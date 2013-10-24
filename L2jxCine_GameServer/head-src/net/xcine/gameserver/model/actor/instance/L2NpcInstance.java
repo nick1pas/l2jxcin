@@ -25,9 +25,6 @@ import java.util.List;
 
 import javolution.text.TextBuilder;
 import javolution.util.FastList;
-
-import org.omg.PortableServer.POAManagerPackage.State;
-
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.cache.HtmCache;
@@ -88,7 +85,6 @@ import net.xcine.gameserver.network.serverpackets.SocialAction;
 import net.xcine.gameserver.network.serverpackets.StatusUpdate;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.network.serverpackets.ValidateLocation;
-import net.xcine.gameserver.powerpak.Buffer.L2BufferInstance;
 import net.xcine.gameserver.skills.Stats;
 import net.xcine.gameserver.taskmanager.DecayTaskManager;
 import net.xcine.gameserver.templates.L2HelperBuff;
@@ -98,6 +94,8 @@ import net.xcine.gameserver.templates.L2Weapon;
 import net.xcine.gameserver.templates.L2WeaponType;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.util.random.Rnd;
+
+import org.omg.PortableServer.POAManagerPackage.State;
 
 /**
  * This class represents a Non-Player-Character in the world. It can be a monster or a friendly character. It also uses a template to fetch some static values. The templates are hardcoded in the client, so we can rely on them.<BR>
@@ -3308,10 +3306,8 @@ public class L2NpcInstance extends L2Character
 	 */
 	public void makeBuffs(L2PcInstance player, String buffTemplate)
 	{
-		int _templateId = 0;
 		try
 		{
-			_templateId = Integer.parseInt(buffTemplate);
 		}
 		catch (NumberFormatException e)
 		{
@@ -3319,11 +3315,6 @@ public class L2NpcInstance extends L2Character
 				e.printStackTrace();
 			
 			player.sendMessage("Buff ID doesn't exist");
-		}
-		if (_templateId > 0)
-		{
-			L2BufferInstance.makeBuffs(player, _templateId, this, true);
-			this.updateEffectIcons();
 		}
 	}
 	

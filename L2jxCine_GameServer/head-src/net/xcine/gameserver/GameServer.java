@@ -104,7 +104,6 @@ import net.xcine.gameserver.managers.FortManager;
 import net.xcine.gameserver.managers.FortSiegeManager;
 import net.xcine.gameserver.managers.FourSepulchersManager;
 import net.xcine.gameserver.managers.GrandBossManager;
-import net.xcine.gameserver.managers.IrcManager;
 import net.xcine.gameserver.managers.ItemsOnGroundManager;
 import net.xcine.gameserver.managers.MercTicketManager;
 import net.xcine.gameserver.managers.PetitionManager;
@@ -130,7 +129,6 @@ import net.xcine.gameserver.model.multisell.L2Multisell;
 import net.xcine.gameserver.model.spawn.AutoSpawn;
 import net.xcine.gameserver.network.L2GameClient;
 import net.xcine.gameserver.network.L2GamePacketHandler;
-import net.xcine.gameserver.powerpak.PowerPak;
 import net.xcine.gameserver.script.EventDroplist;
 import net.xcine.gameserver.script.faenor.FaenorScriptEngine;
 import net.xcine.gameserver.scripting.CompiledScriptCache;
@@ -511,10 +509,7 @@ public class GameServer
 		}
 		
 		Util.printSection("Game Server");
-		
-		if (Config.IRC_ENABLED)
-			IrcManager.getInstance().getConnection().sendChan(Config.IRC_MSG_START);
-		
+
 		_log.info("IdFactory: Free ObjectID's remaining: " + IdFactory.getInstance().size());
 		try
 		{
@@ -540,9 +535,6 @@ public class GameServer
 			
 			if (Config.PCB_ENABLE)
 				ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(PcPoint.getInstance(), Config.PCB_INTERVAL * 1000, Config.PCB_INTERVAL * 1000);
-			
-			if (Config.POWERPAK_ENABLED)
-				PowerPak.getInstance();
 		}
 		else
 			_log.info("All custom mods are Disabled.");

@@ -159,8 +159,6 @@
 		<mkdir dir="${build.dist.game}/config/protected" />
 		<mkdir dir="${build.dist.game}/config/head" />
 		<mkdir dir="${build.dist.game}/config/functions" />
-		<mkdir dir="${build.dist.game}/config/powerpak" />
-		<mkdir dir="${build.dist.game}/config/powerpak/webservices" />
 		<mkdir dir="${build.dist.game}/config/network" />
 		<mkdir dir="${build.dist.game}/config/fun" />
 
@@ -193,18 +191,6 @@
 		<copy todir="${build.dist.game}/config/head">
 			<fileset dir="config/head">
 				<include name="*.properties" />
-			</fileset>
-		</copy>
-
-		<copy todir="${build.dist.game}/config/powerpak">
-			<fileset dir="config/powerpak">
-				<include name="*.*" />
-			</fileset>
-		</copy>
-
-		<copy todir="${build.dist.game}/config/powerpak/webservices">
-			<fileset dir="config/powerpak/webservices">
-				<include name="*.*" />
 			</fileset>
 		</copy>
 

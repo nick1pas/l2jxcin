@@ -28,7 +28,6 @@ import net.xcine.crypt.nProtect;
 import net.xcine.crypt.nProtect.RestrictionType;
 import net.xcine.gameserver.communitybbs.Manager.RegionBBSManager;
 import net.xcine.gameserver.controllers.GameTimeController;
-import net.xcine.gameserver.datatables.CharSchemesTable;
 import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
@@ -91,7 +90,6 @@ import net.xcine.gameserver.network.serverpackets.ShortCutInit;
 import net.xcine.gameserver.network.serverpackets.SignsSky;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.network.serverpackets.UserInfo;
-import net.xcine.gameserver.powerpak.PowerPakConfig;
 import net.xcine.gameserver.thread.TaskPriority;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.util.Util;
@@ -472,11 +470,7 @@ public class EnterWorld extends L2GameClientPacket
 				}
 			}
 		}
-		
-		// NPCBuffer
-		if (PowerPakConfig.BUFFER_ENABLED)
-			CharSchemesTable.getInstance().onPlayerLogin(activeChar.getObjectId());
-		
+
 		if (!nProtect.getInstance().checkRestriction(activeChar, RestrictionType.RESTRICT_ENTER))
 		{
 			activeChar.setIsImobilised(true);

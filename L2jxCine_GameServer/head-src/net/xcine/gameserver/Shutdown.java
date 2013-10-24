@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import net.xcine.Config;
 import net.xcine.gameserver.controllers.GameTimeController;
 import net.xcine.gameserver.controllers.TradeController;
-import net.xcine.gameserver.datatables.CharSchemesTable;
 import net.xcine.gameserver.datatables.OfflineTradeTable;
 import net.xcine.gameserver.managers.AutoSaveManager;
 import net.xcine.gameserver.managers.CastleManorManager;
@@ -681,8 +680,6 @@ public class Shutdown extends Thread
 		if(!Config.ALT_DEV_NO_QUESTS)
 			QuestManager.getInstance().save();
 
-		CharSchemesTable.getInstance().onServerShutdown();
-		
 		//Save items on ground before closing
 		if(Config.SAVE_DROPPED_ITEM)
 		{

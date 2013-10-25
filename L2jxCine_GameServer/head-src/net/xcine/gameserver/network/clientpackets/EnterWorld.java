@@ -341,7 +341,31 @@ public class EnterWorld extends L2GameClientPacket
 
 		if (Config.ANNOUNCE_CASTLE_LORDS)
 				notifyCastleOwner(activeChar);
-		
+
+		if(Config.NEWBIE_CHAR_BUFF && activeChar.getLevel() == 1)
+		{
+			if(activeChar.isMageClass())
+			{
+				SkillTable.getInstance().getInfo(1204, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(1040, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(4338, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(1048, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(1085, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(1078, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(1059, 1).getEffects(activeChar, activeChar);
+			}
+			else
+			{
+				SkillTable.getInstance().getInfo(1204, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(1040, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(4338, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(1045, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(1268, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(1044, 1).getEffects(activeChar, activeChar);
+				SkillTable.getInstance().getInfo(1086, 1).getEffects(activeChar, activeChar);
+			}
+		}
+
 		if (Olympiad.getInstance().playerInStadia(activeChar))
 		{
 			activeChar.teleToLocation(MapRegionTable.TeleportWhereType.Town);
@@ -575,7 +599,33 @@ public class EnterWorld extends L2GameClientPacket
 			activeChar.setFirstLog(false);
 			activeChar.updateFirstLog();
 		}
+		if((activeChar.getClan() != null) && activeChar.getClan().isNoticeEnabled())
+		{
+			String clanNotice = "data/html/communityboard/clannotice.htm";
+			File mainText = new File(Config.DATAPACK_ROOT, clanNotice);
+			if(mainText.exists())
+			{
+				NpcHtmlMessage html = new NpcHtmlMessage(1);
+				html.setFile(clanNotice);
+				html.replace("%clan_name%", activeChar.getClan().getName());
+				html.replace("%notice_text%", activeChar.getClan().getNotice().replaceAll("\r\n", "<br>"));
+				sendPacket(html);
+			}
+		}
 
+		if(Config.GM_WELCOME_HTM && activeChar.isGM() && isValidName(activeChar.getName()))
+		{
+			String Welcome_Path = "data/html/welcomegm.htm";
+			File mainText = new File(Config.DATAPACK_ROOT, Welcome_Path);
+			if(mainText.exists())
+			{
+				NpcHtmlMessage html = new NpcHtmlMessage(1);
+				html.setFile(Welcome_Path);
+				html.replace("%name%", activeChar.getName());
+				sendPacket(html);
+			}
+		}
+		
 		if (Config.WELCOME_HTM && isValidName(activeChar.getName()))
 		{
 			String Welcome_Path = "data/html/welcome.htm";
@@ -584,7 +634,20 @@ public class EnterWorld extends L2GameClientPacket
 			{
 				NpcHtmlMessage html = new NpcHtmlMessage(1);
 				html.setFile(Welcome_Path);
-				html.replace("%name%", activeChar.getName());
+				html.replace("%name%", activeChar.getName());				
+				html.replace("%rate_xp%", String.valueOf(Config.RATE_XP));
+				html.replace("%rate_sp%", String.valueOf(Config.RATE_SP));
+				html.replace("%rate_party_xp%", String.valueOf(Config.RATE_PARTY_XP));
+				html.replace("%rate_party_sp%", String.valueOf(Config.RATE_PARTY_SP));
+				html.replace("%rate_adena%", String.valueOf(Config.RATE_DROP_ADENA));
+				html.replace("%rate_items%", String.valueOf(Config.RATE_DROP_ITEMS));
+				html.replace("%rate_spoil%", String.valueOf(Config.RATE_DROP_SPOIL));
+				html.replace("%rate_drop_manor%", String.valueOf(Config.RATE_DROP_MANOR));
+				html.replace("%rate_quest_reward%", String.valueOf(Config.RATE_QUESTS_REWARD));
+				html.replace("%rate_drop_quest%", String.valueOf(Config.RATE_DROP_QUEST));
+				html.replace("%pet_rate_xp%", String.valueOf(Config.PET_XP_RATE));
+				html.replace("%sineater_rate_xp%", String.valueOf(Config.SINEATER_XP_RATE));
+				html.replace("%pet_food_rate%", String.valueOf(Config.PET_FOOD_RATE));
 				sendPacket(html);
 			}
 		}

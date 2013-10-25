@@ -1834,6 +1834,7 @@ public final class Config
 	public static String PM_TEXT1;
 	public static String PM_TEXT2;
 	public static boolean NEW_PLAYER_EFFECT;
+	public static boolean NEWBIE_CHAR_BUFF;
 	public static boolean BANKING_SYSTEM_ENABLED;
 	public static int BANKING_SYSTEM_GOLDBARS;
 	public static int BANKING_SYSTEM_ADENA;
@@ -1866,6 +1867,7 @@ public final class Config
 			PM_TEXT1  = frozenSettings.getProperty("PMText1", "Have Fun and Nice Stay on");
 			PM_TEXT2  = frozenSettings.getProperty("PMText2", "Vote for us every 24h");
 			NEW_PLAYER_EFFECT = Boolean.parseBoolean(frozenSettings.getProperty("NewPlayerEffect", "True"));
+			NEWBIE_CHAR_BUFF = TypeFormat.parseBoolean(frozenSettings.getProperty("NewbieBuffCharacter", "False"));
 			BANKING_SYSTEM_ENABLED = Boolean.parseBoolean(frozenSettings.getProperty("BankingEnabled", "false"));
 			BANKING_SYSTEM_GOLDBARS = Integer.parseInt(frozenSettings.getProperty("BankingGoldbarCount", "1"));
 			BANKING_SYSTEM_ADENA = Integer.parseInt(frozenSettings.getProperty("BankingAdenaCount", "500000000"));
@@ -2035,6 +2037,7 @@ public final class Config
 	public static boolean ALLOW_DETAILED_STATS_VIEW;
 	public static boolean ALLOW_ONLINE_VIEW;
 	public static boolean WELCOME_HTM;
+	public static boolean GM_WELCOME_HTM;
 	public static String ALLOWED_SKILLS;
 	public static FastList<Integer> ALLOWED_SKILLS_LIST = new FastList<>();
 	public static boolean PROTECTOR_PLAYER_PK;
@@ -2134,7 +2137,8 @@ public final class Config
 
 			/** Welcome Htm **/
 			WELCOME_HTM = Boolean.parseBoolean(L2jxCineSettings.getProperty("WelcomeHtm", "False"));
-
+			GM_WELCOME_HTM = TypeFormat.parseBoolean(L2jxCineSettings.getProperty("GMWelcomeHtm", "False"));
+			
 			/** Server Name **/
 			ALT_SERVER_NAME_ENABLED = Boolean.parseBoolean(L2jxCineSettings.getProperty("ServerNameEnabled", "false"));
 			ANNOUNCE_TO_ALL_SPAWN_RB = Boolean.parseBoolean(L2jxCineSettings.getProperty("AnnounceToAllSpawnRb", "false"));

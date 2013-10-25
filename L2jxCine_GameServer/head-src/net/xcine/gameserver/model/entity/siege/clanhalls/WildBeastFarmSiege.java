@@ -58,7 +58,7 @@ public class WildBeastFarmSiege extends ClanHallSiege
 	private static WildBeastFarmSiege _instance;
 	private boolean _registrationPeriod = false;
 	private int _clanCounter = 0;
-	protected Map<Integer, clanPlayersInfo> _clansInfo = new HashMap<Integer, clanPlayersInfo>();
+	protected Map<Integer, clanPlayersInfo> _clansInfo = new HashMap<>();
 	public ClanHall clanhall = ClanHallManager.getInstance().getClanHallById(63);
 	protected clanPlayersInfo _ownerClanInfo = new clanPlayersInfo();
 	protected boolean _finalStage = false;
@@ -428,7 +428,7 @@ public class WildBeastFarmSiege extends ClanHallSiege
 
 	public FastList<String> getRegisteredClans()
 	{
-		FastList<String> clans = new FastList<String>();
+		FastList<String> clans = new FastList<>();
 		for(clanPlayersInfo a : _clansInfo.values())
 		{
 			clans.add(a._clanName);
@@ -639,6 +639,6 @@ public class WildBeastFarmSiege extends ClanHallSiege
 		public String _clanName;
 		public L2DecoInstance _flag = null;
 		public L2MonsterInstance _mob = null;
-		public FastList<String> _players = new FastList<String>();
+		public FastList<String> _players = new FastList<>();
 	}
 }

@@ -42,7 +42,7 @@ public class ExShowCropInfo extends L2GameServerPacket
 		_crops = crops;
 		if(_crops == null)
 		{
-			_crops = new FastList<CropProcure>();
+			_crops = new FastList<>();
 		}
 	}
 

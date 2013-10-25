@@ -67,7 +67,7 @@ public class AquireSkillList extends L2GameServerPacket
 
 	public AquireSkillList(skillType type)
 	{
-		_skills = new FastList<Skill>();
+		_skills = new FastList<>();
 		_fishingSkills = type;
 	}
 

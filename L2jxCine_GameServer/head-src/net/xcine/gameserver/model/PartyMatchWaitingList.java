@@ -30,7 +30,7 @@ public class PartyMatchWaitingList
 	
 	private PartyMatchWaitingList()
 	{
-		_members = new FastList<L2PcInstance>();
+		_members = new FastList<>();
 	}
 	
 	public void addPlayer(L2PcInstance player)

@@ -66,7 +66,7 @@ public class RequestSetSeed extends L2GameClientPacket
 		if(_size < 1)
 			return;
 
-		FastList<SeedProduction> seeds = new FastList<SeedProduction>();
+		FastList<SeedProduction> seeds = new FastList<>();
 
 		for(int i = 0; i < _size; i++)
 		{

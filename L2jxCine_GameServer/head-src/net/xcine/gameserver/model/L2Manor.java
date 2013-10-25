@@ -62,7 +62,7 @@ public class L2Manor
 
 	public FastList<Integer> getAllCrops()
 	{
-		FastList<Integer> crops = new FastList<Integer>();
+		FastList<Integer> crops = new FastList<>();
 
 		for(SeedData seed : _seeds.values())
 			if(!crops.contains(seed.getCrop()) && seed.getCrop() != 0 && !crops.contains(seed.getCrop()))
@@ -212,7 +212,7 @@ public class L2Manor
 	 */
 	public FastList<Integer> getCropsForCastle(int castleId)
 	{
-		FastList<Integer> crops = new FastList<Integer>();
+		FastList<Integer> crops = new FastList<>();
 
 		for(SeedData seed : _seeds.values())
 		{
@@ -233,7 +233,7 @@ public class L2Manor
 	 */
 	public FastList<Integer> getSeedsForCastle(int castleId)
 	{
-		FastList<Integer> seedsID = new FastList<Integer>();
+		FastList<Integer> seedsID = new FastList<>();
 
 		for(SeedData seed : _seeds.values())
 		{

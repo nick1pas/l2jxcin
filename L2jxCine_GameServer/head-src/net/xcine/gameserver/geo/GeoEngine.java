@@ -63,8 +63,8 @@ public final class GeoEngine extends GeoData
 		return SingletonHolder.INSTANCE;
 	}
 	
-	private final LookupTable<MappedByteBuffer> _geodata = new LookupTable<MappedByteBuffer>();
-	private final LookupTable<IntBuffer> _geodataIndex = new LookupTable<IntBuffer>();
+	private final LookupTable<MappedByteBuffer> _geodata = new LookupTable<>();
+	private final LookupTable<IntBuffer> _geodataIndex = new LookupTable<>();
 	private BufferedOutputStream _geoBugsOut;
 	
 	protected GeoEngine()

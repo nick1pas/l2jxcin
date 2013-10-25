@@ -72,7 +72,7 @@ public final class ServerList extends L2LoginServerPacket
 
 	public ServerList(L2LoginClient client)
 	{
-		_servers = new FastList<ServerData>();
+		_servers = new FastList<>();
 		_lastServer = client.getLastServer();
 
 		for(GameServerInfo gsi : GameServerTable.getInstance().getRegisteredGameServers().values())

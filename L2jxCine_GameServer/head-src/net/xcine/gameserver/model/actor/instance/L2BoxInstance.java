@@ -215,7 +215,7 @@ public class L2BoxInstance extends L2NpcInstance
 	public List<String> getAccess()
 	{
 		Connection con = null;
-		List<String> acl = new FastList<String>();
+		List<String> acl = new FastList<>();
 		try
 		{
 			con = L2DatabaseFactory.getInstance().getConnection(false);
@@ -376,7 +376,7 @@ public class L2BoxInstance extends L2NpcInstance
 		
 		NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		int nitems = 0;
-		Set<L2BoxItem> _items = new FastSet<L2BoxItem>();
+		Set<L2BoxItem> _items = new FastSet<>();
 		for(L2ItemInstance i : player.getInventory().getItems())
 		{
 			if(i.getItemId() == 57 || i.isEquipped())
@@ -437,7 +437,7 @@ public class L2BoxInstance extends L2NpcInstance
 
 	private Set<L2BoxItem> getItems(String drawer)
 	{
-		Set<L2BoxItem> it = new FastSet<L2BoxItem>();
+		Set<L2BoxItem> it = new FastSet<>();
 		Connection con = null;
 		try
 		{

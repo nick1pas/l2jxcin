@@ -42,7 +42,7 @@ public class CoupleManager
 	
 	// =========================================================
 	// Data Field
-	private FastList<Wedding> _couples = new FastList<Wedding>();
+	private FastList<Wedding> _couples = new FastList<>();
 
 		
 	public static final CoupleManager getInstance()

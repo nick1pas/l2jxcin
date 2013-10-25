@@ -52,7 +52,7 @@ public class L2PcTemplate extends L2CharTemplate
 	public final float lvlMpAdd;
 	public final float lvlMpMod;
 
-	private List<L2Item> _items = new FastList<L2Item>();
+	private List<L2Item> _items = new FastList<>();
 
 	public L2PcTemplate(StatsSet set)
 	{

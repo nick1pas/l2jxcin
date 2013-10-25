@@ -76,7 +76,7 @@ public class MMOConnection<T extends MMOClient<?>>
 		_port = socket.getPort();
 		_selectionKey = key;
 		
-		_sendQueue = new NioNetStackList<SendablePacket<T>>();
+		_sendQueue = new NioNetStackList<>();
 	}
 	
 	final void setClient(final T client)

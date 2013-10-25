@@ -1,11 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<project name="L2jFrozen_DataPack" default="dist-local" basedir=".">
-	<description>
-        This script will build the L2J-Frozen DataPack. Thanks for Using our Pack.
-        
-        This program is opensource   
-        
-    </description>
+<project name="L2jxCine_DataPack" default="dist-local" basedir=".">
 
 	<property file="build.properties" />
 
@@ -107,14 +101,6 @@
 		<exec dir="." executable="./subversion/svnversion" outputproperty="l2jfrozen.revision" failifexecutionfails="false">
 			<arg line="-n ." />
 		</exec>
-
-		<concat destfile="${properties-file}">
-			      revision=${l2jfrozen.revision}
-			      builddate=${build.tstamp}
-		      	  repository=http://subversion.assembla.com/svn/L2jFrozenInterlude/trunk/datapack
-			  </concat>
-
-		<echo>L2jFrozen Datapack Revision: ${l2jfrozen.revision}</echo>
 	</target>
 
 

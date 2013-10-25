@@ -43,7 +43,7 @@ public class FortManager
 
 	// =========================================================
 	// Data Field
-	private List<Fort> _forts = new FastList<Fort>();
+	private List<Fort> _forts = new FastList<>();
 
 	// =========================================================
 	// Constructor

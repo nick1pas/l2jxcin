@@ -56,7 +56,7 @@ public class ExOlympiadSpelledInfo extends L2GameServerPacket
 	
 	public ExOlympiadSpelledInfo(L2PcInstance player)
 	{
-		_effects = new FastList<Effect>();
+		_effects = new FastList<>();
         _player = player;
 	}
 	

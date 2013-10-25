@@ -62,7 +62,7 @@ public class VoicedCommandHandler
 	
 	private VoicedCommandHandler()
 	{
-		_datatable = new FastMap<String, IVoicedCommandHandler>();
+		_datatable = new FastMap<>();
 		
 		registerVoicedCommandHandler(new Voting());
 		

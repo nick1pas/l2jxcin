@@ -75,7 +75,7 @@ public abstract class L2Thread extends Thread
 
 	public static List<String> getStats(Thread t)
 	{
-		List<String> list = new FastList<String>();
+		List<String> list = new FastList<>();
 
 		list.add(t.toString() + " - ID: " + t.getId());
 		list.add(" * State: " + t.getState());

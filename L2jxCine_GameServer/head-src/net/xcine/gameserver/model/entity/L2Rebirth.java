@@ -50,7 +50,7 @@ public class L2Rebirth
 	private static L2Rebirth _instance = null;
 	
 	/** Basically, this will act as a cache so it doesnt have to read DB information on relog. */
-	private HashMap<Integer, Integer> _playersRebirthInfo = new HashMap<Integer, Integer>();
+	private HashMap<Integer, Integer> _playersRebirthInfo = new HashMap<>();
 	
 	/**
 	 * Creates a new NON-STATIC instance.

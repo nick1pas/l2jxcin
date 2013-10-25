@@ -87,8 +87,8 @@ public final class SelectorThread<T extends MMOClient<?>> extends Thread
 		
 		STRING_BUFFER = new NioNetStringBuffer(64 * 1024);
 		
-		_pendingClose = new NioNetStackList<MMOConnection<T>>();
-		_bufferPool = new FastList<ByteBuffer>();
+		_pendingClose = new NioNetStackList<>();
+		_bufferPool = new FastList<>();
 		
 		for (int i = 0; i < HELPER_BUFFER_COUNT; i++)
 		{
@@ -249,7 +249,7 @@ public final class SelectorThread<T extends MMOClient<?>> extends Thread
 				{
 					sc.configureBlocking(false);
 					SelectionKey clientKey = sc.register(_selector, SelectionKey.OP_READ);
-					con = new MMOConnection<T>(this, sc.socket(), clientKey);
+					con = new MMOConnection<>(this, sc.socket(), clientKey);
 					con.setClient(_clientFactory.create(con));
 					clientKey.attach(con);
 				}

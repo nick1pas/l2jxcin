@@ -116,7 +116,7 @@ public class MultiSort
 	public final List<?> getKeys()
 	{
 		if(_keyList == null)
-			return new FastList<Object>();
+			return new FastList<>();
 
 		return _keyList;
 	}
@@ -149,7 +149,7 @@ public class MultiSort
 		if(getValues().isEmpty())
 			return -1;
 
-		List<Double> tempValList = new FastList<Double>();
+		List<Double> tempValList = new FastList<>();
 
 		int meanValue = getMean();
 		int numValues = getCount();
@@ -188,7 +188,7 @@ public class MultiSort
 	public final List<Integer> getValues()
 	{
 		if(_valueList == null)
-			return new FastList<Integer>();
+			return new FastList<>();
 
 		return _valueList;
 	}
@@ -212,8 +212,8 @@ public class MultiSort
 	{
 		try
 		{
-			List<Object> newKeyList = new FastList<Object>();
-			List<Integer> newValueList = new FastList<Integer>();
+			List<Object> newKeyList = new FastList<>();
+			List<Integer> newValueList = new FastList<>();
 
 			// Sort the list of values in ascending numerical order.
 			Collections.sort(getValues());

@@ -33,7 +33,7 @@ import net.xcine.util.Util;
 public final class DeadlockDetector implements Runnable
 {
 	protected static final Logger _log = Logger.getLogger(DeadlockDetector.class.getName());
-	private final Set<Long> _logged = new FastSet<Long>();
+	private final Set<Long> _logged = new FastSet<>();
 
 	private static DeadlockDetector _instance;
 
@@ -60,7 +60,7 @@ public final class DeadlockDetector implements Runnable
 		if(ids == null)
 			return;
 
-		List<Thread> deadlocked = new ArrayList<Thread>();
+		List<Thread> deadlocked = new ArrayList<>();
 
 		for(long id : ids)
 			if(_logged.add(id))

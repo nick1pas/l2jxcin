@@ -56,7 +56,7 @@ public class Potions implements IItemHandler
 	protected static final Logger _log = Logger.getLogger(Potions.class.getName());
 	private int _herbstask = 0;
 	
-	private static FastMap<Integer, PotionsSkills> potions = new FastMap<Integer, PotionsSkills>();
+	private static FastMap<Integer, PotionsSkills> potions = new FastMap<>();
 	
 	private static void loadPotions()
 	{
@@ -84,7 +84,7 @@ public class Potions implements IItemHandler
 		if (potions.isEmpty())
 			loadPotions();
 		
-		final List<Integer> output_potions = new ArrayList<Integer>();
+		final List<Integer> output_potions = new ArrayList<>();
 		for (Integer actual_potion_item : potions.keySet())
 		{
 			FastMap<Integer, Integer> actual_item_skills = null;
@@ -923,7 +923,7 @@ public class Potions implements IItemHandler
 		Primeval_Potion1(8787, 2305, 1);
 		
 		public Integer potion_id;
-		public FastMap<Integer, Integer> skills = new FastMap<Integer, Integer>();
+		public FastMap<Integer, Integer> skills = new FastMap<>();
 		
 		private PotionsSkills(int potion_item, int skill_identifier, int skill_level)
 		{

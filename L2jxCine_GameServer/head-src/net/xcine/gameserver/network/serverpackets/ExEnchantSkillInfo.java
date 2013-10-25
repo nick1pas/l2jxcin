@@ -48,7 +48,7 @@ public class ExEnchantSkillInfo extends L2GameServerPacket
 
 	public ExEnchantSkillInfo(int id, int level, int spCost, int xpCost, int rate)
 	{
-		_reqs = new FastList<Req>();
+		_reqs = new FastList<>();
 		_id = id;
 		_level = level;
 		_spCost = spCost;
@@ -61,9 +61,6 @@ public class ExEnchantSkillInfo extends L2GameServerPacket
 		_reqs.add(new Req(type, id, count, unk));
 	}
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.serverpackets.ServerBasePacket#writeImpl()
-	 */
 	@Override
 	protected void writeImpl()
 	{

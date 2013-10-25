@@ -99,7 +99,7 @@ public class L2CastleTeleportZone extends L2ZoneType
 
 	public FastList<L2Character> getAllPlayers()
 	{
-		FastList<L2Character> players = new FastList<L2Character>();
+		FastList<L2Character> players = new FastList<>();
 		Iterator<L2Character> i$ = _characterList.values().iterator();
 
 		while(i$.hasNext())

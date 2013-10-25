@@ -99,8 +99,8 @@ public final class CustomNpcInstanceManager
 	{
 		if(spawns == null || templates == null)
 		{
-			spawns = new FastMap<Integer, customInfo>();
-			templates = new FastMap<Integer, customInfo>();
+			spawns = new FastMap<>();
+			templates = new FastMap<>();
 		}
 
 		String[] SQL_ITEM_SELECTS =

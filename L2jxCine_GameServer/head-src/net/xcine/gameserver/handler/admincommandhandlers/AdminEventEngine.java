@@ -303,7 +303,7 @@ public class AdminEventEngine implements IAdminCommandHandler
 
 				for(int j = 0; j < L2Event.teamsNumber; j++)
 				{
-					LinkedList<String> link = new LinkedList<String>();
+					LinkedList<String> link = new LinkedList<>();
 					L2Event.players.put(j + 1, link);
 					link = null;
 				}
@@ -655,7 +655,7 @@ public class AdminEventEngine implements IAdminCommandHandler
 	void muestraNpcConInfoAPlayers(L2PcInstance activeChar, int id)
 	{
 		L2Event.npcs.clear();
-		LinkedList<L2PcInstance> temp = new LinkedList<L2PcInstance>();
+		LinkedList<L2PcInstance> temp = new LinkedList<>();
 		temp.clear();
 
 		for(L2PcInstance player : L2World.getInstance().getAllPlayers())

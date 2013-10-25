@@ -76,7 +76,7 @@ public class EventManager
 			//============================================================
 			
 			TVT_EVENT_ENABLED = Boolean.parseBoolean(eventSettings.getProperty("TVTEventEnabled", "false"));
-			TVT_TIMES_LIST = new ArrayList<String>();
+			TVT_TIMES_LIST = new ArrayList<>();
 			
 			String[] propertySplit;
 			propertySplit = eventSettings.getProperty("TVTStartTime", "").split(";");
@@ -87,7 +87,7 @@ public class EventManager
 			}
 			
 			CTF_EVENT_ENABLED = Boolean.parseBoolean(eventSettings.getProperty("CTFEventEnabled", "false"));
-			CTF_TIMES_LIST = new ArrayList<String>();
+			CTF_TIMES_LIST = new ArrayList<>();
 			
 			propertySplit = eventSettings.getProperty("CTFStartTime", "").split(";");
 
@@ -97,7 +97,7 @@ public class EventManager
 			}
 			
 			DM_EVENT_ENABLED = Boolean.parseBoolean(eventSettings.getProperty("DMEventEnabled", "false"));
-			DM_TIMES_LIST = new ArrayList<String>();
+			DM_TIMES_LIST = new ArrayList<>();
 			
 			propertySplit = eventSettings.getProperty("DMStartTime", "").split(";");
 

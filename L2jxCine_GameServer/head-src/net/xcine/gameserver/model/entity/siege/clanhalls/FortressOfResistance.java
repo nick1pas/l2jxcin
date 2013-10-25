@@ -124,7 +124,7 @@ public class FortressOfResistance
 			MINUTES = 0;
 		}
 
-		_clansDamageInfo = new FastMap<Integer, DamageInfo>();
+		_clansDamageInfo = new FastMap<>();
 
 		/*
 		synchronized (this)

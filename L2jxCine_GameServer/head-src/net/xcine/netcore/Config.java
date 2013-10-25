@@ -56,13 +56,13 @@ public class Config
 	public String PACKET_FLOODING_PUNISHMENT_TYPE;
 	
 	public String PROTECTED_OPCODES;
-	public FastList<Integer> GS_LIST_PROTECTED_OPCODES = new FastList<Integer>();
-	public FastList<Integer> GS_LIST_PROTECTED_OPCODES2 = new FastList<Integer>();
-	public FastList<Integer> LS_LIST_PROTECTED_OPCODES = new FastList<Integer>();
+	public FastList<Integer> GS_LIST_PROTECTED_OPCODES = new FastList<>();
+	public FastList<Integer> GS_LIST_PROTECTED_OPCODES2 = new FastList<>();
+	public FastList<Integer> LS_LIST_PROTECTED_OPCODES = new FastList<>();
 	
 	public String ALLOWED_OFFLINE_OPCODES;
-	public FastList<Integer> LIST_ALLOWED_OFFLINE_OPCODES = new FastList<Integer>();
-	public FastList<Integer> LIST_ALLOWED_OFFLINE_OPCODES2 = new FastList<Integer>();
+	public FastList<Integer> LIST_ALLOWED_OFFLINE_OPCODES = new FastList<>();
+	public FastList<Integer> LIST_ALLOWED_OFFLINE_OPCODES2 = new FastList<>();
 	
 	public boolean DUMP_CLOSE_CONNECTIONS;
 	
@@ -128,9 +128,9 @@ public class Config
 			//OPCODES Flood Protector
 			PROTECTED_OPCODES = mmoSetting.getProperty("ListOfProtectedOpCodes");
 			
-			LS_LIST_PROTECTED_OPCODES = new FastList<Integer>();
-			GS_LIST_PROTECTED_OPCODES = new FastList<Integer>();
-			GS_LIST_PROTECTED_OPCODES2 = new FastList<Integer>();
+			LS_LIST_PROTECTED_OPCODES = new FastList<>();
+			GS_LIST_PROTECTED_OPCODES = new FastList<>();
+			GS_LIST_PROTECTED_OPCODES2 = new FastList<>();
 			
 			if(PROTECTED_OPCODES!=null && !PROTECTED_OPCODES.equals("")){
 				
@@ -184,8 +184,8 @@ public class Config
 			//OPCODES Offline Protection
 			ALLOWED_OFFLINE_OPCODES = mmoSetting.getProperty("ListOfAllowedOfflineOpCodes","0x03;0x9d;0xd0,0x08;0x13;0x81;");
 			
-			LIST_ALLOWED_OFFLINE_OPCODES = new FastList<Integer>();
-			LIST_ALLOWED_OFFLINE_OPCODES2 = new FastList<Integer>();
+			LIST_ALLOWED_OFFLINE_OPCODES = new FastList<>();
+			LIST_ALLOWED_OFFLINE_OPCODES2 = new FastList<>();
 			
 			if(ALLOWED_OFFLINE_OPCODES!=null && !ALLOWED_OFFLINE_OPCODES.equals("")){
 				

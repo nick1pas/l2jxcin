@@ -41,7 +41,7 @@ public class CustomBypassHandler
 	
 	private CustomBypassHandler()
 	{
-		_handlers = new FastMap<String, ICustomByPassHandler>();
+		_handlers = new FastMap<>();
 		
 		registerCustomBypassHandler(new ExtractableByPassHandler());
 	}

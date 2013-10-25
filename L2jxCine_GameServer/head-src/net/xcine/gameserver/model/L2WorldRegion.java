@@ -67,7 +67,7 @@ public final class L2WorldRegion
 	{
 		_allPlayable = L2ObjectSet.createL2PlayerSet(); //new L2ObjectHashSet<L2PcInstance>();
 		_visibleObjects = L2ObjectSet.createL2ObjectSet(); // new L2ObjectHashSet<L2Object>();
-		_surroundingRegions = new FastList<L2WorldRegion>();
+		_surroundingRegions = new FastList<>();
 		//_surroundingRegions.add(this); //done in L2World.initRegions()
 
 		_tileX = pTileX;

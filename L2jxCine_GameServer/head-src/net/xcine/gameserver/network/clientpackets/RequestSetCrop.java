@@ -68,7 +68,7 @@ public class RequestSetCrop extends L2GameClientPacket
 		if(_size < 1)
 			return;
 
-		FastList<CropProcure> crops = new FastList<CropProcure>();
+		FastList<CropProcure> crops = new FastList<>();
 		for(int i = 0; i < _size; i++)
 		{
 			int id = _items[i * 4 + 0];

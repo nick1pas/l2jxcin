@@ -132,7 +132,7 @@ public class L2ControlTowerInstance extends L2NpcInstance
 	{
 		if(_guards == null)
 		{
-			_guards = new FastList<L2Spawn>();
+			_guards = new FastList<>();
 		}
 		return _guards;
 	}

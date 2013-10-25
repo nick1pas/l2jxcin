@@ -428,7 +428,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		// Set its template to the new L2Character
 		_template = template;
 		
-		_triggeredSkills = new FastMap<Integer, L2Skill>();
+		_triggeredSkills = new FastMap<>();
 		
 		if (template != null && this instanceof L2NpcInstance)
 		{
@@ -2621,7 +2621,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	{
 		if(_attackByList == null)
 		{
-			_attackByList = new FastList<L2Character>();
+			_attackByList = new FastList<>();
 		}
 
 		return _attackByList;
@@ -3706,10 +3706,10 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	/**
 	 * FastTable containing all active skills effects in progress of a L2Character.
 	 */
-	private FastTable<L2Effect> _effects  = new FastTable<L2Effect>();
+	private FastTable<L2Effect> _effects  = new FastTable<>();
 
 	/** The table containing the List of all stacked effect in progress for each Stack group Identifier. */
-	protected Map<String, List<L2Effect>> _stackedEffects = new FastMap<String, List<L2Effect>>();
+	protected Map<String, List<L2Effect>> _stackedEffects = new FastMap<>();
 
 	/** The Constant ABNORMAL_EFFECT_BLEEDING. */
 	public static final int ABNORMAL_EFFECT_BLEEDING = 0x000001;
@@ -3918,7 +3918,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		
 		if (stackQueue == null)
 		{
-			stackQueue = new FastList<L2Effect>();
+			stackQueue = new FastList<>();
 		}
 		
 		// L2Effect tempEffect = null;
@@ -5371,7 +5371,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	private int _clientHeading;
 
 	/** List of all QuestState instance that needs to be notified of this character's death. */
-	private List<QuestState> _NotifyQuestOfDeathList = new FastList<QuestState>();
+	private List<QuestState> _NotifyQuestOfDeathList = new FastList<>();
 
 	/**
 	 * Add QuestState instance that is to be notified of character's death.<BR>
@@ -5397,7 +5397,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	{
 		if(_NotifyQuestOfDeathList == null)
 		{
-			_NotifyQuestOfDeathList = new FastList<QuestState>();
+			_NotifyQuestOfDeathList = new FastList<>();
 		}
 
 		return _NotifyQuestOfDeathList;
@@ -5478,7 +5478,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public final synchronized void addStatFuncs(Func[] funcs)
 	{
 
-		FastList<Stats> modifiedStats = new FastList<Stats>();
+		FastList<Stats> modifiedStats = new FastList<>();
 
 		for(Func f : funcs)
 		{
@@ -5574,7 +5574,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	public final synchronized void removeStatFuncs(Func[] funcs)
 	{
 
-		FastList<Stats> modifiedStats = new FastList<Stats>();
+		FastList<Stats> modifiedStats = new FastList<>();
 
 		for(Func f : funcs)
 		{
@@ -8631,7 +8631,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		
 		if(escapeRange > 0)
 		{
-			List<L2Character> targetList = new FastList<L2Character>();
+			List<L2Character> targetList = new FastList<>();
 
 			for(int i = 0;targets!=null && i < targets.length; i++)
 			{

@@ -65,7 +65,7 @@ final class EffectConfusion extends L2Effect
 	public boolean onActionTime()
 	{
 		
-		List<L2Character> targetList = new FastList<L2Character>();
+		List<L2Character> targetList = new FastList<>();
 
 		// Getting the possible targets
 

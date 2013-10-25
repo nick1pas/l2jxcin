@@ -2095,7 +2095,7 @@ public class L2NpcInstance extends L2Character
 	public void showQuestWindow(L2PcInstance player)
 	{
 		// collect awaiting quests and start points
-		List<Quest> options = new FastList<Quest>();
+		List<Quest> options = new FastList<>();
 		
 		QuestState[] awaits = player.getQuestsForTalk(getTemplate().npcId);
 		Quest[] starts = getTemplate().getEventQuests(Quest.QuestEventType.QUEST_START);

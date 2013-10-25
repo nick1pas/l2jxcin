@@ -55,8 +55,8 @@ public class DynamicExtension
 		{
 			_instance = this;
 		}
-		_getters = new ConcurrentHashMap<String, ExtensionFunction>();
-		_setters = new ConcurrentHashMap<String, ExtensionFunction>();
+		_getters = new ConcurrentHashMap<>();
+		_setters = new ConcurrentHashMap<>();
 		initExtensions();
 	}
 
@@ -93,7 +93,7 @@ public class DynamicExtension
 	{
 		_prop = new Properties();
 		String res = "";
-		_loadedExtensions = new ConcurrentHashMap<String, Object>();
+		_loadedExtensions = new ConcurrentHashMap<>();
 
 		FileInputStream fis = null;
 		

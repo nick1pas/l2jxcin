@@ -42,7 +42,7 @@ public class SiegeGuardManager
 	// =========================================================
 	// Data Field
 	private Castle _castle;
-	private List<L2Spawn> _siegeGuardSpawn = new FastList<L2Spawn>();
+	private List<L2Spawn> _siegeGuardSpawn = new FastList<>();
 
 	// =========================================================
 	// Constructor

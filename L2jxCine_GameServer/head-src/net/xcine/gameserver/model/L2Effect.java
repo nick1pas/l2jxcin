@@ -559,7 +559,7 @@ public abstract class L2Effect
 	{
 		if(_funcTemplates == null)
 			return _emptyFunctionSet;
-		List<Func> funcs = new FastList<Func>();
+		List<Func> funcs = new FastList<>();
 		for(FuncTemplate t : _funcTemplates)
 		{
 			Env env = new Env();

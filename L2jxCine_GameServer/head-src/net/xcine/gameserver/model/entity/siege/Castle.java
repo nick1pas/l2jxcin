@@ -60,10 +60,10 @@ public class Castle
 
 	// =========================================================
 	// Data Field
-	private FastList<CropProcure> _procure = new FastList<CropProcure>();
-	private FastList<SeedProduction> _production = new FastList<SeedProduction>();
-	private FastList<CropProcure> _procureNext = new FastList<CropProcure>();
-	private FastList<SeedProduction> _productionNext = new FastList<SeedProduction>();
+	private FastList<CropProcure> _procure = new FastList<>();
+	private FastList<SeedProduction> _production = new FastList<>();
+	private FastList<CropProcure> _procureNext = new FastList<>();
+	private FastList<SeedProduction> _productionNext = new FastList<>();
 	private boolean _isNextPeriodApproved = false;
 
 	private static final String CASTLE_MANOR_DELETE_PRODUCTION = "DELETE FROM castle_manor_production WHERE castle_id=?;";
@@ -81,8 +81,8 @@ public class Castle
 	// =========================================================
 	// Data Field
 	private int _castleId = 0;
-	private List<L2DoorInstance> _doors = new FastList<L2DoorInstance>();
-	private List<String> _doorDefault = new FastList<String>();
+	private List<L2DoorInstance> _doors = new FastList<>();
+	private List<String> _doorDefault = new FastList<>();
 	private String _name = "";
 	private int _ownerId = 0;
 	private Siege _siege = null;
@@ -100,7 +100,7 @@ public class Castle
 	{
 			Integer.MIN_VALUE, 0, 0
 	};
-	private Map<Integer, Integer> _engrave = new FastMap<Integer, Integer>();
+	private Map<Integer, Integer> _engrave = new FastMap<>();
 
 	// =========================================================
 	// Constructor

@@ -44,7 +44,7 @@ import net.xcine.gameserver.templates.L2EtcItemType;
 public final class RequestPackageSend extends L2GameClientPacket
 {
 	private static Logger _log = Logger.getLogger(RequestPackageSend.class.getName());
-	private List<Item> _items = new FastList<Item>();
+	private List<Item> _items = new FastList<>();
 	private int _objectID;
 	private int _count;
 

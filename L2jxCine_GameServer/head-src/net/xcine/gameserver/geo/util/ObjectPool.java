@@ -28,7 +28,7 @@ import net.xcine.gameserver.thread.L2Thread;
 
 public abstract class ObjectPool<E>
 {
-	protected static final WeakHashMap<ObjectPool<?>, Object> POOLS = new WeakHashMap<ObjectPool<?>, Object>();
+	protected static final WeakHashMap<ObjectPool<?>, Object> POOLS = new WeakHashMap<>();
 
 	static
 	{

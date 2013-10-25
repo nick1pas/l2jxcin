@@ -29,7 +29,7 @@ import net.xcine.gameserver.script.faenor.FaenorInterface;
 public class ScriptEngine
 {
 	protected EngineInterface _utils = FaenorInterface.getInstance();
-	public static final Hashtable<String, ParserFactory> parserFactories = new Hashtable<String, ParserFactory>();
+	public static final Hashtable<String, ParserFactory> parserFactories = new Hashtable<>();
 
 	protected static Parser createParser(String name) throws ParserNotCreatedException
 	{

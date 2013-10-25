@@ -71,8 +71,8 @@ public class VIP
 
 	public static L2Spawn	_endSpawn, _joinSpawn;
 
-	public static Vector<L2PcInstance> 	_playersVIP = new Vector<L2PcInstance>(),
-										_playersNotVIP = new Vector<L2PcInstance>();
+	public static Vector<L2PcInstance> 	_playersVIP = new Vector<>(),
+										_playersNotVIP = new Vector<>();
 
 	public static void setTeam(String team, L2PcInstance activeChar)
 	{
@@ -686,8 +686,8 @@ public class VIP
 			player._isVIP = false;
 		}
 
-		_playersVIP = new Vector<L2PcInstance>();
-		_playersNotVIP = new Vector<L2PcInstance>();
+		_playersVIP = new Vector<>();
+		_playersNotVIP = new Vector<>();
 	}
 
 	public static void chooseVIP()

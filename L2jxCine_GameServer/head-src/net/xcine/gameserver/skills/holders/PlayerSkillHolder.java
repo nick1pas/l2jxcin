@@ -28,7 +28,7 @@ import net.xcine.gameserver.model.L2Skill;
  */
 public class PlayerSkillHolder implements ISkillsHolder
 {
-	private final Map<Integer, L2Skill> _skills = new HashMap<Integer, L2Skill>();
+	private final Map<Integer, L2Skill> _skills = new HashMap<>();
 	
 	public PlayerSkillHolder(Map<Integer, L2Skill> map)
 	{

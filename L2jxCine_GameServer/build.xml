@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="L2jFrozen_GameServer" default="dist-local" basedir=".">
+<project name="L2jxCine_GameServer" default="dist-local" basedir=".">
 	<description>
         This script will build the L2J-Frozen server. Thanks for Using our Pack.
         
@@ -270,14 +270,7 @@
 		<exec dir="." executable="./subversion/svnversion" outputproperty="l2jfrozen.revision" failifexecutionfails="false">
 			<arg line="-n ." />
 		</exec>
-
-		<concat destfile="${properties-file}">
-		      revision=${l2jfrozen.revision}
-		      builddate=${build.tstamp}
-	      	  repository=http://subversion.assembla.com/svn/L2jFrozenInterlude/trunk/gameserver
-		  </concat>
-
-		<echo>L2jFrozen Gameserver Revision: ${l2jfrozen.revision}</echo>
+		
 	</target>
 
 	<target name="dist-local" depends="prepare-local,prepare-final,export" description="Create distribution files and Zip one into 'build' folder">

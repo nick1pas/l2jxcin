@@ -127,7 +127,7 @@ public class Status extends Thread
 		}
 		statusServerSocket = new ServerSocket(_statusPort);
 		_uptime = (int) System.currentTimeMillis();
-		_loginStatus = new FastList<LoginStatusThread>();
+		_loginStatus = new FastList<>();
 	}
 	
 	private String rndPW(int length)
@@ -158,7 +158,7 @@ public class Status extends Thread
 	
 	public void sendMessageToTelnets(String msg)
 	{
-		List<LoginStatusThread> lsToRemove = new FastList<LoginStatusThread>();
+		List<LoginStatusThread> lsToRemove = new FastList<>();
 		for (LoginStatusThread ls : _loginStatus)
 		{
 			if (ls.isInterrupted())

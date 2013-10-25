@@ -38,7 +38,7 @@ public class DimensionalRift
 {
 	protected byte _type;
 	protected L2Party _party;
-	protected FastList<Byte> _completedRooms = new FastList<Byte>();
+	protected FastList<Byte> _completedRooms = new FastList<>();
 	private static final long seconds_5 = 5000L;
 	protected byte jumps_current = 0;
 
@@ -49,8 +49,8 @@ public class DimensionalRift
 
 	protected byte _choosenRoom = -1;
 	private boolean _hasJumped = false;
-	protected FastList<L2PcInstance> deadPlayers = new FastList<L2PcInstance>();
-	protected FastList<L2PcInstance> revivedInWaitingRoom = new FastList<L2PcInstance>();
+	protected FastList<L2PcInstance> deadPlayers = new FastList<>();
+	protected FastList<L2PcInstance> revivedInWaitingRoom = new FastList<>();
 	private boolean isBossRoom = false;
 
 	public DimensionalRift(L2Party party, byte type, byte room)

@@ -89,8 +89,8 @@ public class Hero
 
 	private void init()
 	{
-		_heroes = new FastMap<Integer, StatsSet>();
-		_completeHeroes = new FastMap<Integer, StatsSet>();
+		_heroes = new FastMap<>();
+		_completeHeroes = new FastMap<>();
 		Connection con = null;
 		PreparedStatement statement = null;
 		PreparedStatement statement2 = null;
@@ -309,7 +309,7 @@ public class Hero
 			_heroes.clear();
 			return;
 		}
-		Map<Integer, StatsSet> heroes = new FastMap<Integer, StatsSet>();
+		Map<Integer, StatsSet> heroes = new FastMap<>();
 		for (StatsSet hero : newHeroes)
 		{
 			int charId = hero.getInteger(Olympiad.CHAR_ID);

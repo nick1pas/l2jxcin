@@ -92,10 +92,10 @@ public class GrandBossManager
 
 	private void init()
 	{
-		_zones = new CopyOnWriteArrayList<L2BossZone>();
-		_bosses = new ConcurrentHashMap<Integer, L2GrandBossInstance>();
-		_storedInfo = new ConcurrentHashMap<Integer, StatsSet>();
-		_bossStatus = new ConcurrentHashMap<Integer, Integer>();
+		_zones = new CopyOnWriteArrayList<>();
+		_bosses = new ConcurrentHashMap<>();
+		_storedInfo = new ConcurrentHashMap<>();
+		_bossStatus = new ConcurrentHashMap<>();
 		Connection con = null;
 		try
 		{
@@ -156,7 +156,7 @@ public class GrandBossManager
 			return;
 		}
 
-		Map<Integer, List<Integer>> zones = new ConcurrentHashMap<Integer, List<Integer>>();
+		Map<Integer, List<Integer>> zones = new ConcurrentHashMap<>();
 		for(L2BossZone zone : _zones)
 		{
 			if(zone == null)

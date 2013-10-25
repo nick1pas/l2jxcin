@@ -62,7 +62,7 @@ public class MinionList
 
 	public MinionList(L2MonsterInstance pMaster)
 	{
-		minionReferences = new FastList<L2MinionInstance>();
+		minionReferences = new FastList<>();
 		master = pMaster;
 	}
 
@@ -110,7 +110,7 @@ public class MinionList
 
 	public int lazyCountSpawnedMinionsGroups()
 	{
-		Set<Integer> seenGroups = new FastSet<Integer>();
+		Set<Integer> seenGroups = new FastSet<>();
 		for(L2MinionInstance minion : getSpawnedMinions())
 		{
 			seenGroups.add(minion.getNpcId());

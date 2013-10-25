@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="2200" levels="3" name="Item - Jade Treasue Box">
   <table name="#itemConsumeId">6495 6496 6497</table>
   <set name="itemConsumeId" val="#itemConsumeId"/>
@@ -612,7 +612,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="2252" levels="1" name="Bless of Darkness">
 	<set name="isMagic" val="2" /> <!-- Static Skill -->
 	<set name="element" val="5" /> <!-- Dark -->
@@ -629,7 +629,7 @@
 		</effect>
 	</for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="2253" levels="1" name="Bless of Sacredness">
 	<set name="isMagic" val="2" /> <!-- Static Skill -->
 	<set name="element" val="4" /> <!-- Holy -->
@@ -698,7 +698,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:L2Emu -->
+<!-- Status:Fixed Pack:L2jxCine author:L2Emu -->
 <skill id="2258" levels="3" name="Crystal of Darkness">
    <table name="#magicLvl"> 20 40 70 </table>
    <table name="#Lvl"> 2 3 4 </table>
@@ -714,7 +714,7 @@
    <set name="itemConsumeId" val="7916"/>
   <set name="itemConsumeCount" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:L2Emu -->
+<!-- Status:Fixed Pack:L2jxCine author:L2Emu -->
 <skill id="2259" levels="3" name="Crystal of Sacredness">
   <table name="#magicLvl"> 20 40 70 </table>
   <table name="#Lvl"> 2 3 4 </table>

@@ -12,7 +12,7 @@ import org.apache.commons.lang.ArrayUtils;
 
 public final class RunnableStatsManager
 {
-	protected static final Map<Class<?>, ClassStat> _classStats = new HashMap<Class<?>, ClassStat>();
+	protected static final Map<Class<?>, ClassStat> _classStats = new HashMap<>();
 
 	private static final class ClassStat
 	{

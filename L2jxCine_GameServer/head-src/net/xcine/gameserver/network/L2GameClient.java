@@ -32,14 +32,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.crypt.nProtect;
 import net.xcine.gameserver.communitybbs.Manager.RegionBBSManager;
 import net.xcine.gameserver.datatables.OfflineTradeTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
-import net.xcine.gameserver.managers.AwayManager;
 import net.xcine.gameserver.model.CharSelectInfoPackage;
 import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.L2World;
@@ -67,7 +65,7 @@ import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
- * @author L2JFrozen dev
+ * @author L2jxCine dev
  */
 public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> implements Runnable
 {
@@ -99,7 +97,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 
 	private boolean _isAuthedGG;
 	private long _connectionStartTime;
-	private List<Integer> _charSlotMapping = new FastList<Integer>();
+	private List<Integer> _charSlotMapping = new FastList<>();
 
 	// Task
 	private ScheduledFuture<?> _guardCheckTask = null;
@@ -134,7 +132,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		_connectionStartTime = System.currentTimeMillis();
 		crypt = new GameCrypt();
 		_stats = new ClientStats();
-		_packetQueue = new ArrayBlockingQueue<ReceivablePacket<L2GameClient>>(net.xcine.netcore.Config.getInstance().CLIENT_PACKET_QUEUE_SIZE);
+		_packetQueue = new ArrayBlockingQueue<>(net.xcine.netcore.Config.getInstance().CLIENT_PACKET_QUEUE_SIZE);
 		
 		_guardCheckTask = nProtect.getInstance().startTask(this);
 		ThreadPoolManager.getInstance().scheduleGeneral(new Runnable() {
@@ -864,11 +862,6 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 						player.removeSkill(SkillTable.getInstance().getInfo(4289, 1));
 					}
 
-					if(player.isAway())
-					{
-						AwayManager.getInstance().extraBack(player);
-					}
-					
 					if(Olympiad.getInstance().isRegistered(player)){
 						Olympiad.getInstance().unRegisterNoble(player);
 					}
@@ -961,11 +954,6 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 						player.removeSkill(SkillTable.getInstance().getInfo(4289, 1));
 					}
 
-					if(player.isAway())
-					{
-						AwayManager.getInstance().extraBack(player);
-					}
-					
 					if(Olympiad.getInstance().isRegistered(player)){
 						Olympiad.getInstance().unRegisterNoble(player);
 					}

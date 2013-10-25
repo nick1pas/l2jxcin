@@ -818,7 +818,7 @@ public final class Config
 			}
 
 			USE_SAY_FILTER = Boolean.parseBoolean(otherSettings.getProperty("UseChatFilter", "false"));
-			CHAT_FILTER_CHARS = otherSettings.getProperty("ChatFilterChars", "[I love L2jFrozen]");
+			CHAT_FILTER_CHARS = otherSettings.getProperty("ChatFilterChars", "[I love L2jxCine]");
 			CHAT_FILTER_PUNISHMENT = otherSettings.getProperty("ChatFilterPunishment", "off");
 			CHAT_FILTER_PUNISHMENT_PARAM1 = Integer.parseInt(otherSettings.getProperty("ChatFilterPunishmentParam1", "1"));
 			CHAT_FILTER_PUNISHMENT_PARAM2 = Integer.parseInt(otherSettings.getProperty("ChatFilterPunishmentParam2", "1000"));
@@ -1837,12 +1837,6 @@ public final class Config
 	public static boolean BANKING_SYSTEM_ENABLED;
 	public static int BANKING_SYSTEM_GOLDBARS;
 	public static int BANKING_SYSTEM_ADENA;
-	public static boolean ALLOW_AWAY_STATUS;
-	public static int AWAY_TIMER;
-	public static int BACK_TIMER;
-	public static int AWAY_TITLE_COLOR;
-	public static boolean AWAY_PLAYER_TAKE_AGGRO;
-	public static boolean AWAY_PEACE_ZONE;
 	public static boolean IS_CRAFTING_ENABLED;
 	public static int DWARF_RECIPE_LIMIT;
 	public static int COMMON_RECIPE_LIMIT;
@@ -1875,14 +1869,6 @@ public final class Config
 			BANKING_SYSTEM_ENABLED = Boolean.parseBoolean(frozenSettings.getProperty("BankingEnabled", "false"));
 			BANKING_SYSTEM_GOLDBARS = Integer.parseInt(frozenSettings.getProperty("BankingGoldbarCount", "1"));
 			BANKING_SYSTEM_ADENA = Integer.parseInt(frozenSettings.getProperty("BankingAdenaCount", "500000000"));
-			/** Away System **/
-			ALLOW_AWAY_STATUS = Boolean.parseBoolean(frozenSettings.getProperty("AllowAwayStatus", "False"));
-			AWAY_PLAYER_TAKE_AGGRO = Boolean.parseBoolean(frozenSettings.getProperty("AwayPlayerTakeAggro", "False"));
-			AWAY_TITLE_COLOR = Integer.decode("0x" + frozenSettings.getProperty("AwayTitleColor", "0000FF"));
-			AWAY_TIMER = Integer.parseInt(frozenSettings.getProperty("AwayTimer", "30"));
-			BACK_TIMER = Integer.parseInt(frozenSettings.getProperty("BackTimer", "30"));
-			AWAY_PEACE_ZONE = Boolean.parseBoolean(frozenSettings.getProperty("AwayOnlyInPeaceZone", "False"));
-
 			DWARF_RECIPE_LIMIT = Integer.parseInt(frozenSettings.getProperty("DwarfRecipeLimit", "50"));
 			COMMON_RECIPE_LIMIT = Integer.parseInt(frozenSettings.getProperty("CommonRecipeLimit", "50"));
 			IS_CRAFTING_ENABLED = Boolean.parseBoolean(frozenSettings.getProperty("CraftingEnabled", "True"));
@@ -2108,109 +2094,109 @@ public final class Config
 
 
 	//============================================================
-	public static void loadL2JFrozenConfig()
+	public static void loadL2jxCineConfig()
 	{
-		final String L2JFROZEN = FService.L2JFROZEN_CONFIG_FILE;
+		final String L2jxCine = FService.L2JCINE_CONFIG_FILE;
 
 		try
 		{
-			Properties L2JFrozenSettings = new Properties();
-			InputStream is = new FileInputStream(new File(L2JFROZEN));
-			L2JFrozenSettings.load(is);
+			Properties L2jxCineSettings = new Properties();
+			InputStream is = new FileInputStream(new File(L2jxCine));
+			L2jxCineSettings.load(is);
 			is.close();
 
 			/** Custom Tables **/
-			CUSTOM_SPAWNLIST_TABLE = Boolean.valueOf(L2JFrozenSettings.getProperty("CustomSpawnlistTable", "True"));
-			SAVE_GMSPAWN_ON_CUSTOM = Boolean.valueOf(L2JFrozenSettings.getProperty("SaveGmSpawnOnCustom", "True"));
-			DELETE_GMSPAWN_ON_CUSTOM = Boolean.valueOf(L2JFrozenSettings.getProperty("DeleteGmSpawnOnCustom", "True"));
+			CUSTOM_SPAWNLIST_TABLE = Boolean.valueOf(L2jxCineSettings.getProperty("CustomSpawnlistTable", "True"));
+			SAVE_GMSPAWN_ON_CUSTOM = Boolean.valueOf(L2jxCineSettings.getProperty("SaveGmSpawnOnCustom", "True"));
+			DELETE_GMSPAWN_ON_CUSTOM = Boolean.valueOf(L2jxCineSettings.getProperty("DeleteGmSpawnOnCustom", "True"));
 
-			ONLINE_PLAYERS_ON_LOGIN = Boolean.valueOf(L2JFrozenSettings.getProperty("OnlineOnLogin", "False"));
-			SHOW_SERVER_VERSION = Boolean.valueOf(L2JFrozenSettings.getProperty("ShowServerVersion", "False"));
-			SHOW_NPC_CREST = Boolean.parseBoolean(L2JFrozenSettings.getProperty("ShowNpcCrest", "False"));
+			ONLINE_PLAYERS_ON_LOGIN = Boolean.valueOf(L2jxCineSettings.getProperty("OnlineOnLogin", "False"));
+			SHOW_SERVER_VERSION = Boolean.valueOf(L2jxCineSettings.getProperty("ShowServerVersion", "False"));
+			SHOW_NPC_CREST = Boolean.parseBoolean(L2jxCineSettings.getProperty("ShowNpcCrest", "False"));
 			
 			/** Protector **/
-			PROTECTOR_PLAYER_PK = Boolean.parseBoolean(L2JFrozenSettings.getProperty("ProtectorPlayerPK", "false"));
-			PROTECTOR_PLAYER_PVP = Boolean.parseBoolean(L2JFrozenSettings.getProperty("ProtectorPlayerPVP", "false"));
-			PROTECTOR_RADIUS_ACTION = Integer.parseInt(L2JFrozenSettings.getProperty("ProtectorRadiusAction", "500"));
-			PROTECTOR_SKILLID = Integer.parseInt(L2JFrozenSettings.getProperty("ProtectorSkillId", "1069"));
-			PROTECTOR_SKILLLEVEL = Integer.parseInt(L2JFrozenSettings.getProperty("ProtectorSkillLevel", "42"));
-			PROTECTOR_SKILLTIME = Integer.parseInt(L2JFrozenSettings.getProperty("ProtectorSkillTime", "800"));
-			PROTECTOR_MESSAGE = L2JFrozenSettings.getProperty("ProtectorMessage", "Protector, not spawnkilling here, go read the rules !!!");
+			PROTECTOR_PLAYER_PK = Boolean.parseBoolean(L2jxCineSettings.getProperty("ProtectorPlayerPK", "false"));
+			PROTECTOR_PLAYER_PVP = Boolean.parseBoolean(L2jxCineSettings.getProperty("ProtectorPlayerPVP", "false"));
+			PROTECTOR_RADIUS_ACTION = Integer.parseInt(L2jxCineSettings.getProperty("ProtectorRadiusAction", "500"));
+			PROTECTOR_SKILLID = Integer.parseInt(L2jxCineSettings.getProperty("ProtectorSkillId", "1069"));
+			PROTECTOR_SKILLLEVEL = Integer.parseInt(L2jxCineSettings.getProperty("ProtectorSkillLevel", "42"));
+			PROTECTOR_SKILLTIME = Integer.parseInt(L2jxCineSettings.getProperty("ProtectorSkillTime", "800"));
+			PROTECTOR_MESSAGE = L2jxCineSettings.getProperty("ProtectorMessage", "Protector, not spawnkilling here, go read the rules !!!");
 
 			/** Donator color name **/
-			DONATOR_NAME_COLOR_ENABLED = Boolean.parseBoolean(L2JFrozenSettings.getProperty("DonatorNameColorEnabled", "False"));
-			DONATOR_NAME_COLOR = Integer.decode("0x" + L2JFrozenSettings.getProperty("DonatorColorName", "00FFFF"));
-			DONATOR_TITLE_COLOR = Integer.decode("0x" + L2JFrozenSettings.getProperty("DonatorTitleColor", "00FF00"));
-			DONATOR_XPSP_RATE = Float.parseFloat(L2JFrozenSettings.getProperty("DonatorXpSpRate", "1.5"));
-			DONATOR_ADENA_RATE = Float.parseFloat(L2JFrozenSettings.getProperty("DonatorAdenaRate", "1.5"));
-			DONATOR_DROP_RATE = Float.parseFloat(L2JFrozenSettings.getProperty("DonatorDropRate", "1.5"));
-			DONATOR_SPOIL_RATE = Float.parseFloat(L2JFrozenSettings.getProperty("DonatorSpoilRate", "1.5"));
+			DONATOR_NAME_COLOR_ENABLED = Boolean.parseBoolean(L2jxCineSettings.getProperty("DonatorNameColorEnabled", "False"));
+			DONATOR_NAME_COLOR = Integer.decode("0x" + L2jxCineSettings.getProperty("DonatorColorName", "00FFFF"));
+			DONATOR_TITLE_COLOR = Integer.decode("0x" + L2jxCineSettings.getProperty("DonatorTitleColor", "00FF00"));
+			DONATOR_XPSP_RATE = Float.parseFloat(L2jxCineSettings.getProperty("DonatorXpSpRate", "1.5"));
+			DONATOR_ADENA_RATE = Float.parseFloat(L2jxCineSettings.getProperty("DonatorAdenaRate", "1.5"));
+			DONATOR_DROP_RATE = Float.parseFloat(L2jxCineSettings.getProperty("DonatorDropRate", "1.5"));
+			DONATOR_SPOIL_RATE = Float.parseFloat(L2jxCineSettings.getProperty("DonatorSpoilRate", "1.5"));
 
 			/** Welcome Htm **/
-			WELCOME_HTM = Boolean.parseBoolean(L2JFrozenSettings.getProperty("WelcomeHtm", "False"));
+			WELCOME_HTM = Boolean.parseBoolean(L2jxCineSettings.getProperty("WelcomeHtm", "False"));
 
 			/** Server Name **/
-			ALT_SERVER_NAME_ENABLED = Boolean.parseBoolean(L2JFrozenSettings.getProperty("ServerNameEnabled", "false"));
-			ANNOUNCE_TO_ALL_SPAWN_RB = Boolean.parseBoolean(L2JFrozenSettings.getProperty("AnnounceToAllSpawnRb", "false"));
-			ANNOUNCE_TRY_BANNED_ACCOUNT = Boolean.parseBoolean(L2JFrozenSettings.getProperty("AnnounceTryBannedAccount", "false"));
-			ALT_Server_Name = String.valueOf(L2JFrozenSettings.getProperty("ServerName"));
-			DIFFERENT_Z_CHANGE_OBJECT = Integer.parseInt(L2JFrozenSettings.getProperty("DifferentZchangeObject", "650"));
-			DIFFERENT_Z_NEW_MOVIE = Integer.parseInt(L2JFrozenSettings.getProperty("DifferentZnewmovie", "1000"));
+			ALT_SERVER_NAME_ENABLED = Boolean.parseBoolean(L2jxCineSettings.getProperty("ServerNameEnabled", "false"));
+			ANNOUNCE_TO_ALL_SPAWN_RB = Boolean.parseBoolean(L2jxCineSettings.getProperty("AnnounceToAllSpawnRb", "false"));
+			ANNOUNCE_TRY_BANNED_ACCOUNT = Boolean.parseBoolean(L2jxCineSettings.getProperty("AnnounceTryBannedAccount", "false"));
+			ALT_Server_Name = String.valueOf(L2jxCineSettings.getProperty("ServerName"));
+			DIFFERENT_Z_CHANGE_OBJECT = Integer.parseInt(L2jxCineSettings.getProperty("DifferentZchangeObject", "650"));
+			DIFFERENT_Z_NEW_MOVIE = Integer.parseInt(L2jxCineSettings.getProperty("DifferentZnewmovie", "1000"));
 
-			ALLOW_SIMPLE_STATS_VIEW = Boolean.valueOf(L2JFrozenSettings.getProperty("AllowSimpleStatsView", "True"));
-			ALLOW_DETAILED_STATS_VIEW = Boolean.valueOf(L2JFrozenSettings.getProperty("AllowDetailedStatsView", "False"));
-			ALLOW_ONLINE_VIEW = Boolean.valueOf(L2JFrozenSettings.getProperty("AllowOnlineView", "False"));
+			ALLOW_SIMPLE_STATS_VIEW = Boolean.valueOf(L2jxCineSettings.getProperty("AllowSimpleStatsView", "True"));
+			ALLOW_DETAILED_STATS_VIEW = Boolean.valueOf(L2jxCineSettings.getProperty("AllowDetailedStatsView", "False"));
+			ALLOW_ONLINE_VIEW = Boolean.valueOf(L2jxCineSettings.getProperty("AllowOnlineView", "False"));
 
-			KEEP_SUBCLASS_SKILLS = Boolean.parseBoolean(L2JFrozenSettings.getProperty("KeepSubClassSkills", "False"));
+			KEEP_SUBCLASS_SKILLS = Boolean.parseBoolean(L2jxCineSettings.getProperty("KeepSubClassSkills", "False"));
 
-			ALLOWED_SKILLS = L2JFrozenSettings.getProperty("AllowedSkills", "541,542,543,544,545,546,547,548,549,550,551,552,553,554,555,556,557,558,617,618,619");
+			ALLOWED_SKILLS = L2jxCineSettings.getProperty("AllowedSkills", "541,542,543,544,545,546,547,548,549,550,551,552,553,554,555,556,557,558,617,618,619");
 			ALLOWED_SKILLS_LIST = new FastList<>();
 			for(String id : ALLOWED_SKILLS.trim().split(","))
 			{
 				ALLOWED_SKILLS_LIST.add(Integer.parseInt(id.trim()));
 			}
-			CASTLE_SHIELD = Boolean.parseBoolean(L2JFrozenSettings.getProperty("CastleShieldRestriction", "true"));
-			CLANHALL_SHIELD = Boolean.parseBoolean(L2JFrozenSettings.getProperty("ClanHallShieldRestriction", "true"));
-			APELLA_ARMORS = Boolean.parseBoolean(L2JFrozenSettings.getProperty("ApellaArmorsRestriction", "true"));
-			OATH_ARMORS = Boolean.parseBoolean(L2JFrozenSettings.getProperty("OathArmorsRestriction", "true"));
-			CASTLE_CROWN = Boolean.parseBoolean(L2JFrozenSettings.getProperty("CastleLordsCrownRestriction", "true"));
-			CASTLE_CIRCLETS = Boolean.parseBoolean(L2JFrozenSettings.getProperty("CastleCircletsRestriction", "true"));
-			CHAR_TITLE = Boolean.parseBoolean(L2JFrozenSettings.getProperty("CharTitle", "false"));
-			ADD_CHAR_TITLE = L2JFrozenSettings.getProperty("CharAddTitle", "Welcome");
+			CASTLE_SHIELD = Boolean.parseBoolean(L2jxCineSettings.getProperty("CastleShieldRestriction", "true"));
+			CLANHALL_SHIELD = Boolean.parseBoolean(L2jxCineSettings.getProperty("ClanHallShieldRestriction", "true"));
+			APELLA_ARMORS = Boolean.parseBoolean(L2jxCineSettings.getProperty("ApellaArmorsRestriction", "true"));
+			OATH_ARMORS = Boolean.parseBoolean(L2jxCineSettings.getProperty("OathArmorsRestriction", "true"));
+			CASTLE_CROWN = Boolean.parseBoolean(L2jxCineSettings.getProperty("CastleLordsCrownRestriction", "true"));
+			CASTLE_CIRCLETS = Boolean.parseBoolean(L2jxCineSettings.getProperty("CastleCircletsRestriction", "true"));
+			CHAR_TITLE = Boolean.parseBoolean(L2jxCineSettings.getProperty("CharTitle", "false"));
+			ADD_CHAR_TITLE = L2jxCineSettings.getProperty("CharAddTitle", "Welcome");
 
-			NOBLE_CUSTOM_ITEMS = Boolean.parseBoolean(L2JFrozenSettings.getProperty("EnableNobleCustomItem", "true"));
-			NOOBLE_CUSTOM_ITEM_ID = Integer.parseInt(L2JFrozenSettings.getProperty("NoobleCustomItemId", "6673"));
-			HERO_CUSTOM_ITEMS = Boolean.parseBoolean(L2JFrozenSettings.getProperty("EnableHeroCustomItem", "true"));
-			HERO_CUSTOM_ITEM_ID = Integer.parseInt(L2JFrozenSettings.getProperty("HeroCustomItemId", "3481"));
-			HERO_CUSTOM_DAY = Integer.parseInt(L2JFrozenSettings.getProperty("HeroCustomDay", "0"));
+			NOBLE_CUSTOM_ITEMS = Boolean.parseBoolean(L2jxCineSettings.getProperty("EnableNobleCustomItem", "true"));
+			NOOBLE_CUSTOM_ITEM_ID = Integer.parseInt(L2jxCineSettings.getProperty("NoobleCustomItemId", "6673"));
+			HERO_CUSTOM_ITEMS = Boolean.parseBoolean(L2jxCineSettings.getProperty("EnableHeroCustomItem", "true"));
+			HERO_CUSTOM_ITEM_ID = Integer.parseInt(L2jxCineSettings.getProperty("HeroCustomItemId", "3481"));
+			HERO_CUSTOM_DAY = Integer.parseInt(L2jxCineSettings.getProperty("HeroCustomDay", "0"));
 
-			ALLOW_CREATE_LVL = Boolean.parseBoolean(L2JFrozenSettings.getProperty("CustomStartingLvl", "False"));
-			CHAR_CREATE_LVL = Integer.parseInt(L2JFrozenSettings.getProperty("CharLvl", "80"));
-			SPAWN_CHAR = Boolean.parseBoolean(L2JFrozenSettings.getProperty("CustomSpawn", "false"));
-			SPAWN_X = Integer.parseInt(L2JFrozenSettings.getProperty("SpawnX", ""));
-			SPAWN_Y = Integer.parseInt(L2JFrozenSettings.getProperty("SpawnY", ""));
-			SPAWN_Z = Integer.parseInt(L2JFrozenSettings.getProperty("SpawnZ", ""));
-			ALLOW_LOW_LEVEL_TRADE = Boolean.parseBoolean(L2JFrozenSettings.getProperty("AllowLowLevelTrade", "True"));
-			ALLOW_HERO_SUBSKILL = Boolean.parseBoolean(L2JFrozenSettings.getProperty("CustomHeroSubSkill", "False"));
-			HERO_COUNT = Integer.parseInt(L2JFrozenSettings.getProperty("HeroCount", "1"));
-			CRUMA_TOWER_LEVEL_RESTRICT = Integer.parseInt(L2JFrozenSettings.getProperty("CrumaTowerLevelRestrict", "56"));
-			ALLOW_RAID_BOSS_PETRIFIED = Boolean.valueOf(L2JFrozenSettings.getProperty("AllowRaidBossPetrified", "True"));
-			ALT_PLAYER_PROTECTION_LEVEL = Integer.parseInt(L2JFrozenSettings.getProperty("AltPlayerProtectionLevel", "0"));
-			MONSTER_RETURN_DELAY = Integer.parseInt(L2JFrozenSettings.getProperty("MonsterReturnDelay", "1200"));
-			SCROLL_STACKABLE = Boolean.parseBoolean(L2JFrozenSettings.getProperty("ScrollStackable", "False"));
-			ALLOW_CHAR_KILL_PROTECT = Boolean.parseBoolean(L2JFrozenSettings.getProperty("AllowLowLvlProtect", "False"));
-			CLAN_LEADER_COLOR_ENABLED = Boolean.parseBoolean(L2JFrozenSettings.getProperty("ClanLeaderNameColorEnabled", "true"));
-			CLAN_LEADER_COLORED = Integer.parseInt(L2JFrozenSettings.getProperty("ClanLeaderColored", "1"));
-			CLAN_LEADER_COLOR = Integer.decode("0x" + L2JFrozenSettings.getProperty("ClanLeaderColor", "00FFFF"));
-			CLAN_LEADER_COLOR_CLAN_LEVEL = Integer.parseInt(L2JFrozenSettings.getProperty("ClanLeaderColorAtClanLevel", "1"));
-			SAVE_RAIDBOSS_STATUS_INTO_DB = Boolean.parseBoolean(L2JFrozenSettings.getProperty("SaveRBStatusIntoDB", "False"));
-			DISABLE_WEIGHT_PENALTY = Boolean.parseBoolean(L2JFrozenSettings.getProperty("DisableWeightPenalty", "False"));
+			ALLOW_CREATE_LVL = Boolean.parseBoolean(L2jxCineSettings.getProperty("CustomStartingLvl", "False"));
+			CHAR_CREATE_LVL = Integer.parseInt(L2jxCineSettings.getProperty("CharLvl", "80"));
+			SPAWN_CHAR = Boolean.parseBoolean(L2jxCineSettings.getProperty("CustomSpawn", "false"));
+			SPAWN_X = Integer.parseInt(L2jxCineSettings.getProperty("SpawnX", ""));
+			SPAWN_Y = Integer.parseInt(L2jxCineSettings.getProperty("SpawnY", ""));
+			SPAWN_Z = Integer.parseInt(L2jxCineSettings.getProperty("SpawnZ", ""));
+			ALLOW_LOW_LEVEL_TRADE = Boolean.parseBoolean(L2jxCineSettings.getProperty("AllowLowLevelTrade", "True"));
+			ALLOW_HERO_SUBSKILL = Boolean.parseBoolean(L2jxCineSettings.getProperty("CustomHeroSubSkill", "False"));
+			HERO_COUNT = Integer.parseInt(L2jxCineSettings.getProperty("HeroCount", "1"));
+			CRUMA_TOWER_LEVEL_RESTRICT = Integer.parseInt(L2jxCineSettings.getProperty("CrumaTowerLevelRestrict", "56"));
+			ALLOW_RAID_BOSS_PETRIFIED = Boolean.valueOf(L2jxCineSettings.getProperty("AllowRaidBossPetrified", "True"));
+			ALT_PLAYER_PROTECTION_LEVEL = Integer.parseInt(L2jxCineSettings.getProperty("AltPlayerProtectionLevel", "0"));
+			MONSTER_RETURN_DELAY = Integer.parseInt(L2jxCineSettings.getProperty("MonsterReturnDelay", "1200"));
+			SCROLL_STACKABLE = Boolean.parseBoolean(L2jxCineSettings.getProperty("ScrollStackable", "False"));
+			ALLOW_CHAR_KILL_PROTECT = Boolean.parseBoolean(L2jxCineSettings.getProperty("AllowLowLvlProtect", "False"));
+			CLAN_LEADER_COLOR_ENABLED = Boolean.parseBoolean(L2jxCineSettings.getProperty("ClanLeaderNameColorEnabled", "true"));
+			CLAN_LEADER_COLORED = Integer.parseInt(L2jxCineSettings.getProperty("ClanLeaderColored", "1"));
+			CLAN_LEADER_COLOR = Integer.decode("0x" + L2jxCineSettings.getProperty("ClanLeaderColor", "00FFFF"));
+			CLAN_LEADER_COLOR_CLAN_LEVEL = Integer.parseInt(L2jxCineSettings.getProperty("ClanLeaderColorAtClanLevel", "1"));
+			SAVE_RAIDBOSS_STATUS_INTO_DB = Boolean.parseBoolean(L2jxCineSettings.getProperty("SaveRBStatusIntoDB", "False"));
+			DISABLE_WEIGHT_PENALTY = Boolean.parseBoolean(L2jxCineSettings.getProperty("DisableWeightPenalty", "False"));
 			
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			throw new Error("Failed to Load " + L2JFROZEN + " File.");
+			throw new Error("Failed to Load " + L2jxCine + " File.");
 		}
 	}
 
@@ -4185,7 +4171,7 @@ public final class Config
 			loadBossConfig();
 
 			// Head functions
-			loadL2JFrozenConfig();
+			loadL2jxCineConfig();
 			loadPHYSICSConfig();
 			loadAccessConfig();
 			loadPvpConfig();			

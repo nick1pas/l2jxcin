@@ -62,7 +62,8 @@ public class AdminVip implements IAdminCommandHandler
                admin_removevip
        }
 
-       public boolean useAdminCommand(String command, L2PcInstance activeChar)
+       @Override
+	public boolean useAdminCommand(String command, L2PcInstance activeChar)
        {
                StringTokenizer st = new StringTokenizer(command);
                
@@ -265,7 +266,8 @@ public class AdminVip implements IAdminCommandHandler
                }
        }
 
-       public String[] getAdminCommandList()
+       @Override
+	public String[] getAdminCommandList()
        {
                return _adminCommands;
        }

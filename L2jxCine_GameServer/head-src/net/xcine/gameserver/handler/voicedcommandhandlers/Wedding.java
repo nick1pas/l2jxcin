@@ -29,7 +29,7 @@ import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.util.Broadcast;
 
 /**
- * @author L2JFrozen
+ * @author L2jxCine
  */
 public class Wedding implements IVoicedCommandHandler
 {

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="4900" levels="1" name="Raid Boss - Level 78">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="PASSIVE"/>

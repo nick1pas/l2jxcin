@@ -58,18 +58,18 @@
 
 	<target name="jar" depends="compile" description="Create the jar file">
 
-		<jar destfile="${build}/l2jfrozen-core.jar">
+		<jar destfile="${build}/L2jxCine-core.jar">
 			<fileset dir="${build.classes}" />
 		</jar>
 
 		<copy todir="${build.dist.login.lib}">
 			<fileset dir="${build}">
-				<include name="l2jfrozen-core.jar" />
+				<include name="L2jxCine-core.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${build.dist.game.lib}">
 			<fileset dir="${build}">
-				<include name="l2jfrozen-core.jar" />
+				<include name="L2jxCine-core.jar" />
 			</fileset>
 		</copy>
 
@@ -238,7 +238,7 @@
 
 
 		<delete dir="${build.classes}" />
-		<delete file="${build}/l2jfrozen-core.jar" />
+		<delete file="${build}/L2jxCine-core.jar" />
 
 	</target>
 
@@ -248,14 +248,14 @@
 			<format property="build.tstamp" pattern="dd-MM-yyyy hh:mm:ss aa" />
 		</tstamp>
 
-		<exec dir="." executable="./subversion/svnversion" outputproperty="l2jfrozen.revision" failifexecutionfails="false">
+		<exec dir="." executable="./subversion/svnversion" outputproperty="L2jxCine.revision" failifexecutionfails="false">
 			<arg line="-n ." />
 		</exec>
 	</target>
 
 	
 	<target name="dist-local" depends="prepare-local,prepare-final,export" description="Create distribution files and Zip one into 'build' folder">
-		<zip destfile="${build}/L2JFrozen_GameServer.zip" basedir="${build.dist}" update="true" />
+		<zip destfile="${build}/L2jxCine_GameServer.zip" basedir="${build.dist}" update="true" />
 	</target>
 
 	<target name="dist-test" depends="prepare-test,prepare-final,export" description="Create distribution files into 'local_test_folder' folder: change it into build.properties">
@@ -268,7 +268,7 @@
 		<property name="build" location="build-core" />
 		<property name="build.classes" location="${build}/classes" />
 		<delete dir="${build.classes}" />
-		<delete file="${build}/l2jfrozen-core.jar" />
+		<delete file="${build}/L2jxCine-core.jar" />
 		<mkdir dir="${build}" />
 		<mkdir dir="${build.classes}" />
 		<javac destdir="${build.classes}" includeantruntime="false" optimize="on" debug="on" source="1.6" target="1.6" encoding="UTF-8" nowarn="off">
@@ -277,7 +277,7 @@
 			<classpath refid="classpath" />
 		</javac>
 
-		<jar destfile="${build}/l2jfrozen-core.jar">
+		<jar destfile="${build}/L2jxCine-core.jar">
 			<fileset dir="${build.classes}" />
 		</jar>
 

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="301" levels="5" name="Summon Big Boom" enchantLevels1="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -313,7 +313,7 @@
     </effect>
   </enchant1for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="311" levels="1" name="Dance of Protection" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -345,7 +345,7 @@
     </effect>
   </enchant1for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="312" levels="20" name="Vicious Stance" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -380,7 +380,7 @@
     </effect>
   </enchant2for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="313" levels="8" name="Snipe" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -514,7 +514,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Incorrect Pack:l2jfrozen author:Nefer -->
+<!-- Status:Incorrect Pack:L2jxCine author:Nefer -->
 <skill id="316" levels="1" name="Aegis">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="PASSIVE"/>
@@ -527,7 +527,7 @@
     <mul order="0x30" stat="pDef" val="1.1"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="317" levels="5" name="Focus Attack">
   <set name="weaponsAllowed" val="64"/>
   <table name="#mpConsume">18 22 27 31 34</table>
@@ -553,7 +553,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="318" levels="1" name="Aegis Stance" enchantLevels1="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -603,7 +603,7 @@
     </add>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="320" levels="10" name="Wrath" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -629,7 +629,7 @@
   <enchant1 name="power" val="#ench1Power"/>
   <enchant2 name="mpConsume" val="#ench2MpConsume"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="321" levels="10" name="Blinding Blow">
   <table name="#mpConsume">67 68 69 70 71 72 73 74 75 76</table>
   <table name="#magicLvl">65 66 67 68 69 70 71 72 73 74</table>
@@ -693,7 +693,7 @@
     </effect>
   </enchant2for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="323" levels="1" name="Quiver of Arrow: Grade A">
   <set name="mpConsume" val="366"/>
   <set name="target" val="TARGET_SELF"/>
@@ -708,7 +708,7 @@
   <set name="create_item_count" val="700"/>
   <set name="random_count" val="4"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="324" levels="1" name="Quiver of Arrow: Grade S">
   <set name="mpConsume" val="398"/>
   <set name="target" val="TARGET_SELF"/>
@@ -723,7 +723,7 @@
   <set name="create_item_count" val="900"/>
   <set name="random_count" val="4"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="325" levels="1" name="Strider Siege Assault">
   <set name="mpConsume" val="151"/>
   <set name="itemConsumeId" val="3031"/>
@@ -739,7 +739,7 @@
   <set name="castRange" val="40"/>
   <set name="effectRange" val="400"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="326" levels="1" name="Build Advanced Headquarters">
   <set name="mpConsume" val="30"/>
   <set name="itemConsumeId" val="2131"/>
@@ -820,7 +820,7 @@
     <add order="0x40" stat="skillMastery" val="2"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="332" levels="1" name="Extra Inventory">
   <!-- Increases size of inventory. -->
   <set name="magicLvl" val="76"/>
@@ -869,7 +869,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="336" levels="1" name="Arcane Wisdom">
   <set name="mpConsume" val="36"/>
   <set name="magicLvl" val="78"/>
@@ -883,7 +883,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="337" levels="1" name="Arcane Power">
   <set name="mpConsume" val="36"/>
   <set name="magicLvl" val="78"/>
@@ -897,7 +897,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="338" levels="1" name="Arcane Agility">
   <set name="mpConsume" val="36"/>
   <set name="magicLvl" val="78"/>
@@ -946,7 +946,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="341" levels="1" name="Touch of Life">
   <set name="hpConsume" val="1215"/>
   <set name="power" val="50"/>
@@ -967,7 +967,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="342" levels="1" name="Touch of Death">
   <set name="nextActionAttack" val="true" />
   <set name="hpConsume" val="1004"/>
@@ -1014,7 +1014,7 @@
   <set name="lethal2" val="2"/>
   <set name="hitTime" val="4000"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="344" levels="1" name="Lethal Blow">
   <set name="mpConsume" val="77"/>
   <set name="weaponsAllowed" val="16"/>
@@ -1169,7 +1169,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="352" levels="1" name="Shield Bash">
   <set name="nextActionAttack" val="true" />
   <set name="magicLvl" val="77"/>
@@ -1192,7 +1192,7 @@
     <effect count="1" name="RemoveTarget" time="1" val="0" noicon="1"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="353" levels="1" name="Shield Slam">
   <set name="nextActionAttack" val="true" />
   <set name="magicLvl" val="77"/>
@@ -1239,7 +1239,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="355" levels="1" name="Focus Death">
   <set name="mpConsume" val="36"/>
   <set name="effectPoint" val="669"/>
@@ -1274,7 +1274,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="356" levels="1" name="Focus Chance">
   <set name="mpConsume" val="36"/>
   <set name="effectPoint" val="669"/>
@@ -1309,7 +1309,7 @@
       </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="357" levels="1" name="Focus Power">
   <set name="mpConsume" val="36"/>
   <set name="effectPoint" val="669"/>
@@ -1344,7 +1344,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="358" levels="1" name="Bluff">
   <set name="weaponsAllowed" val="16"/>
   <set name="mpConsume" val="35"/>
@@ -1401,7 +1401,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="361" levels="1" name="Shock Blast">
   <set name="weaponsAllowed" val="64"/>
   <set name="magicLvl" val="77"/>
@@ -1430,7 +1430,7 @@
     <effect count="1" name="RemoveTarget" time="1" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="362" levels="1" name="Armor Crush">
   <set name="nextActionAttack" val="true" />
   <set name="magicLvl" val="77"/>
@@ -1559,7 +1559,7 @@
     <effect count="1" name="Petrification" time="30" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="368" levels="1" name="Vengeance">
   <set name="weaponsAllowed" val="2"/>
   <set name="magicLvl" val="77" />
@@ -1849,7 +1849,7 @@
     <mul order="0x30" stat="sleepVuln" val="#vuln"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="389" levels="3" name="Clan March">
   <table name="#runSpd">3 5 6</table>
   <set name="target" val="TARGET_SELF"/>
@@ -1871,7 +1871,7 @@
     <mul order="0x30" stat="rExp" val="#expLost"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="391" levels="1" name="Clan Imperium">
   <!-- Gives authority to open up a command channel. Only affects Wise Man class and above. -->
   <set name="target" val="TARGET_NONE"/>
@@ -1881,7 +1881,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="395" levels="1" name="Heroic Miracle">
   <set name="mpConsume" val="72"/>
   <set name="itemConsumeId" val="1785"/>
@@ -1901,7 +1901,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="396" levels="1" name="Heroic Berserker">
   <set name="mpConsume" val="72"/>
   <set name="itemConsumeId" val="1785"/>

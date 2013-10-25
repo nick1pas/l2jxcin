@@ -20,7 +20,7 @@
 package net.xcine.gameserver.network.clientpackets;
 
 /**
- * @author L2JFrozen
+ * @author L2jxCine
  */
 public class RequestSiegeInfo extends L2GameClientPacket
 {

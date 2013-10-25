@@ -61,7 +61,7 @@ public class TownManager
 	{
 		if(_towns == null)
 		{
-			_towns = new FastList<L2TownZone>();
+			_towns = new FastList<>();
 		}
 
 		_towns.add(arena);

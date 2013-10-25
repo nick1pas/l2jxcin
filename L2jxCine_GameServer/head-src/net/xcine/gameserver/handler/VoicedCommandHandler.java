@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import javolution.util.FastMap;
 import net.xcine.Config;
 import net.xcine.gameserver.GameServer;
-import net.xcine.gameserver.handler.voicedcommandhandlers.AwayCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.BankingCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.CTFCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.DMCmd;
@@ -89,11 +88,6 @@ public class VoicedCommandHandler
 		}
 		
 		registerVoicedCommandHandler(new StatsCmd());
-
-		if (Config.ALLOW_AWAY_STATUS)
-		{
-			registerVoicedCommandHandler(new AwayCmd());
-		}
 
 		if (Config.ALLOW_ONLINE_VIEW)
 		{

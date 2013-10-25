@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1400" levels="10" name="Turn Undead" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -76,7 +76,7 @@
   <enchant1 name="power" val="#ench1Power"/>
   <enchant2 name="mpConsume" val="#ench2MpConsume"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1403" levels="1" name="Summon Friend">
   <set name="target" val="TARGET_PARTY_MEMBER"/>
   <set name="skillType" val="SUMMON_FRIEND"/>
@@ -213,7 +213,7 @@
   <set name="negateEffectTypes" val="DEBUFF MANA_DMG_OVER_TIME"/>
   <set name="negatePower" val="9"/> <!-- Guessing -->
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1410" levels="1" name="Salvation">
   <set name="magicLvl" val="79"/>
   <set name="mpConsume" val="87"/>
@@ -232,7 +232,7 @@
 	<effect count="1" name="PhoenixBless" time="3600" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1411" levels="1" name="Mystic Immunity">
   <set name="mpConsume" val="73"/>
   <set name="magicLvl" val="79"/>
@@ -250,7 +250,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1412" levels="1" name="Spell Turning">
   <set name="magiclvl" val="79"/>
   <set name="mpConsume" val="23"/>
@@ -272,7 +272,7 @@
     <effect count="1" name="RemoveTarget" noicon="1" time="1" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1413" levels="1" name="Magnus' Chant">
   <set name="itemConsumeId" val="3031"/>
   <set name="itemConsumeCount" val="40"/>
@@ -365,7 +365,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1417" levels="5" name="Aura Flash" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -396,7 +396,7 @@
     <effect count="1" name="RemoveTarget" time="1" val="0" effectPower="#effectPower" effectType="DEBUFF"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1418" levels="1" name="Celestial Shield">
   <set name="mpConsume" val="60"/>
   <set name="target" val="TARGET_ONE"/>
@@ -411,7 +411,7 @@
     <effect count="1" name="Invincible" time="10" val="0" stackOrder="1" stackType="Instant_Shield"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1419" levels="1" name="Volcano">
   <set name="target" val="TARGET_GROUND"/>
   <set name="skillType" val="SIGNET_CASTTIME"/>
@@ -441,7 +441,7 @@
     <effect self="1" count="9" name="SignetMDam" time="2" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1420" levels="1" name="Cyclone">
   <set name="target" val="TARGET_GROUND"/>
   <set name="skillType" val="SIGNET_CASTTIME"/>
@@ -471,7 +471,7 @@
     <effect self="1" count="9" name="SignetMDam" time="2" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1421" levels="1" name="Raging Waves">
   <set name="target" val="TARGET_GROUND"/>
   <set name="skillType" val="SIGNET_CASTTIME"/>
@@ -501,7 +501,7 @@
     <effect self="1" count="9" name="SignetMDam" time="2" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:OnePaTuBHuK -->
+<!-- Status:Fixed Pack:L2jxCine author:OnePaTuBHuK -->
 <skill id="1422" levels="1" name="Day of Doom">
    <set name="target" val="TARGET_GROUND" />
    <set name="skillType" val="SIGNET" />
@@ -526,7 +526,7 @@
       <effect count="5" name="Signet" time="3" val="0" />
    </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1423" levels="1" name="Gehenna">
   <set name="target" val="TARGET_GROUND"/>
   <set name="skillType" val="SIGNET_CASTTIME"/>
@@ -556,7 +556,7 @@
     <effect self="1" count="9" name="SignetMDam" time="2" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1424" levels="1" name="Anti-Summoning Field">
   <set name="target" val="TARGET_GROUND"/>
   <set name="skillType" val="SIGNET"/>
@@ -584,7 +584,7 @@
     <effect count="6" name="SignetAntiSummon" time="5" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1425" levels="1" name="Purification Field">
   <set name="target" val="TARGET_CLAN"/>
   <set name="skillType" val="NEGATE"/>
@@ -607,7 +607,7 @@
   	<player spell_force="2"/>
   </cond>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1426" levels="1" name="Miracle">
   <set name="itemConsumeId" val="8876"/>
   <set name="itemConsumeCount" val="1"/>
@@ -628,7 +628,7 @@
     <player spell_force="2"/>
   </cond>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1427" levels="1" name="Flames of Invincibility">
   <set name="mpConsume" val="73"/>
   <set name="power" val="80"/>
@@ -651,7 +651,7 @@
     <effect count="1" name="Invincible" time="30" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1428" levels="1" name="Mass Recharge">
   <set name="itemConsumeId" val="8876"/>
   <set name="itemConsumeCount" val="1"/>
@@ -671,7 +671,7 @@
     <player spell_force="3"/>
   </cond>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1429" levels="1" name="Gate Chant">
   <set name="target" val="TARGET_PARTY"/>
   <set name="skillRadius" val="-1"/>
@@ -683,7 +683,7 @@
   <set name="hitTime" val="15000"/>
   <set name="reuseDelay" val="600000"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1430" levels="5" name="Invocation">
   <table name="#mpConsume">27 28 30 33 34</table>
   <table name="#regMp">90 105 120 135 150</table>

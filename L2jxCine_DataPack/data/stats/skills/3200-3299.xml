@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="3200" levels="3" name="Item Skill: Spell Refresh">
   <table name="#mpConsume">27 31 34</table>
   <table name="#mReuseRate">0.95 0.92 0.9</table>
@@ -130,7 +130,7 @@
   <set name="effectRange" val="-1"/>
   <set name="reuseDelay" val="180000"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3207" levels="10" name="Item Skill: Heal">
   <table name="#chance">1 1 2 2 3 3 4 4 5 5</table>
   <table name="#triggeredLevel">1 2 3 4 5 6 7 8 9 10</table>
@@ -400,7 +400,7 @@
   <set name="castRange" val="-1"/>
   <set name="effectRange" val="-1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3228" levels="10" name="Item Skill: Stun">
   <table name="#chance">2 2 2 3 3 3 4 4 5 5</table>
   <table name="#triggeredLevel">1 2 3 4 5 6 7 8 9 10</table>
@@ -412,7 +412,7 @@
   <set name="chanceType" val="ON_ATTACKED"/>
   <set name="activationChance" val="#chance"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3229" levels="10" name="Item Skill: Hold">
   <table name="#chance">2 2 2 3 3 3 4 4 5 5</table>
   <table name="#triggeredLevel">1 2 3 4 5 6 7 8 9 10</table>
@@ -437,7 +437,7 @@
   <set name="castRange" val="-1"/>
   <set name="effectRange" val="-1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3231" levels="10" name="Item Skill: Paralyze">
   <table name="#chance">2 2 2 3 3 3 4 4 5 5</table>
   <table name="#triggeredLevel">1 2 3 4 5 6 7 8 9 10</table>
@@ -514,7 +514,7 @@
   <set name="castRange" val="-1"/>
   <set name="effectRange" val="-1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3237" levels="10" name="Item Skill: Doom">
   <table name="#chance">2 2 2 3 3 3 4 4 5 5</table>
   <table name="#triggeredLevel">1 2 3 4 5 6 7 8 9 10</table>
@@ -582,7 +582,7 @@
     <mul order="0x30" stat="pvpPhysSkillsDmg" val="#rate"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3244" levels="10" name="Item Skill: Shield">
   <table name="#rate">1.03 1.04 1.05 1.06 1.07 1.08 1.09 1.1 1.11 1.12</table>
   <set name="target" val="TARGET_SELF"/>
@@ -592,7 +592,7 @@
     <mul order="0x30" stat="pDef" val="#rate"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3245" levels="10" name="Item Skill: Magic Barrier">
   <table name="#rate">1.03 1.04 1.05 1.06 1.07 1.08 1.09 1.1 1.11 1.12</table>
   <set name="target" val="TARGET_SELF"/>
@@ -613,7 +613,7 @@
     <mul order="0x30" stat="gainHp" val="#rate"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3247" levels="10" name="Item Skill: Agility">
   <table name="#rate">0.4 0.8 1.2 1.6 2.0 2.4 2.8 3.2 3.6 4</table>
   <set name="target" val="TARGET_SELF"/>
@@ -623,7 +623,7 @@
     <add order="0x30" stat="rEvas" val="#rate"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3248" levels="10" name="Item Skill: Guidance">
   <table name="#rate">0.4 0.8 1.2 1.6 2.0 2.4 2.8 3.2 3.6 4</table>
   <set name="target" val="TARGET_SELF"/>
@@ -633,7 +633,7 @@
     <add order="0x30" stat="accCombat" val="#rate"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3249" levels="10" name="Item Skill: Focus">
   <table name="#rate">0.5 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50</table>
   <set name="target" val="TARGET_SELF"/>

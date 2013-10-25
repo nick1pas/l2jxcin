@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="1001" levels="10" name="Soul Cry">
   <table name="#patk-add">4.5 14 33.5 66.5 90.5 141.5 208.5 247 310 375.5</table>
   <table name="#mpRegen-sub">3 6 9 12 15 18 21 24 27 30</table>
@@ -450,7 +450,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1015" levels="15" name="Battle Heal">
   <table name="#mpConsume_Init">5 6 7 7 8 9 10 11 11 13 13 14 15 15 16</table>
   <table name="#mpConsume">20 22 25 28 32 35 39 41 43 49 52 53 57 59 62</table>
@@ -1061,7 +1061,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1050" levels="2" name="Return">
   <table name="#mpConsume_Init">21 31</table>
   <table name="#mpConsume">84 122</table>
@@ -1075,7 +1075,7 @@
   <set name="isMagic" val="true"/>
   <set name="operateType" val="OP_ACTIVE"/>
 </skill>
-<!-- Status:Incorrect Pack:l2jfrozen author:Nefer -->
+<!-- Status:Incorrect Pack:L2jxCine author:Nefer -->
 <skill id="1056" levels="12" name="Cancellation">
   <table name="#mpConsume_Init">9 10 11 11 11 12 12 13 13 13 14 14</table>
   <table name="#mpConsume">35 38 41 43 44 46 48 49 51 52 53 55</table>
@@ -1097,7 +1097,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1059" levels="3" name="Empower" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -1195,7 +1195,7 @@
     </effect>
   </enchant1for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1064" levels="14" name="Silence" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -1298,7 +1298,7 @@
     <effect count="1" name="Sleep" time="30" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1071" levels="14" name="Surrender To Water" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -1403,7 +1403,7 @@
     </effect>
   </enchant1for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1074" levels="14" name="Surrender To Wind" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -1535,7 +1535,7 @@
     </effect>
   </enchant1for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1083" levels="17" name="Surrender To Fire" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -1766,7 +1766,7 @@
     <effect count="10" name="DamOverTime" time="3" val="#dmg" abnormal="poison"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1096" levels="16" name="Seal of Chaos" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -1801,7 +1801,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1097" levels="20" name="Dreaming Spirit" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -1834,7 +1834,7 @@
     <effect count="1" name="Sleep" time="30" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1099" levels="15" name="Seal of Slow" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="1300" levels="3" name="Servitor Cure">
   <table name="#mpConsume_Init">7 9 11</table>
   <table name="#mpConsume">28 35 44</table>
@@ -120,7 +120,7 @@
     </effect>
   </enchant1for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1305" levels="5" name="The Honor of Pa'agrio" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -151,7 +151,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1306" levels="6" name="Ritual of Life" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -339,7 +339,7 @@
     </effect>
   </enchant1for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1311" levels="6" name="Body Of Avatar" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -511,7 +511,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1323" levels="1" name="Noblesse Blessing">
   <set name="mpInitialConsume" val="14"/>
   <set name="mpConsume" val="55"/>
@@ -868,7 +868,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1336" levels="1" name="Curse of Doom">
   <set name="mpInitialConsume" val="14"/>
   <set name="mpConsume" val="56"/>
@@ -889,7 +889,7 @@
     <effect count="1" name="SilenceMagicPhysical" time="120" val="0" stackOrder="30" stackType="silence_all" effectPower="40" effectType="MUTE"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1337" levels="1" name="Curse of Abyss">
   <set name="mpInitialConsume" val="14"/>
   <set name="mpConsume" val="58"/>
@@ -1074,7 +1074,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1344" levels="1" name="Mass Warrior Bane">
   <set name="mpInitialConsume" val="25"/>
   <set name="mpConsume" val="80"/>
@@ -1088,7 +1088,7 @@
   <set name="isMagic" val="true"/>
   <set name="operateType" val="OP_ACTIVE"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1345" levels="1" name="Mass Mage Bane">
   <set name="mpInitialConsume" val="27"/>
   <set name="mpConsume" val="80"/>
@@ -1218,7 +1218,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1350" levels="1" name="Warrior Bane">
   <set name="mpInitialConsume" val="20"/>
   <set name="mpConsume" val="50"/>
@@ -1233,7 +1233,7 @@
   <set name="castRange" val="600"/>
   <set name="effectRange" val="1100"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1351" levels="1" name="Mage Bane">
   <set name="mpInitialConsume" val="20"/>
   <set name="mpConsume" val="50"/>
@@ -1248,7 +1248,7 @@
   <set name="castRange" val="600"/>
   <set name="effectRange" val="1100"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1352" levels="1" name="Elemental Protection">
   <set name="mpInitialConsume" val="14"/>
   <set name="mpConsume" val="56"/>
@@ -1270,7 +1270,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1353" levels="1" name="Divine Protection">
   <set name="mpInitialConsume" val="14"/>
   <set name="mpConsume" val="56"/>
@@ -1290,7 +1290,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1354" levels="1" name="Arcane Protection">
   <set name="mpInitialConsume" val="14"/>
   <set name="mpConsume" val="70"/>
@@ -1310,7 +1310,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1355" levels="1" name="Prophecy of Water">
   <set name="mpInitialConsume" val="15"/>
   <set name="mpConsume" val="57"/>
@@ -1337,7 +1337,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1356" levels="1" name="Prophecy of Fire">
   <set name="mpInitialConsume" val="15"/>
   <set name="mpConsume" val="57"/>
@@ -1365,7 +1365,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1357" levels="1" name="Prophecy of Wind">
   <set name="mpInitialConsume" val="15"/>
   <set name="mpConsume" val="57"/>
@@ -1400,7 +1400,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1358" levels="1" name="Block Shield">
   <set name="mpInitialConsume" val="14"/>
   <set name="mpConsume" val="56"/>
@@ -1423,7 +1423,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1359" levels="1" name="Block Wind Walk">
   <set name="mpInitialConsume" val="14"/>
   <set name="mpConsume" val="56"/>
@@ -1446,7 +1446,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1360" levels="1" name="Mass Block Shield">
   <set name="mpInitialConsume" val="21"/>
   <set name="mpConsume" val="84"/>
@@ -1468,7 +1468,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1361" levels="1" name="Mass Block Wind Walk">
   <set name="mpInitialConsume" val="22"/>
   <set name="mpConsume" val="85"/>
@@ -1510,7 +1510,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1363" levels="1" name="Chant of Victory">
   <set name="itemConsumeId" val="3031"/>
   <set name="itemConsumeCount" val="40"/>
@@ -1561,7 +1561,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1365" levels="1" name="The Soul of Pa'agrio">
   <set name="mpInitialConsume" val="56"/>
   <set name="mpConsume" val="224"/>
@@ -1579,7 +1579,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1366" levels="1" name="Seal of Despair">
   <set name="mpInitialConsume" val="22"/>
   <set name="mpConsume" val="85"/>
@@ -1607,7 +1607,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1367" levels="1" name="Seal of Disease">
 <!-- ONLY ENEMY ALIANCE DURING CLANWARS NOT FULL AREA -->
   <set name="mpInitialConsume" val="21"/>
@@ -1700,7 +1700,7 @@
     <mul order="0x30" stat="mAtk" val="1.25"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1374" levels="1" name="Heroic Valor">
   <set name="mpConsume" val="289"/>
   <set name="itemConsumeId" val="3031"/>
@@ -1721,7 +1721,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1375" levels="1" name="Heroic Grandeur">
   <set name="mpConsume" val="109"/>
   <set name="power" val="40"/>
@@ -1750,7 +1750,7 @@
     <effect count="1" name="SilenceMagicPhysical" time="30" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1376" levels="1" name="Heroic Dread">
   <set name="mpConsume" val="109"/>
   <set name="saveVs" val="MEN"/>
@@ -1798,7 +1798,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1380" levels="10" name="Betray">
   <table name="#mpConsume">52 54 55 58 60 62 64 65 67 69</table>
   <table name="#itemConsumeCount">3 3 3 3 4 4 4 5 5 5</table>
@@ -1820,7 +1820,7 @@
     <effect count="1" name="Betray" time="10" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1381" levels="5" name="Mass Fear">
   <table name="#mpConsume">80 87 93 98 103</table>
   <set name="mpConsume" val="#mpConsume"/>
@@ -1840,7 +1840,7 @@
     <effect count="5" name="Fear" time="5" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1382" levels="5" name="Mass Gloom">
   <table name="#mpConsume">80 87 93 98 103</table>
   <!-- suspect these mDef values are guesses -->
@@ -1985,7 +1985,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1388" levels="3" name="Greater Might">
   <table name="#pAtk">1.04 1.07 1.1</table>
   <table name="#mpConsume">54 62 69</table>
@@ -2007,7 +2007,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1389" levels="3" name="Greater Shield">
   <!-- L2P still need to confirm pDef values -->
   <table name="#rate">1.05 1.1 1.15</table>
@@ -2030,7 +2030,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1390" levels="3" name="War Chant">
   <table name="#mpConsume">213 244 272</table>
   <table name="#pAtk">1.04 1.07 1.10</table>
@@ -2053,7 +2053,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1391" levels="3" name="Earth Chant">
   <table name="#mpConsume">213 244 272</table>
   <table name="#pDef">1.05 1.1 1.15</table>
@@ -2076,7 +2076,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1392" levels="3" name="Holy Resistance">
   <table name="#mpConsume">54 62 69</table>
   <!-- L2P still need to confirm res values -->
@@ -2096,7 +2096,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1393" levels="3" name="Unholy Resistance">
   <table name="#mpConsume">54 62 69</table>
   <table name="#darkVuln">0.85 0.77 0.7</table>
@@ -2115,7 +2115,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1394" levels="10" name="Trance" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -2142,7 +2142,7 @@
     <effect count="1" name="Sleep" time="15" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1395" levels="10" name="Erase" enchantLevels1="30" enchantLevels2="30">
   <table name="#mpConsume">52 54 55 58 60 62 64 65 67 69</table>
   <table name="#itemConsumeCount">3 3 3 3 4 4 4 5 5 5</table>

@@ -24,7 +24,7 @@ import net.xcine.gameserver.datatables.xml.ExperienceData;
 /**
  * Character Sub-Class Definition.<br>
  * Used to store key information about a character's sub-class.
- * @author programmos, l2jfrozen dev
+ * @author programmos, L2jxCine dev
  */
 public final class SubClass
 {

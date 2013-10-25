@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="5000" levels="1" name="Alfred - Super Strike">
   <set name="mpConsume" val="212"/>
   <set name="power" val="4878"/>
@@ -450,7 +450,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="5021" levels="12" name="Inspiration of Einhasad">
   <table name="#power">20 30 40 50 60 70 80 90 100 110 120 130</table> <!-- Test-->
   <set name="power" val="#power"/>
@@ -959,7 +959,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="5053" levels="12" name="Castle DD Water">
   <table name="#mpConsume">7 10 14 18 23 28 33 35 37 38 39 39</table>
   <table name="#power">18 26 38 52 68 85 102 110 116 122 126 129</table>
@@ -1541,7 +1541,7 @@
   	<mul order="0x30" stat="cAtk" val="9.25"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="5079" levels="1" name="NPC Focused Haste">
   <set name="magicLvl" val="80"/>
   <set name="mpConsume" val="75"/>
@@ -1557,7 +1557,7 @@
   	</effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="5080" levels="1" name="NPC Mighty Haste">
   <set name="magicLvl" val="85"/>
   <set name="mpInitialConsume" val="15" />
@@ -1575,7 +1575,7 @@
   	</effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="5081" levels="4" name="Silence">
   <table name="#mpConsume">75 75 75 20</table>
   <set name="mpConsume" val="#mpConsume"/>
@@ -1592,7 +1592,7 @@
   	<effect count="1" name="PsychicalMute" time="30" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="5082" levels="4" name="NPC Spinning, Slashing Trick">
   <table name="#mpConsume">60 60 60 5</table>
   <set name="mpConsume" val="#mpConsume"/>
@@ -1628,7 +1628,7 @@
   	<effect count="1" name="Stun" stackOrder="-1" stackType="Stun" time="9" val="0" effectPower="50" effectType="STUN"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="5084" levels="4" name="NPC Blinding Blow">
   <table name="#mpConsume">67 68 69 70</table>
   <table name="#power">2751 2850 2950 3050</table>

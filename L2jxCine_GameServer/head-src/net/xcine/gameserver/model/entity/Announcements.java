@@ -52,8 +52,8 @@ public class Announcements
 	private static Logger _log = Logger.getLogger(Announcements.class.getName());
 
 	private static Announcements _instance;
-	private List<String> _announcements = new FastList<String>();
-	private List<List<Object>> _eventAnnouncements = new FastList<List<Object>>();
+	private List<String> _announcements = new FastList<>();
+	private List<List<Object>> _eventAnnouncements = new FastList<>();
 
 	public Announcements()
 	{
@@ -125,7 +125,7 @@ public class Announcements
 
 	public void addEventAnnouncement(DateRange validDateRange, String[] msg)
 	{
-		List<Object> entry = new FastList<Object>();
+		List<Object> entry = new FastList<>();
 		entry.add(validDateRange);
 		entry.add(msg);
 		_eventAnnouncements.add(entry);

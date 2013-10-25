@@ -18,7 +18,7 @@
 package net.xcine.gameserver.network;
 
 /**
- * @author L2JFrozen dev
+ * @author L2jxCine dev
  */
 public enum SystemMessageId
 {

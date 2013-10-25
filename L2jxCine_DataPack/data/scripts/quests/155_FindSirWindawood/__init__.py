@@ -1,4 +1,4 @@
-# l2jfrozen Dev
+# L2jxCine Dev
 import sys
 from net.xcine import Config 
 from net.xcine.gameserver.model.quest import State

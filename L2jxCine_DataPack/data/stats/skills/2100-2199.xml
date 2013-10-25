@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="2100" levels="1" name="Escape: 1 second">
   <set name="target" val="TARGET_SELF"/>
   <set name="hitTime" val="1000"/>
@@ -479,7 +479,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="2136" levels="1" name="Rice Cake">
   <set name="itemConsumeCount" val="1" />
   <set name="itemConsumeId" val="5283"/>

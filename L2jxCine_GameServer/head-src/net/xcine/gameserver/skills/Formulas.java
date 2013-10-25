@@ -62,7 +62,7 @@ import net.xcine.util.random.Rnd;
 /**
  * Global calculations, can be modified by server admins
  * 
- * @author L2JFrozen dev
+ * @author L2jxCine dev
  */
 public final class Formulas
 {

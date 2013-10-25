@@ -58,7 +58,7 @@ import net.xcine.util.random.Rnd;
  * 
  * Update by rocknow
  * Updated by L2jOff team
- * Updated by L2jFrozen team
+ * Updated by L2jxCine team
  *
  * <BR>
  * Warn: be careful with adding new spawns {@link #getXFix(int)}

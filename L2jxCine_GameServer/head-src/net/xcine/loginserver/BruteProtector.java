@@ -11,7 +11,7 @@ import net.xcine.Config;
 public class BruteProtector
 {
 	private static final Logger _log = Logger.getLogger(BruteProtector.class.getName());
-	private static final FastMap<String, ArrayList<Integer>> _clients = new FastMap<String, ArrayList<Integer>>();
+	private static final FastMap<String, ArrayList<Integer>> _clients = new FastMap<>();
 	
 	public static boolean canLogin(String ip)
 	{

@@ -35,7 +35,7 @@ import net.xcine.Config;
 public abstract class FloodProtectedListener extends Thread
 {
 	private Logger _log = Logger.getLogger(FloodProtectedListener.class.getName());
-	private Map<String, ForeignConnection> _floodProtection = new FastMap<String, ForeignConnection>();
+	private Map<String, ForeignConnection> _floodProtection = new FastMap<>();
 	private String _listenIp;
 	private int _port;
 	private ServerSocket _serverSocket;

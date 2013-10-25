@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="4001" levels="12" name="NPC Wind Strike">
   <table name="#mpConsume">13 20 27 35 45 55 65 69 73 75 77 78</table>
   <table name="#power">18 26 38 52 68 85 102 110 116 122 126 129</table>
@@ -278,7 +278,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4020" levels="1" name="Heal Queen Ant1">
   <!-- Nurse Heal Skill -->
   <set name="magicLvl" val="35"/>
@@ -294,7 +294,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4021" levels="1" name="Queen Ant">
   <!-- Queen Ant Skills -->
   <set name="magicLvl" val="40"/>
@@ -308,7 +308,7 @@
     <mul order="0x30" stat="bowWpnVuln" val="0.2"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4022" levels="1" name="Body Of Nurse Ant">
   <!-- This Skill Is Only For Description In The Client --> 
   <set name="target" val="TARGET_SELF"/>
@@ -320,7 +320,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4023" levels="1" name="Body Of Royal Guard Ant">
   <!-- This Skill Is Only For Description In The Client --> 
   <set name="target" val="TARGET_SELF"/>
@@ -332,7 +332,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4024" levels="1" name="Heal Queen Ant2">
   <!-- Nurse Heal Skill -->
   <set name="power" val="10845"/>
@@ -750,7 +750,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4045" levels="1" name="Resist Full Magic Attack">
   <set name="magicLvl" val="50"/>
   <set name="target" val="TARGET_SELF"/>
@@ -859,7 +859,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4051" levels="16" name="Cubic Heal">
   <table name="#power">201 241 281 314 339 361 382 390 398 405 413 418 422 426 430 434</table>
   <table name="#magicLvl">43 49 55 60 64 68 72 74 76 78 80 81 82 83 84 85</table>
@@ -1281,7 +1281,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4077" levels="12" name="NPC Aura Burn">
   <table name="#mpConsume">13 20 27 35 45 55 65 69 73 75 77 78</table>
   <table name="#power">14 21 30 42 55 68 82 88 93 98 101 104</table>

@@ -24,7 +24,7 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 
 /**
  * Format:(ch) ddd
- * @author L2JFrozen
+ * @author L2jxCine
  */
 public final class RequestDuelAnswerStart extends L2GameClientPacket
 {

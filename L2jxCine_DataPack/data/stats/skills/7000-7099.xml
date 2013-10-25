@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7000" levels="1" name="NPC Default">
   <set name="target" val="TARGET_SELF" />
   <set name="skillType" val="NOTDONE" />
   <set name="operateType" val="OP_PASSIVE" />
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7001" levels="1" name="Dispel Buff">
   <set name="mpConsume" val="96"/>
   <set name="magicLvl" val="99" />
@@ -23,7 +23,7 @@
   <set name="negateSkillTypes" val="BUFF"/>
   <set name="negatePower" val="17"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7002" levels="1" name="Dispel Debuff">
   <set name="mpConsume" val="154"/>
   <set name="target" val="TARGET_ONE"/>
@@ -38,7 +38,7 @@
   <set name="negateSkillTypes" val="STUN SLEEP MUTE FEAR CONFUSION POISON BLEED DEBUFF WEAKNESS PARALYZE"/>
   <set name="negatePower" val="17"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7003" levels="1" name="Dispel All">
   <set name="mpConsume" val="74"/>
   <set name="target" val="TARGET_ONE"/>
@@ -53,7 +53,7 @@
   <set name="negateSkillTypes" val="STUN SLEEP MUTE FEAR CONFUSION POISON BLEED BUFF DEBUFF WEAKNESS PARALYZE"/>
   <set name="negatePower" val="9"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7004" levels="2" name="Dispel Petrification">
   <set name="mpConsume" val="73"/>
   <set name="target" val="TARGET_ONE"/>
@@ -67,7 +67,7 @@
   <set name="negateSkillTypes" val="PARALYZE"/>
   <set name="aggroPoints" val="566"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7005" levels="1" name="Greater Chant of Vampire">
   <set name="magicLvl" val="74"/>
   <set name="mpInitialConsume" val="55"/>
@@ -111,13 +111,13 @@
   <set name="castRange" val="400"/>
   <set name="effectRange" val="900"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7028" levels="1" name="For Stationary NPCs">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="COREDONE"/>
   <set name="operateType" val="OP_PASSIVE"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7029" levels="4" name="Super Haste">
   <!-- GM Skill -->
   <table name="#runSpd">1.5 2 3 4</table>
@@ -136,7 +136,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7030" levels="1" name="Summon King Bugbear">
   <set name="itemConsumeId" val="1458"/>
   <set name="mpConsume" val="3"/>
@@ -156,7 +156,7 @@
   <set name="expPenalty" val="0.3"/>
   <set name="isCubic" val="false"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7031" levels="1" name="Summon Skeleton Royal Guard">
   <set name="itemConsumeId" val="1458"/>
   <set name="mpConsume" val="3"/>
@@ -178,7 +178,7 @@
   <set name="expPenalty" val="0.3"/>
   <set name="isCubic" val="false"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7032" levels="1" name="Summon Hunter Gargoyle">
   <set name="itemConsumeId" val="1458"/>
   <set name="mpConsume" val="3"/>
@@ -248,7 +248,7 @@
   <set name="skillType" val="COREDONE"/>
   <set name="operateType" val="OP_PASSIVE"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7041" levels="1" name="Master's Blessing - Focus">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -267,7 +267,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7042" levels="1" name="Master's Blessing - Death Whisper">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -286,7 +286,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7043" levels="1" name="Master's Blessing - Haste">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -305,7 +305,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7044" levels="1" name="Master's Blessing - Guidance">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -324,7 +324,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7045" levels="1" name="Master's Blessing - Blessed Body">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -343,7 +343,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7046" levels="1" name="Master's Blessing - Blessed Soul">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -362,7 +362,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7047" levels="1" name="Master's Blessing - Agility">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -381,7 +381,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7048" levels="1" name="Master's Blessing - Acumen">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -400,7 +400,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7049" levels="1" name="Master's Blessing - Decrease Weight">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -419,7 +419,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7050" levels="1" name="Master's Blessing - Might">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -438,7 +438,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7051" levels="1" name="Master's Blessing - Shield">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -457,7 +457,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7052" levels="1" name="Master's Blessing - Magic Barrier">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -476,7 +476,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7053" levels="1" name="Master's Blessing - Vampiric Rage">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -495,7 +495,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7054" levels="1" name="Master's Blessing - Empower">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -514,7 +514,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7055" levels="1" name="Master's Blessing - Wind Walk">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -533,7 +533,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7056" levels="1" name="Master's Blessing - Berserker Spirit">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -559,7 +559,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7057" levels="1" name="Master's Blessing - Greater Might">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -577,7 +577,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7058" levels="1" name="Master's Blessing - Greater Shield">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -595,7 +595,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7059" levels="1" name="Master's Blessing - Wild Magic">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -614,7 +614,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7060" levels="1" name="Master's Blessing - Clarity">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -633,7 +633,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7061" levels="1" name="Master's Blessing - Prophecy of Water">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -658,7 +658,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7062" levels="1" name="Master's Blessing - Prophecy of Fire">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -684,7 +684,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7063" levels="1" name="Master's Blessing - Prophecy of Wind">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>
@@ -717,7 +717,7 @@
   </effect>
 </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="7064" levels="1" name="Master's Blessing - Chant of Victory">
   <!-- GM Skill -->
   <set name="mpConsume" val="2"/>

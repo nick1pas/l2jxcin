@@ -145,7 +145,7 @@ public final class Calculator
 		if(f == null)
 			return;
 		
-		ArrayList<Func> tmp_arraylist = new ArrayList<Func>();
+		ArrayList<Func> tmp_arraylist = new ArrayList<>();
 		tmp_arraylist.addAll(Arrays.asList(_functions));
 		
 		if(tmp_arraylist.contains(f))
@@ -163,7 +163,7 @@ public final class Calculator
 	public synchronized FastList<Stats> removeOwner(Object owner)
 	{
 		Func[] funcs = _functions;
-		FastList<Stats> modifiedStats = new FastList<Stats>();
+		FastList<Stats> modifiedStats = new FastList<>();
 
 		for(Func func : funcs)
 		{

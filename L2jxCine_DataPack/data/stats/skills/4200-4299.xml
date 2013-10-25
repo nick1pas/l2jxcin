@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="4200" levels="12" name="Decrease Atk. Spd.">
   <table name="#pAtkSpd">0.83 0.8 0.8 0.77 0.77 0.77 0.77 0.77 0.77 0.77 0.77 0.77</table>
   <table name="#mpConsume">17 29 39 53 67 83 97 103 108 112 115 116</table>
@@ -291,7 +291,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4215" levels="1" name="Raid Curse">
   <set name="target" val="TARGET_ONE"/>
   <set name="skillType" val="MUTE"/>
@@ -304,7 +304,7 @@
     <effect name="SilenceMagicPhysical" time="3600" val="0" stackOrder="99" stackType="silence_all"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4216" levels="1" name="Scatter Enemy">
   <!-- Zaken skills - teleport PC -->
   <set name="magicLvl" val="60"/>
@@ -321,7 +321,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4217" levels="1" name="None">
   <!-- Zaken skills -->
   <set name="magicLvl" val="60"/>
@@ -339,7 +339,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4218" levels="1" name="Absorb HP MP">
   <!-- Zaken skills -->
   <set name="magicLvl" val="60"/>
@@ -360,7 +360,7 @@
     <effect name="ManaDamOverTime" noicon="1" val="274" />
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4219" levels="1" name="Hold">
   <!-- Zaken skills -->
   <set name="magicLvl" val="60"/>
@@ -378,7 +378,7 @@
     <effect count="1" name="Root" time="30" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4220" levels="1" name="Deadly Dual-Sword Weapon">
   <!-- Zaken skills -->
   <set name="magicLvl" val="60"/>
@@ -393,7 +393,7 @@
   <set name="castRange" val="50"/>
   <set name="effectRange" val="200"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4221" levels="1" name="Deadly Dual-Sword Weapon: Range Attack">
   <!-- Zaken skills -->
   <set name="magicLvl" val="60"/>
@@ -406,7 +406,7 @@
   <set name="skillType" val="PDAM"/>
   <set name="operateType" val="OP_ACTIVE"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4222" levels="1" name="Instant Move">
   <!-- Zaken skills - teleport -->
   <set name="magicLvl" val="60"/>
@@ -963,7 +963,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4256" levels="1" name="100% Stun Resistance.">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="BUFF"/>
@@ -1083,7 +1083,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:OnePaTuBHuK -->
+<!-- Status:Fixed Pack:L2jxCine author:OnePaTuBHuK -->
 <skill id="4262" levels="2" name="Holiday Wind Walk">
   <set name="target" val="TARGET_ONE"/>
   <set name="hitTime" val="500"/>
@@ -1101,7 +1101,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:OnePaTuBHuK -->
+<!-- Status:Fixed Pack:L2jxCine author:OnePaTuBHuK -->
 <skill id="4263" levels="1" name="Holiday Haste">
   <set name="aggroPoints" val="418"/>
   <set name="castRange" val="400"/>
@@ -1118,7 +1118,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:OnePaTuBHuK -->
+<!-- Status:Fixed Pack:L2jxCine author:OnePaTuBHuK -->
 <skill id="4264" levels="1" name="Holiday Empower">
   <set name="aggroPoints" val="243"/>
   <set name="castRange" val="400"/>
@@ -1135,7 +1135,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:OnePaTuBHuK -->
+<!-- Status:Fixed Pack:L2jxCine author:OnePaTuBHuK -->
 <skill id="4265" levels="3" name="Holiday Might">
   <set name="target" val="TARGET_ONE"/>
   <set name="hitTime" val="500"/>
@@ -1153,7 +1153,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:OnePaTuBHuK -->
+<!-- Status:Fixed Pack:L2jxCine author:OnePaTuBHuK -->
 <skill id="4266" levels="3" name="Holiday Shield">
   <set name="target" val="TARGET_ONE"/>
   <set name="hitTime" val="500"/>

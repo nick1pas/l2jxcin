@@ -45,7 +45,7 @@ import net.xcine.gameserver.thread.ThreadPoolManager;
  * This class ...
  * 
  * @version $Revision: 1.1.2.1.2.12 $ $Date: 2005/04/11 10:06:07 $
- * @author l2jfrozen dev
+ * @author L2jxCine dev
  */
 public abstract class L2Effect
 {

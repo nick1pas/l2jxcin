@@ -28,7 +28,7 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 
 /**
  * Format:(ch) Sd
- * @author L2JFrozen
+ * @author L2jxCine
  */
 public final class RequestDuelStart extends L2GameClientPacket
 {

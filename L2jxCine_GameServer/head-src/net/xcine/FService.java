@@ -50,7 +50,7 @@ public class FService
 	// functions
 	public static final String ACCESS_CONFIGURATION_FILE = "./config/functions/access.properties";
 	public static final String DEVELOPER = "./config/functions/developer.properties";
-	public static final String L2JFROZEN_CONFIG_FILE = "./config/functions/l2jfrozen.properties";
+	public static final String L2JCINE_CONFIG_FILE = "./config/functions/L2jxCine.properties";
 	public static final String PHYSICS_CONFIGURATION_FILE = "./config/functions/physics.properties";
 	public static final String PVP_CONFIG_FILE = "./config/functions/pvp.properties";
 	public static final String CLASS_DAMAGES_FILE = "./config/functions/classDamages.properties";

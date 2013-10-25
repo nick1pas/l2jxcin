@@ -30,7 +30,7 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 
 /**
- * @author l2jfrozen dev.
+ * @author L2jxCine dev.
  */
 
 public class JackpotSeed implements IItemHandler

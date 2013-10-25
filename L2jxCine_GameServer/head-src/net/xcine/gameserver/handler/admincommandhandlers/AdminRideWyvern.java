@@ -26,7 +26,7 @@ import net.xcine.gameserver.network.serverpackets.Ride;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 
 /**
- * @author l2jfrozen.
+ * @author L2jxCine.
  */
 public class AdminRideWyvern implements IAdminCommandHandler
 {

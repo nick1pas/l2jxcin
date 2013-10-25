@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="4400" levels="3" name="Acumen">
   <table name="#mAtkSpd">1.15 1.23 1.3</table>
   <set name="target" val="TARGET_ONE"/>
@@ -1272,7 +1272,7 @@ if max = min resist
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4478" levels="1" name="Ice Fairy Aqua Splash">
   <set name="magicLvl" val="64" />
   <set name="element" val="3"/> <!-- Water -->
@@ -1304,7 +1304,7 @@ if max = min resist
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4480" levels="1" name="Ice Fairy Curse Gloom">
   <set name="magicLvl" val="64" />
   <set name="saveVs" val="MEN"/>
@@ -1323,7 +1323,7 @@ if max = min resist
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4481" levels="1" name="Ice Fairy Hex">
   <set name="magicLvl" val="64" />
   <set name="saveVs" val="MEN"/>
@@ -1343,7 +1343,7 @@ if max = min resist
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4482" levels="1" name="Ice Fairy Silence">
   <set name="saveVs" val="MEN"/>
   <set name="target" val="TARGET_ONE"/>

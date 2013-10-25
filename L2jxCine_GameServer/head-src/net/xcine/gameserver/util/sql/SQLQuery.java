@@ -21,7 +21,7 @@ package net.xcine.gameserver.util.sql;
 import java.sql.Connection;
 
 /**
- * @author L2JFrozen
+ * @author L2jxCine
  */
 public interface SQLQuery
 {

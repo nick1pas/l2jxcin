@@ -109,7 +109,7 @@ public class ItemHandler
 	 */
 	private ItemHandler()
 	{
-		_datatable = new TreeMap<Integer, IItemHandler>();
+		_datatable = new TreeMap<>();
 		registerItemHandler(new ScrollOfEscape());
 		registerItemHandler(new ScrollOfResurrection());
 		registerItemHandler(new SoulShots());

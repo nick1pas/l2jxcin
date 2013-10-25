@@ -36,7 +36,7 @@ import net.xcine.gameserver.util.Broadcast;
 /**
  * Beast SpiritShot Handler
  * 
- * @author programmos, l2jfrozen dev
+ * @author programmos, L2jxCine dev
  */
 public class BeastSpiritShot implements IItemHandler
 {

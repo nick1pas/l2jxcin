@@ -47,7 +47,7 @@ import net.xcine.gameserver.templates.L2Weapon;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 
 /**
- * @author eX1steam, l2jfrozen
+ * @author eX1steam, L2jxCine
  */
 public class L2BoatInstance extends L2Character
 {
@@ -120,7 +120,7 @@ public class L2BoatInstance extends L2Character
 		public void parseLine(String line)
 		{
 			//L2BoatPath bp = new L2BoatPath();
-			_path = new FastMap<Integer, L2BoatPoint>();
+			_path = new FastMap<>();
 			StringTokenizer st = new StringTokenizer(line, ";");
 			Integer.parseInt(st.nextToken());
 			max = Integer.parseInt(st.nextToken());
@@ -563,7 +563,7 @@ public class L2BoatInstance extends L2Character
 			Collection<L2PcInstance> knownPlayers = getKnownList().getKnownPlayers().values();
 			if(knownPlayers != null && !knownPlayers.isEmpty())
 			{
-				_inboat = new FastMap<Integer, L2PcInstance>();
+				_inboat = new FastMap<>();
 				int i = 0;
 				for(L2PcInstance player : knownPlayers)
 				{
@@ -602,7 +602,7 @@ public class L2BoatInstance extends L2Character
 			Collection<L2PcInstance> knownPlayers = getKnownList().getKnownPlayers().values();
 			if(knownPlayers != null && !knownPlayers.isEmpty())
 			{
-				_inboat = new FastMap<Integer, L2PcInstance>();
+				_inboat = new FastMap<>();
 				int i = 0;
 				for(L2PcInstance player : knownPlayers)
 				{

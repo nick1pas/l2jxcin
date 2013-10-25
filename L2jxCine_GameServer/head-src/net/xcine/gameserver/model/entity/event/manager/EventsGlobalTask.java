@@ -39,8 +39,8 @@ public class EventsGlobalTask implements Runnable
 	
 	private boolean destroy = false;
 	
-	private Hashtable<String, ArrayList<EventTask>> time_to_tasks = new Hashtable<String,ArrayList<EventTask>>();  //time is in hh:mm 
-	private Hashtable<String, ArrayList<EventTask>> eventid_to_tasks = new Hashtable<String,ArrayList<EventTask>>();
+	private Hashtable<String, ArrayList<EventTask>> time_to_tasks = new Hashtable<>();  //time is in hh:mm 
+	private Hashtable<String, ArrayList<EventTask>> eventid_to_tasks = new Hashtable<>();
 	
 	
 	private EventsGlobalTask(){
@@ -80,7 +80,7 @@ public class EventsGlobalTask implements Runnable
 			
 		}else{
 		
-			savedTasksForTime = new ArrayList<EventTask>();
+			savedTasksForTime = new ArrayList<>();
 			savedTasksForTime.add(event);
 			
 		}
@@ -95,7 +95,7 @@ public class EventsGlobalTask implements Runnable
 			
 		}else{
 		
-			savedTasksForId = new ArrayList<EventTask>();
+			savedTasksForId = new ArrayList<>();
 			savedTasksForId.add(event);
 			
 		}

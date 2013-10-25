@@ -20,7 +20,7 @@ package net.xcine.gameserver.network.serverpackets;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 
 /**
- * @author L2JFrozen
+ * @author L2jxCine
  */
 public class TitleUpdate extends L2GameServerPacket
 {

@@ -14,7 +14,7 @@ import net.xcine.gameserver.model.L2Effect;
 import net.xcine.gameserver.skills.Env;
 
 /**
- * @author L2JFrozen dev
+ * @author L2jxCine dev
  */
 public class EffectBigHead extends L2Effect
 {

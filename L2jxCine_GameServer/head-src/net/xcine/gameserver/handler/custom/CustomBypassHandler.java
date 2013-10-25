@@ -15,13 +15,9 @@
 package net.xcine.gameserver.handler.custom;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
-import net.xcine.Config;
 import net.xcine.gameserver.handler.ICustomByPassHandler;
-import net.xcine.gameserver.idfactory.BitSetIDFactory;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 
 /**
@@ -33,14 +29,12 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
  */
 public class CustomBypassHandler
 {
-	private static Logger _log = Logger.getLogger(BitSetIDFactory.class.getName());
-	
 	private static CustomBypassHandler _instance = null;
 	private Map<String, ICustomByPassHandler> _handlers;
 	
 	private CustomBypassHandler()
 	{
-		_handlers = new FastMap<String, ICustomByPassHandler>();
+		_handlers = new FastMap<>();
 		
 		registerCustomBypassHandler(new ExtractableByPassHandler());
 	}

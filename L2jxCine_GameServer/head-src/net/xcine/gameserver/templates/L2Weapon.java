@@ -313,7 +313,7 @@ public final class L2Weapon extends L2Item
 	@Override
 	public Func[] getStatFuncs(L2ItemInstance instance, L2Character player)
 	{
-		List<Func> funcs = new FastList<Func>();
+		List<Func> funcs = new FastList<>();
 		if(_funcTemplates != null)
 		{
 			for(FuncTemplate t : _funcTemplates)
@@ -343,7 +343,7 @@ public final class L2Weapon extends L2Item
 	{
 		if(_skillsOnCrit == null || !crit)
 			return _emptyEffectSet;
-		List<L2Effect> effects = new FastList<L2Effect>();
+		List<L2Effect> effects = new FastList<>();
 
 		for(L2Skill skill : _skillsOnCrit)
 		{

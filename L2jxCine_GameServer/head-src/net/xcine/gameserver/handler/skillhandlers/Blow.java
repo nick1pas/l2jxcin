@@ -36,7 +36,7 @@ import net.xcine.gameserver.templates.L2WeaponType;
 import net.xcine.gameserver.util.Util;
 
 /**
- * @author Steuf-Shyla-L2jFrozen
+ * @author Steuf-Shyla-L2jxCine
  */
 public class Blow implements ISkillHandler
 {

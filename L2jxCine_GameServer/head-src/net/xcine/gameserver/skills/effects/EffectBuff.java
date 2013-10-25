@@ -22,7 +22,7 @@ import net.xcine.gameserver.model.L2Effect;
 import net.xcine.gameserver.skills.Env;
 
 /**
- * @author ProGramMoS, L2JFrozen
+ * @author ProGramMoS, L2jxCine
  */
 final class EffectBuff extends L2Effect
 {

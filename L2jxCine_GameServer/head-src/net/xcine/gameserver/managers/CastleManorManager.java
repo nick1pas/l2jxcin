@@ -208,10 +208,10 @@ public class CastleManorManager
 			con = L2DatabaseFactory.getInstance().getConnection(false);
 			for(Castle castle : CastleManager.getInstance().getCastles())
 			{
-				FastList<SeedProduction> production = new FastList<SeedProduction>();
-				FastList<SeedProduction> productionNext = new FastList<SeedProduction>();
-				FastList<CropProcure> procure = new FastList<CropProcure>();
-				FastList<CropProcure> procureNext = new FastList<CropProcure>();
+				FastList<SeedProduction> production = new FastList<>();
+				FastList<SeedProduction> productionNext = new FastList<>();
+				FastList<CropProcure> procure = new FastList<>();
+				FastList<CropProcure> procureNext = new FastList<>();
 
 				// restore seed production info
 				statement = con.prepareStatement(CASTLE_MANOR_LOAD_PRODUCTION);
@@ -390,8 +390,8 @@ public class CastleManorManager
 			}
 			else
 			{
-				FastList<SeedProduction> production = new FastList<SeedProduction>();
-				FastList<CropProcure> procure = new FastList<CropProcure>();
+				FastList<SeedProduction> production = new FastList<>();
+				FastList<CropProcure> procure = new FastList<>();
 				for(SeedProduction s : c.getSeedProduction(PERIOD_CURRENT))
 				{
 					s.setCanProduce(s.getStartProduce());
@@ -469,7 +469,7 @@ public class CastleManorManager
 
 	private FastList<SeedProduction> getNewSeedsList(int castleId)
 	{
-		FastList<SeedProduction> seeds = new FastList<SeedProduction>();
+		FastList<SeedProduction> seeds = new FastList<>();
 		FastList<Integer> seedsIds = L2Manor.getInstance().getSeedsForCastle(castleId);
 		for(int sd : seedsIds)
 		{
@@ -480,7 +480,7 @@ public class CastleManorManager
 
 	private FastList<CropProcure> getNewCropsList(int castleId)
 	{
-		FastList<CropProcure> crops = new FastList<CropProcure>();
+		FastList<CropProcure> crops = new FastList<>();
 		FastList<Integer> cropsIds = L2Manor.getInstance().getCropsForCastle(castleId);
 		for(int cr : cropsIds)
 		{

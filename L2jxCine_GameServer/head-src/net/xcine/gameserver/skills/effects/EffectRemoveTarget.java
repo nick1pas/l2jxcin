@@ -24,7 +24,7 @@ import net.xcine.gameserver.model.actor.instance.L2RaidBossInstance;
 import net.xcine.gameserver.skills.Env;
 
 /**
- * @author programmos, L2JFrozen
+ * @author programmos, L2jxCine
  */
 public class EffectRemoveTarget extends L2Effect
 {

@@ -52,10 +52,10 @@ public class RaidBossSpawnManager
 {
 	private static Logger _log = Logger.getLogger(RaidBossSpawnManager.class.getName());
 	
-	protected static Map<Integer, L2RaidBossInstance> _bosses = new FastMap<Integer, L2RaidBossInstance>();
-	protected static Map<Integer, L2Spawn> _spawns = new FastMap<Integer, L2Spawn>();
-	protected static Map<Integer, StatsSet> _storedInfo = new FastMap<Integer, StatsSet>();
-	protected static Map<Integer, ScheduledFuture<?>> _schedules = new FastMap<Integer, ScheduledFuture<?>>();
+	protected static Map<Integer, L2RaidBossInstance> _bosses = new FastMap<>();
+	protected static Map<Integer, L2Spawn> _spawns = new FastMap<>();
+	protected static Map<Integer, StatsSet> _storedInfo = new FastMap<>();
+	protected static Map<Integer, ScheduledFuture<?>> _schedules = new FastMap<>();
 
 	public static enum StatusEnum
 	{

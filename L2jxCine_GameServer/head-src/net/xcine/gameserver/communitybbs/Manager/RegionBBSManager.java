@@ -105,7 +105,7 @@ public class RegionBBSManager extends BaseBBSManager
 	private String version()
 	{
 		if(Config.SHOW_SERVER_VERSION)
-			return "L2JFrozen ";
+			return "L2jxCine ";
 		return "";
 	}
 

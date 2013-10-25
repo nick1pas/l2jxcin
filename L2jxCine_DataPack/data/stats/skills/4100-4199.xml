@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="4100" levels="12" name="NPC Prominence">
   <table name="#mpConsume">13 20 27 35 45 55 65 69 73 75 77 78</table>
   <table name="#power">18 26 38 52 68 85 102 110 116 122 126 129</table>
@@ -129,7 +129,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4106" levels="1" name="Antharas Shock">
   <!-- Antharas Skills -->
   <set name="magicLvl" val="70"/>
@@ -146,7 +146,7 @@
     <effect count="1" name="Stun" time="5" val="0" stackOrder="1" stackType="Stun" effectPower="100" effectType="STUN"/>
   </for>
 </skill>
-<!-- Status:Incorrect effect thrown Pack:l2jfrozen author:Nefer -->
+<!-- Status:Incorrect effect thrown Pack:L2jxCine author:Nefer -->
 <skill id="4107" levels="1" name="Antharas Shock">
   <!-- Antharas Skills -->
   <set name="magicLvl" val="70"/>
@@ -165,7 +165,7 @@
     <!-- FLY AWAY SKILL -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4108" levels="1" name="Antharas Terror">
   <!-- Antharas Skills -->
   <set name="magicLvl" val="70"/>
@@ -184,7 +184,7 @@
     <effect count="10" name="Fear" time="3" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4109" levels="1" name="Curse of Antharas">
   <!-- Antharas Skills -->
   <set name="magicLvl" val="70"/>
@@ -213,7 +213,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4110" levels="1" name="Breath Attack">
   <!-- Antharas Skills -->
   <set name="magicLvl" val="70"/>
@@ -229,7 +229,7 @@
   <set name="castRange" val="500"/>
   <set name="effectRange" val="1000"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4111" levels="1" name="Antharas Fossilization">
   <!-- Antharas Skills -->
   <set name="magicLvl" val="70"/>
@@ -253,7 +253,7 @@
      <mul order="0x80" stat="regMp" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4112" levels="1" name="Ordinary Attack">
   <!-- Antharas Skills -->
   <set name="magicLvl" val="70"/>
@@ -269,7 +269,7 @@
   <set name="castRange" val="50"/>
   <set name="effectRange" val="400"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4113" levels="1" name="Animal doing ordinary attack">
   <!-- Antharas Skills -->
   <set name="magicLvl" val="70"/>
@@ -493,7 +493,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4127" levels="1" name="Baium: General Attack">
   <!-- Baium Skills -->
   <set name="magicLvl" val="75"/>
@@ -509,7 +509,7 @@
   <set name="castRange" val="100"/>
   <set name="effectRange" val="400"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4128" levels="1" name="Wind Of Force">
   <!-- Baium Skills -->
   <set name="magicLvl" val="75"/>
@@ -523,7 +523,7 @@
   <set name="skillType" val="PDAM"/>
   <set name="operateType" val="OP_ACTIVE"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4129" levels="1" name="Earthquake">
   <!-- Baium Skills -->
   <set name="magicLvl" val="75"/>
@@ -537,7 +537,7 @@
   <set name="operateType" val="OP_ACTIVE"/>
   <set name="baseCritRate" val="15"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4130" levels="1" name="Striking of Thunderbolt">
   <!-- Baium Skills -->
   <set name="magicLvl" val="75"/>
@@ -552,7 +552,7 @@
   <set name="castRange" val="900"/>
   <set name="effectRange" val="1000"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4131" levels="1" name="Shock">
   <!-- Baium Skills -->
   <set name="magicLvl" val="75"/>
@@ -570,7 +570,7 @@
     <effect count="1" name="Paralyze" time="30" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4132" levels="1" name="Spear: Pound the Ground">
   <!-- Baium Skills -->
   <set name="magicLvl" val="75"/>
@@ -582,7 +582,7 @@
   <set name="skillType" val="PDAM"/>
   <set name="operateType" val="OP_ACTIVE"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4133" levels="1" name="Angel Heal">
   <set name="target" val="TARGET_ONE"/>
   <set name="magicLvl" val="75"/>
@@ -1079,7 +1079,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4161" levels="1" name="Summon PC">
   <!-- Teleports player to mob (Porta/Perum skill) -->
   <set name="target" val="TARGET_ONE"/>
@@ -1126,7 +1126,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4164" levels="9" name="Paralysis">
   <!-- Cubic skill -->
   <table name="#magicLvl">40 44 48 52 56 60 64 68 72 73 74 75 76 77 78 79 80 81</table>
@@ -1661,7 +1661,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4192" levels="12" name="BOSS HP Drain">
   <table name="#mpConsume">12 29 39 53 67 83 97 103 108 112 115 116</table>
   <table name="#power">16 23 32 44 56 69 81 86 91 94 97 99</table>

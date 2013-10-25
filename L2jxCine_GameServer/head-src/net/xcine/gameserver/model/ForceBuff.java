@@ -26,7 +26,7 @@ import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.skills.effects.EffectForce;
 
 /**
- * @author ProGramMoS, l2jfrozen
+ * @author ProGramMoS, L2jxCine
  */
 public final class ForceBuff
 {

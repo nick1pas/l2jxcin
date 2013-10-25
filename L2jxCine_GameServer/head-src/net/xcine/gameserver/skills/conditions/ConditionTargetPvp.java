@@ -23,7 +23,7 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.skills.Env;
 
 /**
- * @author eX1steam L2JFrozen
+ * @author eX1steam L2jxCine
  */
 public class ConditionTargetPvp extends Condition
 {

@@ -72,7 +72,7 @@ public class EventDroplist
 	 */
 	private EventDroplist()
 	{
-		_allNpcDateDrops = new FastList<DateDrop>();
+		_allNpcDateDrops = new FastList<>();
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class EventDroplist
 	 */
 	public List<DateDrop> getAllDrops()
 	{
-		List<DateDrop> list = new FastList<DateDrop>();
+		List<DateDrop> list = new FastList<>();
 
 		for(DateDrop drop : _allNpcDateDrops)
 		{

@@ -9,7 +9,7 @@
 #                                              #
 #                                              #
 #              Download pathnode :             #
-#    http://l2jfrozen.com/index.php?topic=7	   #
+#    http://L2jxCine.com/index.php?topic=7	   #
 #                                              #
 ################################################
 

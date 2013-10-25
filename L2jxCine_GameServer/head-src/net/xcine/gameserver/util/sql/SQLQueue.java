@@ -31,7 +31,7 @@ import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
- * @author L2JFrozen
+ * @author L2jxCine
  */
 public class SQLQueue implements Runnable
 {
@@ -47,7 +47,7 @@ public class SQLQueue implements Runnable
 	private boolean _inShutdown;
 	private boolean _isRuning;
 	private SQLQueue() {
-		_query = new FastList<SQLQuery>();
+		_query = new FastList<>();
 		_task = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(this, 60000, 60000);
 		
 	}

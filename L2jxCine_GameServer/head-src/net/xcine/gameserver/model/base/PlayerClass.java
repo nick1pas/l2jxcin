@@ -50,7 +50,7 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 /**
  * This class ...
  * 
- * @author programmos, l2jfrozen dev
+ * @author programmos, L2jxCine dev
  * @version $Revision: 1.2.1 $ $Date: 2009/04/13 02:01:21 $
  */
 public enum PlayerClass
@@ -201,7 +201,7 @@ public enum PlayerClass
 	private static final Set<PlayerClass> subclasseSet4 = EnumSet.of(Warlock, ElementalSummoner, PhantomSummoner);
 	private static final Set<PlayerClass> subclasseSet5 = EnumSet.of(Sorceror, Spellsinger, Spellhowler);
 
-	private static final EnumMap<PlayerClass, Set<PlayerClass>> subclassSetMap = new EnumMap<PlayerClass, Set<PlayerClass>>(PlayerClass.class);
+	private static final EnumMap<PlayerClass, Set<PlayerClass>> subclassSetMap = new EnumMap<>(PlayerClass.class);
 
 	static
 	{

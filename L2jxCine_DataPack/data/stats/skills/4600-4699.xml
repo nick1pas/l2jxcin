@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="4600" levels="12" name="Reducing P. Def Shock">
   <table name="#mpConsume">25 41 57 77 100 123 143 153 161 166 170 172</table>
   <table name="#pDef">0.83 0.8 0.8 0.77 0.77 0.77 0.77 0.77 0.77 0.77 0.77 0.77</table>
@@ -1367,7 +1367,7 @@
     <effect count="1" name="Stun" time="2" val="0" stackOrder="1" stackType="Stun"/>
   </for>
 </skill>
-<!-- Status:Incorrect Pack:l2jfrozen author:Nefer -->
+<!-- Status:Incorrect Pack:L2jxCine author:Nefer -->
 <skill id="4671" levels="1" name="AV - Teleport">
   <set name="magicLvl" val="40"/>
   <set name="operateType" val="OP_ACTIVE"/>
@@ -1504,7 +1504,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4679" levels="1" name="Valakas">
   <!-- Valakas Skills -->
   <set name="magicLvl" val="75"/>
@@ -1517,7 +1517,7 @@
     <set order="0x08" stat="debuffImmunity" val="1" /> <!-- Immunity to debuff 100% -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4680" levels="1" name="Valakas Lava Skin">
   <!-- Valakas Skills -->
   <set name="target" val="TARGET_SELF"/>
@@ -1531,7 +1531,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4681" levels="1" name="Valakas Trample">
   <!-- Valakas Skills -->
   <set name="magicLvl" val="75"/>
@@ -1545,7 +1545,7 @@
   <set name="castRange" val="50"/>
   <set name="effectRange" val="400"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4682" levels="1" name="Valakas Trample">
   <!-- Valakas Skills -->
   <set name="magicLvl" val="75"/>
@@ -1559,7 +1559,7 @@
   <set name="castRange" val="50"/>
   <set name="effectRange" val="400"/>
   </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4683" levels="1" name="Valakas Dragon Breath">
   <!-- Valakas Skills -->
   <set name="magicLvl" val="75"/>
@@ -1578,7 +1578,7 @@
     <effect count="3" name="DamOverTime" time="3" val="216" effectPower="80" effectType="DOT"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4684" levels="1" name="Valakas Dragon Breath">
   <!-- Valakas Skills -->
   <set name="magicLvl" val="75"/>
@@ -1597,7 +1597,7 @@
     <effect count="3" name="DamOverTime" time="3" val="216" effectPower="80" effectType="DOT"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4685" levels="1" name="Valakas Tail Stomp">
   <!-- Valakas Skills -->
   <set name="magicLvl" val="75"/>
@@ -1610,7 +1610,7 @@
   <set name="operateType" val="OP_ACTIVE"/>
   <set name="element" val="2"/> <!-- Fire -->
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4686" levels="1" name="Valakas Tail Stomp">
   <!-- Valakas Skills -->
   <set name="magicLvl" val="75"/>
@@ -1622,7 +1622,7 @@
   <set name="element" val="2"/> <!-- Fire -->
   <set name="operateType" val="OP_ACTIVE"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4687" levels="1" name="Valakas Tail Stomp">
   <!-- Valakas Skills -->
   <set name="magicLvl" val="75"/>
@@ -1632,7 +1632,7 @@
   <set name="skillType" val="BUFF"/>
   <set name="operateType" val="OP_ACTIVE"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4688" levels="1" name="Valakas Shock">
   <!-- Valakas Skills -->
   <set name="magicLvl" val="75"/>
@@ -1647,7 +1647,7 @@
     <effect count="1" name="Stun" time="5" val="0" stackOrder="1" stackType="Stun" effectPower="80" effectType="STUN"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4689" levels="2" name="Valakas Fear">
   <!-- Valakas Skills -->
   <table name="#coolTime">2000 0</table>
@@ -1666,7 +1666,7 @@
     <effect count="5" name="Fear" time="6" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4690" levels="1" name="Valakas Meteor Storm">
   <!-- Valakas Skills -->
   <set name="magicLvl" val="75"/>
@@ -1680,7 +1680,7 @@
   <set name="operateType" val="OP_ACTIVE"/>
   <set name="element" val="2"/> <!-- Fire -->
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4691" levels="4" name="Valakas Regeneration">
   <table name="#regHp">0.15 0.5 0.8 1</table>
   <set name="target" val="TARGET_ONE"/>

@@ -32,7 +32,6 @@ import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.sql.AdminCommandAccessRights;
-import net.xcine.gameserver.handler.custom.CustomWorldHandler;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.managers.CoupleManager;

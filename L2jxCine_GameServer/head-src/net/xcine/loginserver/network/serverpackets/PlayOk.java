@@ -21,7 +21,7 @@ package net.xcine.loginserver.network.serverpackets;
 import net.xcine.loginserver.SessionKey;
 
 /**
- * L2JFrozen
+ * L2jxCine
  */
 public final class PlayOk extends L2LoginServerPacket
 {

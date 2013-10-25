@@ -1,8 +1,8 @@
 @echo off
-title L2J-Frozen: Login Server Console
+title L2jxCine: Login Server Console
 :start
 
-java -Dfile.encoding=UTF8 -Xms128m -Xmx128m -cp ./lib/*;l2jfrozen-core.jar net.xcine.loginserver.L2LoginServer
+java -Dfile.encoding=UTF8 -Xms128m -Xmx128m -cp ./lib/*;L2jxCine-core.jar net.xcine.loginserver.L2LoginServer
 
 if ERRORLEVEL 2 goto restart
 if ERRORLEVEL 1 goto error

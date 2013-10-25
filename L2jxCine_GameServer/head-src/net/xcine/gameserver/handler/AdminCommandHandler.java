@@ -118,7 +118,7 @@ public class AdminCommandHandler
 	
 	private AdminCommandHandler()
 	{
-		_datatable = new FastMap<String, IAdminCommandHandler>();
+		_datatable = new FastMap<>();
 		registerAdminCommandHandler(new AdminAdmin());
 		registerAdminCommandHandler(new AdminInvul());
 		registerAdminCommandHandler(new AdminDelete());

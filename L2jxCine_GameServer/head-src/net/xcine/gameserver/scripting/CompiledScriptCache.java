@@ -53,7 +53,7 @@ public class CompiledScriptCache implements Serializable
 
 	private static final Logger LOG = Logger.getLogger(CompiledScriptCache.class.getName());
 
-	private Map<String, CompiledScriptHolder> _compiledScriptCache = new FastMap<String, CompiledScriptHolder>();
+	private Map<String, CompiledScriptHolder> _compiledScriptCache = new FastMap<>();
 	private transient boolean _modified = false;
 
 	public CompiledScript loadCompiledScript(ScriptEngine engine, File file) throws ScriptException

@@ -141,7 +141,7 @@ public class CharKnownList extends ObjectKnownList
 
 	public Collection<L2Character> getKnownCharacters()
 	{
-		FastList<L2Character> result = new FastList<L2Character>();
+		FastList<L2Character> result = new FastList<>();
 
 		for(L2Object obj : getKnownObjects().values())
 		{
@@ -156,7 +156,7 @@ public class CharKnownList extends ObjectKnownList
 
 	public Collection<L2Character> getKnownCharactersInRadius(long radius)
 	{
-		FastList<L2Character> result = new FastList<L2Character>();
+		FastList<L2Character> result = new FastList<>();
 
 		for(L2Object obj : getKnownObjects().values())
 		{
@@ -208,7 +208,7 @@ public class CharKnownList extends ObjectKnownList
 
 	public final Collection<L2PcInstance> getKnownPlayersInRadius(long radius)
 	{
-		FastList<L2PcInstance> result = new FastList<L2PcInstance>();
+		FastList<L2PcInstance> result = new FastList<>();
 
 		for(L2PcInstance player : getKnownPlayers().values())
 			if(Util.checkIfInRange((int) radius, getActiveChar(), player, true))

@@ -22,7 +22,7 @@ import net.xcine.gameserver.network.serverpackets.MyTargetSelected;
 import net.xcine.gameserver.skills.Env;
 
 /**
- * @author eX1steam L2JFrozen
+ * @author eX1steam L2jxCine
  */
 public class EffectTargetMe extends L2Effect
 {

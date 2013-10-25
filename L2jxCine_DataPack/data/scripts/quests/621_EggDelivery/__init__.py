@@ -1,4 +1,4 @@
-#Quest reworked like L2OFF by OnePaTuBHuK special for L2JFrozen. All rights reserved.
+#Quest reworked like L2OFF by OnePaTuBHuK special for L2jxCine. All rights reserved.
 import sys
 from net.xcine.gameserver.model.quest import State
 from net.xcine.gameserver.model.quest import QuestState

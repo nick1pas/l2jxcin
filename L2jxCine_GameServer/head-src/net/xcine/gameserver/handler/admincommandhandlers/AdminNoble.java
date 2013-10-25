@@ -33,7 +33,7 @@ import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
- * @author L2jFrozen
+ * @author L2jxCine
  */
 public class AdminNoble implements IAdminCommandHandler
 {

@@ -33,7 +33,7 @@ import net.xcine.gameserver.skills.l2skills.L2SkillSignet;
 import net.xcine.gameserver.skills.l2skills.L2SkillSignetCasttime;
 
 /**
- * @author L2jFrozen
+ * @author L2jxCine
  */
 public final class EffectSignet extends L2Effect
 {

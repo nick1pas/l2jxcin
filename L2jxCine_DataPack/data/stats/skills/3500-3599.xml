@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="3500" levels="1" name="Wooden Set">
 <!--
   Description(s):
@@ -910,7 +910,7 @@
     <mul order="0x30" stat="stunVuln" val="0.5"/> <!-- Stun resistance +50% -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3557" levels="1" name="Necklace of Valakas">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="BUFF"/>
@@ -930,7 +930,7 @@
     <add order="0x40" stat="reflectDam" val="5"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3558" levels="1" name="Earring of Antharas">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="BUFF"/>
@@ -949,7 +949,7 @@
     <mul order="0x30" stat="earthVuln" val="0.85"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3559" levels="1" name="Earring of Zaken">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="BUFF"/>
@@ -965,7 +965,7 @@
     <mul order="0x30" stat="derangementVuln" val="0.8"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3560" levels="1" name="Earring of Orfen">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="BUFF"/>
@@ -978,7 +978,7 @@
     <mul order="0x30" stat="gainHp" val="1.06"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3561" levels="1" name="Ring of Baium">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="BUFF"/>
@@ -995,7 +995,7 @@
     <mul order="0x30" stat="mAtkSpd" val="1.04"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3562" levels="1" name="Ring of Ant Queen">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="BUFF"/>
@@ -1010,7 +1010,7 @@
     <mul order="0x30" stat="rootVuln" val="0.8"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3563" levels="1" name="Ring of Core">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="BUFF"/>
@@ -1059,7 +1059,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="castRange" val="-1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3568" levels="1" name="Special Ability: HP Drain">
 <!--
   Description(s):
@@ -1115,7 +1115,7 @@
     <add order="0x40" stat="reflectDam" val="9"/> <!-- Reflect Damage 9% -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3571" levels="1" name="Special Ability: Crt. Stun">
   <set name="magiclvl" val="80"/>
   <set name="effectPoint" val="100"/>
@@ -1231,7 +1231,7 @@
   	<effect count="1" name="Root" stackOrder="-1" stackType="Root" time="30" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3578" levels="1" name="Special Ability: Infinity Blade">
   <set name="magicLvl" val="80"/>
   <set name="target" val="TARGET_SELF"/>
@@ -1252,7 +1252,7 @@
     <add order="0x40" stat="reflectDam" val="9"/> <!-- Reflect Damage 9% -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3579" levels="1" name="Decrease P. Def.">
   <!-- Infinity Blade Skill -->  
   <set name="bestowed" val="true"/>
@@ -1269,7 +1269,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3580" levels="1" name="Special Ability: Infinity Axe">
   <set name="magicLvl" val="80"/>
   <set name="target" val="TARGET_SELF"/>
@@ -1290,7 +1290,7 @@
     <add order="0x40" stat="reflectDam" val="9"/> <!-- Reflect Damage 9% -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3581" levels="1" name="Discord">
   <!-- Infinity Axe Skill -->  
   <set name="bestowed" val="true"/>
@@ -1304,7 +1304,7 @@
     <effect count="5" name="Confusion" time="4" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3582" levels="1" name="Special Ability: Infinity Cleaver">
   <set name="magicLvl" val="80"/>
   <set name="target" val="TARGET_SELF"/>
@@ -1342,7 +1342,7 @@
     <add order="0x40" stat="reflectSkillMagic" val="10"/> <!-- Reflect Skills 10% of the time -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3584" levels="1" name="Shock">
   <!-- Infinity Crusher Skill -->  
   <set name="bestowed" val="true"/>
@@ -1357,7 +1357,7 @@
     <effect count="1" name="Stun" time="9" val="0" stackOrder="2" stackType="Stun"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3585" levels="1" name="Special Ability: Infinity Wing">
   <set name="magicLvl" val="80"/>
   <set name="target" val="TARGET_SELF"/>
@@ -1379,7 +1379,7 @@
     <add order="0x40" stat="reflectSkillMagic" val="10"/> <!-- Reflect Skills 10% of the time -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3586" levels="1" name="Physical Skill Restraint">
   <!-- Infinity Wing Skill -->  
   <set name="bestowed" val="true"/>
@@ -1394,7 +1394,7 @@
     <effect count="1" name="PsychicalMute" time="30" val="0" stackOrder="1" stackType="silence"/> <!-- time 60?-->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3587" levels="1" name="Special Ability: Infinity Fang">
   <set name="magicLvl" val="80"/>
   <set name="target" val="TARGET_SELF"/>
@@ -1416,7 +1416,7 @@
     <add order="0x40" stat="reflectSkillMagic" val="10"/> <!-- Reflect Skills 10% of the time -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3588" levels="1" name="Shock">
   <!-- Infinity Fang Skill -->  
   <set name="bestowed" val="true"/>
@@ -1431,7 +1431,7 @@
     <effect count="1" name="Stun" time="9" val="0" stackOrder="2" stackType="Stun"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3589" levels="1" name="Special Ability: Infinity Stinger">
   <set name="magicLvl" val="80"/>
   <set name="target" val="TARGET_SELF"/>
@@ -1457,7 +1457,7 @@
     <mul order="0x30" stat="absorbDam" val="1.02"/> <!-- Vampiric Rage effect 2% -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3590" levels="1" name="Silence">
   <!-- Infinity Stinger Skill -->  
   <set name="bestowed" val="true"/>
@@ -1472,7 +1472,7 @@
     <effect count="1" name="Mute" time="30" val="0" stackOrder="1" stackType="silence"/> <!-- time 120?-->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3591" levels="1" name="Special Ability: Infinity Spear">
   <!-- Infinity Spear -->
   <set name="magicLvl" val="80"/>
@@ -1495,7 +1495,7 @@
 	<add order="0x40" stat="reflectSkillMagic" val="10"/> <!-- Reflect Skills 10% of the time -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3592" levels="1" name="Dispell">
   <!-- Infinity Spear Skill -->  
   <set name="bestowed" val="true"/>
@@ -1507,7 +1507,7 @@
   <set name="target" val="TARGET_ONE"/>
   <set name="negatePower" val="5"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3593" levels="1" name="Special Ability: Infinity Bow">
   <set name="magicLvl" val="80"/>
   <set name="target" val="TARGET_SELF"/>
@@ -1525,7 +1525,7 @@
     <mul order="0x30" stat="pvpPhysSkillsDmg" val="1.05"/> <!-- PVP Damage Bonus +5% -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3594" levels="1" name="Slow">
   <!-- Infinity Bow Skill -->  
   <set name="bestowed" val="true"/>
@@ -1543,7 +1543,7 @@
   	</effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3595" levels="1" name="Special Ability: Infinity Scepter">
   <set name="magicLvl" val="80"/>
   <set name="target" val="TARGET_SELF"/>
@@ -1565,7 +1565,7 @@
     <sub order="0x40" stat="cancel" val="106"/> <!-- Chance of Magic Cancelation -106 -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3596" levels="1" name="Full Recover">
   <!-- Infinity Scepter Skill -->  
   <set name="aggroPoints" val="100"/>
@@ -1578,7 +1578,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3597" levels="1" name="Special Ability: Infinity Rod">
   <set name="magicLvl" val="80"/>
   <set name="target" val="TARGET_SELF"/>
@@ -1598,7 +1598,7 @@
     <mul order="0x30" stat="pvpPhysSkillsDmg" val="1.05"/> <!-- PVP Damage Bonus +5% -->
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="3598" levels="1" name="Full Recover">
   <!-- Infinity Rod Skill -->
   <set name="aggroPoints" val="100"/>

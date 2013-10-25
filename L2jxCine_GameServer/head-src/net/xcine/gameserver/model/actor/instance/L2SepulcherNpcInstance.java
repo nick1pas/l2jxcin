@@ -43,7 +43,7 @@ import net.xcine.util.random.Rnd;
  */
 public class L2SepulcherNpcInstance extends L2NpcInstance
 {
-	protected static Map<Integer, Integer> _hallGateKeepers = new FastMap<Integer, Integer>();
+	protected static Map<Integer, Integer> _hallGateKeepers = new FastMap<>();
 
 	protected Future<?> _closeTask = null;
 	protected Future<?> _spawnNextMysteriousBoxTask = null;

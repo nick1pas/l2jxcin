@@ -23,7 +23,7 @@ import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 
 /**
- * @author ProGramMoS, eX1steam, L2JFrozen An Env object is just a class to pass parameters to a calculator such as
+ * @author ProGramMoS, eX1steam, L2jxCine An Env object is just a class to pass parameters to a calculator such as
  *         L2PcInstance, L2ItemInstance, Initial value.
  */
 

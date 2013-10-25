@@ -45,7 +45,7 @@ public class GameGuardReply extends L2GameClientPacket
 		if (!nProtect.getInstance().checkGameGuardRepy(getClient(), _reply))
 			return;
 		
-		//L2jFrozen cannot be reached with GameGuard: L2Net notification --> Close Client connection
+		//L2jxCine cannot be reached with GameGuard: L2Net notification --> Close Client connection
 		if(Config.GAMEGUARD_L2NET_CHECK){
 			getClient().closeNow();
 			_log.warning("Player with account name "+getClient().accountName +" kicked to use L2Net ");

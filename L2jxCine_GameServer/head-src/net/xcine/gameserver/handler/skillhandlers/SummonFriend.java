@@ -36,7 +36,7 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.util.Util;
 
 /**
- * @authors L2JFrozen
+ * @authors L2jxCine
  */
 public class SummonFriend implements ISkillHandler
 {

@@ -10,7 +10,7 @@ import net.xcine.gameserver.network.serverpackets.ValidateLocation;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 
 /**
- * @author eX1steam, l2jfrozen
+ * @author eX1steam, L2jxCine
  */
 public class L2CastleBlacksmithInstance extends L2FolkInstance
 {

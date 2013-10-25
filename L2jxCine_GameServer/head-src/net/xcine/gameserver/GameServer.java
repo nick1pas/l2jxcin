@@ -88,7 +88,6 @@ import net.xcine.gameserver.handler.VoicedCommandHandler;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.managers.AuctionManager;
 import net.xcine.gameserver.managers.AutoSaveManager;
-import net.xcine.gameserver.managers.AwayManager;
 import net.xcine.gameserver.managers.BoatManager;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.CastleManorManager;
@@ -194,7 +193,7 @@ public class GameServer
 		
 		Util.printSection("Team");
 		
-		// Print L2jfrozen's Logo
+		// Print L2jxCine's Logo
 		L2jxCine.info();
 		
 		// Load GameServer Configs
@@ -525,14 +524,11 @@ public class GameServer
 		
 		Util.printSection("Custom Mods");
 		
-		if (Config.L2JMOD_ALLOW_WEDDING || Config.ALLOW_AWAY_STATUS || Config.PCB_ENABLE)
+		if (Config.L2JMOD_ALLOW_WEDDING || Config.PCB_ENABLE)
 		{
 			if (Config.L2JMOD_ALLOW_WEDDING)
 				CoupleManager.getInstance();
-			
-			if (Config.ALLOW_AWAY_STATUS)
-				AwayManager.getInstance();
-			
+
 			if (Config.PCB_ENABLE)
 				ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(PcPoint.getInstance(), Config.PCB_INTERVAL * 1000, Config.PCB_INTERVAL * 1000);
 		}

@@ -26,7 +26,7 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.util.Util;
 
 /**
- * @author L2JFrozen
+ * @author L2jxCine
  */
 public final class RequestRecipeShopMakeItem extends L2GameClientPacket
 {

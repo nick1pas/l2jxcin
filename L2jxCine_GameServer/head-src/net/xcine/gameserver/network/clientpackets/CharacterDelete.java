@@ -24,7 +24,7 @@ import net.xcine.gameserver.network.serverpackets.CharDeleteOk;
 import net.xcine.gameserver.network.serverpackets.CharSelectInfo;
 
 /**
- * @author eX1steam, l2jfrozen
+ * @author eX1steam, L2jxCine
  */
 public final class CharacterDelete extends L2GameClientPacket
 {

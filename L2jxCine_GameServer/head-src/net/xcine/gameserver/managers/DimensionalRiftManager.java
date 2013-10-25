@@ -60,7 +60,7 @@ public class DimensionalRiftManager
 
 	protected static final Logger _log = Logger.getLogger(DimensionalRiftManager.class.getName());
 	private static DimensionalRiftManager _instance;
-	private FastMap<Byte, FastMap<Byte, DimensionalRiftRoom>> _rooms = new FastMap<Byte, FastMap<Byte, DimensionalRiftRoom>>();
+	private FastMap<Byte, FastMap<Byte, DimensionalRiftRoom>> _rooms = new FastMap<>();
 	private final short DIMENSIONAL_FRAGMENT_ITEM_ID = 7079;
 	private final static int MAX_PARTY_PER_AREA = 3;
 
@@ -466,8 +466,8 @@ public class DimensionalRiftManager
 					xT, yT, zT
 			};
 			_isBossRoom = isBossRoom;
-			_roomSpawns = new FastList<L2Spawn>();
-			_roomMobs = new FastList<L2NpcInstance>();
+			_roomSpawns = new FastList<>();
+			_roomMobs = new FastList<>();
 			_s = new Polygon(new int[]
 			{
 					xMin, xMax, xMax, xMin

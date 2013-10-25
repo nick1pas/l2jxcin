@@ -11,7 +11,7 @@
 package net.xcine.gameserver.network;
 
 /**
- * @author L2JFrozen
+ * @author L2jxCine
  */
 public class GameCrypt
 {

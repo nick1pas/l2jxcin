@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
 <skill id="1100" levels="2" name="Chill Flame">
   <table name="#magicLvl">7 14</table>
   <table name="#dmg">20 30</table>
@@ -26,7 +26,7 @@
     <effect count="15" name="DamOverTime" time="1" val="#dmg"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1101" levels="2" name="Blaze Quake">
   <table name="#magicLvl">25 35</table>
   <table name="#dmg">44 60</table>
@@ -77,7 +77,7 @@
     <effect count="10" name="ManaDamOverTime" time="3" val="#dmg" effectPower="80"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1104" levels="14" name="Seal of Winter" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -111,7 +111,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1105" levels="18" name="Madness">
   <table name="#mpConsume_Init">4 5 6 6 7 8 9 10 11 11 11 12 12 13 13 13 14 14</table>
   <table name="#mpConsume">16 18 21 24 28 31 35 38 41 43 44 46 48 49 51 52 53 55</table>
@@ -157,7 +157,7 @@
     <effect count="15" name="DamOverTime" time="1" val="#dmg"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1108" levels="4" name="Seal of Flame">
   <table name="#dmg">77 94 108 118</table>
   <table name="#mpConsume_Init">20 23 29 31</table>
@@ -782,7 +782,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1159" levels="22" name="Curse Death Link" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -814,7 +814,7 @@
     <player hp="10"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1160" levels="15" name="Slow" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -850,7 +850,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1163" levels="14" name="Curse Discord">
     <table name="#mpInitialConsume">7 8 9 10 11 11 11 12 12 13 13 13 14 14</table>
     <table name="#mpConsume">28 31 35 38 41 43 44 46 48 49 51 52 53 55</table>
@@ -964,7 +964,7 @@
     <effect count="10" name="DamOverTime" time="3" val="#dmg" abnormal="poison"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1169" levels="14" name="Curse Fear">
   <table name="#mpConsume_Init">7 8 9 10 11 11 11 12 12 13 13 13 14 14</table>
   <table name="#mpConsume">28 31 35 38 41 43 44 46 48 49 51 52 53 55</table>
@@ -987,7 +987,7 @@
     <effect count="5" name="Fear" time="2" val="0"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1170" levels="13" name="Anchor" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -1196,7 +1196,7 @@
   <for>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1181" levels="3" name="Flame Strike">
   <table name="#mpConsume_Init">6 7 8</table>
   <table name="#mpConsume">23 27 32</table>
@@ -1217,7 +1217,7 @@
   <set name="castRange" val="500"/>
   <set name="effectRange" val="1000"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1182" levels="3" name="Resist Aqua" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -1309,7 +1309,7 @@
     </effect>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1189" levels="3" name="Resist Wind" enchantLevels1="30" enchantLevels2="30">
   <table name="#enchantMagicLvl">76 76 76 77 77 77 78 78 78 79 79 79 80 80 80 81 81 81 82 82 82 82 83 83 83 84 84 85 85 85</table>
   <enchant1 name="magicLvl" val="#enchantMagicLvl"/>
@@ -1349,7 +1349,7 @@
     </effect>
   </enchant1for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="1191" levels="3" name="Resist Fire" enchantLevels1="30" enchantLevels2="30">
   <table name="#ench1time">
   1240 1280 1320 1360 1400 1440 1480 1520 1560 1600

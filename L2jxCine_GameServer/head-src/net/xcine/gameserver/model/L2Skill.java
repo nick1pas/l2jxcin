@@ -76,7 +76,7 @@ import net.xcine.gameserver.util.Util;
 /**
  * This class...
  * 
- * @authors ProGramMoS, eX1steam, l2jfrozen dev
+ * @authors ProGramMoS, eX1steam, L2jxCine dev
  * @version $Revision: 1.3.3 $ $Date: 2009/04/29 00:08 $
  */
 public abstract class L2Skill

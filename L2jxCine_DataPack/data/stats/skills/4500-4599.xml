@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-<!-- Pack:l2jfrozen Site:www.l2jfrozen.com -->
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Pack:L2jxCine Site:www.L2jxCine.com -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4500" levels="1" name="Treasure Chest - Level 27">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -9,7 +9,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4501" levels="1" name="Treasure Chest - Level 29">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -17,7 +17,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4502" levels="1" name="Treasure Chest - Level 31">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -25,7 +25,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4503" levels="1" name="Treasure Chest - Level 32">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -33,7 +33,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4504" levels="1" name="Treasure Chest - Level 33">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -41,7 +41,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4505" levels="1" name="Treasure Chest - Level 35">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -49,7 +49,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4506" levels="1" name="Treasure Chest - Level 39">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -57,7 +57,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4507" levels="1" name="Treasure Chest - Level 42">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -65,7 +65,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4508" levels="1" name="Treasure Chest - Level 43">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -73,7 +73,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4509" levels="1" name="Treasure Chest - Level 45">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -81,7 +81,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4510" levels="1" name="Treasure Chest - Level 47">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -89,7 +89,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4511" levels="1" name="Treasure Chest - Level 49">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -97,7 +97,7 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4512" levels="1" name="Treasure Chest - Level 52">
   <!-- This Skill Is Only For Description In The Client -->
   <set name="target" val="TARGET_SELF"/>
@@ -105,21 +105,21 @@
   <set name="operateType" val="OP_PASSIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4513" levels="1" name="Squash - Level up">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="BUFF"/> <!-- Just Broadcast -->
   <set name="operateType" val="OP_ACTIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4514" levels="1" name="Squash - Poisoned">
   <set name="target" val="TARGET_SELF"/>
   <set name="skillType" val="BUFF"/> <!-- Just Broadcast -->
   <set name="operateType" val="OP_ACTIVE"/>
   <set name="magicLvl" val="1"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4515" levels="1" name="Raid Curse">
   <set name="target" val="TARGET_ONE"/>
   <set name="skillType" val="PARALYZE"/>
@@ -134,7 +134,7 @@
     <effect count="1" name="Petrification" time="120" val="0" stackOrder="120" stackType="turn_stone"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4516" levels="1" name="Orfen Heal">
   <set name="aggroPoints" val="100"/>
   <set name="castRange" val="600"/>
@@ -150,7 +150,7 @@
   <set name="skillType" val="HEAL"/>
   <set name="target" val="TARGET_ONE"/>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4517" levels="1" name="Quest - BOSS Defend">
   <set name="target" val="TARGET_SELF"/>
   <set name="magicLvl" val="76"/>
@@ -163,7 +163,7 @@
     <mul order="0x30" stat="pDef" val="10"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4518" levels="1" name="Quest - BOSS Rampage">
   <set name="magicLvl" val="76"/>
   <set name="operateType" val="OP_TOGGLE"/>
@@ -175,7 +175,7 @@
     <mul order="0x30" stat="pDef" val="0.5"/>
   </for>
 </skill>
-<!-- Status:Fixed Pack:l2jfrozen author:Nefer -->
+<!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="4519" levels="1" name="Quest - BOSS Defend">
   <set name="magicLvl" val="76"/>
   <set name="operateType" val="OP_TOGGLE"/>

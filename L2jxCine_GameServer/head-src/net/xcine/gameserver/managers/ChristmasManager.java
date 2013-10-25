@@ -49,7 +49,7 @@ public class ChristmasManager
 {
 	private static final Logger _log = Logger.getLogger(ChristmasManager.class.getName());
 	
-	protected List<L2NpcInstance> objectQueue = new FastList<L2NpcInstance>();
+	protected List<L2NpcInstance> objectQueue = new FastList<>();
 	protected Random rand = new Random();
 
 	// X-Mas message list

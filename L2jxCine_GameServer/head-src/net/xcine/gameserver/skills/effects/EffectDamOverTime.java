@@ -26,7 +26,7 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.skills.Env;
 
 /**
- * @author L2JFrozen dev
+ * @author L2jxCine dev
  */
 
 class EffectDamOverTime extends L2Effect

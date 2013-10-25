@@ -33,7 +33,7 @@ import net.xcine.util.random.Rnd;
 
 /**
  * @author Shyla
- * @author L2jfrozen
+ * @author L2jxCine
  */
 public class Orfen extends Quest implements Runnable
 {

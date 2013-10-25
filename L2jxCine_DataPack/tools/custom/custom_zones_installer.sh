@@ -14,7 +14,7 @@
 ## License: GNU GPL                       ##
 ## Based on Vincenzo Esposito's script    ##
 ## E-mail: navis83@hotmail.it      ##
-## From "L2jFrozenInterlude"                    ##
+## From "L2jxCineInterlude"                    ##
 ## Bug reports:  navis83@hotmail.it     ##
 ############################################
 trap finish 2

@@ -1,4 +1,4 @@
-#Quest reworked by OnePaTuBHuK special for L2JFrozen. All rights reserved.
+#Quest reworked by OnePaTuBHuK special for L2jxCine. All rights reserved.
 import sys
 from net.xcine import Config
 from net.xcine.gameserver.model.quest import State

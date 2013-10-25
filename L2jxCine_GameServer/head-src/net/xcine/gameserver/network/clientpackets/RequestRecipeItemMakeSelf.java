@@ -22,7 +22,7 @@ import net.xcine.gameserver.controllers.RecipeController;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 
 /**
- * @author L2JFrozen
+ * @author L2jxCine
  */
 public final class RequestRecipeItemMakeSelf extends L2GameClientPacket
 {

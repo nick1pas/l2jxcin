@@ -61,7 +61,7 @@ public class TeleportLocationTable
 
 	public void reloadAll()
 	{
-		_teleports = new FastMap<Integer, L2TeleportLocation>();
+		_teleports = new FastMap<>();
 
 		Connection con = null;
 		try

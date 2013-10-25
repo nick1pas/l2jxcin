@@ -44,7 +44,7 @@ public class CommunityBoard
 	
 	public CommunityBoard()
 	{
-		_handlers = new FastMap<String, IBBSHandler>();
+		_handlers = new FastMap<>();
 		// null;
 	}
 	

@@ -55,7 +55,7 @@ public class HennaTreeTable
 
 	private HennaTreeTable()
 	{
-		_hennaTrees = new FastMap<ClassId, List<L2HennaInstance>>();
+		_hennaTrees = new FastMap<>();
 		int classId = 0;
 		int count = 0;
 
@@ -72,7 +72,7 @@ public class HennaTreeTable
 
 			classlist: while(classlist.next())
 			{
-				list = new FastList<L2HennaInstance>();
+				list = new FastList<>();
 				classId = classlist.getInt("id");
 				PreparedStatement statement2 = con.prepareStatement("SELECT class_id, symbol_id FROM henna_trees where class_id=? ORDER BY symbol_id");
 				statement2.setInt(1, classId);

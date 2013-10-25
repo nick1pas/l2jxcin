@@ -115,7 +115,7 @@ public class ClanTable
 
 	private ClanTable()
 	{
-		_clans = new FastMap<Integer, L2Clan>();
+		_clans = new FastMap<>();
 		L2Clan clan;
 		Connection con = null;
 		try

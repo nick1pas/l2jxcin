@@ -47,11 +47,11 @@ public class CrestCache
 
 	private static CrestCache _instance;
 
-	private FastMRUCache<Integer, byte[]> _cachePledge = new FastMRUCache<Integer, byte[]>();
+	private FastMRUCache<Integer, byte[]> _cachePledge = new FastMRUCache<>();
 
-	private FastMRUCache<Integer, byte[]> _cachePledgeLarge = new FastMRUCache<Integer, byte[]>();
+	private FastMRUCache<Integer, byte[]> _cachePledgeLarge = new FastMRUCache<>();
 
-	private FastMRUCache<Integer, byte[]> _cacheAlly = new FastMRUCache<Integer, byte[]>();
+	private FastMRUCache<Integer, byte[]> _cacheAlly = new FastMRUCache<>();
 
 	private int _loadedFiles;
 

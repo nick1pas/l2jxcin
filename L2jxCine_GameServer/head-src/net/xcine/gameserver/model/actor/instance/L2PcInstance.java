@@ -453,7 +453,7 @@ public final class L2PcInstance extends L2PlayableInstance
 	public int _active_boxes = -1;
 	
 	/** The active_boxes_characters. */
-	public List<String> active_boxes_characters = new ArrayList<String>();
+	public List<String> active_boxes_characters = new ArrayList<>();
 	
 	/** UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,str=?,con=?,dex=?,_int=?,men=?,wit=? ,face=?,hairStyle=?,hairColor =?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,karma=?,pvpkills=?,pkkills=?,rec_have =?,rec_left=?,clanid=?,maxload =?,race=?,classid=?,deletetime=?,title=?,accesslevel=?,online=?,isin7sdungeon=?,clan_privs =?,wantspeace=?,base_class =?,onlinetime=?,in_jail=?,jail_timer=?,newbie=?,nobless=?,power_grade=?,subpledge=?,last_recom_date =?,lvl_joined_academy =?,apprentice=?,sponsor=?,varka_ketra_ally=?,clan_join_expiry_time=?,clan_create_expiry_time=? ,char_name=?,death_penalty_level=?,good=?,evil=?,gve_kills=? WHERE obj_id=?. */
 	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,str=?,con=?,dex=?,_int=?,men=?,wit=?,face=?,hairStyle=?,hairColor=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,karma=?,pvpkills=?,pkkills=?,rec_have=?,rec_left=?,clanid=?,maxload=?,race=?,classid=?,deletetime=?,title=?,accesslevel=?,online=?,isin7sdungeon=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,punish_level=?,punish_timer=?,newbie=?,nobless=?,power_grade=?,subpledge=?,last_recom_date=?,lvl_joined_academy=?,apprentice=?,sponsor=?,varka_ketra_ally=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,death_penalty_level=?,pc_point=?,name_color=?,title_color=?,aio=?,aio_end=? WHERE obj_id=?";
@@ -840,7 +840,7 @@ public final class L2PcInstance extends L2PlayableInstance
 	public String eventTitle;
 	
 	/** The kills. */
-	public List<String> kills = new LinkedList<String>();
+	public List<String> kills = new LinkedList<>();
 	
 	/** The event sit forced. */
 	public boolean eventSitForced = false;
@@ -955,10 +955,10 @@ public final class L2PcInstance extends L2PlayableInstance
 	private boolean _inCraftMode;
 
 	/** The table containing all L2RecipeList of the L2PcInstance. */
-	private Map<Integer, L2RecipeList> _dwarvenRecipeBook = new FastMap<Integer, L2RecipeList>();
+	private Map<Integer, L2RecipeList> _dwarvenRecipeBook = new FastMap<>();
 	
 	/** The _common recipe book. */
-	private Map<Integer, L2RecipeList> _commonRecipeBook = new FastMap<Integer, L2RecipeList>();
+	private Map<Integer, L2RecipeList> _commonRecipeBook = new FastMap<>();
 
 	/** True if the L2PcInstance is sitting. */
 	private boolean _waitTypeSitting;
@@ -994,7 +994,7 @@ public final class L2PcInstance extends L2PlayableInstance
 	private long _lastRecomUpdate;
 	
 	/** List with the recomendations that I've give. */
-	private List<Integer> _recomChars = new FastList<Integer>();
+	private List<Integer> _recomChars = new FastList<>();
 
 	/** The random number of the L2PcInstance. */
 	//private static final Random _rnd = new Random();
@@ -1094,7 +1094,7 @@ public final class L2PcInstance extends L2PlayableInstance
 	}
 	
 	/** The table containing all Quests began by the L2PcInstance. */
-	private Map<String, QuestState> _quests = new FastMap<String, QuestState>();
+	private Map<String, QuestState> _quests = new FastMap<>();
 
 	/** The list containing all shortCuts of this L2PcInstance. */
 	private ShortCuts _shortCuts = new ShortCuts(this);
@@ -1103,10 +1103,10 @@ public final class L2PcInstance extends L2PlayableInstance
 	private MacroList _macroses = new MacroList(this);
 
 	/** The _snoop listener. */
-	private List<L2PcInstance> _snoopListener = new FastList<L2PcInstance>();
+	private List<L2PcInstance> _snoopListener = new FastList<>();
 	
 	/** The _snooped player. */
-	private List<L2PcInstance> _snoopedPlayer = new FastList<L2PcInstance>();
+	private List<L2PcInstance> _snoopedPlayer = new FastList<>();
 
 	/** The _skill learning class id. */
 	private ClassId _skillLearningClassId;
@@ -1236,7 +1236,7 @@ private AccessLevel _accessLevel;
 	private L2Weapon _fistsWeaponItem;
 
 	/** The _chars. */
-	private final Map<Integer, String> _chars = new FastMap<Integer, String>();
+	private final Map<Integer, String> _chars = new FastMap<>();
 
 	//private byte _updateKnownCounter = 0;
 
@@ -1265,7 +1265,7 @@ private AccessLevel _accessLevel;
 	protected boolean _inventoryDisable = false;
 
 	/** The _cubics. */
-	protected Map<Integer, L2CubicInstance> _cubics = new FastMap<Integer, L2CubicInstance>();
+	protected Map<Integer, L2CubicInstance> _cubics = new FastMap<>();
 
 	/** Active shots. A FastSet variable would actually suffice but this was changed to fix threading stability... */
 	protected Map<Integer, Integer> _activeSoulShots = new FastMap<Integer, Integer>().shared();
@@ -1316,13 +1316,13 @@ private AccessLevel _accessLevel;
 	private ScheduledFuture<?> _taskWater;
 
 	/** Bypass validations. */
-	private List<String> _validBypass = new FastList<String>();
+	private List<String> _validBypass = new FastList<>();
 	
 	/** The _valid bypass2. */
-	private List<String> _validBypass2 = new FastList<String>();
+	private List<String> _validBypass2 = new FastList<>();
 	
 	/** The _valid link. */
-	private List<String> _validLink = new FastList<String>();
+	private List<String> _validLink = new FastList<>();
 
 	/** The _forum mail. */
 	private Forum _forumMail;
@@ -2318,7 +2318,7 @@ private int _reviveRequested = 0;
 	 */
 	public Quest[] getAllActiveQuests()
 	{
-		FastList<Quest> quests = new FastList<Quest>();
+		FastList<Quest> quests = new FastList<>();
 
 		for(QuestState qs : _quests.values())
 		{
@@ -7900,8 +7900,8 @@ private int _reviveRequested = 0;
 			while(dropPercent > 0 && Rnd.get(100) < dropPercent && dropCount < dropLimit)
 			{
 				int itemDropPercent = 0;
-				List<Integer> nonDroppableList = new FastList<Integer>();
-				List<Integer> nonDroppableListPet = new FastList<Integer>();
+				List<Integer> nonDroppableList = new FastList<>();
+				List<Integer> nonDroppableListPet = new FastList<>();
 
 				nonDroppableList = Config.KARMA_LIST_NONDROPPABLE_ITEMS;
 				nonDroppableListPet = Config.KARMA_LIST_NONDROPPABLE_ITEMS;
@@ -10960,7 +10960,7 @@ private int _reviveRequested = 0;
 			final L2Effect[] effects = getAllEffects();
 			statement = con.prepareStatement(ADD_SKILL_SAVE);
 			
-			List<Integer> storedSkills = new FastList<Integer>();
+			List<Integer> storedSkills = new FastList<>();
 			
 			int buff_index = 0;
 			
@@ -14198,7 +14198,11 @@ private int _reviveRequested = 0;
 	{
 		sendPacket(SystemMessage.getSystemMessage(id));
 	}
-
+	
+	public boolean isInRefusalMode()
+	{
+		return _messageRefusal;
+	}
 	/**
 	 * Gets the message refusal.
 	 *
@@ -15025,7 +15029,7 @@ private int _reviveRequested = 0;
 			if(skillTree == null)
 				return true;
 
-			Map<Integer, L2Skill> prevSkillList = new FastMap<Integer, L2Skill>();
+			Map<Integer, L2Skill> prevSkillList = new FastMap<>();
 
 			for(L2SkillLearn skillInfo : skillTree)
 			{
@@ -15161,7 +15165,7 @@ private int _reviveRequested = 0;
 	{
 		if(_subClasses == null)
 		{
-			_subClasses = new FastMap<Integer, SubClass>();
+			_subClasses = new FastMap<>();
 		}
 
 		return _subClasses;
@@ -17120,7 +17124,7 @@ private int _reviveRequested = 0;
 	}
 
 	/** list of character friends. */
-	private List<String> _friendList = new FastList<String>();
+	private List<String> _friendList = new FastList<>();
 	
 	/**
 	 * Gets the friend list.
@@ -19166,7 +19170,7 @@ public boolean dismount()
 		boolean output = true;
 		
 		int boxes_number = 0; //this one
-		List<String> active_boxes = new ArrayList<String>();
+		List<String> active_boxes = new ArrayList<>();
 		
 		if(getClient()!=null && getClient().getConnection()!=null && !getClient().getConnection().isClosed() && getClient().getConnection().getInetAddress()!=null ){
 			

@@ -41,10 +41,10 @@ import net.xcine.util.database.L2DatabaseFactory;
 public class BufferSkillsTable
 {
 	private static BufferSkillsTable _instance = null;
-	private static FastMap<String, FastList<L2Skill>> _bufferSkillsMap = new FastMap<String, FastList<L2Skill>>();
-	private static FastList<String> _buffTypes = new FastList<String>();
-	private static FastMap<Integer, Integer> _buffPrizes = new FastMap<Integer, Integer>();
-	private static FastMap<Integer, SkillInfo> _allSkills = new FastMap<Integer, SkillInfo>();
+	private static FastMap<String, FastList<L2Skill>> _bufferSkillsMap = new FastMap<>();
+	private static FastList<String> _buffTypes = new FastList<>();
+	private static FastMap<Integer, Integer> _buffPrizes = new FastMap<>();
+	private static FastMap<Integer, SkillInfo> _allSkills = new FastMap<>();
 	private static Logger _log = Logger.getLogger(BufferSkillsTable.class.getName());
 	private static final String SQL_LOAD_SKILLS = "SELECT * FROM `mods_buffer_skills`";
 

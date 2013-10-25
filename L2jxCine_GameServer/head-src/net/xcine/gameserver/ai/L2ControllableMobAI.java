@@ -415,7 +415,7 @@ public class L2ControllableMobAI extends L2AttackableAI
 		double dy, dx;
 		double dblAggroRange = aggroRange * aggroRange;
 
-		List<L2Character> potentialTarget = new FastList<L2Character>();
+		List<L2Character> potentialTarget = new FastList<>();
 
 		for(L2Object obj : npc.getKnownList().getKnownObjects().values())
 		{

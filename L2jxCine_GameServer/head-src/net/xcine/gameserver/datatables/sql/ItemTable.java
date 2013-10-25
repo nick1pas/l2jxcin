@@ -64,10 +64,10 @@ public class ItemTable
 	private final static Logger _log = Logger.getLogger(ItemTable.class.getName());
 	private final static java.util.logging.Logger _logItems = java.util.logging.Logger.getLogger("item");
 
-	private static final Map<String, Integer> _crystalTypes = new FastMap<String, Integer>();
-	private static final Map<String, L2WeaponType> _weaponTypes = new FastMap<String, L2WeaponType>();
-	private static final Map<String, L2ArmorType> _armorTypes = new FastMap<String, L2ArmorType>();
-	private static final Map<String, Integer> _slots = new FastMap<String, Integer>();
+	private static final Map<String, Integer> _crystalTypes = new FastMap<>();
+	private static final Map<String, L2WeaponType> _weaponTypes = new FastMap<>();
+	private static final Map<String, L2ArmorType> _armorTypes = new FastMap<>();
+	private static final Map<String, Integer> _slots = new FastMap<>();
 
 	private L2Item[] _allTemplates;
 
@@ -149,11 +149,11 @@ public class ItemTable
 	};
 
 	/** List of etcItem */
-	private static final Map<Integer, Item> itemData = new FastMap<Integer, Item>();
+	private static final Map<Integer, Item> itemData = new FastMap<>();
 	/** List of weapons */
-	private static final Map<Integer, Item> weaponData = new FastMap<Integer, Item>();
+	private static final Map<Integer, Item> weaponData = new FastMap<>();
 	/** List of armor */
-	private static final Map<Integer, Item> armorData = new FastMap<Integer, Item>();
+	private static final Map<Integer, Item> armorData = new FastMap<>();
 
 	/**
 	 * Returns instance of ItemTable
@@ -184,9 +184,9 @@ public class ItemTable
 	 */
 	public ItemTable()
 	{
-		Map<Integer, L2EtcItem> etcItems = new FastMap<Integer, L2EtcItem>();
-		Map<Integer, L2Armor> armors = new FastMap<Integer, L2Armor>();
-		Map<Integer, L2Weapon> weapons = new FastMap<Integer, L2Weapon>();
+		Map<Integer, L2EtcItem> etcItems = new FastMap<>();
+		Map<Integer, L2Armor> armors = new FastMap<>();
+		Map<Integer, L2Weapon> weapons = new FastMap<>();
 
 		Connection con = null;
 		try

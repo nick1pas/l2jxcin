@@ -34,7 +34,7 @@ public class ZombieGatekeepers extends Quest implements Runnable
 		super.addAggroRangeEnterId(22136);
 	}
 	
-	private FastMap<Integer, FastList<L2Character>> _attackersList = new FastMap<Integer, FastList<L2Character>>();
+	private FastMap<Integer, FastList<L2Character>> _attackersList = new FastMap<>();
 	
 	@Override
 	public String onAttack(L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
@@ -45,7 +45,7 @@ public class ZombieGatekeepers extends Quest implements Runnable
 		
 		if (_attackersList.get(npcObjId) == null)
 		{
-			FastList<L2Character> player = new FastList<L2Character>();
+			FastList<L2Character> player = new FastList<>();
 			player.add(target);
 			_attackersList.put(npcObjId, player);
 		}

@@ -70,9 +70,9 @@ public class FishTable
 		
 			String line = null;
 
-			_fishsEasy = new FastList<FishData>();
-			_fishsNormal = new FastList<FishData>();
-			_fishsHard = new FastList<FishData>();
+			_fishsEasy = new FastList<>();
+			_fishsNormal = new FastList<>();
+			_fishsHard = new FastList<>();
 			FishData fish;
 
 			//format:
@@ -174,7 +174,7 @@ public class FishTable
 	 */
 	public List<FishData> getfish(int lvl, int type, int group)
 	{
-		List<FishData> result = new FastList<FishData>();
+		List<FishData> result = new FastList<>();
 		List<FishData> _Fishs = null;
 
 		switch(group)

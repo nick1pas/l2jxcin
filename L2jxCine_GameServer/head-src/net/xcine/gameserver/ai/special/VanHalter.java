@@ -66,31 +66,31 @@ public class VanHalter extends Quest implements Runnable
 	private static final Logger _log = Logger.getLogger(VanHalter.class.getName());
 
 	// List of intruders.
-	protected Map<Integer, List<L2PcInstance>> _bleedingPlayers = new FastMap<Integer, List<L2PcInstance>>();
+	protected Map<Integer, List<L2PcInstance>> _bleedingPlayers = new FastMap<>();
 
 	// Spawn data of monsters.
-	protected Map<Integer, L2Spawn> _monsterSpawn = new FastMap<Integer, L2Spawn>();
-	protected List<L2Spawn> _royalGuardSpawn = new FastList<L2Spawn>();
-	protected List<L2Spawn> _royalGuardCaptainSpawn = new FastList<L2Spawn>();
-	protected List<L2Spawn> _royalGuardHelperSpawn = new FastList<L2Spawn>();
-	protected List<L2Spawn> _triolRevelationSpawn = new FastList<L2Spawn>();
-	protected List<L2Spawn> _triolRevelationAlive = new FastList<L2Spawn>();
-	protected List<L2Spawn> _guardOfAltarSpawn = new FastList<L2Spawn>();
-	protected Map<Integer, L2Spawn> _cameraMarkerSpawn = new FastMap<Integer, L2Spawn>();
+	protected Map<Integer, L2Spawn> _monsterSpawn = new FastMap<>();
+	protected List<L2Spawn> _royalGuardSpawn = new FastList<>();
+	protected List<L2Spawn> _royalGuardCaptainSpawn = new FastList<>();
+	protected List<L2Spawn> _royalGuardHelperSpawn = new FastList<>();
+	protected List<L2Spawn> _triolRevelationSpawn = new FastList<>();
+	protected List<L2Spawn> _triolRevelationAlive = new FastList<>();
+	protected List<L2Spawn> _guardOfAltarSpawn = new FastList<>();
+	protected Map<Integer, L2Spawn> _cameraMarkerSpawn = new FastMap<>();
 	protected L2Spawn _ritualOfferingSpawn = null;
 	protected L2Spawn _ritualSacrificeSpawn = null;
 	protected L2Spawn _vanHalterSpawn = null;
 
 	// Instance of monsters.
-	protected List<L2NpcInstance> _monsters = new FastList<L2NpcInstance>();
-	protected List<L2NpcInstance> _royalGuard = new FastList<L2NpcInstance>();
-	protected List<L2NpcInstance> _royalGuardCaptain = new FastList<L2NpcInstance>();
-	protected List<L2NpcInstance> _royalGuardHepler = new FastList<L2NpcInstance>();
-	protected List<L2NpcInstance> _triolRevelation = new FastList<L2NpcInstance>();
-	protected List<L2NpcInstance> _guardOfAltar = new FastList<L2NpcInstance>();
-	protected Map<Integer, L2NpcInstance> _cameraMarker = new FastMap<Integer, L2NpcInstance>();
-	protected List<L2DoorInstance> _doorOfAltar = new FastList<L2DoorInstance>();
-	protected List<L2DoorInstance> _doorOfSacrifice = new FastList<L2DoorInstance>();
+	protected List<L2NpcInstance> _monsters = new FastList<>();
+	protected List<L2NpcInstance> _royalGuard = new FastList<>();
+	protected List<L2NpcInstance> _royalGuardCaptain = new FastList<>();
+	protected List<L2NpcInstance> _royalGuardHepler = new FastList<>();
+	protected List<L2NpcInstance> _triolRevelation = new FastList<>();
+	protected List<L2NpcInstance> _guardOfAltar = new FastList<>();
+	protected Map<Integer, L2NpcInstance> _cameraMarker = new FastMap<>();
+	protected List<L2DoorInstance> _doorOfAltar = new FastList<>();
+	protected List<L2DoorInstance> _doorOfSacrifice = new FastList<>();
 	protected L2NpcInstance _ritualOffering = null;
 	protected L2NpcInstance _ritualSacrifice = null;
 	protected L2RaidBossInstance _vanHalter = null;
@@ -1155,7 +1155,7 @@ public class VanHalter extends Quest implements Runnable
 		}
 		_timeUpTask = ThreadPoolManager.getInstance().scheduleGeneral(new TimeUp(), Config.HPH_FIGHTTIMEOFHALTER);
 
-		Map<Integer, L2PcInstance> _targets = new FastMap<Integer, L2PcInstance>();
+		Map<Integer, L2PcInstance> _targets = new FastMap<>();
 		int i = 0;
 
 		for(L2PcInstance pc : _vanHalter.getKnownList().getKnownPlayers().values())
@@ -1277,7 +1277,7 @@ public class VanHalter extends Quest implements Runnable
 				continue;
 			}
 
-			List<L2PcInstance> bpc = new FastList<L2PcInstance>();
+			List<L2PcInstance> bpc = new FastList<>();
 
 			for(L2PcInstance pc : tr.getKnownList().getKnownPlayersInRadius(tr.getAggroRange()))
 			{

@@ -53,10 +53,10 @@ public class L2FortSiegeGuardAI extends L2CharacterAI implements Runnable
 	protected static final Logger _log1 = Logger.getLogger(L2FortSiegeGuardAI.class.getName());
 
 	//SelfAnalisis ))
-	public List<L2Skill> pdamSkills = new FastList<L2Skill>();
-	public List<L2Skill> mdamSkills = new FastList<L2Skill>();
-	public List<L2Skill> healSkills = new FastList<L2Skill>();
-	public List<L2Skill> rootSkills = new FastList<L2Skill>();
+	public List<L2Skill> pdamSkills = new FastList<>();
+	public List<L2Skill> mdamSkills = new FastList<>();
+	public List<L2Skill> healSkills = new FastList<>();
+	public List<L2Skill> rootSkills = new FastList<>();
 
 	public boolean hasPDam = false;
 	public boolean hasMDam = false;

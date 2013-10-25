@@ -99,14 +99,14 @@ public class AugmentationData
 		_log.info("Initializing AugmentationData.");
 
 		_augmentationStats = new FastList[4];
-		_augmentationStats[0] = new FastList<augmentationStat>();
-		_augmentationStats[1] = new FastList<augmentationStat>();
-		_augmentationStats[2] = new FastList<augmentationStat>();
-		_augmentationStats[3] = new FastList<augmentationStat>();
+		_augmentationStats[0] = new FastList<>();
+		_augmentationStats[1] = new FastList<>();
+		_augmentationStats[2] = new FastList<>();
+		_augmentationStats[3] = new FastList<>();
 
-		_blueSkills = new FastMap<Integer, FastList<augmentationSkill>>();
-		_purpleSkills = new FastMap<Integer, FastList<augmentationSkill>>();
-		_redSkills = new FastMap<Integer, FastList<augmentationSkill>>();
+		_blueSkills = new FastMap<>();
+		_purpleSkills = new FastMap<>();
+		_redSkills = new FastMap<>();
 		for(int i = 1; i <= 10; i++)
 		{
 			_blueSkills.put(i, new FastList<augmentationSkill>());
@@ -380,7 +380,7 @@ public class AugmentationData
 										String tableName = attrs.getNamedItem("name").getNodeValue();
 
 										StringTokenizer data = new StringTokenizer(cd.getFirstChild().getNodeValue());
-										List<Float> array = new FastList<Float>();
+										List<Float> array = new FastList<>();
 
 										while(data.hasMoreTokens())
 										{
@@ -650,7 +650,7 @@ public class AugmentationData
 	 */
 	public FastList<AugStat> getAugStatsById(int augmentationId)
 	{
-		FastList<AugStat> temp = new FastList<AugStat>();
+		FastList<AugStat> temp = new FastList<>();
 		// An augmentation id contains 2 short vaues so we gotta seperate them here
 		// both values contain a number from 1-16380, the first 14560 values are stats
 		// the 14560 stats are devided into 4 blocks each holding 3640 values

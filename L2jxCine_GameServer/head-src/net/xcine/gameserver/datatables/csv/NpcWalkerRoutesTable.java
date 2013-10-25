@@ -66,7 +66,7 @@ public class NpcWalkerRoutesTable
 
 	public void load()
 	{
-		_routes = new FastList<L2NpcWalkerNode>();
+		_routes = new FastList<>();
 		//java.sql.Connection con = null;
 
 		FileReader reader = null;
@@ -175,7 +175,7 @@ public class NpcWalkerRoutesTable
 
 	public FastList<L2NpcWalkerNode> getRouteForNpc(int id)
 	{
-		FastList<L2NpcWalkerNode> _return = new FastList<L2NpcWalkerNode>();
+		FastList<L2NpcWalkerNode> _return = new FastList<>();
 
 		for(FastList.Node<L2NpcWalkerNode> n = _routes.head(), end = _routes.tail(); (n = n.getNext()) != end;)
 		{

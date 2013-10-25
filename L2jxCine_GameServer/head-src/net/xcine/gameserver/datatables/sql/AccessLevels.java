@@ -52,7 +52,7 @@ public class AccessLevels
 	//L2EMU_EDIT
 
 	/** FastMap of access levels defined in database<br> */
-	private final FastMap<Integer, AccessLevel> _accessLevels = new FastMap<Integer, AccessLevel>();
+	private final FastMap<Integer, AccessLevel> _accessLevels = new FastMap<>();
 
 	/**
 	 * Loads the access levels from database<br>

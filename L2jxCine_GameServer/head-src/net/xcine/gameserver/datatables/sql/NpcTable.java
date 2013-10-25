@@ -70,7 +70,7 @@ public class NpcTable
 
 	private NpcTable()
 	{
-		_npcs = new FastMap<Integer, L2NpcTemplate>();
+		_npcs = new FastMap<>();
 
 		restoreNpcData();
 	}
@@ -720,11 +720,11 @@ public class NpcTable
 		{
 			// save a copy of the old data
 			L2NpcTemplate old = getTemplate(id);
-			Map<Integer, L2Skill> skills = new FastMap<Integer, L2Skill>();
+			Map<Integer, L2Skill> skills = new FastMap<>();
 			
 			skills.putAll(old.getSkills());
 			
-			FastList<L2DropCategory> categories = new FastList<L2DropCategory>();
+			FastList<L2DropCategory> categories = new FastList<>();
 			
 			if (old.getDropData() != null)
 			{
@@ -732,7 +732,7 @@ public class NpcTable
 			}
 			ClassId[] classIds = old.getTeachInfo().clone();
 			
-			List<L2MinionData> minions = new FastList<L2MinionData>();
+			List<L2MinionData> minions = new FastList<>();
 			
 			if (old.getMinionData() != null)
 			{
@@ -965,7 +965,7 @@ public class NpcTable
 
 	public L2NpcTemplate[] getAllOfLevel(int lvl)
 	{
-		List<L2NpcTemplate> list = new FastList<L2NpcTemplate>();
+		List<L2NpcTemplate> list = new FastList<>();
 
 		for(L2NpcTemplate t : _npcs.values())
 			if(t.level == lvl)
@@ -978,7 +978,7 @@ public class NpcTable
 
 	public L2NpcTemplate[] getAllMonstersOfLevel(int lvl)
 	{
-		List<L2NpcTemplate> list = new FastList<L2NpcTemplate>();
+		List<L2NpcTemplate> list = new FastList<>();
 
 		for(L2NpcTemplate t : _npcs.values())
 			if(t.level == lvl && "L2Monster".equals(t.type))
@@ -991,7 +991,7 @@ public class NpcTable
 
 	public L2NpcTemplate[] getAllNpcStartingWith(String letter)
 	{
-		List<L2NpcTemplate> list = new FastList<L2NpcTemplate>();
+		List<L2NpcTemplate> list = new FastList<>();
 
 		for(L2NpcTemplate t : _npcs.values())
 			if(t.name.startsWith(letter) && "L2Npc".equals(t.type))

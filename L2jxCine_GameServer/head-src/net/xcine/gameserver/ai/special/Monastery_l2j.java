@@ -94,7 +94,7 @@ public class Monastery_l2j extends Quest implements Runnable
 	{
 		if (Util.contains(mobs1,npc.getNpcId()))
 		{
-			FastList<L2PlayableInstance> result = new FastList<L2PlayableInstance>();
+			FastList<L2PlayableInstance> result = new FastList<>();
 			Collection<L2Object> objs = npc.getKnownList().getKnownObjects().values();
 			for (L2Object obj : objs)
 			{

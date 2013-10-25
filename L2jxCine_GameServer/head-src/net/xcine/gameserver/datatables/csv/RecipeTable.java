@@ -58,7 +58,7 @@ public class RecipeTable extends RecipeController
 
 	private RecipeTable()
 	{
-		_lists = new FastMap<Integer, L2RecipeList>();
+		_lists = new FastMap<>();
 		String line = null;
 		
 		FileReader reader = null;
@@ -141,7 +141,7 @@ public class RecipeTable extends RecipeController
 		try
 		{
 			StringTokenizer st = new StringTokenizer(line, ";");
-			List<L2RecipeInstance> recipePartList = new FastList<L2RecipeInstance>();
+			List<L2RecipeInstance> recipePartList = new FastList<>();
 
 			//we use common/dwarf for easy reading of the recipes.csv file
 			String recipeTypeString = st.nextToken();

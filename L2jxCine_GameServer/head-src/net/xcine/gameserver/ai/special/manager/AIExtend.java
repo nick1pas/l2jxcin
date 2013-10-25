@@ -32,7 +32,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  */
 public class AIExtend implements Runnable
 {
-	private static FastMap<Integer, AIExtend> _AI = new FastMap<Integer, AIExtend>();
+	private static FastMap<Integer, AIExtend> _AI = new FastMap<>();
 	private int _idCharacter;
 
 	/**

@@ -56,7 +56,7 @@ public class GmListTable
 	
 	public FastList<L2PcInstance> getAllGms(boolean includeHidden)
 	{
-		FastList<L2PcInstance> tmpGmList = new FastList<L2PcInstance>();
+		FastList<L2PcInstance> tmpGmList = new FastList<>();
 
 		for(FastMap.Entry<L2PcInstance, Boolean> n = _gmList.head(), end = _gmList.tail(); (n = n.getNext()) != end;)
 		{
@@ -70,7 +70,7 @@ public class GmListTable
 
 	public FastList<String> getAllGmNames(boolean includeHidden)
 	{
-		FastList<String> tmpGmList = new FastList<String>();
+		FastList<String> tmpGmList = new FastList<>();
 
 		for(FastMap.Entry<L2PcInstance, Boolean> n = _gmList.head(), end = _gmList.tail(); (n = n.getNext()) != end;)
 		{

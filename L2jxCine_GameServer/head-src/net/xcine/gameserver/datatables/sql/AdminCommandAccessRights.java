@@ -40,7 +40,7 @@ public class AdminCommandAccessRights
 	private static AdminCommandAccessRights _instance = null;
 
 	/** The access rights<br> */
-	private final Map<String, Integer> _adminCommandAccessRights = new FastMap<String, Integer>();
+	private final Map<String, Integer> _adminCommandAccessRights = new FastMap<>();
 
 	/**
 	 * Loads admin command access rights from database<br>

@@ -49,7 +49,7 @@ public class IceFairySirra extends Quest implements Runnable
 	private static final int SILVER_HEMOCYTE = 8057;
 	private static L2BossZone _freyasZone;
 	private static L2PcInstance _player = null;
-	protected FastList<L2NpcInstance> _allMobs = new FastList<L2NpcInstance>();
+	protected FastList<L2NpcInstance> _allMobs = new FastList<>();
 	protected Future<?> _onDeadEventTask = null;
 
 	public IceFairySirra(int id, String name, String descr)

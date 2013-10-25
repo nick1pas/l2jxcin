@@ -29,7 +29,7 @@ import javolution.util.FastList;
  */
 public class CrownTable
 {
-	private static List<Integer> _crownList = new FastList<Integer>();
+	private static List<Integer> _crownList = new FastList<>();
 
 	public static List<Integer> getCrownList()
 	{

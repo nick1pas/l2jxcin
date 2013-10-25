@@ -265,10 +265,10 @@ public class Frintezza_l2j extends Quest implements Runnable
 	private L2GrandBossInstance frintezza, weakScarlet, strongScarlet, activeScarlet;
 	private L2MonsterInstance demon1, demon2, demon3, demon4, portrait1, portrait2, portrait3, portrait4;
 	private L2NpcInstance _frintezzaDummy, _overheadDummy, _portraitDummy1, _portraitDummy3, _scarletDummy;
-	private List<L2PcInstance> _PlayersInside = new FastList<L2PcInstance>();
-	private List<L2NpcInstance> _Room1Mobs = new FastList<L2NpcInstance>();
-	private List<L2NpcInstance> _Room2Mobs = new FastList<L2NpcInstance>();
-	private List<L2Attackable> Minions = new FastList<L2Attackable>();
+	private List<L2PcInstance> _PlayersInside = new FastList<>();
+	private List<L2NpcInstance> _Room1Mobs = new FastList<>();
+	private List<L2NpcInstance> _Room2Mobs = new FastList<>();
+	private List<L2Attackable> Minions = new FastList<>();
 	
 	// Boss: Frintezza
 	public Frintezza_l2j(int id, String name, String descr)

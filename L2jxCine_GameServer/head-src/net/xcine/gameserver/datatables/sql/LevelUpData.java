@@ -70,7 +70,7 @@ public class LevelUpData
 
 	private LevelUpData()
 	{
-		_lvlTable = new FastMap<Integer, L2LvlupData>();
+		_lvlTable = new FastMap<>();
 		Connection con = null;
 		try
 		{

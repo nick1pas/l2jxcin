@@ -81,7 +81,7 @@ public class HelperBuffTable
 	 */
 	private HelperBuffTable()
 	{
-		_helperBuff = new FastList<L2HelperBuff>();
+		_helperBuff = new FastList<>();
 		restoreHelperBuffData();
 	}
 

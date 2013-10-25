@@ -52,7 +52,7 @@ public class ForumsBBSManager extends BaseBBSManager
 
 	public ForumsBBSManager()
 	{
-		_table = new FastList<Forum>();
+		_table = new FastList<>();
 		load();
 	}
 

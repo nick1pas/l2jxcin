@@ -980,7 +980,7 @@ public class Valakas_l2j extends Quest implements Runnable
 	
 	public L2Character getRandomTarget(L2NpcInstance npc)
 	{
-		FastList<L2Character> result = new FastList<L2Character>();
+		FastList<L2Character> result = new FastList<>();
 		Collection<L2Object> objs = npc.getKnownList().getKnownObjects().values();
 		{
 			for (L2Object obj : objs)

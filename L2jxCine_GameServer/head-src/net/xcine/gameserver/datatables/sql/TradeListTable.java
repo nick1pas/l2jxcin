@@ -76,7 +76,7 @@ public class TradeListTable
 
 	private TradeListTable()
 	{
-		_lists = new FastMap<Integer, L2TradeList>();
+		_lists = new FastMap<>();
 		load();
 	}
 
@@ -247,7 +247,7 @@ public class TradeListTable
 
 	public FastList<L2TradeList> getBuyListByNpcId(int npcId)
 	{
-		FastList<L2TradeList> lists = new FastList<L2TradeList>();
+		FastList<L2TradeList> lists = new FastList<>();
 
 		for(L2TradeList list : _lists.values())
 		{

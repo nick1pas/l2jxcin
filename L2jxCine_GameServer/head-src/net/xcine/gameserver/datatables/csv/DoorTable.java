@@ -59,7 +59,7 @@ public class DoorTable
 
 	public DoorTable()
 	{
-		_staticItems = new FastMap<Integer, L2DoorInstance>();
+		_staticItems = new FastMap<>();
 		//parseData();
 	}
 

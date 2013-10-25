@@ -17,6 +17,8 @@
  */
 package net.xcine.gameserver.network;
 
+
+
 /**
  * @author L2JFrozen dev
  */
@@ -116,6 +118,13 @@ public enum SystemMessageId
 	 */
 	S1_WAS_UNAFFECTED_BY_S2(139),
 
+	
+	/**
+	 * ID: 147<br>
+	 * Message: Chatting is currently prohibited.
+	 */
+	CHATTING_PROHIBITED(147),
+	
 	/**
 	 * ID: 156<br>
 	 * Message: Drain was only 50 percent successful.
@@ -5073,6 +5082,12 @@ public enum SystemMessageId
 	* Message: The Grand Olympiad registration period has ended.
 	*/
 	OLYMPIAD_REGISTRATION_PERIOD_ENDED(1919),
+	
+	/**
+	 * ID: 1079<br>
+	 * Message: The target is currently banend from chatting.
+	 */
+	TARGET_IS_CHAT_BANNED(1079),
 	
 	/**
      * ID: 1673<br>

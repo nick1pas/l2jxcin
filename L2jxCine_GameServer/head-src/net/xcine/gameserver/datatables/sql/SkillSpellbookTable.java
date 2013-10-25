@@ -52,7 +52,7 @@ public class SkillSpellbookTable
 
 	private SkillSpellbookTable()
 	{
-		_skillSpellbooks = new FastMap<Integer, Integer>();
+		_skillSpellbooks = new FastMap<>();
 		Connection con = null;
 
 		try

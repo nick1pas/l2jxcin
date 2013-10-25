@@ -180,7 +180,7 @@ public class CharTemplateTable
 
 	private CharTemplateTable()
 	{
-		_templates = new FastMap<Integer, L2PcTemplate>();
+		_templates = new FastMap<>();
 		Connection con = null;
 
 		try

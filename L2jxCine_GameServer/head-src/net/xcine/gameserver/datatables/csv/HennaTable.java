@@ -60,7 +60,7 @@ public class HennaTable
 
 	private HennaTable()
 	{
-		_henna = new FastMap<Integer, L2Henna>();
+		_henna = new FastMap<>();
 		restoreHennaData();
 	}
 

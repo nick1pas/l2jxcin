@@ -81,6 +81,7 @@ import net.xcine.gameserver.geo.pathfinding.PathFinding;
 import net.xcine.gameserver.handler.AdminCommandHandler;
 import net.xcine.gameserver.handler.AutoAnnouncementHandler;
 import net.xcine.gameserver.handler.AutoChatHandler;
+import net.xcine.gameserver.handler.ChatHandler;
 import net.xcine.gameserver.handler.ItemHandler;
 import net.xcine.gameserver.handler.SkillHandler;
 import net.xcine.gameserver.handler.UserCommandHandler;
@@ -417,9 +418,10 @@ public class GameServer
 		GmListTable.getInstance();
 		
 		Util.printSection("Handlers");
+		AdminCommandHandler.getInstance();
+		ChatHandler.getInstance();
 		ItemHandler.getInstance();
 		SkillHandler.getInstance();
-		AdminCommandHandler.getInstance();
 		UserCommandHandler.getInstance();
 		VoicedCommandHandler.getInstance();
 		
@@ -607,7 +609,7 @@ public class GameServer
 		
 		_gamePacketHandler = new L2GamePacketHandler();
 		
-		_selectorThread = new SelectorThread<L2GameClient>(sc, _gamePacketHandler, _gamePacketHandler, _gamePacketHandler, new IPv4Filter());
+		_selectorThread = new SelectorThread<>(sc, _gamePacketHandler, _gamePacketHandler, _gamePacketHandler, new IPv4Filter());
 		
 		InetAddress bindAddress = null;
 		if (!Config.GAMESERVER_HOSTNAME.equals("*"))

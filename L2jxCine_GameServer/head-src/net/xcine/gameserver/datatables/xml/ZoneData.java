@@ -378,7 +378,7 @@ public class ZoneData
 										}
 										else if(zoneShape.equals("NPoly"))
 										{
-											FastList<Integer> fl_x = new FastList<Integer>(), fl_y = new FastList<Integer>();
+											FastList<Integer> fl_x = new FastList<>(), fl_y = new FastList<>();
 	
 											// Load the rest
 											while(rset.next())

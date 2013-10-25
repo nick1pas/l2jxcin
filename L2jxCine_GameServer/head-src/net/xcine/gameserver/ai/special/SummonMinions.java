@@ -29,9 +29,9 @@ import net.xcine.util.random.Rnd;
 public class SummonMinions extends Quest implements Runnable
 {
 	private static int HasSpawned;
-	private static FastSet<Integer> myTrackingSet = new FastSet<Integer>(); //Used to track instances of npcs
+	private static FastSet<Integer> myTrackingSet = new FastSet<>(); //Used to track instances of npcs
 	private FastMap<Integer, FastList<L2PcInstance>> _attackersList = new FastMap<Integer, FastList<L2PcInstance>>().shared();
-	private static final FastMap<Integer, Integer[]> MINIONS = new FastMap<Integer, Integer[]>();
+	private static final FastMap<Integer, Integer[]> MINIONS = new FastMap<>();
 
 	static
 	{
@@ -156,7 +156,7 @@ public class SummonMinions extends Quest implements Runnable
 						{
 							if(_attackersList.get(npcObjId) == null)
 							{
-								FastList<L2PcInstance> player = new FastList<L2PcInstance>();
+								FastList<L2PcInstance> player = new FastList<>();
 								player.add(member);
 								_attackersList.put(npcObjId, player);
 							}
@@ -170,7 +170,7 @@ public class SummonMinions extends Quest implements Runnable
 					{
 						if(_attackersList.get(npcObjId) == null)
 						{
-							FastList<L2PcInstance> player = new FastList<L2PcInstance>();
+							FastList<L2PcInstance> player = new FastList<>();
 							player.add(attacker);
 							_attackersList.put(npcObjId, player);
 						}

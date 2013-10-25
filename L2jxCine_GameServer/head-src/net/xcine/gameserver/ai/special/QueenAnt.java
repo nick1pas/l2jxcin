@@ -52,8 +52,8 @@ public class QueenAnt extends Quest implements Runnable
 	
 	@SuppressWarnings("unused")
 	private static L2BossZone _Zone;
-	private static List<L2Attackable> _Minions = new FastList<L2Attackable>();
-	private static List<L2Attackable> _Larva_minions = new FastList<L2Attackable>();
+	private static List<L2Attackable> _Minions = new FastList<>();
+	private static List<L2Attackable> _Larva_minions = new FastList<>();
 	
 	// L2GrandBossInstance queen = null;
 	

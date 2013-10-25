@@ -42,7 +42,7 @@ import net.xcine.util.database.L2DatabaseFactory;
 public class TerritoryTable
 {
 	private final static Logger _log = Logger.getLogger(TradeController.class.getName());
-	private static Map<Integer, L2Territory> _territory = new HashMap<Integer, L2Territory>();
+	private static Map<Integer, L2Territory> _territory = new HashMap<>();
 
 	public static TerritoryTable getInstance()
 	{

@@ -50,7 +50,7 @@ public class GameTimeController
 	protected static long _gameStartTime;
 	protected static boolean _isNight = false;
 
-	private static List<L2Character> _movingObjects = new FastList<L2Character>();
+	private static List<L2Character> _movingObjects = new FastList<>();
 
 	protected static TimerThread _timer;
 	private ScheduledFuture<?> _timerWatcher;
@@ -148,7 +148,7 @@ public class GameTimeController
 				_movingObjects.remove(cha);
 				if(ended == null)
 				{
-					ended = new FastList<L2Character>();
+					ended = new FastList<>();
 				}
 
 				ended.add(cha);

@@ -30,7 +30,7 @@ import net.xcine.gameserver.model.L2DropData;
  */
 public class InfoCache
 {
-	private static final FastMap<Integer, List<L2DropData>> _droplistCache = new FastMap<Integer, List<L2DropData>>();
+	private static final FastMap<Integer, List<L2DropData>> _droplistCache = new FastMap<>();
 
 	public static void addToDroplistCache(final int id, final List<L2DropData> list)
 	{

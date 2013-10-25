@@ -94,8 +94,8 @@ public class TradeController
 
 	private TradeController()
 	{
-		_lists = new FastMap<Integer, L2TradeList>();
-		_listsTaskItem = new FastMap<Integer, L2TradeList>();
+		_lists = new FastMap<>();
+		_listsTaskItem = new FastMap<>();
 		File buylistData = new File(Config.DATAPACK_ROOT, "data/buylists.csv");
 
 		if(buylistData.exists())
@@ -609,7 +609,7 @@ public class TradeController
 
 	public List<L2TradeList> getBuyListByNpcId(int npcId)
 	{
-		List<L2TradeList> lists = new FastList<L2TradeList>();
+		List<L2TradeList> lists = new FastList<>();
 
 		for(L2TradeList list : _lists.values())
 		{

@@ -80,14 +80,14 @@ public class Antharas_l2j extends Quest implements Runnable
 	private final int _teleportCubeId = 31859;
 	private final int _teleportCubeLocation[][] = { { 177615, 114941, -7709, 0 } };
 	
-	protected List<L2Spawn> _teleportCubeSpawn = new FastList<L2Spawn>();
-	protected List<L2NpcInstance> _teleportCube = new FastList<L2NpcInstance>();
+	protected List<L2Spawn> _teleportCubeSpawn = new FastList<>();
+	protected List<L2NpcInstance> _teleportCube = new FastList<>();
 	
 	// Spawn data of monsters.
-	protected HashMap<Integer, L2Spawn> _monsterSpawn = new HashMap<Integer, L2Spawn>();
+	protected HashMap<Integer, L2Spawn> _monsterSpawn = new HashMap<>();
 	
 	// Instance of monsters.
-	protected List<L2NpcInstance> _monsters = new FastList<L2NpcInstance>();
+	protected List<L2NpcInstance> _monsters = new FastList<>();
 	protected L2GrandBossInstance _antharas = null;
 	
 	// monstersId

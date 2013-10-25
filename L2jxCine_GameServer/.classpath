@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="lib/bonecp-0.7.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/google-collect-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/mchange-commons-0.2.jar"/>
+	<classpathentry kind="lib" path="lib/trove-3.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

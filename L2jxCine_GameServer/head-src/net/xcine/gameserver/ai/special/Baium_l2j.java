@@ -108,7 +108,7 @@ public class Baium_l2j  extends Quest implements Runnable
 	};
 	
 	private long _LastAttackVsBaiumTime = 0;
-	private List<L2NpcInstance> _Minions = new ArrayList<L2NpcInstance>(5);
+	private List<L2NpcInstance> _Minions = new ArrayList<>(5);
 	protected L2BossZone _Zone;
 	
 	public Baium_l2j (int questId, String name, String descr)
@@ -466,7 +466,7 @@ public class Baium_l2j  extends Quest implements Runnable
 	
 	public L2Character getRandomTarget(L2NpcInstance npc)
 	{
-		FastList<L2Character> result = new FastList<L2Character>();
+		FastList<L2Character> result = new FastList<>();
 		Collection<L2Object> objs = npc.getKnownList().getKnownObjects().values();
 		{
 			/*

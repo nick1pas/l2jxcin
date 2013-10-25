@@ -52,7 +52,7 @@ public class SkillTable
 
 	private SkillTable()
 	{
-		_skills = new FastMap<Integer, L2Skill>();
+		_skills = new FastMap<>();
 		SkillsEngine.getInstance().loadAllSkills(_skills);
 	}
 

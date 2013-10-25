@@ -32,7 +32,7 @@ import net.xcine.util.random.Rnd;
 
 public class Transform extends Quest implements Runnable
 {
-	private ArrayList<Transformer> _mobs = new ArrayList<Transformer>();
+	private ArrayList<Transformer> _mobs = new ArrayList<>();
 	
 	private static class Transformer
 	{

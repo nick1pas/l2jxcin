@@ -571,7 +571,7 @@ public class RecipeController
 		{
 			L2RecipeInstance[] recipes = _recipeList.getRecipes();
 			Inventory inv = _target.getInventory();
-			List<TempItem> materials = new FastList<TempItem>();
+			List<TempItem> materials = new FastList<>();
 
 			for(L2RecipeInstance recipe : recipes)
 			{

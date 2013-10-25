@@ -56,7 +56,7 @@ public class Core extends Quest implements Runnable
 
 	private static boolean _FirstAttacked;
 
-	List<L2Attackable> Minions = new FastList<L2Attackable>();
+	List<L2Attackable> Minions = new FastList<>();
 
 	//private static final Logger _log = Logger.getLogger(Core.class.getName());
 

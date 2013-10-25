@@ -56,7 +56,7 @@ public class L2PlayerAI extends L2CharacterAI
 		}
 	}
 
-	private Stack<IntentionCommand> _interuptedIntentions = new Stack<IntentionCommand>();
+	private Stack<IntentionCommand> _interuptedIntentions = new Stack<>();
 
 	private synchronized Stack<IntentionCommand> getInterruptedIntentions(){
 		return _interuptedIntentions;

@@ -49,8 +49,8 @@ public class ArmorSetsTable
 
 	private ArmorSetsTable()
 	{
-		_armorSets = new FastMap<Integer, L2ArmorSet>();
-		_cusArmorSets = new FastMap<Integer, ArmorDummy>();
+		_armorSets = new FastMap<>();
+		_cusArmorSets = new FastMap<>();
 		loadData();
 	}
 

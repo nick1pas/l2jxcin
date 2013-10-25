@@ -51,7 +51,7 @@ public class L2PetDataTable
 
 	private L2PetDataTable()
 	{
-		_petTable = new FastMap<Integer, Map<Integer, L2PetData>>();
+		_petTable = new FastMap<>();
 	}
 
 	public void loadPetsData()
@@ -126,7 +126,7 @@ public class L2PetDataTable
 
 		if(h == null)
 		{
-			Map<Integer, L2PetData> statTable = new FastMap<Integer, L2PetData>();
+			Map<Integer, L2PetData> statTable = new FastMap<>();
 			statTable.put(petData.getPetLevel(), petData);
 			_petTable.put(petData.getPetID(), statTable);
 			return;

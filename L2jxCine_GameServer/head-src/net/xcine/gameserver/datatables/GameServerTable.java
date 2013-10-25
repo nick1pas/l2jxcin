@@ -60,7 +60,7 @@ public class GameServerTable
 	private static GameServerTable _instance;
 
 	// Server Names Config
-	private static Map<Integer, String> _serverNames = new FastMap<Integer, String>();
+	private static Map<Integer, String> _serverNames = new FastMap<>();
 
 	// Game Server Table
 	private Map<Integer, GameServerInfo> _gameServerTable = new FastMap<Integer, GameServerInfo>().shared();

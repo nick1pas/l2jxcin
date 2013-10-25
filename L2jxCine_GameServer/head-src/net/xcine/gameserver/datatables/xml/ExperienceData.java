@@ -38,7 +38,7 @@ public class ExperienceData
 	private byte MAX_LEVEL;
 	private byte MAX_PET_LEVEL;
 	
-	private final Map<Integer, Long> _expTable = new HashMap<Integer, Long>();
+	private final Map<Integer, Long> _expTable = new HashMap<>();
 	
 	private ExperienceData()
 	{

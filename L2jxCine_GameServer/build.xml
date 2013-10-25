@@ -186,12 +186,6 @@
 				<include name="*.properties" />
 			</fileset>
 		</copy>
-
-		<copy todir="${build.dist.game}/config/fun">
-			<fileset dir="config/fun">
-				<include name="*.properties" />
-			</fileset>
-		</copy>
 		<!-- network gameserver -->
 		<copy todir="${build.dist.game}/config/network">
 			<fileset dir="config/network">

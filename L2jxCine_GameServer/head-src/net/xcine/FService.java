@@ -54,6 +54,8 @@ public class FService
 	public static final String PHYSICS_CONFIGURATION_FILE = "./config/functions/physics.properties";
 	public static final String PVP_CONFIG_FILE = "./config/functions/pvp.properties";
 	public static final String CLASS_DAMAGES_FILE = "./config/functions/classDamages.properties";
+	public static final String EVENT_CHAMPION_FILE = "./config/functions/champion.properties";
+	public static final String EVENT_PC_BANG_POINT_FILE = "./config/functions/pcBang.properties";
 	
 	// protected
 	public static final String PROTECT_FLOOD_CONFIG_FILE = "./config/protected/flood.properties";
@@ -67,12 +69,6 @@ public class FService
 	public static final String EVENT_TVT_FILE = "./config/frozen/tvt.properties";
 	public static final String EVENT_TW_FILE = "./config/frozen/tw.properties";
 
-	// fun -- events	
-	public static final String EVENT_CHAMPION_FILE = "./config/fun/champion.properties";
-	public static final String EVENT_WEDDING_FILE = "./config/fun/wedding.properties";
-	public static final String EVENT_PC_BANG_POINT_FILE = "./config/fun/pcBang.properties";
-	public static final String OFFLINE_FILE = "./config/fun/offline.properties";
-	
 	// network
 	public static final String CONFIGURATION_FILE = "./config/network/gameserver.properties";
 	public static final String LOGIN_CONFIGURATION_FILE = "./config/network/loginserver.properties";

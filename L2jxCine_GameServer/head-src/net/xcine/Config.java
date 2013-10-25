@@ -1519,57 +1519,6 @@ public final class Config
 	}
 
 	//============================================================
-	public static boolean L2JMOD_ALLOW_WEDDING;
-	public static int L2JMOD_WEDDING_PRICE;
-	public static boolean L2JMOD_WEDDING_PUNISH_INFIDELITY;
-	public static boolean L2JMOD_WEDDING_TELEPORT;
-	public static int L2JMOD_WEDDING_TELEPORT_PRICE;
-	public static int L2JMOD_WEDDING_TELEPORT_DURATION;
-	public static int L2JMOD_WEDDING_NAME_COLOR_NORMAL;
-	public static int L2JMOD_WEDDING_NAME_COLOR_GEY;
-	public static int L2JMOD_WEDDING_NAME_COLOR_LESBO;
-	public static boolean L2JMOD_WEDDING_SAMESEX;
-	public static boolean L2JMOD_WEDDING_FORMALWEAR;
-	public static int L2JMOD_WEDDING_DIVORCE_COSTS;
-	public static boolean WEDDING_GIVE_CUPID_BOW;
-	public static boolean ANNOUNCE_WEDDING;
-
-	//============================================================
-	public static void loadWeddingConfig()
-	{
-		final String EVENT_WEDDING = FService.EVENT_WEDDING_FILE;
-
-		try
-		{
-			Properties WeddingSettings = new Properties();
-			InputStream is = new FileInputStream(new File(EVENT_WEDDING));
-			WeddingSettings.load(is);
-			is.close();
-
-			L2JMOD_ALLOW_WEDDING = Boolean.valueOf(WeddingSettings.getProperty("AllowWedding", "False"));
-			L2JMOD_WEDDING_PRICE = Integer.parseInt(WeddingSettings.getProperty("WeddingPrice", "250000000"));
-			L2JMOD_WEDDING_PUNISH_INFIDELITY = Boolean.parseBoolean(WeddingSettings.getProperty("WeddingPunishInfidelity", "True"));
-			L2JMOD_WEDDING_TELEPORT = Boolean.parseBoolean(WeddingSettings.getProperty("WeddingTeleport", "True"));
-			L2JMOD_WEDDING_TELEPORT_PRICE = Integer.parseInt(WeddingSettings.getProperty("WeddingTeleportPrice", "50000"));
-			L2JMOD_WEDDING_TELEPORT_DURATION = Integer.parseInt(WeddingSettings.getProperty("WeddingTeleportDuration", "60"));
-			L2JMOD_WEDDING_NAME_COLOR_NORMAL = Integer.decode("0x" + WeddingSettings.getProperty("WeddingNameCollorN", "FFFFFF"));
-			L2JMOD_WEDDING_NAME_COLOR_GEY = Integer.decode("0x" + WeddingSettings.getProperty("WeddingNameCollorB", "FFFFFF"));
-			L2JMOD_WEDDING_NAME_COLOR_LESBO = Integer.decode("0x" + WeddingSettings.getProperty("WeddingNameCollorL", "FFFFFF"));
-			L2JMOD_WEDDING_SAMESEX = Boolean.parseBoolean(WeddingSettings.getProperty("WeddingAllowSameSex", "False"));
-			L2JMOD_WEDDING_FORMALWEAR = Boolean.parseBoolean(WeddingSettings.getProperty("WeddingFormalWear", "True"));
-			L2JMOD_WEDDING_DIVORCE_COSTS = Integer.parseInt(WeddingSettings.getProperty("WeddingDivorceCosts", "20"));
-			WEDDING_GIVE_CUPID_BOW = Boolean.parseBoolean(WeddingSettings.getProperty("WeddingGiveBow", "False"));
-			ANNOUNCE_WEDDING = Boolean.parseBoolean(WeddingSettings.getProperty("AnnounceWedding", "True"));
-
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			throw new Error("Failed to Load " + EVENT_WEDDING + " File.");
-		}
-	}
-
-	//============================================================
 	public static String TVT_EVEN_TEAMS;
 	public static boolean TVT_ALLOW_INTERFERENCE;
 	public static boolean TVT_ALLOW_POTIONS;
@@ -1677,8 +1626,33 @@ public final class Config
 	public static int PCB_POINT_MIN;
 	public static int PCB_POINT_MAX;
 	public static int PCB_CHANCE_DUAL_POINT;
-	public static int PCB_INTERVAL;
-
+	public static int PCB_INTERVAL;	
+	public static boolean OFFLINE_TRADE_ENABLE;
+	public static boolean OFFLINE_CRAFT_ENABLE;
+	public static boolean OFFLINE_SET_NAME_COLOR;
+	public static int OFFLINE_NAME_COLOR;	
+	public static boolean OFFLINE_COMMAND1;
+	public static boolean OFFLINE_COMMAND2;
+	public static boolean OFFLINE_LOGOUT;
+	public static boolean OFFLINE_SLEEP_EFFECT;	
+	public static boolean RESTORE_OFFLINERS;
+	public static int OFFLINE_MAX_DAYS;
+	public static boolean OFFLINE_DISCONNECT_FINISHED;	
+	public static boolean L2JMOD_ALLOW_WEDDING;
+	public static int L2JMOD_WEDDING_PRICE;
+	public static boolean L2JMOD_WEDDING_PUNISH_INFIDELITY;
+	public static boolean L2JMOD_WEDDING_TELEPORT;
+	public static int L2JMOD_WEDDING_TELEPORT_PRICE;
+	public static int L2JMOD_WEDDING_TELEPORT_DURATION;
+	public static int L2JMOD_WEDDING_NAME_COLOR_NORMAL;
+	public static int L2JMOD_WEDDING_NAME_COLOR_GEY;
+	public static int L2JMOD_WEDDING_NAME_COLOR_LESBO;
+	public static boolean L2JMOD_WEDDING_SAMESEX;
+	public static boolean L2JMOD_WEDDING_FORMALWEAR;
+	public static int L2JMOD_WEDDING_DIVORCE_COSTS;
+	public static boolean WEDDING_GIVE_CUPID_BOW;
+	public static boolean ANNOUNCE_WEDDING;
+	
 	//============================================================
 	public static void loadPCBPointConfig()
 	{
@@ -1696,6 +1670,35 @@ public final class Config
 			PCB_POINT_MIN = Integer.parseInt(pcbpSettings.getProperty("PcBangPointMinCount", "20"));
 			PCB_POINT_MAX = Integer.parseInt(pcbpSettings.getProperty("PcBangPointMaxCount", "1000000"));
 
+			OFFLINE_TRADE_ENABLE = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineTradeEnable", "false"));
+			OFFLINE_CRAFT_ENABLE = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineCraftEnable", "false"));
+			OFFLINE_SET_NAME_COLOR = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineNameColorEnable", "false"));
+			OFFLINE_NAME_COLOR = Integer.decode("0x" + pcbpSettings.getProperty("OfflineNameColor", "ff00ff"));
+			
+			OFFLINE_COMMAND1 = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineCommand1", "True"));
+			OFFLINE_COMMAND2 = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineCommand2", "False"));
+			OFFLINE_LOGOUT = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineLogout", "False"));
+			OFFLINE_SLEEP_EFFECT = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineSleepEffect", "True"));
+
+			RESTORE_OFFLINERS = Boolean.parseBoolean(pcbpSettings.getProperty("RestoreOffliners", "false")); 
+			OFFLINE_MAX_DAYS = Integer.parseInt(pcbpSettings.getProperty("OfflineMaxDays", "10"));
+			OFFLINE_DISCONNECT_FINISHED = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineDisconnectFinished", "true"));
+			
+			L2JMOD_ALLOW_WEDDING = Boolean.valueOf(pcbpSettings.getProperty("AllowWedding", "False"));
+			L2JMOD_WEDDING_PRICE = Integer.parseInt(pcbpSettings.getProperty("WeddingPrice", "250000000"));
+			L2JMOD_WEDDING_PUNISH_INFIDELITY = Boolean.parseBoolean(pcbpSettings.getProperty("WeddingPunishInfidelity", "True"));
+			L2JMOD_WEDDING_TELEPORT = Boolean.parseBoolean(pcbpSettings.getProperty("WeddingTeleport", "True"));
+			L2JMOD_WEDDING_TELEPORT_PRICE = Integer.parseInt(pcbpSettings.getProperty("WeddingTeleportPrice", "50000"));
+			L2JMOD_WEDDING_TELEPORT_DURATION = Integer.parseInt(pcbpSettings.getProperty("WeddingTeleportDuration", "60"));
+			L2JMOD_WEDDING_NAME_COLOR_NORMAL = Integer.decode("0x" + pcbpSettings.getProperty("WeddingNameCollorN", "FFFFFF"));
+			L2JMOD_WEDDING_NAME_COLOR_GEY = Integer.decode("0x" + pcbpSettings.getProperty("WeddingNameCollorB", "FFFFFF"));
+			L2JMOD_WEDDING_NAME_COLOR_LESBO = Integer.decode("0x" + pcbpSettings.getProperty("WeddingNameCollorL", "FFFFFF"));
+			L2JMOD_WEDDING_SAMESEX = Boolean.parseBoolean(pcbpSettings.getProperty("WeddingAllowSameSex", "False"));
+			L2JMOD_WEDDING_FORMALWEAR = Boolean.parseBoolean(pcbpSettings.getProperty("WeddingFormalWear", "True"));
+			L2JMOD_WEDDING_DIVORCE_COSTS = Integer.parseInt(pcbpSettings.getProperty("WeddingDivorceCosts", "20"));
+			WEDDING_GIVE_CUPID_BOW = Boolean.parseBoolean(pcbpSettings.getProperty("WeddingGiveBow", "False"));
+			ANNOUNCE_WEDDING = Boolean.parseBoolean(pcbpSettings.getProperty("AnnounceWedding", "True"));
+			
 			if(PCB_POINT_MAX < 1)
 			{
 				PCB_POINT_MAX = Integer.MAX_VALUE;
@@ -1818,55 +1821,6 @@ public final class Config
 		{
 			e.printStackTrace();
 			throw new Error("Failed to Load " + DEV + " File.");
-		}
-	}
-
-	//============================================================
-	public static boolean OFFLINE_TRADE_ENABLE;
-	public static boolean OFFLINE_CRAFT_ENABLE;
-	public static boolean OFFLINE_SET_NAME_COLOR;
-	public static int OFFLINE_NAME_COLOR;
-	
-	public static boolean OFFLINE_COMMAND1;
-	public static boolean OFFLINE_COMMAND2;
-	public static boolean OFFLINE_LOGOUT;
-	public static boolean OFFLINE_SLEEP_EFFECT;
-	
-	public static boolean RESTORE_OFFLINERS;
-	public static int OFFLINE_MAX_DAYS;
-	public static boolean OFFLINE_DISCONNECT_FINISHED;
-
-	//============================================================
-	public static void loadOfflineConfig()
-	{
-		final String OFFLINE = FService.OFFLINE_FILE;
-
-		try
-		{
-			Properties OfflineSettings = new Properties();
-			InputStream is = new FileInputStream(new File(OFFLINE));
-			OfflineSettings.load(is);
-			is.close();
-
-			OFFLINE_TRADE_ENABLE = Boolean.parseBoolean(OfflineSettings.getProperty("OfflineTradeEnable", "false"));
-			OFFLINE_CRAFT_ENABLE = Boolean.parseBoolean(OfflineSettings.getProperty("OfflineCraftEnable", "false"));
-			OFFLINE_SET_NAME_COLOR = Boolean.parseBoolean(OfflineSettings.getProperty("OfflineNameColorEnable", "false"));
-			OFFLINE_NAME_COLOR = Integer.decode("0x" + OfflineSettings.getProperty("OfflineNameColor", "ff00ff"));
-			
-			OFFLINE_COMMAND1 = Boolean.parseBoolean(OfflineSettings.getProperty("OfflineCommand1", "True"));
-			OFFLINE_COMMAND2 = Boolean.parseBoolean(OfflineSettings.getProperty("OfflineCommand2", "False"));
-			OFFLINE_LOGOUT = Boolean.parseBoolean(OfflineSettings.getProperty("OfflineLogout", "False"));
-			OFFLINE_SLEEP_EFFECT = Boolean.parseBoolean(OfflineSettings.getProperty("OfflineSleepEffect", "True"));
-
-			RESTORE_OFFLINERS = Boolean.parseBoolean(OfflineSettings.getProperty("RestoreOffliners", "false")); 
-			OFFLINE_MAX_DAYS = Integer.parseInt(OfflineSettings.getProperty("OfflineMaxDays", "10"));
-			OFFLINE_DISCONNECT_FINISHED = Boolean.parseBoolean(OfflineSettings.getProperty("OfflineDisconnectFinished", "true"));
-			 					
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			throw new Error("Failed to Load " + OFFLINE + " File.");
 		}
 	}
 
@@ -4235,6 +4189,8 @@ public final class Config
 			loadPHYSICSConfig();
 			loadAccessConfig();
 			loadPvpConfig();			
+			loadChampionConfig();
+			loadPCBPointConfig();
 			
 			// Frozen config
 			loadCTFConfig();
@@ -4251,12 +4207,6 @@ public final class Config
 			// Geo&path
 			loadgeodataConfig();
 
-			// Fun
-			loadChampionConfig();
-			loadWeddingConfig();		
-			loadPCBPointConfig();
-			loadOfflineConfig();
-			
 			// Other
 			loadKeyOptions();
 			loadExtendersConfig();

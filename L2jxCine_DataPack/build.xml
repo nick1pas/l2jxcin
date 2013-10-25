@@ -28,7 +28,6 @@
 		<property name="build.dist.login" location="${build.dist}/loginserver" />
 		<property name="build.dist.sql" location="${build.dist}/sql" />
 		<property name="build.dist.tools" location="${build.dist}/tools" />
-		<property name="properties-file" location="${build.dist.game}/config/version/l2jfrozen-datapack.properties" />
 
 	</target>
 

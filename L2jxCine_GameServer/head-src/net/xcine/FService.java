@@ -55,7 +55,6 @@ public class FService
 	public static final String L2JFROZEN_CONFIG_FILE = "./config/functions/l2jfrozen.properties";
 	public static final String PHYSICS_CONFIGURATION_FILE = "./config/functions/physics.properties";
 	public static final String PVP_CONFIG_FILE = "./config/functions/pvp.properties";
-	public static final String POWERPAK_FILE = "./config/powerpak/powerpak.properties";
 	public static final String CLASS_DAMAGES_FILE = "./config/functions/classDamages.properties";
 	
 	// protected
@@ -82,11 +81,7 @@ public class FService
 	// network
 	public static final String CONFIGURATION_FILE = "./config/network/gameserver.properties";
 	public static final String LOGIN_CONFIGURATION_FILE = "./config/network/loginserver.properties";
-	
-	// version
-	public static final String SERVER_VERSION_FILE = "./config/version/l2jfrozen-server.properties";
-	public static final String DATAPACK_VERSION_FILE = "./config/version/l2jfrozen-datapack.properties";
-	
+
 	// others
 	public static final String LOG_CONF_FILE = "./config/others/log.cfg";
 	public static final String BANNED_IP = "./config/others/banned_ip.cfg";

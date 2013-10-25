@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.GameServer;
 import net.xcine.gameserver.handler.voicedcommandhandlers.AwayCmd;
@@ -34,7 +33,6 @@ import net.xcine.gameserver.handler.voicedcommandhandlers.OfflineShop;
 import net.xcine.gameserver.handler.voicedcommandhandlers.Online;
 import net.xcine.gameserver.handler.voicedcommandhandlers.StatsCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.TvTCmd;
-import net.xcine.gameserver.handler.voicedcommandhandlers.VersionCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.Voting;
 import net.xcine.gameserver.handler.voicedcommandhandlers.Wedding;
 
@@ -92,11 +90,6 @@ public class VoicedCommandHandler
 		}
 		
 		registerVoicedCommandHandler(new StatsCmd());
-		
-		if (Config.ALLOW_VERSION_COMMAND)
-		{
-			registerVoicedCommandHandler(new VersionCmd());
-		}
 		
 		if (Config.ALLOW_AWAY_STATUS)
 		{

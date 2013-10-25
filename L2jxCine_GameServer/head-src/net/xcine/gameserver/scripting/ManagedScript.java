@@ -30,7 +30,7 @@ import net.xcine.Config;
  */
 public abstract class ManagedScript
 {
-	private File _scriptFile;
+	private final File _scriptFile;
 	private long _lastLoadTime;
 	private boolean _isActive;
 
@@ -98,7 +98,7 @@ public abstract class ManagedScript
 		return _lastLoadTime;
 	}
 
-	public abstract String getScriptName();
+	public abstract String getName();
 
 	public abstract ScriptManager<?> getScriptManager();
 }

@@ -31,7 +31,6 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.cache.HtmCache;
 import net.xcine.gameserver.datatables.GmListTable;
@@ -53,6 +52,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 import net.xcine.util.random.Rnd;
+
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 /**
  * @author Luis Arias
@@ -187,16 +187,16 @@ public class Quest extends ManagedScript
 		/** a person came within the Npc/Mob's range */
 		ON_AGGRO_RANGE_ENTER(true),
 
-		/** OnSpawn РґРµР№СЃС‚РІРёРµ РїСЂРё СЃРїР°СѓРЅРµ РјРѕР±Р° */
+		/** OnSpawn Ã Ã’â€˜Ã Ã‚ÂµÃ Ã¢â€žâ€“ÃÂ¡ÃÆ’ÃÂ¡Ã¢â‚¬Å¡Ã Ãâ€ Ã Ã‘â€˜Ã Ã‚Âµ Ã Ã‘â€”ÃÂ¡Ãâ€šÃ Ã‘â€˜ ÃÂ¡ÃÆ’Ã Ã‘â€”Ã Ã‚Â°ÃÂ¡Ã‘â€œÃ Ãâ€¦Ã Ã‚Âµ Ã Ã‘ËœÃ Ã‘â€¢Ã Ã‚Â±Ã Ã‚Â° */
 		ON_SPAWN(true),
 
-		/** OnSkillUse РґРµР№СЃС‚РІРёРµ РїСЂРё РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё СЃРєРёР»Р»Р° (MOB_TARGETED_BY_SKILL) */
+		/** OnSkillUse Ã Ã’â€˜Ã Ã‚ÂµÃ Ã¢â€žâ€“ÃÂ¡ÃÆ’ÃÂ¡Ã¢â‚¬Å¡Ã Ãâ€ Ã Ã‘â€˜Ã Ã‚Âµ Ã Ã‘â€”ÃÂ¡Ãâ€šÃ Ã‘â€˜ Ã Ã‘â€˜ÃÂ¡ÃÆ’Ã Ã‘â€”Ã Ã‘â€¢Ã Ã‚Â»ÃÂ¡ÃÅ Ã Ã‚Â·Ã Ã‘â€¢Ã Ãâ€ Ã Ã‚Â°Ã Ãâ€¦Ã Ã‘â€˜Ã Ã‘â€˜ ÃÂ¡ÃÆ’Ã Ã‘â€Ã Ã‘â€˜Ã Ã‚Â»Ã Ã‚Â»Ã Ã‚Â° (MOB_TARGETED_BY_SKILL) */
 		ON_SKILL_USE(true),
 
-		/** OnKill РґРµР№СЃС‚РІРёРµ РїСЂРё СѓР±РёР№СЃС‚РІРµ (MOBKILLED) */
+		/** OnKill Ã Ã’â€˜Ã Ã‚ÂµÃ Ã¢â€žâ€“ÃÂ¡ÃÆ’ÃÂ¡Ã¢â‚¬Å¡Ã Ãâ€ Ã Ã‘â€˜Ã Ã‚Âµ Ã Ã‘â€”ÃÂ¡Ãâ€šÃ Ã‘â€˜ ÃÂ¡Ã‘â€œÃ Ã‚Â±Ã Ã‘â€˜Ã Ã¢â€žâ€“ÃÂ¡ÃÆ’ÃÂ¡Ã¢â‚¬Å¡Ã Ãâ€ Ã Ã‚Âµ (MOBKILLED) */
 		ON_KILL(true),
 
-		/** OnAttack РґРµР№СЃС‚РІРёРµ РїСЂРё Р°С‚Р°РєРµ (MOBGOTATTACKED) */
+		/** OnAttack Ã Ã’â€˜Ã Ã‚ÂµÃ Ã¢â€žâ€“ÃÂ¡ÃÆ’ÃÂ¡Ã¢â‚¬Å¡Ã Ãâ€ Ã Ã‘â€˜Ã Ã‚Âµ Ã Ã‘â€”ÃÂ¡Ãâ€šÃ Ã‘â€˜ Ã Ã‚Â°ÃÂ¡Ã¢â‚¬Å¡Ã Ã‚Â°Ã Ã‘â€Ã Ã‚Âµ (MOBGOTATTACKED) */
 		ON_ATTACK(true);
 
 		// control whether this event type is allowed for the same npc template in multiple quests
@@ -264,6 +264,7 @@ public class Quest extends ManagedScript
 	 * 
 	 * @return String
 	 */
+	@Override
 	public String getName()
 	{
 		return _name;
@@ -1789,12 +1790,6 @@ public class Quest extends ManagedScript
 		unload();
 		return super.reload();
 	}
-
-	@Override
-	public String getScriptName()
-	{
-		return getName();
-	}
 	
 	/**
 	 * This is used to register all monsters contained in mobs for a particular script<BR>
@@ -1817,6 +1812,26 @@ public class Quest extends ManagedScript
 	}
 	
 	/**
+	 * Add the quest to the NPC's startQuest
+	 * @param npcIds A serie of ids.
+	 */
+	public void addStartNpc(int... npcIds)
+	{
+		for (int npcId : npcIds)
+			addEventId(npcId, QuestEventType.QUEST_START);
+	}
+	
+	/**
+	 * Add this quest to the list of quests that the passed npc will respond to for Talk Events.
+	 * @param talkIds : A serie of ids.
+	 */
+	public void addTalkId(int... talkIds)
+	{
+		for (int talkId : talkIds)
+			addEventId(talkId, QuestEventType.QUEST_TALK);
+	}
+	
+	/**
 	 * This is used to register all monsters contained in mobs for a particular script
 	 * event types defined in types.
 	 * @param mobs
@@ -1831,7 +1846,5 @@ public class Quest extends ManagedScript
 				addEventId(id, type);
 			}
 		}
-	}
-	
-	
+	}	
 }

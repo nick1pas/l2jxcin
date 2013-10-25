@@ -415,57 +415,6 @@ public final class Config
 	}
 
 	//============================================================
-	public static String SERVER_REVISION;
-	public static String SERVER_BUILD_DATE;
-	public static String SERVER_VERSION;
-
-	//============================================================
-	public static void loadServerVersionConfig()
-	{
-		final String SV = FService.SERVER_VERSION_FILE;
-
-		try
-		{
-			Properties serverVersion = new Properties();
-			InputStream is = new FileInputStream(new File(SV));
-			serverVersion.load(is);
-			is.close();
-			SERVER_REVISION = serverVersion.getProperty("revision", "Unsupported Custom Version.");
-			SERVER_BUILD_DATE = serverVersion.getProperty("builddate", "Undefined Date.");
-			SERVER_VERSION = serverVersion.getProperty("revision", "null");
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	//============================================================
-	public static String DATAPACK_VERSION;
-	public static String DATAPACK_BUILD_DATE;
-
-	//============================================================
-	public static void loadDPVersionConfig()
-	{
-		final String DP = FService.DATAPACK_VERSION_FILE;
-
-		try
-		{
-			Properties dpVersion = new Properties();
-			InputStream is = new FileInputStream(new File(DP));
-			dpVersion.load(is);
-			is.close();
-			DATAPACK_VERSION = dpVersion.getProperty("version", "Unsupported Custom Version.");
-			SERVER_BUILD_DATE = dpVersion.getProperty("builddate", "Undefined Date.");
-
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	//============================================================
 	public static boolean IS_TELNET_ENABLED;
 
 	//============================================================
@@ -2291,7 +2240,6 @@ public final class Config
 	
 	public static boolean SCROLL_STACKABLE;
 
-	public static boolean ALLOW_VERSION_COMMAND;
 	public static boolean ALLOW_CHAR_KILL_PROTECT;
 	public static int CLAN_LEADER_COLOR;
 	public static int CLAN_LEADER_COLOR_CLAN_LEVEL;
@@ -2421,7 +2369,6 @@ public final class Config
 			CLAN_LEADER_COLORED = Integer.parseInt(L2JFrozenSettings.getProperty("ClanLeaderColored", "1"));
 			CLAN_LEADER_COLOR = Integer.decode("0x" + L2JFrozenSettings.getProperty("ClanLeaderColor", "00FFFF"));
 			CLAN_LEADER_COLOR_CLAN_LEVEL = Integer.parseInt(L2JFrozenSettings.getProperty("ClanLeaderColorAtClanLevel", "1"));
-			ALLOW_VERSION_COMMAND = Boolean.parseBoolean(L2JFrozenSettings.getProperty("AllowVersionCommand", "False"));
 			SAVE_RAIDBOSS_STATUS_INTO_DB = Boolean.parseBoolean(L2JFrozenSettings.getProperty("SaveRBStatusIntoDB", "False"));
 			DISABLE_WEIGHT_PENALTY = Boolean.parseBoolean(L2JFrozenSettings.getProperty("DisableWeightPenalty", "False"));
 			ALLOW_FARM1_COMMAND = Boolean.parseBoolean(L2JFrozenSettings.getProperty("AllowFarm1Command", "false"));
@@ -3956,28 +3903,6 @@ public final class Config
 	}
 
 	//============================================================
-	public static boolean POWERPAK_ENABLED;
-
-	//============================================================
-	public static void loadPowerPak()
-	{
-		final String POWERPAK = FService.POWERPAK_FILE;
-
-		try
-		{
-			L2Properties p = new L2Properties(POWERPAK);
-			POWERPAK_ENABLED = Boolean.parseBoolean(p.getProperty("PowerPakEnabled", "true"));
-		}
-		catch(Exception e)
-		{
-			if(Config.ENABLE_ALL_EXCEPTIONS)
-				e.printStackTrace();
-			
-			_log.warning("Failed to load " + POWERPAK + " file");
-		}
-	}
-
-	//============================================================
 	public static Map<String, List<String>> EXTENDERS;
 
 	//============================================================
@@ -4475,12 +4400,9 @@ public final class Config
 			loadBankingConfig();
 			loadPCBPointConfig();
 			loadOfflineConfig();
-			loadPowerPak();
 
 			// Other
 			loadKeyOptions();
-			loadDPVersionConfig();
-			loadServerVersionConfig();
 			loadExtendersConfig();
 			loadDaemonsConf();
 			
@@ -5297,10 +5219,6 @@ public final class Config
 		else if(pName.equalsIgnoreCase("MenuStyle"))
 		{
 			GM_ADMIN_MENU_STYLE = pValue;
-		}
-		else if(pName.equalsIgnoreCase("AllowVersionCommand"))
-		{
-			ALLOW_VERSION_COMMAND = Boolean.valueOf(pValue);
 		}
 		else if(pName.equalsIgnoreCase("MaxPAtkSpeed"))
 		{

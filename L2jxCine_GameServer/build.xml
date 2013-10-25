@@ -37,8 +37,6 @@
 		<property name="build.dist.login.lib" location="${build.dist.login}/lib" />
 		<property name="build.dist.game" location="${build.dist}/gameserver" />
 		<property name="build.dist.game.lib" location="${build.dist.game}/lib" />
-		<property name="properties-file" location="${build.dist.game}/config/version/l2jfrozen-server.properties" />
-
 	</target>
 
 	<path id="classpath">
@@ -60,12 +58,8 @@
 	</target>
 
 
-	<target name="compile" depends="version" description="Compile the source.">
-
-		<javac destdir="${build.classes}" includeantruntime="false" optimize="on" debug="on" source="1.6" target="1.6" encoding="utf-8" nowarn="off">
-			<src path="${src}" />
-			<classpath refid="classpath" />
-		</javac>
+	<target name="compile" depends="init" description="Compile the source.">
+		<javac srcdir="${src}" classpathref="classpath" destdir="${build.classes}" compiler="javac1.7" debug="true" debuglevel="lines,vars,source" includeantruntime="false" source="1.7" target="1.7" /> 
 	</target>
 
 

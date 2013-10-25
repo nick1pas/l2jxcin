@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="teleports/2000_NoblesseTeleport/|teleports/2000_NoblesseTeleport/" kind="src" path="data/scripts"/>
+	<classpathentry kind="src" path="data/scripts"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/L2jxCine_GameServer"/>
 	<classpathentry kind="output" path="bin"/>

@@ -527,7 +527,7 @@ public class GameServer
 		
 		Util.printSection("Custom Mods");
 		
-		if (Config.L2JMOD_ALLOW_WEDDING || Config.ALLOW_AWAY_STATUS || Config.PCB_ENABLE || Config.POWERPAK_ENABLED)
+		if (Config.L2JMOD_ALLOW_WEDDING || Config.ALLOW_AWAY_STATUS || Config.PCB_ENABLE)
 		{
 			if (Config.L2JMOD_ALLOW_WEDDING)
 				CoupleManager.getInstance();

@@ -48,7 +48,7 @@ public class AutoAnnouncementHandler
 
 	protected AutoAnnouncementHandler()
 	{
-		_registeredAnnouncements = new FastMap<>();
+		_registeredAnnouncements = new FastMap<Integer, AutoAnnouncementInstance>();
 		restoreAnnouncementData();
 	}
 

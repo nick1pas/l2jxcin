@@ -38,8 +38,8 @@ public class ClanHallManager
 {
 	private static final Logger _log = Logger.getLogger(ClanHallManager.class.getName());
 
-	private static final Map<Integer, ClanHall> _clanHall = new FastMap<>();
-	private static final Map<Integer, ClanHall> _freeClanHall = new FastMap<>();
+	private static final Map<Integer, ClanHall> _clanHall = new FastMap<Integer, ClanHall>();
+	private static final Map<Integer, ClanHall> _freeClanHall = new FastMap<Integer, ClanHall>();
 	private static boolean _loaded = false;
 
 	public static ClanHallManager getInstance()

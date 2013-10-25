@@ -56,7 +56,7 @@ public class FishingZoneManager
 	{
 		if(_fishingZones == null)
 		{
-			_fishingZones = new FastList<>();
+			_fishingZones = new FastList<L2FishingZone>();
 		}
 
 		_fishingZones.add(fishingZone);
@@ -66,7 +66,7 @@ public class FishingZoneManager
 	{
 		if(_waterZones == null)
 		{
-			_waterZones = new FastList<>();
+			_waterZones = new FastList<L2WaterZone>();
 		}
 
 		_waterZones.add(waterZone);

@@ -46,7 +46,7 @@ public final class L2AuctioneerInstance extends L2FolkInstance
 	private static final int COND_BUSY_BECAUSE_OF_SIEGE = 1;
 	private static final int COND_REGULAR = 3;
 
-	private Map<Integer, Auction> _pendingAuctions = new FastMap<>();
+	private Map<Integer, Auction> _pendingAuctions = new FastMap<Integer, Auction>();
 
 	public L2AuctioneerInstance(int objectId, L2NpcTemplate template)
 	{

@@ -15,7 +15,6 @@
 package net.xcine.gameserver.handler.custom;
 
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.entity.L2Rebirth;
 
 /**
  *This will simply manage any custom 'Enter World callers' needed.<br>
@@ -45,17 +44,6 @@ public class CustomWorldHandler
 		}
 
 		return _instance;
-	}
-
-	/**
-	 * Requests entry into the world - manages appropriately.
-	 * @param player
-	 */
-	public void enterWorld(L2PcInstance player)
-	{
-		// L2Rebirth's skills must be actived only on main class
-		if (!player.isSubClassActive())
-			L2Rebirth.getInstance().grantRebirthSkills(player);// Rebirth Caller - if player has any skills, they will be granted them.
 	}
 
 	/**

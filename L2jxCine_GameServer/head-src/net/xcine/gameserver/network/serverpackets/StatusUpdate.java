@@ -98,7 +98,7 @@ public class StatusUpdate extends L2GameServerPacket
 	
 	public StatusUpdate(int objectId)
 	{
-		_attributes = new Vector<>();
+		_attributes = new Vector<Attribute>();
 		_objectId = objectId;
 	}
 	

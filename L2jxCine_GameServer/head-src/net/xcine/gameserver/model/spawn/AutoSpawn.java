@@ -75,8 +75,8 @@ public class AutoSpawn
 
 	private AutoSpawn()
 	{
-		_registeredSpawns = new FastMap<>();
-		_runningSpawns = new FastMap<>();
+		_registeredSpawns = new FastMap<Integer, AutoSpawnInstance>();
+		_runningSpawns = new FastMap<Integer, ScheduledFuture<?>>();
 
 		restoreSpawnData();
 	}
@@ -438,7 +438,7 @@ public class AutoSpawn
 
 	public Map<Integer, AutoSpawnInstance> getAutoSpawnInstances(int npcId)
 	{
-		Map<Integer, AutoSpawnInstance> spawnInstList = new FastMap<>();
+		Map<Integer, AutoSpawnInstance> spawnInstList = new FastMap<Integer, AutoSpawnInstance>();
 
 		Collection<AutoSpawnInstance> instances;
 		synchronized(_registeredSpawns){
@@ -740,9 +740,9 @@ public class AutoSpawn
 
 		protected int _lastLocIndex = -1;
 
-		private List<L2NpcInstance> _npcList = new FastList<>();
+		private List<L2NpcInstance> _npcList = new FastList<L2NpcInstance>();
 
-		private List<Location> _locList = new FastList<>();
+		private List<Location> _locList = new FastList<Location>();
 
 		private boolean _spawnActive;
 
@@ -823,7 +823,7 @@ public class AutoSpawn
 
 		public L2Spawn[] getSpawns()
 		{
-			List<L2Spawn> npcSpawns = new FastList<>();
+			List<L2Spawn> npcSpawns = new FastList<L2Spawn>();
 
 			for(L2NpcInstance npcInst : _npcList)
 			{

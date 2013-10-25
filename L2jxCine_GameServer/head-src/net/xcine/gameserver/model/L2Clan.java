@@ -70,7 +70,7 @@ public class L2Clan
 	private String _name;
 	private int _clanId;
 	private L2ClanMember _leader;
-	private Map<String, L2ClanMember> _members = new FastMap<>();
+	private Map<String, L2ClanMember> _members = new FastMap<String, L2ClanMember>();
 
 	private String _allyName;
 	private int _allyId = 0;
@@ -99,14 +99,14 @@ public class L2Clan
 	public static final int PENALTY_TYPE_DISSOLVE_ALLY = 4;
 
 	private ItemContainer _warehouse = new ClanWarehouse(this);
-	private List<Integer> _atWarWith = new FastList<>();
-	private List<Integer> _atWarAttackers = new FastList<>();
+	private List<Integer> _atWarWith = new FastList<Integer>();
+	private List<Integer> _atWarAttackers = new FastList<Integer>();
 
 	private boolean _hasCrestLarge;
 
 	private Forum _forum;
 
-	private List<L2Skill> _skillList = new FastList<>();
+	private List<L2Skill> _skillList = new FastList<L2Skill>();
 	
 	// Clan Notice
 	private String _notice;
@@ -164,9 +164,9 @@ public class L2Clan
 	public static final int SUBUNIT_KNIGHT4 = 2002;
 
 	/** FastMap(Integer, L2Skill) containing all skills of the L2Clan */
-	protected final Map<Integer, L2Skill> _skills = new FastMap<>();
-	protected final Map<Integer, RankPrivs> _privs = new FastMap<>();
-	protected final Map<Integer, SubPledge> _subPledges = new FastMap<>();
+	protected final Map<Integer, L2Skill> _skills = new FastMap<Integer, L2Skill>();
+	protected final Map<Integer, RankPrivs> _privs = new FastMap<Integer, RankPrivs>();
+	protected final Map<Integer, SubPledge> _subPledges = new FastMap<Integer, SubPledge>();
 
 	private int _reputationScore = 0;
 	private int _rank = 0;
@@ -568,7 +568,7 @@ public class L2Clan
 
 	public L2PcInstance[] getOnlineMembers(String exclude)
 	{
-		List<L2PcInstance> result = new FastList<>();
+		List<L2PcInstance> result = new FastList<L2PcInstance>();
 
 		for(L2ClanMember temp : _members.values())
 		{

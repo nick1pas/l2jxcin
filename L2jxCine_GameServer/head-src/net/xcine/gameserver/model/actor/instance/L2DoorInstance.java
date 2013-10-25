@@ -1064,7 +1064,7 @@ public class L2DoorInstance extends L2Character
 	 */
 	public Collection<L2SiegeGuardInstance> getKnownSiegeGuards()
 	{
-		FastList<L2SiegeGuardInstance> result = new FastList<>();
+		FastList<L2SiegeGuardInstance> result = new FastList<L2SiegeGuardInstance>();
 
 		for(L2Object obj : getKnownList().getKnownObjects().values())
 		{
@@ -1084,7 +1084,7 @@ public class L2DoorInstance extends L2Character
 	 */
 	public Collection<L2FortSiegeGuardInstance> getKnownFortSiegeGuards()
 	{
-		FastList<L2FortSiegeGuardInstance> result = new FastList<>();
+		FastList<L2FortSiegeGuardInstance> result = new FastList<L2FortSiegeGuardInstance>();
 
 		Collection<L2Object> objs = getKnownList().getKnownObjects().values();
 		//synchronized (getKnownList().getKnownObjects()) 

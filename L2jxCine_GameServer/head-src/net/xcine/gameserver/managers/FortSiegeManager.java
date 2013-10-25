@@ -204,13 +204,13 @@ public class FortSiegeManager
 			_siegeLength = Integer.decode(siegeSettings.getProperty("SiegeLength", "120"));
 
 			// Siege spawns settings
-			_commanderSpawnList = new FastMap<>();
-			_flagList = new FastMap<>();
+			_commanderSpawnList = new FastMap<Integer, FastList<SiegeSpawn>>();
+			_flagList = new FastMap<Integer, FastList<SiegeSpawn>>();
 
 			for(Fort fort : FortManager.getInstance().getForts())
 			{
-				FastList<SiegeSpawn> _commanderSpawns = new FastList<>();
-				FastList<SiegeSpawn> _flagSpawns = new FastList<>();
+				FastList<SiegeSpawn> _commanderSpawns = new FastList<SiegeSpawn>();
+				FastList<SiegeSpawn> _flagSpawns = new FastList<SiegeSpawn>();
 
 				for(int i = 1; i < 5; i++)
 				{
@@ -370,7 +370,7 @@ public class FortSiegeManager
 	{
 		if(_sieges == null)
 		{
-			_sieges = new FastList<>();
+			_sieges = new FastList<FortSiege>();
 		}
 		return _sieges;
 	}
@@ -379,7 +379,7 @@ public class FortSiegeManager
 	{
 		if(_sieges == null)
 		{
-			_sieges = new FastList<>();
+			_sieges = new FastList<FortSiege>();
 		}
 		_sieges.add(fortSiege);
 	}
@@ -388,7 +388,7 @@ public class FortSiegeManager
 	{
 		if(_sieges == null)
 		{
-			_sieges = new FastList<>();
+			_sieges = new FastList<FortSiege>();
 		}
 		_sieges.remove(fortSiege);
 	}

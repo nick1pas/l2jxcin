@@ -74,7 +74,7 @@ public class GameServerThread extends Thread
 	private GameServerInfo _gsi;
 
 	/** Authed Clients on a GameServer */
-	private Set<String> _accountsOnGameServer = new FastSet<>();
+	private Set<String> _accountsOnGameServer = new FastSet<String>();
 
 	private String _connectionIPAddress;
 

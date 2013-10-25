@@ -18,9 +18,7 @@
  */
 package net.xcine.gameserver.model.actor.knownlist;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastMap;
@@ -258,19 +256,7 @@ public class ObjectKnownList
 
 		return _knownObjects;
 	}
-	
-	@SuppressWarnings("unchecked")
-	public final <A> Collection<A> getKnownTypeInRadius(Class<A> type, int radius)
-	{
-		List<A> result = new ArrayList<>();
-		
-		for (L2Object obj : _knownObjects.values())
-		{
-			if (type.isAssignableFrom(obj.getClass()) && Util.checkIfInRange(radius, getActiveObject(), obj, true))
-				result.add((A) obj);
-		}
-		return result;
-	}
+
 	public static class KnownListAsynchronousUpdateTask implements Runnable
 	{
 		private L2Object _obj;

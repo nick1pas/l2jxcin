@@ -213,7 +213,7 @@ public class L2FortZone extends L2ZoneType
 	 */
 	public FastList<L2PcInstance> getAllPlayers()
 	{
-		FastList<L2PcInstance> players = new FastList<>();
+		FastList<L2PcInstance> players = new FastList<L2PcInstance>();
 
 		for(L2Character temp : _characterList.values())
 		{

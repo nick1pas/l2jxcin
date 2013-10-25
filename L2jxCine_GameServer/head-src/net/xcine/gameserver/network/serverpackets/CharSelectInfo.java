@@ -219,7 +219,7 @@ public class CharSelectInfo extends L2GameServerPacket
 	private CharSelectInfoPackage[] loadCharacterSelectInfo()
 	{
 		CharSelectInfoPackage charInfopackage;
-		List<CharSelectInfoPackage> characterList = new FastList<>();
+		List<CharSelectInfoPackage> characterList = new FastList<CharSelectInfoPackage>();
 		
 		Connection con = null;
 		

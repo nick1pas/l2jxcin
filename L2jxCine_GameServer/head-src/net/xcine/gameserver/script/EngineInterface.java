@@ -30,7 +30,7 @@ import net.xcine.gameserver.datatables.sql.LevelUpData;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
-import net.xcine.gameserver.datatables.sql.TeleportLocationTable;
+import net.xcine.gameserver.datatables.xml.TeleportLocationTable;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.entity.Announcements;

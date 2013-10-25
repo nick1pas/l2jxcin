@@ -33,7 +33,7 @@ public class PartyMatchRoomList
 	
 	private PartyMatchRoomList()
 	{
-		_rooms = new FastMap<>();
+		_rooms = new FastMap<Integer, PartyMatchRoom>();
 	}
 	
 	public synchronized void addPartyMatchRoom(int id, PartyMatchRoom room)

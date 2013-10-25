@@ -28,7 +28,7 @@ import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.NpcWalkerRoutesTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
-import net.xcine.gameserver.datatables.sql.TeleportLocationTable;
+import net.xcine.gameserver.datatables.xml.TeleportLocationTable;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.managers.DatatablesManager;
 import net.xcine.gameserver.managers.Manager;
@@ -75,7 +75,7 @@ public class AdminReload implements IAdminCommandHandler
 				}
 				else if (type.startsWith("teleport"))
 				{
-					TeleportLocationTable.getInstance().reloadAll();
+					TeleportLocationTable.getInstance().reload();
 					sendReloadPage(activeChar);
 					activeChar.sendMessage("Teleport location table reloaded.");
 				}

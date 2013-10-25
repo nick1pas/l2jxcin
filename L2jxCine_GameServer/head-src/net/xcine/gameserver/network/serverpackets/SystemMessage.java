@@ -30,8 +30,8 @@ public final class SystemMessage extends L2GameServerPacket
 	private static final int TYPE_NUMBER = 1;
 	private static final int TYPE_TEXT = 0;
 	private int _messageId;
-	private Vector<Integer> _types = new Vector<>();
-	private Vector<Object> _values = new Vector<>();
+	private Vector<Integer> _types = new Vector<Integer>();
+	private Vector<Object> _values = new Vector<Object>();
 	private int _skillLvL = 1;
 
 	public SystemMessage(SystemMessageId messageId)

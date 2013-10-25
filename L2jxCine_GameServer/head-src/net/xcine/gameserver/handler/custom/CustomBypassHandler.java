@@ -23,7 +23,6 @@ import net.xcine.Config;
 import net.xcine.gameserver.handler.ICustomByPassHandler;
 import net.xcine.gameserver.idfactory.BitSetIDFactory;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.entity.L2Rebirth;
 
 /**
  * This 'Bypass Handler' is a handy tool indeed!<br>
@@ -41,7 +40,7 @@ public class CustomBypassHandler
 	
 	private CustomBypassHandler()
 	{
-		_handlers = new FastMap<>();
+		_handlers = new FastMap<String, ICustomByPassHandler>();
 		
 		registerCustomBypassHandler(new ExtractableByPassHandler());
 	}
@@ -99,17 +98,7 @@ public class CustomBypassHandler
 		}
 		else
 		{
-			if (command.startsWith("custom_rebirth"))
-			{
-				// Check to see if Rebirth is enabled to avoid hacks
-				if (!Config.REBIRTH_ENABLE)
-				{
-					_log.warning("[WARNING] Player " + player.getName() + " is trying to use rebirth system when it's disabled.");
-					return;
-				}
-				
-				L2Rebirth.getInstance().handleCommand(player, command);
-			}
+
 		}
 	}
 }

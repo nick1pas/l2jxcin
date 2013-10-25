@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
+
 import net.xcine.Config;
 import net.xcine.gameserver.cache.HtmCache;
 import net.xcine.gameserver.datatables.GmListTable;
@@ -52,7 +53,6 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 import net.xcine.util.random.Rnd;
-
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 /**
  * @author Luis Arias
@@ -62,9 +62,9 @@ public class Quest extends ManagedScript
 	protected static final Logger _log = Logger.getLogger(Quest.class.getName());
 
 	/** HashMap containing events from String value of the event */
-	private static Map<String, Quest> _allEventsS = new FastMap<>();
+	private static Map<String, Quest> _allEventsS = new FastMap<String, Quest>();
 	/** HashMap containing lists of timers from the name of the timer */
-	private Map<String, ArrayList<QuestTimer>> _allEventTimers = new FastMap<>();
+	private Map<String, ArrayList<QuestTimer>> _allEventTimers = new FastMap<String, ArrayList<QuestTimer>>();
 
 	private final int _questId;
 	private final String _name;
@@ -96,7 +96,7 @@ public class Quest extends ManagedScript
 		_questId = questId;
 		_name = name;
 		_descr = descr;
-		_states = new FastMap<>();
+		_states = new FastMap<String, State>();
 
 		// Given the quest instance, create a string representing the path and questName 
 		// like a simplified version of a canonical class name.  That is, if a script is in 
@@ -187,16 +187,16 @@ public class Quest extends ManagedScript
 		/** a person came within the Npc/Mob's range */
 		ON_AGGRO_RANGE_ENTER(true),
 
-		/** OnSpawn Ã Ã’â€˜Ã Ã‚ÂµÃ Ã¢â€žâ€“ÃÂ¡ÃÆ’ÃÂ¡Ã¢â‚¬Å¡Ã Ãâ€ Ã Ã‘â€˜Ã Ã‚Âµ Ã Ã‘â€”ÃÂ¡Ãâ€šÃ Ã‘â€˜ ÃÂ¡ÃÆ’Ã Ã‘â€”Ã Ã‚Â°ÃÂ¡Ã‘â€œÃ Ãâ€¦Ã Ã‚Âµ Ã Ã‘ËœÃ Ã‘â€¢Ã Ã‚Â±Ã Ã‚Â° */
+		/** OnSpawn РґРµР№СЃС‚РІРёРµ РїСЂРё СЃРїР°СѓРЅРµ РјРѕР±Р° */
 		ON_SPAWN(true),
 
-		/** OnSkillUse Ã Ã’â€˜Ã Ã‚ÂµÃ Ã¢â€žâ€“ÃÂ¡ÃÆ’ÃÂ¡Ã¢â‚¬Å¡Ã Ãâ€ Ã Ã‘â€˜Ã Ã‚Âµ Ã Ã‘â€”ÃÂ¡Ãâ€šÃ Ã‘â€˜ Ã Ã‘â€˜ÃÂ¡ÃÆ’Ã Ã‘â€”Ã Ã‘â€¢Ã Ã‚Â»ÃÂ¡ÃÅ Ã Ã‚Â·Ã Ã‘â€¢Ã Ãâ€ Ã Ã‚Â°Ã Ãâ€¦Ã Ã‘â€˜Ã Ã‘â€˜ ÃÂ¡ÃÆ’Ã Ã‘â€Ã Ã‘â€˜Ã Ã‚Â»Ã Ã‚Â»Ã Ã‚Â° (MOB_TARGETED_BY_SKILL) */
+		/** OnSkillUse РґРµР№СЃС‚РІРёРµ РїСЂРё РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё СЃРєРёР»Р»Р° (MOB_TARGETED_BY_SKILL) */
 		ON_SKILL_USE(true),
 
-		/** OnKill Ã Ã’â€˜Ã Ã‚ÂµÃ Ã¢â€žâ€“ÃÂ¡ÃÆ’ÃÂ¡Ã¢â‚¬Å¡Ã Ãâ€ Ã Ã‘â€˜Ã Ã‚Âµ Ã Ã‘â€”ÃÂ¡Ãâ€šÃ Ã‘â€˜ ÃÂ¡Ã‘â€œÃ Ã‚Â±Ã Ã‘â€˜Ã Ã¢â€žâ€“ÃÂ¡ÃÆ’ÃÂ¡Ã¢â‚¬Å¡Ã Ãâ€ Ã Ã‚Âµ (MOBKILLED) */
+		/** OnKill РґРµР№СЃС‚РІРёРµ РїСЂРё СѓР±РёР№СЃС‚РІРµ (MOBKILLED) */
 		ON_KILL(true),
 
-		/** OnAttack Ã Ã’â€˜Ã Ã‚ÂµÃ Ã¢â€žâ€“ÃÂ¡ÃÆ’ÃÂ¡Ã¢â‚¬Å¡Ã Ãâ€ Ã Ã‘â€˜Ã Ã‚Âµ Ã Ã‘â€”ÃÂ¡Ãâ€šÃ Ã‘â€˜ Ã Ã‚Â°ÃÂ¡Ã¢â‚¬Å¡Ã Ã‚Â°Ã Ã‘â€Ã Ã‚Âµ (MOBGOTATTACKED) */
+		/** OnAttack РґРµР№СЃС‚РІРёРµ РїСЂРё Р°С‚Р°РєРµ (MOBGOTATTACKED) */
 		ON_ATTACK(true);
 
 		// control whether this event type is allowed for the same npc template in multiple quests
@@ -264,7 +264,6 @@ public class Quest extends ManagedScript
 	 * 
 	 * @return String
 	 */
-	@Override
 	public String getName()
 	{
 		return _name;
@@ -378,7 +377,7 @@ public class Quest extends ManagedScript
 			// no timer exists with the same name, at all
 			if(timers == null){
 				
-				timers = new ArrayList<>();
+				timers = new ArrayList<QuestTimer>();
 				timers.add(new QuestTimer(this, name, time, npc, player, repeating));
 				
 			// a timer with this name exists, but may not be for the same set of npc and player
@@ -1591,7 +1590,7 @@ public class Quest extends ManagedScript
 
 		// if the player is in a party, gather a list of all matching party members (possibly 
 		// including this player) 
-		FastList<L2PcInstance> candidates = new FastList<>();
+		FastList<L2PcInstance> candidates = new FastList<L2PcInstance>();
 
 		// get the target for enforcing distance limitations.
 		L2Object target = player.getTarget();
@@ -1655,7 +1654,7 @@ public class Quest extends ManagedScript
 
 		// if the player is in a party, gather a list of all matching party members (possibly 
 		// including this player) 
-		FastList<L2PcInstance> candidates = new FastList<>();
+		FastList<L2PcInstance> candidates = new FastList<L2PcInstance>();
 
 		// get the target for enforcing distance limitations.
 		L2Object target = player.getTarget();
@@ -1742,7 +1741,7 @@ public class Quest extends ManagedScript
 	{
 		if(_questItemIds == null)
 		{
-			_questItemIds = new FastList<>();
+			_questItemIds = new FastList<Integer>();
 		}
 
 		_questItemIds.add(itemId);
@@ -1790,6 +1789,12 @@ public class Quest extends ManagedScript
 		unload();
 		return super.reload();
 	}
+
+	@Override
+	public String getScriptName()
+	{
+		return getName();
+	}
 	
 	/**
 	 * This is used to register all monsters contained in mobs for a particular script<BR>
@@ -1812,26 +1817,6 @@ public class Quest extends ManagedScript
 	}
 	
 	/**
-	 * Add the quest to the NPC's startQuest
-	 * @param npcIds A serie of ids.
-	 */
-	public void addStartNpc(int... npcIds)
-	{
-		for (int npcId : npcIds)
-			addEventId(npcId, QuestEventType.QUEST_START);
-	}
-	
-	/**
-	 * Add this quest to the list of quests that the passed npc will respond to for Talk Events.
-	 * @param talkIds : A serie of ids.
-	 */
-	public void addTalkId(int... talkIds)
-	{
-		for (int talkId : talkIds)
-			addEventId(talkId, QuestEventType.QUEST_TALK);
-	}
-	
-	/**
 	 * This is used to register all monsters contained in mobs for a particular script
 	 * event types defined in types.
 	 * @param mobs
@@ -1846,5 +1831,7 @@ public class Quest extends ManagedScript
 				addEventId(id, type);
 			}
 		}
-	}	
+	}
+	
+	
 }

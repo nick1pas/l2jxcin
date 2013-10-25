@@ -30,7 +30,7 @@ import net.xcine.netcore.ReceivablePacket;
  */
 public abstract class L2GameClientPacket extends ReceivablePacket<L2GameClient>
 {
-	public static final Logger _log = Logger.getLogger(L2GameClientPacket.class.getName());
+	private static final Logger _log = Logger.getLogger(L2GameClientPacket.class.getName());
 
 	@Override
 	protected boolean read()
@@ -98,13 +98,4 @@ public abstract class L2GameClientPacket extends ReceivablePacket<L2GameClient>
 	 * @return A String with this packet name for debuging purposes
 	 */
 	public abstract String getType();
-	
-	/**
-	 * Overriden with true value on some packets that should disable spawn protection
-	 * @return
-	 */
-	protected boolean triggersOnActionRequest()
-	{
-		return true;
-	}
 }

@@ -468,7 +468,7 @@ public final class L2Collections
 
 	public static <T> Iterable<T> filteredIterable(Class<T> clazz, Iterable<? super T> iterable, Filter<T> filter)
 	{
-		return new FilteredIterable<>(clazz, iterable, filter);
+		return new FilteredIterable<T>(clazz, iterable, filter);
 	}
 
 	public static <T> Iterator<T> filteredIterator(Class<T> clazz, Iterable<? super T> iterable)
@@ -478,7 +478,7 @@ public final class L2Collections
 
 	public static <T> Iterator<T> filteredIterator(Class<T> clazz, Iterable<? super T> iterable, Filter<T> filter)
 	{
-		return new FilteredIterator<>(clazz, iterable, filter);
+		return new FilteredIterator<T>(clazz, iterable, filter);
 	}
 
 	public interface Filter<E>
@@ -570,12 +570,12 @@ public final class L2Collections
 
 	public static <S, T> Iterable<T> convertingIterable(Iterable<? extends S> iterable, Converter<S, T> converter)
 	{
-		return new ConvertingIterable<>(iterable, converter);
+		return new ConvertingIterable<S, T>(iterable, converter);
 	}
 
 	public static <S, T> Iterator<T> convertingIterator(Iterable<? extends S> iterable, Converter<S, T> converter)
 	{
-		return new ConvertingIterator<>(iterable, converter);
+		return new ConvertingIterator<S, T>(iterable, converter);
 	}
 
 	public interface Converter<S, T>
@@ -665,34 +665,34 @@ public final class L2Collections
 
 	public static <T> Iterable<T> concatenatedIterable(Iterable<? extends T> iterable1, Iterable<? extends T> iterable2)
 	{
-		return new ConcatenatedIterable<>(iterable1, iterable2);
+		return new ConcatenatedIterable<T>(iterable1, iterable2);
 	}
 
 	public static <T> Iterable<T> concatenatedIterable(Iterable<? extends T> iterable1,
 		Iterable<? extends T> iterable2, Iterable<? extends T> iterable3)
 	{
-		return new ConcatenatedIterable<>(iterable1, iterable2, iterable3);
+		return new ConcatenatedIterable<T>(iterable1, iterable2, iterable3);
 	}
 
 	public static <T> Iterable<T> concatenatedIterable(Iterable<? extends T>... iterables)
 	{
-		return new ConcatenatedIterable<>(iterables);
+		return new ConcatenatedIterable<T>(iterables);
 	}
 
 	public static <T> Iterator<T> concatenatedIterator(Iterable<? extends T> iterable1, Iterable<? extends T> iterable2)
 	{
-		return new ConcatenatedIterator<>(iterable1, iterable2);
+		return new ConcatenatedIterator<T>(iterable1, iterable2);
 	}
 
 	public static <T> Iterator<T> concatenatedIterator(Iterable<? extends T> iterable1,
 		Iterable<? extends T> iterable2, Iterable<? extends T> iterable3)
 	{
-		return new ConcatenatedIterator<>(iterable1, iterable2, iterable3);
+		return new ConcatenatedIterator<T>(iterable1, iterable2, iterable3);
 	}
 
 	public static <T> Iterator<T> concatenatedIterator(Iterable<? extends T>... iterables)
 	{
-		return new ConcatenatedIterator<>(iterables);
+		return new ConcatenatedIterator<T>(iterables);
 	}
 
 	private static final class ConcatenatedIterable<E> implements Iterable<E>

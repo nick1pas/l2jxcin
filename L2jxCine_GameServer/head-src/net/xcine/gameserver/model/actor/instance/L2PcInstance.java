@@ -140,7 +140,6 @@ import net.xcine.gameserver.model.base.Race;
 import net.xcine.gameserver.model.base.SubClass;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.entity.Duel;
-import net.xcine.gameserver.model.entity.L2Rebirth;
 import net.xcine.gameserver.model.entity.event.CTF;
 import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.L2Event;
@@ -453,15 +452,15 @@ public final class L2PcInstance extends L2PlayableInstance
 	public int _active_boxes = -1;
 	
 	/** The active_boxes_characters. */
-	public List<String> active_boxes_characters = new ArrayList<>();
+	public List<String> active_boxes_characters = new ArrayList<String>();
 	
 	/** UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,str=?,con=?,dex=?,_int=?,men=?,wit=? ,face=?,hairStyle=?,hairColor =?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,karma=?,pvpkills=?,pkkills=?,rec_have =?,rec_left=?,clanid=?,maxload =?,race=?,classid=?,deletetime=?,title=?,accesslevel=?,online=?,isin7sdungeon=?,clan_privs =?,wantspeace=?,base_class =?,onlinetime=?,in_jail=?,jail_timer=?,newbie=?,nobless=?,power_grade=?,subpledge=?,last_recom_date =?,lvl_joined_academy =?,apprentice=?,sponsor=?,varka_ketra_ally=?,clan_join_expiry_time=?,clan_create_expiry_time=? ,char_name=?,death_penalty_level=?,good=?,evil=?,gve_kills=? WHERE obj_id=?. */
-	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,str=?,con=?,dex=?,_int=?,men=?,wit=?,face=?,hairStyle=?,hairColor=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,karma=?,pvpkills=?,pkkills=?,rec_have=?,rec_left=?,clanid=?,maxload=?,race=?,classid=?,deletetime=?,title=?,accesslevel=?,online=?,isin7sdungeon=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,punish_level=?,punish_timer=?,newbie=?,nobless=?,power_grade=?,subpledge=?,last_recom_date=?,lvl_joined_academy=?,apprentice=?,sponsor=?,varka_ketra_ally=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,death_penalty_level=?,pc_point=?,name_color=?,title_color=?,aio=?,aio_end=? WHERE obj_id=?";
-
+	private static final String UPDATE_CHARACTER = "UPDATE characters SET level=?,maxHp=?,curHp=?,maxCp=?,curCp=?,maxMp=?,curMp=?,str=?,con=?,dex=?,_int=?,men=?,wit=?,face=?,hairStyle=?,hairColor=?,heading=?,x=?,y=?,z=?,exp=?,expBeforeDeath=?,sp=?,karma=?,pvpkills=?,pkkills=?,rec_have=?,rec_left=?,clanid=?,maxload=?,race=?,classid=?,deletetime=?,title=?,accesslevel=?,online=?,isin7sdungeon=?,clan_privs=?,wantspeace=?,base_class=?,onlinetime=?,punish_level=?,punish_timer=?,newbie=?,nobless=?,power_grade=?,subpledge=?,last_recom_date=?,lvl_joined_academy=?,apprentice=?,sponsor=?,varka_ketra_ally=?,clan_join_expiry_time=?,clan_create_expiry_time=?,char_name=?,death_penalty_level=?,pc_point=?,name_color=?,title_color=?,aio=?,aio_end=?,vip=?,vip_end=? WHERE obj_id=?";
+	 
 	/** SELECT account_name, obj_Id, char_name, level, maxHp, curHp, maxCp, curCp, maxMp, curMp, acc, crit, evasion, mAtk, mDef, mSpd, pAtk, pDef, pSpd, runSpd, walkSpd, str, con, dex, _int, men, wit, face, hairStyle, hairColor, sex, heading, x, y, z, movement_multiplier, attack_speed_multiplier, colRad, colHeight, exp, expBeforeDeath, sp, karma, pvpkills, pkkills, clanid, maxload, race, classid, deletetime, cancraft, title, rec_have, rec_left, accesslevel, online, char_slot, lastAccess, clan_privs, wantspeace, base_class, onlinetime, isin7sdungeon, in_jail, jail_timer, newbie, nobless, power_grade, subpledge, last_recom_date, lvl_joined_academy, apprentice, sponsor, varka_ketra_ally,clan_join_expiry_time,clan_create_expiry_time,death_penalty_level,good,evil,gve_kills FROM characters WHERE obj_id=?. */
 	//private static final String RESTORE_CHARACTER = "SELECT account_name, obj_Id, char_name, level, maxHp, curHp, maxCp, curCp, maxMp, curMp, acc, crit, evasion, mAtk, mDef, mSpd, pAtk, pDef, pSpd, runSpd, walkSpd, str, con, dex, _int, men, wit, face, hairStyle, hairColor, sex, heading, x, y, z, movement_multiplier, attack_speed_multiplier, colRad, colHeight, exp, expBeforeDeath, sp, karma, pvpkills, pkkills, clanid, maxload, race, classid, deletetime, cancraft, title, rec_have, rec_left, accesslevel, online, char_slot, lastAccess, clan_privs, wantspeace, base_class, onlinetime, isin7sdungeon, in_jail, jail_timer, newbie, nobless, power_grade, subpledge, last_recom_date, lvl_joined_academy, apprentice, sponsor, varka_ketra_ally,clan_join_expiry_time,clan_create_expiry_time,death_penalty_level,pc_point,banchat_time,name_color,title_color,first_log,aio,aio_end FROM characters WHERE obj_id=?";
-	private static final String RESTORE_CHARACTER = "SELECT account_name, obj_Id, char_name, level, maxHp, curHp, maxCp, curCp, maxMp, curMp, acc, crit, evasion, mAtk, mDef, mSpd, pAtk, pDef, pSpd, runSpd, walkSpd, str, con, dex, _int, men, wit, face, hairStyle, hairColor, sex, heading, x, y, z, movement_multiplier, attack_speed_multiplier, colRad, colHeight, exp, expBeforeDeath, sp, karma, pvpkills, pkkills, clanid, maxload, race, classid, deletetime, cancraft, title, rec_have, rec_left, accesslevel, online, char_slot, lastAccess, clan_privs, wantspeace, base_class, onlinetime, isin7sdungeon,punish_level,punish_timer,"+/* in_jail, jail_timer,*/ "newbie, nobless, power_grade, subpledge, last_recom_date, lvl_joined_academy, apprentice, sponsor, varka_ketra_ally,clan_join_expiry_time,clan_create_expiry_time,death_penalty_level,pc_point"+/*,banchat_time*/",name_color,title_color,first_log,aio,aio_end FROM characters WHERE obj_id=?";
-
+	private static final String RESTORE_CHARACTER = "SELECT account_name, obj_Id, char_name, level, maxHp, curHp, maxCp, curCp, maxMp, curMp, acc, crit, evasion, mAtk, mDef, mSpd, pAtk, pDef, pSpd, runSpd, walkSpd, str, con, dex, _int, men, wit, face, hairStyle, hairColor, sex, heading, x, y, z, movement_multiplier, attack_speed_multiplier, colRad, colHeight, exp, expBeforeDeath, sp, karma, pvpkills, pkkills, clanid, maxload, race, classid, deletetime, cancraft, title, rec_have, rec_left, accesslevel, online, char_slot, lastAccess, clan_privs, wantspeace, base_class, onlinetime, isin7sdungeon,punish_level,punish_timer,"+/* in_jail, jail_timer,*/ "newbie, nobless, power_grade, subpledge, last_recom_date, lvl_joined_academy, apprentice, sponsor, varka_ketra_ally,clan_join_expiry_time,clan_create_expiry_time,death_penalty_level,pc_point"+/*,banchat_time*/",name_color,title_color,first_log,aio,aio_end,vip,vip_end FROM characters WHERE obj_id=?";
+	 
 	/** The Constant STATUS_DATA_GET. */
 	private static final String STATUS_DATA_GET = "SELECT hero, noble, donator, hero_end_date FROM characters_custom_data WHERE obj_Id = ?";
 
@@ -817,6 +816,9 @@ public final class L2PcInstance extends L2PlayableInstance
 	
 	/** The _aio_end time. */
 	private long _aio_endTime = 0;
+	
+	private boolean _isVip = false;
+	private long _vip_endTime = 0;
 	   
 	/** Event parameters. */
 	public int eventX;
@@ -840,7 +842,7 @@ public final class L2PcInstance extends L2PlayableInstance
 	public String eventTitle;
 	
 	/** The kills. */
-	public List<String> kills = new LinkedList<>();
+	public List<String> kills = new LinkedList<String>();
 	
 	/** The event sit forced. */
 	public boolean eventSitForced = false;
@@ -955,10 +957,10 @@ public final class L2PcInstance extends L2PlayableInstance
 	private boolean _inCraftMode;
 
 	/** The table containing all L2RecipeList of the L2PcInstance. */
-	private Map<Integer, L2RecipeList> _dwarvenRecipeBook = new FastMap<>();
+	private Map<Integer, L2RecipeList> _dwarvenRecipeBook = new FastMap<Integer, L2RecipeList>();
 	
 	/** The _common recipe book. */
-	private Map<Integer, L2RecipeList> _commonRecipeBook = new FastMap<>();
+	private Map<Integer, L2RecipeList> _commonRecipeBook = new FastMap<Integer, L2RecipeList>();
 
 	/** True if the L2PcInstance is sitting. */
 	private boolean _waitTypeSitting;
@@ -994,7 +996,7 @@ public final class L2PcInstance extends L2PlayableInstance
 	private long _lastRecomUpdate;
 	
 	/** List with the recomendations that I've give. */
-	private List<Integer> _recomChars = new FastList<>();
+	private List<Integer> _recomChars = new FastList<Integer>();
 
 	/** The random number of the L2PcInstance. */
 	//private static final Random _rnd = new Random();
@@ -1094,7 +1096,7 @@ public final class L2PcInstance extends L2PlayableInstance
 	}
 	
 	/** The table containing all Quests began by the L2PcInstance. */
-	private Map<String, QuestState> _quests = new FastMap<>();
+	private Map<String, QuestState> _quests = new FastMap<String, QuestState>();
 
 	/** The list containing all shortCuts of this L2PcInstance. */
 	private ShortCuts _shortCuts = new ShortCuts(this);
@@ -1103,10 +1105,10 @@ public final class L2PcInstance extends L2PlayableInstance
 	private MacroList _macroses = new MacroList(this);
 
 	/** The _snoop listener. */
-	private List<L2PcInstance> _snoopListener = new FastList<>();
+	private List<L2PcInstance> _snoopListener = new FastList<L2PcInstance>();
 	
 	/** The _snooped player. */
-	private List<L2PcInstance> _snoopedPlayer = new FastList<>();
+	private List<L2PcInstance> _snoopedPlayer = new FastList<L2PcInstance>();
 
 	/** The _skill learning class id. */
 	private ClassId _skillLearningClassId;
@@ -1236,7 +1238,7 @@ private AccessLevel _accessLevel;
 	private L2Weapon _fistsWeaponItem;
 
 	/** The _chars. */
-	private final Map<Integer, String> _chars = new FastMap<>();
+	private final Map<Integer, String> _chars = new FastMap<Integer, String>();
 
 	//private byte _updateKnownCounter = 0;
 
@@ -1265,7 +1267,7 @@ private AccessLevel _accessLevel;
 	protected boolean _inventoryDisable = false;
 
 	/** The _cubics. */
-	protected Map<Integer, L2CubicInstance> _cubics = new FastMap<>();
+	protected Map<Integer, L2CubicInstance> _cubics = new FastMap<Integer, L2CubicInstance>();
 
 	/** Active shots. A FastSet variable would actually suffice but this was changed to fix threading stability... */
 	protected Map<Integer, Integer> _activeSoulShots = new FastMap<Integer, Integer>().shared();
@@ -1316,13 +1318,13 @@ private AccessLevel _accessLevel;
 	private ScheduledFuture<?> _taskWater;
 
 	/** Bypass validations. */
-	private List<String> _validBypass = new FastList<>();
+	private List<String> _validBypass = new FastList<String>();
 	
 	/** The _valid bypass2. */
-	private List<String> _validBypass2 = new FastList<>();
+	private List<String> _validBypass2 = new FastList<String>();
 	
 	/** The _valid link. */
-	private List<String> _validLink = new FastList<>();
+	private List<String> _validLink = new FastList<String>();
 
 	/** The _forum mail. */
 	private Forum _forumMail;
@@ -2318,7 +2320,7 @@ private int _reviveRequested = 0;
 	 */
 	public Quest[] getAllActiveQuests()
 	{
-		FastList<Quest> quests = new FastList<>();
+		FastList<Quest> quests = new FastList<Quest>();
 
 		for(QuestState qs : _quests.values())
 		{
@@ -7900,8 +7902,8 @@ private int _reviveRequested = 0;
 			while(dropPercent > 0 && Rnd.get(100) < dropPercent && dropCount < dropLimit)
 			{
 				int itemDropPercent = 0;
-				List<Integer> nonDroppableList = new FastList<>();
-				List<Integer> nonDroppableListPet = new FastList<>();
+				List<Integer> nonDroppableList = new FastList<Integer>();
+				List<Integer> nonDroppableListPet = new FastList<Integer>();
 
 				nonDroppableList = Config.KARMA_LIST_NONDROPPABLE_ITEMS;
 				nonDroppableListPet = Config.KARMA_LIST_NONDROPPABLE_ITEMS;
@@ -10107,8 +10109,8 @@ private int _reviveRequested = 0;
 		{
 			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement;
-			statement = con.prepareStatement("INSERT INTO characters " + "(account_name,obj_Id,char_name,level,maxHp,curHp,maxCp,curCp,maxMp,curMp," + "acc,crit,evasion,mAtk,mDef,mSpd,pAtk,pDef,pSpd,runSpd,walkSpd," + "str,con,dex,_int,men,wit,face,hairStyle,hairColor,sex," + "movement_multiplier,attack_speed_multiplier,colRad,colHeight," + "exp,sp,karma,pvpkills,pkkills,clanid,maxload,race,classid,deletetime," + "cancraft,title,accesslevel,online,isin7sdungeon,clan_privs,wantspeace," + "base_class,newbie,nobless,power_grade,last_recom_date"/*,banchat_time,*/+",name_color,title_color,aio,aio_end) " + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-			statement.setString(1, _accountName);
+			statement = con.prepareStatement("INSERT INTO characters " + "(account_name,obj_Id,char_name,level,maxHp,curHp,maxCp,curCp,maxMp,curMp," + "acc,crit,evasion,mAtk,mDef,mSpd,pAtk,pDef,pSpd,runSpd,walkSpd," + "str,con,dex,_int,men,wit,face,hairStyle,hairColor,sex," + "movement_multiplier,attack_speed_multiplier,colRad,colHeight," + "exp,sp,karma,pvpkills,pkkills,clanid,maxload,race,classid,deletetime," + "cancraft,title,accesslevel,online,isin7sdungeon,clan_privs,wantspeace," + "base_class,newbie,nobless,power_grade,last_recom_date"/*,banchat_time,*/+",name_color,title_color,aio,aio_end,vip,vip_end) " + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            statement.setString(1, _accountName);
 			statement.setInt(2, getObjectId());
 			statement.setString(3, getName());
 			statement.setInt(4, getLevel());
@@ -10170,7 +10172,9 @@ private int _reviveRequested = 0;
 			statement.setString(59, StringToHex(Integer.toHexString(getAppearance().getTitleColor()).toUpperCase()));
 	        statement.setInt(60, isAio() ? 1 :0);
 	        statement.setLong(61, 0);
-			
+	        statement.setInt(62, isVip() ? 1 :0);
+	        statement.setLong(63, 0);
+	        
 			statement.executeUpdate();
 			statement.close();
 			statement = null;
@@ -10403,6 +10407,8 @@ private int _reviveRequested = 0;
 				player.setDeathPenaltyBuffLevel(rset.getInt("death_penalty_level"));
                 player.setAio(rset.getInt("aio") == 1 ? true : false);
                 player.setAioEndTime(rset.getLong("aio_end"));
+                player.setVip(rset.getInt("vip") == 1 ? true : false);
+                player.setVipEndTime(rset.getLong("vip_end"));
 				// Add the L2PcInstance object in _allObjects
 				//L2World.getInstance().storeObject(player);
 
@@ -10879,8 +10885,11 @@ private int _reviveRequested = 0;
 			statement.setInt(60, isAio() ? 1 : 0);
 			statement.setLong(61, getAioEndTime());
 			
-			statement.setInt(62, getObjectId());
+			statement.setInt(62, isVip() ? 1 : 0);
+			statement.setLong(63, getVipEndTime());
 			
+			statement.setInt(64, getObjectId());
+						
 			statement.execute();
 			statement.close();
 			statement = null;
@@ -10960,7 +10969,7 @@ private int _reviveRequested = 0;
 			final L2Effect[] effects = getAllEffects();
 			statement = con.prepareStatement(ADD_SKILL_SAVE);
 			
-			List<Integer> storedSkills = new FastList<>();
+			List<Integer> storedSkills = new FastList<Integer>();
 			
 			int buff_index = 0;
 			
@@ -14198,11 +14207,7 @@ private int _reviveRequested = 0;
 	{
 		sendPacket(SystemMessage.getSystemMessage(id));
 	}
-	
-	public boolean isInRefusalMode()
-	{
-		return _messageRefusal;
-	}
+
 	/**
 	 * Gets the message refusal.
 	 *
@@ -15029,7 +15034,7 @@ private int _reviveRequested = 0;
 			if(skillTree == null)
 				return true;
 
-			Map<Integer, L2Skill> prevSkillList = new FastMap<>();
+			Map<Integer, L2Skill> prevSkillList = new FastMap<Integer, L2Skill>();
 
 			for(L2SkillLearn skillInfo : skillTree)
 			{
@@ -15165,7 +15170,7 @@ private int _reviveRequested = 0;
 	{
 		if(_subClasses == null)
 		{
-			_subClasses = new FastMap<>();
+			_subClasses = new FastMap<Integer, SubClass>();
 		}
 
 		return _subClasses;
@@ -15452,10 +15457,6 @@ private int _reviveRequested = 0;
 		_shortCuts.restore();
 		sendPacket(new ShortCutInit(this));
 
-		// Rebirth Caller - if player has any skills, they will be granted them.
-		if(Config.REBIRTH_ENABLE)
-		   L2Rebirth.getInstance().grantRebirthSkills(this);
-		
 		broadcastPacket(new SocialAction(getObjectId(), 15));
 		sendPacket(new SkillCoolTime(this));
         
@@ -17124,7 +17125,7 @@ private int _reviveRequested = 0;
 	}
 
 	/** list of character friends. */
-	private List<String> _friendList = new FastList<>();
+	private List<String> _friendList = new FastList<String>();
 	
 	/**
 	 * Gets the friend list.
@@ -19170,7 +19171,7 @@ public boolean dismount()
 		boolean output = true;
 		
 		int boxes_number = 0; //this one
-		List<String> active_boxes = new ArrayList<>();
+		List<String> active_boxes = new ArrayList<String>();
 		
 		if(getClient()!=null && getClient().getConnection()!=null && !getClient().getConnection().isClosed() && getClient().getConnection().getInetAddress()!=null ){
 			
@@ -19365,73 +19366,8 @@ public boolean dismount()
   	public void setAioEndTime(long val)
 	   {
 	      _aio_endTime = val;
-	   }
-	
-	   /**
-   	 * Sets the end time.
-   	 *
-   	 * @param process the process
-   	 * @param val the val
-   	 */
-   	public void setEndTime(String process, int val)
-	   {
-	      if (val > 0)
-	      {
-	         long end_day;
-	         Calendar calendar = Calendar.getInstance();
-	         if (val >= 30)
-	         {
-	           while(val >= 30)
-	            {
-	               if(calendar.get(Calendar.MONTH)== 11)
-	                  calendar.roll(Calendar.YEAR, true);
-	               calendar.roll(Calendar.MONTH, true);
-	               val -= 30;
-	            }
-	         }
-	         if (val < 30 && val > 0)
-	         {
-	            while(val > 0)
-	            {
-	               if(calendar.get(Calendar.DATE)== 28 && calendar.get(Calendar.MONTH) == 1)
-	                  calendar.roll(Calendar.MONTH, true);         
-	               if(calendar.get(Calendar.DATE)== 30)
-	               {
-	                  if(calendar.get(Calendar.MONTH) == 11)
-	                     calendar.roll(Calendar.YEAR, true);
-	                  calendar.roll(Calendar.MONTH, true);
-	                  
-	               }
-	               calendar.roll(Calendar.DATE, true);
-	               val--;
-	            }
-	         }
-	
-	         end_day = calendar.getTimeInMillis();
-	         if(process.equals("aio"))
-	            _aio_endTime = end_day;
-	
-	         else
-	         {
-	            System.out.println("process "+ process + "no Known while try set end date");
-	            return;
-	         }
-	         Date dt = new Date(end_day);
-	         System.out.println(""+process +" end time for player " + getName() + " is " + dt);
-	      }
-	      else
-	      {
-	         if(process.equals("aio"))
-	            _aio_endTime = 0;
-	
-	         else
-	         {
-	            System.out.println("process "+ process + "no Known while try set end date");
-	           return;
-	  }
-	 }
-	}
-	
+	   }	
+
 	/**
 	 * Gets the aio end time.
 	 *
@@ -19442,6 +19378,86 @@ public boolean dismount()
 	return _aio_endTime;
 	}
 	
+	       /** Vip System Start */
+	       public boolean isVip()
+	       {
+	               return _isVip;
+	       }
+	
+	       public void setVip(boolean val)
+	       {
+	               _isVip = val;
+	       }
+	
+	       public void setVipEndTime(long val)
+	       {
+	               _vip_endTime = val;
+	       }
+	
+	       public long getVipEndTime()
+	       {
+	               return _vip_endTime;
+	       }
+	
+	       public void setEndTime(String process, int val)
+	       {
+	               if (val > 0)
+	               {
+	                       long end_day;
+	                       Calendar calendar = Calendar.getInstance();
+	                       if (val >= 30)
+	                       {
+	                               while(val >= 30)
+	                               {
+	                                       if(calendar.get(Calendar.MONTH)== 11)
+	                                               calendar.roll(Calendar.YEAR, true);
+	                                       calendar.roll(Calendar.MONTH, true);
+	                                       val -= 30;
+	                               }
+	                       }
+	                       if (val < 30 && val > 0)
+	                       {
+	                               while(val > 0)
+	                               {
+	                                       if(calendar.get(Calendar.DATE)== 28 && calendar.get(Calendar.MONTH) == 1)
+	                                               calendar.roll(Calendar.MONTH, true);            
+	                                       if(calendar.get(Calendar.DATE)== 30)
+	                                       {
+	                                               if(calendar.get(Calendar.MONTH) == 11)
+	                                                       calendar.roll(Calendar.YEAR, true);
+	                                               calendar.roll(Calendar.MONTH, true);
+	                                       }
+	                                       calendar.roll(Calendar.DATE, true);
+	                                       val--;
+	                               }
+	                       }
+	                       end_day = calendar.getTimeInMillis();
+	                       if(process.equals("aio"))
+	                               _aio_endTime = end_day;
+	                       else if(process.equals("vip"))
+	                               _vip_endTime = end_day;
+	                       else
+	                       {
+	                               System.out.println("Process " + process + " no Known while try set end date.");
+	                               return;
+	                       }
+	                       Date dt = new Date(end_day);
+	                       System.out.println("" + process + " end time for player " + getName() + " is " + dt + ".");
+	               }
+	               else
+	               {
+	                       if(process.equals("aio"))
+	                               _aio_endTime = 0;
+	                       else if(process.equals("vip"))
+	                               _vip_endTime = 0;
+	                       else
+	                       {
+	                               System.out.println("Process " + process + " no Known while try set end date.");
+	                               return;
+	                       }
+	               }
+	       }
+	 
 	/**
 	 * Gets the offline start time.
 	 *

@@ -56,8 +56,8 @@ public class L2BossZone extends L2ZoneType
 	{
 		super(id);
 		_bossId = boss_id;
-		_playerAllowedReEntryTimes = new FastMap<>();
-		_playersAllowed = new L2FastList<>();
+		_playerAllowedReEntryTimes = new FastMap<Integer, Long>();
+		_playersAllowed = new L2FastList<Integer>();
 	}
 	
 	

@@ -805,11 +805,18 @@ public class L2Attackable extends L2NpcInstance
 									player.sendPacket(new SystemMessage(SystemMessageId.OVER_HIT));
 									exp += calculateOverhitExp(exp);
 								}
+								
 								if(player.isDonator())
 								{
 									exp = (long) (exp * Config.DONATOR_XPSP_RATE);
 									sp = (int) (sp * Config.DONATOR_XPSP_RATE);
 								}
+
+                                if (player.isVip() && Config.ALLOW_VIP_XPSP)
+                                {
+                                     exp *= Config.VIP_XP;
+                                                                       sp *= Config.VIP_SP;
+                                }
 							}
 
 							// Distribute the Exp and SP between the L2PcInstance and its L2Summon
@@ -827,7 +834,7 @@ public class L2Attackable extends L2NpcInstance
 						partyLvl = 0;
 
 						// Get all L2Character that can be rewarded in the party
-						List<L2PlayableInstance> rewardedMembers = new FastList<>();
+						List<L2PlayableInstance> rewardedMembers = new FastList<L2PlayableInstance>();
 
 						// Go through all L2PcInstance in the party
 						List<L2PcInstance> groupMembers;
@@ -1391,9 +1398,12 @@ public class L2Attackable extends L2NpcInstance
 				{
 					dropChance *= Config.DONATOR_ADENA_RATE;
 				}
+								
+				if(lastAttacker.isVip())
+				{
+					dropChance *= Config.VIP_ADENA_RATE;
+				}
 			}
-			
-			
 		}
 		else if(isSweep)
 		{
@@ -1417,6 +1427,11 @@ public class L2Attackable extends L2NpcInstance
 				{
 					dropChance *= Config.DONATOR_SPOIL_RATE;
 				}
+								
+				if(lastAttacker.isVip())
+				{
+					dropChance *= Config.VIP_SPOIL_RATE;
+				}	
 			}
 		}
 		else
@@ -1440,6 +1455,11 @@ public class L2Attackable extends L2NpcInstance
 				if(lastAttacker.isDonator())
 				{
 					dropChance *= Config.DONATOR_DROP_RATE;
+				}
+								
+				if(lastAttacker.isVip())
+				{
+					dropChance *= Config.VIP_DROP_RATE;
 				}
 			}
 		}
@@ -1698,12 +1718,17 @@ public class L2Attackable extends L2NpcInstance
 				else
 				{
 					dropChance *= Config.RATE_DROP_ADENA;
+					
 					if(lastAttacker.isDonator())
 					{
 						dropChance *= Config.DONATOR_ADENA_RATE;
 					}
-				}
-				
+										
+					if(lastAttacker.isVip())
+					{
+						dropChance *= Config.VIP_ADENA_RATE;
+					}	
+				}				
 			}
 			else
 			{
@@ -1722,9 +1747,15 @@ public class L2Attackable extends L2NpcInstance
 				else
 				{
 					dropChance *= Config.RATE_DROP_ITEMS;
+					
 					if(lastAttacker.isDonator())
 					{
 						dropChance *= Config.DONATOR_DROP_RATE;
+					}
+										
+					if(lastAttacker.isVip())
+					{
+						dropChance *= Config.VIP_DROP_RATE;
 					}
 				}
 			}
@@ -1905,7 +1936,7 @@ public class L2Attackable extends L2NpcInstance
 				// according to sh1ny, seeded mobs CAN be spoiled and swept.
 				if(isSpoil()/* && !isSeeded() */)
 				{
-					FastList<RewardItem> sweepList = new FastList<>();
+					FastList<RewardItem> sweepList = new FastList<RewardItem>();
 
 					for(L2DropData drop : cat.getAllDrops())
 					{
@@ -2796,7 +2827,7 @@ public class L2Attackable extends L2NpcInstance
 		// 3- Everything is correct, but it failed. The crystal scatters. A sound event is played. (10%)
 		// 4- Everything is correct, the crystal level up. A sound event is played. (32.5%)
 
-		List<L2PcInstance> players = new FastList<>();
+		List<L2PcInstance> players = new FastList<L2PcInstance>();
 
 		if(absorbType == L2NpcTemplate.AbsorbCrystalType.FULL_PARTY && killer.isInParty())
 		{
@@ -3232,7 +3263,7 @@ public class L2Attackable extends L2NpcInstance
 			count += diff;
 		}
 
-		FastList<RewardItem> harvested = new FastList<>();
+		FastList<RewardItem> harvested = new FastList<RewardItem>();
 
 		harvested.add(new RewardItem(L2Manor.getInstance().getCropType(_seedType), count * Config.RATE_DROP_MANOR));
 

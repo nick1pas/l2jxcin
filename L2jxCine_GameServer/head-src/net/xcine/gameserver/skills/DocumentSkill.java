@@ -48,12 +48,12 @@ final class DocumentSkill extends DocumentBase
 		public StatsSet[] enchsets1;
 		public StatsSet[] enchsets2;
 		public int currentLevel;
-		public List<L2Skill> skills = new FastList<>();
-		public List<L2Skill> currentSkills = new FastList<>();
+		public List<L2Skill> skills = new FastList<L2Skill>();
+		public List<L2Skill> currentSkills = new FastList<L2Skill>();
 	}
 
 	private Skill _currentSkill;
-	private List<L2Skill> _skillsInFile = new FastList<>();
+	private List<L2Skill> _skillsInFile = new FastList<L2Skill>();
 
 	DocumentSkill(File file)
 	{
@@ -380,7 +380,7 @@ final class DocumentSkill extends DocumentBase
 	private void makeSkills()
 	{
 		int count = 0;
-		_currentSkill.currentSkills = new FastList<>(_currentSkill.sets.length + _currentSkill.enchsets1.length + _currentSkill.enchsets2.length);
+		_currentSkill.currentSkills = new FastList<L2Skill>(_currentSkill.sets.length + _currentSkill.enchsets1.length + _currentSkill.enchsets2.length);
 
 		for(int i = 0; i < _currentSkill.sets.length; i++)
 		{

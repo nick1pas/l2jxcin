@@ -636,4 +636,6 @@ INSERT IGNORE INTO `admin_command_access_rights` VALUES
 
 -- Section: AIO
 ('admin_setaio','2'),
-('admin_removeaio','2');
+('admin_removeaio','2'),
+('admin_setvip','2'),
+('admin_removevip','2');

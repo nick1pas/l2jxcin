@@ -65,9 +65,9 @@ public class DayNightSpawnManager
 
 	private DayNightSpawnManager()
 	{
-		_dayCreatures = new FastMap<>();
-		_nightCreatures = new FastMap<>();
-		_bosses = new FastMap<>();
+		_dayCreatures = new FastMap<L2Spawn, L2NpcInstance>();
+		_nightCreatures = new FastMap<L2Spawn, L2NpcInstance>();
+		_bosses = new FastMap<L2Spawn, L2RaidBossInstance>();
 
 		_log.info("DayNightSpawnManager: Day/Night handler initialised");
 	}

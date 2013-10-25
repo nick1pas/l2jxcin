@@ -58,7 +58,7 @@ public class OlympiadStadiaManager
     public void addStadium(L2OlympiadStadiumZone arena)
     {
     	if (_olympiadStadias == null)
-    		_olympiadStadias = new FastList<>();
+    		_olympiadStadias = new FastList<L2OlympiadStadiumZone>();
     	
     	_olympiadStadias.add(arena);
     }

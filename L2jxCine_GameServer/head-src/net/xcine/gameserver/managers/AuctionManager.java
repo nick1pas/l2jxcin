@@ -34,7 +34,7 @@ import net.xcine.util.database.L2DatabaseFactory;
 public class AuctionManager
 {
 	protected static final Logger _log = Logger.getLogger(AuctionManager.class.getName());
-	private List<Auction> _auctions  = new FastList<>();
+	private List<Auction> _auctions  = new FastList<Auction>();
 	private static final String[] ITEM_INIT_DATA =
 	{
 			"(23, 0, 'NPC', 'NPC Clan', 'ClanHall', 23, 0, 'Onyx Hall', 1, 20000000, 0, 1164841200000)",

@@ -163,7 +163,7 @@ public final class L2Armor extends L2Item
 	@Override
 	public Func[] getStatFuncs(L2ItemInstance instance, L2Character player)
 	{
-		List<Func> funcs = new FastList<>();
+		List<Func> funcs = new FastList<Func>();
 		if(_funcTemplates != null)
 		{
 			for(FuncTemplate t : _funcTemplates)

@@ -152,7 +152,7 @@ public class Duel
 			_duelEndTime.add(Calendar.SECOND, 120);
 		}
 
-		_playerConditions = new FastList<>();
+		_playerConditions = new FastList<PlayerCondition>();
 
 		setFinished(false);
 
@@ -261,7 +261,7 @@ public class Duel
 		{
 			if(_debuffs == null)
 			{
-				_debuffs = new FastList<>();
+				_debuffs = new FastList<L2Effect>();
 			}
 
 			_debuffs.add(debuff);

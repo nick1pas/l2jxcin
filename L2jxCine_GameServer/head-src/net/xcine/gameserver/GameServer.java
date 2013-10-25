@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 
 import net.xcine.Config;
 import net.xcine.FService;
-import net.xcine.L2Frozen;
+import net.xcine.L2jxCine;
 import net.xcine.ServerType;
 import net.xcine.crypt.nProtect;
 import net.xcine.gameserver.ai.special.manager.AILoader;
@@ -71,9 +71,9 @@ import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SkillSpellbookTable;
 import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
-import net.xcine.gameserver.datatables.sql.TeleportLocationTable;
 import net.xcine.gameserver.datatables.xml.AugmentationData;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
+import net.xcine.gameserver.datatables.xml.TeleportLocationTable;
 import net.xcine.gameserver.datatables.xml.ZoneData;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.geo.geoeditorcon.GeoEditorListener;
@@ -81,7 +81,6 @@ import net.xcine.gameserver.geo.pathfinding.PathFinding;
 import net.xcine.gameserver.handler.AdminCommandHandler;
 import net.xcine.gameserver.handler.AutoAnnouncementHandler;
 import net.xcine.gameserver.handler.AutoChatHandler;
-import net.xcine.gameserver.handler.ChatHandler;
 import net.xcine.gameserver.handler.ItemHandler;
 import net.xcine.gameserver.handler.SkillHandler;
 import net.xcine.gameserver.handler.UserCommandHandler;
@@ -196,7 +195,7 @@ public class GameServer
 		Util.printSection("Team");
 		
 		// Print L2jfrozen's Logo
-		L2Frozen.info();
+		L2jxCine.info();
 		
 		// Load GameServer Configs
 		Config.load();
@@ -418,10 +417,9 @@ public class GameServer
 		GmListTable.getInstance();
 		
 		Util.printSection("Handlers");
-		AdminCommandHandler.getInstance();
-		ChatHandler.getInstance();
 		ItemHandler.getInstance();
 		SkillHandler.getInstance();
+		AdminCommandHandler.getInstance();
 		UserCommandHandler.getInstance();
 		VoicedCommandHandler.getInstance();
 		

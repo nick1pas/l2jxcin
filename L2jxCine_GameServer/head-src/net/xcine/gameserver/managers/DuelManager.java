@@ -52,7 +52,7 @@ public class DuelManager
 	private DuelManager()
 	{
 		_log.info("Initializing DuelManager");
-		_duels = new FastList<>();
+		_duels = new FastList<Duel>();
 	}
 
 	// =========================================================

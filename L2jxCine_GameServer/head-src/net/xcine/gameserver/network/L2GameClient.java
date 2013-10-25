@@ -99,7 +99,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 
 	private boolean _isAuthedGG;
 	private long _connectionStartTime;
-	private List<Integer> _charSlotMapping = new FastList<>();
+	private List<Integer> _charSlotMapping = new FastList<Integer>();
 
 	// Task
 	private ScheduledFuture<?> _guardCheckTask = null;
@@ -134,7 +134,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		_connectionStartTime = System.currentTimeMillis();
 		crypt = new GameCrypt();
 		_stats = new ClientStats();
-		_packetQueue = new ArrayBlockingQueue<>(net.xcine.netcore.Config.getInstance().CLIENT_PACKET_QUEUE_SIZE);
+		_packetQueue = new ArrayBlockingQueue<ReceivablePacket<L2GameClient>>(net.xcine.netcore.Config.getInstance().CLIENT_PACKET_QUEUE_SIZE);
 		
 		_guardCheckTask = nProtect.getInstance().startTask(this);
 		ThreadPoolManager.getInstance().scheduleGeneral(new Runnable() {

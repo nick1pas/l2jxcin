@@ -267,10 +267,10 @@ public class SevenSigns
 	 */
 	public SevenSigns()
 	{
-		_signsPlayerData = new FastMap<>();
-		_signsSealOwners = new FastMap<>();
-		_signsDuskSealTotals = new FastMap<>();
-		_signsDawnSealTotals = new FastMap<>();
+		_signsPlayerData = new FastMap<Integer, StatsSet>();
+		_signsSealOwners = new FastMap<Integer, Integer>();
+		_signsDuskSealTotals = new FastMap<Integer, Integer>();
+		_signsDawnSealTotals = new FastMap<Integer, Integer>();
 
 		try
 		{

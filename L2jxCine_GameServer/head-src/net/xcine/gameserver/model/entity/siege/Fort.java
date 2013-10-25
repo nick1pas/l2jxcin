@@ -49,8 +49,8 @@ public class Fort
 	// =========================================================
 	// Data Field
 	private int _fortId = 0;
-	private List<L2DoorInstance> _doors = new FastList<>();
-	private List<String> _doorDefault = new FastList<>();
+	private List<L2DoorInstance> _doors = new FastList<L2DoorInstance>();
+	private List<String> _doorDefault = new FastList<String>();
 	private String _name = "";
 	private int _ownerId = 0;
 	private L2Clan _fortOwner = null;

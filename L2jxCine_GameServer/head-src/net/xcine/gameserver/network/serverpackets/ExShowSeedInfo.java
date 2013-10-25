@@ -40,7 +40,7 @@ public class ExShowSeedInfo extends L2GameServerPacket
 		_seeds = seeds;
 		if(_seeds == null)
 		{
-			_seeds = new FastList<>();
+			_seeds = new FastList<SeedProduction>();
 		}
 	}
 

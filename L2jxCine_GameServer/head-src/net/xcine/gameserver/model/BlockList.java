@@ -28,10 +28,10 @@
  */
 package net.xcine.gameserver.model;
 
-import java.util.List;
 import java.util.Set;
 
 import javolution.util.FastSet;
+
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
@@ -47,12 +47,11 @@ public class BlockList
 	private Set<String> _blockSet;
 	private boolean _blockAll;
 	private L2PcInstance _owner;
-	private List<Integer> _blockList;
 	
 	public BlockList(L2PcInstance owner)
 	{
 		_owner = owner;
-		_blockSet = new FastSet<>();
+		_blockSet = new FastSet<String>();
 		_blockAll = false;
 	}
 
@@ -109,27 +108,6 @@ public class BlockList
 		return _blockSet;
 	}
 	
-	public static boolean isBlocked(L2PcInstance listOwner, L2PcInstance target)
-	{
-		BlockList blockList = listOwner.getBlockList();
-		return blockList.isBlockAll() || blockList.isInBlockList(target);
-	}
-	
-	public static boolean isBlocked(L2PcInstance listOwner, int targetId)
-	{
-		BlockList blockList = listOwner.getBlockList();
-		return blockList.isBlockAll() || blockList.isInBlockList(targetId);
-	}
-	
-	public boolean isInBlockList(L2PcInstance target)
-	{
-		return _blockList.contains(target.getObjectId());
-	}
-	
-	public boolean isInBlockList(int targetId)
-	{
-		return _blockList.contains(targetId);
-	}
 	/*
 	public static boolean isInBlockList(String ownerName, String targetName) throws Exception
 	{

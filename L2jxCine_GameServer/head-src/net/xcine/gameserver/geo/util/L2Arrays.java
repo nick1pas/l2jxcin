@@ -102,9 +102,9 @@ public final class L2Arrays
 			return L2Collections.emptyList();
 		
 		if(newSize <= 8)
-			return new CopyOnWriteArrayList<>(compact(array));
+			return new CopyOnWriteArrayList<T>(compact(array));
 
-		final List<T> result = new FastList<>(newSize);
+		final List<T> result = new FastList<T>(newSize);
 
 		for(T t : array)
 			if(t != null)
@@ -115,14 +115,14 @@ public final class L2Arrays
 
 	public static <T> Iterable<T> iterable(Object[] array)
 	{
-		return new NullFreeArrayIterable<>(array);
+		return new NullFreeArrayIterable<T>(array);
 	}
 
 	public static <T> Iterable<T> iterable(Object[] array, boolean allowNull)
 	{
 		if(allowNull)
-			return new ArrayIterable<>(array);
-		return new NullFreeArrayIterable<>(array);
+			return new ArrayIterable<T>(array);
+		return new NullFreeArrayIterable<T>(array);
 	}
 
 	private static class ArrayIterable<T> implements Iterable<T>
@@ -137,7 +137,7 @@ public final class L2Arrays
 		@Override
 		public Iterator<T> iterator()
 		{
-			return new ArrayIterator<>(_array);
+			return new ArrayIterator<T>(_array);
 		}
 	}
 
@@ -151,20 +151,20 @@ public final class L2Arrays
 		@Override
 		public Iterator<T> iterator()
 		{
-			return new NullFreeArrayIterator<>(_array);
+			return new NullFreeArrayIterator<T>(_array);
 		}
 	}
 
 	public static <T> Iterator<T> iterator(Object[] array)
 	{
-		return new NullFreeArrayIterator<>(array);
+		return new NullFreeArrayIterator<T>(array);
 	}
 
 	public static <T> Iterator<T> iterator(Object[] array, boolean allowNull)
 	{
 		if(allowNull)
-			return new ArrayIterator<>(array);
-		return new NullFreeArrayIterator<>(array);
+			return new ArrayIterator<T>(array);
+		return new NullFreeArrayIterator<T>(array);
 	}
 
 	private static class ArrayIterator<T> implements Iterator<T>

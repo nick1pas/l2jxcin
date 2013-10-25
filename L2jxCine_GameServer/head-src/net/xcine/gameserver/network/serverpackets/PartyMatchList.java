@@ -36,7 +36,7 @@ public class PartyMatchList extends L2GameServerPacket
 		_cha = player;
 		_loc = location;
 		_lim = limit;
-		_rooms = new FastList<>();
+		_rooms = new FastList<PartyMatchRoom>();
 	}
 
 	@Override

@@ -275,6 +275,7 @@ $MYG < ../sql/boxaccess.sql &> /dev/null
 $MYG < ../sql/boxes.sql &> /dev/null
 $MYG < ../sql/buff_templates.sql &> /dev/null
 $MYG < ../sql/castle.sql &> /dev/null
+$MYG < ../sql/crestnpc.sql &> /dev/null
 $MYG < ../sql/castle_door.sql &> /dev/null
 $MYG < ../sql/castle_doorupgrade.sql &> /dev/null
 $MYG < ../sql/castle_manor_procure.sql &> /dev/null
@@ -312,13 +313,11 @@ $MYG < ../sql/custom_etcitem.sql &> /dev/null
 $MYG < ../sql/custom_merchant_buylists.sql &> /dev/null
 $MYG < ../sql/custom_merchant_shopids.sql &> /dev/null
 $MYG < ../sql/custom_npc.sql &> /dev/null
-$MYG < ../sql/custom_teleport.sql&> /dev/null
 $MYG < ../sql/custom_weapon.sql &> /dev/null
 $MYG < ../sql/custom_notspawned.sql &> /dev/null
 $MYG < ../sql/dimensional_rift.sql &> /dev/null
 $MYG < ../sql/droplist.sql &> /dev/null
 $MYG < ../sql/enchant_skill_trees.sql &> /dev/null
-$MYG < ../sql/engrave.sql &> /dev/null
 $MYG < ../sql/etcitem.sql &> /dev/null
 $MYG < ../sql/fish.sql &> /dev/null
 $MYG < ../sql/fishing_skill_trees.sql &> /dev/null
@@ -360,7 +359,6 @@ $MYG < ../sql/skill_learn.sql &> /dev/null
 $MYG < ../sql/skill_spellbooks.sql &> /dev/null
 $MYG < ../sql/skill_trees.sql &> /dev/null
 $MYG < ../sql/spawnlist.sql &> /dev/null
-$MYG < ../sql/teleport.sql &> /dev/null
 $MYG < ../sql/topic.sql &> /dev/null
 $MYG < ../sql/tvt.sql &> /dev/null
 $MYG < ../sql/tvt_teams.sql &> /dev/null

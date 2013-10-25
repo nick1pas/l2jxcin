@@ -84,7 +84,7 @@ public class SkillHandler
 	
 	private SkillHandler()
 	{
-		_datatable = new TreeMap<>();
+		_datatable = new TreeMap<SkillType, ISkillHandler>();
 		registerSkillHandler(new Blow());
 		registerSkillHandler(new Pdam());
 		registerSkillHandler(new Mdam());

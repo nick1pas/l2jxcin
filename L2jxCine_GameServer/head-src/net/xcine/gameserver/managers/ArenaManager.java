@@ -55,7 +55,7 @@ public class ArenaManager
 	{
 		if(_arenas == null)
 		{
-			_arenas = new FastList<>();
+			_arenas = new FastList<L2ArenaZone>();
 		}
 
 		_arenas.add(arena);

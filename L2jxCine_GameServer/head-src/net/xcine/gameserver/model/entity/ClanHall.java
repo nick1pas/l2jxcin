@@ -57,10 +57,10 @@ public class ClanHall
 	private int _clanHallId;
 	
 	/** The _doors. */
-	private List<L2DoorInstance> _doors = new FastList<>();
+	private List<L2DoorInstance> _doors = new FastList<L2DoorInstance>();
 	
 	/** The _door default. */
-	private List<String> _doorDefault = new FastList<>();
+	private List<String> _doorDefault = new FastList<String>();
 	
 	/** The _name. */
 	private String _name;
@@ -420,7 +420,7 @@ public class ClanHall
 		_grade = Grade;
 		_paid = paid;
 		loadDoor();
-		_functions = new FastMap<>();
+		_functions = new FastMap<Integer, ClanHallFunction>();
 
 		if(ownerId != 0)
 		{

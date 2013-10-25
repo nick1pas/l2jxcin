@@ -31,7 +31,7 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
  */
 public class PartyMemberPosition extends L2GameServerPacket
 {
-	Map<Integer, Location> locations = new FastMap<>();
+	Map<Integer, Location> locations = new FastMap<Integer, Location>();
 
 	public PartyMemberPosition(L2Party party)
 	{

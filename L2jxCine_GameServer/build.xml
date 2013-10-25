@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="L2jxCine_GameServer" default="dist-local" basedir=".">
-	<description>
-        This script will build the L2J-Frozen server. Thanks for Using our Pack.
-        
-        This program is opensource   
-        
-    </description>
 
 	<property file="build.properties" />
 	<property name="src" location="head-src" />
@@ -37,6 +31,7 @@
 		<property name="build.dist.login.lib" location="${build.dist.login}/lib" />
 		<property name="build.dist.game" location="${build.dist}/gameserver" />
 		<property name="build.dist.game.lib" location="${build.dist.game}/lib" />
+
 	</target>
 
 	<path id="classpath">
@@ -56,10 +51,12 @@
 		<mkdir dir="${build.dist.game.lib}" />
 		
 	</target>
-
-
-	<target name="compile" depends="init" description="Compile the source.">
-		<javac srcdir="${src}" classpathref="classpath" destdir="${build.classes}" compiler="javac1.7" debug="true" debuglevel="lines,vars,source" includeantruntime="false" source="1.7" target="1.7" /> 
+	
+	<target name="compile" depends="version" description="Compile the source.">
+			<javac destdir="${build.classes}" includeantruntime="false" optimize="on" debug="on" source="1.6" target="1.6" encoding="utf-8" nowarn="off">
+				<src path="${src}" />
+				<classpath refid="classpath" />
+			</javac>
 	</target>
 
 
@@ -264,9 +261,9 @@
 		<exec dir="." executable="./subversion/svnversion" outputproperty="l2jfrozen.revision" failifexecutionfails="false">
 			<arg line="-n ." />
 		</exec>
-		
 	</target>
 
+	
 	<target name="dist-local" depends="prepare-local,prepare-final,export" description="Create distribution files and Zip one into 'build' folder">
 		<zip destfile="${build}/L2JFrozen_GameServer.zip" basedir="${build.dist}" update="true" />
 	</target>

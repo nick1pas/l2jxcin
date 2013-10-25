@@ -24,7 +24,7 @@ import java.util.StringTokenizer;
 import net.xcine.Config;
 import net.xcine.gameserver.controllers.TradeController;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.sql.TeleportLocationTable;
+import net.xcine.gameserver.datatables.xml.TeleportLocationTable;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.managers.SiegeManager;
 import net.xcine.gameserver.model.L2Clan;

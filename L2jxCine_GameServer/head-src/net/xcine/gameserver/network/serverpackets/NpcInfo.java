@@ -19,11 +19,15 @@
 package net.xcine.gameserver.network.serverpackets;
 
 import net.xcine.Config;
+import net.xcine.gameserver.datatables.sql.ClanTable;
+import net.xcine.gameserver.managers.TownManager;
 import net.xcine.gameserver.model.L2Character;
+import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.L2Summon;
 import net.xcine.gameserver.model.actor.instance.L2MonsterInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
+import net.xcine.gameserver.model.zone.type.L2TownZone;
 import net.xcine.gameserver.model.actor.instance.L2SummonInstance;
 
 /**
@@ -68,7 +72,11 @@ public class NpcInfo extends L2GameServerPacket
 	
 	/** The _title. */
 	private String _title = "";
-
+	int _clanCrest = 0;
+	int _allyCrest = 0;
+	int _allyId = 0;
+	int _clanId = 0;
+	
 	/**
 	 * Instantiates a new npc info.
 	 *
@@ -126,7 +134,33 @@ public class NpcInfo extends L2GameServerPacket
 
 			_title = t;
 		}
-
+		 
+			  if(Config.SHOW_NPC_CREST)
+			  {
+				 if(cha instanceof L2NpcInstance && cha.isInsideZone(L2Character.ZONE_PEACE) && cha.getCastle().getOwnerId() != 0)
+				 {
+					int _x,_y,_z;
+					_x = cha.getX();
+					_y = cha.getY();
+					_z = cha.getZ();
+					L2TownZone Town;
+					Town = TownManager.getInstance().getTown(_x, _y, _z);
+					if(Town != null)
+					{
+					   int townId = Town.getTownId();
+					   if(townId != 33 && townId != 22)
+					   {
+						  L2Clan clan;
+						  clan = ClanTable.getInstance().getClan(cha.getCastle().getOwnerId());
+						  _clanCrest = clan.getCrestId();
+						  _clanId = clan.getClanId();
+						  _allyCrest = clan.getAllyCrestId();
+						  _allyId = clan.getAllyId();
+					   }
+					}
+				 }
+			  }
+		
 		_x = _activeChar.getX();
 		_y = _activeChar.getY();
 		_z = _activeChar.getZ();
@@ -231,12 +265,22 @@ public class NpcInfo extends L2GameServerPacket
 		}
 		
 		writeD(_activeChar.getAbnormalEffect()); // C2
-		writeD(0000); // C2
-		writeD(0000); // C2
-		writeD(0000); // C2
-		writeD(0000); // C2
-		writeC(0000); // C2
-
+		if(Config.SHOW_NPC_CREST)
+		{
+		writeD(_clanId);
+		writeD(_clanCrest);
+		writeD(_allyId);
+		writeD(_allyCrest);
+		}
+		else
+		{
+		writeD(0000);
+		writeD(0000);
+		writeD(0000);
+		writeD(0000);
+		writeC(0000);
+		}
+			
 		writeC(0x00); // C3  team circle 1-blue, 2-red
 		writeF(_collisionRadius);
 		writeF(_collisionHeight);

@@ -82,6 +82,7 @@ public final class RequestGMCommand extends L2GameClientPacket
 			case 5: // player inventory
 			{
 				sendPacket(new GMViewItemList(player));
+				sendPacket(new GMViewHennaInfo(player));
 				break;
 			}
 			case 6: // player warehouse

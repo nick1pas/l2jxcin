@@ -43,7 +43,7 @@ public class ShortCuts
 	private static Logger _log = Logger.getLogger(ShortCuts.class.getName());
 
 	private L2PcInstance _owner;
-	private Map<Integer, L2ShortCut> _shortCuts = new TreeMap<>();
+	private Map<Integer, L2ShortCut> _shortCuts = new TreeMap<Integer, L2ShortCut>();
 
 	public ShortCuts(L2PcInstance owner)
 	{

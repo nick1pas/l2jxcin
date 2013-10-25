@@ -21,7 +21,7 @@ package net.xcine.gameserver.model.actor.instance;
 import java.util.StringTokenizer;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.sql.TeleportLocationTable;
+import net.xcine.gameserver.datatables.xml.TeleportLocationTable;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.managers.SiegeManager;

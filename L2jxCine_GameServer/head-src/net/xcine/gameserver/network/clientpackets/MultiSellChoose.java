@@ -136,7 +136,7 @@ public class MultiSellChoose extends L2GameClientPacket
 
                 // Generate a list of distinct ingredients and counts in order to check if the correct item-counts
                 // are possessed by the player
-                FastList<MultiSellIngredient> _ingredientsList = new FastList<>();
+                FastList<MultiSellIngredient> _ingredientsList = new FastList<MultiSellIngredient>();
                 boolean newIng = true;
 
                 for (MultiSellIngredient e : entry.getIngredients())
@@ -239,7 +239,7 @@ public class MultiSellChoose extends L2GameClientPacket
 
                 _ingredientsList.clear();
                 _ingredientsList = null;
-                FastList<L2Augmentation> augmentation = new FastList<>();
+                FastList<L2Augmentation> augmentation = new FastList<L2Augmentation>();
                 /** All ok, remove items and add final product */
 
                 for (MultiSellIngredient e : entry.getIngredients())

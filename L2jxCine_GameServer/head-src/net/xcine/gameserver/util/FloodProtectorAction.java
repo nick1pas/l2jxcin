@@ -74,7 +74,7 @@ public final class FloodProtectorAction
 		_config = config;
 	}
 
-	private Hashtable<String, AtomicInteger> received_commands_actions = new Hashtable<>();
+	private Hashtable<String, AtomicInteger> received_commands_actions = new Hashtable<String, AtomicInteger>();
 	
 	/**
 	 * Checks whether the request is flood protected or not.

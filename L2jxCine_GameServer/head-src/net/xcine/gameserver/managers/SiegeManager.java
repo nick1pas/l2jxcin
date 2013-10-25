@@ -230,12 +230,12 @@ public class SiegeManager
 			_teleport_to_siege_town = Boolean.parseBoolean(siegeSettings.getProperty("AllowTeleportToSiegeTown", "false"));
 			
 			// Siege spawns settings
-			_controlTowerSpawnList = new FastMap<>();
-			_artefactSpawnList = new FastMap<>();
+			_controlTowerSpawnList = new FastMap<Integer, FastList<SiegeSpawn>>();
+			_artefactSpawnList = new FastMap<Integer, FastList<SiegeSpawn>>();
 
 			for(Castle castle : CastleManager.getInstance().getCastles())
 			{
-				FastList<SiegeSpawn> _controlTowersSpawns = new FastList<>();
+				FastList<SiegeSpawn> _controlTowersSpawns = new FastList<SiegeSpawn>();
 
 				for(int i = 1; i < 0xFF; i++)
 				{
@@ -270,7 +270,7 @@ public class SiegeManager
 					}
 				}
 
-				FastList<SiegeSpawn> _artefactSpawns = new FastList<>();
+				FastList<SiegeSpawn> _artefactSpawns = new FastList<SiegeSpawn>();
 
 				for(int i = 1; i < 0xFF; i++)
 				{
@@ -406,7 +406,7 @@ public class SiegeManager
 
 	public final List<Siege> getSieges()
 	{
-		FastList<Siege> _sieges = new FastList<>();
+		FastList<Siege> _sieges = new FastList<Siege>();
 		for(Castle castle : CastleManager.getInstance().getCastles())
 		{
 			_sieges.add(castle.getSiege());

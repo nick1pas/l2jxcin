@@ -28,7 +28,7 @@ import net.xcine.gameserver.geo.util.ObjectPool;
 public final class BinaryNodeHeap
 {
 	protected final Node[] _list = new Node[800 + 1];
-	protected final L2FastSet<Node> _set = new L2FastSet<>();
+	protected final L2FastSet<Node> _set = new L2FastSet<Node>();
 	protected int _size = 0;
 
 	protected BinaryNodeHeap()

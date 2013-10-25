@@ -44,8 +44,8 @@ import net.xcine.gameserver.templates.StatsSet;
 final class DocumentItem extends DocumentBase
 {
 	private Item _currentItem = null;
-	private List<L2Item> _itemsInFile = new FastList<>();
-	private Map<Integer, Item> _itemData = new FastMap<>();
+	private List<L2Item> _itemsInFile = new FastList<L2Item>();
+	private Map<Integer, Item> _itemData = new FastMap<Integer, Item>();
 
 	/**
 	 * @param pItemData 

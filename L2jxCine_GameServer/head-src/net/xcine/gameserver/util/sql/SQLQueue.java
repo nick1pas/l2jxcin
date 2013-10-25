@@ -47,7 +47,7 @@ public class SQLQueue implements Runnable
 	private boolean _inShutdown;
 	private boolean _isRuning;
 	private SQLQueue() {
-		_query = new FastList<>();
+		_query = new FastList<SQLQuery>();
 		_task = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(this, 60000, 60000);
 		
 	}

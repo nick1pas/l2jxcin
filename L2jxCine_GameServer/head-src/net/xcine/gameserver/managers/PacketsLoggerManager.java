@@ -29,8 +29,8 @@ import net.xcine.logs.Log;
  */
 public class PacketsLoggerManager
 {
-	private List<String> _monitored_characters = new ArrayList<>();
-	private Hashtable<String, List<String>> _character_blocked_packets = new Hashtable<>();
+	private List<String> _monitored_characters = new ArrayList<String>();
+	private Hashtable<String, List<String>> _character_blocked_packets = new Hashtable<String, List<String>>();
 	
 	protected PacketsLoggerManager()
 	{
@@ -56,7 +56,7 @@ public class PacketsLoggerManager
 		
 		List<String> blocked_packets = _character_blocked_packets.get(character);
 		if(blocked_packets==null){
-			blocked_packets = new ArrayList<>();
+			blocked_packets = new ArrayList<String>();
 		}
 		
 		if(!blocked_packets.contains(packet)){

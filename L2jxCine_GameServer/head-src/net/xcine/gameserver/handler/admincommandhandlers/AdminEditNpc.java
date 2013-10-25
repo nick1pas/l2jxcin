@@ -972,7 +972,7 @@ public class AdminEditNpc implements IAdminCommandHandler
 				return null;
 		}
 
-		List<L2TradeList> tradeLists = new FastList<>();
+		List<L2TradeList> tradeLists = new FastList<L2TradeList>();
 		String[] lines = content.split("\n");
 
 		int pos = 0;

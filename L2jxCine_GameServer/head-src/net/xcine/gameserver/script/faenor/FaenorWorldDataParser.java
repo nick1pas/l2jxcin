@@ -69,7 +69,7 @@ public class FaenorWorldDataParser extends FaenorParser
 
 		public PetData()
 		{
-			statValues = new FastMap<>();
+			statValues = new FastMap<String, String>();
 		}
 	}
 

@@ -41,13 +41,13 @@ public class ClassDamageManager
 {
 	private static final Logger _log = Logger.getLogger(ClassDamageManager.class.getName());
 	
-	private static Hashtable<Integer, Double> damage_to_mage = new Hashtable<>();
-	private static Hashtable<Integer, Double> damage_to_fighter = new Hashtable<>();
-	private static Hashtable<Integer, Double> damage_by_mage = new Hashtable<>();
-	private static Hashtable<Integer, Double> damage_by_fighter = new Hashtable<>();
+	private static Hashtable<Integer, Double> damage_to_mage = new Hashtable<Integer, Double>();
+	private static Hashtable<Integer, Double> damage_to_fighter = new Hashtable<Integer, Double>();
+	private static Hashtable<Integer, Double> damage_by_mage = new Hashtable<Integer, Double>();
+	private static Hashtable<Integer, Double> damage_by_fighter = new Hashtable<Integer, Double>();
 
-	private static Hashtable<Integer, String> id_to_name = new Hashtable<>();
-	private static Hashtable<String, Integer> name_to_id = new Hashtable<>();
+	private static Hashtable<Integer, String> id_to_name = new Hashtable<Integer, String>();
+	private static Hashtable<String, Integer> name_to_id = new Hashtable<String, Integer>();
 	
 	public static void loadConfig()
 	{

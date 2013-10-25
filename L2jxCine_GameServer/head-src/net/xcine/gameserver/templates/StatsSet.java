@@ -33,7 +33,7 @@ import net.xcine.Config;
 public final class StatsSet
 {
 
-	private final Map<String, Object> _set = new FastMap<>();
+	private final Map<String, Object> _set = new FastMap<String, Object>();
 
 	/**
 	 * Returns the set of values

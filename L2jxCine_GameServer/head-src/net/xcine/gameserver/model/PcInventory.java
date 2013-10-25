@@ -102,7 +102,7 @@ public class PcInventory extends Inventory
 
 	public L2ItemInstance[] getUniqueItems(boolean allowAdena, boolean allowAncientAdena, boolean onlyAvailable, boolean allowEquipped)
 	{
-		List<L2ItemInstance> list = new FastList<>();
+		List<L2ItemInstance> list = new FastList<L2ItemInstance>();
 
 		for(L2ItemInstance item : _items)
 		{
@@ -152,7 +152,7 @@ public class PcInventory extends Inventory
 
 	public L2ItemInstance[] getUniqueItemsByEnchantLevel(boolean allowAdena, boolean allowAncientAdena, boolean onlyAvailable, boolean allowEquipped)
 	{
-		List<L2ItemInstance> list = new FastList<>();
+		List<L2ItemInstance> list = new FastList<L2ItemInstance>();
 
 		for(L2ItemInstance item : _items)
 		{
@@ -191,7 +191,7 @@ public class PcInventory extends Inventory
 	 */
 	public L2ItemInstance[] getAllItemsByItemId(int itemId)
 	{
-		List<L2ItemInstance> list = new FastList<>();
+		List<L2ItemInstance> list = new FastList<L2ItemInstance>();
 
 		for(L2ItemInstance item : _items)
 		{
@@ -213,7 +213,7 @@ public class PcInventory extends Inventory
 	 */
 	public L2ItemInstance[] getAllItemsByItemId(int itemId, int enchantment)
 	{
-		List<L2ItemInstance> list = new FastList<>();
+		List<L2ItemInstance> list = new FastList<L2ItemInstance>();
 
 		for(L2ItemInstance item : _items)
 		{
@@ -234,7 +234,7 @@ public class PcInventory extends Inventory
 	 */
 	public L2ItemInstance[] getAvailableItems(boolean allowAdena)
 	{
-		List<L2ItemInstance> list = new FastList<>();
+		List<L2ItemInstance> list = new FastList<L2ItemInstance>();
 
 		for(L2ItemInstance item : _items)
 			if(item != null && item.isAvailable(getOwner(), allowAdena, false))
@@ -252,7 +252,7 @@ public class PcInventory extends Inventory
 	 */
 	public L2ItemInstance[] getAugmentedItems()
 	{
-		List<L2ItemInstance> list = new FastList<>();
+		List<L2ItemInstance> list = new FastList<L2ItemInstance>();
 
 		for(L2ItemInstance item : _items)
 			if(item != null && item.isAugmented())
@@ -271,7 +271,7 @@ public class PcInventory extends Inventory
 	 */
 	public TradeList.TradeItem[] getAvailableItems(TradeList tradeList)
 	{
-		List<TradeList.TradeItem> list = new FastList<>();
+		List<TradeList.TradeItem> list = new FastList<TradeList.TradeItem>();
 
 		for(L2ItemInstance item : _items)
 			if(item.isAvailable(getOwner(), false, false))

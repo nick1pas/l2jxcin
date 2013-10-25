@@ -106,7 +106,7 @@ public class L2Spawn
 	private int _instanceId = 0;
 
 	private L2NpcInstance _lastSpawn;
-	private static List<SpawnListener> _spawnListeners = new FastList<>();
+	private static List<SpawnListener> _spawnListeners = new FastList<SpawnListener>();
 
 	/** The task launching the function doSpawn() */
 	class SpawnTask implements Runnable

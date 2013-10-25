@@ -48,7 +48,7 @@ public class BoatManager
 
 	// =========================================================
 	// Data Field
-	private Map<Integer, L2BoatInstance> _staticItems = new FastMap<>();
+	private Map<Integer, L2BoatInstance> _staticItems = new FastMap<Integer, L2BoatInstance>();
 
 	public BoatManager()
 	{
@@ -254,7 +254,7 @@ public class BoatManager
 	{
 		if(_staticItems == null)
 		{
-			_staticItems = new FastMap<>();
+			_staticItems = new FastMap<Integer, L2BoatInstance>();
 		}
 		return _staticItems.get(boatId);
 	}

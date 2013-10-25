@@ -457,7 +457,7 @@ public abstract class L2Item
 	{
 		if(_funcTemplates == null)
 			return _emptyFunctionSet;
-		List<Func> funcs = new FastList<>();
+		List<Func> funcs = new FastList<Func>();
 		for(FuncTemplate t : _funcTemplates)
 		{
 			Env env = new Env();
@@ -486,7 +486,7 @@ public abstract class L2Item
 	{
 		if(_effectTemplates == null)
 			return _emptyEffectSet;
-		List<L2Effect> effects = new FastList<>();
+		List<L2Effect> effects = new FastList<L2Effect>();
 		for(EffectTemplate et : _effectTemplates)
 		{
 			Env env = new Env();
@@ -515,7 +515,7 @@ public abstract class L2Item
 	{
 		if(_skills == null)
 			return _emptyEffectSet;
-		List<L2Effect> effects = new FastList<>();
+		List<L2Effect> effects = new FastList<L2Effect>();
 
 		for(L2Skill skill : _skills)
 		{

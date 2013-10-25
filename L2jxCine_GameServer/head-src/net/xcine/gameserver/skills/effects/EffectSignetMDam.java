@@ -113,7 +113,7 @@ public final class EffectSignetMDam extends L2Effect
 		sps = caster.checkSps();
 		bss = caster.checkBss();
 		
-		FastList<L2Character> targets = new FastList<>();
+		FastList<L2Character> targets = new FastList<L2Character>();
 
 		for(L2Character cha : _actor.getKnownList().getKnownCharactersInRadius(getSkill().getSkillRadius()))
 		{

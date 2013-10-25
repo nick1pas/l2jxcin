@@ -99,7 +99,7 @@ public final class PetitionManager
 		private PetitionState _state = PetitionState.Pending;
 		private String _content;
 
-		private List<CreatureSay> _messageLogger = new FastList<>();
+		private List<CreatureSay> _messageLogger = new FastList<CreatureSay>();
 
 		private L2PcInstance _petitioner;
 		private L2PcInstance _responder;
@@ -244,8 +244,8 @@ public final class PetitionManager
 
 	private PetitionManager()
 	{
-		_pendingPetitions = new FastMap<>();
-		_completedPetitions = new FastMap<>();
+		_pendingPetitions = new FastMap<Integer, Petition>();
+		_completedPetitions = new FastMap<Integer, Petition>();
 	}
 
 	public void clearCompletedPetitions()

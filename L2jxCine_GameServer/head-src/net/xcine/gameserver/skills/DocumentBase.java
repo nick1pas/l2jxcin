@@ -95,7 +95,7 @@ abstract class DocumentBase
 	DocumentBase(File pFile)
 	{
 		_file = pFile;
-		_tables = new FastMap<>();
+		_tables = new FastMap<String, String[]>();
 	}
 
 	Document parse()
@@ -142,7 +142,7 @@ abstract class DocumentBase
 
 	protected void resetTable()
 	{
-		_tables = new FastMap<>();
+		_tables = new FastMap<String, String[]>();
 	}
 
 	protected void setTable(String name, String[] table)
@@ -621,7 +621,7 @@ abstract class DocumentBase
 			else if ("class_id_restriction".equalsIgnoreCase(a.getNodeName()))
 			{
 				StringTokenizer st = new StringTokenizer(a.getNodeValue(), ",");
-				ArrayList<Integer> array = new ArrayList<>(st.countTokens());
+				ArrayList<Integer> array = new ArrayList<Integer>(st.countTokens());
 				while (st.hasMoreTokens())
 				{
 					String item = st.nextToken().trim();
@@ -672,7 +672,7 @@ abstract class DocumentBase
 			}
 			else if("class_id_restriction".equalsIgnoreCase(a.getNodeName()))
 			{
-				FastList<Integer> array = new FastList<>();
+				FastList<Integer> array = new FastList<Integer>();
 				StringTokenizer st = new StringTokenizer(a.getNodeValue(), ",");
 				while(st.hasMoreTokens())
 				{
@@ -683,7 +683,7 @@ abstract class DocumentBase
 			}
 			else if("race_id".equalsIgnoreCase(a.getNodeName()))
 			{
-				FastList<Integer> array = new FastList<>();
+				FastList<Integer> array = new FastList<Integer>();
 				StringTokenizer st = new StringTokenizer(a.getNodeValue(), ",");
 				while(st.hasMoreTokens())
 				{
@@ -694,7 +694,7 @@ abstract class DocumentBase
 			}
 			else if("pvp".equalsIgnoreCase(a.getNodeName()))
 			{
-				FastList<Integer> array = new FastList<>();
+				FastList<Integer> array = new FastList<Integer>();
 				StringTokenizer st = new StringTokenizer(a.getNodeValue(), ",");
 				while(st.hasMoreTokens())
 				{
@@ -846,7 +846,7 @@ abstract class DocumentBase
 			throw new IllegalArgumentException("Table name must start with #");
 
 		StringTokenizer data = new StringTokenizer(n.getFirstChild().getNodeValue());
-		List<String> array = new FastList<>();
+		List<String> array = new FastList<String>();
 		while(data.hasMoreTokens())
 		{
 			array.add(data.nextToken());

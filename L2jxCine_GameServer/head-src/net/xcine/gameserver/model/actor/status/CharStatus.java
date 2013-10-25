@@ -702,7 +702,7 @@ public class CharStatus
 	{
 		if(_StatusListener == null)
 		{
-			_StatusListener = new CopyOnWriteArraySet<>();
+			_StatusListener = new CopyOnWriteArraySet<L2Character>();
 		}
 
 		return _StatusListener;

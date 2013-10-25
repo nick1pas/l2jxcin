@@ -1946,7 +1946,7 @@ public class L2NpcInstance extends L2Character
 			
 			sb.append("<a action=\"bypass -h npc_").append(getObjectId()).append("_Quest ").append(q.getName()).append("\">[");
 		
-			final QuestState qs = player.getQuestState(q.getName());
+			final QuestState qs = player.getQuestState(q.getScriptName());
 			
 			if ((qs == null) 
 				|| qs.getState().equals(State.ACTIVE))
@@ -2095,7 +2095,7 @@ public class L2NpcInstance extends L2Character
 	public void showQuestWindow(L2PcInstance player)
 	{
 		// collect awaiting quests and start points
-		List<Quest> options = new FastList<>();
+		List<Quest> options = new FastList<Quest>();
 		
 		QuestState[] awaits = player.getQuestsForTalk(getTemplate().npcId);
 		Quest[] starts = getTemplate().getEventQuests(Quest.QuestEventType.QUEST_START);

@@ -56,7 +56,11 @@ public class Pdam implements ISkillHandler
 {
 	// all the items ids that this handler knowns
 	private static Logger _log = Logger.getLogger(Pdam.class.getName());
-
+	
+	/*
+	 * (non-Javadoc)
+	 * @see net.xcine.gameserver.handler.IItemHandler#useItem(net.xcine.gameserver.model.L2PcInstance, net.xcine.gameserver.model.L2ItemInstance)
+	 */
 	private static final SkillType[] SKILL_IDS =
 	{
 		SkillType.PDAM,
@@ -64,6 +68,10 @@ public class Pdam implements ISkillHandler
 	/* , SkillType.CHARGEDAM */
 	};
 	
+	/*
+	 * (non-Javadoc)
+	 * @see net.xcine.gameserver.handler.IItemHandler#useItem(net.xcine.gameserver.model.L2PcInstance, net.xcine.gameserver.model.L2ItemInstance)
+	 */
 	@Override
 	public void useSkill(L2Character activeChar, L2Skill skill, L2Object[] targets)
 	{
@@ -76,7 +84,7 @@ public class Pdam implements ISkillHandler
 			_log.fine("Begin Skill processing in Pdam.java " + skill.getSkillType());
 		
 		// Calculate targets based on vegeance
-		List<L2Object> target_s = new ArrayList<>();
+		List<L2Object> target_s = new ArrayList<L2Object>();
 		
 		for (L2Object _target : targets)
 		{

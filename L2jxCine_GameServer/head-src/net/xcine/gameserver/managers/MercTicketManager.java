@@ -55,7 +55,7 @@ public class MercTicketManager
 
 	// =========================================================
 	// Data Field
-	private List<L2ItemInstance> _droppedTickets = new FastList<>(); 
+	private List<L2ItemInstance> _droppedTickets = new FastList<L2ItemInstance>(); 
 
 		
 	public static final MercTicketManager getInstance()

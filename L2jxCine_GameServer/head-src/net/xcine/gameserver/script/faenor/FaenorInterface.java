@@ -168,7 +168,7 @@ public class FaenorInterface implements EngineInterface
 		L2NpcTemplate npc = npcTable.getTemplate(npcID);
 		if(npc == null)
 			return null;
-		List<L2DropData> questDrops = new FastList<>();
+		List<L2DropData> questDrops = new FastList<L2DropData>();
 		if(npc.getDropData() != null)
 		{
 			for(L2DropCategory cat : npc.getDropData())

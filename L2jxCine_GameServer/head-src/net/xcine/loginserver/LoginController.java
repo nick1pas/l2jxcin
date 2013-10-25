@@ -105,7 +105,7 @@ public class LoginController
 	private final static int LOGIN_TIMEOUT = 60 * 1000;
 
 	/** Clients that are on the LS but arent assocated with a account yet */
-	protected FastList<L2LoginClient> _clients = new FastList<>();
+	protected FastList<L2LoginClient> _clients = new FastList<L2LoginClient>();
 
 	/** Authed Clients on LoginServer */
 	protected FastMap<String, L2LoginClient> _loginServerClients = new FastMap<String, L2LoginClient>().shared();
@@ -137,7 +137,7 @@ public class LoginController
 	{
 		Util.printSection("LoginController");
 
-		_hackProtection = new FastMap<>();
+		_hackProtection = new FastMap<InetAddress, FailedLoginAttempt>();
 
 		_keyPairs = new ScrambledKeyPair[10];
 		KeyPairGenerator keygen = null;

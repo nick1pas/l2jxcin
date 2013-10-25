@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 
 import net.xcine.Config;
 import net.xcine.FService;
-import net.xcine.L2Frozen;
+import net.xcine.L2jxCine;
 import net.xcine.ServerType;
 import net.xcine.gameserver.datatables.GameServerTable;
 import net.xcine.netcore.SelectorConfig;
@@ -113,7 +113,7 @@ public class L2LoginServer
 
 		// Team info
 		Util.printSection("Team");
-		L2Frozen.info();
+		L2jxCine.info();
 
 		// Load LoginServer Configs
 		Config.load();
@@ -213,7 +213,7 @@ public class L2LoginServer
 		final SelectorHelper sh = new SelectorHelper();
 		try
 		{
-			_selectorThread = new SelectorThread<>(sc, sh, lph, sh, sh);
+			_selectorThread = new SelectorThread<L2LoginClient>(sc, sh, lph, sh, sh);
 		}
 		catch(IOException e)
 		{

@@ -1070,7 +1070,7 @@ public class AdminEditChar implements IAdminCommandHandler
 	{
 		Collection<L2PcInstance> allPlayers_with_offlines = L2World.getInstance().getAllPlayers();
 		
-		List<L2PcInstance> online_players_list = new ArrayList<>();
+		List<L2PcInstance> online_players_list = new ArrayList<L2PcInstance>();
 		
 		for (L2PcInstance actual_player : allPlayers_with_offlines)
 			if (actual_player != null && actual_player.isOnline() == 1 && !actual_player.isOffline())
@@ -1408,11 +1408,11 @@ public class AdminEditChar implements IAdminCommandHandler
 	{
 		Collection<L2PcInstance> allPlayers = L2World.getInstance().getAllPlayers();
 		L2PcInstance[] players = allPlayers.toArray(new L2PcInstance[allPlayers.size()]);
-		Map<String, List<L2PcInstance>> ipMap = new HashMap<>();
+		Map<String, List<L2PcInstance>> ipMap = new HashMap<String, List<L2PcInstance>>();
 		
 		String ip = "0.0.0.0";
 		
-		final Map<String, Integer> dualboxIPs = new HashMap<>();
+		final Map<String, Integer> dualboxIPs = new HashMap<String, Integer>();
 		
 		for (L2PcInstance player : players)
 		{
@@ -1445,7 +1445,7 @@ public class AdminEditChar implements IAdminCommandHandler
 			}
 		}
 		
-		List<String> keys = new ArrayList<>(dualboxIPs.keySet());
+		List<String> keys = new ArrayList<String>(dualboxIPs.keySet());
 		Collections.sort(keys, new Comparator<String>()
 		{
 			@Override

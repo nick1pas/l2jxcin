@@ -66,8 +66,8 @@ public final class TaskManager
 			"INSERT INTO global_tasks (task,type,last_activation,param1,param2,param3) VALUES(?,?,?,?,?,?)"
 	};
 
-	private final FastMap<Integer, Task> _tasks = new FastMap<>();
-	protected final FastList<ExecutedTask> _currentTasks = new FastList<>();
+	private final FastMap<Integer, Task> _tasks = new FastMap<Integer, Task>();
+	protected final FastList<ExecutedTask> _currentTasks = new FastList<ExecutedTask>();
 
 	public class ExecutedTask implements Runnable
 	{

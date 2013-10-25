@@ -44,7 +44,7 @@ public class L2TradeList
 
 	public L2TradeList(int listId)
 	{
-		_items = new FastList<>();
+		_items = new FastList<L2ItemInstance>();
 		_listId = listId;
 		_confirmed = false;
 	}

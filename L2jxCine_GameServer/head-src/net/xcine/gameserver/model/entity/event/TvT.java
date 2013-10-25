@@ -102,28 +102,28 @@ public class TvT implements EventTask
 	private static boolean _teamEvent = true; //TODO to be integrated
 	
 	/** The _players. */
-	public static Vector<L2PcInstance> _players = new Vector<>();
+	public static Vector<L2PcInstance> _players = new Vector<L2PcInstance>();
 	
 	/** The _top team. */
 	private static String _topTeam = new String();
 	
 	/** The _players shuffle. */
-	public static Vector<L2PcInstance> _playersShuffle = new Vector<>();
+	public static Vector<L2PcInstance> _playersShuffle = new Vector<L2PcInstance>();
 
 	/** The _save player teams. */
-	public static Vector<String> _teams = new Vector<>(),
-								_savePlayers = new Vector<>(),
-								_savePlayerTeams = new Vector<>();
+	public static Vector<String> _teams = new Vector<String>(),
+								_savePlayers = new Vector<String>(),
+								_savePlayerTeams = new Vector<String>();
 	
 	/** The _teams z. */
-	public static Vector<Integer> _teamPlayersCount = new Vector<>(),
-								_teamColors = new Vector<>(),
-								_teamsX = new Vector<>(),
-								_teamsY = new Vector<>(),
-								_teamsZ = new Vector<>();
+	public static Vector<Integer> _teamPlayersCount = new Vector<Integer>(),
+								_teamColors = new Vector<Integer>(),
+								_teamsX = new Vector<Integer>(),
+								_teamsY = new Vector<Integer>(),
+								_teamsZ = new Vector<Integer>();
 
 	/** The _team points count. */
-	public static Vector<Integer> _teamPointsCount = new Vector<>();
+	public static Vector<Integer> _teamPointsCount = new Vector<Integer>();
 
 	/** The _top kills. */
 	public static int  _topKills = 0;
@@ -1423,7 +1423,7 @@ public class TvT implements EventTask
 		}
 		else if(Config.TVT_EVEN_TEAMS.equals("SHUFFLE"))
 		{
-			Vector<L2PcInstance> playersShuffleTemp = new Vector<>();
+			Vector<L2PcInstance> playersShuffleTemp = new Vector<L2PcInstance>();
 			int loopCount = 0;
 
 			loopCount = _playersShuffle.size();
@@ -1551,7 +1551,7 @@ public class TvT implements EventTask
 					countBefore = teamPlayerCount;
 			}
 
-			Vector<String> joinableTeams = new Vector<>();
+			Vector<String> joinableTeams = new Vector<String>();
 
 			for(String team : _teams)
 			{
@@ -1714,19 +1714,19 @@ public class TvT implements EventTask
 		_eventName = new String();
 		_eventDesc = new String();
 		_joiningLocationName = new String();
-		_savePlayers = new Vector<>();
-		_players = new Vector<>();
+		_savePlayers = new Vector<String>();
+		_players = new Vector<L2PcInstance>();
 		
 		_topTeam = new String();
-		_teams = new Vector<>();
-		_savePlayerTeams = new Vector<>();
-		_playersShuffle = new Vector<>();
-		_teamPlayersCount = new Vector<>();
-		_teamPointsCount = new Vector<>();
-		_teamColors = new Vector<>();
-		_teamsX = new Vector<>();
-		_teamsY = new Vector<>();
-		_teamsZ = new Vector<>();
+		_teams = new Vector<String>();
+		_savePlayerTeams = new Vector<String>();
+		_playersShuffle = new Vector<L2PcInstance>();
+		_teamPlayersCount = new Vector<Integer>();
+		_teamPointsCount = new Vector<Integer>();
+		_teamColors = new Vector<Integer>();
+		_teamsX = new Vector<Integer>();
+		_teamsY = new Vector<Integer>();
+		_teamsZ = new Vector<Integer>();
 		
 		_joining = false;
 		_teleport = false;
@@ -2122,13 +2122,13 @@ public class TvT implements EventTask
 
 		_topKills = 0;
 		_topTeam = new String();
-		_players = new Vector<>();
-		_playersShuffle = new Vector<>();
-		_savePlayers = new Vector<>();
-		_savePlayerTeams = new Vector<>();
+		_players = new Vector<L2PcInstance>();
+		_playersShuffle = new Vector<L2PcInstance>();
+		_savePlayers = new Vector<String>();
+		_savePlayerTeams = new Vector<String>();
 		
-		_teamPointsCount = new Vector<>();
-		_teamPlayersCount = new Vector<>();
+		_teamPointsCount = new Vector<Integer>();
+		_teamPlayersCount = new Vector<Integer>();
 		
 		cleanLocalEventInfo();
 		

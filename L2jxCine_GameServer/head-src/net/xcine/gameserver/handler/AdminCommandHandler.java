@@ -93,6 +93,7 @@ import net.xcine.gameserver.handler.admincommandhandlers.AdminUnblockIp;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminVIPEngine;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminWho;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminZone;
+import net.xcine.gameserver.handler.admincommandhandlers.AdminVip;
 
 /**
  * This class ...
@@ -117,7 +118,7 @@ public class AdminCommandHandler
 	
 	private AdminCommandHandler()
 	{
-		_datatable = new FastMap<>();
+		_datatable = new FastMap<String, IAdminCommandHandler>();
 		registerAdminCommandHandler(new AdminAdmin());
 		registerAdminCommandHandler(new AdminInvul());
 		registerAdminCommandHandler(new AdminDelete());
@@ -184,6 +185,7 @@ public class AdminCommandHandler
 		registerAdminCommandHandler(new AdminNoble());
 		registerAdminCommandHandler(new AdminBuffs());
 		registerAdminCommandHandler(new AdminAio());
+		registerAdminCommandHandler(new AdminVip());
 		registerAdminCommandHandler(new AdminCharSupervision());
 		registerAdminCommandHandler(new AdminWho()); // L2OFF command
 		// ATTENTION: adding new command handlers, you have to change the

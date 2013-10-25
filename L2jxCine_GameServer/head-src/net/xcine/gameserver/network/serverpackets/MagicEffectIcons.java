@@ -46,8 +46,8 @@ public class MagicEffectIcons extends L2GameServerPacket
 	
 	public MagicEffectIcons()
 	{
-		_effects = new FastList<>();
-		_debuffs = new FastList<>();
+		_effects = new FastList<Effect>();
+		_debuffs = new FastList<Effect>();
 	}
 	
 	public void addEffect(int skillId, int level, int duration, boolean debuff)

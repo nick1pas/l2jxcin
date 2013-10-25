@@ -29,8 +29,8 @@ public class MultiSellEntry
 {
 	private int _entryId;
 
-	private List<MultiSellIngredient> _products = new FastList<>();
-	private List<MultiSellIngredient> _ingredients = new FastList<>();
+	private List<MultiSellIngredient> _products = new FastList<MultiSellIngredient>();
+	private List<MultiSellIngredient> _ingredients = new FastList<MultiSellIngredient>();
 
 	/**
 	 * @param entryId The entryId to set.

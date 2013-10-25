@@ -61,7 +61,7 @@ public class CursedWeaponsManager
 {
 	private static final Logger _log = Logger.getLogger(CursedWeaponsManager.class.getName());
 	
-	private static final Map<Integer, CursedWeapon> _cursedWeapons = new FastMap<>();
+	private static final Map<Integer, CursedWeapon> _cursedWeapons = new FastMap<Integer, CursedWeapon>();
 	
 	public static final CursedWeaponsManager getInstance()
 	{

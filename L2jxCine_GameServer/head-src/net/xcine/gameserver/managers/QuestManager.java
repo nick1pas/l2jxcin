@@ -31,7 +31,7 @@ import net.xcine.gameserver.scripting.ScriptManager;
 public class QuestManager extends ScriptManager<Quest>
 {
 	protected static final Logger _log = Logger.getLogger(QuestManager.class.getName());
-	private Map<String, Quest> _quests = new FastMap<>();
+	private Map<String, Quest> _quests = new FastMap<String, Quest>();
 	private static QuestManager _instance;
 
 	public static QuestManager getInstance()
@@ -134,7 +134,7 @@ public class QuestManager extends ScriptManager<Quest>
 	{
 		if(_quests == null)
 		{
-			_quests = new FastMap<>();
+			_quests = new FastMap<String, Quest>();
 		}
 
 		return (FastMap<String, Quest>) _quests;

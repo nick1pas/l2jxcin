@@ -101,9 +101,9 @@ public class EnterWorld extends L2GameClientPacket
 {
 	private static Logger _log = Logger.getLogger(EnterWorld.class.getName());
 
-	private final SimpleDateFormat fmt = new SimpleDateFormat("H:mm.");
+	private static final SimpleDateFormat fmt = new SimpleDateFormat("HH:mm.");
 	private long _daysleft;
-	SimpleDateFormat df = new SimpleDateFormat("dd MM yyyy");
+	SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	
 	public TaskPriority getPriority()
 	{
@@ -280,9 +280,12 @@ public class EnterWorld extends L2GameClientPacket
 		// Welcome to Lineage II
 		sendPacket(new SystemMessage(SystemMessageId.WELCOME_TO_LINEAGE));
 		
-		// Credits to L2jfrozen
-		activeChar.sendMessage("This server uses L2JFrozen, a project founded by L2Chef and");
-		activeChar.sendMessage("developed by the L2JFrozen Dev Team at l2jfrozen.com");
+		// Credits to L2JxCine
+		if (activeChar.getLevel() == 1)
+		{	
+			activeChar.sendMessage("This server uses L2JxCine");
+			activeChar.sendMessage("www.L2JxCine.com");
+   	    }
 
 		SevenSigns.getInstance().sendCurrentPeriodMsg(activeChar);
 		Announcements.getInstance().showAnnouncements(activeChar);
@@ -406,7 +409,6 @@ public class EnterWorld extends L2GameClientPacket
 		}
 
 		RegionBBSManager.getInstance().changeCommunityBoard();
-		CustomWorldHandler.getInstance().enterWorld(activeChar);
 
 		if (TvT._savePlayers.contains(activeChar.getName()))
 			TvT.addDisconnectedPlayer(activeChar);
@@ -666,8 +668,17 @@ public class EnterWorld extends L2GameClientPacket
 		if (activeChar.isAio())
 			onEnterAio(activeChar);
 
+		if(Config.ALLOW_VIP_NCOLOR && activeChar.isVip())
+			activeChar.getAppearance().setNameColor(Config.VIP_NCOLOR);
+			 
+		if(Config.ALLOW_VIP_TCOLOR && activeChar.isVip())
+			activeChar.getAppearance().setTitleColor(Config.VIP_TCOLOR);
+			
+		if(activeChar.isVip())
+			onEnterVip(activeChar);
+			
 		activeChar.updateNameTitleColor();
-
+			
 		sendPacket(new UserInfo(activeChar));
 		sendPacket(new HennaInfo(activeChar));
 		sendPacket(new FriendList(activeChar));
@@ -749,7 +760,33 @@ public class EnterWorld extends L2GameClientPacket
 				partner.sendMessage("Your partner has logged in");
 		}
 	}
-
+	 
+	       private void onEnterVip(L2PcInstance activeChar)
+	       {
+	               long curDay = Calendar.getInstance().getTimeInMillis();
+	               long endDay = activeChar.getVipEndTime();
+	               if(curDay > endDay)
+	               {
+	                       activeChar.setVip(false);
+	                       activeChar.setVipEndTime(0);
+	                       activeChar.sendMessage("[Vip System]: Removed your Vip stats... period ends ");
+	               }
+	               else
+	               {
+	                       Date dt = new Date(endDay);
+	                       _daysleft = (endDay - curDay) / 86400000;
+	                       if(_daysleft > 30)
+	                               activeChar.sendMessage("[Vip System]: Vip period ends in " + df.format(dt) + ". enjoy the Game");
+	                       else if(_daysleft > 0)
+	                               activeChar.sendMessage("[Vip System]: Left " + (int)_daysleft + " days for Vip period ends");
+	                       else if(_daysleft < 1)
+	                       {
+	                               long hour = (endDay - curDay) / 3600000;
+	                               activeChar.sendMessage("[Vip System]: Left " + (int)hour + " hours to Vip period ends");
+	                       }
+	               }
+	       }
+	
 	/**
 	 * @param activeChar
 	 */

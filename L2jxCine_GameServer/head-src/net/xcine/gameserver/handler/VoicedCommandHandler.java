@@ -28,7 +28,6 @@ import net.xcine.gameserver.handler.voicedcommandhandlers.AwayCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.BankingCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.CTFCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.DMCmd;
-import net.xcine.gameserver.handler.voicedcommandhandlers.FarmPvpCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.OfflineShop;
 import net.xcine.gameserver.handler.voicedcommandhandlers.Online;
 import net.xcine.gameserver.handler.voicedcommandhandlers.StatsCmd;
@@ -90,17 +89,12 @@ public class VoicedCommandHandler
 		}
 		
 		registerVoicedCommandHandler(new StatsCmd());
-		
+
 		if (Config.ALLOW_AWAY_STATUS)
 		{
 			registerVoicedCommandHandler(new AwayCmd());
 		}
-		
-		if (Config.ALLOW_FARM1_COMMAND || Config.ALLOW_FARM2_COMMAND || Config.ALLOW_PVP1_COMMAND || Config.ALLOW_PVP2_COMMAND)
-		{
-			registerVoicedCommandHandler(new FarmPvpCmd());
-		}
-		
+
 		if (Config.ALLOW_ONLINE_VIEW)
 		{
 			registerVoicedCommandHandler(new Online());

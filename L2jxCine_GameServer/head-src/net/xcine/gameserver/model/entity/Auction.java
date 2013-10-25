@@ -101,7 +101,7 @@ public class Auction
 	public static final long MAX_ADENA = 99900000000L;
 
 	/** The _bidders. */
-	private Map<Integer, Bidder> _bidders = new FastMap<>();
+	private Map<Integer, Bidder> _bidders = new FastMap<Integer, Bidder>();
 	
 	/** The Constant ItemTypeName. */
 	private static final String[] ItemTypeName =

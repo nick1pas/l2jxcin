@@ -42,7 +42,7 @@ public class FortSiegeGuardManager
 	// =========================================================
 	// Data Field
 	private Fort _fort;
-	private List<L2Spawn> _siegeGuardSpawn = new FastList<>();
+	private List<L2Spawn> _siegeGuardSpawn = new FastList<L2Spawn>();
 
 	// =========================================================
 	// Constructor

@@ -60,10 +60,10 @@ public class Castle
 
 	// =========================================================
 	// Data Field
-	private FastList<CropProcure> _procure = new FastList<>();
-	private FastList<SeedProduction> _production = new FastList<>();
-	private FastList<CropProcure> _procureNext = new FastList<>();
-	private FastList<SeedProduction> _productionNext = new FastList<>();
+	private FastList<CropProcure> _procure = new FastList<CropProcure>();
+	private FastList<SeedProduction> _production = new FastList<SeedProduction>();
+	private FastList<CropProcure> _procureNext = new FastList<CropProcure>();
+	private FastList<SeedProduction> _productionNext = new FastList<SeedProduction>();
 	private boolean _isNextPeriodApproved = false;
 
 	private static final String CASTLE_MANOR_DELETE_PRODUCTION = "DELETE FROM castle_manor_production WHERE castle_id=?;";
@@ -81,8 +81,8 @@ public class Castle
 	// =========================================================
 	// Data Field
 	private int _castleId = 0;
-	private List<L2DoorInstance> _doors = new FastList<>();
-	private List<String> _doorDefault = new FastList<>();
+	private List<L2DoorInstance> _doors = new FastList<L2DoorInstance>();
+	private List<String> _doorDefault = new FastList<String>();
 	private String _name = "";
 	private int _ownerId = 0;
 	private Siege _siege = null;
@@ -92,6 +92,7 @@ public class Castle
 	private int _taxPercent = 0;
 	private double _taxRate = 0;
 	private int _treasury = 0;
+	private boolean _showNpcCrest = false;
 	private L2CastleZone _zone;
 	private L2CastleTeleportZone _teleZone;
 	private L2Clan _formerOwner = null;
@@ -100,7 +101,7 @@ public class Castle
 	{
 			Integer.MIN_VALUE, 0, 0
 	};
-	private Map<Integer, Integer> _engrave = new FastMap<>();
+	private Map<Integer, Integer> _engrave = new FastMap<Integer, Integer>();
 
 	// =========================================================
 	// Constructor
@@ -376,7 +377,8 @@ public class Castle
 		}
 
 		updateOwnerInDB(clan); // Update in database
-
+		setShowNpcCrest(false);
+		
 		if(getSiege().getIsInProgress())
 		{
 			getSiege().midVictory(); // Mid victory phase of siege
@@ -565,6 +567,7 @@ public class Castle
 
 				_taxPercent = rs.getInt("taxPercent");
 				_treasury = rs.getInt("treasury");
+				_showNpcCrest = rs.getBoolean("showNpcCrest");
 			}
 
 			rs.close();
@@ -866,7 +869,21 @@ public class Castle
 	{
 		return _treasury;
 	}
-
+	 
+	   public final boolean getShowNpcCrest()
+	   {
+		  return _showNpcCrest;
+	   }
+	
+	   public final void setShowNpcCrest(boolean showNpcCrest)
+	   {
+		  if(_showNpcCrest != showNpcCrest)
+		  {
+			 _showNpcCrest = showNpcCrest;
+			 updateShowNpcCrest();
+		  }
+	   }
+	
 	public FastList<SeedProduction> getSeedProduction(int period)
 	{
 		return period == CastleManorManager.PERIOD_CURRENT ? _production : _productionNext;
@@ -1336,7 +1353,37 @@ public class Castle
 			con = null;
 		}
 	}
-
+	 
+	   public void updateShowNpcCrest()
+	   {
+		  Connection con = null;
+		  PreparedStatement statement;
+		  try
+		  {
+			 con = L2DatabaseFactory.getInstance().getConnection();
+	
+			 statement = con.prepareStatement("UPDATE castle SET showNpcCrest = ? WHERE id = ?");
+			 statement.setString(1, String.valueOf(getShowNpcCrest()));
+			 statement.setInt(2, getCastleId());
+			 statement.execute();
+			 statement.close();
+		  }
+		  catch (Exception e)
+		  {
+			 _log.info("Error saving showNpcCrest for castle " + getName() + ": " + e.getMessage());
+		  }
+		  finally
+		  {
+			 try
+			 {
+				con.close();
+			 }
+			 catch (Exception e)
+			 {
+			 }
+		  }
+	   }
+	
 	public boolean isNextPeriodApproved()
 	{
 		return _isNextPeriodApproved;

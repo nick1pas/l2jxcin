@@ -50,9 +50,12 @@ public class ExEnchantSkillList extends L2GameServerPacket
 
 	public ExEnchantSkillList()
 	{
-		_skills = new FastList<>();
+		_skills = new FastList<Skill>();
 	}
 
+	/* (non-Javadoc)
+	 * @see net.xcine.gameserver.serverpackets.ServerBasePacket#writeImpl()
+	 */
 	@Override
 	protected void writeImpl()
 	{

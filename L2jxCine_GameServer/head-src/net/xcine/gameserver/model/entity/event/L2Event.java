@@ -55,13 +55,13 @@ public class L2Event
 	
 	public static String eventName = "";
 	public static int teamsNumber = 0;
-	public static final HashMap<Integer, String> names = new HashMap<>();
-	public static final LinkedList<String> participatingPlayers = new LinkedList<>();
-	public static final HashMap<Integer, LinkedList<String>> players = new HashMap<>();
+	public static final HashMap<Integer, String> names = new HashMap<Integer, String>();
+	public static final LinkedList<String> participatingPlayers = new LinkedList<String>();
+	public static final HashMap<Integer, LinkedList<String>> players = new HashMap<Integer, LinkedList<String>>();
 	public static int id = 12760;
-	public static final LinkedList<String> npcs = new LinkedList<>();
+	public static final LinkedList<String> npcs = new LinkedList<String>();
 	public static boolean active = false;
-	public static final HashMap<String, EventData> connectionLossData = new HashMap<>();
+	public static final HashMap<String, EventData> connectionLossData = new HashMap<String, EventData>();
 
 	public static int getTeamOfPlayer(String name)
 	{
@@ -90,7 +90,7 @@ public class L2Event
 
 		int kills = 0;
 
-		LinkedList<String> killersTemp = new LinkedList<>();
+		LinkedList<String> killersTemp = new LinkedList<String>();
 
 		for(int k = 0; k < N; k++)
 		{

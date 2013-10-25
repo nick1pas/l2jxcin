@@ -519,7 +519,19 @@ public final class Config
 	public static int AIO_TCOLOR;
 	public static boolean ALLOW_AIO_USE_GK;
 	public static boolean ALLOW_AIO_USE_CM;
-	public static boolean ANNOUNCE_CASTLE_LORDS;
+	public static boolean ANNOUNCE_CASTLE_LORDS;	
+	public static boolean ALLOW_VIP_NCOLOR;
+	public static int VIP_NCOLOR;
+	public static boolean ALLOW_VIP_TCOLOR;
+	public static int VIP_TCOLOR;
+	public static boolean ALLOW_VIP_XPSP;
+	public static int VIP_XP;
+	public static int VIP_SP;
+	public static float VIP_ADENA_RATE;
+	public static float VIP_DROP_RATE;
+	public static float VIP_SPOIL_RATE;
+	public static float VIP_PARTY_XP;
+	public static float VIP_PARTY_SP;
 	
 	/** Configuration to allow custom items to be given on character creation */
 	public static boolean CUSTOM_STARTER_ITEMS_ENABLED;
@@ -624,6 +636,18 @@ public final class Config
         	ALLOW_AIO_USE_GK = Boolean.parseBoolean(otherSettings.getProperty("AllowAioUseGk", "False"));
         	ALLOW_AIO_USE_CM = Boolean.parseBoolean(otherSettings.getProperty("AllowAioUseClassMaster", "False"));
         	ANNOUNCE_CASTLE_LORDS = Boolean.parseBoolean(otherSettings.getProperty("AnnounceCastleLords", "False"));
+        	ALLOW_VIP_NCOLOR = Boolean.parseBoolean(otherSettings.getProperty("AllowVipNameColor", "True"));
+        	VIP_NCOLOR = Integer.decode("0x" + otherSettings.getProperty("VipNameColor", "0088FF"));
+        	ALLOW_VIP_TCOLOR = Boolean.parseBoolean(otherSettings.getProperty("AllowVipTitleColor", "True"));
+        	VIP_TCOLOR = Integer.decode("0x" + otherSettings.getProperty("VipTitleColor", "0088FF"));
+        	ALLOW_VIP_XPSP = Boolean.parseBoolean(otherSettings.getProperty("AllowVipMulXpSp", "True"));
+        	VIP_XP = Integer.parseInt(otherSettings.getProperty("VipMulXp", "2"));
+        	VIP_SP = Integer.parseInt(otherSettings.getProperty("VipMulSp", "2"));
+        	VIP_ADENA_RATE = Float.parseFloat(otherSettings.getProperty("VipAdenaRate", "2"));
+        	VIP_DROP_RATE = Float.parseFloat(otherSettings.getProperty("VipDropRate", "2"));
+        	VIP_SPOIL_RATE = Float.parseFloat(otherSettings.getProperty("VipSpoilRate", "2"));
+        	VIP_PARTY_XP = Float.parseFloat(otherSettings.getProperty("VipPartyXp", "2"));
+        	VIP_PARTY_SP = Float.parseFloat(otherSettings.getProperty("VipPartySp", "2"));
         	if(ENABLE_AIO_SYSTEM) //create map if system is enabled
         	{
         		String[] AioSkillsSplit = otherSettings.getProperty("AioSkills", "").split(";");
@@ -1263,6 +1287,12 @@ public final class Config
 	}
 
 	//============================================================
+	public static int DEVASTATED_DAY;
+	public static int DEVASTATED_HOUR;
+	public static int DEVASTATED_MINUTES;
+	public static int PARTISAN_DAY;
+	public static int PARTISAN_HOUR;
+	public static int PARTISAN_MINUTES;
 	public static boolean ALT_GAME_REQUIRE_CASTLE_DAWN;
 	public static boolean ALT_GAME_REQUIRE_CLAN_CASTLE;
 	public static boolean ALT_REQUIRE_WIN_7S;
@@ -1289,6 +1319,12 @@ public final class Config
 			SevenSettings.load(is);
 			is.close();
 
+			DEVASTATED_DAY = Integer.valueOf(SevenSettings.getProperty("DevastatedDay", "1"));
+			DEVASTATED_HOUR = Integer.valueOf(SevenSettings.getProperty("DevastatedHour", "18"));
+			DEVASTATED_MINUTES = Integer.valueOf(SevenSettings.getProperty("DevastatedMinutes", "0"));
+			PARTISAN_DAY = Integer.valueOf(SevenSettings.getProperty("PartisanDay", "5"));
+			PARTISAN_HOUR = Integer.valueOf(SevenSettings.getProperty("PartisanHour", "21"));
+			PARTISAN_MINUTES = Integer.valueOf(SevenSettings.getProperty("PartisanMinutes", "0"));			
 			ALT_GAME_REQUIRE_CASTLE_DAWN = Boolean.parseBoolean(SevenSettings.getProperty("AltRequireCastleForDawn", "False"));
 			ALT_GAME_REQUIRE_CLAN_CASTLE = Boolean.parseBoolean(SevenSettings.getProperty("AltRequireClanCastle", "False"));
 			ALT_REQUIRE_WIN_7S = Boolean.parseBoolean(SevenSettings.getProperty("AltRequireWin7s", "True"));
@@ -1372,7 +1408,7 @@ public final class Config
 			Properties clanhallSettings = new Properties();
 			InputStream is = new FileInputStream(new File(CLANHALL));
 			clanhallSettings.load(is);
-			is.close();
+			is.close();			
 			CH_TELE_FEE_RATIO = Long.valueOf(clanhallSettings.getProperty("ClanHallTeleportFunctionFeeRation", "86400000"));
 			CH_TELE1_FEE = Integer.valueOf(clanhallSettings.getProperty("ClanHallTeleportFunctionFeeLvl1", "86400000"));
 			CH_TELE2_FEE = Integer.valueOf(clanhallSettings.getProperty("ClanHallTeleportFunctionFeeLvl2", "86400000"));
@@ -1428,40 +1464,6 @@ public final class Config
 		{
 			e.printStackTrace();
 			throw new Error("Failed to Load " + CLANHALL + " File.");
-		}
-	}
-
-	//============================================================
-	public static int DEVASTATED_DAY;
-	public static int DEVASTATED_HOUR;
-	public static int DEVASTATED_MINUTES;
-	public static int PARTISAN_DAY;
-	public static int PARTISAN_HOUR;
-	public static int PARTISAN_MINUTES;
-
-	//============================================================
-	public static void loadElitCHConfig()
-	{
-		final String ELIT_CH = FService.ELIT_CLANHALL_CONFIG_FILE;
-
-		try
-		{
-			Properties elitchSettings = new Properties();
-			InputStream is = new FileInputStream(new File(ELIT_CH));
-			elitchSettings.load(is);
-			is.close();
-
-			DEVASTATED_DAY = Integer.valueOf(elitchSettings.getProperty("DevastatedDay", "1"));
-			DEVASTATED_HOUR = Integer.valueOf(elitchSettings.getProperty("DevastatedHour", "18"));
-			DEVASTATED_MINUTES = Integer.valueOf(elitchSettings.getProperty("DevastatedMinutes", "0"));
-			PARTISAN_DAY = Integer.valueOf(elitchSettings.getProperty("PartisanDay", "5"));
-			PARTISAN_HOUR = Integer.valueOf(elitchSettings.getProperty("PartisanHour", "21"));
-			PARTISAN_MINUTES = Integer.valueOf(elitchSettings.getProperty("PartisanMinutes", "0"));
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			throw new Error("Failed to Load " + ELIT_CH + " File.");
 		}
 	}
 
@@ -1668,42 +1670,6 @@ public final class Config
 			throw new Error("Failed to Load " + EVENT_TW + " File.");
 		}
 	}
-	//============================================================
-	public static boolean REBIRTH_ENABLE;
-	public static String[] REBIRTH_ITEM_PRICE;
-	public static String[] REBIRTH_MAGE_SKILL;
-	public static String[] REBIRTH_FIGHTER_SKILL;
-	public static int REBIRTH_MIN_LEVEL;
-	public static int REBIRTH_MAX;
-	public static int REBIRTH_RETURN_TO_LEVEL;
-
-	//============================================================
-	public static void loadREBIRTHConfig()
-	{
-		final String EVENT_REBIRTH = FService.EVENT_REBIRTH_FILE;
-
-		try
-		{
-			Properties REBIRTHSettings = new Properties();
-			InputStream is = new FileInputStream(new File(EVENT_REBIRTH));
-			REBIRTHSettings.load(is);
-			is.close();
-
-			REBIRTH_ENABLE = Boolean.parseBoolean(REBIRTHSettings.getProperty("REBIRTH_ENABLE", "false"));
-			REBIRTH_MIN_LEVEL = Integer.parseInt(REBIRTHSettings.getProperty("REBIRTH_MIN_LEVEL", "80"));
-			REBIRTH_MAX = Integer.parseInt(REBIRTHSettings.getProperty("REBIRTH_MAX", "3"));
-			REBIRTH_RETURN_TO_LEVEL = Integer.parseInt(REBIRTHSettings.getProperty("REBIRTH_RETURN_TO_LEVEL", "1"));
-			
-			REBIRTH_ITEM_PRICE = REBIRTHSettings.getProperty("REBIRTH_ITEM_PRICE", "").split(";");
-			REBIRTH_MAGE_SKILL = REBIRTHSettings.getProperty("REBIRTH_MAGE_SKILL", "").split(";");
-			REBIRTH_FIGHTER_SKILL = REBIRTHSettings.getProperty("REBIRTH_FIGHTER_SKILL", "").split(";");
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			throw new Error("Failed to Load " + EVENT_REBIRTH + " File.");
-		}
-	}
 
 	//============================================================
 	public static boolean PCB_ENABLE;
@@ -1856,109 +1822,6 @@ public final class Config
 	}
 
 	//============================================================
-	public static boolean IS_CRAFTING_ENABLED;
-	public static int DWARF_RECIPE_LIMIT;
-	public static int COMMON_RECIPE_LIMIT;
-	public static boolean ALT_GAME_CREATION;
-	public static double ALT_GAME_CREATION_SPEED;
-	public static double ALT_GAME_CREATION_XP_RATE;
-	public static double ALT_GAME_CREATION_SP_RATE;
-	public static boolean ALT_BLACKSMITH_USE_RECIPES;
-
-	//============================================================
-	public static void loadCraftConfig()
-	{
-		final String CRAFT = FService.CRAFTING;
-
-		try
-		{
-			Properties craftSettings = new Properties();
-			InputStream is = new FileInputStream(new File(CRAFT));
-			craftSettings.load(is);
-			is.close();
-
-			DWARF_RECIPE_LIMIT = Integer.parseInt(craftSettings.getProperty("DwarfRecipeLimit", "50"));
-			COMMON_RECIPE_LIMIT = Integer.parseInt(craftSettings.getProperty("CommonRecipeLimit", "50"));
-			IS_CRAFTING_ENABLED = Boolean.parseBoolean(craftSettings.getProperty("CraftingEnabled", "True"));
-			ALT_GAME_CREATION = Boolean.parseBoolean(craftSettings.getProperty("AltGameCreation", "False"));
-			ALT_GAME_CREATION_SPEED = Double.parseDouble(craftSettings.getProperty("AltGameCreationSpeed", "1"));
-			ALT_GAME_CREATION_XP_RATE = Double.parseDouble(craftSettings.getProperty("AltGameCreationRateXp", "1"));
-			ALT_GAME_CREATION_SP_RATE = Double.parseDouble(craftSettings.getProperty("AltGameCreationRateSp", "1"));
-			ALT_BLACKSMITH_USE_RECIPES = Boolean.parseBoolean(craftSettings.getProperty("AltBlacksmithUseRecipes", "True"));
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			throw new Error("Failed to Load " + CRAFT + " File.");
-		}
-	}
-
-	//============================================================
-	public static boolean ALLOW_AWAY_STATUS;
-	public static int AWAY_TIMER;
-	public static int BACK_TIMER;
-	public static int AWAY_TITLE_COLOR;
-	public static boolean AWAY_PLAYER_TAKE_AGGRO;
-	public static boolean AWAY_PEACE_ZONE;
-
-	//============================================================
-	public static void loadAWAYConfig()
-	{
-		final String AWAY_SYSTEM = FService.AWAY_FILE;
-
-		try
-		{
-			Properties AWAYSettings = new Properties();
-			InputStream is = new FileInputStream(new File(AWAY_SYSTEM));
-			AWAYSettings.load(is);
-			is.close();
-
-			/** Away System **/
-			ALLOW_AWAY_STATUS = Boolean.parseBoolean(AWAYSettings.getProperty("AllowAwayStatus", "False"));
-			AWAY_PLAYER_TAKE_AGGRO = Boolean.parseBoolean(AWAYSettings.getProperty("AwayPlayerTakeAggro", "False"));
-			AWAY_TITLE_COLOR = Integer.decode("0x" + AWAYSettings.getProperty("AwayTitleColor", "0000FF"));
-			AWAY_TIMER = Integer.parseInt(AWAYSettings.getProperty("AwayTimer", "30"));
-			BACK_TIMER = Integer.parseInt(AWAYSettings.getProperty("BackTimer", "30"));
-			AWAY_PEACE_ZONE = Boolean.parseBoolean(AWAYSettings.getProperty("AwayOnlyInPeaceZone", "False"));
-
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			throw new Error("Failed to Load " + AWAY_SYSTEM + " File.");
-		}
-	}
-
-	//============================================================
-	public static boolean BANKING_SYSTEM_ENABLED;
-	public static int BANKING_SYSTEM_GOLDBARS;
-	public static int BANKING_SYSTEM_ADENA;
-
-	//============================================================
-	public static void loadBankingConfig()
-	{
-		final String BANK = FService.BANK_FILE;
-
-		try
-		{
-			Properties BANKSettings = new Properties();
-			InputStream is = new FileInputStream(new File(BANK));
-			BANKSettings.load(is);
-			is.close();
-
-			BANKING_SYSTEM_ENABLED = Boolean.parseBoolean(BANKSettings.getProperty("BankingEnabled", "false"));
-			BANKING_SYSTEM_GOLDBARS = Integer.parseInt(BANKSettings.getProperty("BankingGoldbarCount", "1"));
-			BANKING_SYSTEM_ADENA = Integer.parseInt(BANKSettings.getProperty("BankingAdenaCount", "500000000"));
-
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			throw new Error("Failed to Load " + BANK + " File.");
-		}
-	}
-
-	//============================================================
 	public static boolean OFFLINE_TRADE_ENABLE;
 	public static boolean OFFLINE_CRAFT_ENABLE;
 	public static boolean OFFLINE_SET_NAME_COLOR;
@@ -2017,8 +1880,24 @@ public final class Config
 	public static String PM_TEXT1;
 	public static String PM_TEXT2;
 	public static boolean NEW_PLAYER_EFFECT;
+	public static boolean BANKING_SYSTEM_ENABLED;
+	public static int BANKING_SYSTEM_GOLDBARS;
+	public static int BANKING_SYSTEM_ADENA;
+	public static boolean ALLOW_AWAY_STATUS;
+	public static int AWAY_TIMER;
+	public static int BACK_TIMER;
+	public static int AWAY_TITLE_COLOR;
+	public static boolean AWAY_PLAYER_TAKE_AGGRO;
+	public static boolean AWAY_PEACE_ZONE;
+	public static boolean IS_CRAFTING_ENABLED;
+	public static int DWARF_RECIPE_LIMIT;
+	public static int COMMON_RECIPE_LIMIT;
+	public static boolean ALT_GAME_CREATION;
+	public static double ALT_GAME_CREATION_SPEED;
+	public static double ALT_GAME_CREATION_XP_RATE;
+	public static double ALT_GAME_CREATION_SP_RATE;
+	public static boolean ALT_BLACKSMITH_USE_RECIPES;
 	
-
 	//============================================================
 	public static void loadFrozenConfig()
 	{
@@ -2039,7 +1918,26 @@ public final class Config
 			PM_TEXT1  = frozenSettings.getProperty("PMText1", "Have Fun and Nice Stay on");
 			PM_TEXT2  = frozenSettings.getProperty("PMText2", "Vote for us every 24h");
 			NEW_PLAYER_EFFECT = Boolean.parseBoolean(frozenSettings.getProperty("NewPlayerEffect", "True"));
+			BANKING_SYSTEM_ENABLED = Boolean.parseBoolean(frozenSettings.getProperty("BankingEnabled", "false"));
+			BANKING_SYSTEM_GOLDBARS = Integer.parseInt(frozenSettings.getProperty("BankingGoldbarCount", "1"));
+			BANKING_SYSTEM_ADENA = Integer.parseInt(frozenSettings.getProperty("BankingAdenaCount", "500000000"));
+			/** Away System **/
+			ALLOW_AWAY_STATUS = Boolean.parseBoolean(frozenSettings.getProperty("AllowAwayStatus", "False"));
+			AWAY_PLAYER_TAKE_AGGRO = Boolean.parseBoolean(frozenSettings.getProperty("AwayPlayerTakeAggro", "False"));
+			AWAY_TITLE_COLOR = Integer.decode("0x" + frozenSettings.getProperty("AwayTitleColor", "0000FF"));
+			AWAY_TIMER = Integer.parseInt(frozenSettings.getProperty("AwayTimer", "30"));
+			BACK_TIMER = Integer.parseInt(frozenSettings.getProperty("BackTimer", "30"));
+			AWAY_PEACE_ZONE = Boolean.parseBoolean(frozenSettings.getProperty("AwayOnlyInPeaceZone", "False"));
 
+			DWARF_RECIPE_LIMIT = Integer.parseInt(frozenSettings.getProperty("DwarfRecipeLimit", "50"));
+			COMMON_RECIPE_LIMIT = Integer.parseInt(frozenSettings.getProperty("CommonRecipeLimit", "50"));
+			IS_CRAFTING_ENABLED = Boolean.parseBoolean(frozenSettings.getProperty("CraftingEnabled", "True"));
+			ALT_GAME_CREATION = Boolean.parseBoolean(frozenSettings.getProperty("AltGameCreation", "False"));
+			ALT_GAME_CREATION_SPEED = Double.parseDouble(frozenSettings.getProperty("AltGameCreationSpeed", "1"));
+			ALT_GAME_CREATION_XP_RATE = Double.parseDouble(frozenSettings.getProperty("AltGameCreationRateXp", "1"));
+			ALT_GAME_CREATION_SP_RATE = Double.parseDouble(frozenSettings.getProperty("AltGameCreationRateSp", "1"));
+			ALT_BLACKSMITH_USE_RECIPES = Boolean.parseBoolean(frozenSettings.getProperty("AltBlacksmithUseRecipes", "True"));
+			
 		}
 		catch(Exception e)
 		{
@@ -2172,6 +2070,7 @@ public final class Config
 	//============================================================
 	public static boolean ONLINE_PLAYERS_ON_LOGIN;
 	public static boolean SHOW_SERVER_VERSION;
+	public static boolean SHOW_NPC_CREST;
 	public static boolean SUBSTUCK_SKILLS;
 	public static boolean ALT_SERVER_NAME_ENABLED;
 	public static boolean ANNOUNCE_TO_ALL_SPAWN_RB;
@@ -2190,7 +2089,6 @@ public final class Config
 	public static boolean CUSTOM_NPC_TABLE = true;
 	public static boolean CUSTOM_ITEM_TABLES = true;
 	public static boolean CUSTOM_ARMORSETS_TABLE = true;
-	public static boolean CUSTOM_TELEPORT_TABLE = true;
 	public static boolean CUSTOM_DROPLIST_TABLE = true;
 	public static boolean CUSTOM_MERCHANT_TABLES = true;
 	public static boolean ALLOW_SIMPLE_STATS_VIEW;
@@ -2253,26 +2151,7 @@ public final class Config
 	public static int HERO_CUSTOM_ITEM_ID;
 	public static int NOOBLE_CUSTOM_ITEM_ID;
 	public static int HERO_CUSTOM_DAY;
-	public static boolean ALLOW_FARM1_COMMAND;
-	public static boolean ALLOW_FARM2_COMMAND;
-	public static boolean ALLOW_PVP1_COMMAND;
-	public static boolean ALLOW_PVP2_COMMAND;
-	public static int FARM1_X;
-	public static int FARM1_Y;
-	public static int FARM1_Z;
-	public static int PVP1_X;
-	public static int PVP1_Y;
-	public static int PVP1_Z;
-	public static int FARM2_X;
-	public static int FARM2_Y;
-	public static int FARM2_Z;
-	public static int PVP2_X;
-	public static int PVP2_Y;
-	public static int PVP2_Z;
-	public static String FARM1_CUSTOM_MESSAGE;
-	public static String FARM2_CUSTOM_MESSAGE;
-	public static String PVP1_CUSTOM_MESSAGE;
-	public static String PVP2_CUSTOM_MESSAGE;
+
 
 	//============================================================
 	public static void loadL2JFrozenConfig()
@@ -2293,7 +2172,8 @@ public final class Config
 
 			ONLINE_PLAYERS_ON_LOGIN = Boolean.valueOf(L2JFrozenSettings.getProperty("OnlineOnLogin", "False"));
 			SHOW_SERVER_VERSION = Boolean.valueOf(L2JFrozenSettings.getProperty("ShowServerVersion", "False"));
-
+			SHOW_NPC_CREST = Boolean.parseBoolean(L2JFrozenSettings.getProperty("ShowNpcCrest", "False"));
+			
 			/** Protector **/
 			PROTECTOR_PLAYER_PK = Boolean.parseBoolean(L2JFrozenSettings.getProperty("ProtectorPlayerPK", "false"));
 			PROTECTOR_PLAYER_PVP = Boolean.parseBoolean(L2JFrozenSettings.getProperty("ProtectorPlayerPVP", "false"));
@@ -2371,26 +2251,7 @@ public final class Config
 			CLAN_LEADER_COLOR_CLAN_LEVEL = Integer.parseInt(L2JFrozenSettings.getProperty("ClanLeaderColorAtClanLevel", "1"));
 			SAVE_RAIDBOSS_STATUS_INTO_DB = Boolean.parseBoolean(L2JFrozenSettings.getProperty("SaveRBStatusIntoDB", "False"));
 			DISABLE_WEIGHT_PENALTY = Boolean.parseBoolean(L2JFrozenSettings.getProperty("DisableWeightPenalty", "False"));
-			ALLOW_FARM1_COMMAND = Boolean.parseBoolean(L2JFrozenSettings.getProperty("AllowFarm1Command", "false"));
-			ALLOW_FARM2_COMMAND = Boolean.parseBoolean(L2JFrozenSettings.getProperty("AllowFarm2Command", "false"));
-			ALLOW_PVP1_COMMAND = Boolean.parseBoolean(L2JFrozenSettings.getProperty("AllowPvP1Command", "false"));
-			ALLOW_PVP2_COMMAND = Boolean.parseBoolean(L2JFrozenSettings.getProperty("AllowPvP2Command", "false"));
-			FARM1_X = Integer.parseInt(L2JFrozenSettings.getProperty("farm1_X", "81304"));
-			FARM1_Y = Integer.parseInt(L2JFrozenSettings.getProperty("farm1_Y", "14589"));
-			FARM1_Z = Integer.parseInt(L2JFrozenSettings.getProperty("farm1_Z", "-3469"));
-			PVP1_X = Integer.parseInt(L2JFrozenSettings.getProperty("pvp1_X", "81304"));
-			PVP1_Y = Integer.parseInt(L2JFrozenSettings.getProperty("pvp1_Y", "14589"));
-			PVP1_Z = Integer.parseInt(L2JFrozenSettings.getProperty("pvp1_Z", "-3469"));
-			FARM2_X = Integer.parseInt(L2JFrozenSettings.getProperty("farm2_X", "81304"));
-			FARM2_Y = Integer.parseInt(L2JFrozenSettings.getProperty("farm2_Y", "14589"));
-			FARM2_Z = Integer.parseInt(L2JFrozenSettings.getProperty("farm2_Z", "-3469"));
-			PVP2_X = Integer.parseInt(L2JFrozenSettings.getProperty("pvp2_X", "81304"));
-			PVP2_Y = Integer.parseInt(L2JFrozenSettings.getProperty("pvp2_Y", "14589"));
-			PVP2_Z = Integer.parseInt(L2JFrozenSettings.getProperty("pvp2_Z", "-3469"));
-			FARM1_CUSTOM_MESSAGE = L2JFrozenSettings.getProperty("Farm1CustomMeesage", "You have been teleported to Farm Zone 1!");
-			FARM2_CUSTOM_MESSAGE = L2JFrozenSettings.getProperty("Farm2CustomMeesage", "You have been teleported to Farm Zone 2!");
-			PVP1_CUSTOM_MESSAGE = L2JFrozenSettings.getProperty("PvP1CustomMeesage", "You have been teleported to PvP Zone 1!");
-			PVP2_CUSTOM_MESSAGE = L2JFrozenSettings.getProperty("PvP2CustomMeesage", "You have been teleported to PvP Zone 2!");
+			
 		}
 		catch(Exception e)
 		{
@@ -3901,7 +3762,7 @@ public final class Config
 			throw new Error("Failed to Load " + SCRIPT + " File.");
 		}
 	}
-
+	
 	//============================================================
 	public static Map<String, List<String>> EXTENDERS;
 
@@ -4365,7 +4226,6 @@ public final class Config
 			loadAltConfig();
 			load7sConfig();
 			loadCHConfig();
-			loadElitCHConfig();
 			loadOlympConfig();
 			loadEnchantConfig();
 			loadBossConfig();
@@ -4374,8 +4234,7 @@ public final class Config
 			loadL2JFrozenConfig();
 			loadPHYSICSConfig();
 			loadAccessConfig();
-			loadPvpConfig();
-			loadCraftConfig();
+			loadPvpConfig();			
 			
 			// Frozen config
 			loadCTFConfig();
@@ -4394,13 +4253,10 @@ public final class Config
 
 			// Fun
 			loadChampionConfig();
-			loadWeddingConfig();
-			loadREBIRTHConfig();
-			loadAWAYConfig();
-			loadBankingConfig();
+			loadWeddingConfig();		
 			loadPCBPointConfig();
 			loadOfflineConfig();
-
+			
 			// Other
 			loadKeyOptions();
 			loadExtendersConfig();

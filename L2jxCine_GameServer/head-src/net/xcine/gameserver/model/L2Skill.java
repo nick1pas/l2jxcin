@@ -629,7 +629,7 @@ public abstract class L2Skill
 		}
 		else
 		{
-			_canLearn = new FastList<>();
+			_canLearn = new FastList<ClassId>();
 			StringTokenizer st = new StringTokenizer(canLearn, " \r\n\t,;");
 
 			while(st.hasMoreTokens())
@@ -658,7 +658,7 @@ public abstract class L2Skill
 		}
 		else
 		{
-			_teachers = new FastList<>();
+			_teachers = new FastList<Integer>();
 			StringTokenizer st = new StringTokenizer(teachers, " \r\n\t,;");
 			while(st.hasMoreTokens())
 			{
@@ -1465,7 +1465,7 @@ public abstract class L2Skill
 			
 		}
 
-		List<L2Character> targetList = new FastList<>();
+		List<L2Character> targetList = new FastList<L2Character>();
 
 		if(isPotion()){
 			
@@ -3105,7 +3105,7 @@ public abstract class L2Skill
 		if(_funcTemplates == null)
 			return _emptyFunctionSet;
 
-		List<Func> funcs = new FastList<>();
+		List<Func> funcs = new FastList<Func>();
 
 		for(FuncTemplate t : _funcTemplates)
 		{
@@ -3149,7 +3149,7 @@ public abstract class L2Skill
 		if (getSkillType() == SkillType.BUFF && effected.isBlockBuff())
 			return _emptyEffectSet;
 		
-		List<L2Effect> effects = new FastList<>();
+		List<L2Effect> effects = new FastList<L2Effect>();
 		
 		boolean skillMastery = false;
 		
@@ -3204,7 +3204,7 @@ public abstract class L2Skill
 		if(_effectTemplatesSelf == null)
 			return _emptyEffectSet;
 
-		List<L2Effect> effects = new FastList<>();
+		List<L2Effect> effects = new FastList<L2Effect>();
 
 		Env env = new Env();
 		env.player = effector;

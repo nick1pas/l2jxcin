@@ -38,7 +38,7 @@ import net.xcine.Config;
  */
 public class JarClassLoader extends ClassLoader
 {
-	private final HashSet<String> _jars = new HashSet<>();
+	private final HashSet<String> _jars = new HashSet<String>();
 
 	public void addJarFile(String filename)
 	{

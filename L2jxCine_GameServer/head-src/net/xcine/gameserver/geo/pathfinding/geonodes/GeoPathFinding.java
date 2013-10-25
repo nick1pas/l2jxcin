@@ -55,8 +55,8 @@ public final class GeoPathFinding extends PathFinding
 		return SingletonHolder.INSTANCE;
 	}
 	
-	private final LookupTable<ByteBuffer> _pathNodes = new LookupTable<>();
-	private final LookupTable<IntBuffer> _pathNodesIndex = new LookupTable<>();
+	private final LookupTable<ByteBuffer> _pathNodes = new LookupTable<ByteBuffer>();
+	private final LookupTable<IntBuffer> _pathNodesIndex = new LookupTable<IntBuffer>();
 	
 	private boolean pathNodesExist(short regionoffset)
 	{

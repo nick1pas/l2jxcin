@@ -64,7 +64,7 @@ public class UserCommandHandler
 	
 	private UserCommandHandler()
 	{
-		_datatable = new FastMap<>();
+		_datatable = new FastMap<Integer, IUserCommandHandler>();
 		registerUserCommandHandler(new Time());
 		registerUserCommandHandler(new OlympiadStat());
 		registerUserCommandHandler(new ChannelLeave());

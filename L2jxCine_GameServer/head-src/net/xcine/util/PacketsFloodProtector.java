@@ -39,15 +39,15 @@ public class PacketsFloodProtector
 {
 	private final static int MAX_CONCURRENT_ACTIONS_PER_PLAYER = 10;
 	
-	private static Hashtable<String, AtomicInteger> clients_concurrent_actions = new Hashtable<>();
+	private static Hashtable<String, AtomicInteger> clients_concurrent_actions = new Hashtable<String, AtomicInteger>();
 	
 	private static final Logger _log = Logger.getLogger(PacketsFloodProtector.class.getName());
 	
-	private static Hashtable<String, Hashtable<Integer, AtomicInteger>> clients_actions = new Hashtable<>();
+	private static Hashtable<String, Hashtable<Integer, AtomicInteger>> clients_actions = new Hashtable<String, Hashtable<Integer, AtomicInteger>>();
 	
-	private static Hashtable<String, Hashtable<Integer, Integer>> clients_nextGameTick = new Hashtable<>();
+	private static Hashtable<String, Hashtable<Integer, Integer>> clients_nextGameTick = new Hashtable<String, Hashtable<Integer, Integer>>();
 	
-	private static Hashtable<String, Boolean> punishes_in_progress = new Hashtable<>();
+	private static Hashtable<String, Boolean> punishes_in_progress = new Hashtable<String, Boolean>();
 	
 	/**
 	 * Checks whether the request is flood protected or not.
@@ -106,7 +106,7 @@ public class PacketsFloodProtector
 		Hashtable<Integer, Integer> account_nextGameTicks = clients_nextGameTick.get(account);
 		if (account_nextGameTicks == null)
 		{
-			account_nextGameTicks = new Hashtable<>();
+			account_nextGameTicks = new Hashtable<Integer, Integer>();
 		}
 		Integer _nextGameTick = account_nextGameTicks.get(opcode);
 		if (_nextGameTick == null)
@@ -133,7 +133,7 @@ public class PacketsFloodProtector
 		Hashtable<Integer, AtomicInteger> received_commands_actions = clients_actions.get(account);
 		if (received_commands_actions == null)
 		{
-			received_commands_actions = new Hashtable<>();
+			received_commands_actions = new Hashtable<Integer, AtomicInteger>();
 		}
 		AtomicInteger command_count = null;
 		if ((command_count = received_commands_actions.get(opcode)) == null)

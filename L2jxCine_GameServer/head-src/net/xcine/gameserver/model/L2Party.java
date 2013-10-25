@@ -95,7 +95,7 @@ public class L2Party
 	 */
 	public L2Party(L2PcInstance leader, int itemDistribution)
 	{
-		_members = new FastList<>();
+		_members = new FastList<L2PcInstance>();
 		_itemDistribution = itemDistribution;
 		getPartyMembers().add(leader);
 		_partyLvl = leader.getLevel();
@@ -159,7 +159,7 @@ public class L2Party
 	 */
 	private L2PcInstance getCheckedRandomMember(int ItemId, L2Character target)
 	{
-		List<L2PcInstance> availableMembers = new FastList<>();
+		List<L2PcInstance> availableMembers = new FastList<L2PcInstance>();
 
 		for(L2PcInstance member : getPartyMembers())
 		{
@@ -807,7 +807,7 @@ public class L2Party
 
 	private List<L2PlayableInstance> getValidMembers(List<L2PlayableInstance> members, int topLvl)
 	{
-		List<L2PlayableInstance> validMembers = new FastList<>();
+		List<L2PlayableInstance> validMembers = new FastList<L2PlayableInstance>();
 
 		// Fixed LevelDiff cutoff point
 		if(Config.PARTY_XP_CUTOFF_METHOD.equalsIgnoreCase("level"))
@@ -893,7 +893,7 @@ public class L2Party
 		if(membersCount < 2)
 			//not is a valid party
 			return getBaseExpSpBonus(membersCount);
-		return getBaseExpSpBonus(membersCount) * Config.RATE_PARTY_XP;
+		return getBaseExpSpBonus(membersCount) * Config.RATE_PARTY_XP * Config.VIP_PARTY_XP;
 	}
 
 	private double getSpBonus(int membersCount)
@@ -901,7 +901,7 @@ public class L2Party
 		if(membersCount < 2)
 			//not is a valid party
 			return getBaseExpSpBonus(membersCount);
-		return getBaseExpSpBonus(membersCount) * Config.RATE_PARTY_SP;
+		return getBaseExpSpBonus(membersCount) * Config.RATE_PARTY_SP * Config.VIP_PARTY_SP;
 	}
 
 	public int getLevel()

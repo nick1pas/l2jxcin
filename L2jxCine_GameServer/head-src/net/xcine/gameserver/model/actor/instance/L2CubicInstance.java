@@ -131,7 +131,7 @@ public class L2CubicInstance
 	private boolean _givenByOther;
 	
 	/** The _skills. */
-	protected List<L2Skill> _skills = new FastList<>();
+	protected List<L2Skill> _skills = new FastList<L2Skill>();
 	
 	/** The _disappear task. */
 	private Future<?> _disappearTask;

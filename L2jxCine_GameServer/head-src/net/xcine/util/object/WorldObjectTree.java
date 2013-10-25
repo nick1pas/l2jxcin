@@ -30,7 +30,7 @@ import net.xcine.gameserver.model.L2Object;
  */
 public class WorldObjectTree<T extends L2Object> extends L2ObjectMap<T>
 {
-	private final TreeMap<Integer, T> _objectMap = new TreeMap<>();
+	private final TreeMap<Integer, T> _objectMap = new TreeMap<Integer, T>();
 	private final ReentrantReadWriteLock _rwl = new ReentrantReadWriteLock();
 	private final Lock _r = _rwl.readLock();
 	private final Lock _w = _rwl.writeLock();

@@ -235,7 +235,7 @@ public class CastleManager
 	{
 		if(_castles == null)
 		{
-			_castles = new FastList<>();
+			_castles = new FastList<Castle>();
 		}
 		return _castles;
 	}

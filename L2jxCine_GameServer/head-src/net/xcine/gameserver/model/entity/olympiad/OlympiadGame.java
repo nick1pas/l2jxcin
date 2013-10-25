@@ -61,8 +61,8 @@ class OlympiadGame
 	protected boolean _playerTwoDefaulted;
 	protected String _playerOneName;
 	protected String _playerTwoName;
-    protected FastList<L2Skill> _playerOneSkills = new FastList<>();
-	protected FastList<L2Skill> _playerTwoSkills = new FastList<>();
+    protected FastList<L2Skill> _playerOneSkills = new FastList<L2Skill>();
+	protected FastList<L2Skill> _playerTwoSkills = new FastList<L2Skill>();
 
 
 	private static final String POINTS = "olympiad_points";
@@ -107,8 +107,8 @@ class OlympiadGame
 				_playerTwoName = _playerTwo.getName();
 				_playerOne.setOlympiadGameId(id);
 				_playerTwo.setOlympiadGameId(id);
-                _playerOneSkills = new FastList<>();
-                _playerTwoSkills = new FastList<>();
+                _playerOneSkills = new FastList<L2Skill>();
+                _playerTwoSkills = new FastList<L2Skill>();
 			}
 			catch (Exception e)
 			{

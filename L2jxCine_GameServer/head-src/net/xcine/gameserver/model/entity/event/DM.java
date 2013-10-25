@@ -84,13 +84,13 @@ public class DM implements EventTask
 	protected static boolean _teamEvent = false; // TODO to be integrated
 	
 	/** The _players. */
-	public static Vector<L2PcInstance> _players = new Vector<>();
+	public static Vector<L2PcInstance> _players = new Vector<L2PcInstance>();
 	
 	/** The _top players. */
-	public static List<L2PcInstance> _topPlayers = new ArrayList<>();
+	public static List<L2PcInstance> _topPlayers = new ArrayList<L2PcInstance>();
 	
 	/** The _save players. */
-	public static Vector<String> _savePlayers = new Vector<>();
+	public static Vector<String> _savePlayers = new Vector<String>();
 	
 	/**
 	 * Instantiates a new dM.
@@ -1329,7 +1329,7 @@ public class DM implements EventTask
 				if (_players == null || _players.isEmpty())
 					return;
 				
-				List<L2PcInstance> toBeRemoved = new ArrayList<>();
+				List<L2PcInstance> toBeRemoved = new ArrayList<L2PcInstance>();
 				
 				for (L2PcInstance player : _players)
 				{
@@ -1604,14 +1604,14 @@ public class DM implements EventTask
 		_eventName = new String();
 		_eventDesc = new String();
 		_joiningLocationName = new String();
-		_savePlayers = new Vector<>();
+		_savePlayers = new Vector<String>();
 		
 		synchronized (_players)
 		{
 			_players.clear();
 		}
 		
-		_topPlayers = new ArrayList<>();
+		_topPlayers = new ArrayList<L2PcInstance>();
 		_npcSpawn = null;
 		_joining = false;
 		_teleport = false;
@@ -1954,8 +1954,8 @@ public class DM implements EventTask
 		}
 		
 		_topKills = 0;
-		_savePlayers = new Vector<>();
-		_topPlayers = new ArrayList<>();
+		_savePlayers = new Vector<String>();
+		_topPlayers = new ArrayList<L2PcInstance>();
 		
 		cleanLocalEventInfo();
 		

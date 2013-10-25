@@ -45,12 +45,10 @@ public class FService
 	public static final String RATES_CONFIG_FILE = "./config/head/rates.properties";
 	public static final String SEVENSIGNS_FILE = "./config/head/sevensigns.properties";
 	public static final String SIEGE_CONFIGURATION_FILE = "./config/head/siege.properties";
-	public static final String ELIT_CLANHALL_CONFIG_FILE = "./config/head/elitclanhall.properties";
 	public static final String BOSS_CONFIG_FILE = "./config/head/boss.properties";
 	
 	// functions
 	public static final String ACCESS_CONFIGURATION_FILE = "./config/functions/access.properties";
-	public static final String CRAFTING = "./config/functions/crafting.properties";
 	public static final String DEVELOPER = "./config/functions/developer.properties";
 	public static final String L2JFROZEN_CONFIG_FILE = "./config/functions/l2jfrozen.properties";
 	public static final String PHYSICS_CONFIGURATION_FILE = "./config/functions/physics.properties";
@@ -69,11 +67,8 @@ public class FService
 	public static final String EVENT_TVT_FILE = "./config/frozen/tvt.properties";
 	public static final String EVENT_TW_FILE = "./config/frozen/tw.properties";
 
-	// fun -- events
-	public static final String AWAY_FILE = "./config/fun/away.properties";
-	public static final String BANK_FILE = "./config/fun/bank.properties";
+	// fun -- events	
 	public static final String EVENT_CHAMPION_FILE = "./config/fun/champion.properties";
-	public static final String EVENT_REBIRTH_FILE = "./config/fun/rebirth.properties";
 	public static final String EVENT_WEDDING_FILE = "./config/fun/wedding.properties";
 	public static final String EVENT_PC_BANG_POINT_FILE = "./config/fun/pcBang.properties";
 	public static final String OFFLINE_FILE = "./config/fun/offline.properties";

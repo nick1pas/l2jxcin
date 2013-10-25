@@ -36,8 +36,8 @@ public class SellListProcure extends L2GameServerPacket
 
 	private final L2PcInstance _activeChar;
 	private int _money;
-	private Map<L2ItemInstance, Integer> _sellList = new FastMap<>();
-	private List<CropProcure> _procureList = new FastList<>();
+	private Map<L2ItemInstance, Integer> _sellList = new FastMap<L2ItemInstance, Integer>();
+	private List<CropProcure> _procureList = new FastList<CropProcure>();
 	private int _castle;
 
 	public SellListProcure(L2PcInstance player, int castleId)

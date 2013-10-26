@@ -46,7 +46,7 @@ import net.xcine.gameserver.templates.L2Weapon;
 public class L2Multisell
 {
 	private static Logger _log = Logger.getLogger(L2Multisell.class.getName());
-	private List<MultiSellListContainer> _entries = new FastList<MultiSellListContainer>();
+	private List<MultiSellListContainer> _entries = new FastList<>();
 	private static L2Multisell _instance;/* = new L2Multisell();*/
 
 	public MultiSellListContainer getList(int id)
@@ -320,7 +320,7 @@ public class L2Multisell
 
 		int id = 0;
 
-		List<File> files = new FastList<File>();
+		List<File> files = new FastList<>();
 		hashFiles("multisell", files);
 
 		for(File f : files)

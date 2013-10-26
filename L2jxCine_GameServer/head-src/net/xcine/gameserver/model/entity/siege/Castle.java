@@ -60,10 +60,10 @@ public class Castle
 
 	// =========================================================
 	// Data Field
-	private FastList<CropProcure> _procure = new FastList<CropProcure>();
-	private FastList<SeedProduction> _production = new FastList<SeedProduction>();
-	private FastList<CropProcure> _procureNext = new FastList<CropProcure>();
-	private FastList<SeedProduction> _productionNext = new FastList<SeedProduction>();
+	private FastList<CropProcure> _procure = new FastList<>();
+	private FastList<SeedProduction> _production = new FastList<>();
+	private FastList<CropProcure> _procureNext = new FastList<>();
+	private FastList<SeedProduction> _productionNext = new FastList<>();
 	private boolean _isNextPeriodApproved = false;
 
 	private static final String CASTLE_MANOR_DELETE_PRODUCTION = "DELETE FROM castle_manor_production WHERE castle_id=?;";
@@ -81,8 +81,8 @@ public class Castle
 	// =========================================================
 	// Data Field
 	private int _castleId = 0;
-	private List<L2DoorInstance> _doors = new FastList<L2DoorInstance>();
-	private List<String> _doorDefault = new FastList<String>();
+	private List<L2DoorInstance> _doors = new FastList<>();
+	private List<String> _doorDefault = new FastList<>();
 	private String _name = "";
 	private int _ownerId = 0;
 	private Siege _siege = null;
@@ -101,7 +101,7 @@ public class Castle
 	{
 			Integer.MIN_VALUE, 0, 0
 	};
-	private Map<Integer, Integer> _engrave = new FastMap<Integer, Integer>();
+	private Map<Integer, Integer> _engrave = new FastMap<>();
 
 	// =========================================================
 	// Constructor
@@ -1354,35 +1354,22 @@ public class Castle
 		}
 	}
 	 
-	   public void updateShowNpcCrest()
-	   {
-		  Connection con = null;
-		  PreparedStatement statement;
-		  try
-		  {
-			 con = L2DatabaseFactory.getInstance().getConnection();
-	
-			 statement = con.prepareStatement("UPDATE castle SET showNpcCrest = ? WHERE id = ?");
-			 statement.setString(1, String.valueOf(getShowNpcCrest()));
-			 statement.setInt(2, getCastleId());
-			 statement.execute();
-			 statement.close();
-		  }
-		  catch (Exception e)
-		  {
-			 _log.info("Error saving showNpcCrest for castle " + getName() + ": " + e.getMessage());
-		  }
-		  finally
-		  {
-			 try
-			 {
-				con.close();
-			 }
-			 catch (Exception e)
-			 {
-			 }
-		  }
-	   }
+	public void updateShowNpcCrest()
+	{
+		PreparedStatement statement;
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		{
+			statement = con.prepareStatement("UPDATE castle SET showNpcCrest = ? WHERE id = ?");
+			statement.setString(1, String.valueOf(getShowNpcCrest()));
+			statement.setInt(2, getCastleId());
+			statement.execute();
+			statement.close();
+		}
+		catch (Exception e)
+		{
+			_log.info("Error saving showNpcCrest for castle " + getName() + ": " + e.getMessage());
+		}	
+	}
 	
 	public boolean isNextPeriodApproved()
 	{

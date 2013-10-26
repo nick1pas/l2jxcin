@@ -1,26 +1,26 @@
-/* This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
+/*
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.
+ *
+ * http://www.gnu.org/copyleft/gpl.html
  */
 package net.xcine.util.random;
 
 import java.security.SecureRandom;
 import java.util.Random;
 
-/**
- * 
- * @author Forsaiken
- *
- */
 public final class Rnd
 {
 	/**
@@ -36,6 +36,7 @@ public final class Rnd
 		private static final long serialVersionUID = 1L;
 		private volatile long _seed;
 		
+		@SuppressWarnings("synthetic-access")
 		public NonAtomicRandom()
 		{
 			this(++SEED_UNIQUIFIER + System.nanoTime());
@@ -68,7 +69,7 @@ public final class Rnd
 	{
 		private final Random _random;
 		
-		protected RandomContainer(final Random random)
+		private RandomContainer(final Random random)
 		{
 			_random = random;
 		}
@@ -82,6 +83,7 @@ public final class Rnd
 		 * Get a random double number from 0 to 1
 		 * 
 		 * @return A random double number from 0 to 1
+		 * @see net.xcine.util.random.Rnd#nextDouble()
 		 */
 		public final double get()
 		{
@@ -229,13 +231,19 @@ public final class Rnd
 		UNSECURE_ATOMIC,
 
 		/**
+		 * Like {@link net.xcine.util.random.Rnd.RandomType#UNSECURE_ATOMIC}.<br>
 		 * Each thread has it`s own random instance.<br>
 		 * Provides best parallel access speed.
+		 * 
+		 * @see net.xcine.util.random.Rnd.ThreadLocalRandom
 		 */
 		UNSECURE_THREAD_LOCAL,
 
 		/**
+		 * Like {@link net.xcine.util.random.Rnd.RandomType#UNSECURE_ATOMIC}.<br>
 		 * Provides much faster parallel access speed.
+		 * 
+		 * @see net.xcine.util.random.Rnd.NonAtomicRandom
 		 */
 		UNSECURE_VOLATILE
 	}
@@ -278,6 +286,7 @@ public final class Rnd
 		{
 			_seedLocal = new ThreadLocal<Seed>()
 			{
+				@SuppressWarnings("synthetic-access")
 				@Override
 				public final Seed initialValue()
 				{
@@ -320,7 +329,7 @@ public final class Rnd
 	
 	private static final RandomContainer rnd = newInstance(RandomType.UNSECURE_THREAD_LOCAL);
 	
-	protected static volatile long SEED_UNIQUIFIER = 8682522807148012L;
+	private static volatile long SEED_UNIQUIFIER = 8682522807148012L;
 	
 	public static final Random directRandom()
 	{
@@ -331,6 +340,7 @@ public final class Rnd
 	 * Get a random double number from 0 to 1
 	 * 
 	 * @return A random double number from 0 to 1
+	 * @see net.xcine.util.random.Rnd#nextDouble()
 	 */
 	public static final double get()
 	{
@@ -377,6 +387,7 @@ public final class Rnd
 		return rnd.get(min, max);
 	}
 	
+	@SuppressWarnings("synthetic-access")
 	public static final RandomContainer newInstance(final RandomType type)
 	{
 		switch (type)
@@ -464,6 +475,11 @@ public final class Rnd
 		return rnd.nextInt();
 	}
 	
+	/**
+	 * @param n 
+	 * @return 
+	 * @see net.xcine.util.random.Rnd#get(int n)
+	 */
 	public static final int nextInt(final int n)
 	{
 		return get(n);

@@ -119,12 +119,6 @@
 				<include name="startBackup.*" />
 			</fileset>
 		</copy>
-		<copy todir="${build.dist}">
-			<fileset dir="dist">
-				<include name="Start_GameServer_noScreen.sh" />
-				<include name="Start_LoginServer_noScreen.sh" />
-			</fileset>
-		</copy>
 
 		<fixcrlf srcdir="${build.dist.game}" eol="lf" eof="remove" includes="**/*.sh">
 		</fixcrlf>

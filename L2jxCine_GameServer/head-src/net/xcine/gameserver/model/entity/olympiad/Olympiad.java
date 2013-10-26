@@ -72,7 +72,7 @@ public class Olympiad
 	private static L2FastList<L2PcInstance> _nonClassBasedRegisters;
 	private static Map<Integer, L2FastList<L2PcInstance>> _classBasedRegisters;
     public static final int OLY_MANAGER = 31688;
-    public static FastList<L2Spawn> olymanagers = new FastList<L2Spawn>();
+    public static FastList<L2Spawn> olymanagers = new FastList<>();
 	
 	private static final String OLYMPIAD_DATA_FILE = "config/olympiad.cfg";
 	public static final String OLYMPIAD_HTML_PATH = "data/html/olympiad/";
@@ -178,8 +178,8 @@ public class Olympiad
 	
 	private void load()
 	{
-		_nobles = new FastMap<Integer, StatsSet>();
-		_oldnobles = new FastMap<Integer, StatsSet>();
+		_nobles = new FastMap<>();
+		_oldnobles = new FastMap<>();
 		
 		Properties OlympiadProperties = new Properties();
 		InputStream is = null;
@@ -336,8 +336,8 @@ public class Olympiad
 		if (_period == 1)
 			return;
 		
-		_nonClassBasedRegisters = new L2FastList<L2PcInstance>();
-		_classBasedRegisters = new FastMap<Integer, L2FastList<L2PcInstance>>();
+		_nonClassBasedRegisters = new L2FastList<>();
+		_classBasedRegisters = new FastMap<>();
 		
 		_compStart = Calendar.getInstance();
 		_compStart.set(Calendar.HOUR_OF_DAY, COMP_START);
@@ -535,7 +535,7 @@ public class Olympiad
 			}
 			else
 			{
-				L2FastList<L2PcInstance> classed = new L2FastList<L2PcInstance>();
+				L2FastList<L2PcInstance> classed = new L2FastList<>();
 				classed.add(noble);
 				
 				_classBasedRegisters.put(noble.getClassId().getId(), classed);
@@ -588,7 +588,7 @@ public class Olympiad
 	
 	protected static L2FastList<Integer> hasEnoughRegisteredClassed()
 	{
-		L2FastList<Integer> result = new L2FastList<Integer>();
+		L2FastList<Integer> result = new L2FastList<>();
 
 		for (Integer classList : getRegisteredClassBased().keySet())
 		{
@@ -1235,7 +1235,7 @@ public class Olympiad
 			}
 		}
 		
-		_heroesToBe = new L2FastList<StatsSet>();
+		_heroesToBe = new L2FastList<>();
 		
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -1278,7 +1278,7 @@ public class Olympiad
 	{
 		// if (_period != 1) return;
 		
-		L2FastList<String> names = new L2FastList<String>();
+		L2FastList<String> names = new L2FastList<>();
 		
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -1472,7 +1472,7 @@ public class Olympiad
 		
 		_oldnobles.clear();
 		_oldnobles = _nobles;
-		_nobles = new FastMap<Integer, StatsSet>();
+		_nobles = new FastMap<>();
 	}
 	
 	/**

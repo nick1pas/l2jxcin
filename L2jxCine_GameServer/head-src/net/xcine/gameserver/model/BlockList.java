@@ -51,7 +51,7 @@ public class BlockList
 	public BlockList(L2PcInstance owner)
 	{
 		_owner = owner;
-		_blockSet = new FastSet<String>();
+		_blockSet = new FastSet<>();
 		_blockAll = false;
 	}
 

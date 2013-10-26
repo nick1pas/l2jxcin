@@ -31,7 +31,7 @@ public final class L2Radar
 	public L2Radar(L2PcInstance player)
 	{
 		_player = player;
-		_markers = new Vector<RadarMarker>();
+		_markers = new Vector<>();
 	}
 
 	// Add a marker to player's radar

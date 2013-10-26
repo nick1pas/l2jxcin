@@ -72,8 +72,8 @@ public class DevastatedCastle
 	private L2NpcInstance _minion1 = null;
 	private L2NpcInstance _minion2 = null;
 
-	private ArrayList<MonsterLocation> _monsters = new ArrayList<MonsterLocation>();
-	private ArrayList<L2Spawn> _spawns = new ArrayList<L2Spawn>();
+	private ArrayList<MonsterLocation> _monsters = new ArrayList<>();
+	private ArrayList<L2Spawn> _spawns = new ArrayList<>();
 
 	private Calendar _siegetime = Calendar.getInstance();
 
@@ -138,7 +138,7 @@ public class DevastatedCastle
 			MINUTES = 0;
 		}
 
-		_clansDamageInfo = new FastMap<Integer, DamageInfo>();
+		_clansDamageInfo = new FastMap<>();
 
 		synchronized (this)
 		{

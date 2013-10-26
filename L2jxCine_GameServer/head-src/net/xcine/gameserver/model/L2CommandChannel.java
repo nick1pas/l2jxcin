@@ -47,7 +47,7 @@ public class L2CommandChannel
 	public L2CommandChannel(L2PcInstance leader)
 	{
 		_commandLeader = leader;
-		_partys = new FastList<L2Party>();
+		_partys = new FastList<>();
 		_partys.add(leader.getParty());
 		_channelLvl = leader.getParty().getLevel();
 		leader.getParty().setCommandChannel(this);
@@ -182,7 +182,7 @@ public class L2CommandChannel
 	 */
 	public List<L2PcInstance> getMembers()
 	{
-		List<L2PcInstance> members = new FastList<L2PcInstance>();
+		List<L2PcInstance> members = new FastList<>();
 		for(L2Party party : getPartys())
 		{
 			members.addAll(party.getPartyMembers());

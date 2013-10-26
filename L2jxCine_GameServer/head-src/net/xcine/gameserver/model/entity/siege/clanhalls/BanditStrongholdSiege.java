@@ -54,7 +54,7 @@ public class BanditStrongholdSiege extends ClanHallSiege
 	private static BanditStrongholdSiege _instance;
 	private boolean _registrationPeriod = false;
 	private int _clanCounter = 0;
-	protected Map<Integer, clanPlayersInfo> _clansInfo = new HashMap<Integer, clanPlayersInfo>();
+	protected Map<Integer, clanPlayersInfo> _clansInfo = new HashMap<>();
 	private L2ClanHallZone zone;
 	public ClanHall clanhall = ClanHallManager.getInstance().getClanHallById(35);
 	protected clanPlayersInfo _ownerClanInfo = new clanPlayersInfo();
@@ -435,7 +435,7 @@ public class BanditStrongholdSiege extends ClanHallSiege
 
 	public FastList<String> getRegisteredClans()
 	{
-		FastList<String> clans = new FastList<String>();
+		FastList<String> clans = new FastList<>();
 		for(clanPlayersInfo a : _clansInfo.values())
 		{
 			clans.add(a._clanName);
@@ -648,6 +648,6 @@ public class BanditStrongholdSiege extends ClanHallSiege
 		public String _clanName;
 		public L2DecoInstance _flag = null;
 		public L2MonsterInstance _mob = null;
-		public FastList<String> _players = new FastList<String>();
+		public FastList<String> _players = new FastList<>();
 	}
 }

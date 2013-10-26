@@ -40,7 +40,7 @@ import net.xcine.util.StringUtil;
 
 /**
  * @author BossForever
- * @version 1.0
+ * @version 1.1
  */
 public final class Config
 {
@@ -84,11 +84,8 @@ public final class Config
 	public static final String PROTECT_PACKET_CONFIG_FILE = "./config/protected/packets.properties";
 	
 	// Gates of File configs
+	public static final String EVENTS_CONFIG_FILE = "./config/Events.properties";
 	public static final String L2FROZEN_CONFIG_FILE = "./config/frozen/frozen.properties";
-	public static final String EVENT_CTF_FILE = "./config/frozen/ctf.properties";
-	public static final String EVENT_DM_FILE = "./config/frozen/dm.properties";
-	public static final String EVENT_TVT_FILE = "./config/frozen/tvt.properties";
-	public static final String EVENT_TW_FILE = "./config/frozen/tw.properties";
 
 	// network
 	public static final String CONFIGURATION_FILE = "./config/network/gameserver.properties";
@@ -1113,11 +1110,8 @@ public final class Config
 	public static float ALT_PETS_MAGICAL_DAMAGE_MULTI;
 	public static float ALT_NPC_PHYSICAL_DAMAGE_MULTI;
 	public static float ALT_NPC_MAGICAL_DAMAGE_MULTI;
-	// Alternative damage for dagger skills VS heavy
 	public static float ALT_DAGGER_DMG_VS_HEAVY;
-	// Alternative damage for dagger skills VS robe
 	public static float ALT_DAGGER_DMG_VS_ROBE;
-	// Alternative damage for dagger skills VS light
 	public static float ALT_DAGGER_DMG_VS_LIGHT;
 	
 	public static boolean ALLOW_RAID_LETHAL,
@@ -1299,6 +1293,12 @@ public final class Config
 	public static String NETWORK_IP_LIST;
 	public static long SESSION_TTL;
 	public static int MAX_LOGINSESSIONS;
+	
+	// ID Factroty
+	public static IdFactoryType IDFACTORY_TYPE;
+	public static boolean BAD_ID_CHECKING;
+	public static ObjectMapType MAP_TYPE;
+	public static ObjectSetType SET_TYPE;
 	
 	public static void load()
 	{
@@ -2093,47 +2093,89 @@ public final class Config
 			L2JMOD_CHAMPION_REWARD_QTY = Integer.parseInt(ChampionSettings.getProperty("ChampionRewardItemQty", "1"));
 			L2JMOD_CHAMP_TITLE = ChampionSettings.getProperty("ChampionTitle", "Champion");
 
-			ExProperties TVTSettings = load(EVENT_TVT_FILE);
+			ExProperties EventsSettings = load(EVENTS_CONFIG_FILE);
 
-			TVT_EVEN_TEAMS = TVTSettings.getProperty("TvTEvenTeams", "BALANCE");
-			TVT_ALLOW_INTERFERENCE = Boolean.parseBoolean(TVTSettings.getProperty("TvTAllowInterference", "False"));
-			TVT_ALLOW_POTIONS = Boolean.parseBoolean(TVTSettings.getProperty("TvTAllowPotions", "False"));
-			TVT_ALLOW_SUMMON = Boolean.parseBoolean(TVTSettings.getProperty("TvTAllowSummon", "False"));
-			TVT_ON_START_REMOVE_ALL_EFFECTS = Boolean.parseBoolean(TVTSettings.getProperty("TvTOnStartRemoveAllEffects", "True"));
-			TVT_ON_START_UNSUMMON_PET = Boolean.parseBoolean(TVTSettings.getProperty("TvTOnStartUnsummonPet", "True"));
-			TVT_REVIVE_RECOVERY = Boolean.parseBoolean(TVTSettings.getProperty("TvTReviveRecovery", "False"));
-			TVT_ANNOUNCE_TEAM_STATS = Boolean.parseBoolean(TVTSettings.getProperty("TvTAnnounceTeamStats", "False"));
-			TVT_ANNOUNCE_REWARD = Boolean.parseBoolean(TVTSettings.getProperty("TvTAnnounceReward", "False"));
-			TVT_PRICE_NO_KILLS = Boolean.parseBoolean(TVTSettings.getProperty("TvTPriceNoKills", "False"));
-			TVT_JOIN_CURSED = Boolean.parseBoolean(TVTSettings.getProperty("TvTJoinWithCursedWeapon", "True"));
-			TVT_COMMAND = Boolean.parseBoolean(TVTSettings.getProperty("TvTCommand", "True"));
-			TVT_REVIVE_DELAY = Long.parseLong(TVTSettings.getProperty("TvTReviveDelay", "20000"));
+			TVT_EVEN_TEAMS = EventsSettings.getProperty("TvTEvenTeams", "BALANCE");
+			TVT_ALLOW_INTERFERENCE = Boolean.parseBoolean(EventsSettings.getProperty("TvTAllowInterference", "False"));
+			TVT_ALLOW_POTIONS = Boolean.parseBoolean(EventsSettings.getProperty("TvTAllowPotions", "False"));
+			TVT_ALLOW_SUMMON = Boolean.parseBoolean(EventsSettings.getProperty("TvTAllowSummon", "False"));
+			TVT_ON_START_REMOVE_ALL_EFFECTS = Boolean.parseBoolean(EventsSettings.getProperty("TvTOnStartRemoveAllEffects", "True"));
+			TVT_ON_START_UNSUMMON_PET = Boolean.parseBoolean(EventsSettings.getProperty("TvTOnStartUnsummonPet", "True"));
+			TVT_REVIVE_RECOVERY = Boolean.parseBoolean(EventsSettings.getProperty("TvTReviveRecovery", "False"));
+			TVT_ANNOUNCE_TEAM_STATS = Boolean.parseBoolean(EventsSettings.getProperty("TvTAnnounceTeamStats", "False"));
+			TVT_ANNOUNCE_REWARD = Boolean.parseBoolean(EventsSettings.getProperty("TvTAnnounceReward", "False"));
+			TVT_PRICE_NO_KILLS = Boolean.parseBoolean(EventsSettings.getProperty("TvTPriceNoKills", "False"));
+			TVT_JOIN_CURSED = Boolean.parseBoolean(EventsSettings.getProperty("TvTJoinWithCursedWeapon", "True"));
+			TVT_COMMAND = Boolean.parseBoolean(EventsSettings.getProperty("TvTCommand", "True"));
+			TVT_REVIVE_DELAY = Long.parseLong(EventsSettings.getProperty("TvTReviveDelay", "20000"));
 			if(TVT_REVIVE_DELAY < 1000)
 				TVT_REVIVE_DELAY = 1000; //can't be set less then 1 second
-			TVT_OPEN_FORT_DOORS = Boolean.parseBoolean(TVTSettings.getProperty("TvTOpenFortDoors", "False"));
-			TVT_CLOSE_FORT_DOORS = Boolean.parseBoolean(TVTSettings.getProperty("TvTCloseFortDoors", "False"));
-			TVT_OPEN_ADEN_COLOSSEUM_DOORS = Boolean.parseBoolean(TVTSettings.getProperty("TvTOpenAdenColosseumDoors", "False"));
-			TVT_CLOSE_ADEN_COLOSSEUM_DOORS = Boolean.parseBoolean(TVTSettings.getProperty("TvTCloseAdenColosseumDoors", "False"));
-			TVT_TOP_KILLER_REWARD = Integer.parseInt(TVTSettings.getProperty("TvTTopKillerRewardId", "5575"));
-			TVT_TOP_KILLER_QTY = Integer.parseInt(TVTSettings.getProperty("TvTTopKillerRewardQty", "2000000"));
-			TVT_AURA = Boolean.parseBoolean(TVTSettings.getProperty("TvTAura", "False"));
-			TVT_STATS_LOGGER = Boolean.parseBoolean(TVTSettings.getProperty("TvTStatsLogger", "true"));
+			TVT_OPEN_FORT_DOORS = Boolean.parseBoolean(EventsSettings.getProperty("TvTOpenFortDoors", "False"));
+			TVT_CLOSE_FORT_DOORS = Boolean.parseBoolean(EventsSettings.getProperty("TvTCloseFortDoors", "False"));
+			TVT_OPEN_ADEN_COLOSSEUM_DOORS = Boolean.parseBoolean(EventsSettings.getProperty("TvTOpenAdenColosseumDoors", "False"));
+			TVT_CLOSE_ADEN_COLOSSEUM_DOORS = Boolean.parseBoolean(EventsSettings.getProperty("TvTCloseAdenColosseumDoors", "False"));
+			TVT_TOP_KILLER_REWARD = Integer.parseInt(EventsSettings.getProperty("TvTTopKillerRewardId", "5575"));
+			TVT_TOP_KILLER_QTY = Integer.parseInt(EventsSettings.getProperty("TvTTopKillerRewardQty", "2000000"));
+			TVT_AURA = Boolean.parseBoolean(EventsSettings.getProperty("TvTAura", "False"));
+			TVT_STATS_LOGGER = Boolean.parseBoolean(EventsSettings.getProperty("TvTStatsLogger", "true"));
+			TW_TOWN_ID = Integer.parseInt(EventsSettings.getProperty("TWTownId", "9"));
+			TW_ALL_TOWNS = Boolean.parseBoolean(EventsSettings.getProperty("TWAllTowns", "False"));
+			TW_ITEM_ID = Integer.parseInt(EventsSettings.getProperty("TownWarItemId", "57"));
+			TW_ITEM_AMOUNT = Integer.parseInt(EventsSettings.getProperty("TownWarItemAmount", "5000"));
+			TW_ALLOW_KARMA = Boolean.parseBoolean(EventsSettings.getProperty("AllowKarma", "False"));
+			TW_DISABLE_GK = Boolean.parseBoolean(EventsSettings.getProperty("DisableGK", "True"));
+			TW_RESS_ON_DIE = Boolean.parseBoolean(EventsSettings.getProperty("SendRessOnDeath", "False"));
+			DM_ALLOW_INTERFERENCE = Boolean.parseBoolean(EventsSettings.getProperty("DMAllowInterference", "False"));
+			DM_ALLOW_POTIONS = Boolean.parseBoolean(EventsSettings.getProperty("DMAllowPotions", "False"));
+			DM_ALLOW_SUMMON = Boolean.parseBoolean(EventsSettings.getProperty("DMAllowSummon", "False"));
+			DM_JOIN_CURSED = Boolean.parseBoolean(EventsSettings.getProperty("DMJoinWithCursedWeapon", "False"));
+			DM_ON_START_REMOVE_ALL_EFFECTS = Boolean.parseBoolean(EventsSettings.getProperty("DMOnStartRemoveAllEffects", "True"));
+			DM_ON_START_UNSUMMON_PET = Boolean.parseBoolean(EventsSettings.getProperty("DMOnStartUnsummonPet", "True"));
+			DM_REVIVE_DELAY = Long.parseLong(EventsSettings.getProperty("DMReviveDelay", "20000"));
+			if(DM_REVIVE_DELAY < 1000)
+			{
+				DM_REVIVE_DELAY = 1000; //can't be set less then 1 second
+			}
 			
-			ExProperties TWSettings = load(EVENT_TW_FILE);
-			TW_TOWN_ID = Integer.parseInt(TWSettings.getProperty("TWTownId", "9"));
-			TW_ALL_TOWNS = Boolean.parseBoolean(TWSettings.getProperty("TWAllTowns", "False"));
-			TW_ITEM_ID = Integer.parseInt(TWSettings.getProperty("TownWarItemId", "57"));
-			TW_ITEM_AMOUNT = Integer.parseInt(TWSettings.getProperty("TownWarItemAmount", "5000"));
-			TW_ALLOW_KARMA = Boolean.parseBoolean(TWSettings.getProperty("AllowKarma", "False"));
-			TW_DISABLE_GK = Boolean.parseBoolean(TWSettings.getProperty("DisableGK", "True"));
-			TW_RESS_ON_DIE = Boolean.parseBoolean(TWSettings.getProperty("SendRessOnDeath", "False"));
+			DM_REVIVE_RECOVERY = Boolean.parseBoolean(EventsSettings.getProperty("DMReviveRecovery", "False"));
+			DM_COMMAND = Boolean.parseBoolean(EventsSettings.getProperty("DMCommand", "False"));
+			DM_ENABLE_KILL_REWARD = Boolean.parseBoolean(EventsSettings.getProperty("DMEnableKillReward", "False"));
+			DM_KILL_REWARD_ID = Integer.parseInt(EventsSettings.getProperty("DMKillRewardID", "6392"));
+			DM_KILL_REWARD_AMOUNT = Integer.parseInt(EventsSettings.getProperty("DMKillRewardAmount", "1"));
+			DM_ANNOUNCE_REWARD = Boolean.parseBoolean(EventsSettings.getProperty("DMAnnounceReward", "False"));
+			DM_SPAWN_OFFSET = Integer.parseInt(EventsSettings.getProperty("DMSpawnOffset", "100"));
+			DM_STATS_LOGGER = Boolean.parseBoolean(EventsSettings.getProperty("DMStatsLogger", "true"));
+			DM_ALLOW_HEALER_CLASSES = Boolean.parseBoolean(EventsSettings.getProperty("DMAllowedHealerClasses", "true"));
+			DM_REMOVE_BUFFS_ON_DIE = Boolean.parseBoolean(EventsSettings.getProperty("DMRemoveBuffsOnPlayerDie", "false"));
+			CTF_EVEN_TEAMS = EventsSettings.getProperty("CTFEvenTeams", "BALANCE");
+			CTF_ALLOW_INTERFERENCE = Boolean.parseBoolean(EventsSettings.getProperty("CTFAllowInterference", "False"));
+			CTF_ALLOW_POTIONS = Boolean.parseBoolean(EventsSettings.getProperty("CTFAllowPotions", "False"));
+			CTF_ALLOW_SUMMON = Boolean.parseBoolean(EventsSettings.getProperty("CTFAllowSummon", "False"));
+			CTF_ON_START_REMOVE_ALL_EFFECTS = Boolean.parseBoolean(EventsSettings.getProperty("CTFOnStartRemoveAllEffects", "True"));
+			CTF_ON_START_UNSUMMON_PET = Boolean.parseBoolean(EventsSettings.getProperty("CTFOnStartUnsummonPet", "True"));
+			CTF_ANNOUNCE_TEAM_STATS = Boolean.parseBoolean(EventsSettings.getProperty("CTFAnnounceTeamStats", "False"));
+			CTF_ANNOUNCE_REWARD = Boolean.parseBoolean(EventsSettings.getProperty("CTFAnnounceReward", "False"));
+			CTF_JOIN_CURSED = Boolean.parseBoolean(EventsSettings.getProperty("CTFJoinWithCursedWeapon", "True"));
+			CTF_REVIVE_RECOVERY = Boolean.parseBoolean(EventsSettings.getProperty("CTFReviveRecovery", "False"));
+			CTF_COMMAND = Boolean.parseBoolean(EventsSettings.getProperty("CTFCommand", "True"));
+			CTF_AURA = Boolean.parseBoolean(EventsSettings.getProperty("CTFAura", "True"));
+			CTF_STATS_LOGGER = Boolean.parseBoolean(EventsSettings.getProperty("CTFStatsLogger", "true"));
+			CTF_SPAWN_OFFSET = Integer.parseInt(EventsSettings.getProperty("CTFSpawnOffset", "100"));
+			PCB_ENABLE = Boolean.parseBoolean(EventsSettings.getProperty("PcBangPointEnable", "true"));
+			PCB_MIN_LEVEL = Integer.parseInt(EventsSettings.getProperty("PcBangPointMinLevel", "20"));
+			PCB_POINT_MIN = Integer.parseInt(EventsSettings.getProperty("PcBangPointMinCount", "20"));
+			PCB_POINT_MAX = Integer.parseInt(EventsSettings.getProperty("PcBangPointMaxCount", "1000000"));
 			
+			if(PCB_POINT_MAX < 1)
+			{
+				PCB_POINT_MAX = Integer.MAX_VALUE;
+			}
+
+			PCB_CHANCE_DUAL_POINT = Integer.parseInt(EventsSettings.getProperty("PcBangPointDualChance", "20"));
+			PCB_INTERVAL = Integer.parseInt(EventsSettings.getProperty("PcBangPointTimeStamp", "900"));
+
 			ExProperties pcbpSettings = load(EVENT_PC_BANG_POINT_FILE);
 
-			PCB_ENABLE = Boolean.parseBoolean(pcbpSettings.getProperty("PcBangPointEnable", "true"));
-			PCB_MIN_LEVEL = Integer.parseInt(pcbpSettings.getProperty("PcBangPointMinLevel", "20"));
-			PCB_POINT_MIN = Integer.parseInt(pcbpSettings.getProperty("PcBangPointMinCount", "20"));
-			PCB_POINT_MAX = Integer.parseInt(pcbpSettings.getProperty("PcBangPointMaxCount", "1000000"));
 
 			OFFLINE_TRADE_ENABLE = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineTradeEnable", "false"));
 			OFFLINE_CRAFT_ENABLE = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineCraftEnable", "false"));
@@ -2164,14 +2206,6 @@ public final class Config
 			WEDDING_GIVE_CUPID_BOW = Boolean.parseBoolean(pcbpSettings.getProperty("WeddingGiveBow", "False"));
 			ANNOUNCE_WEDDING = Boolean.parseBoolean(pcbpSettings.getProperty("AnnounceWedding", "True"));
 			
-			if(PCB_POINT_MAX < 1)
-			{
-				PCB_POINT_MAX = Integer.MAX_VALUE;
-			}
-
-			PCB_CHANCE_DUAL_POINT = Integer.parseInt(pcbpSettings.getProperty("PcBangPointDualChance", "20"));
-			PCB_INTERVAL = Integer.parseInt(pcbpSettings.getProperty("PcBangPointTimeStamp", "900"));
-
 			ExProperties devSettings = load(CONFIG_DEVELOPER);
 			SKILLSDEBUG = Boolean.parseBoolean(devSettings.getProperty("SkillsDebug", "false"));
 			DEBUG = Boolean.parseBoolean(devSettings.getProperty("Debug", "false"));
@@ -2244,46 +2278,6 @@ public final class Config
 			ALT_GAME_CREATION_XP_RATE = Double.parseDouble(frozenSettings.getProperty("AltGameCreationRateXp", "1"));
 			ALT_GAME_CREATION_SP_RATE = Double.parseDouble(frozenSettings.getProperty("AltGameCreationRateSp", "1"));
 			ALT_BLACKSMITH_USE_RECIPES = Boolean.parseBoolean(frozenSettings.getProperty("AltBlacksmithUseRecipes", "True"));
-
-			ExProperties DMSettings = load(EVENT_DM_FILE);
-			DM_ALLOW_INTERFERENCE = Boolean.parseBoolean(DMSettings.getProperty("DMAllowInterference", "False"));
-			DM_ALLOW_POTIONS = Boolean.parseBoolean(DMSettings.getProperty("DMAllowPotions", "False"));
-			DM_ALLOW_SUMMON = Boolean.parseBoolean(DMSettings.getProperty("DMAllowSummon", "False"));
-			DM_JOIN_CURSED = Boolean.parseBoolean(DMSettings.getProperty("DMJoinWithCursedWeapon", "False"));
-			DM_ON_START_REMOVE_ALL_EFFECTS = Boolean.parseBoolean(DMSettings.getProperty("DMOnStartRemoveAllEffects", "True"));
-			DM_ON_START_UNSUMMON_PET = Boolean.parseBoolean(DMSettings.getProperty("DMOnStartUnsummonPet", "True"));
-			DM_REVIVE_DELAY = Long.parseLong(DMSettings.getProperty("DMReviveDelay", "20000"));
-			if(DM_REVIVE_DELAY < 1000)
-			{
-				DM_REVIVE_DELAY = 1000; //can't be set less then 1 second
-			}
-			
-			DM_REVIVE_RECOVERY = Boolean.parseBoolean(DMSettings.getProperty("DMReviveRecovery", "False"));
-			DM_COMMAND = Boolean.parseBoolean(DMSettings.getProperty("DMCommand", "False"));
-			DM_ENABLE_KILL_REWARD = Boolean.parseBoolean(DMSettings.getProperty("DMEnableKillReward", "False"));
-			DM_KILL_REWARD_ID = Integer.parseInt(DMSettings.getProperty("DMKillRewardID", "6392"));
-			DM_KILL_REWARD_AMOUNT = Integer.parseInt(DMSettings.getProperty("DMKillRewardAmount", "1"));
-			DM_ANNOUNCE_REWARD = Boolean.parseBoolean(DMSettings.getProperty("DMAnnounceReward", "False"));
-			DM_SPAWN_OFFSET = Integer.parseInt(DMSettings.getProperty("DMSpawnOffset", "100"));
-			DM_STATS_LOGGER = Boolean.parseBoolean(DMSettings.getProperty("DMStatsLogger", "true"));
-			DM_ALLOW_HEALER_CLASSES = Boolean.parseBoolean(DMSettings.getProperty("DMAllowedHealerClasses", "true"));
-			DM_REMOVE_BUFFS_ON_DIE = Boolean.parseBoolean(DMSettings.getProperty("DMRemoveBuffsOnPlayerDie", "false"));
-
-			ExProperties CTFSettings = load(EVENT_CTF_FILE);
-			CTF_EVEN_TEAMS = CTFSettings.getProperty("CTFEvenTeams", "BALANCE");
-			CTF_ALLOW_INTERFERENCE = Boolean.parseBoolean(CTFSettings.getProperty("CTFAllowInterference", "False"));
-			CTF_ALLOW_POTIONS = Boolean.parseBoolean(CTFSettings.getProperty("CTFAllowPotions", "False"));
-			CTF_ALLOW_SUMMON = Boolean.parseBoolean(CTFSettings.getProperty("CTFAllowSummon", "False"));
-			CTF_ON_START_REMOVE_ALL_EFFECTS = Boolean.parseBoolean(CTFSettings.getProperty("CTFOnStartRemoveAllEffects", "True"));
-			CTF_ON_START_UNSUMMON_PET = Boolean.parseBoolean(CTFSettings.getProperty("CTFOnStartUnsummonPet", "True"));
-			CTF_ANNOUNCE_TEAM_STATS = Boolean.parseBoolean(CTFSettings.getProperty("CTFAnnounceTeamStats", "False"));
-			CTF_ANNOUNCE_REWARD = Boolean.parseBoolean(CTFSettings.getProperty("CTFAnnounceReward", "False"));
-			CTF_JOIN_CURSED = Boolean.parseBoolean(CTFSettings.getProperty("CTFJoinWithCursedWeapon", "True"));
-			CTF_REVIVE_RECOVERY = Boolean.parseBoolean(CTFSettings.getProperty("CTFReviveRecovery", "False"));
-			CTF_COMMAND = Boolean.parseBoolean(CTFSettings.getProperty("CTFCommand", "True"));
-			CTF_AURA = Boolean.parseBoolean(CTFSettings.getProperty("CTFAura", "True"));
-			CTF_STATS_LOGGER = Boolean.parseBoolean(CTFSettings.getProperty("CTFStatsLogger", "true"));
-			CTF_SPAWN_OFFSET = Integer.parseInt(CTFSettings.getProperty("CTFSpawnOffset", "100"));
 
 			ExProperties L2jxCineSettings = load(L2JCINE_CONFIG_FILE);
 
@@ -3153,6 +3147,12 @@ public final class Config
 			SCRIPT_CACHE = Boolean.valueOf(scriptSetting.getProperty("UseCache", "true"));
 			SCRIPT_ERROR_LOG = Boolean.valueOf(scriptSetting.getProperty("EnableScriptErrorLog", "true"));
 
+			ExProperties idSettings = load(ID_CONFIG_FILE);
+			MAP_TYPE = ObjectMapType.valueOf(idSettings.getProperty("L2Map", "WorldObjectMap"));
+			SET_TYPE = ObjectSetType.valueOf(idSettings.getProperty("L2Set", "WorldObjectSet"));
+			IDFACTORY_TYPE = IdFactoryType.valueOf(idSettings.getProperty("IDFactory", "Compaction"));
+			BAD_ID_CHECKING = Boolean.valueOf(idSettings.getProperty("BadIdChecking", "True"));
+			
 			ExProperties p = load(DAEMONS_FILE);
 
 			AUTOSAVE_INITIAL_TIME = Long.parseLong(p.getProperty("AutoSaveInitial", "300000"));
@@ -4219,6 +4219,28 @@ public final class Config
 	{
 		return load(new File(filename));
 	}
+
+    /** Enumeration for type of ID Factory */
+    public static enum IdFactoryType
+    {
+        Compaction,
+        BitSet,
+        Stack
+    }
+
+    /** Enumeration for type of maps object */
+    public static enum ObjectMapType
+    {
+        L2ObjectHashMap,
+        WorldObjectMap
+    }
+
+    /** Enumeration for type of set object */
+    public static enum ObjectSetType
+    {
+        L2ObjectHashSet,
+        WorldObjectSet
+    }
 
 	public static ExProperties load(File file)
 	{

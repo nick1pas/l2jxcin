@@ -37,7 +37,7 @@ public class L2ZoneManager
 	 */
 	public L2ZoneManager()
 	{
-		_zones = new FastList<L2ZoneType>();
+		_zones = new FastList<>();
 	}
 
 	/**

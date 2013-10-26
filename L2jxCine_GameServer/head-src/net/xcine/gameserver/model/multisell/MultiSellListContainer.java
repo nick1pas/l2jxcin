@@ -35,7 +35,7 @@ public class MultiSellListContainer
 
 	public MultiSellListContainer()
 	{
-		_entriesC = new FastList<MultiSellEntry>();
+		_entriesC = new FastList<>();
 	}
 
 	/**

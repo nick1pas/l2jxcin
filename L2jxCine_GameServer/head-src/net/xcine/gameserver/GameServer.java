@@ -227,6 +227,12 @@ public class GameServer
 		Announcements.getInstance();
 		AutoAnnouncementHandler.getInstance();
 
+        if (!IdFactory.getInstance().isInitialized())
+        {
+            _log.info("Could not read object IDs from DB. Please Check Your Data.");
+            throw new Exception("Could not initialize the ID factory");
+        }
+
 		StaticObjects.getInstance();
 		TeleportLocationTable.getInstance();
 		PartyMatchWaitingList.getInstance();

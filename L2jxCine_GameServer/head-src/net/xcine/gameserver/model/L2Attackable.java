@@ -834,7 +834,7 @@ public class L2Attackable extends L2NpcInstance
 						partyLvl = 0;
 
 						// Get all L2Character that can be rewarded in the party
-						List<L2PlayableInstance> rewardedMembers = new FastList<L2PlayableInstance>();
+						List<L2PlayableInstance> rewardedMembers = new FastList<>();
 
 						// Go through all L2PcInstance in the party
 						List<L2PcInstance> groupMembers;
@@ -1936,7 +1936,7 @@ public class L2Attackable extends L2NpcInstance
 				// according to sh1ny, seeded mobs CAN be spoiled and swept.
 				if(isSpoil()/* && !isSeeded() */)
 				{
-					FastList<RewardItem> sweepList = new FastList<RewardItem>();
+					FastList<RewardItem> sweepList = new FastList<>();
 
 					for(L2DropData drop : cat.getAllDrops())
 					{
@@ -2827,7 +2827,7 @@ public class L2Attackable extends L2NpcInstance
 		// 3- Everything is correct, but it failed. The crystal scatters. A sound event is played. (10%)
 		// 4- Everything is correct, the crystal level up. A sound event is played. (32.5%)
 
-		List<L2PcInstance> players = new FastList<L2PcInstance>();
+		List<L2PcInstance> players = new FastList<>();
 
 		if(absorbType == L2NpcTemplate.AbsorbCrystalType.FULL_PARTY && killer.isInParty())
 		{
@@ -3263,7 +3263,7 @@ public class L2Attackable extends L2NpcInstance
 			count += diff;
 		}
 
-		FastList<RewardItem> harvested = new FastList<RewardItem>();
+		FastList<RewardItem> harvested = new FastList<>();
 
 		harvested.add(new RewardItem(L2Manor.getInstance().getCropType(_seedType), count * Config.RATE_DROP_MANOR));
 

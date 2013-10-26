@@ -160,7 +160,7 @@ public class TradeList
 
 	public TradeList(L2PcInstance owner)
 	{
-		_items = new FastList<TradeItem>();
+		_items = new FastList<>();
 		_owner = owner;
 	}
 
@@ -226,7 +226,7 @@ public class TradeList
 	 */
 	public TradeList.TradeItem[] getAvailableItems(PcInventory inventory)
 	{
-		List<TradeList.TradeItem> list = new FastList<TradeList.TradeItem>();
+		List<TradeList.TradeItem> list = new FastList<>();
 
 		for(TradeList.TradeItem item : _items)
 		{

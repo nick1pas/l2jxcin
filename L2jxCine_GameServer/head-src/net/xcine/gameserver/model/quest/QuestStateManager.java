@@ -50,7 +50,7 @@ public class QuestStateManager
 	// =========================================================
 	// Data Field
 	private static QuestStateManager _instance;
-	private List<QuestState> _questStates = new FastList<QuestState>();
+	private List<QuestState> _questStates = new FastList<>();
 
 	// =========================================================
 	// Constructor
@@ -132,7 +132,7 @@ public class QuestStateManager
 	{
 		if(_questStates == null)
 		{
-			_questStates = new FastList<QuestState>();
+			_questStates = new FastList<>();
 		}
 
 		return _questStates;

@@ -48,7 +48,7 @@ public abstract class ItemContainer
 
 	protected ItemContainer()
 	{
-		_items = new FastList<L2ItemInstance>();
+		_items = new FastList<>();
 	}
 
 	protected abstract L2Character getOwner();

@@ -251,24 +251,24 @@ public class FortSiege
 	// Data Field
 	// Attacker and Defender
 	/** The _attacker clans. */
-	private List<L2SiegeClan> _attackerClans = new FastList<L2SiegeClan>(); // L2SiegeClan
+	private List<L2SiegeClan> _attackerClans = new FastList<>(); // L2SiegeClan
 
 	/** The _defender clans. */
-	private List<L2SiegeClan> _defenderClans = new FastList<L2SiegeClan>(); // L2SiegeClan
+	private List<L2SiegeClan> _defenderClans = new FastList<>(); // L2SiegeClan
 	
 	/** The _defender waiting clans. */
-	private List<L2SiegeClan> _defenderWaitingClans = new FastList<L2SiegeClan>(); // L2SiegeClan
+	private List<L2SiegeClan> _defenderWaitingClans = new FastList<>(); // L2SiegeClan
 	
 	/** The _defender respawn delay penalty. */
 	private int _defenderRespawnDelayPenalty;
 
 	// Fort setting
 	/** The _commanders. */
-	private List<L2CommanderInstance> _commanders = new FastList<L2CommanderInstance>();
+	private List<L2CommanderInstance> _commanders = new FastList<>();
 	
 	/** The _combatflag. */
-	private List<L2ArtefactInstance> _combatflag = new FastList<L2ArtefactInstance>();
-	
+	private List<L2ArtefactInstance> _combatflag = new FastList<>();
+
 	/** The _fort. */
 	private Fort[] _fort;
 	
@@ -757,7 +757,7 @@ public class FortSiege
 	 */
 	public List<L2PcInstance> getAttackersInZone()
 	{
-		List<L2PcInstance> players = new FastList<L2PcInstance>();
+		List<L2PcInstance> players = new FastList<>();
 		L2Clan clan;
 
 		for(L2SiegeClan siegeclan : getAttackerClans())
@@ -785,7 +785,7 @@ public class FortSiege
 	 */
 	public List<L2PcInstance> getDefendersButNotOwnersInZone()
 	{
-		List<L2PcInstance> players = new FastList<L2PcInstance>();
+		List<L2PcInstance> players = new FastList<>();
 		L2Clan clan;
 
 		for(L2SiegeClan siegeclan : getDefenderClans())
@@ -828,7 +828,7 @@ public class FortSiege
 	 */
 	public List<L2PcInstance> getOwnersInZone()
 	{
-		List<L2PcInstance> players = new FastList<L2PcInstance>();
+		List<L2PcInstance> players = new FastList<>();
 		L2Clan clan;
 
 		for(L2SiegeClan siegeclan : getDefenderClans())
@@ -861,7 +861,7 @@ public class FortSiege
 	 */
 	public List<L2PcInstance> getSpectatorsInZone()
 	{
-		List<L2PcInstance> players = new FastList<L2PcInstance>();
+		List<L2PcInstance> players = new FastList<>();
 
 		for(L2PcInstance player : L2World.getInstance().getAllPlayers())
 		{
@@ -1506,7 +1506,7 @@ public class FortSiege
 		//Set commanders array size if one does not exist
 		if(_commanders == null)
 		{
-			_commanders = new FastList<L2CommanderInstance>();
+			_commanders = new FastList<>();
 		}
 
 		for(SiegeSpawn _sp : FortSiegeManager.getInstance().getCommanderSpawnList(Id))
@@ -1532,7 +1532,7 @@ public class FortSiege
 	{
 		if(_combatflag == null)
 		{
-			_combatflag = new FastList<L2ArtefactInstance>();
+			_combatflag = new FastList<>();
 		}
 
 		for(SiegeSpawn _sp : FortSiegeManager.getInstance().getFlagList(Id))

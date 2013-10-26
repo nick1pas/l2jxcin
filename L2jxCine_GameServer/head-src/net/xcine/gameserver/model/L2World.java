@@ -109,7 +109,8 @@ public final class L2World
 		//_allPlayers = new FastMap<String, L2PcInstance>().shared();
 
 		_petsInstance = new FastMap<Integer, L2PetInstance>().shared();
-
+		_allObjects = L2ObjectMap.createL2ObjectMap();
+		
 		initRegions();
 	}
 

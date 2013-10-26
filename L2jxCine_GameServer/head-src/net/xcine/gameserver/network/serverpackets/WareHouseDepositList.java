@@ -49,7 +49,7 @@ public class WareHouseDepositList extends L2GameServerPacket
 		_activeChar = player;
 		_whType = type;
 		_playerAdena = _activeChar.getAdena();
-		_items = new FastList<L2ItemInstance>();
+		_items = new FastList<>();
 
 		for(L2ItemInstance temp : _activeChar.getInventory().getAvailableItems(true))
 		{

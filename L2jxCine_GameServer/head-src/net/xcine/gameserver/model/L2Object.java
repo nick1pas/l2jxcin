@@ -65,8 +65,7 @@ public abstract class L2Object
     
     public L2Object(int objectId)
     {
-        _objectId = objectId;
-        initPosition();
+    	_objectId = objectId;
     }
 	/**
 	 * @param newExtender as BaseExtender
@@ -120,10 +119,6 @@ public abstract class L2Object
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 
-    public void initPosition()
-    {
-        _position = new ObjectPosition(this);
-    }
 	public void onActionShift(L2GameClient client)
 	{
 		// Like L2OFF send to L2PcInstance

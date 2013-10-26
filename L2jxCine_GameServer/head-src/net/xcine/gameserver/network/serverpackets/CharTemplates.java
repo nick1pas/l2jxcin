@@ -33,7 +33,7 @@ public class CharTemplates extends L2GameServerPacket
 {
 	// dddddddddddddddddddd
 	private static final String _S__23_CHARTEMPLATES = "[S] 23 CharTemplates";
-	private List<L2PcTemplate> _chars = new FastList<L2PcTemplate>();
+	private List<L2PcTemplate> _chars = new FastList<>();
 
 	public void addChar(L2PcTemplate template)
 	{

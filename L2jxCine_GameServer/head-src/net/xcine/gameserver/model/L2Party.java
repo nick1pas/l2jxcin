@@ -95,7 +95,7 @@ public class L2Party
 	 */
 	public L2Party(L2PcInstance leader, int itemDistribution)
 	{
-		_members = new FastList<L2PcInstance>();
+		_members = new FastList<>();
 		_itemDistribution = itemDistribution;
 		getPartyMembers().add(leader);
 		_partyLvl = leader.getLevel();
@@ -159,7 +159,7 @@ public class L2Party
 	 */
 	private L2PcInstance getCheckedRandomMember(int ItemId, L2Character target)
 	{
-		List<L2PcInstance> availableMembers = new FastList<L2PcInstance>();
+		List<L2PcInstance> availableMembers = new FastList<>();
 
 		for(L2PcInstance member : getPartyMembers())
 		{
@@ -807,7 +807,7 @@ public class L2Party
 
 	private List<L2PlayableInstance> getValidMembers(List<L2PlayableInstance> members, int topLvl)
 	{
-		List<L2PlayableInstance> validMembers = new FastList<L2PlayableInstance>();
+		List<L2PlayableInstance> validMembers = new FastList<>();
 
 		// Fixed LevelDiff cutoff point
 		if(Config.PARTY_XP_CUTOFF_METHOD.equalsIgnoreCase("level"))

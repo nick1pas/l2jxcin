@@ -46,7 +46,7 @@ public class L2TownZone extends L2ZoneType
 		super(id);
 
 		_taxById = 0;
-		_spawnLoc = new FastList<int[]>();
+		_spawnLoc = new FastList<>();
 
 		// Default to Giran
 		_redirectTownId = 9;

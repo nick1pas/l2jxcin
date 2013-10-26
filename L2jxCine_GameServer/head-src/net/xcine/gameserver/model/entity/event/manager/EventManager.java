@@ -38,7 +38,7 @@ public class EventManager
 {
 	protected static final Logger _log = Logger.getLogger(EventManager.class.getName());
 	
-	private final static String EVENT_MANAGER_CONFIGURATION_FILE = "./config/frozen/eventmanager.properties";
+	private final static String EVENTS_CONFIG_FILE = "./config/Events.properties";
 	
 	public static boolean TVT_EVENT_ENABLED;
 	public static  ArrayList<String> TVT_TIMES_LIST;
@@ -70,7 +70,7 @@ public class EventManager
 		try
 		{
 			Properties eventSettings = new Properties();
-			is = new FileInputStream(new File(EVENT_MANAGER_CONFIGURATION_FILE));
+			is = new FileInputStream(new File(EVENTS_CONFIG_FILE));
 			eventSettings.load(is);
 			
 			//============================================================

@@ -157,7 +157,7 @@ public abstract class Inventory extends ItemContainer
 		ChangeRecorder(Inventory inventory)
 		{
 			_inventory = inventory;
-			_changed = new FastList<L2ItemInstance>();
+			_changed = new FastList<>();
 			_inventory.addPaperdollListener(this);
 		}
 
@@ -688,7 +688,7 @@ public abstract class Inventory extends ItemContainer
 	protected Inventory()
 	{
 		_paperdoll = new L2ItemInstance[0x12];
-		_paperdollListeners = new FastList<PaperdollListener>();
+		_paperdollListeners = new FastList<>();
 		addPaperdollListener(new ArmorSetListener());
 		addPaperdollListener(new BowListener());
 		addPaperdollListener(new ItemPassiveSkillsListener());

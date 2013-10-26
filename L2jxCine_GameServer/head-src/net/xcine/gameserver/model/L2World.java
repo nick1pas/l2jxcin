@@ -109,7 +109,6 @@ public final class L2World
 		//_allPlayers = new FastMap<String, L2PcInstance>().shared();
 
 		_petsInstance = new FastMap<Integer, L2PetInstance>().shared();
-		_allObjects = L2ObjectMap.createL2ObjectMap();
 
 		initRegions();
 	}
@@ -718,7 +717,7 @@ public final class L2World
 			return null;
 
 		// Create an FastList in order to contain all visible L2Object
-		FastList<L2Object> result = new FastList<L2Object>();
+		FastList<L2Object> result = new FastList<>();
 
 		// Create a FastList containing all regions around the current region
 		FastList<L2WorldRegion> regions = reg.getSurroundingRegions();
@@ -779,19 +778,19 @@ public final class L2World
 	public FastList<L2Object> getVisibleObjects(final L2Object object, int radius)
 	{
 		if(object == null || !object.isVisible())
-			return new FastList<L2Object>();
+			return new FastList<>();
 
 		final L2WorldRegion region = object.getWorldRegion();
 		
 		if(region == null)
-			return new FastList<L2Object>();
+			return new FastList<>();
 		
 		int x = object.getX();
 		int y = object.getY();
 		int sqRadius = radius * radius;
 
 		// Create an FastList in order to contain all visible L2Object
-		FastList<L2Object> result = new FastList<L2Object>();
+		FastList<L2Object> result = new FastList<>();
 
 		// Create an FastList containing all regions around the current region
 		FastList<L2WorldRegion> regions = region.getSurroundingRegions();
@@ -857,7 +856,7 @@ public final class L2World
 	public FastList<L2Object> getVisibleObjects3D(L2Object object, int radius)
 	{
 		if(object == null || !object.isVisible())
-			return new FastList<L2Object>();
+			return new FastList<>();
 
 		int x = object.getX();
 		int y = object.getY();
@@ -865,7 +864,7 @@ public final class L2World
 		int sqRadius = radius * radius;
 
 		// Create an FastList in order to contain all visible L2Object
-		FastList<L2Object> result = new FastList<L2Object>();
+		FastList<L2Object> result = new FastList<>();
 
 		// Create an FastList containing all regions around the current region
 		FastList<L2WorldRegion> regions = object.getWorldRegion().getSurroundingRegions();
@@ -933,7 +932,7 @@ public final class L2World
 			return null;
 
 		// Create an FastList in order to contain all visible L2Object
-		FastList<L2PlayableInstance> result = new FastList<L2PlayableInstance>();
+		FastList<L2PlayableInstance> result = new FastList<>();
 
 		// Create a FastList containing all regions around the current region
 		FastList<L2WorldRegion> regions = reg.getSurroundingRegions();
@@ -1104,7 +1103,7 @@ public final class L2World
 	 */
 	public FastList<L2PcInstance> getAccountPlayers(String account_name){
 		
-		FastList<L2PcInstance> players_for_account = new FastList<L2PcInstance>();
+		FastList<L2PcInstance> players_for_account = new FastList<>();
 		for(L2PcInstance actual:_allPlayers.values())
 		{
 			if(actual.getAccountName().equals(account_name))

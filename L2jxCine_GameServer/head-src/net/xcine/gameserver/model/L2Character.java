@@ -428,7 +428,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		// Set its template to the new L2Character
 		_template = template;
 		
-		_triggeredSkills = new FastMap<Integer, L2Skill>();
+		_triggeredSkills = new FastMap<>();
 		
 		if (template != null && this instanceof L2NpcInstance)
 		{

@@ -97,7 +97,7 @@ public abstract class XmlEngine
 	
 	public List<Node> parseHeadStandart(Document doc)
 	{
-		List<Node> temp = new FastList<Node>();
+		List<Node> temp = new FastList<>();
 		for(Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 		{
 			if("list".equalsIgnoreCase(n.getNodeName()))

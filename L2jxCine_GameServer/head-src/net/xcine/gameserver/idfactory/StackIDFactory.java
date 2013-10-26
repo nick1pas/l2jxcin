@@ -24,7 +24,6 @@ import java.sql.SQLException;
 import java.util.Stack;
 import java.util.logging.Logger;
 
-import net.xcine.Config;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
@@ -91,8 +90,6 @@ public class StackIDFactory extends IdFactory
             return N;
         }
         // check these IDs not present in DB
-        if (Config.BAD_ID_CHECKING)
-        {
         for (String check : ID_CHECKS)
         {
             PreparedStatement ps = con.prepareStatement(check);
@@ -108,7 +105,6 @@ public class StackIDFactory extends IdFactory
             }
             rs.close();
             ps.close();
-        }
         }
 
         //int hole = id - _curOID;

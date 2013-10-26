@@ -20,7 +20,6 @@ package net.xcine.util.object;
 
 import java.util.Iterator;
 
-import net.xcine.Config;
 import net.xcine.gameserver.model.L2Object;
 
 /**
@@ -50,14 +49,4 @@ public abstract class L2ObjectMap<T extends L2Object> implements Iterable<T>
 	@Override
 	public abstract Iterator<T> iterator();
 
-	public static L2ObjectMap<L2Object> createL2ObjectMap()
-	{
-		switch(Config.MAP_TYPE)
-		{
-			case WorldObjectMap:
-				return new WorldObjectMap<L2Object>();
-			default:
-				return new WorldObjectTree<L2Object>();
-		}
-	}
 }

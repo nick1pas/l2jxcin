@@ -44,9 +44,7 @@ import java.util.StringTokenizer;
 
 import javolution.util.FastComparator;
 import javolution.util.FastTable;
-
 import net.xcine.Config;
-import net.xcine.FService;
 import net.xcine.gameserver.Shutdown;
 import net.xcine.gameserver.cache.HtmCache;
 import net.xcine.gameserver.controllers.GameTimeController;
@@ -140,7 +138,7 @@ public class GameStatusThread extends Thread
 		try
 		{
 			Properties telnetSettings = new Properties();
-			telnetIS = new FileInputStream(new File(FService.TELNET_FILE));
+			telnetIS = new FileInputStream(new File(Config.TELNET_FILE));
 			telnetSettings.load(telnetIS);
 			
 			String HostList = telnetSettings.getProperty("ListOfHosts", "127.0.0.1,localhost,::1");

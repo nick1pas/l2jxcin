@@ -42,9 +42,7 @@ import javolution.util.FastMap;
 import javolution.xml.stream.XMLStreamConstants;
 import javolution.xml.stream.XMLStreamException;
 import javolution.xml.stream.XMLStreamReaderImpl;
-
 import net.xcine.Config;
-import net.xcine.FService;
 import net.xcine.loginserver.GameServerThread;
 import net.xcine.loginserver.network.gameserverpackets.ServerStatus;
 import net.xcine.util.CloseUtil;
@@ -120,10 +118,10 @@ public class GameServerTable
 		InputStream in = null;
 		try
 		{
-			File conf_file = new File(FService.SERVER_NAME_FILE);
+			File conf_file = new File(Config.SERVER_NAME_FILE);
 			if(!conf_file.exists()){
 				//old file position
-				conf_file = new File(FService.LEGACY_SERVER_NAME_FILE);
+				conf_file = new File(Config.LEGACY_SERVER_NAME_FILE);
 			}
 			
 			in = new FileInputStream(conf_file);

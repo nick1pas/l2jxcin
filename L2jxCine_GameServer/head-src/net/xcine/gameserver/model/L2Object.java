@@ -18,8 +18,6 @@
  */
 package net.xcine.gameserver.model;
 
-import java.lang.reflect.Constructor;
-
 import net.xcine.Config;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.managers.ItemsOnGroundManager;
@@ -64,43 +62,12 @@ public abstract class L2Object
 
 	// =========================================================
 	// Constructor
-
-	public L2Object(int objectId)
-	{
-		_objectId = objectId;
-		if(Config.EXTENDERS.get(this.getClass().getName()) != null)
-		{
-			for(String className : Config.EXTENDERS.get(this.getClass().getName()))
-			{
-				try
-				{
-					Class<?> clazz = Class.forName(className);
-					if(clazz == null)
-					{
-						continue;
-					}
-					if(!BaseExtender.class.isAssignableFrom(clazz))
-					{
-						continue;
-					}
-					if(!(Boolean) clazz.getMethod("canCreateFor", L2Object.class).invoke(null, this))
-					{
-						continue;
-					}
-					Constructor<?> construct = clazz.getConstructor(L2Object.class);
-					if(construct != null)
-					{
-						addExtender((BaseExtender) construct.newInstance(this));
-					}
-				}
-				catch(Exception e)
-				{
-					continue;
-				}
-			}
-		}
-	}
-	
+    
+    public L2Object(int objectId)
+    {
+        _objectId = objectId;
+        initPosition();
+    }
 	/**
 	 * @param newExtender as BaseExtender
 	 */
@@ -153,6 +120,10 @@ public abstract class L2Object
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 
+    public void initPosition()
+    {
+        _position = new ObjectPosition(this);
+    }
 	public void onActionShift(L2GameClient client)
 	{
 		// Like L2OFF send to L2PcInstance

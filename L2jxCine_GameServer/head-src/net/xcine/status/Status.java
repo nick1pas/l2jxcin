@@ -25,8 +25,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
-import net.xcine.FService;
+import net.xcine.Config;
 import net.xcine.ServerType;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.util.random.Rnd;
@@ -107,7 +106,7 @@ public class Status extends Thread
 		super("Status");
 		_mode = mode;
 		Properties telnetSettings = new Properties();
-		InputStream is = new FileInputStream(new File(FService.TELNET_FILE));
+		InputStream is = new FileInputStream(new File(Config.TELNET_FILE));
 		telnetSettings.load(is);
 		is.close();
 		

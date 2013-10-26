@@ -44,9 +44,6 @@ import java.util.logging.Level;
 import javolution.text.TextBuilder;
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
-import org.apache.commons.lang.RandomStringUtils;
-
 import net.xcine.Config;
 import net.xcine.crypt.nProtect;
 import net.xcine.gameserver.ai.CtrlIntention;
@@ -212,7 +209,6 @@ import net.xcine.gameserver.network.serverpackets.TitleUpdate;
 import net.xcine.gameserver.network.serverpackets.TradePressOtherOk;
 import net.xcine.gameserver.network.serverpackets.TradePressOwnOk;
 import net.xcine.gameserver.network.serverpackets.TradeStart;
-import net.xcine.gameserver.network.serverpackets.TutorialShowHtml;
 import net.xcine.gameserver.network.serverpackets.UserInfo;
 import net.xcine.gameserver.network.serverpackets.ValidateLocation;
 import net.xcine.gameserver.skills.Formulas;
@@ -889,9 +885,6 @@ public final class L2PcInstance extends L2PlayableInstance
 
 	/** The _correct word. */
 	public int _correctWord = -1;
-	
-	/** The _stop kick bot task. */
-	public boolean _stopKickBotTask = false;
 
 	/** Event Engine parameters. */
 	public int _originalNameColor, _countKills, _originalKarma, _eventKills;
@@ -8903,7 +8896,6 @@ private int _reviveRequested = 0;
 		stopRentPet();
 		stopPvpRegTask();
 		stopPunishTask(true);
-		stopBotChecker();
 		quakeSystem = 0;
 	}
 
@@ -13448,138 +13440,6 @@ private int _reviveRequested = 0;
 		}
 	}
 
-	/** The _task bot checker. */
-	private ScheduledFuture<?> _taskBotChecker;
-	
-	/** The _task kick bot. */
-	protected ScheduledFuture<?> _taskKickBot;
-
-	/**
-	 * The Class botChecker.
-	 */
-	class botChecker implements Runnable
-	{
-		
-		/* (non-Javadoc)
-		 * @see java.lang.Runnable#run()
-		 */
-		@Override
-		public void run()
-		{
-			/* Start bot checker if player is in combat online without shop and in a zone not peacefull */
-			if(isOnline() == 1 
-				&& isInCombat() 
-				&& getPrivateStoreType() == 0
-				&& !isInsideZone(L2Character.ZONE_PEACE))
-			{
-				try
-				{
-					String text = HtmCache.getInstance().getHtm("data/html/custom/bot.htm");
-					String word = Config.QUESTION_LIST.get(Rnd.get(Config.QUESTION_LIST.size()));
-					String output;
-					_correctWord = Rnd.get(5)+1;
-					
-					text = text.replace("%Time%", Integer.toString(Config.BOT_PROTECTOR_WAIT_ANSVER));
-					for(int i = 1; i <= 5; i++)
-					{
-						if(i != _correctWord)
-						{
-							output = RandomStringUtils.random(word.length(), word);
-						}else{
-							output = word;
-						}
-
-						text = text.replace("%Word"+i+"%", output);
-						if(i == _correctWord)
-						{
-							text = text.replace("%Word%", output);
-						}
-					
-					}
-
-					L2PcInstance.this.sendPacket(new TutorialShowHtml(text));
-
-					if(_taskKickBot == null)
-					{
-						_stopKickBotTask = false;
-						_taskKickBot = ThreadPoolManager.getInstance().scheduleGeneral(new kickBot(), 10);
-					}
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-			else
-			{
-				stopBotChecker();
-			}
-		}
-	}
-
-	/**
-	 * The Class kickBot.
-	 */
-	class kickBot implements Runnable
-	{
-		
-		/*
-		 * (non-Javadoc)
-		 * @see java.lang.Runnable#run()
-		 */
-		@SuppressWarnings("synthetic-access")
-		@Override
-		public void run()
-		{
-			if (isOnline() == 1 && getPrivateStoreType() == 0 && !isGM())
-			{
-				
-				for (int i = Config.BOT_PROTECTOR_WAIT_ANSVER; i >= 10; i -= 10)
-				{
-					if (_stopKickBotTask)
-					{
-						if (_taskKickBot != null)
-						{
-							_taskKickBot = null;
-						}
-						_stopKickBotTask = false;
-						return;
-					}
-					
-					L2PcInstance.this.sendMessage("You have " + i + " seconds to choose the answer.");
-					
-					try
-					{
-						Thread.sleep(10000);
-					}
-					catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
-				}
-				if (_stopKickBotTask)
-				{
-					if (_taskKickBot != null)
-					{
-						_taskKickBot = null;
-					}
-					_stopKickBotTask = false;
-					return;
-				}
-				_log.warning("Player " + L2PcInstance.this.getName() + " kicked from game, no/wrong answer on ANTI BOT!");
-				L2PcInstance.this.closeNetConnection();
-			}
-			else
-			{
-				if (_taskKickBot != null)
-				{
-					_taskKickBot = null;
-				}
-				_stopKickBotTask = false;
-			}
-		}
-	}
-
 	/**
 	 * The Class RentPetTask.
 	 */
@@ -15503,51 +15363,6 @@ private int _reviveRequested = 0;
 			_taskWarnUserTakeBreak = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new WarnUserTakeBreak(), 7200000, 7200000);
 		}
 	}
-
-	/**
-	 * Start bot checker.
-	 */
-	public void startBotChecker()
-	{
-		if(_taskBotChecker == null)
-		{
-			if(Config.QUESTION_LIST.size() != 0){
-				_taskBotChecker = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new botChecker(), Config.BOT_PROTECTOR_FIRST_CHECK * 60000, Config.BOT_PROTECTOR_NEXT_CHECK * 60000);
-			}else{
-				_log.warning("ATTENTION: Bot Checker is bad configured because config/questionwords.txt has 0 words of 6 to 15 keys");
-			}
-		}
-	}
-
-	/**
-	 * Stop bot checker.
-	 */
-	public void stopBotChecker()
-	{
-		if(_taskBotChecker != null)
-		{
-			_taskBotChecker.cancel(true);
-			_taskBotChecker = null;
-		}
-	}
-
-	/**
-	 * Check answer.
-	 *
-	 * @param id the id
-	 */
-	public void checkAnswer(int id)
-	{
-		if(id - 100000 == _correctWord)
-		{
-			_stopKickBotTask = true;
-		}
-		else
-		{
-			closeNetConnection();
-		}
-	}
-
 	/**
 	 * Stop rent pet.
 	 */
@@ -15671,11 +15486,6 @@ private int _reviveRequested = 0;
 	public void onPlayerEnter()
 	{
 		startWarnUserTakeBreak();
-
-		if(Config.BOT_PROTECTOR)
-		{
-			startBotChecker();
-		}
 
 		if(SevenSigns.getInstance().isSealValidationPeriod() || SevenSigns.getInstance().isCompResultsPeriod())
 		{

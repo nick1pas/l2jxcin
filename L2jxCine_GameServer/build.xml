@@ -156,10 +156,7 @@
 			<fileset dir="config">
 				<include name="*.properties" />
 				<include name="*.info" />
-				<include name="chatfilter.txt" />
-				<include name="questionwords.txt" />
 				<include name="key.cfg" />
-				<!-- include name="banned_ip.cfg" / -->
 			</fileset>
 		</copy>
 

@@ -30,7 +30,6 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.FService;
 import net.xcine.L2jxCine;
 import net.xcine.ServerType;
 import net.xcine.gameserver.datatables.GameServerTable;
@@ -81,10 +80,10 @@ public class L2LoginServer
 		try
 		{
 			//check for legacy Implementation
-			File log_conf_file = new File(FService.LOG_CONF_FILE);
+			File log_conf_file = new File(Config.LOG_CONF_FILE);
 			if(!log_conf_file.exists()){
 				//old file position
-				log_conf_file = new File(FService.LEGACY_LOG_CONF_FILE);
+				log_conf_file = new File(Config.LEGACY_LOG_CONF_FILE);
 			}
 			
 			is = new FileInputStream(log_conf_file);
@@ -259,10 +258,6 @@ public class L2LoginServer
 
 			System.exit(1);
 		}
-		
-		
-		//load bannedIps
-		Config.loadBanFile();
 		
 		logFolder = null;
 		bindAddress = null;

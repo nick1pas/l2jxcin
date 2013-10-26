@@ -27,7 +27,6 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.FService;
 import net.xcine.gameserver.datatables.GameServerTable;
 import net.xcine.loginserver.L2LoginServer;
 import net.xcine.loginserver.LoginController;
@@ -75,7 +74,7 @@ public class LoginStatusThread extends Thread
 		try
 		{
 			Properties telnetSettings = new Properties();
-			telnetIS = new FileInputStream(new File(FService.TELNET_FILE));
+			telnetIS = new FileInputStream(new File(Config.TELNET_FILE));
 			telnetSettings.load(telnetIS);
 			
 			String HostList = telnetSettings.getProperty("ListOfHosts", "127.0.0.1,localhost,::1");

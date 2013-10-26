@@ -31,9 +31,7 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
-import net.xcine.FService;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Clan;
@@ -211,7 +209,7 @@ public class SiegeManager
 		InputStream is = null;
 		try
 		{
-			is = new FileInputStream(new File(FService.SIEGE_CONFIGURATION_FILE));
+			is = new FileInputStream(new File(Config.SIEGE_CONFIGURATION_FILE));
 			Properties siegeSettings = new Properties();
 			siegeSettings.load(is);
 			

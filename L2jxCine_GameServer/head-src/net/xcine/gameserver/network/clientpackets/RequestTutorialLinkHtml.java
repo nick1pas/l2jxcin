@@ -14,10 +14,8 @@
  */
 package net.xcine.gameserver.network.clientpackets;
 
-import net.xcine.Config;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.QuestState;
-import net.xcine.gameserver.network.serverpackets.TutorialCloseHtml;
 
 /**
  * @author ProGramMoS
@@ -25,9 +23,6 @@ import net.xcine.gameserver.network.serverpackets.TutorialCloseHtml;
 public class RequestTutorialLinkHtml extends L2GameClientPacket
 {
 	private String _bypass;
-	private boolean protector_packet = false;
-	private int answer_id = 0;
-	
 	@Override
 	protected void readImpl()
 	{
@@ -37,8 +32,7 @@ public class RequestTutorialLinkHtml extends L2GameClientPacket
 			
 			try
 			{
-				answer_id = Integer.parseInt(_bypass);
-				protector_packet = true;
+				Integer.parseInt(_bypass);
 			}catch(NumberFormatException e){
 				//not bot protection packet
 			}
@@ -50,30 +44,13 @@ public class RequestTutorialLinkHtml extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		L2PcInstance player = getClient().getActiveChar();
-		if(player == null)
+		final L2PcInstance player = getClient().getActiveChar();
+		if (player == null)
 			return;
-
-		if(protector_packet){
-			
-			if(Config.BOT_PROTECTOR && answer_id >= 100001 && answer_id <= 100005){
-				
-				player.checkAnswer(answer_id);
-				player.sendPacket(new TutorialCloseHtml());
-				return;
-				
-			}
-			
-		}else{
-			
-			QuestState qs = player.getQuestState("255_Tutorial");
-			if(qs != null)
-			{
-				qs.getQuest().notifyEvent(_bypass, null, player);
-			}
-			
-		}
 		
+		QuestState qs = player.getQuestState("Tutorial");
+		if (qs != null)
+			qs.getQuest().notifyEvent(_bypass, null, player);
 	}
 
 	@Override

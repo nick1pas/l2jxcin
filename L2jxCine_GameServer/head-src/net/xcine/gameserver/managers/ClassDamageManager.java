@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.FService;
 import net.xcine.gameserver.datatables.sql.CharTemplateTable;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 
@@ -49,7 +48,7 @@ public class ClassDamageManager
 	
 	public static void loadConfig()
 	{
-		final String SCRIPT = FService.CLASS_DAMAGES_FILE;
+		final String SCRIPT = Config.CLASS_DAMAGES_FILE;
 		InputStream is = null;
 		File file = null;
 		try

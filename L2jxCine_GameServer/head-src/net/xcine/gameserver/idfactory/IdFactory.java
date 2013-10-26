@@ -23,7 +23,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
-import net.xcine.Config;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
@@ -101,22 +100,6 @@ public abstract class IdFactory
 	{
         setAllCharacterOffline();
         cleanUpDB();
-    }
-
-    static
-    {
-        switch (Config.IDFACTORY_TYPE)
-        {
-            case Compaction:
-                _instance   = new CompactionIDFactory();
-                break;
-            case BitSet:
-                _instance   = new BitSetIDFactory();
-                break;
-            case Stack:
-                _instance   = new StackIDFactory();
-                break;
-        }
     }
 
     /**

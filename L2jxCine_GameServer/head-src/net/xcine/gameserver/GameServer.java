@@ -30,7 +30,6 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.FService;
 import net.xcine.L2jxCine;
 import net.xcine.ServerType;
 import net.xcine.crypt.nProtect;
@@ -176,11 +175,11 @@ public class GameServer
 		// Create input stream for log file -- or store file data into memory
 		
 		// check for legacy Implementation
-		File log_conf_file = new File(FService.LOG_CONF_FILE);
+		File log_conf_file = new File(Config.LOG_CONF_FILE);
 		if (!log_conf_file.exists())
 		{
 			// old file position
-			log_conf_file = new File(FService.LEGACY_LOG_CONF_FILE);
+			log_conf_file = new File(Config.LEGACY_LOG_CONF_FILE);
 		}
 		
 		InputStream is = new FileInputStream(log_conf_file);

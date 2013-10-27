@@ -374,6 +374,10 @@ public final class RequestBuyItem extends L2GameClientPacket
 			} 
 			// Add item to Inventory and adjust update packet
 			player.getInventory().addItem("Buy", itemId, count, player, merchant);
+			
+			// Send success message.
+			player.sendPacket(new SystemMessage(SystemMessageId.SUCCESSFULLY_TRADED_WITH_NPC));
+			                       
 			/* TODO: Disabled until Leaseholders are rewritten ;-)
 						// Update Leaseholder list
 						if (_listId >= 1000000)

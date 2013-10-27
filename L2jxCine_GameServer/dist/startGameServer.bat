@@ -1,12 +1,7 @@
 @echo off
 title L2jxCine: Game Server Console
 :start
-echo Starting L2jxCine Core Game Server.
-echo Official website : http://www.L2jxCine.com
-echo Enjoy by server core. Bee happy!
-echo ------------------------------
 echo.
-
 
 REM -------------------------------------
 REM Default parameters for a basic server.

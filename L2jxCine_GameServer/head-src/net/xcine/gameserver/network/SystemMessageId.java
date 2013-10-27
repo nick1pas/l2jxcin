@@ -3857,6 +3857,12 @@ public enum SystemMessageId
 	 * Message: The Grand Olympiad Games are not currently in progress.
 	 */
 	THE_OLYMPIAD_GAME_IS_NOT_CURRENTLY_IN_PROGRESS(1651),
+	 
+    /**
+     * ID: 1656<br>
+     * Message: You have successfully traded the item with the NPC.
+     */
+     SUCCESSFULLY_TRADED_WITH_NPC(1656),
 
 	/**
 	 * ID: 1657<br>

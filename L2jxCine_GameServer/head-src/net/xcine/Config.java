@@ -85,8 +85,7 @@ public final class Config
 	
 	// Gates of File configs
 	public static final String EVENTS_CONFIG_FILE = "./config/Events.properties";
-	public static final String L2FROZEN_CONFIG_FILE = "./config/frozen/frozen.properties";
-
+	
 	// network
 	public static final String CONFIGURATION_FILE = "./config/network/gameserver.properties";
 	public static final String LOGIN_CONFIGURATION_FILE = "./config/network/loginserver.properties";
@@ -639,7 +638,20 @@ public final class Config
 	public static boolean TW_DISABLE_GK;
 	public static boolean TW_RESS_ON_DIE;
 	
-	// PC Bang Points
+	//L2jxCine
+	public static boolean BANKING_SYSTEM_ENABLED;
+	public static int BANKING_SYSTEM_GOLDBARS;
+	public static int BANKING_SYSTEM_ADENA;
+	public static boolean IS_CRAFTING_ENABLED;
+	public static int DWARF_RECIPE_LIMIT;
+	public static int COMMON_RECIPE_LIMIT;
+	public static boolean ALT_GAME_CREATION;
+	public static double ALT_GAME_CREATION_SPEED;
+	public static double ALT_GAME_CREATION_XP_RATE;
+	public static double ALT_GAME_CREATION_SP_RATE;
+	public static boolean ALT_BLACKSMITH_USE_RECIPES;
+	
+	// PC Bang Points	
 	public static boolean PCB_ENABLE;
 	public static int PCB_MIN_LEVEL;
 	public static int PCB_POINT_MIN;
@@ -712,30 +724,7 @@ public final class Config
 	public static int AI_MAX_THREAD;
 	public static boolean LAZY_CACHE;
 	public static boolean ENABLE_CACHE_INFO = false;
-	
-	//L2jxCine
-	public static boolean GM_TRADE_RESTRICTED_ITEMS;
-	public static boolean GM_CRITANNOUNCER_NAME;
-	public static boolean GM_RESTART_FIGHTING;
-	public static boolean PM_MESSAGE_ON_START;
-	public static boolean SERVER_TIME_ON_START;
-	public static String PM_SERVER_NAME;
-	public static String PM_TEXT1;
-	public static String PM_TEXT2;
-	public static boolean NEW_PLAYER_EFFECT;
-	public static boolean NEWBIE_CHAR_BUFF;
-	public static boolean BANKING_SYSTEM_ENABLED;
-	public static int BANKING_SYSTEM_GOLDBARS;
-	public static int BANKING_SYSTEM_ADENA;
-	public static boolean IS_CRAFTING_ENABLED;
-	public static int DWARF_RECIPE_LIMIT;
-	public static int COMMON_RECIPE_LIMIT;
-	public static boolean ALT_GAME_CREATION;
-	public static double ALT_GAME_CREATION_SPEED;
-	public static double ALT_GAME_CREATION_XP_RATE;
-	public static double ALT_GAME_CREATION_SP_RATE;
-	public static boolean ALT_BLACKSMITH_USE_RECIPES;
-	
+
 	// DM Event
 	public static boolean DM_ALLOW_INTERFERENCE;
 	public static boolean DM_ALLOW_POTIONS;
@@ -775,6 +764,12 @@ public final class Config
 	public static boolean ONLINE_PLAYERS_ON_LOGIN;
 	public static boolean SHOW_SERVER_VERSION;
 	public static boolean SHOW_NPC_CREST;
+	public static boolean GM_TRADE_RESTRICTED_ITEMS;
+	public static boolean GM_CRITANNOUNCER_NAME;
+	public static boolean GM_RESTART_FIGHTING;
+	public static boolean SERVER_TIME_ON_START;
+	public static boolean NEW_PLAYER_EFFECT;
+	public static boolean NEWBIE_CHAR_BUFF;
 	public static boolean SUBSTUCK_SKILLS;
 	public static boolean ALT_SERVER_NAME_ENABLED;
 	public static boolean ANNOUNCE_TO_ALL_SPAWN_RB;
@@ -798,8 +793,7 @@ public final class Config
 	public static boolean ALLOW_SIMPLE_STATS_VIEW;
 	public static boolean ALLOW_DETAILED_STATS_VIEW;
 	public static boolean ALLOW_ONLINE_VIEW;
-	public static boolean WELCOME_HTM;
-	public static boolean GM_WELCOME_HTM;
+	public static boolean WELCOME_HTM;	
 	public static String ALLOWED_SKILLS;
 	public static FastList<Integer> ALLOWED_SKILLS_LIST = new FastList<>();
 	public static boolean PROTECTOR_PLAYER_PK;
@@ -2176,6 +2170,17 @@ public final class Config
 
 			ExProperties pcbpSettings = load(EVENT_PC_BANG_POINT_FILE);
 
+			BANKING_SYSTEM_ENABLED = Boolean.parseBoolean(pcbpSettings.getProperty("BankingEnabled", "false"));
+			BANKING_SYSTEM_GOLDBARS = Integer.parseInt(pcbpSettings.getProperty("BankingGoldbarCount", "1"));
+			BANKING_SYSTEM_ADENA = Integer.parseInt(pcbpSettings.getProperty("BankingAdenaCount", "500000000"));
+			DWARF_RECIPE_LIMIT = Integer.parseInt(pcbpSettings.getProperty("DwarfRecipeLimit", "50"));
+			COMMON_RECIPE_LIMIT = Integer.parseInt(pcbpSettings.getProperty("CommonRecipeLimit", "50"));
+			IS_CRAFTING_ENABLED = Boolean.parseBoolean(pcbpSettings.getProperty("CraftingEnabled", "True"));
+			ALT_GAME_CREATION = Boolean.parseBoolean(pcbpSettings.getProperty("AltGameCreation", "False"));
+			ALT_GAME_CREATION_SPEED = Double.parseDouble(pcbpSettings.getProperty("AltGameCreationSpeed", "1"));
+			ALT_GAME_CREATION_XP_RATE = Double.parseDouble(pcbpSettings.getProperty("AltGameCreationRateXp", "1"));
+			ALT_GAME_CREATION_SP_RATE = Double.parseDouble(pcbpSettings.getProperty("AltGameCreationRateSp", "1"));
+			ALT_BLACKSMITH_USE_RECIPES = Boolean.parseBoolean(pcbpSettings.getProperty("AltBlacksmithUseRecipes", "True"));
 
 			OFFLINE_TRADE_ENABLE = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineTradeEnable", "false"));
 			OFFLINE_CRAFT_ENABLE = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineCraftEnable", "false"));
@@ -2257,28 +2262,6 @@ public final class Config
 
 			LAZY_CACHE = Boolean.valueOf(devSettings.getProperty("LazyCache", "False"));
 
-			ExProperties frozenSettings = load(L2FROZEN_CONFIG_FILE);
-			GM_TRADE_RESTRICTED_ITEMS = Boolean.parseBoolean(frozenSettings.getProperty("GMTradeRestrictedItems", "False"));
-			GM_RESTART_FIGHTING = Boolean.parseBoolean(frozenSettings.getProperty("GMRestartFighting", "False"));
-			PM_MESSAGE_ON_START = Boolean.parseBoolean(frozenSettings.getProperty("PMWelcomeShow", "False"));
-			SERVER_TIME_ON_START = Boolean.parseBoolean(frozenSettings.getProperty("ShowServerTimeOnStart", "False"));
-			PM_SERVER_NAME  = frozenSettings.getProperty("PMServerName", "L2-Frozen");
-			PM_TEXT1  = frozenSettings.getProperty("PMText1", "Have Fun and Nice Stay on");
-			PM_TEXT2  = frozenSettings.getProperty("PMText2", "Vote for us every 24h");
-			NEW_PLAYER_EFFECT = Boolean.parseBoolean(frozenSettings.getProperty("NewPlayerEffect", "True"));
-			NEWBIE_CHAR_BUFF = TypeFormat.parseBoolean(frozenSettings.getProperty("NewbieBuffCharacter", "False"));
-			BANKING_SYSTEM_ENABLED = Boolean.parseBoolean(frozenSettings.getProperty("BankingEnabled", "false"));
-			BANKING_SYSTEM_GOLDBARS = Integer.parseInt(frozenSettings.getProperty("BankingGoldbarCount", "1"));
-			BANKING_SYSTEM_ADENA = Integer.parseInt(frozenSettings.getProperty("BankingAdenaCount", "500000000"));
-			DWARF_RECIPE_LIMIT = Integer.parseInt(frozenSettings.getProperty("DwarfRecipeLimit", "50"));
-			COMMON_RECIPE_LIMIT = Integer.parseInt(frozenSettings.getProperty("CommonRecipeLimit", "50"));
-			IS_CRAFTING_ENABLED = Boolean.parseBoolean(frozenSettings.getProperty("CraftingEnabled", "True"));
-			ALT_GAME_CREATION = Boolean.parseBoolean(frozenSettings.getProperty("AltGameCreation", "False"));
-			ALT_GAME_CREATION_SPEED = Double.parseDouble(frozenSettings.getProperty("AltGameCreationSpeed", "1"));
-			ALT_GAME_CREATION_XP_RATE = Double.parseDouble(frozenSettings.getProperty("AltGameCreationRateXp", "1"));
-			ALT_GAME_CREATION_SP_RATE = Double.parseDouble(frozenSettings.getProperty("AltGameCreationRateSp", "1"));
-			ALT_BLACKSMITH_USE_RECIPES = Boolean.parseBoolean(frozenSettings.getProperty("AltBlacksmithUseRecipes", "True"));
-
 			ExProperties L2jxCineSettings = load(L2JCINE_CONFIG_FILE);
 
 			/** Custom Tables **/
@@ -2289,7 +2272,12 @@ public final class Config
 			ONLINE_PLAYERS_ON_LOGIN = Boolean.valueOf(L2jxCineSettings.getProperty("OnlineOnLogin", "False"));
 			SHOW_SERVER_VERSION = Boolean.valueOf(L2jxCineSettings.getProperty("ShowServerVersion", "False"));
 			SHOW_NPC_CREST = Boolean.parseBoolean(L2jxCineSettings.getProperty("ShowNpcCrest", "False"));
-			
+			GM_TRADE_RESTRICTED_ITEMS = Boolean.parseBoolean(L2jxCineSettings.getProperty("GMTradeRestrictedItems", "False"));
+			GM_RESTART_FIGHTING = Boolean.parseBoolean(L2jxCineSettings.getProperty("GMRestartFighting", "False"));
+			SERVER_TIME_ON_START = Boolean.parseBoolean(L2jxCineSettings.getProperty("ShowServerTimeOnStart", "False"));
+			NEW_PLAYER_EFFECT = Boolean.parseBoolean(L2jxCineSettings.getProperty("NewPlayerEffect", "True"));
+			NEWBIE_CHAR_BUFF = TypeFormat.parseBoolean(L2jxCineSettings.getProperty("NewbieBuffCharacter", "False"));
+
 			/** Protector **/
 			PROTECTOR_PLAYER_PK = Boolean.parseBoolean(L2jxCineSettings.getProperty("ProtectorPlayerPK", "false"));
 			PROTECTOR_PLAYER_PVP = Boolean.parseBoolean(L2jxCineSettings.getProperty("ProtectorPlayerPVP", "false"));
@@ -2310,7 +2298,6 @@ public final class Config
 
 			/** Welcome Htm **/
 			WELCOME_HTM = Boolean.parseBoolean(L2jxCineSettings.getProperty("WelcomeHtm", "False"));
-			GM_WELCOME_HTM = TypeFormat.parseBoolean(L2jxCineSettings.getProperty("GMWelcomeHtm", "False"));
 			
 			/** Server Name **/
 			ALT_SERVER_NAME_ENABLED = Boolean.parseBoolean(L2jxCineSettings.getProperty("ServerNameEnabled", "false"));

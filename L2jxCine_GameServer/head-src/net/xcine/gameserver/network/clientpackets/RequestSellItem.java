@@ -203,7 +203,10 @@ public final class RequestSellItem extends L2GameClientPacket
 			*/
 		}
 		player.addAdena("Sell", (int) totalPrice, merchant, false);
-
+		 
+		// Send success message.
+		player.sendPacket(new SystemMessage(SystemMessageId.SUCCESSFULLY_TRADED_WITH_NPC));
+		               
 		String html = HtmCache.getInstance().getHtm("data/html/" + htmlFolder + "/" + merchant.getNpcId() + "-sold.htm");
 
 		if(html != null)

@@ -613,19 +613,6 @@ public class EnterWorld extends L2GameClientPacket
 			}
 		}
 
-		if(Config.GM_WELCOME_HTM && activeChar.isGM() && isValidName(activeChar.getName()))
-		{
-			String Welcome_Path = "data/html/welcomegm.htm";
-			File mainText = new File(Config.DATAPACK_ROOT, Welcome_Path);
-			if(mainText.exists())
-			{
-				NpcHtmlMessage html = new NpcHtmlMessage(1);
-				html.setFile(Welcome_Path);
-				html.replace("%name%", activeChar.getName());
-				sendPacket(html);
-			}
-		}
-		
 		if (Config.WELCOME_HTM && isValidName(activeChar.getName()))
 		{
 			String Welcome_Path = "data/html/welcome.htm";
@@ -666,12 +653,6 @@ public class EnterWorld extends L2GameClientPacket
 			}
 		}
 
-		if (Config.PM_MESSAGE_ON_START)
-		{
-			activeChar.sendPacket(new CreatureSay(2, Say2.HERO_VOICE,Config.PM_TEXT1,Config.PM_SERVER_NAME));
-			activeChar.sendPacket(new CreatureSay(15, Say2.PARTYROOM_COMMANDER,activeChar.getName(),Config.PM_TEXT2));
-		}
-		
 		if (Config.SERVER_TIME_ON_START)
 			activeChar.sendMessage("SVR time is " + fmt.format(new Date(System.currentTimeMillis())));
 	}

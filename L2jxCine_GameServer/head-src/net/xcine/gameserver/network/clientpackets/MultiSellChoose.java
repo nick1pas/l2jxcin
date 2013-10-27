@@ -240,8 +240,9 @@ public class MultiSellChoose extends L2GameClientPacket
                 _ingredientsList.clear();
                 _ingredientsList = null;
                 FastList<L2Augmentation> augmentation = new FastList<>();
-                /** All ok, remove items and add final product */
-
+                // All ok. Remove items, add final product and send success message.
+                player.sendPacket(new SystemMessage(SystemMessageId.SUCCESSFULLY_TRADED_WITH_NPC));
+                 
                 for (MultiSellIngredient e : entry.getIngredients())
                 {
                         if (e.getItemId() != 65336 && e.getItemId() != 65436)

@@ -172,11 +172,6 @@
 			</fileset>
 		</copy>
 
-		<copy todir="${build.dist.game}/config/frozen">
-			<fileset dir="config/frozen">
-				<include name="*.properties" />
-			</fileset>
-		</copy>
 		<!-- network gameserver -->
 		<copy todir="${build.dist.game}/config/network">
 			<fileset dir="config/network">

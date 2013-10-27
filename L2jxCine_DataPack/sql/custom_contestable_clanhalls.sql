@@ -171,8 +171,3 @@ INSERT INTO `merchant_buylists` (`item_id`,`price`,`shop_id`,`order`,`count`,tim
 	(7011,29000,375007,40,1,1),
 	(7012,29000,375007,41,1,1),
 	(7013,29000,375007,42,1,1);
-
--- Insert new Teleports
-INSERT IGNORE INTO teleport VALUES 
-	('Clan Hall -> Forest of the Dead - East Entrance',75006,61868,-48890,-3128,0,0),
-	('Clan Hall -> Forest of the Dead - West Entrance',75007,45555,-56081,-3667,0,0);

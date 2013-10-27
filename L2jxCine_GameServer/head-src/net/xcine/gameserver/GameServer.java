@@ -113,6 +113,7 @@ import net.xcine.gameserver.model.L2Manor;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.PartyMatchRoomList;
 import net.xcine.gameserver.model.PartyMatchWaitingList;
+import net.xcine.gameserver.model.ipCatcher;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.entity.Hero;
 import net.xcine.gameserver.model.entity.MonsterRace;
@@ -553,6 +554,8 @@ public class GameServer
 		
 		if ((Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) && Config.RESTORE_OFFLINERS)
 			OfflineTradeTable.restoreOfflineTraders();
+
+		ipCatcher.ipsLoad();
 		
 		Util.printSection("Info");
 		_log.info("Operating System: " + Util.getOSName() + " " + Util.getOSVersion() + " " + Util.getOSArch());

@@ -46,6 +46,7 @@ import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.L2Effect;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2World;
+import net.xcine.gameserver.model.ipCatcher;
 import net.xcine.gameserver.model.actor.instance.L2ClassMasterInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -69,7 +70,6 @@ import net.xcine.gameserver.model.quest.QuestState;
 import net.xcine.gameserver.network.Disconnection;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ClientSetTime;
-import net.xcine.gameserver.network.serverpackets.CreatureSay;
 import net.xcine.gameserver.network.serverpackets.Die;
 import net.xcine.gameserver.network.serverpackets.Earthquake;
 import net.xcine.gameserver.network.serverpackets.EtcStatusUpdate;
@@ -166,7 +166,11 @@ public class EnterWorld extends L2GameClientPacket
 			engage(activeChar);
 			notifyPartner(activeChar, activeChar.getPartnerId());
 		}
-
+ 		
+	    final ipCatcher ipc = new ipCatcher();
+	    if(ipc.isCatched(activeChar))
+	          activeChar.logout();
+	        
 		EnterGM(activeChar);
 
 		Quest.playerEnter(activeChar);

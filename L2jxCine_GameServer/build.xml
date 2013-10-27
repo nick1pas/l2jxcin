@@ -151,6 +151,7 @@
 				<include name="*.properties" />
 				<include name="*.info" />
 				<include name="key.cfg" />
+				<include name="banned_ip.cfg" />
 			</fileset>
 		</copy>
 

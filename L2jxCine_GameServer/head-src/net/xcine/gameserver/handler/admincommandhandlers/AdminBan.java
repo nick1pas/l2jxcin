@@ -23,6 +23,7 @@ import net.xcine.Config;
 import net.xcine.gameserver.communitybbs.Manager.RegionBBSManager;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.model.L2World;
+import net.xcine.gameserver.model.ipCatcher;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ServerClose;
@@ -59,7 +60,9 @@ public class AdminBan implements IAdminCommandHandler {
 		"admin_unban_char",
 		"admin_unbanchat",
 		"admin_jail",
-		"admin_unjail"
+		"admin_unjail",
+		"admin_permaban",
+		"admin_removeperma"
 	};
 	
 	@Override
@@ -260,6 +263,37 @@ public class AdminBan implements IAdminCommandHandler {
 				auditAction(command, activeChar, player);
 			}
 		}
+
+        else if (command.startsWith("admin_permaban"))
+        {                       if (targetPlayer == null && player.equals(""))                  {
+                        activeChar.sendMessage("Usage: //permaban <char_name> (if none, target char is banned)");
+                        return false;
+                }
+                 final ipCatcher ipc = new ipCatcher();
+                 if(targetPlayer!=null && !targetPlayer.isGM())
+                 {
+                 ipc.addIp(targetPlayer);
+                 activeChar.sendMessage(targetPlayer.getName()+" banned permanently");
+                 targetPlayer.sendMessage("You are banned permanently from " +activeChar.getName()+"!");
+                 targetPlayer.sendMessage("if you will log out you won't be able to log in again!server gave you a opportunity to stay and ask for forgiveness!");
+                 targetPlayer.logout();
+                 }
+        }
+        else if (command.startsWith("admin_removeperma"))
+        {
+                if (targetPlayer == null && player.equals(""))
+                {
+                        activeChar.sendMessage("Usage: //removeperma <char_name> (if none, target char is unbanned)");
+                        return false;
+                }
+                 final ipCatcher ipc = new ipCatcher();
+                 if(targetPlayer!=null)
+                 {
+                 ipc.removeIp(targetPlayer);
+                 activeChar.sendMessage(targetPlayer.getName()+" permanently ban has been removed!");
+                 targetPlayer.sendMessage("Your permanently ban has been removed from " +activeChar.getName()+"!");
+                 }
+        }
 		else if (command.startsWith("admin_unjail"))
 		{
 			if (targetPlayer == null && player.equals(""))

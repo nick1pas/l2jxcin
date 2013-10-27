@@ -418,7 +418,6 @@ cnpcsinstall(){
 echo "Put in database custom NPCs..."
 $MYG < ../sql/customs/added_custom_merchant_buylist.sql &> /dev/null
 $MYG < ../sql/customs/added_custom_npc.sql &> /dev/null
-$MYG < ../sql/customs/added_custom_teleport.sql &> /dev/null
 echo "custom NPCs loaded with no-error. Greet!!!"
 custom
 }

@@ -1,4 +1,5 @@
-/* This program is free software; you can redistribute it and/or modify
+/*
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
  * any later version.
@@ -18,11 +19,11 @@
 package net.xcine.gameserver.managers;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.scripting.L2ScriptEngineManager;
@@ -45,52 +46,56 @@ public class QuestManager extends ScriptManager<Quest>
 
 	public QuestManager()
 	{
-		_log.info("Initializing QuestManager");
+		System.out.println("QuestManager: Initialized");
 	}
 
 	public final boolean reload(String questFolder)
 	{
 		Quest q = getQuest(questFolder);
 		if(q == null)
+		{
 			return false;
+		}
+
 		return q.reload();
 	}
 
-	/**
-	 * Reloads a the quest given by questId.<BR>
-	 * <B>NOTICE: Will only work if the quest name is equal the quest folder name</B>
-	 * 
-	 * @param questId The id of the quest to be reloaded
-	 * @return true if reload was succesful, false otherwise
-	 */
 	public final boolean reload(int questId)
 	{
 		Quest q = this.getQuest(questId);
 		if(q == null)
+		{
 			return false;
+		}
+
 		return q.reload();
 	}
 
 	public final void reloadAllQuests()
 	{
 		_log.info("Reloading Server Scripts");
-		// unload all scripts
-		for(Quest quest : _quests.values())
+		try
 		{
-			if(quest != null)
+			for(Quest quest : _quests.values())
 			{
-				quest.unload();
+				if(quest != null)
+				{
+					quest.unload();
+				}
 			}
+			File scripts = new File(Config.DATAPACK_ROOT + "/data/scripts/scripts.cfg");
+			L2ScriptEngineManager.getInstance().executeScriptsList(scripts);
+			QuestManager.getInstance().report();
 		}
-		// now load all scripts
-		File scripts = new File(Config.DATAPACK_ROOT + "/data/scripts.cfg");
-		L2ScriptEngineManager.getInstance().executeScriptsList(scripts);
-		QuestManager.getInstance().report();
+		catch(IOException ioe)
+		{
+			_log.severe("Failed loading scripts.cfg, no script going to be loaded");
+		}
 	}
 
 	public final void report()
 	{
-		_log.info("Loaded: " + _quests.size() + " quests");
+		_log.info("QuestManager: Loaded " + _quests.size() + " quests.");
 	}
 
 	public final void save()
@@ -101,8 +106,6 @@ public class QuestManager extends ScriptManager<Quest>
 		}
 	}
 
-	// =========================================================
-	// Property - Public
 	public final Quest getQuest(String name)
 	{
 		return getQuests().get(name);
@@ -113,7 +116,9 @@ public class QuestManager extends ScriptManager<Quest>
 		for(Quest q : getQuests().values())
 		{
 			if(q.getQuestIntId() == questId)
+			{
 				return q;
+			}
 		}
 		return null;
 	}
@@ -125,8 +130,6 @@ public class QuestManager extends ScriptManager<Quest>
 			_log.info("Replaced: " + newQuest.getName() + " with a new version");
 		}
 
-		// Note: FastMap will replace the old value if the key already exists
-		// so there is no need to explicitly try to remove the old reference.
 		getQuests().put(newQuest.getName(), newQuest);
 	}
 
@@ -140,9 +143,6 @@ public class QuestManager extends ScriptManager<Quest>
 		return (FastMap<String, Quest>) _quests;
 	}
 
-	/**
-	 * This will reload quests
-	 */
 	public static void reload()
 	{
 		_instance = new QuestManager();
@@ -170,5 +170,23 @@ public class QuestManager extends ScriptManager<Quest>
 	public final boolean removeQuest(Quest q)
 	{
 		return _quests.remove(q.getName()) != null;
+	}
+	
+	public final void getcountInd(String descr)
+	{
+		int count = 0;
+		String _name = "";
+		if(descr == "ai_grp")
+			_name = " Group templates";
+		else
+			_name = " Individual";
+		for(Quest q : getQuests().values())
+		{
+			if(q.getDescr() == descr)
+			{
+				count++;
+			}
+		}
+		_log.info("AI: Loaded " + count + _name + ".");
 	}
 }

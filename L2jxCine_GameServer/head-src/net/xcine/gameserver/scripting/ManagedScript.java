@@ -19,20 +19,19 @@
 package net.xcine.gameserver.scripting;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.script.ScriptException;
 
-import net.xcine.Config;
-
-/**
- * Abstract class for classes that are meant to be implemented by scripts.
- * @author KenM
- */
 public abstract class ManagedScript
 {
 	private File _scriptFile;
 	private long _lastLoadTime;
 	private boolean _isActive;
+
+	public abstract String getScriptName();
+	public abstract ScriptManager<?> getScriptManager();
+	public abstract boolean unload();
 
 	public ManagedScript()
 	{
@@ -40,12 +39,6 @@ public abstract class ManagedScript
 		setLastLoadTime(System.currentTimeMillis());
 	}
 
-	/**
-	 * Attempts to reload this script and to refresh the necessary bindings with it ScriptControler.<BR>
-	 * Subclasses of this class should override this method to properly refresh their bindings when necessary.
-	 * 
-	 * @return true if and only if the script was reloaded, false otherwise.
-	 */
 	public boolean reload()
 	{
 		try
@@ -53,16 +46,15 @@ public abstract class ManagedScript
 			L2ScriptEngineManager.getInstance().executeScript(getScriptFile());
 			return true;
 		}
+		catch(FileNotFoundException e)
+		{
+			return false;
+		}
 		catch(ScriptException e)
 		{
-			if(Config.ENABLE_ALL_EXCEPTIONS)
-				e.printStackTrace();
-			
 			return false;
 		}
 	}
-
-	public abstract boolean unload();
 
 	public void setActive(boolean status)
 	{
@@ -74,31 +66,19 @@ public abstract class ManagedScript
 		return _isActive;
 	}
 
-	/**
-	 * @return Returns the scriptFile.
-	 */
 	public File getScriptFile()
 	{
 		return _scriptFile;
 	}
 
-	/**
-	 * @param lastLoadTime The lastLoadTime to set.
-	 */
 	protected void setLastLoadTime(long lastLoadTime)
 	{
 		_lastLoadTime = lastLoadTime;
 	}
 
-	/**
-	 * @return Returns the lastLoadTime.
-	 */
 	protected long getLastLoadTime()
 	{
 		return _lastLoadTime;
 	}
 
-	public abstract String getScriptName();
-
-	public abstract ScriptManager<?> getScriptManager();
 }

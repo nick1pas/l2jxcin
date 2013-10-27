@@ -421,7 +421,6 @@ echo.
 echo Put in database custom NPCs...
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/customs/added_custom_merchant_buylist.sql
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/customs/added_custom_npc.sql
-%mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/customs/added_custom_teleport.sql
 echo custom NPCs loaded with no-error. Greet!!!
 pause
 :end

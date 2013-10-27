@@ -27,9 +27,9 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.csv.DoorTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
@@ -1580,7 +1580,7 @@ public class FourSepulchersManager extends GrandBossManager
 	{
 		for(int doorId : _hallGateKeepers.values())
 		{
-			L2DoorInstance door = DoorTable.getInstance().getDoor(doorId);
+			L2DoorInstance door = DoorData.getInstance().getDoor(doorId);
 			try
 			{
 				if(door != null)

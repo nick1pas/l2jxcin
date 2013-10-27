@@ -17,7 +17,7 @@
  */
 package net.xcine.gameserver.handler.itemhandlers;
 
-import net.xcine.gameserver.datatables.csv.DoorTable;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
@@ -90,10 +90,10 @@ public class MOSKey implements IItemHandler
 		{
 			if(door.getDoorId() == 23150003 || door.getDoorId() == 23150004)
 			{
-				DoorTable.getInstance().getDoor(23150003).openMe();
-				DoorTable.getInstance().getDoor(23150004).openMe();
-				DoorTable.getInstance().getDoor(23150003).onOpen();
-				DoorTable.getInstance().getDoor(23150004).onOpen();
+				DoorData.getInstance().getDoor(23150003).openMe();
+				DoorData.getInstance().getDoor(23150004).openMe();
+				DoorData.getInstance().getDoor(23150003).onOpen();
+				DoorData.getInstance().getDoor(23150004).onOpen();
 				activeChar.broadcastPacket(new SocialAction(activeChar.getObjectId(), 3));
 				LAST_OPEN = System.currentTimeMillis();
 			}

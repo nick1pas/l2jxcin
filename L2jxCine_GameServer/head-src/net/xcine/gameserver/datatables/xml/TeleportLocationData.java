@@ -26,18 +26,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-public class TeleportLocationTable
+public class TeleportLocationData
 {
-	private static Logger _log = Logger.getLogger(TeleportLocationTable.class.getName());
+	private static Logger _log = Logger.getLogger(TeleportLocationData.class.getName());
 	
 	private final TIntObjectHashMap<L2TeleportLocation> _teleports;
 	
-	public static TeleportLocationTable getInstance()
+	public static TeleportLocationData getInstance()
 	{
 		return SingletonHolder._instance;
 	}
 	
-	protected TeleportLocationTable()
+	protected TeleportLocationData()
 	{
 		_teleports = new TIntObjectHashMap<>();
 		load();
@@ -93,6 +93,6 @@ public class TeleportLocationTable
 	
 	private static class SingletonHolder
 	{
-		protected static final TeleportLocationTable _instance = new TeleportLocationTable();
+		protected static final TeleportLocationData _instance = new TeleportLocationData();
 	}
 }

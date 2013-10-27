@@ -33,9 +33,9 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.csv.DoorTable;
 import net.xcine.gameserver.geo.pathfinding.Node;
 import net.xcine.gameserver.geo.pathfinding.cellnodes.CellPathFinding;
+import net.xcine.gameserver.geo.util.Door;
 import net.xcine.gameserver.geo.util.L2Arrays;
 import net.xcine.gameserver.geo.util.LookupTable;
 import net.xcine.gameserver.model.L2Object;
@@ -101,7 +101,7 @@ public final class GeoEngine extends GeoData
 	@Override
 	public boolean canSeeTarget(L2Object cha, Point3D target)
 	{
-		if(DoorTable.getInstance().checkIfDoorsBetween(cha.getX(), cha.getY(), cha.getZ(), target.getX(), target.getY(), target.getZ()))
+		if(Door.getInstance().checkIfDoorsBetween(cha.getX(), cha.getY(), cha.getZ(), target.getX(), target.getY(), target.getZ()))
 			return false;
 		if(cha.getZ() >= target.getZ())
 			return canSeeTarget(cha.getX(), cha.getY(), cha.getZ(), target.getX(), target.getY(), target.getZ());
@@ -126,7 +126,7 @@ public final class GeoEngine extends GeoData
 		int z2 = target.getZ() + 45;
 		if(target instanceof L2DoorInstance)
 			return true; // door coordinates are hinge coords..
-		if(DoorTable.getInstance().checkIfDoorsBetween(cha.getX(), cha.getY(), z, target.getX(), target.getY(), z2))
+		if(Door.getInstance().checkIfDoorsBetween(cha.getX(), cha.getY(), z, target.getX(), target.getY(), z2))
 			return false;
 		if(target instanceof L2SiegeGuardInstance)
 			z2 += 30; // well they don't move closer to balcony fence at the moment :(
@@ -169,7 +169,7 @@ public final class GeoEngine extends GeoData
 	public Location moveCheck(int x, int y, int z, int tx, int ty, int tz)
 	{
 		Location startpoint = new Location(x, y, z);
-		if(DoorTable.getInstance().checkIfDoorsBetween(x, y, z, tx, ty, tz))
+		if(Door.getInstance().checkIfDoorsBetween(x, y, z, tx, ty, tz))
 			return startpoint;
 
 		Location destiny = new Location(tx, ty, tz);

@@ -28,7 +28,7 @@ import net.xcine.Config;
 import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
-import net.xcine.gameserver.datatables.xml.TeleportLocationTable;
+import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.managers.DayNightSpawnManager;
 import net.xcine.gameserver.managers.GrandBossManager;
@@ -217,7 +217,7 @@ public class AdminSpawn implements IAdminCommandHandler
 		}
 		else if(command.startsWith("admin_teleport_reload"))
 		{
-			TeleportLocationTable.getInstance().reload();
+			TeleportLocationData.getInstance().reload();
 			GmListTable.broadcastMessageToGMs("Teleport List Table reloaded.");
 		}
 

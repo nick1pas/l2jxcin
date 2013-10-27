@@ -21,9 +21,9 @@ import javolution.util.FastList;
 
 import net.xcine.Config;
 import net.xcine.gameserver.cache.HtmCache;
-import net.xcine.gameserver.datatables.csv.DoorTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
@@ -228,7 +228,7 @@ public class IceFairySirra extends Quest implements Runnable
 		{
 			try
 			{
-				L2DoorInstance door = DoorTable.getInstance().getDoor(i);
+				L2DoorInstance door = DoorData.getInstance().getDoor(i);
 				if(door != null)
 				{
 					door.openMe();
@@ -254,7 +254,7 @@ public class IceFairySirra extends Quest implements Runnable
 		{
 			try
 			{
-				L2DoorInstance door = DoorTable.getInstance().getDoor(i);
+				L2DoorInstance door = DoorData.getInstance().getDoor(i);
 				if(door != null)
 				{
 					door.closeMe();

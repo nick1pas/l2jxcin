@@ -44,15 +44,10 @@ import net.xcine.gameserver.datatables.HeroSkillTable;
 import net.xcine.gameserver.datatables.NobleSkillTable;
 import net.xcine.gameserver.datatables.OfflineTradeTable;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.csv.DoorTable;
 import net.xcine.gameserver.datatables.csv.ExtractableItemsData;
-import net.xcine.gameserver.datatables.csv.FishTable;
-import net.xcine.gameserver.datatables.csv.HennaTable;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.csv.NpcWalkerRoutesTable;
 import net.xcine.gameserver.datatables.csv.RecipeTable;
-import net.xcine.gameserver.datatables.csv.StaticObjects;
-import net.xcine.gameserver.datatables.csv.SummonItemsData;
 import net.xcine.gameserver.datatables.sql.AccessLevels;
 import net.xcine.gameserver.datatables.sql.AdminCommandAccessRights;
 import net.xcine.gameserver.datatables.sql.ArmorSetsTable;
@@ -60,7 +55,6 @@ import net.xcine.gameserver.datatables.sql.CharNameTable;
 import net.xcine.gameserver.datatables.sql.CharTemplateTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.CustomArmorSetsTable;
-import net.xcine.gameserver.datatables.sql.HelperBuffTable;
 import net.xcine.gameserver.datatables.sql.HennaTreeTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.L2PetDataTable;
@@ -70,8 +64,14 @@ import net.xcine.gameserver.datatables.sql.SkillSpellbookTable;
 import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.AugmentationData;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
-import net.xcine.gameserver.datatables.xml.TeleportLocationTable;
+import net.xcine.gameserver.datatables.xml.FishTable;
+import net.xcine.gameserver.datatables.xml.HelperBuffData;
+import net.xcine.gameserver.datatables.xml.HennaData;
+import net.xcine.gameserver.datatables.xml.StaticObjectsData;
+import net.xcine.gameserver.datatables.xml.SummonItemsData;
+import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.datatables.xml.ZoneData;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.geo.geoeditorcon.GeoEditorListener;
@@ -228,8 +228,8 @@ public class GameServer
             throw new Exception("Could not initialize the ID factory");
         }
 
-		StaticObjects.getInstance();
-		TeleportLocationTable.getInstance();
+		StaticObjectsData.load();
+		TeleportLocationData.getInstance();
 		PartyMatchWaitingList.getInstance();
 		PartyMatchRoomList.getInstance();
 		GameTimeController.getInstance();
@@ -290,19 +290,11 @@ public class GameServer
 		ClanTable.getInstance();
 		CharTemplateTable.getInstance();
 		LevelUpData.getInstance();
-		if (!HennaTable.getInstance().isInitialized())
-		{
-			throw new Exception("Could not initialize the Henna Table");
-		}
-		
+		HennaData.getInstance();
+		HelperBuffData.getInstance();
 		if (!HennaTreeTable.getInstance().isInitialized())
 		{
 			throw new Exception("Could not initialize the Henna Tree Table");
-		}
-		
-		if (!HelperBuffTable.getInstance().isInitialized())
-		{
-			throw new Exception("Could not initialize the Helper Buff Table");
 		}
 		
 		Util.printSection("Geodata");
@@ -391,7 +383,7 @@ public class GameServer
 		BoatManager.getInstance();
 		
 		Util.printSection("Doors");
-		DoorTable.getInstance().parseData();
+		DoorData.getInstance().parseData();
 		
 		Util.printSection("Four Sepulchers");
 		FourSepulchersManager.getInstance();
@@ -425,7 +417,7 @@ public class GameServer
 		
 		try
 		{
-			DoorTable doorTable = DoorTable.getInstance();
+			DoorData doorTable = DoorData.getInstance();
 			
 			// Opened by players like L2OFF
 			//doorTable.getDoor(19160010).openMe();

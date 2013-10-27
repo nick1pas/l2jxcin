@@ -18,7 +18,7 @@
  */
 package net.xcine.gameserver.handler.admincommandhandlers;
 
-import net.xcine.gameserver.datatables.csv.DoorTable;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.model.L2Object;
@@ -48,7 +48,7 @@ import net.xcine.gameserver.model.entity.siege.Castle;
 public class AdminDoorControl implements IAdminCommandHandler
 {
 	//private static Logger      _log            = Logger.getLogger(AdminDoorControl.class.getName());
-	private static DoorTable _doorTable;
+	private static DoorData _doorTable;
 	private static final String[] ADMIN_COMMANDS =
 	{
 			"admin_open", "admin_close", "admin_openall", "admin_closeall"
@@ -76,7 +76,7 @@ public class AdminDoorControl implements IAdminCommandHandler
 		}
 		*/
 
-		_doorTable = DoorTable.getInstance();
+		_doorTable = DoorData.getInstance();
 
 		L2Object target2 = null;
 

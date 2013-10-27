@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
-import net.xcine.gameserver.datatables.csv.HennaTable;
+import net.xcine.gameserver.datatables.xml.HennaData;
 import net.xcine.gameserver.model.actor.instance.L2HennaInstance;
 import net.xcine.gameserver.model.base.ClassId;
 import net.xcine.gameserver.templates.L2Henna;
@@ -82,7 +82,7 @@ public class HennaTreeTable
 				{
 					int id = hennatree.getInt("symbol_id");
 					//String name = hennatree.getString("name");
-					L2Henna template = HennaTable.getInstance().getTemplate(id);
+					L2Henna template = HennaData.getInstance().getTemplate(id);
 
 					if(template == null)
 					{

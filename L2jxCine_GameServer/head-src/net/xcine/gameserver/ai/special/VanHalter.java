@@ -32,9 +32,9 @@ import javolution.util.FastMap;
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.csv.DoorTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Effect;
 import net.xcine.gameserver.model.L2Skill;
@@ -142,11 +142,11 @@ public class VanHalter extends Quest implements Runnable
 		_isHalterSpawned = false;
 
 		// Setting door state.
-		_doorOfAltar.add(DoorTable.getInstance().getDoor(19160014));
-		_doorOfAltar.add(DoorTable.getInstance().getDoor(19160015));
+		_doorOfAltar.add(DoorData.getInstance().getDoor(19160014));
+		_doorOfAltar.add(DoorData.getInstance().getDoor(19160015));
 		openDoorOfAltar(true);
-		_doorOfSacrifice.add(DoorTable.getInstance().getDoor(19160016));
-		_doorOfSacrifice.add(DoorTable.getInstance().getDoor(19160017));
+		_doorOfSacrifice.add(DoorData.getInstance().getDoor(19160016));
+		_doorOfSacrifice.add(DoorData.getInstance().getDoor(19160017));
 		closeDoorOfSacrifice();
 
 		// Load spawn data of monsters.

@@ -21,9 +21,9 @@ import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.datatables.sql.AccessLevels;
 import net.xcine.gameserver.datatables.sql.AdminCommandAccessRights;
 import net.xcine.gameserver.datatables.sql.ClanTable;
-import net.xcine.gameserver.datatables.sql.HelperBuffTable;
 import net.xcine.gameserver.datatables.xml.AugmentationData;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
+import net.xcine.gameserver.datatables.xml.HelperBuffData;
 
 public class DatatablesManager
 {
@@ -34,7 +34,7 @@ public class DatatablesManager
 		GmListTable.reload();
 		AugmentationData.reload();
 		ClanTable.reload();
-		HelperBuffTable.reload();
+		HelperBuffData.getInstance();
 		ExperienceData.getInstance();
 	}
 }

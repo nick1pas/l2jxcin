@@ -20,7 +20,7 @@ import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.controllers.GameTimeController;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.csv.DoorTable;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
@@ -139,7 +139,7 @@ public class Zaken_l2j extends Quest implements Runnable
 					if (getTimeHour() == 0)
 					{
 						_log.info("Zaken door id 21240006 opened, game time 00.00.");
-						DoorTable.getInstance().getDoor(21240006).openMe();
+						DoorData.getInstance().getDoor(21240006).openMe();
 						ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 						{
 							@Override
@@ -148,7 +148,7 @@ public class Zaken_l2j extends Quest implements Runnable
 								try
 								{
 									_log.info("Zaken door id 21240006 closed.");
-									DoorTable.getInstance().getDoor(21240006).closeMe();
+									DoorData.getInstance().getDoor(21240006).closeMe();
 								}
 								catch (Throwable e)
 								{

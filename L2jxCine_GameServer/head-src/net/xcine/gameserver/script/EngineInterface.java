@@ -30,7 +30,7 @@ import net.xcine.gameserver.datatables.sql.LevelUpData;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
-import net.xcine.gameserver.datatables.xml.TeleportLocationTable;
+import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.entity.Announcements;
@@ -56,7 +56,7 @@ public interface EngineInterface
 
 	public NpcTable npcTable = NpcTable.getInstance();
 
-	public TeleportLocationTable teleTable = TeleportLocationTable.getInstance();
+	public TeleportLocationData teleTable = TeleportLocationData.getInstance();
 	public LevelUpData levelUpData = LevelUpData.getInstance();
 	public L2World world = L2World.getInstance();
 	public SpawnTable spawnTable = SpawnTable.getInstance();

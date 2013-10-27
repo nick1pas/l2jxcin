@@ -21,7 +21,7 @@ package net.xcine.gameserver.model.actor.instance;
 import java.util.StringTokenizer;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.xml.TeleportLocationTable;
+import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.managers.SiegeManager;
@@ -233,7 +233,7 @@ public final class L2TeleporterInstance extends L2FolkInstance
 	 */
 	private void doTeleport(L2PcInstance player, int val)
 	{
-		L2TeleportLocation list = TeleportLocationTable.getInstance().getTemplate(val);
+		L2TeleportLocation list = TeleportLocationData.getInstance().getTemplate(val);
 		if(list != null)
 		{
 			//you cannot teleport to village that is in siege

@@ -25,10 +25,10 @@ import javolution.text.TextBuilder;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.csv.DoorTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.model.L2Party;
 import net.xcine.gameserver.model.L2Summon;
@@ -2870,16 +2870,16 @@ public class TvT implements EventTask
 	 */
 	private static void closeFortDoors()
 	{
-		DoorTable.getInstance().getDoor(23170004).closeMe();
-		DoorTable.getInstance().getDoor(23170005).closeMe();
-		DoorTable.getInstance().getDoor(23170002).closeMe();
-		DoorTable.getInstance().getDoor(23170003).closeMe();
-		DoorTable.getInstance().getDoor(23170006).closeMe();
-		DoorTable.getInstance().getDoor(23170007).closeMe();
-		DoorTable.getInstance().getDoor(23170008).closeMe();
-		DoorTable.getInstance().getDoor(23170009).closeMe();
-		DoorTable.getInstance().getDoor(23170010).closeMe();
-		DoorTable.getInstance().getDoor(23170011).closeMe();
+		DoorData.getInstance().getDoor(23170004).closeMe();
+		DoorData.getInstance().getDoor(23170005).closeMe();
+		DoorData.getInstance().getDoor(23170002).closeMe();
+		DoorData.getInstance().getDoor(23170003).closeMe();
+		DoorData.getInstance().getDoor(23170006).closeMe();
+		DoorData.getInstance().getDoor(23170007).closeMe();
+		DoorData.getInstance().getDoor(23170008).closeMe();
+		DoorData.getInstance().getDoor(23170009).closeMe();
+		DoorData.getInstance().getDoor(23170010).closeMe();
+		DoorData.getInstance().getDoor(23170011).closeMe();
 
 		try
 		{
@@ -2899,16 +2899,16 @@ public class TvT implements EventTask
 	 */
 	private static void openFortDoors()
 	{
-		DoorTable.getInstance().getDoor(23170004).openMe();
-		DoorTable.getInstance().getDoor(23170005).openMe();
-		DoorTable.getInstance().getDoor(23170002).openMe();
-		DoorTable.getInstance().getDoor(23170003).openMe();
-		DoorTable.getInstance().getDoor(23170006).openMe();
-		DoorTable.getInstance().getDoor(23170007).openMe();
-		DoorTable.getInstance().getDoor(23170008).openMe();
-		DoorTable.getInstance().getDoor(23170009).openMe();
-		DoorTable.getInstance().getDoor(23170010).openMe();
-		DoorTable.getInstance().getDoor(23170011).openMe();
+		DoorData.getInstance().getDoor(23170004).openMe();
+		DoorData.getInstance().getDoor(23170005).openMe();
+		DoorData.getInstance().getDoor(23170002).openMe();
+		DoorData.getInstance().getDoor(23170003).openMe();
+		DoorData.getInstance().getDoor(23170006).openMe();
+		DoorData.getInstance().getDoor(23170007).openMe();
+		DoorData.getInstance().getDoor(23170008).openMe();
+		DoorData.getInstance().getDoor(23170009).openMe();
+		DoorData.getInstance().getDoor(23170010).openMe();
+		DoorData.getInstance().getDoor(23170011).openMe();
 
 	}
 	
@@ -2917,8 +2917,8 @@ public class TvT implements EventTask
 	 */
 	private static void closeAdenColosseumDoors()
 	{
-		DoorTable.getInstance().getDoor(24190002).closeMe();
-		DoorTable.getInstance().getDoor(24190003).closeMe();
+		DoorData.getInstance().getDoor(24190002).closeMe();
+		DoorData.getInstance().getDoor(24190003).closeMe();
 
 		try
 		{
@@ -2938,8 +2938,8 @@ public class TvT implements EventTask
 	 */
 	private static void openAdenColosseumDoors()
 	{
-		DoorTable.getInstance().getDoor(24190002).openMe();
-		DoorTable.getInstance().getDoor(24190003).openMe();
+		DoorData.getInstance().getDoor(24190002).openMe();
+		DoorData.getInstance().getDoor(24190003).openMe();
 
 	}
 }

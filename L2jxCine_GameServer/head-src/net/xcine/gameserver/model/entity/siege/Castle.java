@@ -30,8 +30,8 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.csv.DoorTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.CastleManorManager;
 import net.xcine.gameserver.managers.CastleManorManager.CropProcure;
@@ -489,7 +489,7 @@ public class Castle
 			if(door.getCurrentHp() <= 0)
 			{
 				door.decayMe(); // Kill current if not killed already
-				door = DoorTable.parseList(_doorDefault.get(i));
+				door = DoorData.parseList(_doorDefault.get(i));
 
 				if(isDoorWeak)
 				{
@@ -625,10 +625,10 @@ public class Castle
 				// Create list of the door default for use when respawning dead doors
 				_doorDefault.add(rs.getString("name") + ";" + rs.getInt("id") + ";" + rs.getInt("x") + ";" + rs.getInt("y") + ";" + rs.getInt("z") + ";" + rs.getInt("range_xmin") + ";" + rs.getInt("range_ymin") + ";" + rs.getInt("range_zmin") + ";" + rs.getInt("range_xmax") + ";" + rs.getInt("range_ymax") + ";" + rs.getInt("range_zmax") + ";" + rs.getInt("hp") + ";" + rs.getInt("pDef") + ";" + rs.getInt("mDef"));
 
-				L2DoorInstance door = DoorTable.parseList(_doorDefault.get(_doorDefault.size() - 1));
+				L2DoorInstance door = DoorData.parseList(_doorDefault.get(_doorDefault.size() - 1));
 				door.spawnMe(door.getX(), door.getY(), door.getZ());
 				_doors.add(door);
-				DoorTable.getInstance().putDoor(door);
+				DoorData.getInstance().putDoor(door);
 
 				door = null;
 			}

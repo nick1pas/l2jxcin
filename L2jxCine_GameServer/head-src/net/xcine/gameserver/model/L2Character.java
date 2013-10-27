@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastTable;
-
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlEvent;
 import net.xcine.gameserver.ai.CtrlIntention;
@@ -41,13 +40,13 @@ import net.xcine.gameserver.ai.L2CharacterAI;
 import net.xcine.gameserver.controllers.GameTimeController;
 import net.xcine.gameserver.datatables.HeroSkillTable;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.csv.DoorTable;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.csv.MapRegionTable.TeleportWhereType;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.geo.pathfinding.Node;
 import net.xcine.gameserver.geo.pathfinding.PathFinding;
+import net.xcine.gameserver.geo.util.Door;
 import net.xcine.gameserver.handler.ISkillHandler;
 import net.xcine.gameserver.handler.SkillHandler;
 import net.xcine.gameserver.handler.itemhandlers.Potions;
@@ -6736,7 +6735,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 						z = m.geoPath[m.onGeodataPathIndex].getZ();
 
 						// check for doors in the route
-						if(DoorTable.getInstance().checkIfDoorsBetween(curX, curY, curZ, x, y, z))
+						if(Door.getInstance().checkIfDoorsBetween(curX, curY, curZ, x, y, z))
 						{
 							m.geoPath = null;
 							getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
@@ -6745,7 +6744,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 
 						for(int i = 0; i < m.geoPath.length - 1; i++)
 						{
-							if(DoorTable.getInstance().checkIfDoorsBetween(m.geoPath[i], m.geoPath[i+1]))
+							if(Door.getInstance().checkIfDoorsBetween(m.geoPath[i], m.geoPath[i+1]))
 							{
 								m.geoPath = null;
 								getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);

@@ -24,7 +24,7 @@ import java.util.StringTokenizer;
 import net.xcine.Config;
 import net.xcine.gameserver.controllers.TradeController;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.xml.TeleportLocationTable;
+import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.managers.SiegeManager;
 import net.xcine.gameserver.model.L2Clan;
@@ -1030,7 +1030,7 @@ public class L2ClanHallManagerInstance extends L2FolkInstance
 		{
 			player.sendMessage("doTeleport(L2PcInstance player, int val) is called");
 		}
-		L2TeleportLocation list = TeleportLocationTable.getInstance().getTemplate(val);
+		L2TeleportLocation list = TeleportLocationData.getInstance().getTemplate(val);
 		if(list != null)
 		{
 			//you cannot teleport to village that is in siege Not sure about this one though

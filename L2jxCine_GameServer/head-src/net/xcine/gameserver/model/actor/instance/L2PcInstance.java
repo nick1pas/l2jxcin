@@ -60,8 +60,6 @@ import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.datatables.HeroSkillTable;
 import net.xcine.gameserver.datatables.NobleSkillTable;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.csv.FishTable;
-import net.xcine.gameserver.datatables.csv.HennaTable;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.csv.RecipeTable;
 import net.xcine.gameserver.datatables.sql.AccessLevels;
@@ -72,6 +70,8 @@ import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
+import net.xcine.gameserver.datatables.xml.FishTable;
+import net.xcine.gameserver.datatables.xml.HennaData;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.handler.ItemHandler;
@@ -11601,7 +11601,7 @@ private int _reviveRequested = 0;
 
 				if(symbol_id != 0)
 				{
-					L2Henna tpl = HennaTable.getInstance().getTemplate(symbol_id);
+					L2Henna tpl = HennaData.getInstance().getTemplate(symbol_id);
 
 					if(tpl != null)
 					{

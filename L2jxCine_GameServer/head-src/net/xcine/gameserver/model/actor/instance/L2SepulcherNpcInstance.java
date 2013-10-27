@@ -22,7 +22,7 @@ import javolution.util.FastMap;
 
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
-import net.xcine.gameserver.datatables.csv.DoorTable;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.managers.FourSepulchersManager;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.quest.Quest;
@@ -376,7 +376,7 @@ public class L2SepulcherNpcInstance extends L2NpcInstance
 	public void openNextDoor(int npcId)
 	{
 		int doorId = FourSepulchersManager.getInstance().getHallGateKeepers().get(npcId).intValue();
-		DoorTable _doorTable = DoorTable.getInstance();
+		DoorData _doorTable = DoorData.getInstance();
 		_doorTable.getDoor(doorId).openMe();
 
 		if(_closeTask != null)
@@ -393,7 +393,7 @@ public class L2SepulcherNpcInstance extends L2NpcInstance
 
 	private class CloseNextDoor implements Runnable
 	{
-		final DoorTable _DoorTable = DoorTable.getInstance();
+		final DoorData _DoorTable = DoorData.getInstance();
 
 		private int _DoorId;
 

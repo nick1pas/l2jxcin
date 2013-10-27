@@ -241,7 +241,6 @@ echo *** Sucesfull 47 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/grandboss_list.sql
 
 echo *** Sucesfull 48 percents. ***
-%mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/helper_buff_list.sql
 
 echo *** Sucesfull 49 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/henna_trees.sql

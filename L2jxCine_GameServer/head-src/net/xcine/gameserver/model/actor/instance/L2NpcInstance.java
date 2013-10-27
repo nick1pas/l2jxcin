@@ -31,9 +31,9 @@ import net.xcine.gameserver.cache.HtmCache;
 import net.xcine.gameserver.datatables.MobGroupTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
-import net.xcine.gameserver.datatables.sql.HelperBuffTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
+import net.xcine.gameserver.datatables.xml.HelperBuffData;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.CustomNpcInstanceManager;
@@ -2463,13 +2463,13 @@ public class L2NpcInstance extends L2Character
 		// Calculate the min and max level between wich the player must be to obtain buff
 		if (player.isMageClass())
 		{
-			lowestLevel = HelperBuffTable.getInstance().getMagicClassLowestLevel();
-			higestLevel = HelperBuffTable.getInstance().getMagicClassHighestLevel();
+			lowestLevel = HelperBuffData.getInstance().getMagicClassLowestLevel();
+			higestLevel = HelperBuffData.getInstance().getMagicClassHighestLevel();
 		}
 		else
 		{
-			lowestLevel = HelperBuffTable.getInstance().getPhysicClassLowestLevel();
-			higestLevel = HelperBuffTable.getInstance().getPhysicClassHighestLevel();
+			lowestLevel = HelperBuffData.getInstance().getPhysicClassLowestLevel();
+			higestLevel = HelperBuffData.getInstance().getPhysicClassHighestLevel();
 		}
 		
 		// If the player is too high level, display a message and return
@@ -2490,7 +2490,7 @@ public class L2NpcInstance extends L2Character
 		
 		L2Skill skill = null;
 		// Go through the Helper Buff list define in sql table helper_buff_list and cast skill
-		for (L2HelperBuff helperBuffItem : HelperBuffTable.getInstance().getHelperBuffTable())
+		for (L2HelperBuff helperBuffItem : HelperBuffData.getInstance().getHelperBuffTable())
 		{
 			if (helperBuffItem.isMagicClassBuff() == player.isMageClass())
 			{

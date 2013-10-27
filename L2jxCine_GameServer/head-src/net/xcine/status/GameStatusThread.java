@@ -53,7 +53,7 @@ import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
-import net.xcine.gameserver.datatables.xml.TeleportLocationTable;
+import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.datatables.xml.ZoneData;
 import net.xcine.gameserver.managers.DayNightSpawnManager;
 import net.xcine.gameserver.managers.Manager;
@@ -837,7 +837,7 @@ public class GameStatusThread extends Thread
 						else if (type.equals("teleports"))
 						{
 							_print.print("Reloading telport location table... ");
-							TeleportLocationTable.getInstance().reload();
+							TeleportLocationData.getInstance().reload();
 							_print.println("done");
 						}
 						else if (type.equals("spawns"))

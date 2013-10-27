@@ -32,9 +32,9 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 
-import net.xcine.gameserver.datatables.csv.DoorTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.model.L2Character;
@@ -190,17 +190,17 @@ public class WildBeastFarmSiege extends ClanHallSiege
 	{
 		if(val == 1)
 		{
-			DoorTable.getInstance().getDoor(21150003).openMe();
-			DoorTable.getInstance().getDoor(21150004).openMe();
-			DoorTable.getInstance().getDoor(21150001).closeMe();
-			DoorTable.getInstance().getDoor(21150002).closeMe();
+			DoorData.getInstance().getDoor(21150003).openMe();
+			DoorData.getInstance().getDoor(21150004).openMe();
+			DoorData.getInstance().getDoor(21150001).closeMe();
+			DoorData.getInstance().getDoor(21150002).closeMe();
 		}
 		else if(val == 2)
 		{
-			DoorTable.getInstance().getDoor(21150001).closeMe();
-			DoorTable.getInstance().getDoor(21150002).closeMe();
-			DoorTable.getInstance().getDoor(21150003).closeMe();
-			DoorTable.getInstance().getDoor(21150004).closeMe();
+			DoorData.getInstance().getDoor(21150001).closeMe();
+			DoorData.getInstance().getDoor(21150002).closeMe();
+			DoorData.getInstance().getDoor(21150003).closeMe();
+			DoorData.getInstance().getDoor(21150004).closeMe();
 		}
 	}
 

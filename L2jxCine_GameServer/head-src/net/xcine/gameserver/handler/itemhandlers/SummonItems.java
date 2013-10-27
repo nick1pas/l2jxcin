@@ -21,8 +21,8 @@ package net.xcine.gameserver.handler.itemhandlers;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.csv.SummonItemsData;
 import net.xcine.gameserver.datatables.sql.NpcTable;
+import net.xcine.gameserver.datatables.xml.SummonItemsData;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.model.L2Skill;

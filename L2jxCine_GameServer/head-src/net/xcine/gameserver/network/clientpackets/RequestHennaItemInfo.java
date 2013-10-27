@@ -18,7 +18,7 @@
  */
 package net.xcine.gameserver.network.clientpackets;
 
-import net.xcine.gameserver.datatables.csv.HennaTable;
+import net.xcine.gameserver.datatables.xml.HennaData;
 import net.xcine.gameserver.model.actor.instance.L2HennaInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.serverpackets.HennaItemInfo;
@@ -42,7 +42,7 @@ public final class RequestHennaItemInfo extends L2GameClientPacket
 		if(activeChar == null)
 			return;
 
-		L2Henna template = HennaTable.getInstance().getTemplate(_symbolId);
+		L2Henna template = HennaData.getInstance().getTemplate(_symbolId);
 
 		if(template == null)
 			return;

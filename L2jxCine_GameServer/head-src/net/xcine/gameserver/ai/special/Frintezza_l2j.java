@@ -21,7 +21,7 @@ import javolution.util.FastList;
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.csv.DoorTable;
+import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
@@ -298,7 +298,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 		
 		//tempfix for messed door cords
 		for (int i = 0; i < 8; i++)
-			DoorTable.getInstance().getDoor(25150051 + i).setRange(0, 0, 0, 0, 0, 0);
+			DoorData.getInstance().getDoor(25150051 + i).setRange(0, 0, 0, 0, 0, 0);
 	}
 	
 	@Override
@@ -457,14 +457,14 @@ public class Frintezza_l2j extends Quest implements Runnable
 		else if (event.equalsIgnoreCase("close"))
 		{
 			for (int i = 25150051; i <= 25150058; i++)
-				DoorTable.getInstance().getDoor(i).closeMe();
+				DoorData.getInstance().getDoor(i).closeMe();
 			for (int i = 25150061; i <= 25150070; i++)
-				DoorTable.getInstance().getDoor(i).closeMe();
+				DoorData.getInstance().getDoor(i).closeMe();
 			
-			DoorTable.getInstance().getDoor(25150042).closeMe();
-			DoorTable.getInstance().getDoor(25150043).closeMe();
-			DoorTable.getInstance().getDoor(25150045).closeMe();
-			DoorTable.getInstance().getDoor(25150046).closeMe();
+			DoorData.getInstance().getDoor(25150042).closeMe();
+			DoorData.getInstance().getDoor(25150043).closeMe();
+			DoorData.getInstance().getDoor(25150045).closeMe();
+			DoorData.getInstance().getDoor(25150046).closeMe();
 		}
 		/*else if (event.equalsIgnoreCase("loc_check"))
 		{
@@ -1636,15 +1636,15 @@ public class Frintezza_l2j extends Quest implements Runnable
 			if (_KillHallAlarmDevice == 3) // open walls
 			{
 				for (int i = 25150051; i <= 25150058; i++)
-					DoorTable.getInstance().getDoor(i).openMe();
+					DoorData.getInstance().getDoor(i).openMe();
 			}
 			if (_KillHallAlarmDevice == 4)
 			{
 				startQuestTimer("room1_del", 100, npc, null);
 				startQuestTimer("room2_spawn", 100, npc, null);
 				
-				DoorTable.getInstance().getDoor(25150042).openMe();
-				DoorTable.getInstance().getDoor(25150043).openMe();
+				DoorData.getInstance().getDoor(25150042).openMe();
+				DoorData.getInstance().getDoor(25150043).openMe();
 			}
 			/*
 			_KillHallAlarmDevice++;
@@ -1667,10 +1667,10 @@ public class Frintezza_l2j extends Quest implements Runnable
 			_KillDarkChoirPlayer++;
 			if (_KillDarkChoirPlayer == 2)
 			{
-				DoorTable.getInstance().getDoor(25150042).closeMe();
-				DoorTable.getInstance().getDoor(25150043).closeMe();
-				DoorTable.getInstance().getDoor(25150045).closeMe();
-				DoorTable.getInstance().getDoor(25150046).closeMe();
+				DoorData.getInstance().getDoor(25150042).closeMe();
+				DoorData.getInstance().getDoor(25150043).closeMe();
+				DoorData.getInstance().getDoor(25150045).closeMe();
+				DoorData.getInstance().getDoor(25150046).closeMe();
 				int outside = 0;
 				synchronized(_PlayersInside){
 					for (L2PcInstance room2_pc : _PlayersInside)
@@ -1690,7 +1690,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 				else
 				{
 					for (int i = 25150061; i <= 25150070; i++)
-						DoorTable.getInstance().getDoor(i).openMe();
+						DoorData.getInstance().getDoor(i).openMe();
 					
 					startQuestTimer("room2_spawn2", 1000, npc, null);
 				}
@@ -1704,8 +1704,8 @@ public class Frintezza_l2j extends Quest implements Runnable
 			{
 				startQuestTimer("room2_del", 100, npc, null);
 				
-				DoorTable.getInstance().getDoor(25150045).openMe();
-				DoorTable.getInstance().getDoor(25150046).openMe();
+				DoorData.getInstance().getDoor(25150045).openMe();
+				DoorData.getInstance().getDoor(25150046).openMe();
 				
 				startQuestTimer("waiting", 180000, npc, null);
 				cancelQuestTimer("room_final", null, null);

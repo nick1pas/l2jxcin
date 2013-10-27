@@ -19,8 +19,8 @@
 package net.xcine.gameserver.network.clientpackets;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.csv.HennaTable;
 import net.xcine.gameserver.datatables.sql.HennaTreeTable;
+import net.xcine.gameserver.datatables.xml.HennaData;
 import net.xcine.gameserver.model.actor.instance.L2HennaInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -55,7 +55,7 @@ public final class RequestHennaEquip extends L2GameClientPacket
 		if (!getClient().getFloodProtectors().getTransaction().tryPerformAction("HennaEquip"))
 			return;
 
-		L2Henna template = HennaTable.getInstance().getTemplate(_symbolId);
+		L2Henna template = HennaData.getInstance().getTemplate(_symbolId);
 
 		if(template == null)
 			return;

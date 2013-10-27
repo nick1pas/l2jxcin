@@ -46,8 +46,6 @@ import net.xcine.gameserver.datatables.OfflineTradeTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.ExtractableItemsData;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
-import net.xcine.gameserver.datatables.csv.NpcWalkerRoutesTable;
-import net.xcine.gameserver.datatables.csv.RecipeTable;
 import net.xcine.gameserver.datatables.sql.AccessLevels;
 import net.xcine.gameserver.datatables.sql.AdminCommandAccessRights;
 import net.xcine.gameserver.datatables.sql.ArmorSetsTable;
@@ -69,6 +67,8 @@ import net.xcine.gameserver.datatables.xml.ExperienceData;
 import net.xcine.gameserver.datatables.xml.FishTable;
 import net.xcine.gameserver.datatables.xml.HelperBuffData;
 import net.xcine.gameserver.datatables.xml.HennaData;
+import net.xcine.gameserver.datatables.xml.NpcWalkerRoutesData;
+import net.xcine.gameserver.datatables.xml.RecipeData;
 import net.xcine.gameserver.datatables.xml.StaticObjectsData;
 import net.xcine.gameserver.datatables.xml.SummonItemsData;
 import net.xcine.gameserver.datatables.xml.TeleportLocationData;
@@ -274,7 +274,7 @@ public class GameServer
 			FishTable.getInstance();
 		
 		Util.printSection("Npc");
-		NpcWalkerRoutesTable.getInstance().load();
+		NpcWalkerRoutesData.getInstance().load();
 		if (!NpcTable.getInstance().isInitialized())
 		{
 			_log.info("Could not find the extraced files. Please Check Your Data.");
@@ -344,7 +344,7 @@ public class GameServer
 		DimensionalRiftManager.getInstance();
 		
 		Util.printSection("Misc");
-		RecipeTable.getInstance();
+		RecipeData.getInstance();
 		RecipeController.getInstance();
 		EventDroplist.getInstance();
 		AugmentationData.getInstance();

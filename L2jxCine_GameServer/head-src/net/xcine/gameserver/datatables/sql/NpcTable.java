@@ -607,17 +607,7 @@ public class NpcTable
 						}
 
 					}
-						break;
-					case 29019:
-					{ //antharas
-
-						if(Config.ANTHARAS_POWER_MULTIPLIER > 0)
-						{
-							multi_value = multi_value * Config.ANTHARAS_POWER_MULTIPLIER;
-						}
-
-					}
-						break;
+					break;
 					case 29028:
 					{ //valakas
 

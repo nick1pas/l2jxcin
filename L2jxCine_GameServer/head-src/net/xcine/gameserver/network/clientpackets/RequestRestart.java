@@ -104,14 +104,6 @@ public final class RequestRestart extends L2GameClientPacket
 			return;
 		}
 
-		// Check if player is in away mode
-		if(player.isAway())
-		{
-			player.sendMessage("You can't restart in Away mode.");
-			sendPacket(RestartResponse.valueOf(false));
-			return;
-		}
-
 		// Prevent player from restarting if they are a festival participant
 		// and it is in progress, otherwise notify party members that the player
 		// is not longer a participant.

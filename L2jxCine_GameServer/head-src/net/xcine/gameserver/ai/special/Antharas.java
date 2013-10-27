@@ -1,16 +1,20 @@
 /*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.
+ *
+ * http://www.gnu.org/copyleft/gpl.html
  */
 package net.xcine.gameserver.ai.special;
 
@@ -18,10 +22,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
@@ -51,20 +53,18 @@ import net.xcine.util.random.Rnd;
 
 /**
  * This class ... control for sequence of fight against Antharas.
- * 
+ *
  * @version $Revision: $ $Date: $
  * @author L2J_JP SANDMAN
  */
-public class Antharas_l2j extends Quest implements Runnable
+public class Antharas extends Quest implements Runnable
 {
-	protected static final Logger _log = Logger.getLogger(Antharas_l2j.class.getName());
-	
 	// config
 	private static final int FWA_ACTIVITYTIMEOFANTHARAS = 120;
 	//private static final int FWA_APPTIMEOFANTHARAS = 1800000;
 	//private static final int FWA_INACTIVITYTIME = 900000;
 	//private static final boolean FWA_OLDANTHARAS = true; //use antharas interlude with minions
-	protected static final boolean FWA_OLDANTHARAS = Config.ANTHARAS_OLD; //use antharas interlude with minions
+	public static final boolean FWA_OLDANTHARAS = Config.ANTHARAS_OLD_TYPE; //use antharas interlude with minions
 	private static final boolean FWA_MOVEATRANDOM = true;
 	private static final boolean FWA_DOSERVEREARTHQUAKE = true;
 	private static final int FWA_LIMITOFWEAK = 45;
@@ -98,7 +98,7 @@ public class Antharas_l2j extends Quest implements Runnable
 	
 	// Tasks.
 	protected ScheduledFuture<?> _cubeSpawnTask = null;
-	protected volatile ScheduledFuture<?> _monsterSpawnTask = null;
+	protected ScheduledFuture<?> _monsterSpawnTask = null;
 	protected ScheduledFuture<?> _activityCheckTask = null;
 	protected ScheduledFuture<?> _socialTask = null;
 	protected ScheduledFuture<?> _mobiliseTask = null;
@@ -120,7 +120,7 @@ public class Antharas_l2j extends Quest implements Runnable
 	
 
 	// Boss: Antharas
-	public Antharas_l2j(int id,String name,String descr)
+	public Antharas(int id,String name,String descr)
 	{
 		super(id,name,descr);
 		int[] mob = {ANTHARASOLDID,ANTHARASWEAKID,ANTHARASNORMALID,ANTHARASSTRONGID,29069,29070,29071,29072,29073,29074,29075,29076};
@@ -354,7 +354,7 @@ public class Antharas_l2j extends Quest implements Runnable
 		}
 	}
 	
-	protected void startMinionSpawns(int antharasId)
+	public void startMinionSpawns(int antharasId)
 	{
 		int intervalOfMobs;
 		
@@ -522,7 +522,7 @@ public class Antharas_l2j extends Quest implements Runnable
 		}
 	}
 	
-	protected void broadcastPacket(L2GameServerPacket mov)
+	public void broadcastPacket(L2GameServerPacket mov)
 	{
 		if (_Zone != null)
 		{
@@ -685,7 +685,7 @@ public class Antharas_l2j extends Quest implements Runnable
 	}
 	
 	// At end of activity time.
-	protected class CheckActivity implements Runnable
+	public class CheckActivity implements Runnable
 	{
 		@Override
 		public void run()
@@ -894,9 +894,9 @@ public class Antharas_l2j extends Quest implements Runnable
 	{
 		if (npc.getNpcId() == 29019 || npc.getNpcId() == 29066 || npc.getNpcId() == 29067 || npc.getNpcId() == 29068)
 		{
-			npc.broadcastPacket(new PlaySound(1, "BS01_D", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
-			
-			if(!npc.getSpawn().is_customBossInstance()){
+			if(!npc.getSpawn().is_customBossInstance())
+			{
+				npc.broadcastPacket(new PlaySound(1, "BS01_D", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
 				_cubeSpawnTask = ThreadPoolManager.getInstance().scheduleGeneral(new CubeSpawn(0), 10000);
 				GrandBossManager.getInstance().setBossStatus(npc.getNpcId(),DEAD);
 				long respawnTime = (Config.ANTHARAS_RESP_FIRST + Rnd.get(Config.ANTHARAS_RESP_SECOND)) * 3600000;
@@ -906,7 +906,6 @@ public class Antharas_l2j extends Quest implements Runnable
 				info.set("respawn_time",(System.currentTimeMillis() + respawnTime));
 				GrandBossManager.getInstance().setStatsSet(npc.getNpcId(),info);
 			}
-			
 		}
 		else if (npc.getNpcId() == 29069)
 		{
@@ -925,4 +924,5 @@ public class Antharas_l2j extends Quest implements Runnable
 	@Override
 	public void run()
 	{}
+
 }

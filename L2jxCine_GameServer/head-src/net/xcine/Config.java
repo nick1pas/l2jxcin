@@ -1169,13 +1169,11 @@ public final class Config
 	public static HashMap<Integer, Integer> RBS_SPECIFIC_LOCK_RAGE;
 	
 	public static boolean ALLOW_DIRECT_TP_TO_BOSS_ROOM;
-	public static boolean ANTHARAS_OLD;
-	public static int ANTHARAS_CLOSE;
 	public static int ANTHARAS_DESPAWN_TIME;
+	public static int ANTHARAS_WAIT_TIME;
 	public static int ANTHARAS_RESP_FIRST;
 	public static int ANTHARAS_RESP_SECOND;
-	public static int ANTHARAS_WAIT_TIME;
-	public static float ANTHARAS_POWER_MULTIPLIER;
+	public static boolean ANTHARAS_OLD_TYPE;
 	
 	public static int BAIUM_SLEEP;
 	public static int BAIUM_RESP_FIRST;
@@ -2908,13 +2906,11 @@ public final class Config
 			//============================================================
 			ALLOW_DIRECT_TP_TO_BOSS_ROOM = Boolean.valueOf(bossSettings.getProperty("AllowDirectTeleportToBossRoom", "False"));
 			//Antharas
-			ANTHARAS_OLD = Boolean.valueOf(bossSettings.getProperty("AntharasOldScript", "true"));
-			ANTHARAS_CLOSE = Integer.parseInt(bossSettings.getProperty("AntharasClose", "1200"));
 			ANTHARAS_DESPAWN_TIME = Integer.parseInt(bossSettings.getProperty("AntharasDespawnTime", "240"));
-			ANTHARAS_RESP_FIRST = Integer.parseInt(bossSettings.getProperty("AntharasRespFirst", "192"));
-			ANTHARAS_RESP_SECOND = Integer.parseInt(bossSettings.getProperty("AntharasRespSecond", "145"));
-			ANTHARAS_WAIT_TIME = Integer.parseInt(bossSettings.getProperty("AntharasWaitTime", "30"));
-			ANTHARAS_POWER_MULTIPLIER = Float.parseFloat(bossSettings.getProperty("AntharasPowerMultiplier", "1.0"));
+			ANTHARAS_WAIT_TIME = TypeFormat.parseInt(bossSettings.getProperty("AntharasWaitTime", "30"));
+			ANTHARAS_RESP_FIRST = TypeFormat.parseInt(bossSettings.getProperty("AntharasRespFirst", "180"));
+			ANTHARAS_RESP_SECOND = TypeFormat.parseInt(bossSettings.getProperty("AntharasRespSecond", "24"));
+			ANTHARAS_OLD_TYPE = TypeFormat.parseBoolean(bossSettings.getProperty("AntharasOldType", "False"));
 			//============================================================
 			//Baium
 			BAIUM_SLEEP = Integer.parseInt(bossSettings.getProperty("BaiumSleep", "1800"));

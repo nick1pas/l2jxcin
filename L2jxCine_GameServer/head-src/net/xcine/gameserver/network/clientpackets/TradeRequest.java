@@ -72,28 +72,7 @@ public final class TradeRequest extends L2GameClientPacket
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (partner.isAway())
-		{
-			player.sendMessage("You can't Request a Trade when partner is Away");
-			player.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
-		
-		if (partner.isStunned())
-		{
-			player.sendMessage("You can't Request a Trade when partner Stunned");
-			player.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
-		
-		if (partner.isConfused())
-		{
-			player.sendMessage("You can't Request a Trade when partner Confused");
-			player.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
-		
+
 		if (partner.isCastingNow() || partner.isCastingPotionNow())
 		{
 			player.sendMessage("You can't Request a Trade when partner Casting Now");
@@ -149,21 +128,6 @@ public final class TradeRequest extends L2GameClientPacket
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (player.isStunned())
-		{
-			player.sendMessage("You can't Request a Trade when you Stunned");
-			player.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
-		
-		if (player.isAway())
-		{
-			player.sendMessage("You can't Request a Trade when you Away");
-			player.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
-		
 		if (player.isConfused())
 		{
 			player.sendMessage("You can't Request a Trade when you Confused");

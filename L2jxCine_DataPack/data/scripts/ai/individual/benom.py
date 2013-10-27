@@ -1,6 +1,6 @@
 import sys
 from net.xcine.gameserver.ai import CtrlIntention
-from net.xcine.gameserver.datatables.csv import DoorTable
+from net.xcine.gameserver.datatables.xml import DoorData
 from net.xcine.gameserver.managers import CastleManager
 from net.xcine.gameserver.managers import GrandBossManager
 from net.xcine.gameserver.model.actor.position import L2CharPosition

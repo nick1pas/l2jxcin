@@ -240,7 +240,6 @@ public class ThreadPoolManager
 		if(_aiScheduledThreadPool.isShutdown())
 			return null;
 		
-		
 		try
 		{
 			delay = ThreadPoolManager.validateDelay(delay);

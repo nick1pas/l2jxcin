@@ -18,7 +18,7 @@
  */
 package net.xcine.gameserver.model;
 
-import net.xcine.gameserver.datatables.csv.RecipeTable;
+import net.xcine.gameserver.datatables.xml.RecipeData;
 
 /**
  * This class ...
@@ -35,7 +35,7 @@ public class L2ManufactureItem
 	{
 		_recipeId = recipeId;
 		_cost = cost;
-		_isDwarven = RecipeTable.getInstance().getRecipeById(_recipeId).isDwarvenRecipe();
+		_isDwarven = RecipeData.getInstance().getRecipeById(_recipeId).isDwarvenRecipe();
 	}
 
 	public int getRecipeId()

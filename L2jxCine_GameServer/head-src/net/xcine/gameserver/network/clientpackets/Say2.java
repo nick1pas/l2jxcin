@@ -254,10 +254,6 @@ public final class Say2 extends L2GameClientPacket
 				if (!receiver.getBlockList().isInBlockList(activeChar.getName()) 
 					|| activeChar.isGM())
 				{
-					if(receiver.isAway())
-					{
-						activeChar.sendMessage("Player is Away try again later.");
-					}
 
 					if(Config.JAIL_DISABLE_CHAT && receiver.isInJail())
 					{

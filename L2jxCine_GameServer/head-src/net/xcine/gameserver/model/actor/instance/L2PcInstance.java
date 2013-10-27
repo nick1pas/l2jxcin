@@ -61,7 +61,6 @@ import net.xcine.gameserver.datatables.HeroSkillTable;
 import net.xcine.gameserver.datatables.NobleSkillTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
-import net.xcine.gameserver.datatables.csv.RecipeTable;
 import net.xcine.gameserver.datatables.sql.AccessLevels;
 import net.xcine.gameserver.datatables.sql.AdminCommandAccessRights;
 import net.xcine.gameserver.datatables.sql.CharTemplateTable;
@@ -72,6 +71,7 @@ import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
 import net.xcine.gameserver.datatables.xml.FishTable;
 import net.xcine.gameserver.datatables.xml.HennaData;
+import net.xcine.gameserver.datatables.xml.RecipeData;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.handler.ItemHandler;
@@ -794,18 +794,8 @@ public final class L2PcInstance extends L2PlayableInstance
  	/** The is pvp hero. */
  	private boolean isPVPHero = false;
 	 
-	
 	/** character away mode *. */
 	private boolean _awaying = false;
-	
-	/** The _is away. */
-	private boolean _isAway = false;
-	
-	/** The _original title color away. */
-	public int _originalTitleColorAway;
-	
-	/** The _original title away. */
-	public String _originalTitleAway;
 	   
 	/** The _is aio. */
 	private boolean _isAio = false;
@@ -4578,10 +4568,6 @@ private int _reviveRequested = 0;
 		else if(VIP._sitForced && _inEventVIP)
 		{
 			sendMessage("The Admin/GM handle if you sit or stand in this match!");
-		}
-		else if(isAway())
-		{
-			sendMessage("You can't stand up if your Status is Away.");
 		}
 		else if(_waitTypeSitting && !isInStoreMode() && !isAlikeDead())
 		{
@@ -10706,7 +10692,7 @@ private int _reviveRequested = 0;
 			L2RecipeList recipe;
 			while(rset.next())
 			{
-				recipe = RecipeTable.getInstance().getRecipeList(rset.getInt("id") - 1);
+				recipe = RecipeData.getInstance().getRecipeList(rset.getInt("id") - 1);
 
 				if(rset.getInt("type") == 1)
 				{
@@ -14265,26 +14251,6 @@ private int _reviveRequested = 0;
 	public boolean isDonator()
 	{
 		return _donator;
-	}
-
-	/**
-	 * Checks if is away.
-	 *
-	 * @return true, if is away
-	 */
-	public boolean isAway()
-	{
-		return _isAway;
-	}
-
-	/**
-	 * Sets the checks if is away.
-	 *
-	 * @param state the new checks if is away
-	 */
-	public void setIsAway(boolean state)
-	{
-		_isAway = state;
 	}
 
 	/**

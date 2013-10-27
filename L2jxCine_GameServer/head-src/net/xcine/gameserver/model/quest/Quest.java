@@ -59,7 +59,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
  */
 public class Quest extends ManagedScript
 {
-	protected static final Logger _log = Logger.getLogger(Quest.class.getName());
+	public static final Logger _log = Logger.getLogger(Quest.class.getName());
 
 	/** HashMap containing events from String value of the event */
 	private static Map<String, Quest> _allEventsS = new FastMap<>();

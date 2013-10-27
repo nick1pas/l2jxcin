@@ -53,13 +53,7 @@ public final class Logout extends L2GameClientPacket
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		if (player.isAway())
-		{
-			player.sendMessage("You can't restart in Away mode.");
-			return;
-		}
-		
+
 		player.getInventory().updateDatabase();
 		
 		if (AttackStanceTaskManager.getInstance().getAttackStanceTask(player) && !(player.isGM() && Config.GM_RESTART_FIGHTING))

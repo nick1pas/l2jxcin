@@ -19,8 +19,6 @@
 package net.xcine.gameserver.datatables;
 
 /**
- * 
- * 
  * @author Enzo
  */
 
@@ -44,8 +42,6 @@ import net.xcine.gameserver.thread.LoginServerThread;
 import net.xcine.logs.Log;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
-
-
 
 public class OfflineTradeTable
 {

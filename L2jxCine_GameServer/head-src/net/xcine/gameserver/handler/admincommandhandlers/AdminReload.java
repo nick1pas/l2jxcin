@@ -25,9 +25,9 @@ import net.xcine.Config;
 import net.xcine.gameserver.cache.HtmCache;
 import net.xcine.gameserver.controllers.TradeController;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.csv.NpcWalkerRoutesTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
+import net.xcine.gameserver.datatables.xml.NpcWalkerRoutesData;
 import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.managers.DatatablesManager;
@@ -111,7 +111,7 @@ public class AdminReload implements IAdminCommandHandler
 				}
 				else if (type.startsWith("npcwalkers"))
 				{
-					NpcWalkerRoutesTable.getInstance().load();
+					NpcWalkerRoutesData.getInstance().load();
 					sendReloadPage(activeChar);
 					activeChar.sendMessage("All NPC walker routes have been reloaded");
 				}

@@ -18,7 +18,7 @@
  */
 package net.xcine.gameserver.handler.itemhandlers;
 
-import net.xcine.gameserver.datatables.csv.RecipeTable;
+import net.xcine.gameserver.datatables.xml.RecipeData;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.model.L2RecipeList;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
@@ -39,7 +39,7 @@ public class Recipes implements IItemHandler
 
 	public Recipes()
 	{
-		RecipeTable rc = RecipeTable.getInstance();
+		RecipeData rc = RecipeData.getInstance();
 		ITEM_IDS = new int[rc.getRecipesCount()];
 		for(int i = 0; i < rc.getRecipesCount(); i++)
 		{
@@ -53,7 +53,7 @@ public class Recipes implements IItemHandler
 		if(!(playable instanceof L2PcInstance))
 			return;
 		L2PcInstance activeChar = (L2PcInstance) playable;
-		L2RecipeList rp = RecipeTable.getInstance().getRecipeByItemId(item.getItemId());
+		L2RecipeList rp = RecipeData.getInstance().getRecipeByItemId(item.getItemId());
 		if(activeChar.hasRecipeList(rp.getId()))
 		{
 			SystemMessage sm = new SystemMessage(SystemMessageId.RECIPE_ALREADY_REGISTERED);

@@ -21,7 +21,7 @@ package net.xcine.gameserver.network.serverpackets;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.csv.RecipeTable;
+import net.xcine.gameserver.datatables.xml.RecipeData;
 import net.xcine.gameserver.model.L2RecipeList;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 
@@ -56,7 +56,7 @@ public class RecipeItemMakeInfo extends L2GameServerPacket
 	@Override
 	protected final void writeImpl()
 	{
-		L2RecipeList recipe = RecipeTable.getInstance().getRecipeById(_id);
+		L2RecipeList recipe = RecipeData.getInstance().getRecipeById(_id);
 
 		if(recipe != null)
 		{

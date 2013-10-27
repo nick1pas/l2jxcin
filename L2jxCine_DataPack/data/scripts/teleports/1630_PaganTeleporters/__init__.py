@@ -3,7 +3,7 @@
 # v1.1 Done by BiTi
 
 import sys
-from net.xcine.gameserver.datatables.csv import DoorTable
+from net.xcine.gameserver.datatables.xml import DoorData
 from net.xcine.gameserver.model.actor.instance import L2PcInstance
 from net.xcine.gameserver.model.quest import State
 from net.xcine.gameserver.model.quest import QuestState

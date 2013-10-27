@@ -80,7 +80,7 @@ public final class UseItem extends L2GameClientPacket
 			if (!getClient().getFloodProtectors().getUseItem().tryPerformAction("use item"))
 				return;
 		}
-		if (activeChar.isStunned() || activeChar.isConfused() || activeChar.isAway() || activeChar.isParalyzed() || activeChar.isSleeping())
+		if (activeChar.isStunned() || activeChar.isConfused() || activeChar.isParalyzed() || activeChar.isSleeping())
 		{
 			activeChar.sendMessage("You Cannot Use Items Right Now.");
 			return;

@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import javolution.util.FastList;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.csv.RecipeTable;
+import net.xcine.gameserver.datatables.xml.RecipeData;
 import net.xcine.gameserver.model.Inventory;
 import net.xcine.gameserver.model.L2ManufactureItem;
 import net.xcine.gameserver.model.L2RecipeList;
@@ -56,6 +56,7 @@ public class RecipeController
 	protected static final Logger _log = Logger.getLogger(RecipeController.class.getName());
 
 	private static RecipeController _instance;
+	private Map<Integer, L2RecipeList> _lists;
 	protected static final Map<L2PcInstance, RecipeItemMaker> _activeMakers = Collections.synchronizedMap(new WeakHashMap<L2PcInstance, RecipeItemMaker>());
 
 	public static RecipeController getInstance()
@@ -743,7 +744,7 @@ public class RecipeController
 
 	private L2RecipeList getValidRecipeList(L2PcInstance player, int id)
 	{
-		L2RecipeList recipeList = RecipeTable.getInstance().getRecipeList(id - 1);
+		L2RecipeList recipeList = RecipeData.getInstance().getRecipeList(id - 1);
 
 		if(recipeList == null || recipeList.getRecipes().length == 0)
 		{
@@ -752,5 +753,18 @@ public class RecipeController
 			return null;
 		}
 		return recipeList;
+	}
+
+	public L2RecipeList getRecipeByItemId(int itemId)
+	{
+		for(int i = 0; i < _lists.size(); i++)
+		{
+			L2RecipeList find = _lists.get(new Integer(i));
+			if(find.getRecipeId() == itemId)
+			{
+				return find;
+			}
+		}
+		return null;
 	}
 }

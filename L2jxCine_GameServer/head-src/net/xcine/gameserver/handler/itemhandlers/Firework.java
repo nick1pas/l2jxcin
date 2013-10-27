@@ -85,24 +85,6 @@ public class Firework implements IItemHandler
 			return;
 		}
 
-		if(activeChar.isAway())
-		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
-
-		if(activeChar.isConfused())
-		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
-
-		if(activeChar.isStunned())
-		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
-
 		if(activeChar.isDead())
 		{
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);

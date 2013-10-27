@@ -17,7 +17,7 @@
  */
 package net.xcine.gameserver.network.clientpackets;
 
-import net.xcine.gameserver.datatables.csv.RecipeTable;
+import net.xcine.gameserver.datatables.xml.RecipeData;
 import net.xcine.gameserver.model.L2RecipeList;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.serverpackets.RecipeBookItemList;
@@ -45,7 +45,7 @@ public final class RequestRecipeBookDestroy extends L2GameClientPacket
 	    		return;
 
 	    	
-			L2RecipeList rp = RecipeTable.getInstance().getRecipeList(_recipeID - 1);
+			L2RecipeList rp = RecipeData.getInstance().getRecipeList(_recipeID - 1);
 			if(rp == null)
 				return;
 

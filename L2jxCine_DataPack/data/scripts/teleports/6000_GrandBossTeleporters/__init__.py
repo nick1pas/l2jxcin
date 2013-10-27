@@ -1,7 +1,7 @@
 #Made by Emperorc
 import sys
 from net.xcine import Config
-from net.xcine.gameserver.datatables.csv import DoorTable
+from net.xcine.gameserver.datatables.xml import DoorData
 from net.xcine.gameserver.model.quest import State
 from net.xcine.gameserver.model.quest import QuestState
 from net.xcine.gameserver.model.quest.jython import QuestJython as JQuest

@@ -249,12 +249,6 @@ public class RegionBBSManager extends BaseBBSManager
 					return;
 				}
 
-				if(receiver.isAway())
-				{
-					activeChar.sendMessage(receiver.getName() + " is Away please try again later.");
-					return;
-				}
-
 				if(Config.LOG_CHAT)
 				{
 					LogRecord record = new LogRecord(Level.INFO, ar3);

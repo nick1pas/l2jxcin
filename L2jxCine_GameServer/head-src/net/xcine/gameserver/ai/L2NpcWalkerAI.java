@@ -20,7 +20,7 @@ package net.xcine.gameserver.ai;
 import javolution.util.FastList;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.csv.NpcWalkerRoutesTable;
+import net.xcine.gameserver.datatables.xml.NpcWalkerRoutesData;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2NpcWalkerNode;
 import net.xcine.gameserver.model.actor.instance.L2NpcWalkerInstance;
@@ -43,7 +43,7 @@ public class L2NpcWalkerAI extends L2CharacterAI implements Runnable
 	/**
 	 * route of the current npc
 	 */
-	private final FastList<L2NpcWalkerNode> _route = NpcWalkerRoutesTable.getInstance().getRouteForNpc(getActor().getNpcId());
+	private final FastList<L2NpcWalkerNode> _route = NpcWalkerRoutesData.getInstance().getRouteForNpc(getActor().getNpcId());
 
 	/**
 	 * current node

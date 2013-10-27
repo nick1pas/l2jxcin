@@ -134,14 +134,11 @@
 		<mkdir dir="${build.dist.login}/log" />
 		
 		<mkdir dir="${build.dist.login}/config" />
-		<mkdir dir="${build.dist.login}/config/network" />
 		<mkdir dir="${build.dist.login}/config/protected" />
 		
 		<mkdir dir="${build.dist.game}/config/protected" />
 		<mkdir dir="${build.dist.game}/config/head" />
 		<mkdir dir="${build.dist.game}/config/functions" />
-		<mkdir dir="${build.dist.game}/config/network" />
-		<mkdir dir="${build.dist.game}/config/fun" />
 
 		<mkdir dir="${build.dist.game}/config/others" />
 
@@ -174,9 +171,9 @@
 		</copy>
 
 		<!-- network gameserver -->
-		<copy todir="${build.dist.game}/config/network">
-			<fileset dir="config/network">
-				<include name="gameserver.properties" />
+		<copy todir="${build.dist.game}/config">
+			<fileset dir="config/">
+				<include name="Server.properties" />
 			</fileset>
 		</copy>
 
@@ -195,7 +192,7 @@
 
 		<!-- login server -->
 		<copy todir="${build.dist.login}/config">
-			<fileset dir="config">
+			<fileset dir="config/">
 				<include name="telnet.properties" />
 			</fileset>
 			<!-- fileset dir="config/others">
@@ -211,18 +208,17 @@
 
 
 		<!-- network ls -->
-		<copy todir="${build.dist.login}/config/network">
-			<fileset dir="config/network">
-				<include name="loginserver.properties" />
+		<copy todir="${build.dist.login}/config">
+			<fileset dir="config/">
+				<include name="LoginServer.properties" />
 			</fileset>
 		</copy>
 		
 		<copy todir="${build.dist.login}/config/others">
-							<fileset dir="config/others">
-								<include name="*.*" />
-							</fileset>
-				</copy>
-
+		<fileset dir="config/others">
+				<include name="*.*" />
+		</fileset>
+		</copy>
 
 		<delete dir="${build.classes}" />
 		<delete file="${build}/L2jxCine-core.jar" />

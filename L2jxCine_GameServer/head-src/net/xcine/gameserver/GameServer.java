@@ -138,7 +138,6 @@ import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.thread.daemons.DeadlockDetector;
 import net.xcine.gameserver.thread.daemons.ItemsAutoDestroy;
 import net.xcine.gameserver.thread.daemons.PcPoint;
-import net.xcine.gameserver.util.DynamicExtension;
 import net.xcine.gameserver.util.sql.SQLQueue;
 import net.xcine.netcore.SelectorConfig;
 import net.xcine.netcore.SelectorThread;
@@ -512,17 +511,6 @@ public class GameServer
 		Util.printSection("Game Server");
 
 		_log.info("IdFactory: Free ObjectID's remaining: " + IdFactory.getInstance().size());
-		try
-		{
-			DynamicExtension.getInstance();
-		}
-		catch (Exception ex)
-		{
-			if (Config.ENABLE_ALL_EXCEPTIONS)
-				ex.printStackTrace();
-			
-			_log.info("DynamicExtension could not be loaded and initialized" + ex);
-		}
 		
 		Util.printSection("Custom Mods");
 		

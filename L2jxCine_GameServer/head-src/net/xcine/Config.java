@@ -40,7 +40,7 @@ import net.xcine.util.StringUtil;
 
 /**
  * @author BossForever
- * @version 1.1
+ * @version 1.2
  */
 public final class Config
 {
@@ -57,16 +57,13 @@ public final class Config
 	// head
 	public static final String ALT_SETTINGS_FILE = "./config/head/altsettings.properties";
 	public static final String CLANHALL_CONFIG_FILE = "./config/head/clanhall.properties";
-	public static final String ENCHANT_CONFIG_FILE = "./config/head/enchant.properties";
 	public static final String FORTSIEGE_CONFIGURATION_FILE = "./config/head/fort.properties";
-	public static final String GEODATA_CONFIG_FILE = "./config/head/geodata.properties";
 	public static final String OLYMP_CONFIG_FILE = "./config/head/olympiad.properties";
 	public static final String OPTIONS_FILE = "./config/head/options.properties";
 	public static final String OTHER_CONFIG_FILE = "./config/head/other.properties";
-	public static final String RATES_CONFIG_FILE = "./config/head/rates.properties";
 	public static final String SEVENSIGNS_FILE = "./config/head/sevensigns.properties";
 	public static final String SIEGE_CONFIGURATION_FILE = "./config/head/siege.properties";
-	public static final String BOSS_CONFIG_FILE = "./config/head/boss.properties";
+	public static final String BOSS_CONFIG_FILE = "./config/GrandBoss.properties";
 	
 	// functions
 	public static final String ACCESS_CONFIGURATION_FILE = "./config/functions/access.properties";
@@ -87,8 +84,8 @@ public final class Config
 	public static final String EVENTS_CONFIG_FILE = "./config/Events.properties";
 	
 	// network
-	public static final String CONFIGURATION_FILE = "./config/network/gameserver.properties";
-	public static final String LOGIN_CONFIGURATION_FILE = "./config/network/loginserver.properties";
+	public static final String SERVER_CONFIGURATION_FILE = "./config/Server.properties";
+	public static final String LOGIN_CONFIGURATION_FILE = "./config/LoginServer.properties";
 
 	// others
 	public static final String LOG_CONF_FILE = "./config/others/log.cfg";
@@ -1452,30 +1449,23 @@ public final class Config
 
 			HIGH_RATE_SERVER_DROPS = Boolean.valueOf(optionsSettings.getProperty("HighRateServerDrops", "false"));
 		
-			ExProperties serverSettings = load(CONFIGURATION_FILE);
+			ExProperties serverSettings = load(SERVER_CONFIGURATION_FILE);
 			GAMESERVER_HOSTNAME = serverSettings.getProperty("GameserverHostname");
 			PORT_GAME = Integer.parseInt(serverSettings.getProperty("GameserverPort", "7777"));
-
 			EXTERNAL_HOSTNAME = serverSettings.getProperty("ExternalHostname", "*");
 			INTERNAL_HOSTNAME = serverSettings.getProperty("InternalHostname", "*");
-
 			GAME_SERVER_LOGIN_PORT = Integer.parseInt(serverSettings.getProperty("LoginPort", "9014"));
 			GAME_SERVER_LOGIN_HOST = serverSettings.getProperty("LoginHost", "127.0.0.1");
-
 			DATABASE_POOL_TYPE = serverSettings.getProperty("DatabasePoolType", "c3p0");
 			DATABASE_DRIVER = serverSettings.getProperty("Driver", "com.mysql.jdbc.Driver");
-			
 			GAMESERVER_DB = serverSettings.getProperty("GameserverDB", "gameserver_beta");
 			LOGINSERVER_DB = serverSettings.getProperty("LoginserverDB", "loginserver_beta");
-			
 			String DATABASE_URL_BASE = serverSettings.getProperty("URL", "jdbc:mysql://localhost/");
 			DATABASE_URL = DATABASE_URL_BASE+GAMESERVER_DB;
-			
 			DATABASE_LOGIN = serverSettings.getProperty("Login", "root");
 			DATABASE_PASSWORD = serverSettings.getProperty("Password", "");
 			DATABASE_MAX_CONNECTIONS = Integer.parseInt(serverSettings.getProperty("MaximumDbConnections", "10"));
 			DATABASE_MAX_IDLE_TIME = Integer.parseInt(serverSettings.getProperty("MaximumDbIdleTime", "0"));
-
 			DATABASE_TIMEOUT = Integer.parseInt(serverSettings.getProperty("TimeOutConDb", "0"));
 			DATABASE_PARTITION_COUNT = Integer.parseInt(serverSettings.getProperty("PartitionCount", "3"));
 			DATABASE_CONNECTION_TIMEOUT = Integer.parseInt(serverSettings.getProperty("SingleConnectionTimeOutDb", "150000"));
@@ -1522,11 +1512,389 @@ public final class Config
 			RWHO_ONLINE_INCREMENT = Integer.parseInt(serverSettings.getProperty("RemoteOnlineIncrement", "0"));
 			RWHO_PRIV_STORE_FACTOR = Float.parseFloat(serverSettings.getProperty("RemotePrivStoreFactor", "0"));
 			RWHO_FORCE_INC = Integer.parseInt(serverSettings.getProperty("RemoteWhoForceInc", "0"));
+			RATE_XP = Float.parseFloat(serverSettings.getProperty("RateXp", "1.00"));
+			RATE_SP = Float.parseFloat(serverSettings.getProperty("RateSp", "1.00"));
+			RATE_PARTY_XP = Float.parseFloat(serverSettings.getProperty("RatePartyXp", "1.00"));
+			RATE_PARTY_SP = Float.parseFloat(serverSettings.getProperty("RatePartySp", "1.00"));
+			RATE_QUESTS_REWARD = Float.parseFloat(serverSettings.getProperty("RateQuestsReward", "1.00"));
+			RATE_DROP_ADENA = Float.parseFloat(serverSettings.getProperty("RateDropAdena", "1.00"));
+			RATE_CONSUMABLE_COST = Float.parseFloat(serverSettings.getProperty("RateConsumableCost", "1.00"));
+			RATE_DROP_ITEMS = Float.parseFloat(serverSettings.getProperty("RateDropItems", "1.00"));
+			RATE_DROP_SEAL_STONES = Float.parseFloat(serverSettings.getProperty("RateDropSealStones", "1.00"));
+			RATE_DROP_SPOIL = Float.parseFloat(serverSettings.getProperty("RateDropSpoil", "1.00"));
+			RATE_DROP_MANOR = Integer.parseInt(serverSettings.getProperty("RateDropManor", "1.00"));
+			RATE_DROP_QUEST = Float.parseFloat(serverSettings.getProperty("RateDropQuest", "1.00"));
+			RATE_KARMA_EXP_LOST = Float.parseFloat(serverSettings.getProperty("RateKarmaExpLost", "1.00"));
+			RATE_SIEGE_GUARDS_PRICE = Float.parseFloat(serverSettings.getProperty("RateSiegeGuardsPrice", "1.00"));
+			RATE_DROP_COMMON_HERBS = Float.parseFloat(serverSettings.getProperty("RateCommonHerbs", "15.00"));
+			RATE_DROP_MP_HP_HERBS = Float.parseFloat(serverSettings.getProperty("RateHpMpHerbs", "10.00"));
+			RATE_DROP_GREATER_HERBS = Float.parseFloat(serverSettings.getProperty("RateGreaterHerbs", "4.00"));
+			RATE_DROP_SUPERIOR_HERBS = Float.parseFloat(serverSettings.getProperty("RateSuperiorHerbs", "0.80")) * 10;
+			RATE_DROP_SPECIAL_HERBS = Float.parseFloat(serverSettings.getProperty("RateSpecialHerbs", "0.20")) * 10;
+			PLAYER_DROP_LIMIT = Integer.parseInt(serverSettings.getProperty("PlayerDropLimit", "3"));
+			PLAYER_RATE_DROP = Integer.parseInt(serverSettings.getProperty("PlayerRateDrop", "5"));
+			PLAYER_RATE_DROP_ITEM = Integer.parseInt(serverSettings.getProperty("PlayerRateDropItem", "70"));
+			PLAYER_RATE_DROP_EQUIP = Integer.parseInt(serverSettings.getProperty("PlayerRateDropEquip", "25"));
+			PLAYER_RATE_DROP_EQUIP_WEAPON = Integer.parseInt(serverSettings.getProperty("PlayerRateDropEquipWeapon", "5"));
+			PET_XP_RATE = Float.parseFloat(serverSettings.getProperty("PetXpRate", "1.00"));
+			PET_FOOD_RATE = Integer.parseInt(serverSettings.getProperty("PetFoodRate", "1"));
+			SINEATER_XP_RATE = Float.parseFloat(serverSettings.getProperty("SinEaterXpRate", "1.00"));
+			KARMA_DROP_LIMIT = Integer.parseInt(serverSettings.getProperty("KarmaDropLimit", "10"));
+			KARMA_RATE_DROP = Integer.parseInt(serverSettings.getProperty("KarmaRateDrop", "70"));
+			KARMA_RATE_DROP_ITEM = Integer.parseInt(serverSettings.getProperty("KarmaRateDropItem", "50"));
+			KARMA_RATE_DROP_EQUIP = Integer.parseInt(serverSettings.getProperty("KarmaRateDropEquip", "40"));
+			KARMA_RATE_DROP_EQUIP_WEAPON = Integer.parseInt(serverSettings.getProperty("KarmaRateDropEquipWeapon", "10"));
+			ADENA_BOSS = Float.parseFloat(serverSettings.getProperty("AdenaBoss", "1.00"));
+			ADENA_RAID = Float.parseFloat(serverSettings.getProperty("AdenaRaid", "1.00"));
+			ADENA_MINON = Float.parseFloat(serverSettings.getProperty("AdenaMinon", "1.00"));
+			ITEMS_BOSS = Float.parseFloat(serverSettings.getProperty("ItemsBoss", "1.00"));
+			ITEMS_RAID = Float.parseFloat(serverSettings.getProperty("ItemsRaid", "1.00"));
+			ITEMS_MINON = Float.parseFloat(serverSettings.getProperty("ItemsMinon", "1.00"));
+			SPOIL_BOSS = Float.parseFloat(serverSettings.getProperty("SpoilBoss", "1.00"));
+			SPOIL_RAID = Float.parseFloat(serverSettings.getProperty("SpoilRaid", "1.00"));
+			SPOIL_MINON = Float.parseFloat(serverSettings.getProperty("SpoilMinon", "1.00"));
+			String[] propertySplit = serverSettings.getProperty("NormalWeaponEnchantLevel", "").split(";");
+			for(String readData : propertySplit)
+			{
+				String[] writeData = readData.split(",");
+				if(writeData.length != 2)
+				{
+					System.out.println("invalid config property");
+				}
+				else
+				{
+					try
+					{
+						NORMAL_WEAPON_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
+					}
+					catch(NumberFormatException nfe)
+					{
+						if(Config.ENABLE_ALL_EXCEPTIONS)
+							nfe.printStackTrace();
+						if(!readData.equals(""))
+						{
+							System.out.println("invalid config property");
+						}
+					}
+				}
+			}
+
+			propertySplit = serverSettings.getProperty("BlessWeaponEnchantLevel", "").split(";");
+			for(String readData : propertySplit)
+			{
+				String[] writeData = readData.split(",");
+				if(writeData.length != 2)
+				{
+					System.out.println("invalid config property");
+				}
+				else
+				{
+					try
+					{
+						BLESS_WEAPON_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
+					}
+					catch(NumberFormatException nfe)
+					{
+						if(Config.ENABLE_ALL_EXCEPTIONS)
+							nfe.printStackTrace();
+						if(!readData.equals(""))
+						{
+							System.out.println("invalid config property");
+						}
+					}
+				}
+			}
+
+			propertySplit = serverSettings.getProperty("CrystalWeaponEnchantLevel", "").split(";");
+			for(String readData : propertySplit)
+			{
+				String[] writeData = readData.split(",");
+				if(writeData.length != 2)
+				{
+					System.out.println("invalid config property");
+				}
+				else
+				{
+					try
+					{
+						CRYSTAL_WEAPON_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
+					}
+					catch(NumberFormatException nfe)
+					{
+						if(Config.ENABLE_ALL_EXCEPTIONS)
+							nfe.printStackTrace();
+						if(!readData.equals(""))
+						{
+							System.out.println("invalid config property");
+						}
+					}
+				}
+			}
+
+			propertySplit = serverSettings.getProperty("NormalArmorEnchantLevel", "").split(";");
+			for(String readData : propertySplit)
+			{
+				String[] writeData = readData.split(",");
+				if(writeData.length != 2)
+				{
+					System.out.println("invalid config property");
+				}
+				else
+				{
+					try
+					{
+						NORMAL_ARMOR_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
+					}
+					catch(NumberFormatException nfe)
+					{
+						if(Config.ENABLE_ALL_EXCEPTIONS)
+							nfe.printStackTrace();
+						if(!readData.equals(""))
+						{
+							System.out.println("invalid config property");
+						}
+					}
+				}
+			}
+
+			propertySplit = serverSettings.getProperty("BlessArmorEnchantLevel", "").split(";");
+			for(String readData : propertySplit)
+			{
+				String[] writeData = readData.split(",");
+				if(writeData.length != 2)
+				{
+					System.out.println("invalid config property");
+				}
+				else
+				{
+					try
+					{
+						BLESS_ARMOR_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
+					}
+					catch(NumberFormatException nfe)
+					{
+						if(Config.ENABLE_ALL_EXCEPTIONS)
+							nfe.printStackTrace();
+						if(!readData.equals(""))
+						{
+							System.out.println("invalid config property");
+						}
+					}
+				}
+			}
+
+			propertySplit = serverSettings.getProperty("CrystalArmorEnchantLevel", "").split(";");
+			for(String readData : propertySplit)
+			{
+				String[] writeData = readData.split(",");
+				if(writeData.length != 2)
+				{
+					System.out.println("invalid config property");
+				}
+				else
+				{
+					try
+					{
+						CRYSTAL_ARMOR_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
+					}
+					catch(NumberFormatException nfe)
+					{
+						if(Config.ENABLE_ALL_EXCEPTIONS)
+							nfe.printStackTrace();
+						if(!readData.equals(""))
+						{
+							System.out.println("invalid config property");
+						}
+					}
+				}
+			}
+
+			propertySplit = serverSettings.getProperty("NormalJewelryEnchantLevel", "").split(";");
+			for(String readData : propertySplit)
+			{
+				String[] writeData = readData.split(",");
+				if(writeData.length != 2)
+				{
+					System.out.println("invalid config property");
+				}
+				else
+				{
+					try
+					{
+						NORMAL_JEWELRY_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
+					}
+					catch(NumberFormatException nfe)
+					{
+						if(Config.ENABLE_ALL_EXCEPTIONS)
+							nfe.printStackTrace();
+						
+						
+						if(!readData.equals(""))
+						{
+							System.out.println("invalid config property");
+						}
+					}
+				}
+			}
+
+			propertySplit = serverSettings.getProperty("BlessJewelryEnchantLevel", "").split(";");
+			for(String readData : propertySplit)
+			{
+				String[] writeData = readData.split(",");
+				if(writeData.length != 2)
+				{
+					System.out.println("invalid config property");
+				}
+				else
+				{
+					try
+					{
+						BLESS_JEWELRY_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
+					}
+					catch(NumberFormatException nfe)
+					{
+						if(Config.ENABLE_ALL_EXCEPTIONS)
+							nfe.printStackTrace();
+						
+						if(!readData.equals(""))
+						{
+							System.out.println("invalid config property");
+						}
+					}
+				}
+			}
+
+			propertySplit = serverSettings.getProperty("CrystalJewelryEnchantLevel", "").split(";");
+			for(String readData : propertySplit)
+			{
+				String[] writeData = readData.split(",");
+				if(writeData.length != 2)
+				{
+					System.out.println("invalid config property");
+				}
+				else
+				{
+					try
+					{
+						CRYSTAL_JEWELRY_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
+					}
+					catch(NumberFormatException nfe)
+					{
+						if(Config.ENABLE_ALL_EXCEPTIONS)
+							nfe.printStackTrace();
+						
+						if(!readData.equals(""))
+						{
+							System.out.println("invalid config property");
+						}
+					}
+				}
+			}
+
+			ENCHANT_SAFE_MAX = Integer.parseInt(serverSettings.getProperty("EnchantSafeMax", "3"));
+			ENCHANT_SAFE_MAX_FULL = Integer.parseInt(serverSettings.getProperty("EnchantSafeMaxFull", "4"));
+			ENCHANT_WEAPON_MAX = Integer.parseInt(serverSettings.getProperty("EnchantWeaponMax", "25"));
+			ENCHANT_ARMOR_MAX = Integer.parseInt(serverSettings.getProperty("EnchantArmorMax", "25"));
+			ENCHANT_JEWELRY_MAX = Integer.parseInt(serverSettings.getProperty("EnchantJewelryMax", "25"));
+			CRYSTAL_ENCHANT_MIN = Integer.parseInt(serverSettings.getProperty("CrystalEnchantMin", "20"));
+			CRYSTAL_ENCHANT_MAX = Integer.parseInt(serverSettings.getProperty("CrystalEnchantMax", "0"));
+			ENABLE_DWARF_ENCHANT_BONUS = Boolean.parseBoolean(serverSettings.getProperty("EnableDwarfEnchantBonus", "False"));
+			DWARF_ENCHANT_MIN_LEVEL = Integer.parseInt(serverSettings.getProperty("DwarfEnchantMinLevel", "80"));
+			DWARF_ENCHANT_BONUS = Integer.parseInt(serverSettings.getProperty("DwarfEnchantBonus", "15"));
+			AUGMENTATION_NG_SKILL_CHANCE = Integer.parseInt(serverSettings.getProperty("AugmentationNGSkillChance", "15"));
+			AUGMENTATION_MID_SKILL_CHANCE = Integer.parseInt(serverSettings.getProperty("AugmentationMidSkillChance", "30"));
+			AUGMENTATION_HIGH_SKILL_CHANCE = Integer.parseInt(serverSettings.getProperty("AugmentationHighSkillChance", "45"));
+			AUGMENTATION_TOP_SKILL_CHANCE = Integer.parseInt(serverSettings.getProperty("AugmentationTopSkillChance", "60"));
+			AUGMENTATION_BASESTAT_CHANCE = Integer.parseInt(serverSettings.getProperty("AugmentationBaseStatChance", "1"));
+			AUGMENTATION_NG_GLOW_CHANCE = Integer.parseInt(serverSettings.getProperty("AugmentationNGGlowChance", "0"));
+			AUGMENTATION_MID_GLOW_CHANCE = Integer.parseInt(serverSettings.getProperty("AugmentationMidGlowChance", "40"));
+			AUGMENTATION_HIGH_GLOW_CHANCE = Integer.parseInt(serverSettings.getProperty("AugmentationHighGlowChance", "70"));
+			AUGMENTATION_TOP_GLOW_CHANCE = Integer.parseInt(serverSettings.getProperty("AugmentationTopGlowChance", "100"));
+			DELETE_AUGM_PASSIVE_ON_CHANGE = Boolean.parseBoolean(serverSettings.getProperty("DeleteAgmentPassiveEffectOnChangeWep", "true"));
+			DELETE_AUGM_ACTIVE_ON_CHANGE = Boolean.parseBoolean(serverSettings.getProperty("DeleteAgmentActiveEffectOnChangeWep", "true"));
+			ENCHANT_HERO_WEAPON = Boolean.parseBoolean(serverSettings.getProperty("EnableEnchantHeroWeapons", "False"));
+			SOUL_CRYSTAL_BREAK_CHANCE = Integer.parseInt(serverSettings.getProperty("SoulCrystalBreakChance", "10"));
+			SOUL_CRYSTAL_LEVEL_CHANCE = Integer.parseInt(serverSettings.getProperty("SoulCrystalLevelChance", "32"));
+			SOUL_CRYSTAL_MAX_LEVEL = Integer.parseInt(serverSettings.getProperty("SoulCrystalMaxLevel", "13"));
+			CUSTOM_ENCHANT_VALUE = Integer.parseInt(serverSettings.getProperty("CustomEnchantValue", "1"));
+			ALT_OLY_ENCHANT_LIMIT = Integer.parseInt(serverSettings.getProperty("AltOlyMaxEnchant", "-1"));
+			BREAK_ENCHANT = Integer.valueOf(serverSettings.getProperty("BreakEnchant", "0"));
+			MAX_ITEM_ENCHANT_KICK = Integer.parseInt(serverSettings.getProperty("EnchantKick", "0"));
+			GM_OVER_ENCHANT = Integer.parseInt(serverSettings.getProperty("GMOverEnchant", "0"));
+			GEODATA = Integer.parseInt(serverSettings.getProperty("GeoData", "0"));
+			GEODATA_CELLFINDING = Boolean.parseBoolean(serverSettings.getProperty("CellPathFinding", "False"));
+			ALLOW_PLAYERS_PATHNODE	= Boolean.parseBoolean(serverSettings.getProperty("AllowPlayersPathnode", "False"));
+			FORCE_GEODATA = Boolean.parseBoolean(serverSettings.getProperty("ForceGeoData", "True"));
+			String correctZ = serverSettings.getProperty("GeoCorrectZ", "ALL");
+			GEO_CORRECT_Z = CorrectSpawnsZ.valueOf(correctZ.toUpperCase());
+			ACCEPT_GEOEDITOR_CONN = Boolean.parseBoolean(serverSettings.getProperty("AcceptGeoeditorConn", "False"));
+			GEOEDITOR_PORT = Integer.parseInt(serverSettings.getProperty("GeoEditorPort", "9011"));
+			WORLD_SIZE_MIN_X = Integer.parseInt(serverSettings.getProperty("WorldSizeMinX", "-131072"));
+			WORLD_SIZE_MAX_X = Integer.parseInt(serverSettings.getProperty("WorldSizeMaxX", "228608"));
+			WORLD_SIZE_MIN_Y = Integer.parseInt(serverSettings.getProperty("WorldSizeMinY", "-262144"));
+			WORLD_SIZE_MAX_Y = Integer.parseInt(serverSettings.getProperty("WorldSizeMaxY", "262144"));
+			WORLD_SIZE_MIN_Z = Integer.parseInt(serverSettings.getProperty("WorldSizeMinZ", "-15000"));
+			WORLD_SIZE_MAX_Z = Integer.parseInt(serverSettings.getProperty("WorldSizeMaxZ", "15000"));
+			COORD_SYNCHRONIZE = Integer.valueOf(serverSettings.getProperty("CoordSynchronize", "-1"));
+			FALL_DAMAGE = Boolean.parseBoolean(serverSettings.getProperty("FallDamage", "False"));
+			ALLOW_WATER = Boolean.valueOf(serverSettings.getProperty("AllowWater", "False"));
+			STARTING_ADENA = Integer.parseInt(serverSettings.getProperty("StartingAdena", "100"));
+			STARTING_AA = Integer.parseInt(serverSettings.getProperty("StartingAncientAdena", "0"));
+			AUTO_LOOT = serverSettings.getProperty("AutoLoot").equalsIgnoreCase("True");
+			AUTO_LOOT_BOSS = serverSettings.getProperty("AutoLootBoss").equalsIgnoreCase("True");
+			AUTO_LOOT_HERBS = serverSettings.getProperty("AutoLootHerbs").equalsIgnoreCase("True");
+
+			CUSTOM_STARTER_ITEMS_ENABLED = Boolean.parseBoolean(serverSettings.getProperty("CustomStarterItemsEnabled", "False"));
+			if (Config.CUSTOM_STARTER_ITEMS_ENABLED)
+			{
+				String[] propertySplit1 = serverSettings.getProperty("StartingCustomItemsMage", "57,0").split(";");
+				STARTING_CUSTOM_ITEMS_M.clear();
+				for (String reward : propertySplit1)
+				{
+					String[] rewardSplit = reward.split(",");
+					if (rewardSplit.length != 2)
+						_log.warning("StartingCustomItemsMage[Config.load()]: invalid config property -> StartingCustomItemsMage \"" + reward + "\"");
+					else
+					{
+						try
+						{
+							STARTING_CUSTOM_ITEMS_M.add(new int[]{Integer.parseInt(rewardSplit[0]), Integer.parseInt(rewardSplit[1])});
+						}
+						catch (NumberFormatException nfe)
+						{
+							if(Config.ENABLE_ALL_EXCEPTIONS)
+								nfe.printStackTrace();
+							if (!reward.isEmpty())
+								_log.warning("StartingCustomItemsMage[Config.load()]: invalid config property -> StartingCustomItemsMage \"" + reward + "\"");
+						}
+					}
+				}
+				
+				propertySplit1 = serverSettings.getProperty("StartingCustomItemsFighter", "57,0").split(";");
+				STARTING_CUSTOM_ITEMS_F.clear();
+				for (String reward : propertySplit1)
+				{
+					String[] rewardSplit = reward.split(",");
+					if (rewardSplit.length != 2)
+						_log.warning("StartingCustomItemsFighter[Config.load()]: invalid config property -> StartingCustomItemsFighter \"" + reward + "\"");
+					else
+					{
+						try
+						{
+							STARTING_CUSTOM_ITEMS_F.add(new int[]{Integer.parseInt(rewardSplit[0]), Integer.parseInt(rewardSplit[1])});
+						}
+						catch (NumberFormatException nfe)
+						{
+							if(Config.ENABLE_ALL_EXCEPTIONS)
+								nfe.printStackTrace();
+							
+							if (!reward.isEmpty())
+								_log.warning("StartingCustomItemsFighter[Config.load()]: invalid config property -> StartingCustomItemsFighter \"" + reward + "\"");
+						}
+					}
+				}
+			}
 			
-			ExProperties telnetSettings = load(TELNET_FILE);
-
-			IS_TELNET_ENABLED = Boolean.parseBoolean(telnetSettings.getProperty("EnableTelnet", "false"));
-
 			ExProperties otherSettings = load(OTHER_CONFIG_FILE);
 			
 			DEEPBLUE_DROP_RULES = Boolean.parseBoolean(otherSettings.getProperty("UseDeepBlueDropRules", "True"));
@@ -1535,29 +1903,19 @@ public final class Config
 			WYVERN_SPEED = Integer.parseInt(otherSettings.getProperty("WyvernSpeed", "100"));
 			STRIDER_SPEED = Integer.parseInt(otherSettings.getProperty("StriderSpeed", "80"));
 			ALLOW_WYVERN_UPGRADER = Boolean.valueOf(otherSettings.getProperty("AllowWyvernUpgrader", "False"));
-
-			/* Select hit task */
 			CLICK_TASK = Integer.parseInt(otherSettings.getProperty("ClickTask", "50"));
-			
 			GM_CRITANNOUNCER_NAME = Boolean.parseBoolean(otherSettings.getProperty("GMShowCritAnnouncerName", "False"));
-			
-			/* Inventory slots limits */
 			INVENTORY_MAXIMUM_NO_DWARF = Integer.parseInt(otherSettings.getProperty("MaximumSlotsForNoDwarf", "80"));
 			INVENTORY_MAXIMUM_DWARF = Integer.parseInt(otherSettings.getProperty("MaximumSlotsForDwarf", "100"));
 			INVENTORY_MAXIMUM_GM = Integer.parseInt(otherSettings.getProperty("MaximumSlotsForGMPlayer", "250"));
 			MAX_ITEM_IN_PACKET = Math.max(INVENTORY_MAXIMUM_NO_DWARF, Math.max(INVENTORY_MAXIMUM_DWARF, INVENTORY_MAXIMUM_GM));
-			
-			/* Inventory slots limits */
 			WAREHOUSE_SLOTS_NO_DWARF = Integer.parseInt(otherSettings.getProperty("MaximumWarehouseSlotsForNoDwarf", "100"));
 			WAREHOUSE_SLOTS_DWARF = Integer.parseInt(otherSettings.getProperty("MaximumWarehouseSlotsForDwarf", "120"));
 			WAREHOUSE_SLOTS_CLAN = Integer.parseInt(otherSettings.getProperty("MaximumWarehouseSlotsForClan", "150"));
 			FREIGHT_SLOTS = Integer.parseInt(otherSettings.getProperty("MaximumFreightSlots", "20"));
-
-			/* If different from 100 (ie 100%) heal rate is modified acordingly */
 			HP_REGEN_MULTIPLIER = Double.parseDouble(otherSettings.getProperty("HpRegenMultiplier", "100")) / 100;
 			MP_REGEN_MULTIPLIER = Double.parseDouble(otherSettings.getProperty("MpRegenMultiplier", "100")) / 100;
 			CP_REGEN_MULTIPLIER = Double.parseDouble(otherSettings.getProperty("CpRegenMultiplier", "100")) / 100;
-
 			RAID_HP_REGEN_MULTIPLIER = Double.parseDouble(otherSettings.getProperty("RaidHpRegenMultiplier", "100")) / 100;
 			RAID_MP_REGEN_MULTIPLIER = Double.parseDouble(otherSettings.getProperty("RaidMpRegenMultiplier", "100")) / 100;
 			RAID_P_DEFENCE_MULTIPLIER = Double.parseDouble(otherSettings.getProperty("RaidPhysicalDefenceMultiplier", "100")) / 100;
@@ -1614,89 +1972,23 @@ public final class Config
         			}
         		}
         	}       
-			STARTING_ADENA = Integer.parseInt(otherSettings.getProperty("StartingAdena", "100"));
-			STARTING_AA = Integer.parseInt(otherSettings.getProperty("StartingAncientAdena", "0"));
-			
-			CUSTOM_STARTER_ITEMS_ENABLED = Boolean.parseBoolean(otherSettings.getProperty("CustomStarterItemsEnabled", "False"));
-			if (Config.CUSTOM_STARTER_ITEMS_ENABLED)
-			{
-				String[] propertySplit = otherSettings.getProperty("StartingCustomItemsMage", "57,0").split(";");
-				STARTING_CUSTOM_ITEMS_M.clear();
-				for (String reward : propertySplit)
-				{
-					String[] rewardSplit = reward.split(",");
-					if (rewardSplit.length != 2)
-						_log.warning("StartingCustomItemsMage[Config.load()]: invalid config property -> StartingCustomItemsMage \"" + reward + "\"");
-					else
-					{
-						try
-						{
-							STARTING_CUSTOM_ITEMS_M.add(new int[]{Integer.parseInt(rewardSplit[0]), Integer.parseInt(rewardSplit[1])});
-						}
-						catch (NumberFormatException nfe)
-						{
-							if(Config.ENABLE_ALL_EXCEPTIONS)
-								nfe.printStackTrace();
-							if (!reward.isEmpty())
-								_log.warning("StartingCustomItemsMage[Config.load()]: invalid config property -> StartingCustomItemsMage \"" + reward + "\"");
-						}
-					}
-				}
-				
-				propertySplit = otherSettings.getProperty("StartingCustomItemsFighter", "57,0").split(";");
-				STARTING_CUSTOM_ITEMS_F.clear();
-				for (String reward : propertySplit)
-				{
-					String[] rewardSplit = reward.split(",");
-					if (rewardSplit.length != 2)
-						_log.warning("StartingCustomItemsFighter[Config.load()]: invalid config property -> StartingCustomItemsFighter \"" + reward + "\"");
-					else
-					{
-						try
-						{
-							STARTING_CUSTOM_ITEMS_F.add(new int[]{Integer.parseInt(rewardSplit[0]), Integer.parseInt(rewardSplit[1])});
-						}
-						catch (NumberFormatException nfe)
-						{
-							if(Config.ENABLE_ALL_EXCEPTIONS)
-								nfe.printStackTrace();
-							
-							if (!reward.isEmpty())
-								_log.warning("StartingCustomItemsFighter[Config.load()]: invalid config property -> StartingCustomItemsFighter \"" + reward + "\"");
-						}
-					}
-				}
-			}
 			
 			UNSTUCK_INTERVAL = Integer.parseInt(otherSettings.getProperty("UnstuckInterval", "300"));
-
-			/* Player protection after teleport or login */
 			PLAYER_SPAWN_PROTECTION = Integer.parseInt(otherSettings.getProperty("PlayerSpawnProtection", "0"));
 			PLAYER_TELEPORT_PROTECTION = Integer.parseInt(otherSettings.getProperty("PlayerTeleportProtection", "0"));
 			EFFECT_TELEPORT_PROTECTION = Boolean.parseBoolean(otherSettings.getProperty("EffectTeleportProtection", "False"));
-			
-			/* Player protection after recovering from fake death (works against mobs only) */
 			PLAYER_FAKEDEATH_UP_PROTECTION = Integer.parseInt(otherSettings.getProperty("PlayerFakeDeathUpProtection", "0"));
-
-			/* Defines some Party XP related values */
 			PARTY_XP_CUTOFF_METHOD = otherSettings.getProperty("PartyXpCutoffMethod", "percentage");
 			PARTY_XP_CUTOFF_PERCENT = Double.parseDouble(otherSettings.getProperty("PartyXpCutoffPercent", "3."));
 			PARTY_XP_CUTOFF_LEVEL = Integer.parseInt(otherSettings.getProperty("PartyXpCutoffLevel", "30"));
-
-			/* Amount of HP, MP, and CP is restored */
 			RESPAWN_RESTORE_CP = Double.parseDouble(otherSettings.getProperty("RespawnRestoreCP", "0")) / 100;
 			RESPAWN_RESTORE_HP = Double.parseDouble(otherSettings.getProperty("RespawnRestoreHP", "70")) / 100;
 			RESPAWN_RESTORE_MP = Double.parseDouble(otherSettings.getProperty("RespawnRestoreMP", "70")) / 100;
-
 			RESPAWN_RANDOM_ENABLED = Boolean.parseBoolean(otherSettings.getProperty("RespawnRandomInTown", "False"));
 			RESPAWN_RANDOM_MAX_OFFSET = Integer.parseInt(otherSettings.getProperty("RespawnRandomMaxOffset", "50"));
-
-			/* Maximum number of available slots for pvt stores */
 			MAX_PVTSTORE_SLOTS_DWARF = Integer.parseInt(otherSettings.getProperty("MaxPvtStoreSlotsDwarf", "5"));
 			MAX_PVTSTORE_SLOTS_OTHER = Integer.parseInt(otherSettings.getProperty("MaxPvtStoreSlotsOther", "4"));
-
 			STORE_SKILL_COOLTIME = Boolean.parseBoolean(otherSettings.getProperty("StoreSkillCooltime", "true"));
-
 			PET_RENT_NPC = otherSettings.getProperty("ListPetRentNpc", "30827");
 			LIST_PET_RENT_NPC = new FastList<>();
 			for(String id : PET_RENT_NPC.split(","))
@@ -1710,7 +2002,6 @@ public final class Config
 			{
 				LIST_NONDROPPABLE_ITEMS.add(Integer.parseInt(id));
 			}
-
 			ANNOUNCE_MAMMON_SPAWN = Boolean.parseBoolean(otherSettings.getProperty("AnnounceMammonSpawn", "True"));
 			PETITIONING_ALLOWED = Boolean.parseBoolean(otherSettings.getProperty("PetitioningAllowed", "True"));
 			MAX_PETITIONS_PER_PLAYER = Integer.parseInt(otherSettings.getProperty("MaxPetitionsPerPlayer", "5"));
@@ -1718,16 +2009,15 @@ public final class Config
 			JAIL_IS_PVP = Boolean.valueOf(otherSettings.getProperty("JailIsPvp", "True"));
 			JAIL_DISABLE_CHAT = Boolean.valueOf(otherSettings.getProperty("JailDisableChat", "True"));
 			DEATH_PENALTY_CHANCE = Integer.parseInt(otherSettings.getProperty("DeathPenaltyChance", "20"));
-			//////////////
 			ENABLE_MODIFY_SKILL_DURATION = Boolean.parseBoolean(otherSettings.getProperty("EnableModifySkillDuration", "false"));
 			if(ENABLE_MODIFY_SKILL_DURATION)
 			{
 				SKILL_DURATION_LIST = new FastMap<>();
 
-				String[] propertySplit;
-				propertySplit = otherSettings.getProperty("SkillDurationList", "").split(";");
+				String[] propertySplit1;
+				propertySplit1 = otherSettings.getProperty("SkillDurationList", "").split(";");
 
-				for(String skill : propertySplit)
+				for(String skill : propertySplit1)
 				{
 					String[] skillSplit = skill.split(",");
 					if(skillSplit.length != 2)
@@ -1759,7 +2049,6 @@ public final class Config
 			CHAT_FILTER_PUNISHMENT = otherSettings.getProperty("ChatFilterPunishment", "off");
 			CHAT_FILTER_PUNISHMENT_PARAM1 = Integer.parseInt(otherSettings.getProperty("ChatFilterPunishmentParam1", "1"));
 			CHAT_FILTER_PUNISHMENT_PARAM2 = Integer.parseInt(otherSettings.getProperty("ChatFilterPunishmentParam2", "1000"));
-
 			FS_TIME_ATTACK = Integer.parseInt(otherSettings.getProperty("TimeOfAttack", "50"));
 			FS_TIME_COOLDOWN = Integer.parseInt(otherSettings.getProperty("TimeOfCoolDown", "5"));
 			FS_TIME_ENTRY = Integer.parseInt(otherSettings.getProperty("TimeOfEntry", "3"));
@@ -1789,55 +2078,6 @@ public final class Config
 
 			ALLOW_QUAKE_SYSTEM = Boolean.parseBoolean(otherSettings.getProperty("AllowQuakeSystem", "False"));
 			ENABLE_ANTI_PVP_FARM_MSG = Boolean.parseBoolean(otherSettings.getProperty("EnableAntiPvpFarmMsg", "False"));
-
-			ExProperties ratesSettings = load(RATES_CONFIG_FILE);
-
-			RATE_XP = Float.parseFloat(ratesSettings.getProperty("RateXp", "1.00"));
-			RATE_SP = Float.parseFloat(ratesSettings.getProperty("RateSp", "1.00"));
-			RATE_PARTY_XP = Float.parseFloat(ratesSettings.getProperty("RatePartyXp", "1.00"));
-			RATE_PARTY_SP = Float.parseFloat(ratesSettings.getProperty("RatePartySp", "1.00"));
-			RATE_QUESTS_REWARD = Float.parseFloat(ratesSettings.getProperty("RateQuestsReward", "1.00"));
-			RATE_DROP_ADENA = Float.parseFloat(ratesSettings.getProperty("RateDropAdena", "1.00"));
-			RATE_CONSUMABLE_COST = Float.parseFloat(ratesSettings.getProperty("RateConsumableCost", "1.00"));
-			RATE_DROP_ITEMS = Float.parseFloat(ratesSettings.getProperty("RateDropItems", "1.00"));
-			RATE_DROP_SEAL_STONES = Float.parseFloat(ratesSettings.getProperty("RateDropSealStones", "1.00"));
-			RATE_DROP_SPOIL = Float.parseFloat(ratesSettings.getProperty("RateDropSpoil", "1.00"));
-			RATE_DROP_MANOR = Integer.parseInt(ratesSettings.getProperty("RateDropManor", "1.00"));
-			RATE_DROP_QUEST = Float.parseFloat(ratesSettings.getProperty("RateDropQuest", "1.00"));
-			RATE_KARMA_EXP_LOST = Float.parseFloat(ratesSettings.getProperty("RateKarmaExpLost", "1.00"));
-			RATE_SIEGE_GUARDS_PRICE = Float.parseFloat(ratesSettings.getProperty("RateSiegeGuardsPrice", "1.00"));
-			RATE_DROP_COMMON_HERBS = Float.parseFloat(ratesSettings.getProperty("RateCommonHerbs", "15.00"));
-			RATE_DROP_MP_HP_HERBS = Float.parseFloat(ratesSettings.getProperty("RateHpMpHerbs", "10.00"));
-			RATE_DROP_GREATER_HERBS = Float.parseFloat(ratesSettings.getProperty("RateGreaterHerbs", "4.00"));
-			RATE_DROP_SUPERIOR_HERBS = Float.parseFloat(ratesSettings.getProperty("RateSuperiorHerbs", "0.80")) * 10;
-			RATE_DROP_SPECIAL_HERBS = Float.parseFloat(ratesSettings.getProperty("RateSpecialHerbs", "0.20")) * 10;
-
-			PLAYER_DROP_LIMIT = Integer.parseInt(ratesSettings.getProperty("PlayerDropLimit", "3"));
-			PLAYER_RATE_DROP = Integer.parseInt(ratesSettings.getProperty("PlayerRateDrop", "5"));
-			PLAYER_RATE_DROP_ITEM = Integer.parseInt(ratesSettings.getProperty("PlayerRateDropItem", "70"));
-			PLAYER_RATE_DROP_EQUIP = Integer.parseInt(ratesSettings.getProperty("PlayerRateDropEquip", "25"));
-			PLAYER_RATE_DROP_EQUIP_WEAPON = Integer.parseInt(ratesSettings.getProperty("PlayerRateDropEquipWeapon", "5"));
-
-			PET_XP_RATE = Float.parseFloat(ratesSettings.getProperty("PetXpRate", "1.00"));
-			PET_FOOD_RATE = Integer.parseInt(ratesSettings.getProperty("PetFoodRate", "1"));
-			SINEATER_XP_RATE = Float.parseFloat(ratesSettings.getProperty("SinEaterXpRate", "1.00"));
-
-			KARMA_DROP_LIMIT = Integer.parseInt(ratesSettings.getProperty("KarmaDropLimit", "10"));
-			KARMA_RATE_DROP = Integer.parseInt(ratesSettings.getProperty("KarmaRateDrop", "70"));
-			KARMA_RATE_DROP_ITEM = Integer.parseInt(ratesSettings.getProperty("KarmaRateDropItem", "50"));
-			KARMA_RATE_DROP_EQUIP = Integer.parseInt(ratesSettings.getProperty("KarmaRateDropEquip", "40"));
-			KARMA_RATE_DROP_EQUIP_WEAPON = Integer.parseInt(ratesSettings.getProperty("KarmaRateDropEquipWeapon", "10"));
-
-			/** RB rate **/
-			ADENA_BOSS = Float.parseFloat(ratesSettings.getProperty("AdenaBoss", "1.00"));
-			ADENA_RAID = Float.parseFloat(ratesSettings.getProperty("AdenaRaid", "1.00"));
-			ADENA_MINON = Float.parseFloat(ratesSettings.getProperty("AdenaMinon", "1.00"));
-			ITEMS_BOSS = Float.parseFloat(ratesSettings.getProperty("ItemsBoss", "1.00"));
-			ITEMS_RAID = Float.parseFloat(ratesSettings.getProperty("ItemsRaid", "1.00"));
-			ITEMS_MINON = Float.parseFloat(ratesSettings.getProperty("ItemsMinon", "1.00"));
-			SPOIL_BOSS = Float.parseFloat(ratesSettings.getProperty("SpoilBoss", "1.00"));
-			SPOIL_RAID = Float.parseFloat(ratesSettings.getProperty("SpoilRaid", "1.00"));
-			SPOIL_MINON = Float.parseFloat(ratesSettings.getProperty("SpoilMinon", "1.00"));
 
 			ExProperties altSettings = load(ALT_SETTINGS_FILE);
 
@@ -1875,9 +2115,6 @@ public final class Config
 			LIFE_CRYSTAL_NEEDED = Boolean.parseBoolean(altSettings.getProperty("LifeCrystalNeeded", "true"));
 			SP_BOOK_NEEDED = Boolean.parseBoolean(altSettings.getProperty("SpBookNeeded", "true"));
 			ES_SP_BOOK_NEEDED = Boolean.parseBoolean(altSettings.getProperty("EnchantSkillSpBookNeeded", "true"));
-			AUTO_LOOT = altSettings.getProperty("AutoLoot").equalsIgnoreCase("True");
-			AUTO_LOOT_BOSS = altSettings.getProperty("AutoLootBoss").equalsIgnoreCase("True");
-			AUTO_LOOT_HERBS = altSettings.getProperty("AutoLootHerbs").equalsIgnoreCase("True");
 			ALT_GAME_FREE_TELEPORT = Boolean.parseBoolean(altSettings.getProperty("AltFreeTeleporting", "False"));
 			ALT_RECOMMEND = Boolean.parseBoolean(altSettings.getProperty("AltRecommend", "False"));
 			ALT_GAME_SUBCLASS_WITHOUT_QUESTS = Boolean.parseBoolean(altSettings.getProperty("AltSubClassWithoutQuests", "False"));
@@ -2513,299 +2750,6 @@ public final class Config
 			ALT_OLY_PERIOD = OlympiadPeriod.valueOf(OLYMPSetting.getProperty("AltOlyPeriod", "MONTH"));
 			ALT_OLY_PERIOD_MULTIPLIER = Integer.parseInt(OLYMPSetting.getProperty("AltOlyPeriodMultiplier", "1"));
 
-			ExProperties ENCHANTSetting = load(ENCHANT_CONFIG_FILE);
-			String[] propertySplit = ENCHANTSetting.getProperty("NormalWeaponEnchantLevel", "").split(";");
-			for(String readData : propertySplit)
-			{
-				String[] writeData = readData.split(",");
-				if(writeData.length != 2)
-				{
-					System.out.println("invalid config property");
-				}
-				else
-				{
-					try
-					{
-						NORMAL_WEAPON_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
-					}
-					catch(NumberFormatException nfe)
-					{
-						if(Config.ENABLE_ALL_EXCEPTIONS)
-							nfe.printStackTrace();
-						if(!readData.equals(""))
-						{
-							System.out.println("invalid config property");
-						}
-					}
-				}
-			}
-
-			propertySplit = ENCHANTSetting.getProperty("BlessWeaponEnchantLevel", "").split(";");
-			for(String readData : propertySplit)
-			{
-				String[] writeData = readData.split(",");
-				if(writeData.length != 2)
-				{
-					System.out.println("invalid config property");
-				}
-				else
-				{
-					try
-					{
-						BLESS_WEAPON_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
-					}
-					catch(NumberFormatException nfe)
-					{
-						if(Config.ENABLE_ALL_EXCEPTIONS)
-							nfe.printStackTrace();
-						if(!readData.equals(""))
-						{
-							System.out.println("invalid config property");
-						}
-					}
-				}
-			}
-
-			propertySplit = ENCHANTSetting.getProperty("CrystalWeaponEnchantLevel", "").split(";");
-			for(String readData : propertySplit)
-			{
-				String[] writeData = readData.split(",");
-				if(writeData.length != 2)
-				{
-					System.out.println("invalid config property");
-				}
-				else
-				{
-					try
-					{
-						CRYSTAL_WEAPON_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
-					}
-					catch(NumberFormatException nfe)
-					{
-						if(Config.ENABLE_ALL_EXCEPTIONS)
-							nfe.printStackTrace();
-						if(!readData.equals(""))
-						{
-							System.out.println("invalid config property");
-						}
-					}
-				}
-			}
-
-			propertySplit = ENCHANTSetting.getProperty("NormalArmorEnchantLevel", "").split(";");
-			for(String readData : propertySplit)
-			{
-				String[] writeData = readData.split(",");
-				if(writeData.length != 2)
-				{
-					System.out.println("invalid config property");
-				}
-				else
-				{
-					try
-					{
-						NORMAL_ARMOR_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
-					}
-					catch(NumberFormatException nfe)
-					{
-						if(Config.ENABLE_ALL_EXCEPTIONS)
-							nfe.printStackTrace();
-						if(!readData.equals(""))
-						{
-							System.out.println("invalid config property");
-						}
-					}
-				}
-			}
-
-			propertySplit = ENCHANTSetting.getProperty("BlessArmorEnchantLevel", "").split(";");
-			for(String readData : propertySplit)
-			{
-				String[] writeData = readData.split(",");
-				if(writeData.length != 2)
-				{
-					System.out.println("invalid config property");
-				}
-				else
-				{
-					try
-					{
-						BLESS_ARMOR_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
-					}
-					catch(NumberFormatException nfe)
-					{
-						if(Config.ENABLE_ALL_EXCEPTIONS)
-							nfe.printStackTrace();
-						if(!readData.equals(""))
-						{
-							System.out.println("invalid config property");
-						}
-					}
-				}
-			}
-
-			propertySplit = ENCHANTSetting.getProperty("CrystalArmorEnchantLevel", "").split(";");
-			for(String readData : propertySplit)
-			{
-				String[] writeData = readData.split(",");
-				if(writeData.length != 2)
-				{
-					System.out.println("invalid config property");
-				}
-				else
-				{
-					try
-					{
-						CRYSTAL_ARMOR_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
-					}
-					catch(NumberFormatException nfe)
-					{
-						if(Config.ENABLE_ALL_EXCEPTIONS)
-							nfe.printStackTrace();
-						if(!readData.equals(""))
-						{
-							System.out.println("invalid config property");
-						}
-					}
-				}
-			}
-
-			propertySplit = ENCHANTSetting.getProperty("NormalJewelryEnchantLevel", "").split(";");
-			for(String readData : propertySplit)
-			{
-				String[] writeData = readData.split(",");
-				if(writeData.length != 2)
-				{
-					System.out.println("invalid config property");
-				}
-				else
-				{
-					try
-					{
-						NORMAL_JEWELRY_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
-					}
-					catch(NumberFormatException nfe)
-					{
-						if(Config.ENABLE_ALL_EXCEPTIONS)
-							nfe.printStackTrace();
-						
-						
-						if(!readData.equals(""))
-						{
-							System.out.println("invalid config property");
-						}
-					}
-				}
-			}
-
-			propertySplit = ENCHANTSetting.getProperty("BlessJewelryEnchantLevel", "").split(";");
-			for(String readData : propertySplit)
-			{
-				String[] writeData = readData.split(",");
-				if(writeData.length != 2)
-				{
-					System.out.println("invalid config property");
-				}
-				else
-				{
-					try
-					{
-						BLESS_JEWELRY_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
-					}
-					catch(NumberFormatException nfe)
-					{
-						if(Config.ENABLE_ALL_EXCEPTIONS)
-							nfe.printStackTrace();
-						
-						if(!readData.equals(""))
-						{
-							System.out.println("invalid config property");
-						}
-					}
-				}
-			}
-
-			propertySplit = ENCHANTSetting.getProperty("CrystalJewelryEnchantLevel", "").split(";");
-			for(String readData : propertySplit)
-			{
-				String[] writeData = readData.split(",");
-				if(writeData.length != 2)
-				{
-					System.out.println("invalid config property");
-				}
-				else
-				{
-					try
-					{
-						CRYSTAL_JEWELRY_ENCHANT_LEVEL.put(Integer.parseInt(writeData[0]), Integer.parseInt(writeData[1]));
-					}
-					catch(NumberFormatException nfe)
-					{
-						if(Config.ENABLE_ALL_EXCEPTIONS)
-							nfe.printStackTrace();
-						
-						if(!readData.equals(""))
-						{
-							System.out.println("invalid config property");
-						}
-					}
-				}
-			}
-
-			/** limit of safe enchant normal **/
-			ENCHANT_SAFE_MAX = Integer.parseInt(ENCHANTSetting.getProperty("EnchantSafeMax", "3"));
-
-			/** limit of safe enchant full **/
-			ENCHANT_SAFE_MAX_FULL = Integer.parseInt(ENCHANTSetting.getProperty("EnchantSafeMaxFull", "4"));
-
-			/** limit of max enchant **/
-			ENCHANT_WEAPON_MAX = Integer.parseInt(ENCHANTSetting.getProperty("EnchantWeaponMax", "25"));
-			ENCHANT_ARMOR_MAX = Integer.parseInt(ENCHANTSetting.getProperty("EnchantArmorMax", "25"));
-			ENCHANT_JEWELRY_MAX = Integer.parseInt(ENCHANTSetting.getProperty("EnchantJewelryMax", "25"));
-
-			
-			/** CRYSTAL SCROLL enchant limits **/
-			CRYSTAL_ENCHANT_MIN = Integer.parseInt(ENCHANTSetting.getProperty("CrystalEnchantMin", "20"));
-			CRYSTAL_ENCHANT_MAX = Integer.parseInt(ENCHANTSetting.getProperty("CrystalEnchantMax", "0"));
-
-			/** bonus for dwarf **/
-			ENABLE_DWARF_ENCHANT_BONUS = Boolean.parseBoolean(ENCHANTSetting.getProperty("EnableDwarfEnchantBonus", "False"));
-			DWARF_ENCHANT_MIN_LEVEL = Integer.parseInt(ENCHANTSetting.getProperty("DwarfEnchantMinLevel", "80"));
-			DWARF_ENCHANT_BONUS = Integer.parseInt(ENCHANTSetting.getProperty("DwarfEnchantBonus", "15"));
-
-			/** augmentation chance **/
-			AUGMENTATION_NG_SKILL_CHANCE = Integer.parseInt(ENCHANTSetting.getProperty("AugmentationNGSkillChance", "15"));
-			AUGMENTATION_MID_SKILL_CHANCE = Integer.parseInt(ENCHANTSetting.getProperty("AugmentationMidSkillChance", "30"));
-			AUGMENTATION_HIGH_SKILL_CHANCE = Integer.parseInt(ENCHANTSetting.getProperty("AugmentationHighSkillChance", "45"));
-			AUGMENTATION_TOP_SKILL_CHANCE = Integer.parseInt(ENCHANTSetting.getProperty("AugmentationTopSkillChance", "60"));
-			AUGMENTATION_BASESTAT_CHANCE = Integer.parseInt(ENCHANTSetting.getProperty("AugmentationBaseStatChance", "1"));
-
-			/** augmentation glow **/
-			AUGMENTATION_NG_GLOW_CHANCE = Integer.parseInt(ENCHANTSetting.getProperty("AugmentationNGGlowChance", "0"));
-			AUGMENTATION_MID_GLOW_CHANCE = Integer.parseInt(ENCHANTSetting.getProperty("AugmentationMidGlowChance", "40"));
-			AUGMENTATION_HIGH_GLOW_CHANCE = Integer.parseInt(ENCHANTSetting.getProperty("AugmentationHighGlowChance", "70"));
-			AUGMENTATION_TOP_GLOW_CHANCE = Integer.parseInt(ENCHANTSetting.getProperty("AugmentationTopGlowChance", "100"));
-
-			/** augmentation configs **/
-			DELETE_AUGM_PASSIVE_ON_CHANGE = Boolean.parseBoolean(ENCHANTSetting.getProperty("DeleteAgmentPassiveEffectOnChangeWep", "true"));
-			DELETE_AUGM_ACTIVE_ON_CHANGE = Boolean.parseBoolean(ENCHANTSetting.getProperty("DeleteAgmentActiveEffectOnChangeWep", "true"));
-			
-			/** enchant hero weapon **/
-			ENCHANT_HERO_WEAPON = Boolean.parseBoolean(ENCHANTSetting.getProperty("EnableEnchantHeroWeapons", "False"));
-
-			/** soul crystal **/
-			SOUL_CRYSTAL_BREAK_CHANCE = Integer.parseInt(ENCHANTSetting.getProperty("SoulCrystalBreakChance", "10"));
-			SOUL_CRYSTAL_LEVEL_CHANCE = Integer.parseInt(ENCHANTSetting.getProperty("SoulCrystalLevelChance", "32"));
-			SOUL_CRYSTAL_MAX_LEVEL = Integer.parseInt(ENCHANTSetting.getProperty("SoulCrystalMaxLevel", "13"));
-
-			/** count enchant **/
-			CUSTOM_ENCHANT_VALUE = Integer.parseInt(ENCHANTSetting.getProperty("CustomEnchantValue", "1"));
-			ALT_OLY_ENCHANT_LIMIT = Integer.parseInt(ENCHANTSetting.getProperty("AltOlyMaxEnchant", "-1"));
-			BREAK_ENCHANT = Integer.valueOf(ENCHANTSetting.getProperty("BreakEnchant", "0"));
-		
-			MAX_ITEM_ENCHANT_KICK = Integer.parseInt(ENCHANTSetting.getProperty("EnchantKick", "0"));
-			GM_OVER_ENCHANT = Integer.parseInt(ENCHANTSetting.getProperty("GMOverEnchant", "0"));
-
 			ExProperties PacketSetting = load(PROTECT_PACKET_CONFIG_FILE);
 		
 			ENABLE_UNK_PACKET_PROTECTION = Boolean.parseBoolean(PacketSetting.getProperty("UnknownPacketProtection", "true"));
@@ -2926,32 +2870,6 @@ public final class Config
 			}
 				
 			LEAVE_BUFFS_ON_DIE = Boolean.parseBoolean(PHYSICSSetting.getProperty("LeaveBuffsOnDie", "True"));
-
-			ExProperties geodataSetting = load(GEODATA_CONFIG_FILE);
-
-			GEODATA					= Integer.parseInt(geodataSetting.getProperty("GeoData", "0"));
-			GEODATA_CELLFINDING		= Boolean.parseBoolean(geodataSetting.getProperty("CellPathFinding", "False"));
-			
-			ALLOW_PLAYERS_PATHNODE	= Boolean.parseBoolean(geodataSetting.getProperty("AllowPlayersPathnode", "False"));
-			
-			FORCE_GEODATA			= Boolean.parseBoolean(geodataSetting.getProperty("ForceGeoData", "True"));
-			String correctZ			= geodataSetting.getProperty("GeoCorrectZ", "ALL");
-			GEO_CORRECT_Z			= CorrectSpawnsZ.valueOf(correctZ.toUpperCase());
-
-			ACCEPT_GEOEDITOR_CONN	= Boolean.parseBoolean(geodataSetting.getProperty("AcceptGeoeditorConn", "False"));
-			GEOEDITOR_PORT			= Integer.parseInt(geodataSetting.getProperty("GeoEditorPort", "9011"));
-
-			WORLD_SIZE_MIN_X = Integer.parseInt(geodataSetting.getProperty("WorldSizeMinX", "-131072"));
-			WORLD_SIZE_MAX_X = Integer.parseInt(geodataSetting.getProperty("WorldSizeMaxX", "228608"));
-			WORLD_SIZE_MIN_Y = Integer.parseInt(geodataSetting.getProperty("WorldSizeMinY", "-262144"));
-			WORLD_SIZE_MAX_Y = Integer.parseInt(geodataSetting.getProperty("WorldSizeMaxY", "262144"));
-			WORLD_SIZE_MIN_Z = Integer.parseInt(geodataSetting.getProperty("WorldSizeMinZ", "-15000"));
-			WORLD_SIZE_MAX_Z = Integer.parseInt(geodataSetting.getProperty("WorldSizeMaxZ", "15000"));
-
-			COORD_SYNCHRONIZE = Integer.valueOf(geodataSetting.getProperty("CoordSynchronize", "-1"));
-
-			FALL_DAMAGE = Boolean.parseBoolean(geodataSetting.getProperty("FallDamage", "False"));
-			ALLOW_WATER = Boolean.valueOf(geodataSetting.getProperty("AllowWater", "False"));
 
 			ExProperties bossSettings = load(BOSS_CONFIG_FILE);
 			
@@ -3162,18 +3080,13 @@ public final class Config
 
 				GAME_SERVER_LOGIN_HOST = loginSettings.getProperty("LoginHostname", "*");
 				GAME_SERVER_LOGIN_PORT = Integer.parseInt(loginSettings.getProperty("LoginPort", "9013"));
-
 				LOGIN_BIND_ADDRESS = loginSettings.getProperty("LoginserverHostname", "*");
 				PORT_LOGIN = Integer.parseInt(loginSettings.getProperty("LoginserverPort", "2106"));
-
 				ACCEPT_NEW_GAMESERVER = Boolean.parseBoolean(loginSettings.getProperty("AcceptNewGameServer", "True"));
-
 				LOGIN_TRY_BEFORE_BAN = Integer.parseInt(loginSettings.getProperty("LoginTryBeforeBan", "10"));
 				LOGIN_BLOCK_AFTER_BAN = Integer.parseInt(loginSettings.getProperty("LoginBlockAfterBan", "600"));
-
 				INTERNAL_HOSTNAME = loginSettings.getProperty("InternalHostname", "localhost");
 				EXTERNAL_HOSTNAME = loginSettings.getProperty("ExternalHostname", "localhost");
-
 				DATABASE_POOL_TYPE = loginSettings.getProperty("DatabasePoolType", "c3p0");
 				DATABASE_DRIVER = loginSettings.getProperty("Driver", "com.mysql.jdbc.Driver");
 				DATABASE_URL = loginSettings.getProperty("URL", "jdbc:mysql://localhost/l2jdb");
@@ -3181,26 +3094,20 @@ public final class Config
 				DATABASE_PASSWORD = loginSettings.getProperty("Password", "");
 				DATABASE_MAX_CONNECTIONS = Integer.parseInt(loginSettings.getProperty("MaximumDbConnections", "10"));
 				DATABASE_MAX_IDLE_TIME = Integer.parseInt(loginSettings.getProperty("MaximumDbIdleTime", "0"));
-
 				ENABLE_DDOS_PROTECTION_SYSTEM = Boolean.parseBoolean(loginSettings.getProperty("EnableDdosProSystem", "false"));
 				DDOS_COMMAND_BLOCK = loginSettings.getProperty("Deny_noallow_ip_ddos", "/sbin/iptables -I INPUT -p tcp --dport 7777 -s $IP -j ACCEPT");
 				ENABLE_DEBUG_DDOS_PROTECTION_SYSTEM = Boolean.parseBoolean(loginSettings.getProperty("Fulllog_mode_print", "false"));
-
 				DATABASE_TIMEOUT = Integer.parseInt(loginSettings.getProperty("TimeOutConDb", "0"));
 				DATABASE_CONNECTION_TIMEOUT = Integer.parseInt(loginSettings.getProperty("SingleConnectionTimeOutDb", "120000"));
 				DATABASE_PARTITION_COUNT = Integer.parseInt(loginSettings.getProperty("PartitionCount", "4"));
 
-				// Anti Brute force attack on login
 				BRUT_AVG_TIME = Integer.parseInt(loginSettings.getProperty("BrutAvgTime", "30")); // in Seconds
 				BRUT_LOGON_ATTEMPTS = Integer.parseInt(loginSettings.getProperty("BrutLogonAttempts", "15"));
 				BRUT_BAN_IP_TIME = Integer.parseInt(loginSettings.getProperty("BrutBanIpTime", "900")); // in Seconds
-				
 				SHOW_LICENCE = Boolean.parseBoolean(loginSettings.getProperty("ShowLicence", "false"));
 				IP_UPDATE_TIME = Integer.parseInt(loginSettings.getProperty("IpUpdateTime", "15"));
 				FORCE_GGAUTH = Boolean.parseBoolean(loginSettings.getProperty("ForceGGAuth", "false"));
-
 				AUTO_CREATE_ACCOUNTS = Boolean.parseBoolean(loginSettings.getProperty("AutoCreateAccounts", "True"));
-
 				FLOOD_PROTECTION = Boolean.parseBoolean(loginSettings.getProperty("EnableFloodProtection", "True"));
 				FAST_CONNECTION_LIMIT = Integer.parseInt(loginSettings.getProperty("FastConnectionLimit", "15"));
 				NORMAL_CONNECTION_TIME = Integer.parseInt(loginSettings.getProperty("NormalConnectionTime", "700"));
@@ -3208,12 +3115,13 @@ public final class Config
 				MAX_CONNECTION_PER_IP = Integer.parseInt(loginSettings.getProperty("MaxConnectionPerIP", "50"));
 				DEBUG = Boolean.parseBoolean(loginSettings.getProperty("Debug", "false"));
 				DEVELOPER = Boolean.parseBoolean(loginSettings.getProperty("Developer", "false"));
-
 				NETWORK_IP_LIST = loginSettings.getProperty("NetworkList", "");
 				SESSION_TTL = Long.parseLong(loginSettings.getProperty("SessionTTL", "25000"));
 				MAX_LOGINSESSIONS = Integer.parseInt(loginSettings.getProperty("MaxSessions","200"));
-				
 				DEBUG_PACKETS = Boolean.parseBoolean(loginSettings.getProperty("DebugPackets", "false"));
+				
+				ExProperties telnetSettings = load(TELNET_FILE);
+				IS_TELNET_ENABLED = Boolean.parseBoolean(telnetSettings.getProperty("EnableTelnet", "false"));
 			}
 			else
 				_log.severe("Couldn't load configs: server mode wasn't set.");

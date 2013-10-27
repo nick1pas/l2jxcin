@@ -83,7 +83,7 @@ public class QuestManager extends ScriptManager<Quest>
 					quest.unload();
 				}
 			}
-			File scripts = new File(Config.DATAPACK_ROOT + "/data/scripts/scripts.cfg");
+			File scripts = new File(Config.DATAPACK_ROOT + "/data/scripts.cfg");
 			L2ScriptEngineManager.getInstance().executeScriptsList(scripts);
 			QuestManager.getInstance().report();
 		}

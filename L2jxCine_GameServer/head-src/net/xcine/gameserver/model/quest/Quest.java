@@ -31,7 +31,6 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.cache.HtmCache;
 import net.xcine.gameserver.datatables.GmListTable;
@@ -53,6 +52,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 import net.xcine.util.random.Rnd;
+
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 /**
  * @author Luis Arias
@@ -187,16 +187,16 @@ public class Quest extends ManagedScript
 		/** a person came within the Npc/Mob's range */
 		ON_AGGRO_RANGE_ENTER(true),
 
-		/** OnSpawn РґРµР№СЃС‚РІРёРµ РїСЂРё СЃРїР°СѓРЅРµ РјРѕР±Р° */
+		/** OnSpawn Ð Ò‘Ð ÂµÐ â„–Ð¡ÐƒÐ¡â€šÐ Ð†Ð Ñ‘Ð Âµ Ð Ñ—Ð¡Ð‚Ð Ñ‘ Ð¡ÐƒÐ Ñ—Ð Â°Ð¡Ñ“Ð Ð…Ð Âµ Ð Ñ˜Ð Ñ•Ð Â±Ð Â° */
 		ON_SPAWN(true),
 
-		/** OnSkillUse РґРµР№СЃС‚РІРёРµ РїСЂРё РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё СЃРєРёР»Р»Р° (MOB_TARGETED_BY_SKILL) */
+		/** OnSkillUse Ð Ò‘Ð ÂµÐ â„–Ð¡ÐƒÐ¡â€šÐ Ð†Ð Ñ‘Ð Âµ Ð Ñ—Ð¡Ð‚Ð Ñ‘ Ð Ñ‘Ð¡ÐƒÐ Ñ—Ð Ñ•Ð Â»Ð¡ÐŠÐ Â·Ð Ñ•Ð Ð†Ð Â°Ð Ð…Ð Ñ‘Ð Ñ‘ Ð¡ÐƒÐ Ñ”Ð Ñ‘Ð Â»Ð Â»Ð Â° (MOB_TARGETED_BY_SKILL) */
 		ON_SKILL_USE(true),
 
-		/** OnKill РґРµР№СЃС‚РІРёРµ РїСЂРё СѓР±РёР№СЃС‚РІРµ (MOBKILLED) */
+		/** OnKill Ð Ò‘Ð ÂµÐ â„–Ð¡ÐƒÐ¡â€šÐ Ð†Ð Ñ‘Ð Âµ Ð Ñ—Ð¡Ð‚Ð Ñ‘ Ð¡Ñ“Ð Â±Ð Ñ‘Ð â„–Ð¡ÐƒÐ¡â€šÐ Ð†Ð Âµ (MOBKILLED) */
 		ON_KILL(true),
 
-		/** OnAttack РґРµР№СЃС‚РІРёРµ РїСЂРё Р°С‚Р°РєРµ (MOBGOTATTACKED) */
+		/** OnAttack Ð Ò‘Ð ÂµÐ â„–Ð¡ÐƒÐ¡â€šÐ Ð†Ð Ñ‘Ð Âµ Ð Ñ—Ð¡Ð‚Ð Ñ‘ Ð Â°Ð¡â€šÐ Â°Ð Ñ”Ð Âµ (MOBGOTATTACKED) */
 		ON_ATTACK(true);
 
 		// control whether this event type is allowed for the same npc template in multiple quests

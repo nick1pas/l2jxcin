@@ -23,14 +23,25 @@ import java.io.Serializable;
 
 import javax.script.CompiledScript;
 
+/**
+ * @author KenM
+ */
 public class CompiledScriptHolder implements Serializable
 {
+	/**
+	 * Version 1
+	 */
 	private static final long serialVersionUID = 1L;
 
 	private long _lastModified;
 	private long _size;
 	private CompiledScript _compiledScript;
 
+	/**
+	 * @param compiledScript
+	 * @param lastModified
+	 * @param size
+	 */
 	public CompiledScriptHolder(CompiledScript compiledScript, long lastModified, long size)
 	{
 		_compiledScript = compiledScript;
@@ -43,31 +54,49 @@ public class CompiledScriptHolder implements Serializable
 		this(compiledScript, scriptFile.lastModified(), scriptFile.length());
 	}
 
+	/**
+	 * @return Returns the lastModified.
+	 */
 	public long getLastModified()
 	{
 		return _lastModified;
 	}
 
+	/**
+	 * @param lastModified The lastModified to set.
+	 */
 	public void setLastModified(long lastModified)
 	{
 		_lastModified = lastModified;
 	}
 
+	/**
+	 * @return Returns the size.
+	 */
 	public long getSize()
 	{
 		return _size;
 	}
 
+	/**
+	 * @param size The size to set.
+	 */
 	public void setSize(long size)
 	{
 		_size = size;
 	}
 
+	/**
+	 * @return Returns the compiledScript.
+	 */
 	public CompiledScript getCompiledScript()
 	{
 		return _compiledScript;
 	}
 
+	/**
+	 * @param compiledScript The compiledScript to set.
+	 */
 	public void setCompiledScript(CompiledScript compiledScript)
 	{
 		_compiledScript = compiledScript;
@@ -77,5 +106,4 @@ public class CompiledScriptHolder implements Serializable
 	{
 		return f.lastModified() == getLastModified() && f.length() == getSize();
 	}
-
 }

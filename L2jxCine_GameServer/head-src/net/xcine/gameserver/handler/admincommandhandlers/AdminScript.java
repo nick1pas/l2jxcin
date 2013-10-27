@@ -85,7 +85,8 @@ public class AdminScript implements IAdminCommandHandler
 						if(Config.ENABLE_ALL_EXCEPTIONS)
 							e.printStackTrace();
 						
-						L2ScriptEngineManager.getInstance().reportScriptFileError(file, e);
+						L2ScriptEngineManager.getInstance();
+						L2ScriptEngineManager.reportScriptFileError(file, e);
 					}
 				}
 				else

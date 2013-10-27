@@ -1946,7 +1946,7 @@ public class L2NpcInstance extends L2Character
 			
 			sb.append("<a action=\"bypass -h npc_").append(getObjectId()).append("_Quest ").append(q.getName()).append("\">[");
 		
-			final QuestState qs = player.getQuestState(q.getScriptName());
+			final QuestState qs = player.getQuestState(q.getName());
 			
 			if ((qs == null) 
 				|| qs.getState().equals(State.ACTIVE))

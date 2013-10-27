@@ -254,7 +254,7 @@
 		<delete file="${build}/L2jxCine-core.jar" />
 		<mkdir dir="${build}" />
 		<mkdir dir="${build.classes}" />
-		<javac destdir="${build.classes}" includeantruntime="false" optimize="on" debug="on" source="1.6" target="1.6" encoding="UTF-8" nowarn="off">
+		<javac destdir="${build.classes}" includeantruntime="false" optimize="on" compiler="javac1.7"  debug="on" source="1.7" target="1.7" encoding="UTF-8" nowarn="off">
 
 			<src path="${src}" />
 			<classpath refid="classpath" />

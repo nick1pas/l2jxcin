@@ -50,8 +50,8 @@
 				<exclude name="**.svn**" />
 				<exclude name="**/*.class" />
 				<exclude name="**/*.jar" />
-				<exclude name="geodata/**" />
-				<exclude name="pathnode/**" />
+				<include name="geodata/**" />
+				<include name="pathnode/**" />
 				<include name="**/*.*" />
 			</fileset>
 		</copy>

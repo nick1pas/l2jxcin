@@ -73,7 +73,6 @@ public final class Config
 	public static final String PVP_CONFIG_FILE = "./config/functions/pvp.properties";
 	public static final String CLASS_DAMAGES_FILE = "./config/functions/classDamages.properties";
 	public static final String EVENT_CHAMPION_FILE = "./config/functions/champion.properties";
-	public static final String EVENT_PC_BANG_POINT_FILE = "./config/functions/pcBang.properties";
 	
 	// protected
 	public static final String PROTECT_FLOOD_CONFIG_FILE = "./config/protected/flood.properties";
@@ -1347,6 +1346,47 @@ public final class Config
 			MASTERACCESS_NAME_COLOR = Integer.decode("0x" + AccessSettings.getProperty("MasterNameColor", "00FF00"));
 			MASTERACCESS_TITLE_COLOR = Integer.decode("0x" + AccessSettings.getProperty("MasterTitleColor", "00FF00"));
 			USERACCESS_LEVEL = Integer.parseInt(AccessSettings.getProperty("UserAccessLevel", "0"));
+
+			BANKING_SYSTEM_ENABLED = Boolean.parseBoolean(AccessSettings.getProperty("BankingEnabled", "false"));
+			BANKING_SYSTEM_GOLDBARS = Integer.parseInt(AccessSettings.getProperty("BankingGoldbarCount", "1"));
+			BANKING_SYSTEM_ADENA = Integer.parseInt(AccessSettings.getProperty("BankingAdenaCount", "500000000"));
+			DWARF_RECIPE_LIMIT = Integer.parseInt(AccessSettings.getProperty("DwarfRecipeLimit", "50"));
+			COMMON_RECIPE_LIMIT = Integer.parseInt(AccessSettings.getProperty("CommonRecipeLimit", "50"));
+			IS_CRAFTING_ENABLED = Boolean.parseBoolean(AccessSettings.getProperty("CraftingEnabled", "True"));
+			ALT_GAME_CREATION = Boolean.parseBoolean(AccessSettings.getProperty("AltGameCreation", "False"));
+			ALT_GAME_CREATION_SPEED = Double.parseDouble(AccessSettings.getProperty("AltGameCreationSpeed", "1"));
+			ALT_GAME_CREATION_XP_RATE = Double.parseDouble(AccessSettings.getProperty("AltGameCreationRateXp", "1"));
+			ALT_GAME_CREATION_SP_RATE = Double.parseDouble(AccessSettings.getProperty("AltGameCreationRateSp", "1"));
+			ALT_BLACKSMITH_USE_RECIPES = Boolean.parseBoolean(AccessSettings.getProperty("AltBlacksmithUseRecipes", "True"));
+
+			OFFLINE_TRADE_ENABLE = Boolean.parseBoolean(AccessSettings.getProperty("OfflineTradeEnable", "false"));
+			OFFLINE_CRAFT_ENABLE = Boolean.parseBoolean(AccessSettings.getProperty("OfflineCraftEnable", "false"));
+			OFFLINE_SET_NAME_COLOR = Boolean.parseBoolean(AccessSettings.getProperty("OfflineNameColorEnable", "false"));
+			OFFLINE_NAME_COLOR = Integer.decode("0x" + AccessSettings.getProperty("OfflineNameColor", "ff00ff"));
+			
+			OFFLINE_COMMAND1 = Boolean.parseBoolean(AccessSettings.getProperty("OfflineCommand1", "True"));
+			OFFLINE_COMMAND2 = Boolean.parseBoolean(AccessSettings.getProperty("OfflineCommand2", "False"));
+			OFFLINE_LOGOUT = Boolean.parseBoolean(AccessSettings.getProperty("OfflineLogout", "False"));
+			OFFLINE_SLEEP_EFFECT = Boolean.parseBoolean(AccessSettings.getProperty("OfflineSleepEffect", "True"));
+
+			RESTORE_OFFLINERS = Boolean.parseBoolean(AccessSettings.getProperty("RestoreOffliners", "false")); 
+			OFFLINE_MAX_DAYS = Integer.parseInt(AccessSettings.getProperty("OfflineMaxDays", "10"));
+			OFFLINE_DISCONNECT_FINISHED = Boolean.parseBoolean(AccessSettings.getProperty("OfflineDisconnectFinished", "true"));
+			
+			L2JMOD_ALLOW_WEDDING = Boolean.valueOf(AccessSettings.getProperty("AllowWedding", "False"));
+			L2JMOD_WEDDING_PRICE = Integer.parseInt(AccessSettings.getProperty("WeddingPrice", "250000000"));
+			L2JMOD_WEDDING_PUNISH_INFIDELITY = Boolean.parseBoolean(AccessSettings.getProperty("WeddingPunishInfidelity", "True"));
+			L2JMOD_WEDDING_TELEPORT = Boolean.parseBoolean(AccessSettings.getProperty("WeddingTeleport", "True"));
+			L2JMOD_WEDDING_TELEPORT_PRICE = Integer.parseInt(AccessSettings.getProperty("WeddingTeleportPrice", "50000"));
+			L2JMOD_WEDDING_TELEPORT_DURATION = Integer.parseInt(AccessSettings.getProperty("WeddingTeleportDuration", "60"));
+			L2JMOD_WEDDING_NAME_COLOR_NORMAL = Integer.decode("0x" + AccessSettings.getProperty("WeddingNameCollorN", "FFFFFF"));
+			L2JMOD_WEDDING_NAME_COLOR_GEY = Integer.decode("0x" + AccessSettings.getProperty("WeddingNameCollorB", "FFFFFF"));
+			L2JMOD_WEDDING_NAME_COLOR_LESBO = Integer.decode("0x" + AccessSettings.getProperty("WeddingNameCollorL", "FFFFFF"));
+			L2JMOD_WEDDING_SAMESEX = Boolean.parseBoolean(AccessSettings.getProperty("WeddingAllowSameSex", "False"));
+			L2JMOD_WEDDING_FORMALWEAR = Boolean.parseBoolean(AccessSettings.getProperty("WeddingFormalWear", "True"));
+			L2JMOD_WEDDING_DIVORCE_COSTS = Integer.parseInt(AccessSettings.getProperty("WeddingDivorceCosts", "20"));
+			WEDDING_GIVE_CUPID_BOW = Boolean.parseBoolean(AccessSettings.getProperty("WeddingGiveBow", "False"));
+			ANNOUNCE_WEDDING = Boolean.parseBoolean(AccessSettings.getProperty("AnnounceWedding", "True"));
 			
 			ExProperties optionsSettings = load(OPTIONS_FILE);
 
@@ -1838,12 +1878,7 @@ public final class Config
 			COORD_SYNCHRONIZE = Integer.valueOf(serverSettings.getProperty("CoordSynchronize", "-1"));
 			FALL_DAMAGE = Boolean.parseBoolean(serverSettings.getProperty("FallDamage", "False"));
 			ALLOW_WATER = Boolean.valueOf(serverSettings.getProperty("AllowWater", "False"));
-			STARTING_ADENA = Integer.parseInt(serverSettings.getProperty("StartingAdena", "100"));
-			STARTING_AA = Integer.parseInt(serverSettings.getProperty("StartingAncientAdena", "0"));
-			AUTO_LOOT = serverSettings.getProperty("AutoLoot").equalsIgnoreCase("True");
-			AUTO_LOOT_BOSS = serverSettings.getProperty("AutoLootBoss").equalsIgnoreCase("True");
-			AUTO_LOOT_HERBS = serverSettings.getProperty("AutoLootHerbs").equalsIgnoreCase("True");
-
+			
 			CUSTOM_STARTER_ITEMS_ENABLED = Boolean.parseBoolean(serverSettings.getProperty("CustomStarterItemsEnabled", "False"));
 			if (Config.CUSTOM_STARTER_ITEMS_ENABLED)
 			{
@@ -1930,7 +1965,6 @@ public final class Config
         	AIO_TCOLOR = Integer.decode("0x" + otherSettings.getProperty("AioTitleColor", "88AA88"));
         	ALLOW_AIO_USE_GK = Boolean.parseBoolean(otherSettings.getProperty("AllowAioUseGk", "False"));
         	ALLOW_AIO_USE_CM = Boolean.parseBoolean(otherSettings.getProperty("AllowAioUseClassMaster", "False"));
-        	ANNOUNCE_CASTLE_LORDS = Boolean.parseBoolean(otherSettings.getProperty("AnnounceCastleLords", "False"));
         	ALLOW_VIP_NCOLOR = Boolean.parseBoolean(otherSettings.getProperty("AllowVipNameColor", "True"));
         	VIP_NCOLOR = Integer.decode("0x" + otherSettings.getProperty("VipNameColor", "0088FF"));
         	ALLOW_VIP_TCOLOR = Boolean.parseBoolean(otherSettings.getProperty("AllowVipTitleColor", "True"));
@@ -2009,41 +2043,6 @@ public final class Config
 			JAIL_IS_PVP = Boolean.valueOf(otherSettings.getProperty("JailIsPvp", "True"));
 			JAIL_DISABLE_CHAT = Boolean.valueOf(otherSettings.getProperty("JailDisableChat", "True"));
 			DEATH_PENALTY_CHANCE = Integer.parseInt(otherSettings.getProperty("DeathPenaltyChance", "20"));
-			ENABLE_MODIFY_SKILL_DURATION = Boolean.parseBoolean(otherSettings.getProperty("EnableModifySkillDuration", "false"));
-			if(ENABLE_MODIFY_SKILL_DURATION)
-			{
-				SKILL_DURATION_LIST = new FastMap<>();
-
-				String[] propertySplit1;
-				propertySplit1 = otherSettings.getProperty("SkillDurationList", "").split(";");
-
-				for(String skill : propertySplit1)
-				{
-					String[] skillSplit = skill.split(",");
-					if(skillSplit.length != 2)
-					{
-						System.out.println("[SkillDurationList]: invalid config property -> SkillDurationList \"" + skill + "\"");
-					}
-					else
-					{
-						try
-						{
-							SKILL_DURATION_LIST.put(Integer.parseInt(skillSplit[0]), Integer.parseInt(skillSplit[1]));
-						}
-						catch(NumberFormatException nfe)
-						{
-							if(Config.ENABLE_ALL_EXCEPTIONS)
-								nfe.printStackTrace();
-							
-							if(!skill.equals(""))
-							{
-								System.out.println("[SkillDurationList]: invalid config property -> SkillList \"" + skillSplit[0] + "\"" + skillSplit[1]);
-							}
-						}
-					}
-				}
-			}
-
 			USE_SAY_FILTER = Boolean.parseBoolean(otherSettings.getProperty("UseChatFilter", "false"));
 			CHAT_FILTER_CHARS = otherSettings.getProperty("ChatFilterChars", "[I love L2jxCine]");
 			CHAT_FILTER_PUNISHMENT = otherSettings.getProperty("ChatFilterPunishment", "off");
@@ -2231,6 +2230,40 @@ public final class Config
 			
 			ALT_MOBS_STATS_BONUS = Boolean.parseBoolean(altSettings.getProperty("AltMobsStatsBonus", "True"));
 			ALT_PETS_STATS_BONUS = Boolean.parseBoolean(altSettings.getProperty("AltPetsStatsBonus", "True"));		
+			ENABLE_MODIFY_SKILL_DURATION = Boolean.parseBoolean(altSettings.getProperty("EnableModifySkillDuration", "false"));
+			if(ENABLE_MODIFY_SKILL_DURATION)
+			{
+				SKILL_DURATION_LIST = new FastMap<>();
+
+				String[] propertySplit1;
+				propertySplit1 = altSettings.getProperty("SkillDurationList", "").split(";");
+
+				for(String skill : propertySplit1)
+				{
+					String[] skillSplit = skill.split(",");
+					if(skillSplit.length != 2)
+					{
+						System.out.println("[SkillDurationList]: invalid config property -> SkillDurationList \"" + skill + "\"");
+					}
+					else
+					{
+						try
+						{
+							SKILL_DURATION_LIST.put(Integer.parseInt(skillSplit[0]), Integer.parseInt(skillSplit[1]));
+						}
+						catch(NumberFormatException nfe)
+						{
+							if(Config.ENABLE_ALL_EXCEPTIONS)
+								nfe.printStackTrace();
+							
+							if(!skill.equals(""))
+							{
+								System.out.println("[SkillDurationList]: invalid config property -> SkillList \"" + skillSplit[0] + "\"" + skillSplit[1]);
+							}
+						}
+					}
+				}
+			}
 
 			ExProperties SevenSettings = load(SEVENSIGNS_FILE);
 			
@@ -2405,49 +2438,6 @@ public final class Config
 			PCB_CHANCE_DUAL_POINT = Integer.parseInt(EventsSettings.getProperty("PcBangPointDualChance", "20"));
 			PCB_INTERVAL = Integer.parseInt(EventsSettings.getProperty("PcBangPointTimeStamp", "900"));
 
-			ExProperties pcbpSettings = load(EVENT_PC_BANG_POINT_FILE);
-
-			BANKING_SYSTEM_ENABLED = Boolean.parseBoolean(pcbpSettings.getProperty("BankingEnabled", "false"));
-			BANKING_SYSTEM_GOLDBARS = Integer.parseInt(pcbpSettings.getProperty("BankingGoldbarCount", "1"));
-			BANKING_SYSTEM_ADENA = Integer.parseInt(pcbpSettings.getProperty("BankingAdenaCount", "500000000"));
-			DWARF_RECIPE_LIMIT = Integer.parseInt(pcbpSettings.getProperty("DwarfRecipeLimit", "50"));
-			COMMON_RECIPE_LIMIT = Integer.parseInt(pcbpSettings.getProperty("CommonRecipeLimit", "50"));
-			IS_CRAFTING_ENABLED = Boolean.parseBoolean(pcbpSettings.getProperty("CraftingEnabled", "True"));
-			ALT_GAME_CREATION = Boolean.parseBoolean(pcbpSettings.getProperty("AltGameCreation", "False"));
-			ALT_GAME_CREATION_SPEED = Double.parseDouble(pcbpSettings.getProperty("AltGameCreationSpeed", "1"));
-			ALT_GAME_CREATION_XP_RATE = Double.parseDouble(pcbpSettings.getProperty("AltGameCreationRateXp", "1"));
-			ALT_GAME_CREATION_SP_RATE = Double.parseDouble(pcbpSettings.getProperty("AltGameCreationRateSp", "1"));
-			ALT_BLACKSMITH_USE_RECIPES = Boolean.parseBoolean(pcbpSettings.getProperty("AltBlacksmithUseRecipes", "True"));
-
-			OFFLINE_TRADE_ENABLE = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineTradeEnable", "false"));
-			OFFLINE_CRAFT_ENABLE = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineCraftEnable", "false"));
-			OFFLINE_SET_NAME_COLOR = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineNameColorEnable", "false"));
-			OFFLINE_NAME_COLOR = Integer.decode("0x" + pcbpSettings.getProperty("OfflineNameColor", "ff00ff"));
-			
-			OFFLINE_COMMAND1 = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineCommand1", "True"));
-			OFFLINE_COMMAND2 = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineCommand2", "False"));
-			OFFLINE_LOGOUT = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineLogout", "False"));
-			OFFLINE_SLEEP_EFFECT = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineSleepEffect", "True"));
-
-			RESTORE_OFFLINERS = Boolean.parseBoolean(pcbpSettings.getProperty("RestoreOffliners", "false")); 
-			OFFLINE_MAX_DAYS = Integer.parseInt(pcbpSettings.getProperty("OfflineMaxDays", "10"));
-			OFFLINE_DISCONNECT_FINISHED = Boolean.parseBoolean(pcbpSettings.getProperty("OfflineDisconnectFinished", "true"));
-			
-			L2JMOD_ALLOW_WEDDING = Boolean.valueOf(pcbpSettings.getProperty("AllowWedding", "False"));
-			L2JMOD_WEDDING_PRICE = Integer.parseInt(pcbpSettings.getProperty("WeddingPrice", "250000000"));
-			L2JMOD_WEDDING_PUNISH_INFIDELITY = Boolean.parseBoolean(pcbpSettings.getProperty("WeddingPunishInfidelity", "True"));
-			L2JMOD_WEDDING_TELEPORT = Boolean.parseBoolean(pcbpSettings.getProperty("WeddingTeleport", "True"));
-			L2JMOD_WEDDING_TELEPORT_PRICE = Integer.parseInt(pcbpSettings.getProperty("WeddingTeleportPrice", "50000"));
-			L2JMOD_WEDDING_TELEPORT_DURATION = Integer.parseInt(pcbpSettings.getProperty("WeddingTeleportDuration", "60"));
-			L2JMOD_WEDDING_NAME_COLOR_NORMAL = Integer.decode("0x" + pcbpSettings.getProperty("WeddingNameCollorN", "FFFFFF"));
-			L2JMOD_WEDDING_NAME_COLOR_GEY = Integer.decode("0x" + pcbpSettings.getProperty("WeddingNameCollorB", "FFFFFF"));
-			L2JMOD_WEDDING_NAME_COLOR_LESBO = Integer.decode("0x" + pcbpSettings.getProperty("WeddingNameCollorL", "FFFFFF"));
-			L2JMOD_WEDDING_SAMESEX = Boolean.parseBoolean(pcbpSettings.getProperty("WeddingAllowSameSex", "False"));
-			L2JMOD_WEDDING_FORMALWEAR = Boolean.parseBoolean(pcbpSettings.getProperty("WeddingFormalWear", "True"));
-			L2JMOD_WEDDING_DIVORCE_COSTS = Integer.parseInt(pcbpSettings.getProperty("WeddingDivorceCosts", "20"));
-			WEDDING_GIVE_CUPID_BOW = Boolean.parseBoolean(pcbpSettings.getProperty("WeddingGiveBow", "False"));
-			ANNOUNCE_WEDDING = Boolean.parseBoolean(pcbpSettings.getProperty("AnnounceWedding", "True"));
-			
 			ExProperties devSettings = load(CONFIG_DEVELOPER);
 			SKILLSDEBUG = Boolean.parseBoolean(devSettings.getProperty("SkillsDebug", "false"));
 			DEBUG = Boolean.parseBoolean(devSettings.getProperty("Debug", "false"));
@@ -2502,6 +2492,12 @@ public final class Config
 			ExProperties L2jxCineSettings = load(L2JCINE_CONFIG_FILE);
 
 			/** Custom Tables **/
+            STARTING_ADENA = Integer.parseInt(L2jxCineSettings.getProperty("StartingAdena", "100"));
+			STARTING_AA = Integer.parseInt(L2jxCineSettings.getProperty("StartingAncientAdena", "0"));
+			AUTO_LOOT = L2jxCineSettings.getProperty("AutoLoot").equalsIgnoreCase("True");
+			AUTO_LOOT_BOSS = L2jxCineSettings.getProperty("AutoLootBoss").equalsIgnoreCase("True");
+			AUTO_LOOT_HERBS = L2jxCineSettings.getProperty("AutoLootHerbs").equalsIgnoreCase("True");
+
 			CUSTOM_SPAWNLIST_TABLE = Boolean.valueOf(L2jxCineSettings.getProperty("CustomSpawnlistTable", "True"));
 			SAVE_GMSPAWN_ON_CUSTOM = Boolean.valueOf(L2jxCineSettings.getProperty("SaveGmSpawnOnCustom", "True"));
 			DELETE_GMSPAWN_ON_CUSTOM = Boolean.valueOf(L2jxCineSettings.getProperty("DeleteGmSpawnOnCustom", "True"));
@@ -2590,6 +2586,7 @@ public final class Config
 			CLAN_LEADER_COLORED = Integer.parseInt(L2jxCineSettings.getProperty("ClanLeaderColored", "1"));
 			CLAN_LEADER_COLOR = Integer.decode("0x" + L2jxCineSettings.getProperty("ClanLeaderColor", "00FFFF"));
 			CLAN_LEADER_COLOR_CLAN_LEVEL = Integer.parseInt(L2jxCineSettings.getProperty("ClanLeaderColorAtClanLevel", "1"));
+			ANNOUNCE_CASTLE_LORDS = Boolean.parseBoolean(L2jxCineSettings.getProperty("AnnounceCastleLords", "False"));
 			SAVE_RAIDBOSS_STATUS_INTO_DB = Boolean.parseBoolean(L2jxCineSettings.getProperty("SaveRBStatusIntoDB", "False"));
 			DISABLE_WEIGHT_PENALTY = Boolean.parseBoolean(L2jxCineSettings.getProperty("DisableWeightPenalty", "False"));
 

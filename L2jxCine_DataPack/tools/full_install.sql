@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS boxaccess;
 DROP TABLE IF EXISTS boxes;
 DROP TABLE IF EXISTS buff_templates;
 DROP TABLE IF EXISTS castle;
-DROP TALBE IF EXISTS crestnpc;
+DROP TABLE IF EXISTS crestnpc;
 DROP TABLE IF EXISTS castle_door;
 DROP TABLE IF EXISTS castle_doorupgrade;
 DROP TABLE IF EXISTS castle_manor_procure;

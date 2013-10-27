@@ -30,7 +30,6 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.L2jxCine;
 import net.xcine.ServerType;
 import net.xcine.crypt.nProtect;
 import net.xcine.gameserver.ai.special.manager.AILoader;
@@ -191,11 +190,7 @@ public class GameServer
 		long serverLoadStart = System.currentTimeMillis();
 		
 		Util.printSection("Team");
-		
-		// Print L2jxCine's Logo
-		L2jxCine.info();
-		
-		// Load GameServer Configs
+		Util.team();
 		Config.load();
 		
 		Util.printSection("Database");

@@ -46,7 +46,6 @@ import net.xcine.gameserver.thread.LoginServerThread;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.util.sql.SQLQueue;
 import net.xcine.util.database.L2DatabaseFactory;
-import net.xcine.util.database.SqlUtils;
 
 /**
  * This class provides the functions for shutting down and restarting the server It closes all open client connections
@@ -306,26 +305,6 @@ public class Shutdown extends Thread
 			try
 			{
 				ThreadPoolManager.getInstance().shutdown();
-			}
-			catch (Throwable t)
-			{
-				if (Config.ENABLE_ALL_EXCEPTIONS)
-					t.printStackTrace();
-			}
-			
-			try
-			{
-				SqlUtils.OpzGame();
-			}
-			catch (Throwable t)
-			{
-				if (Config.ENABLE_ALL_EXCEPTIONS)
-					t.printStackTrace();
-			}
-			
-			try
-			{
-				SqlUtils.OpzLogin();
 			}
 			catch (Throwable t)
 			{

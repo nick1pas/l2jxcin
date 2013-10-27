@@ -10,14 +10,14 @@ set DateT=%date%
 
 REM Configurate database connection loginserver
 set lsuser=root
-set lspass=root
-set lsdb=loginserver_beta
+set lspass=
+set lsdb=cine
 set lshost=localhost
 
 REM Configurate database connection Gameserver
 set gsuser=root
-set gspass=root
-set gsdb=gameserver_beta
+set gspass=
+set gsdb=cine
 set gshost=localhost
 REM ############################################
 
@@ -29,7 +29,7 @@ set mysqlPath="%mysqlBinPath%\mysql"
 cls
 echo. ---------------------------------------------------------------------
 echo.
-echo.   L2-Frozen Team - Database Login Server
+echo.   L2j-xCine Team - Database Login Server
 echo. _____________________________________________________________________
 echo.
 echo.   1 - Full install database loginserver`s.
@@ -63,7 +63,7 @@ goto :Step2
 
 echo. ---------------------------------------------------------------------
 echo.
-echo.   L2-Frozen Team - database operation about gameserver
+echo.   L2j-xCine Team - database operation about gameserver
 echo. _____________________________________________________________________
 echo.
 echo.   1 - Full Install Gameserver Database`s.
@@ -215,7 +215,6 @@ echo *** Sucesfull 38 percents. ***
 
 echo *** Sucesfull 39 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/enchant_skill_trees.sql
-%mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/engrave.sql
 
 echo *** Sucesfull 40 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/etcitem.sql
@@ -281,7 +280,7 @@ echo *** Sucesfull 60 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/minions.sql
 
 echo *** Sucesfull 61 percents. ***
-%mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/mods_buffer.sql
+%mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/mods_wedding.sql
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/character_offline_trade.sql
 
 echo *** Sucesfull 62 percents. ***

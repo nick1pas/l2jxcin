@@ -798,4 +798,9 @@
 	<teleport id="30607" loc_x="78721" loc_y="253309" loc_z="-9840" price="1000" fornoble="0"/>
 	<teleport id="30608" loc_x="82951" loc_y="252354" loc_z="-10592" price="1000" fornoble="0"/>
 	<teleport id="30609" loc_x="86006" loc_y="231069" loc_z="-3600" price="1000" fornoble="0"/>
+	<!-- Clan Halls -->
+	<teleport id="75004" loc_x="43835" loc_y="47749" loc_z="-796" price="500" fornoble="0"/>
+	<teleport id="75005" loc_x="42598" loc_y="88832" loc_z="-3124" price="0" fornoble="0"/>
+	<teleport id="75006" loc_x="61868" loc_y="-48890" loc_z="-3128" price="0" fornoble="0"/>
+	<teleport id="75007" loc_x="45555" loc_y="-56081" loc_z="-3667" price="0" fornoble="0"/>
 </list>

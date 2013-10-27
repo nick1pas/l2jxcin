@@ -145,10 +145,14 @@
 		<!-- game server -->
 		<copy todir="${build.dist.game}/config">
 			<fileset dir="config">
-				<include name="*.properties" />
 				<include name="*.info" />
 				<include name="key.cfg" />
 				<include name="banned_ip.cfg" />
+				<include name="daemons.properties" />
+				<include name="Events.properties" />
+				<include name="GrandBoss.properties" />
+				<include name="idfactory.properties" />
+				<include name="script.properties" />
 			</fileset>
 		</copy>
 
@@ -192,8 +196,9 @@
 
 		<!-- login server -->
 		<copy todir="${build.dist.login}/config">
-			<fileset dir="config/">
+			<fileset dir="config">
 				<include name="telnet.properties" />
+				<include name="LoginServer.properties" />
 			</fileset>
 			<!-- fileset dir="config/others">
 				<include name="banned_ip.cfg" />
@@ -203,14 +208,6 @@
 		<copy todir="${build.dist.login}/config/protected">
 			<fileset dir="config/protected">
 				<include name="mmocore.properties" />
-			</fileset>
-		</copy>
-
-
-		<!-- network ls -->
-		<copy todir="${build.dist.login}/config">
-			<fileset dir="config/">
-				<include name="LoginServer.properties" />
 			</fileset>
 		</copy>
 		

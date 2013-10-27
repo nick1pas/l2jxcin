@@ -30,7 +30,6 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.L2jxCine;
 import net.xcine.ServerType;
 import net.xcine.gameserver.datatables.GameServerTable;
 import net.xcine.netcore.SelectorConfig;
@@ -38,7 +37,6 @@ import net.xcine.netcore.SelectorThread;
 import net.xcine.status.Status;
 import net.xcine.util.Util;
 import net.xcine.util.database.L2DatabaseFactory;
-import net.xcine.util.database.SqlUtils;
 
 public class L2LoginServer
 {
@@ -110,11 +108,8 @@ public class L2LoginServer
 			
 		}
 
-		// Team info
 		Util.printSection("Team");
-		L2jxCine.info();
-
-		// Load LoginServer Configs
+		Util.team();
 		Config.load();
 
 		Util.printSection("Database");
@@ -271,7 +266,6 @@ public class L2LoginServer
 	public void shutdown(boolean restart)
 	{
 		LoginController.getInstance().shutdown();
-		SqlUtils.OpzLogin();
 		System.gc();
 		Runtime.getRuntime().exit(restart ? 2 : 0);
 	}

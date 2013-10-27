@@ -87,11 +87,6 @@ INSERT INTO `merchant_buylists` (`item_id`,`price`,`shop_id`,`order`,`count`,tim
 	(7012,29000,375003,43,1,1),
 	(7013,29000,375003,44,1,1);
 
--- Insert new Teleports
-INSERT IGNORE INTO teleport VALUES 
-	('Clan Hall -> Rune Castle Town',75004,43835,-47749,-796,500,0),
-	('Clan Hall -> Beast Farm',75005,42598,-88832,-3124,0,0);
-
 --
 -- Fortress of the Dead
 --

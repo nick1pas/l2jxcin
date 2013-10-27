@@ -52,7 +52,6 @@ public final class Config
 	public static final String PROTECT_KEY_FILE = "./config/key.cfg";
 	public static final String HEXID_FILE = "./config/hexid.txt";
 	public static final String TELNET_FILE = "./config/telnet.properties";
-	public static final String FLOOD_PROTECTOR_FILE = "./config/FloodProtector.properties";
 	
 	// head
 	public static final String ALT_SETTINGS_FILE = "./config/head/altsettings.properties";
@@ -1319,7 +1318,7 @@ public final class Config
 			FLOOD_PROTECTOR_POTION = new FloodProtectorConfig("PotionFloodProtector",true);
 			_log.info("Loading gameserver configuration files.");
 			
-			ExProperties security = load(FLOOD_PROTECTOR_FILE);
+			ExProperties security = load(PROTECT_FLOOD_CONFIG_FILE);
 			loadFloodProtectorConfig(security, FLOOD_PROTECTOR_ROLL_DICE, "RollDice", "42");
 			loadFloodProtectorConfig(security, FLOOD_PROTECTOR_HERO_VOICE, "HeroVoice", "100");
 			loadFloodProtectorConfig(security, FLOOD_PROTECTOR_SUBCLASS, "Subclass", "20");

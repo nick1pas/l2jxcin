@@ -216,6 +216,28 @@ public class Util
 		_log.info("..................................................");
 	}
 
+	public static void team()
+	{
+		_log.info("               	        L2J X-Cine Interlude Project			             ");
+        _log.info("                                                                              ");
+        _log.info("                                                                              ");
+        _log.info("  #####       #####           ############  #########  #        ####  ####### ");
+        _log.info("   #   #     #   #            #          #  #       #  ##       #  #  #     # ");
+        _log.info("    #   #   #   #             #   ########  ###   ###  # #      #  #  #  #### ");
+        _log.info("     #   # #   #              #   #           #   #    #  #     #  #  #  #    ");
+        _log.info("      #   #   #   ##########  #   #           #   #    #   #    #  #  #  #    ");
+        _log.info("       #     #    #        #  #   #           #   #    #    #   #  #  #  ###  ");
+        _log.info("        #   #     ##########  #   #           #   #    #  #  #  #  #  #    #  ");
+        _log.info("       #     #                #   #           #   #    #  ##  # #  #  #  ###  ");
+        _log.info("      #   #   #               #   #           #   #    #  # #   #  #  #  #    ");
+        _log.info("     #   # #   #              #   #           #   #    #  #  #     #  #  #    ");
+        _log.info("    #   #   #   #             #   ########  ###   ###  #  #   #    #  #  #### ");
+        _log.info("   #   #     #   #            #          #  #       #  #  #    #   #  #     # ");
+        _log.info("  ######      #####           ############  #########  ####     ####  ####### ");
+        _log.info("                                                                              ");
+        _log.info("                                                                              ");		
+        _log.info("               	       © 2013-2014 ALL RIGHTS RESERVED 		   	             ");
+	}
 	/**
 	 * gets system JVM properties.
 	 */

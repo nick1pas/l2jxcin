@@ -100,7 +100,6 @@
 		<copy todir="${build.dist.login.lib}">
 			<fileset dir="${src-lib}">
 				<include name="*.jar" />
-				<include name="*.txt" />
 			</fileset>
 		</copy>
 
@@ -134,9 +133,6 @@
 		<mkdir dir="${build.dist.login}/log" />
 		
 		<mkdir dir="${build.dist.login}/config" />
-		<mkdir dir="${build.dist.login}/config/protected" />
-		
-		<mkdir dir="${build.dist.game}/config/protected" />		
 
 		<mkdir dir="${build.dist.game}/config/others" />
 
@@ -153,12 +149,7 @@
 				<include name="L2jxCine.properties" />
 				<include name="idfactory.properties" />
 				<include name="script.properties" />
-			</fileset>
-		</copy>
-
-		<copy todir="${build.dist.game}/config/protected">
-			<fileset dir="config/protected">
-				<include name="*.properties" />
+				<include name="Security.properties" />
 			</fileset>
 		</copy>
 
@@ -187,18 +178,13 @@
 			<fileset dir="config">
 				<include name="telnet.properties" />
 				<include name="LoginServer.properties" />
+				<include name="Security.properties" />
 			</fileset>
 			<!-- fileset dir="config/others">
 				<include name="banned_ip.cfg" />
 			</fileset -->
 		</copy>
 
-		<copy todir="${build.dist.login}/config/protected">
-			<fileset dir="config/protected">
-				<include name="mmocore.properties" />
-			</fileset>
-		</copy>
-		
 		<copy todir="${build.dist.login}/config/others">
 		<fileset dir="config/others">
 				<include name="*.*" />

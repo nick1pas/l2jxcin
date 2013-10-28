@@ -260,7 +260,6 @@ echo "Upgrading gameserver content"
 fi
 #if [ "$1" == "I" ]; then
 $MYG < ../sql/access_levels.sql &> /dev/null
-$MYG < ../sql/admin_command_access_rights.sql &> /dev/null
 #fi 
 $MYG < ../sql/armor.sql &> /dev/null
 $MYG < ../sql/armorsets.sql &> /dev/null
@@ -281,7 +280,6 @@ $MYG < ../sql/castle_doorupgrade.sql &> /dev/null
 $MYG < ../sql/castle_manor_procure.sql &> /dev/null
 $MYG < ../sql/castle_manor_production.sql &> /dev/null
 $MYG < ../sql/castle_siege_guards.sql &> /dev/null
-$MYG < ../sql/char_templates.sql &> /dev/null
 $MYG < ../sql/character_raid_points.sql &> /dev/null
 $MYG < ../sql/character_friends.sql &> /dev/null
 $MYG < ../sql/character_hennas.sql &> /dev/null
@@ -342,7 +340,6 @@ $MYG < ../sql/npc.sql &> /dev/null
 $MYG < ../sql/npcskills.sql &> /dev/null
 $MYG < ../sql/olympiad_nobles.sql&> /dev/null
 $MYG < ../sql/pets.sql &> /dev/null
-$MYG < ../sql/pets_stats.sql &> /dev/null
 $MYG < ../sql/pkkills.sql &> /dev/null
 $MYG < ../sql/pledge_skill_trees.sql &> /dev/null
 $MYG < ../sql/posts.sql &> /dev/null

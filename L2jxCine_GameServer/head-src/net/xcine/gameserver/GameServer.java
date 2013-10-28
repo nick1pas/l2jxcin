@@ -47,26 +47,26 @@ import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.ExtractableItemsData;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.sql.AccessLevels;
-import net.xcine.gameserver.datatables.sql.AdminCommandAccessRights;
 import net.xcine.gameserver.datatables.sql.ArmorSetsTable;
 import net.xcine.gameserver.datatables.sql.CharNameTable;
-import net.xcine.gameserver.datatables.sql.CharTemplateTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.CustomArmorSetsTable;
 import net.xcine.gameserver.datatables.sql.HennaTreeTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
-import net.xcine.gameserver.datatables.sql.L2PetDataTable;
 import net.xcine.gameserver.datatables.sql.LevelUpData;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SkillSpellbookTable;
 import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
+import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
 import net.xcine.gameserver.datatables.xml.AugmentationData;
+import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
 import net.xcine.gameserver.datatables.xml.FishTable;
 import net.xcine.gameserver.datatables.xml.HelperBuffData;
 import net.xcine.gameserver.datatables.xml.HennaData;
+import net.xcine.gameserver.datatables.xml.L2PetDataData;
 import net.xcine.gameserver.datatables.xml.NpcWalkerRoutesData;
 import net.xcine.gameserver.datatables.xml.RecipeData;
 import net.xcine.gameserver.datatables.xml.StaticObjectsData;
@@ -288,7 +288,7 @@ public class GameServer
 		}
 		
 		ClanTable.getInstance();
-		CharTemplateTable.getInstance();
+		CharTemplateData.getInstance();
 		LevelUpData.getInstance();
 		HennaData.getInstance();
 		HelperBuffData.getInstance();
@@ -353,7 +353,7 @@ public class GameServer
 		PetitionManager.getInstance();
 		CursedWeaponsManager.getInstance();
 		TaskManager.getInstance();
-		L2PetDataTable.getInstance().loadPetsData();
+		L2PetDataData.getInstance().loadPetsData();
 		SQLQueue.getInstance();
 		if (Config.ACCEPT_GEOEDITOR_CONN)
 		{
@@ -400,7 +400,7 @@ public class GameServer
 		
 		Util.printSection("Access Levels");
 		AccessLevels.getInstance();
-		AdminCommandAccessRights.getInstance();
+		AdminCommandAccessRightsData.getInstance();
 		GmListTable.getInstance();
 		
 		Util.printSection("Handlers");

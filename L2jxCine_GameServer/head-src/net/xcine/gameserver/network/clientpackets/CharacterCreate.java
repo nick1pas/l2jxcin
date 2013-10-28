@@ -23,9 +23,9 @@ import net.xcine.Config;
 import net.xcine.gameserver.GameServer;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.sql.CharNameTable;
-import net.xcine.gameserver.datatables.sql.CharTemplateTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.SkillTreeTable;
+import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.managers.QuestManager;
@@ -118,7 +118,7 @@ public final class CharacterCreate extends L2GameClientPacket
 				return;
 			}
 
-			template = CharTemplateTable.getInstance().getTemplate(_classId);
+			template = CharTemplateData.getInstance().getTemplate(_classId);
 
 			if (Config.DEBUG)
 				_log.fine("DEBUG "+getType()+": charname: " + _name + " classId: " + _classId + " template: " + template);

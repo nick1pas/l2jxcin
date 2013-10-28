@@ -31,7 +31,7 @@ import net.xcine.gameserver.controllers.GameTimeController;
 import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
-import net.xcine.gameserver.datatables.sql.AdminCommandAccessRights;
+import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.managers.CoupleManager;
@@ -564,16 +564,16 @@ public class EnterWorld extends L2GameClientPacket
 			if (Config.SHOW_GM_LOGIN)
 				Announcements.getInstance().announceToAll("GM " + activeChar.getName() + " has logged on.");
 
-			if (Config.GM_STARTUP_INVULNERABLE && AdminCommandAccessRights.getInstance().hasAccess("admin_invul", activeChar.getAccessLevel()))
+			if (Config.GM_STARTUP_INVULNERABLE && AdminCommandAccessRightsData.getInstance().hasAccess("admin_invul", activeChar.getAccessLevel()))
 				activeChar.setIsInvul(true);
 
-			if (Config.GM_STARTUP_INVISIBLE && AdminCommandAccessRights.getInstance().hasAccess("admin_invisible", activeChar.getAccessLevel()))
+			if (Config.GM_STARTUP_INVISIBLE && AdminCommandAccessRightsData.getInstance().hasAccess("admin_invisible", activeChar.getAccessLevel()))
 				activeChar.getAppearance().setInvisible();
 
-			if (Config.GM_STARTUP_SILENCE && AdminCommandAccessRights.getInstance().hasAccess("admin_silence", activeChar.getAccessLevel()))
+			if (Config.GM_STARTUP_SILENCE && AdminCommandAccessRightsData.getInstance().hasAccess("admin_silence", activeChar.getAccessLevel()))
 				activeChar.setMessageRefusal(true);
 
-			if (Config.GM_STARTUP_AUTO_LIST && AdminCommandAccessRights.getInstance().hasAccess("admin_gmliston", activeChar.getAccessLevel()))
+			if (Config.GM_STARTUP_AUTO_LIST && AdminCommandAccessRightsData.getInstance().hasAccess("admin_gmliston", activeChar.getAccessLevel()))
 				GmListTable.getInstance().addGm(activeChar, false);
 			else
 				GmListTable.getInstance().addGm(activeChar, true);

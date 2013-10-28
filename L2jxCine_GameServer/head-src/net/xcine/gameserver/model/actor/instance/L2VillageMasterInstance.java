@@ -24,9 +24,9 @@ import java.util.Set;
 import javolution.text.TextBuilder;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.sql.CharTemplateTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.SkillTreeTable;
+import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.FortManager;
 import net.xcine.gameserver.managers.FortSiegeManager;
@@ -289,11 +289,11 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 
 						if(baseClassId == player.getActiveClass())
 						{
-							content.append(CharTemplateTable.getClassNameById(baseClassId) + "&nbsp;<font color=\"LEVEL\">(Base Class)</font><br><br>");
+							content.append(CharTemplateData.getClassNameById(baseClassId) + "&nbsp;<font color=\"LEVEL\">(Base Class)</font><br><br>");
 						}
 						else
 						{
-							content.append("<a action=\"bypass -h npc_" + getObjectId() + "_Subclass 5 0\">" + CharTemplateTable.getClassNameById(baseClassId) + "</a>&nbsp;" + "<font color=\"LEVEL\">(Base Class)</font><br><br>");
+							content.append("<a action=\"bypass -h npc_" + getObjectId() + "_Subclass 5 0\">" + CharTemplateData.getClassNameById(baseClassId) + "</a>&nbsp;" + "<font color=\"LEVEL\">(Base Class)</font><br><br>");
 						}
 
 						for(Iterator<SubClass> subList = iterSubClasses(player); subList.hasNext();)
@@ -303,11 +303,11 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 
 							if(subClassId == player.getActiveClass())
 							{
-								content.append(CharTemplateTable.getClassNameById(subClassId) + "<br>");
+								content.append(CharTemplateData.getClassNameById(subClassId) + "<br>");
 							}
 							else
 							{
-								content.append("<a action=\"bypass -h npc_" + getObjectId() + "_Subclass 5 " + subClass.getClassIndex() + "\">" + CharTemplateTable.getClassNameById(subClassId) + "</a><br>");
+								content.append("<a action=\"bypass -h npc_" + getObjectId() + "_Subclass 5 " + subClass.getClassIndex() + "\">" + CharTemplateData.getClassNameById(subClassId) + "</a><br>");
 							}
 						}
 					}					
@@ -322,7 +322,7 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 						SubClass subClass = subList.next();
 
 						content.append("Sub-class " + classIndex + "<br1>");
-						content.append("<a action=\"bypass -h npc_" + getObjectId() + "_Subclass 6 " + subClass.getClassIndex() + "\">" + CharTemplateTable.getClassNameById(subClass.getClassId()) + "</a><br>");
+						content.append("<a action=\"bypass -h npc_" + getObjectId() + "_Subclass 6 " + subClass.getClassIndex() + "\">" + CharTemplateData.getClassNameById(subClass.getClassId()) + "</a><br>");
 
 						classIndex++;
 					}
@@ -418,7 +418,7 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 
 					if(allowAddition)
 					{
-						String className = CharTemplateTable.getClassNameById(paramOne);
+						String className = CharTemplateData.getClassNameById(paramOne);
 
 						if(!player.addSubClass(paramOne, player.getTotalSubClasses() + 1))
 						{
@@ -487,7 +487,7 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 
 					player.setActiveClass(paramOne);
 
-					content.append("Change Subclass:<br>Your active sub class is now a <font color=\"LEVEL\">" + CharTemplateTable.getClassNameById(player.getActiveClass()) + "</font>.");
+					content.append("Change Subclass:<br>Your active sub class is now a <font color=\"LEVEL\">" + CharTemplateData.getClassNameById(player.getActiveClass()) + "</font>.");
 
 					player.sendPacket(new SystemMessage(SystemMessageId.SUBCLASS_TRANSFER_COMPLETED)); // Transfer completed.
 					
@@ -558,7 +558,7 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 					{
 						player.setActiveClass(paramOne);
 
-						content.append("Change Subclass:<br>Your sub class has been changed to <font color=\"LEVEL\">" + CharTemplateTable.getClassNameById(paramTwo) + "</font>.");
+						content.append("Change Subclass:<br>Your sub class has been changed to <font color=\"LEVEL\">" + CharTemplateData.getClassNameById(paramTwo) + "</font>.");
 
 						player.sendPacket(new SystemMessage(SystemMessageId.ADD_NEW_SUBCLASS)); // Subclass added.
 

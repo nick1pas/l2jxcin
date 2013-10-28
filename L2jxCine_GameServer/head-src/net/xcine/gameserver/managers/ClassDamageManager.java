@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.sql.CharTemplateTable;
+import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 
 /**
@@ -73,7 +73,7 @@ public class ClassDamageManager
 				
 				String type = class_and_type[1];
 				
-				Integer class_id = CharTemplateTable.getClassIdByName(class_name)-1;
+				Integer class_id = CharTemplateData.getClassIdByName(class_name)-1;
 				
 				id_to_name.put(class_id, class_name);
 				name_to_id.put(class_name, class_id);

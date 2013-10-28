@@ -14,7 +14,7 @@
  */
 package net.xcine.gameserver.network.serverpackets;
 
-import net.xcine.gameserver.datatables.sql.CharTemplateTable;
+import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 
 public class CustomNpcInfo extends L2GameServerPacket
@@ -77,8 +77,8 @@ public class CustomNpcInfo extends L2GameServerPacket
 		writeD(_activeChar.getRunSpeed());
 		writeF(_activeChar.getStat().getMovementSpeedMultiplier());
 		writeF(_activeChar.getStat().getAttackSpeedMultiplier());
-		writeF(CharTemplateTable.getInstance().getTemplate(_activeChar.getCustomNpcInstance().getClassId()).getCollisionRadius());
-		writeF(CharTemplateTable.getInstance().getTemplate(_activeChar.getCustomNpcInstance().getClassId()).getCollisionHeight());
+		writeF(CharTemplateData.getInstance().getTemplate(_activeChar.getCustomNpcInstance().getClassId()).getCollisionRadius());
+		writeF(CharTemplateData.getInstance().getTemplate(_activeChar.getCustomNpcInstance().getClassId()).getCollisionHeight());
 		writeD(_activeChar.getCustomNpcInstance().getHairStyle());
 		writeD(_activeChar.getCustomNpcInstance().getHairColor());
 		writeD(_activeChar.getCustomNpcInstance().getFace());

@@ -54,9 +54,7 @@ public final class Config
 	public static final String TELNET_FILE = "./config/telnet.properties";
 
 	// protected
-	public static final String PROTECT_FLOOD_CONFIG_FILE = "./config/protected/flood.properties";
-	public static final String PROTECT_OTHER_CONFIG_FILE = "./config/protected/other.properties";
-	public static final String PROTECT_PACKET_CONFIG_FILE = "./config/protected/packets.properties";
+	public static final String SECURITY_CONFIG_FILE = "./config/Security.properties";
 	
 	// Gates of File configs
 	public static final String EVENTS_CONFIG_FILE = "./config/Events.properties";
@@ -1309,7 +1307,7 @@ public final class Config
 			FLOOD_PROTECTOR_POTION = new FloodProtectorConfig("PotionFloodProtector",true);
 			_log.info("Loading gameserver configuration files.");
 			
-			ExProperties security = load(PROTECT_FLOOD_CONFIG_FILE);
+			ExProperties security = load(SECURITY_CONFIG_FILE);
 			loadFloodProtectorConfig(security, FLOOD_PROTECTOR_ROLL_DICE, "RollDice", "42");
 			loadFloodProtectorConfig(security, FLOOD_PROTECTOR_HERO_VOICE, "HeroVoice", "100");
 			loadFloodProtectorConfig(security, FLOOD_PROTECTOR_SUBCLASS, "Subclass", "20");
@@ -2667,34 +2665,31 @@ public final class Config
 			ANTI_FARM_IP_ENABLED = Boolean.parseBoolean(pvpSettings.getProperty("AntiFarmIP", "False"));
 			ANTI_FARM_SUMMON = Boolean.parseBoolean(pvpSettings.getProperty("AntiFarmSummon", "False"));
 
-			ExProperties PacketSetting = load(PROTECT_PACKET_CONFIG_FILE);
-		
-			ENABLE_UNK_PACKET_PROTECTION = Boolean.parseBoolean(PacketSetting.getProperty("UnknownPacketProtection", "true"));
-			MAX_UNKNOWN_PACKETS = Integer.parseInt(PacketSetting.getProperty("UnknownPacketsBeforeBan", "5"));
-			UNKNOWN_PACKETS_PUNiSHMENT = Integer.parseInt(PacketSetting.getProperty("UnknownPacketsPunishment", "2"));
-			DEBUG_PACKETS = Boolean.parseBoolean(PacketSetting.getProperty("DebugPackets", "false"));
-			DEBUG_UNKNOWN_PACKETS = Boolean.parseBoolean(PacketSetting.getProperty("UnknownDebugPackets", "false"));
+			ExProperties SecuritySettings = load(SECURITY_CONFIG_FILE);
 
-			ExProperties POtherSetting = load(PROTECT_OTHER_CONFIG_FILE);
-
-			CHECK_NAME_ON_LOGIN = Boolean.parseBoolean(POtherSetting.getProperty("CheckNameOnEnter", "True"));
-			CHECK_SKILLS_ON_ENTER = Boolean.parseBoolean(POtherSetting.getProperty("CheckSkillsOnEnter", "True"));
+			CHECK_NAME_ON_LOGIN = Boolean.parseBoolean(SecuritySettings.getProperty("CheckNameOnEnter", "True"));
+			CHECK_SKILLS_ON_ENTER = Boolean.parseBoolean(SecuritySettings.getProperty("CheckSkillsOnEnter", "True"));
 
 			/** l2walker protection **/
-			L2WALKER_PROTEC = Boolean.parseBoolean(POtherSetting.getProperty("L2WalkerProtection", "False"));
+			L2WALKER_PROTEC = Boolean.parseBoolean(SecuritySettings.getProperty("L2WalkerProtection", "False"));
 
 			/** enchant protected **/
-			PROTECTED_ENCHANT = Boolean.parseBoolean(POtherSetting.getProperty("ProtectorEnchant", "false"));
+			PROTECTED_ENCHANT = Boolean.parseBoolean(SecuritySettings.getProperty("ProtectorEnchant", "false"));
 
-			ONLY_GM_TELEPORT_FREE = Boolean.parseBoolean(POtherSetting.getProperty("OnlyGMTeleportFree", "false"));
-			ONLY_GM_ITEMS_FREE = Boolean.parseBoolean(POtherSetting.getProperty("OnlyGMItemsFree", "false"));
+			ONLY_GM_TELEPORT_FREE = Boolean.parseBoolean(SecuritySettings.getProperty("OnlyGMTeleportFree", "false"));
+			ONLY_GM_ITEMS_FREE = Boolean.parseBoolean(SecuritySettings.getProperty("OnlyGMItemsFree", "false"));
 
-			BYPASS_VALIDATION = Boolean.parseBoolean(POtherSetting.getProperty("BypassValidation", "True"));
+			BYPASS_VALIDATION = Boolean.parseBoolean(SecuritySettings.getProperty("BypassValidation", "True"));
 
-			ALLOW_DUALBOX_OLY = Boolean.parseBoolean(POtherSetting.getProperty("AllowDualBoxInOly", "True"));
-			ALLOW_DUALBOX_EVENT = Boolean.parseBoolean(POtherSetting.getProperty("AllowDualBoxInEvent", "True"));
-			ALLOWED_BOXES = Integer.parseInt(POtherSetting.getProperty("AllowedBoxes", "99"));
-			ALLOW_DUALBOX = Boolean.parseBoolean(POtherSetting.getProperty("AllowDualBox", "True"));
+			ALLOW_DUALBOX_OLY = Boolean.parseBoolean(SecuritySettings.getProperty("AllowDualBoxInOly", "True"));
+			ALLOW_DUALBOX_EVENT = Boolean.parseBoolean(SecuritySettings.getProperty("AllowDualBoxInEvent", "True"));
+			ALLOWED_BOXES = Integer.parseInt(SecuritySettings.getProperty("AllowedBoxes", "99"));
+			ALLOW_DUALBOX = Boolean.parseBoolean(SecuritySettings.getProperty("AllowDualBox", "True"));
+			ENABLE_UNK_PACKET_PROTECTION = Boolean.parseBoolean(SecuritySettings.getProperty("UnknownPacketProtection", "true"));
+			MAX_UNKNOWN_PACKETS = Integer.parseInt(SecuritySettings.getProperty("UnknownPacketsBeforeBan", "5"));
+			UNKNOWN_PACKETS_PUNiSHMENT = Integer.parseInt(SecuritySettings.getProperty("UnknownPacketsPunishment", "2"));
+			DEBUG_PACKETS = Boolean.parseBoolean(SecuritySettings.getProperty("DebugPackets", "false"));
+			DEBUG_UNKNOWN_PACKETS = Boolean.parseBoolean(SecuritySettings.getProperty("UnknownDebugPackets", "false"));
 
 			ExProperties keySetting = load(PROTECT_KEY_FILE);
 

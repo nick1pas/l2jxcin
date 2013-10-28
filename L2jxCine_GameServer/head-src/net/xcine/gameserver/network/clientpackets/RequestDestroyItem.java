@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.sql.L2PetDataTable;
+import net.xcine.gameserver.datatables.xml.L2PetDataData;
 import net.xcine.gameserver.managers.CursedWeaponsManager;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -140,7 +140,7 @@ public final class RequestDestroyItem extends L2GameClientPacket
 			activeChar.broadcastUserInfo();
 		}
 		
-		if (L2PetDataTable.isPetItem(itemId))
+		if (L2PetDataData.isPetItem(itemId))
 		{
 			Connection con = null;
 			try

@@ -18,14 +18,11 @@
  */
 package net.xcine.gameserver.handler;
 
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.sql.AdminCommandAccessRights;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminAdmin;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminAio;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminAnnouncements;
@@ -91,9 +88,9 @@ import net.xcine.gameserver.handler.admincommandhandlers.AdminTownWar;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminTvTEngine;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminUnblockIp;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminVIPEngine;
+import net.xcine.gameserver.handler.admincommandhandlers.AdminVip;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminWho;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminZone;
-import net.xcine.gameserver.handler.admincommandhandlers.AdminVip;
 
 /**
  * This class ...
@@ -188,29 +185,8 @@ public class AdminCommandHandler
 		registerAdminCommandHandler(new AdminVip());
 		registerAdminCommandHandler(new AdminCharSupervision());
 		registerAdminCommandHandler(new AdminWho()); // L2OFF command
-		// ATTENTION: adding new command handlers, you have to change the
-		// sql file containing the access levels rights
 		
 		_log.info("AdminCommandHandler: Loaded " + _datatable.size() + " handlers.");
-		
-		if (Config.DEBUG)
-		{
-			String[] commands = new String[_datatable.keySet().size()];
-			
-			commands = _datatable.keySet().toArray(commands);
-			
-			Arrays.sort(commands);
-			
-			for (String command : commands)
-			{
-				if (AdminCommandAccessRights.getInstance().accessRightForCommand(command) < 0)
-				{
-					_log.info("ATTENTION: admin command " + command + " has not an access right");
-				}
-			}
-			
-		}
-		
 	}
 	
 	public void registerAdminCommandHandler(IAdminCommandHandler handler)

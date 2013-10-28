@@ -143,7 +143,6 @@ echo *** Sucesfull 15 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/castle_siege_guards.sql
 
 echo *** Sucesfull 16 percents. ***
-%mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/char_templates.sql
 
 echo *** Sucesfull 17 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/character_friends.sql
@@ -295,7 +294,6 @@ echo *** Sucesfull 65 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/pets.sql
 
 echo *** Sucesfull 66 percents. ***
-%mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/pets_stats.sql
 
 echo *** Sucesfull 67 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/pledge_skill_trees.sql
@@ -375,7 +373,6 @@ echo *** Sucesfull 91 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/remove_unneeded_spawns.sql
 
 echo *** Sucesfull 92 percents. ***
-%mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/admin_command_access_rights.sql
 
 echo *** Sucesfull 93 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/pkkills.sql

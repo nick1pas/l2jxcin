@@ -22,7 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.sql.AdminCommandAccessRights;
+import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
 import net.xcine.gameserver.handler.AdminCommandHandler;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -53,7 +53,7 @@ public final class SendBypassBuildCmd extends L2GameClientPacket
 			return;
 
 		//Checks The Access and notify requester if requester access it not allowed for that command
-		if(!AdminCommandAccessRights.getInstance().hasAccess(_command, activeChar.getAccessLevel()))
+		if(!AdminCommandAccessRightsData.getInstance().hasAccess(_command, activeChar.getAccessLevel()))
 		{
 			activeChar.sendMessage("You don't have the access right to use this command!");
 			_log.log(Level.WARNING, "Character " + activeChar.getName() + " tried to use admin command " + _command + ", but doesn't have access to it!");

@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.communitybbs.CommunityBoard;
-import net.xcine.gameserver.datatables.sql.AdminCommandAccessRights;
+import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
 import net.xcine.gameserver.handler.AdminCommandHandler;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.handler.custom.CustomBypassHandler;
@@ -99,7 +99,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 					return;
 				}
 
-				if(!AdminCommandAccessRights.getInstance().hasAccess(command, activeChar.getAccessLevel()))
+				if(!AdminCommandAccessRightsData.getInstance().hasAccess(command, activeChar.getAccessLevel()))
 				{
 					activeChar.sendMessage("You don't have the access right to use this command!");
 					if(Config.DEBUG)

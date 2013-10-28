@@ -62,12 +62,12 @@ import net.xcine.gameserver.datatables.NobleSkillTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.sql.AccessLevels;
-import net.xcine.gameserver.datatables.sql.AdminCommandAccessRights;
-import net.xcine.gameserver.datatables.sql.CharTemplateTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SkillTreeTable;
+import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
+import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
 import net.xcine.gameserver.datatables.xml.FishTable;
 import net.xcine.gameserver.datatables.xml.HennaData;
@@ -1843,7 +1843,7 @@ private int _reviveRequested = 0;
 	 */
 	public final L2PcTemplate getBaseTemplate()
 	{
-		return CharTemplateTable.getInstance().getTemplate(_baseClass);
+		return CharTemplateData.getInstance().getTemplate(_baseClass);
 	}
 
 	/**
@@ -1864,7 +1864,7 @@ private int _reviveRequested = 0;
 	 */
 	public void setTemplate(ClassId newclass)
 	{
-		super.setTemplate(CharTemplateTable.getInstance().getTemplate(newclass));
+		super.setTemplate(CharTemplateData.getInstance().getTemplate(newclass));
 	}
 	
 	public void setTimerToAttack (long time)
@@ -4082,7 +4082,7 @@ private int _reviveRequested = 0;
 		if(!isSubClassActive())
 			return getTemplate().race;
 
-		L2PcTemplate charTemp = CharTemplateTable.getInstance().getTemplate(_baseClass);
+		L2PcTemplate charTemp = CharTemplateData.getInstance().getTemplate(_baseClass);
 		return charTemp.race;
 	}
 
@@ -10216,7 +10216,7 @@ private int _reviveRequested = 0;
 			{
 				final int activeClassId = rset.getInt("classid");
 				final boolean female = rset.getInt("sex") != 0;
-				final L2PcTemplate template = CharTemplateTable.getInstance().getTemplate(activeClassId);
+				final L2PcTemplate template = CharTemplateData.getInstance().getTemplate(activeClassId);
 				PcAppearance app = new PcAppearance(rset.getByte("face"), rset.getByte("hairColor"), rset.getByte("hairStyle"), female);
 
 				player = new L2PcInstance(objectId, template, rset.getString("account_name"), app);
@@ -15051,7 +15051,7 @@ private int _reviveRequested = 0;
 	{
 		_activeClass = classId;
 
-		L2PcTemplate t = CharTemplateTable.getInstance().getTemplate(classId);
+		L2PcTemplate t = CharTemplateData.getInstance().getTemplate(classId);
 
 		if(t == null)
 		{
@@ -20091,9 +20091,9 @@ public boolean dismount()
 		setTarget(null);
 		sendPacket(new ExOlympiadMode(0));
         teleToLocation(_obsX, _obsY, _obsZ, true);
-		if (!AdminCommandAccessRights.getInstance().hasAccess("admin_invis", getAccessLevel()))
+		if (!AdminCommandAccessRightsData.getInstance().hasAccess("admin_invis", getAccessLevel()))
 			getAppearance().setVisible();
-        if (!AdminCommandAccessRights.getInstance().hasAccess("admin_invul", getAccessLevel()))
+        if (!AdminCommandAccessRightsData.getInstance().hasAccess("admin_invul", getAccessLevel()))
 			setIsInvul(false);
         if (getAI() != null)
 		{

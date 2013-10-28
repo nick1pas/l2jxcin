@@ -17,8 +17,8 @@
  */
 package net.xcine.gameserver.model.actor.stat;
 
-import net.xcine.gameserver.datatables.sql.L2PetDataTable;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
+import net.xcine.gameserver.datatables.xml.L2PetDataData;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
@@ -109,7 +109,7 @@ public class PetStat extends SummonStat
 	@Override
 	public final long getExpForLevel(int level)
 	{
-		return L2PetDataTable.getInstance().getPetData(getActiveChar().getNpcId(), level).getPetMaxExp();
+		return L2PetDataData.getInstance().getPetData(getActiveChar().getNpcId(), level).getPetMaxExp();
 	}
 	
 	@Override
@@ -134,7 +134,7 @@ public class PetStat extends SummonStat
 		getActiveChar().stopFeed();
 		super.setLevel(value);
 
-		getActiveChar().setPetData(L2PetDataTable.getInstance().getPetData(getActiveChar().getTemplate().npcId, getLevel()));
+		getActiveChar().setPetData(L2PetDataData.getInstance().getPetData(getActiveChar().getTemplate().npcId, getLevel()));
 		getActiveChar().startFeed(false);
 
 		if(getActiveChar().getControlItem() != null)

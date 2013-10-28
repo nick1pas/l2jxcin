@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import net.xcine.Config;
+import net.xcine.gameserver.datatables.xml.L2PetDataData;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
@@ -59,7 +60,7 @@ public class PetNameTable
 			statement.setString(1, name);
 
 			String cond = "";
-			for(int it : L2PetDataTable.getPetItemsAsNpc(petNpcId))
+			for(int it : L2PetDataData.getPetItemsAsNpc(petNpcId))
 			{
 				if(cond != "")
 				{

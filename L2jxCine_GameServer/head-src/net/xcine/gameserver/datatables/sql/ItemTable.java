@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import javolution.util.FastMap;
 
 import net.xcine.Config;
+import net.xcine.gameserver.datatables.xml.L2PetDataData;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.model.Item;
 import net.xcine.gameserver.model.L2Attackable;
@@ -884,7 +885,7 @@ public class ItemTable
 			}
 
 			// if it's a pet control item, delete the pet as well
-			if(L2PetDataTable.isPetItem(item.getItemId()))
+			if(L2PetDataData.isPetItem(item.getItemId()))
 			{
 				Connection con = null;
 				try

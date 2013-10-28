@@ -136,9 +136,7 @@
 		<mkdir dir="${build.dist.login}/config" />
 		<mkdir dir="${build.dist.login}/config/protected" />
 		
-		<mkdir dir="${build.dist.game}/config/protected" />
-		<mkdir dir="${build.dist.game}/config/head" />
-		<mkdir dir="${build.dist.game}/config/functions" />
+		<mkdir dir="${build.dist.game}/config/protected" />		
 
 		<mkdir dir="${build.dist.game}/config/others" />
 
@@ -150,7 +148,9 @@
 				<include name="banned_ip.cfg" />
 				<include name="daemons.properties" />
 				<include name="Events.properties" />
-				<include name="GrandBoss.properties" />
+				<include name="access.properties" />
+				<include name="GBossChampion.properties" />				
+				<include name="L2jxCine.properties" />
 				<include name="idfactory.properties" />
 				<include name="script.properties" />
 			</fileset>
@@ -158,18 +158,6 @@
 
 		<copy todir="${build.dist.game}/config/protected">
 			<fileset dir="config/protected">
-				<include name="*.properties" />
-			</fileset>
-		</copy>
-
-		<copy todir="${build.dist.game}/config/functions">
-			<fileset dir="config/functions">
-				<include name="*.properties" />
-			</fileset>
-		</copy>
-
-		<copy todir="${build.dist.game}/config/head">
-			<fileset dir="config/head">
 				<include name="*.properties" />
 			</fileset>
 		</copy>

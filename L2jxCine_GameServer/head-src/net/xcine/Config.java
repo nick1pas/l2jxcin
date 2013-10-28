@@ -52,27 +52,7 @@ public final class Config
 	public static final String PROTECT_KEY_FILE = "./config/key.cfg";
 	public static final String HEXID_FILE = "./config/hexid.txt";
 	public static final String TELNET_FILE = "./config/telnet.properties";
-	
-	// head
-	public static final String ALT_SETTINGS_FILE = "./config/head/altsettings.properties";
-	public static final String CLANHALL_CONFIG_FILE = "./config/head/clanhall.properties";
-	public static final String FORTSIEGE_CONFIGURATION_FILE = "./config/head/fort.properties";
-	public static final String OLYMP_CONFIG_FILE = "./config/head/olympiad.properties";
-	public static final String OPTIONS_FILE = "./config/head/options.properties";
-	public static final String OTHER_CONFIG_FILE = "./config/head/other.properties";
-	public static final String SEVENSIGNS_FILE = "./config/head/sevensigns.properties";
-	public static final String SIEGE_CONFIGURATION_FILE = "./config/head/siege.properties";
-	public static final String BOSS_CONFIG_FILE = "./config/GrandBoss.properties";
-	
-	// functions
-	public static final String ACCESS_CONFIGURATION_FILE = "./config/functions/access.properties";
-	public static final String CONFIG_DEVELOPER = "./config/functions/developer.properties";
-	public static final String L2JCINE_CONFIG_FILE = "./config/functions/L2jxCine.properties";
-	public static final String PHYSICS_CONFIGURATION_FILE = "./config/functions/physics.properties";
-	public static final String PVP_CONFIG_FILE = "./config/functions/pvp.properties";
-	public static final String CLASS_DAMAGES_FILE = "./config/functions/classDamages.properties";
-	public static final String EVENT_CHAMPION_FILE = "./config/functions/champion.properties";
-	
+
 	// protected
 	public static final String PROTECT_FLOOD_CONFIG_FILE = "./config/protected/flood.properties";
 	public static final String PROTECT_OTHER_CONFIG_FILE = "./config/protected/other.properties";
@@ -80,7 +60,10 @@ public final class Config
 	
 	// Gates of File configs
 	public static final String EVENTS_CONFIG_FILE = "./config/Events.properties";
-	
+	public static final String ACCESS_CONFIGURATION_FILE = "./config/access.properties";
+	public static final String L2JCINE_CONFIG_FILE = "./config/L2jxCine.properties";
+	public static final String BOSS_CONFIG_FILE = "./config/GBossChampion.properties";
+
 	// network
 	public static final String SERVER_CONFIGURATION_FILE = "./config/Server.properties";
 	public static final String LOGIN_CONFIGURATION_FILE = "./config/LoginServer.properties";
@@ -88,7 +71,17 @@ public final class Config
 	// others
 	public static final String LOG_CONF_FILE = "./config/others/log.cfg";
 	public static final String SERVER_NAME_FILE = "./config/others/servername.xml";
-	
+	public static final String ALT_SETTINGS_FILE = "./config/others/altsettings.properties";
+	public static final String CLANHALL_CONFIG_FILE = "./config/others/clanhall.properties";
+	public static final String FORTSIEGE_CONFIGURATION_FILE = "./config/others/fort.properties";
+	public static final String OPTIONS_FILE = "./config/others/options.properties";
+	public static final String OTHER_CONFIG_FILE = "./config/others/other.properties";
+	public static final String SEVENSIGNS_FILE = "./config/others/sevensigns.properties";
+	public static final String SIEGE_CONFIGURATION_FILE = "./config/others/siege.properties";
+	public static final String PHYSICS_CONFIGURATION_FILE = "./config/others/physics.properties";
+	public static final String PVP_CONFIG_FILE = "./config/others/pvp.properties";
+	public static final String CLASS_DAMAGES_FILE = "./config/others/classDamages.properties";
+
 	// Legacy others position
 	public static final String LEGACY_LOG_CONF_FILE = "./log.cfg";
 	public static final String LEGACY_BANNED_IP = "./config/banned_ip.cfg";
@@ -2337,25 +2330,52 @@ public final class Config
 			CH_FRONT1_FEE = Integer.valueOf(clanhallSettings.getProperty("ClanHallFrontPlatformFunctionFeeLvl1", "86400000"));
 			CH_FRONT2_FEE = Integer.valueOf(clanhallSettings.getProperty("ClanHallFrontPlatformFunctionFeeLvl2", "86400000"));
 
-			ExProperties ChampionSettings = load(EVENT_CHAMPION_FILE);
-
-			L2JMOD_CHAMPION_ENABLE = Boolean.parseBoolean(ChampionSettings.getProperty("ChampionEnable", "false"));
-			L2JMOD_CHAMPION_FREQUENCY = Integer.parseInt(ChampionSettings.getProperty("ChampionFrequency", "0"));
-			L2JMOD_CHAMP_MIN_LVL = Integer.parseInt(ChampionSettings.getProperty("ChampionMinLevel", "20"));
-			L2JMOD_CHAMP_MAX_LVL = Integer.parseInt(ChampionSettings.getProperty("ChampionMaxLevel", "60"));
-			L2JMOD_CHAMPION_HP = Integer.parseInt(ChampionSettings.getProperty("ChampionHp", "7"));
-			L2JMOD_CHAMPION_HP_REGEN = Float.parseFloat(ChampionSettings.getProperty("ChampionHpRegen", "1.0"));
-			L2JMOD_CHAMPION_REWARDS = Integer.parseInt(ChampionSettings.getProperty("ChampionRewards", "8"));
-			L2JMOD_CHAMPION_ADENAS_REWARDS = Integer.parseInt(ChampionSettings.getProperty("ChampionAdenasRewards", "1"));
-			L2JMOD_CHAMPION_ATK = Float.parseFloat(ChampionSettings.getProperty("ChampionAtk", "1.0"));
-			L2JMOD_CHAMPION_SPD_ATK = Float.parseFloat(ChampionSettings.getProperty("ChampionSpdAtk", "1.0"));
-			L2JMOD_CHAMPION_REWARD = Integer.parseInt(ChampionSettings.getProperty("ChampionRewardItem", "0"));
-			L2JMOD_CHAMPION_REWARD_ID = Integer.parseInt(ChampionSettings.getProperty("ChampionRewardItemID", "6393"));
-			L2JMOD_CHAMPION_REWARD_QTY = Integer.parseInt(ChampionSettings.getProperty("ChampionRewardItemQty", "1"));
-			L2JMOD_CHAMP_TITLE = ChampionSettings.getProperty("ChampionTitle", "Champion");
-
 			ExProperties EventsSettings = load(EVENTS_CONFIG_FILE);
 
+			ALT_OLY_START_TIME = Integer.parseInt(EventsSettings.getProperty("AltOlyStartTime", "18"));
+			ALT_OLY_MIN = Integer.parseInt(EventsSettings.getProperty("AltOlyMin", "00"));
+			ALT_OLY_CPERIOD = Long.parseLong(EventsSettings.getProperty("AltOlyCPeriod", "21600000"));
+			ALT_OLY_BATTLE = Long.parseLong(EventsSettings.getProperty("AltOlyBattle", "360000"));
+			ALT_OLY_WPERIOD = Long.parseLong(EventsSettings.getProperty("AltOlyWPeriod", "604800000"));
+			ALT_OLY_VPERIOD = Long.parseLong(EventsSettings.getProperty("AltOlyVPeriod", "86400000"));
+			ALT_OLY_CLASSED = Integer.parseInt(EventsSettings.getProperty("AltOlyClassedParticipants", "5"));
+			ALT_OLY_NONCLASSED = Integer.parseInt(EventsSettings.getProperty("AltOlyNonClassedParticipants", "9"));
+			ALT_OLY_BATTLE_REWARD_ITEM = Integer.parseInt(EventsSettings.getProperty("AltOlyBattleRewItem", "6651"));
+			ALT_OLY_CLASSED_RITEM_C = Integer.parseInt(EventsSettings.getProperty("AltOlyClassedRewItemCount", "50"));
+			ALT_OLY_NONCLASSED_RITEM_C = Integer.parseInt(EventsSettings.getProperty("AltOlyNonClassedRewItemCount", "30"));
+			ALT_OLY_COMP_RITEM = Integer.parseInt(EventsSettings.getProperty("AltOlyCompRewItem", "6651"));
+			ALT_OLY_GP_PER_POINT = Integer.parseInt(EventsSettings.getProperty("AltOlyGPPerPoint", "1000"));
+			ALT_OLY_MIN_POINT_FOR_EXCH = Integer.parseInt(EventsSettings.getProperty("AltOlyMinPointForExchange", "50"));
+			ALT_OLY_HERO_POINTS = Integer.parseInt(EventsSettings.getProperty("AltOlyHeroPoints", "100"));
+			ALT_OLY_RESTRICTED_ITEMS = EventsSettings.getProperty("AltOlyRestrictedItems", "0");
+			LIST_OLY_RESTRICTED_ITEMS = new FastList<>();
+			for(String id : ALT_OLY_RESTRICTED_ITEMS.split(","))
+			{
+				LIST_OLY_RESTRICTED_ITEMS.add(Integer.parseInt(id));
+			}
+			ALLOW_EVENTS_DURING_OLY = Boolean.parseBoolean(EventsSettings.getProperty("AllowEventsDuringOly", "False"));
+			
+			ALT_OLY_RECHARGE_SKILLS = Boolean.parseBoolean(EventsSettings.getProperty("AltOlyRechargeSkills", "False"));
+			
+			/* Remove cubic at the enter of olympiad */
+			REMOVE_CUBIC_OLYMPIAD = Boolean.parseBoolean(EventsSettings.getProperty("RemoveCubicOlympiad", "False"));
+
+			ALT_OLY_NUMBER_HEROS_EACH_CLASS	= Integer.parseInt(EventsSettings.getProperty("AltOlyNumberHerosEachClass", "1"));
+			ALT_OLY_LOG_FIGHTS				= Boolean.parseBoolean(EventsSettings.getProperty("AlyOlyLogFights", "false"));
+			ALT_OLY_SHOW_MONTHLY_WINNERS	= Boolean.parseBoolean(EventsSettings.getProperty("AltOlyShowMonthlyWinners", "true"));
+			ALT_OLY_ANNOUNCE_GAMES			= Boolean.parseBoolean(EventsSettings.getProperty("AltOlyAnnounceGames", "true"));
+			LIST_OLY_RESTRICTED_SKILLS		= new FastList<>();
+			for (String id : EventsSettings.getProperty("AltOlyRestrictedSkills", "0").split(","))
+			{
+				LIST_OLY_RESTRICTED_SKILLS.add(Integer.parseInt(id));
+			}
+			ALT_OLY_AUGMENT_ALLOW			= Boolean.parseBoolean(EventsSettings.getProperty("AltOlyAugmentAllow", "true"));
+			ALT_OLY_TELEPORT_COUNTDOWN 		= Integer.parseInt(EventsSettings.getProperty("AltOlyTeleportCountDown", "120"));
+		
+			ALT_OLY_USE_CUSTOM_PERIOD_SETTINGS = Boolean.parseBoolean(EventsSettings.getProperty("AltOlyUseCustomPeriodSettings", "false"));
+			ALT_OLY_PERIOD = OlympiadPeriod.valueOf(EventsSettings.getProperty("AltOlyPeriod", "MONTH"));
+			ALT_OLY_PERIOD_MULTIPLIER = Integer.parseInt(EventsSettings.getProperty("AltOlyPeriodMultiplier", "1"));
+			
 			TVT_EVEN_TEAMS = EventsSettings.getProperty("TvTEvenTeams", "BALANCE");
 			TVT_ALLOW_INTERFERENCE = Boolean.parseBoolean(EventsSettings.getProperty("TvTAllowInterference", "False"));
 			TVT_ALLOW_POTIONS = Boolean.parseBoolean(EventsSettings.getProperty("TvTAllowPotions", "False"));
@@ -2434,57 +2454,6 @@ public final class Config
 
 			PCB_CHANCE_DUAL_POINT = Integer.parseInt(EventsSettings.getProperty("PcBangPointDualChance", "20"));
 			PCB_INTERVAL = Integer.parseInt(EventsSettings.getProperty("PcBangPointTimeStamp", "900"));
-
-			ExProperties devSettings = load(CONFIG_DEVELOPER);
-			SKILLSDEBUG = Boolean.parseBoolean(devSettings.getProperty("SkillsDebug", "false"));
-			DEBUG = Boolean.parseBoolean(devSettings.getProperty("Debug", "false"));
-			ASSERT = Boolean.parseBoolean(devSettings.getProperty("Assert", "false"));
-			DEVELOPER = Boolean.parseBoolean(devSettings.getProperty("Developer", "false"));
-			ENABLE_ALL_EXCEPTIONS = Boolean.parseBoolean(devSettings.getProperty("EnableAllExceptionsLog", "false"));
-			SERVER_LIST_TESTSERVER = Boolean.parseBoolean(devSettings.getProperty("TestServer", "false"));
-			SERVER_LIST_BRACKET = Boolean.valueOf(devSettings.getProperty("ServerListBrackets", "false"));
-			SERVER_LIST_CLOCK = Boolean.valueOf(devSettings.getProperty("ServerListClock", "false"));
-			SERVER_GMONLY = Boolean.valueOf(devSettings.getProperty("ServerGMOnly", "false"));
-			ALT_DEV_NO_QUESTS = Boolean.parseBoolean(devSettings.getProperty("AltDevNoQuests", "False"));
-			ALT_DEV_NO_SPAWNS = Boolean.parseBoolean(devSettings.getProperty("AltDevNoSpawns", "False"));
-			ALT_DEV_NO_SCRIPT = Boolean.parseBoolean(devSettings.getProperty("AltDevNoScript", "False"));
-			ALT_DEV_NO_AI = Boolean.parseBoolean(devSettings.getProperty("AltDevNoAI", "False"));
-			ALT_DEV_NO_RB = Boolean.parseBoolean(devSettings.getProperty("AltDevNoRB", "False"));
-
-			REQUEST_ID = Integer.parseInt(devSettings.getProperty("RequestServerID", "0"));
-			ACCEPT_ALTERNATE_ID = Boolean.parseBoolean(devSettings.getProperty("AcceptAlternateID", "True"));
-
-			CNAME_TEMPLATE = devSettings.getProperty("CnameTemplate", ".*");
-			PET_NAME_TEMPLATE = devSettings.getProperty("PetNameTemplate", ".*");
-			CLAN_NAME_TEMPLATE = devSettings.getProperty("ClanNameTemplate", ".*");
-			MAX_CHARACTERS_NUMBER_PER_ACCOUNT = Integer.parseInt(devSettings.getProperty("CharMaxNumber", "0"));
-
-			MAX_CHARACTERS_NUMBER_PER_IP = Integer.parseInt(devSettings.getProperty("CharMaxNumberPerIP", "0"));
-
-			MAXIMUM_ONLINE_USERS = Integer.parseInt(devSettings.getProperty("MaximumOnlineUsers", "100"));
-
-			MIN_PROTOCOL_REVISION = Integer.parseInt(devSettings.getProperty("MinProtocolRevision", "660"));
-			MAX_PROTOCOL_REVISION = Integer.parseInt(devSettings.getProperty("MaxProtocolRevision", "665"));
-			if(MIN_PROTOCOL_REVISION > MAX_PROTOCOL_REVISION)
-			{
-				throw new Error("MinProtocolRevision is bigger than MaxProtocolRevision in server configuration file.");
-			}
-
-			GMAUDIT = Boolean.valueOf(devSettings.getProperty("GMAudit", "False"));
-			LOG_CHAT = Boolean.valueOf(devSettings.getProperty("LogChat", "false"));
-			LOG_ITEMS = Boolean.valueOf(devSettings.getProperty("LogItems", "false"));
-			LOG_HIGH_DAMAGES = Boolean.valueOf(devSettings.getProperty("LogHighDamages", "false"));
-			
-			GAMEGUARD_L2NET_CHECK = Boolean.valueOf(devSettings.getProperty("GameGuardL2NetCheck", "False"));
-			
-			THREAD_P_EFFECTS = Integer.parseInt(devSettings.getProperty("ThreadPoolSizeEffects", "6"));
-			THREAD_P_GENERAL = Integer.parseInt(devSettings.getProperty("ThreadPoolSizeGeneral", "15"));
-			GENERAL_PACKET_THREAD_CORE_SIZE = Integer.parseInt(devSettings.getProperty("GeneralPacketThreadCoreSize", "4"));
-			IO_PACKET_THREAD_CORE_SIZE = Integer.parseInt(devSettings.getProperty("UrgentPacketThreadCoreSize", "2"));
-			AI_MAX_THREAD = Integer.parseInt(devSettings.getProperty("AiMaxThread", "10"));
-			GENERAL_THREAD_CORE_SIZE = Integer.parseInt(devSettings.getProperty("GeneralThreadCoreSize", "4"));
-
-			LAZY_CACHE = Boolean.valueOf(devSettings.getProperty("LazyCache", "False"));
 
 			ExProperties L2jxCineSettings = load(L2JCINE_CONFIG_FILE);
 
@@ -2698,52 +2667,6 @@ public final class Config
 			ANTI_FARM_IP_ENABLED = Boolean.parseBoolean(pvpSettings.getProperty("AntiFarmIP", "False"));
 			ANTI_FARM_SUMMON = Boolean.parseBoolean(pvpSettings.getProperty("AntiFarmSummon", "False"));
 
-			ExProperties OLYMPSetting = load(OLYMP_CONFIG_FILE);
-
-			ALT_OLY_START_TIME = Integer.parseInt(OLYMPSetting.getProperty("AltOlyStartTime", "18"));
-			ALT_OLY_MIN = Integer.parseInt(OLYMPSetting.getProperty("AltOlyMin", "00"));
-			ALT_OLY_CPERIOD = Long.parseLong(OLYMPSetting.getProperty("AltOlyCPeriod", "21600000"));
-			ALT_OLY_BATTLE = Long.parseLong(OLYMPSetting.getProperty("AltOlyBattle", "360000"));
-			ALT_OLY_WPERIOD = Long.parseLong(OLYMPSetting.getProperty("AltOlyWPeriod", "604800000"));
-			ALT_OLY_VPERIOD = Long.parseLong(OLYMPSetting.getProperty("AltOlyVPeriod", "86400000"));
-			ALT_OLY_CLASSED = Integer.parseInt(OLYMPSetting.getProperty("AltOlyClassedParticipants", "5"));
-			ALT_OLY_NONCLASSED = Integer.parseInt(OLYMPSetting.getProperty("AltOlyNonClassedParticipants", "9"));
-			ALT_OLY_BATTLE_REWARD_ITEM = Integer.parseInt(OLYMPSetting.getProperty("AltOlyBattleRewItem", "6651"));
-			ALT_OLY_CLASSED_RITEM_C = Integer.parseInt(OLYMPSetting.getProperty("AltOlyClassedRewItemCount", "50"));
-			ALT_OLY_NONCLASSED_RITEM_C = Integer.parseInt(OLYMPSetting.getProperty("AltOlyNonClassedRewItemCount", "30"));
-			ALT_OLY_COMP_RITEM = Integer.parseInt(OLYMPSetting.getProperty("AltOlyCompRewItem", "6651"));
-			ALT_OLY_GP_PER_POINT = Integer.parseInt(OLYMPSetting.getProperty("AltOlyGPPerPoint", "1000"));
-			ALT_OLY_MIN_POINT_FOR_EXCH = Integer.parseInt(OLYMPSetting.getProperty("AltOlyMinPointForExchange", "50"));
-			ALT_OLY_HERO_POINTS = Integer.parseInt(OLYMPSetting.getProperty("AltOlyHeroPoints", "100"));
-			ALT_OLY_RESTRICTED_ITEMS = OLYMPSetting.getProperty("AltOlyRestrictedItems", "0");
-			LIST_OLY_RESTRICTED_ITEMS = new FastList<>();
-			for(String id : ALT_OLY_RESTRICTED_ITEMS.split(","))
-			{
-				LIST_OLY_RESTRICTED_ITEMS.add(Integer.parseInt(id));
-			}
-			ALLOW_EVENTS_DURING_OLY = Boolean.parseBoolean(OLYMPSetting.getProperty("AllowEventsDuringOly", "False"));
-			
-			ALT_OLY_RECHARGE_SKILLS = Boolean.parseBoolean(OLYMPSetting.getProperty("AltOlyRechargeSkills", "False"));
-			
-			/* Remove cubic at the enter of olympiad */
-			REMOVE_CUBIC_OLYMPIAD = Boolean.parseBoolean(OLYMPSetting.getProperty("RemoveCubicOlympiad", "False"));
-
-			ALT_OLY_NUMBER_HEROS_EACH_CLASS	= Integer.parseInt(OLYMPSetting.getProperty("AltOlyNumberHerosEachClass", "1"));
-			ALT_OLY_LOG_FIGHTS				= Boolean.parseBoolean(OLYMPSetting.getProperty("AlyOlyLogFights", "false"));
-			ALT_OLY_SHOW_MONTHLY_WINNERS	= Boolean.parseBoolean(OLYMPSetting.getProperty("AltOlyShowMonthlyWinners", "true"));
-			ALT_OLY_ANNOUNCE_GAMES			= Boolean.parseBoolean(OLYMPSetting.getProperty("AltOlyAnnounceGames", "true"));
-			LIST_OLY_RESTRICTED_SKILLS		= new FastList<>();
-			for (String id : OLYMPSetting.getProperty("AltOlyRestrictedSkills", "0").split(","))
-			{
-				LIST_OLY_RESTRICTED_SKILLS.add(Integer.parseInt(id));
-			}
-			ALT_OLY_AUGMENT_ALLOW			= Boolean.parseBoolean(OLYMPSetting.getProperty("AltOlyAugmentAllow", "true"));
-			ALT_OLY_TELEPORT_COUNTDOWN 		= Integer.parseInt(OLYMPSetting.getProperty("AltOlyTeleportCountDown", "120"));
-		
-			ALT_OLY_USE_CUSTOM_PERIOD_SETTINGS = Boolean.parseBoolean(OLYMPSetting.getProperty("AltOlyUseCustomPeriodSettings", "false"));
-			ALT_OLY_PERIOD = OlympiadPeriod.valueOf(OLYMPSetting.getProperty("AltOlyPeriod", "MONTH"));
-			ALT_OLY_PERIOD_MULTIPLIER = Integer.parseInt(OLYMPSetting.getProperty("AltOlyPeriodMultiplier", "1"));
-
 			ExProperties PacketSetting = load(PROTECT_PACKET_CONFIG_FILE);
 		
 			ENABLE_UNK_PACKET_PROTECTION = Boolean.parseBoolean(PacketSetting.getProperty("UnknownPacketProtection", "true"));
@@ -2904,6 +2827,21 @@ public final class Config
 			PLAYERS_CAN_HEAL_RB = Boolean.parseBoolean(bossSettings.getProperty("PlayersCanHealRb", "True"));
 			
 			//============================================================
+			L2JMOD_CHAMPION_ENABLE = Boolean.parseBoolean(bossSettings.getProperty("ChampionEnable", "false"));
+			L2JMOD_CHAMPION_FREQUENCY = Integer.parseInt(bossSettings.getProperty("ChampionFrequency", "0"));
+			L2JMOD_CHAMP_MIN_LVL = Integer.parseInt(bossSettings.getProperty("ChampionMinLevel", "20"));
+			L2JMOD_CHAMP_MAX_LVL = Integer.parseInt(bossSettings.getProperty("ChampionMaxLevel", "60"));
+			L2JMOD_CHAMPION_HP = Integer.parseInt(bossSettings.getProperty("ChampionHp", "7"));
+			L2JMOD_CHAMPION_HP_REGEN = Float.parseFloat(bossSettings.getProperty("ChampionHpRegen", "1.0"));
+			L2JMOD_CHAMPION_REWARDS = Integer.parseInt(bossSettings.getProperty("ChampionRewards", "8"));
+			L2JMOD_CHAMPION_ADENAS_REWARDS = Integer.parseInt(bossSettings.getProperty("ChampionAdenasRewards", "1"));
+			L2JMOD_CHAMPION_ATK = Float.parseFloat(bossSettings.getProperty("ChampionAtk", "1.0"));
+			L2JMOD_CHAMPION_SPD_ATK = Float.parseFloat(bossSettings.getProperty("ChampionSpdAtk", "1.0"));
+			L2JMOD_CHAMPION_REWARD = Integer.parseInt(bossSettings.getProperty("ChampionRewardItem", "0"));
+			L2JMOD_CHAMPION_REWARD_ID = Integer.parseInt(bossSettings.getProperty("ChampionRewardItemID", "6393"));
+			L2JMOD_CHAMPION_REWARD_QTY = Integer.parseInt(bossSettings.getProperty("ChampionRewardItemQty", "1"));
+			L2JMOD_CHAMP_TITLE = bossSettings.getProperty("ChampionTitle", "Champion");
+			//============================================================
 			ALLOW_DIRECT_TP_TO_BOSS_ROOM = Boolean.valueOf(bossSettings.getProperty("AllowDirectTeleportToBossRoom", "False"));
 			//Antharas
 			ANTHARAS_DESPAWN_TIME = Integer.parseInt(bossSettings.getProperty("AntharasDespawnTime", "240"));
@@ -3061,6 +2999,56 @@ public final class Config
 			DEADLOCKCHECK_INTIAL_TIME = Long.parseLong(p.getProperty("DeadLockCheck", "0"));
 			DEADLOCKCHECK_DELAY_TIME = Long.parseLong(p.getProperty("DeadLockDelay", "0"));
 
+			SKILLSDEBUG = Boolean.parseBoolean(p.getProperty("SkillsDebug", "false"));
+			DEBUG = Boolean.parseBoolean(p.getProperty("Debug", "false"));
+			ASSERT = Boolean.parseBoolean(p.getProperty("Assert", "false"));
+			DEVELOPER = Boolean.parseBoolean(p.getProperty("Developer", "false"));
+			ENABLE_ALL_EXCEPTIONS = Boolean.parseBoolean(p.getProperty("EnableAllExceptionsLog", "false"));
+			SERVER_LIST_TESTSERVER = Boolean.parseBoolean(p.getProperty("TestServer", "false"));
+			SERVER_LIST_BRACKET = Boolean.valueOf(p.getProperty("ServerListBrackets", "false"));
+			SERVER_LIST_CLOCK = Boolean.valueOf(p.getProperty("ServerListClock", "false"));
+			SERVER_GMONLY = Boolean.valueOf(p.getProperty("ServerGMOnly", "false"));
+			ALT_DEV_NO_QUESTS = Boolean.parseBoolean(p.getProperty("AltDevNoQuests", "False"));
+			ALT_DEV_NO_SPAWNS = Boolean.parseBoolean(p.getProperty("AltDevNoSpawns", "False"));
+			ALT_DEV_NO_SCRIPT = Boolean.parseBoolean(p.getProperty("AltDevNoScript", "False"));
+			ALT_DEV_NO_AI = Boolean.parseBoolean(p.getProperty("AltDevNoAI", "False"));
+			ALT_DEV_NO_RB = Boolean.parseBoolean(p.getProperty("AltDevNoRB", "False"));
+
+			REQUEST_ID = Integer.parseInt(p.getProperty("RequestServerID", "0"));
+			ACCEPT_ALTERNATE_ID = Boolean.parseBoolean(p.getProperty("AcceptAlternateID", "True"));
+
+			CNAME_TEMPLATE = p.getProperty("CnameTemplate", ".*");
+			PET_NAME_TEMPLATE = p.getProperty("PetNameTemplate", ".*");
+			CLAN_NAME_TEMPLATE = p.getProperty("ClanNameTemplate", ".*");
+			MAX_CHARACTERS_NUMBER_PER_ACCOUNT = Integer.parseInt(p.getProperty("CharMaxNumber", "0"));
+
+			MAX_CHARACTERS_NUMBER_PER_IP = Integer.parseInt(p.getProperty("CharMaxNumberPerIP", "0"));
+
+			MAXIMUM_ONLINE_USERS = Integer.parseInt(p.getProperty("MaximumOnlineUsers", "100"));
+
+			MIN_PROTOCOL_REVISION = Integer.parseInt(p.getProperty("MinProtocolRevision", "660"));
+			MAX_PROTOCOL_REVISION = Integer.parseInt(p.getProperty("MaxProtocolRevision", "665"));
+			if(MIN_PROTOCOL_REVISION > MAX_PROTOCOL_REVISION)
+			{
+				throw new Error("MinProtocolRevision is bigger than MaxProtocolRevision in server configuration file.");
+			}
+
+			GMAUDIT = Boolean.valueOf(p.getProperty("GMAudit", "False"));
+			LOG_CHAT = Boolean.valueOf(p.getProperty("LogChat", "false"));
+			LOG_ITEMS = Boolean.valueOf(p.getProperty("LogItems", "false"));
+			LOG_HIGH_DAMAGES = Boolean.valueOf(p.getProperty("LogHighDamages", "false"));
+			
+			GAMEGUARD_L2NET_CHECK = Boolean.valueOf(p.getProperty("GameGuardL2NetCheck", "False"));
+			
+			THREAD_P_EFFECTS = Integer.parseInt(p.getProperty("ThreadPoolSizeEffects", "6"));
+			THREAD_P_GENERAL = Integer.parseInt(p.getProperty("ThreadPoolSizeGeneral", "15"));
+			GENERAL_PACKET_THREAD_CORE_SIZE = Integer.parseInt(p.getProperty("GeneralPacketThreadCoreSize", "4"));
+			IO_PACKET_THREAD_CORE_SIZE = Integer.parseInt(p.getProperty("UrgentPacketThreadCoreSize", "2"));
+			AI_MAX_THREAD = Integer.parseInt(p.getProperty("AiMaxThread", "10"));
+			GENERAL_THREAD_CORE_SIZE = Integer.parseInt(p.getProperty("GeneralThreadCoreSize", "4"));
+
+			LAZY_CACHE = Boolean.valueOf(p.getProperty("LazyCache", "False"));
+			
 			ExProperties Settings = load(HEXID_FILE);
 			SERVER_ID = Integer.parseInt(Settings.getProperty("ServerID"));
 			HEX_ID = new BigInteger(Settings.getProperty("HexID"), 16).toByteArray();

@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS access_levels;
 DROP TABLE IF EXISTS account_data;
 DROP TABLE IF EXISTS armor;
 DROP TABLE IF EXISTS armorsets;
@@ -74,7 +73,6 @@ DROP TABLE IF EXISTS henna_trees;
 DROP TABLE IF EXISTS heroes;
 DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS itemsonground;
-DROP TABLE IF EXISTS locations;
 DROP TABLE IF EXISTS lvlupgain;
 DROP TABLE IF EXISTS mapregion;
 DROP TABLE IF EXISTS merchant_areas_list;

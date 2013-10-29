@@ -29,7 +29,7 @@ public class DatatablesManager
 {
 	public static void reloadAll()
 	{
-		AccessLevels.reload();
+		AccessLevels.getInstance();
 		AdminCommandAccessRightsData.getInstance();
 		GmListTable.reload();
 		AugmentationData.reload();

@@ -1,67 +1,62 @@
-/* This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
- *
- * http://www.gnu.org/copyleft/gpl.html
- */
 /*
-	coded by Balancer
-	ported to L2JRU by Mr
-	balancer@balancer.ru
-	http://balancer.ru
-
-	version 0.1.1, 2005-06-07
-	version 0.1, 2005-03-16
-*/
-
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package net.xcine.gameserver.datatables.sql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import net.xcine.Config;
 import net.xcine.gameserver.controllers.TradeController;
 import net.xcine.gameserver.model.L2Territory;
-import net.xcine.util.CloseUtil;
-import net.xcine.util.database.L2DatabaseFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class TerritoryTable
 {
-	private final static Logger _log = Logger.getLogger(TradeController.class.getName());
-	private static Map<Integer, L2Territory> _territory = new HashMap<>();
+	private static final Logger _log = Logger.getLogger(TradeController.class.getName());
+
+	private static final TerritoryTable _instance = new TerritoryTable();
+	private static Map<String, L2Territory> _territory;
 
 	public static TerritoryTable getInstance()
 	{
-		return SingletonHolder._instance;
+		return _instance;
 	}
 
-	public TerritoryTable()
+	private TerritoryTable()
 	{
-		_territory.clear();
+		_territory = new HashMap<>();
 		// load all data at server start
 		reload_data();
 	}
 
-	public int[] getRandomPoint(Integer terr)
+	public int[] getRandomPoint(int terr)
 	{
 		return _territory.get(terr).getRandomPoint();
 	}
 
-	public int getProcMax(Integer terr)
+	public int getProcMax(int terr)
 	{
 		return _territory.get(terr).getProcMax();
 	}
@@ -69,44 +64,61 @@ public class TerritoryTable
 	public void reload_data()
 	{
 		_territory.clear();
-		Connection con = null;
-
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setValidating(false);
+		factory.setIgnoringComments(true);
+		File f = new File(Config.DATAPACK_ROOT + "/data/stats/location.xml");
+		if(!f.exists())
+		{
+			_log.warning("location.xml could not be loaded: file not found");
+			return;
+		}
 		try
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-			final PreparedStatement statement = con.prepareStatement("SELECT loc_id, loc_x, loc_y, loc_zmin, loc_zmax, proc FROM `locations`");
-			final ResultSet rset = statement.executeQuery();
-
-			while(rset.next())
+			InputSource in = new InputSource(new InputStreamReader(new FileInputStream(f), "UTF-8"));
+			in.setEncoding("UTF-8");
+			Document doc = factory.newDocumentBuilder().parse(in);
+			for(Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 			{
-				//final String terr = "sql_terr_" + rset.getString("loc_id");
-				final int terr = rset.getInt("loc_id");
-				
-				if(_territory.get(terr) == null)
+				if(n.getNodeName().equalsIgnoreCase("list"))
 				{
-					L2Territory t = new L2Territory();
-					_territory.put(terr, t);
+					for(Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
+					{
+						if(d.getNodeName().equalsIgnoreCase("loc"))
+						{
+							String terr = "sql_terr_" + String.valueOf(d.getAttributes().getNamedItem("id").getNodeValue());
+							int loc_x = Integer.valueOf(d.getAttributes().getNamedItem("x").getNodeValue());
+							int loc_y = Integer.valueOf(d.getAttributes().getNamedItem("y").getNodeValue());
+							int loc_zmin = Integer.valueOf(d.getAttributes().getNamedItem("Zmin").getNodeValue());
+							int loc_zmax = Integer.valueOf(d.getAttributes().getNamedItem("Zmax").getNodeValue());
+							int proc = Integer.valueOf(d.getAttributes().getNamedItem("proc").getNodeValue());
+
+							if(_territory.get(terr) == null)
+							{
+								L2Territory t = new L2Territory();
+								_territory.put(terr, t);
+							}
+							_territory.get(terr).add(loc_x, loc_y, loc_zmin, loc_zmax, proc);
+
+							terr = null;
+						}
+					}
 				}
-				_territory.get(terr).add(rset.getInt("loc_x"), rset.getInt("loc_y"), rset.getInt("loc_zmin"), rset.getInt("loc_zmax"), rset.getInt("proc"));
 			}
-			
-			rset.close();
-			statement.close();
 		}
-		catch(Exception e1)
+		catch(SAXException e)
 		{
-			_log.severe("locations couldnt be initialized "+ e1);
+			_log.warning("Error while creating table");
 		}
-		finally
+		catch(IOException e)
 		{
-			CloseUtil.close(con);
+			_log.warning("Error while creating table");
+		}
+		catch(ParserConfigurationException e)
+		{
+			_log.warning("Error while creating table");
 		}
 
-		_log.finest("TerritoryTable: Loaded {} locations "+ _territory.size());
-	}
-	
-	private static class SingletonHolder
-	{
-		protected static final TerritoryTable _instance = new TerritoryTable();
+		_log.info("TerritoryTable: Loaded " + _territory.size() + " locations");
 	}
 }

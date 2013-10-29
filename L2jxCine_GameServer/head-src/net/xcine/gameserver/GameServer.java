@@ -56,6 +56,7 @@ import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.LevelUpData;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
+import net.xcine.gameserver.datatables.sql.TerritoryTable;
 import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
 import net.xcine.gameserver.datatables.xml.AugmentationData;
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
@@ -221,7 +222,8 @@ public class GameServer
 		MapRegionTable.getInstance();
 		Announcements.getInstance();
 		AutoAnnouncementHandler.getInstance();
-
+		TerritoryTable.getInstance();
+		
         if (!IdFactory.getInstance().isInitialized())
         {
             _log.info("Could not read object IDs from DB. Please Check Your Data.");

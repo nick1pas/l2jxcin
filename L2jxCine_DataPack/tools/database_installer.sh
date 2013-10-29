@@ -259,7 +259,6 @@ else
 echo "Upgrading gameserver content"
 fi
 #if [ "$1" == "I" ]; then
-$MYG < ../sql/access_levels.sql &> /dev/null
 #fi 
 $MYG < ../sql/armor.sql &> /dev/null
 $MYG < ../sql/armorsets.sql &> /dev/null
@@ -324,7 +323,6 @@ $MYG < ../sql/henna_trees.sql &> /dev/null
 $MYG < ../sql/heroes.sql &> /dev/null
 $MYG < ../sql/items.sql &> /dev/null
 $MYG < ../sql/itemsonground.sql &> /dev/null
-$MYG < ../sql/locations.sql &> /dev/null
 $MYG < ../sql/lvlupgain.sql &> /dev/null
 $MYG < ../sql/merchant_areas_list.sql &> /dev/null
 $MYG < ../sql/merchant_buylists.sql &> /dev/null

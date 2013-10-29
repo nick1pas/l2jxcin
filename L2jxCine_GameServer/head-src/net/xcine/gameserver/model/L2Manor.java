@@ -1,45 +1,41 @@
-/* This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
+/*
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
- *
- * http://www.gnu.org/copyleft/gpl.html
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package net.xcine.gameserver.model;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.LineNumberReader;
-import java.util.StringTokenizer;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.logging.Logger;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.templates.L2Item;
 
-/**
- * Service class for manor
- * 
- * @author l3x
- */
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 public class L2Manor
 {
-	private static Logger _log = Logger.getLogger(L2Manor.class.getName());
+	private static final Logger _log = Logger.getLogger(L2Manor.class.getName());
+
 	private static L2Manor _instance;
 
 	private static FastMap<Integer, SeedData> _seeds;
@@ -65,10 +61,12 @@ public class L2Manor
 		FastList<Integer> crops = new FastList<>();
 
 		for(SeedData seed : _seeds.values())
+		{
 			if(!crops.contains(seed.getCrop()) && seed.getCrop() != 0 && !crops.contains(seed.getCrop()))
 			{
 				crops.add(seed.getCrop());
 			}
+		}
 
 		return crops;
 	}
@@ -78,7 +76,9 @@ public class L2Manor
 		L2Item seedItem = ItemTable.getInstance().getTemplate(seedId);
 
 		if(seedItem != null)
+		{
 			return seedItem.getReferencePrice();
+		}
 		return 0;
 	}
 
@@ -87,7 +87,9 @@ public class L2Manor
 		for(SeedData seed : _seeds.values())
 		{
 			if(seed.getCrop() == cropId)
+			{
 				return getSeedBasicPrice(seed.getId());
+			}
 		}
 
 		return 0;
@@ -98,7 +100,9 @@ public class L2Manor
 		L2Item cropItem = ItemTable.getInstance().getTemplate(cropId);
 
 		if(cropItem != null)
+		{
 			return cropItem.getReferencePrice();
+		}
 		return 0;
 	}
 
@@ -107,17 +111,14 @@ public class L2Manor
 		for(SeedData seed : _seeds.values())
 		{
 			if(seed.getCrop() == cropId)
+			{
 				return seed.getMature();
+			}
 		}
+
 		return 0;
 	}
 
-	/**
-	 * Returns price which lord pays to buy one seed
-	 * 
-	 * @param seedId
-	 * @return seed price
-	 */
 	public int getSeedBuyPrice(int seedId)
 	{
 		int buyPrice = getSeedBasicPrice(seedId) / 10;
@@ -130,7 +131,12 @@ public class L2Manor
 		SeedData seed = _seeds.get(seedId);
 
 		if(seed != null)
+		{
 			return seed.getLevel() - 5;
+		}
+
+		seed = null;
+
 		return -1;
 	}
 
@@ -139,7 +145,12 @@ public class L2Manor
 		SeedData seed = _seeds.get(seedId);
 
 		if(seed != null)
+		{
 			return seed.getLevel() + 5;
+		}
+
+		seed = null;
+
 		return -1;
 	}
 
@@ -148,8 +159,11 @@ public class L2Manor
 		for(SeedData seed : _seeds.values())
 		{
 			if(seed.getCrop() == cropId)
+			{
 				return seed.getLevel();
+			}
 		}
+
 		return 0;
 	}
 
@@ -158,8 +172,14 @@ public class L2Manor
 		SeedData seed = _seeds.get(seedId);
 
 		if(seed != null)
+		{
 			return seed.getLevel();
+		}
+
+		seed = null;
+
 		return -1;
+
 	}
 
 	public boolean isAlternative(int seedId)
@@ -167,7 +187,9 @@ public class L2Manor
 		for(SeedData seed : _seeds.values())
 		{
 			if(seed.getId() == seedId)
+			{
 				return seed.isAlternative();
+			}
 		}
 		return false;
 	}
@@ -177,7 +199,12 @@ public class L2Manor
 		SeedData seed = _seeds.get(seedId);
 
 		if(seed != null)
+		{
 			return seed.getCrop();
+		}
+
+		seed = null;
+
 		return -1;
 	}
 
@@ -186,12 +213,11 @@ public class L2Manor
 		for(SeedData seed : _seeds.values())
 		{
 			if(seed.getCrop() == cropId)
+			{
 				return seed.getReward(type);
-			// there can be several
-			// seeds with same crop, but
-			// reward should be the same for
-			// all
+			}
 		}
+
 		return -1;
 	}
 
@@ -200,16 +226,15 @@ public class L2Manor
 		SeedData seed = _seeds.get(seedId);
 
 		if(seed != null)
+		{
 			return seed.getReward(type);
+		}
+
+		seed = null;
+
 		return 0;
 	}
 
-	/**
-	 * Return all crops which can be purchased by given castle
-	 * 
-	 * @param castleId
-	 * @return
-	 */
 	public FastList<Integer> getCropsForCastle(int castleId)
 	{
 		FastList<Integer> crops = new FastList<>();
@@ -225,12 +250,6 @@ public class L2Manor
 		return crops;
 	}
 
-	/**
-	 * Return list of seed ids, which belongs to castle with given id
-	 * 
-	 * @param castleId - id of the castle
-	 * @return seedIds - list of seed ids
-	 */
 	public FastList<Integer> getSeedsForCastle(int castleId)
 	{
 		FastList<Integer> seedsID = new FastList<>();
@@ -246,17 +265,16 @@ public class L2Manor
 		return seedsID;
 	}
 
-	/**
-	 * Returns castle id where seed can be sowned<br>
-	 * 
-	 * @param seedId
-	 * @return castleId
-	 */
 	public int getCastleIdForSeed(int seedId)
 	{
 		SeedData seed = _seeds.get(seedId);
 		if(seed != null)
+		{
 			return seed.getManorId();
+		}
+
+		seed = null;
+
 		return 0;
 	}
 
@@ -265,7 +283,12 @@ public class L2Manor
 		SeedData seed = _seeds.get(seedId);
 
 		if(seed != null)
+		{
 			return seed.getSeedLimit();
+		}
+
+		seed = null;
+
 		return 0;
 	}
 
@@ -274,7 +297,9 @@ public class L2Manor
 		for(SeedData seed : _seeds.values())
 		{
 			if(seed.getCrop() == cropId)
+			{
 				return seed.getCropLimit();
+			}
 		}
 		return 0;
 	}
@@ -282,12 +307,12 @@ public class L2Manor
 	private class SeedData
 	{
 		private int _id;
-		private int _level; // seed level
-		private int _crop; // crop type
-		private int _mature; // mature crop type
+		private int _level;
+		private int _crop;
+		private int _mature;
 		private int _type1;
 		private int _type2;
-		private int _manorId; // id of manor (castle id) where seed can be farmed
+		private int _manorId;
 		private int _isAlternative;
 		private int _limitSeeds;
 		private int _limitCrops;
@@ -358,97 +383,60 @@ public class L2Manor
 
 	private void parseData()
 	{
-		FileReader reader = null;
-		BufferedReader buff = null;
-		LineNumberReader lnr = null;
-		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setValidating(false);
+		factory.setIgnoringComments(true);
+		File f = new File(Config.DATAPACK_ROOT + "/data/stats/seeds.xml");
+		if(!f.exists())
+		{
+			_log.warning("seeds.xml could not be loaded: file not found");
+			return;
+		}
 		try
 		{
-			File seedData = new File(Config.DATAPACK_ROOT, "data/seeds.csv");
-			
-			reader = new FileReader(seedData);
-			buff = new BufferedReader(reader);
-			lnr = new LineNumberReader(buff);
-
-			String line = null;
-
-			while((line = lnr.readLine()) != null)
+			InputSource in = new InputSource(new InputStreamReader(new FileInputStream(f), "UTF-8"));
+			in.setEncoding("UTF-8");
+			Document doc = factory.newDocumentBuilder().parse(in);
+			for(Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 			{
-				if(line.trim().length() == 0 || line.startsWith("#"))
+				if(n.getNodeName().equalsIgnoreCase("list"))
 				{
-					continue;
-				}
+					for(Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
+					{
+						if(d.getNodeName().equalsIgnoreCase("seed"))
+						{
+							int seedId = Integer.valueOf(d.getAttributes().getNamedItem("seed_id").getNodeValue()); // seed id
+							int level = Integer.valueOf(d.getAttributes().getNamedItem("seed_level").getNodeValue()); // seed level
+							int cropId = Integer.valueOf(d.getAttributes().getNamedItem("crop_id").getNodeValue()); // crop id
+							int matureId = Integer.valueOf(d.getAttributes().getNamedItem("mature_id").getNodeValue()); // mature crop id
+							int type1R = Integer.valueOf(d.getAttributes().getNamedItem("reward1_id").getNodeValue()); // type I reward
+							int type2R = Integer.valueOf(d.getAttributes().getNamedItem("reward2_id").getNodeValue()); // type II reward
+							int manorId = Integer.valueOf(d.getAttributes().getNamedItem("manor_id").getNodeValue()); // id of manor, where seed can be farmed
+							int isAlt = Integer.valueOf(d.getAttributes().getNamedItem("is_alternative").getNodeValue()); // alternative seed
+							int limitSeeds = Integer.valueOf(d.getAttributes().getNamedItem("limit_for_seeds").getNodeValue()); // limit for seeds
+							int limitCrops = Integer.valueOf(d.getAttributes().getNamedItem("limit_for_crops").getNodeValue()); // limit for crops
 
-				SeedData seed = parseList(line);
-				_seeds.put(seed.getId(), seed);
-				seed = null;
+							SeedData seed = new SeedData(level, cropId, matureId);
+							seed.setData(seedId, type1R, type2R, manorId, isAlt, limitSeeds, limitCrops);
+							_seeds.put(seed.getId(), seed);
+						}
+					}
+				}
 			}
-
-			_log.info("ManorManager: Loaded " + _seeds.size() + " seeds");
 		}
-		catch(FileNotFoundException e)
+		catch(SAXException e)
 		{
-			_log.info("seeds.csv is missing in data folder");
+			_log.warning("Error while creating table");
 		}
-		catch(Exception e)
+		catch(IOException e)
 		{
-			_log.info("error while loading seeds: " + e.getMessage());
+			_log.warning("Error while creating table");
 		}
-		finally
+		catch(ParserConfigurationException e)
 		{
-			if(lnr != null)
-				try
-				{
-					lnr.close();
-				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			
-			if(buff != null)
-				try
-				{
-					buff.close();
-				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			
-			if(reader != null)
-				try
-				{
-					reader.close();
-				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			
+			_log.warning("Error while creating table");
 		}
-	}
 
-	private SeedData parseList(String line)
-	{
-		StringTokenizer st = new StringTokenizer(line, ";");
-
-		int seedId = Integer.parseInt(st.nextToken()); // seed id
-		int level = Integer.parseInt(st.nextToken()); // seed level
-		int cropId = Integer.parseInt(st.nextToken()); // crop id
-		int matureId = Integer.parseInt(st.nextToken()); // mature crop id
-		int type1R = Integer.parseInt(st.nextToken()); // type I reward
-		int type2R = Integer.parseInt(st.nextToken()); // type II reward
-		int manorId = Integer.parseInt(st.nextToken()); // id of manor, where seed can be farmed
-		int isAlt = Integer.parseInt(st.nextToken()); // alternative seed
-		int limitSeeds = Integer.parseInt(st.nextToken()); // limit for seeds
-		int limitCrops = Integer.parseInt(st.nextToken()); // limit for crops
-
-		SeedData seed = new SeedData(level, cropId, matureId);
-		seed.setData(seedId, type1R, type2R, manorId, isAlt, limitSeeds, limitCrops);
-
-		st = null;
-
-		return seed;
+		_log.info("ManorManager: Loaded " + _seeds.size() + " seeds.");
 	}
 }

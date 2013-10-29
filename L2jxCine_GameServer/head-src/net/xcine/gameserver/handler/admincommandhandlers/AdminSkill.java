@@ -25,7 +25,7 @@ import javolution.text.TextBuilder;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.sql.SkillTreeTable;
+import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2Skill;
@@ -247,7 +247,7 @@ public class AdminSkill implements IAdminCommandHandler
 		int unLearnable = 0;
 		int skillCounter = 0;
 
-		L2SkillLearn[] skills = SkillTreeTable.getInstance().getAvailableSkills(player, player.getClassId());
+		L2SkillLearn[] skills = SkillTreeData.getInstance().getAvailableSkills(player, player.getClassId());
 
 		while(skills.length > unLearnable)
 		{
@@ -276,7 +276,7 @@ public class AdminSkill implements IAdminCommandHandler
 			}
 
 			countUnlearnable = false;
-			skills = SkillTreeTable.getInstance().getAvailableSkills(player, player.getClassId());
+			skills = SkillTreeData.getInstance().getAvailableSkills(player, player.getClassId());
 		}
 
 		//Notify player and admin

@@ -30,7 +30,7 @@ import javolution.util.FastList;
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.HeroSkillTable;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.sql.SkillTreeTable;
+import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.managers.SiegeManager;
 import net.xcine.gameserver.model.actor.instance.L2ArtefactInstance;
@@ -563,7 +563,7 @@ public abstract class L2Skill
 		_negateEffectTypes = set.getString("negateEffectTypes", "").split(" ");
 		_negatePower = set.getFloat("negatePower", 0.f);
 		_negateId = set.getInteger("negateId", 0);
-		_magicLevel = set.getInteger("magicLvl", SkillTreeTable.getInstance().getMinSkillLevel(_id, _level));
+		_magicLevel = set.getInteger("magicLvl", SkillTreeData.getInstance().getMinSkillLevel(_id, _level));
 		_levelDepend = set.getInteger("lvlDepend", 0);
 		_stat = set.getEnum("stat", Stats.class, null);
 

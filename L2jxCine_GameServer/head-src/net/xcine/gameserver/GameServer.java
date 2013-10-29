@@ -55,8 +55,6 @@ import net.xcine.gameserver.datatables.sql.HennaTreeTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.LevelUpData;
 import net.xcine.gameserver.datatables.sql.NpcTable;
-import net.xcine.gameserver.datatables.sql.SkillSpellbookTable;
-import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
 import net.xcine.gameserver.datatables.xml.AugmentationData;
@@ -69,6 +67,8 @@ import net.xcine.gameserver.datatables.xml.HennaData;
 import net.xcine.gameserver.datatables.xml.L2PetDataData;
 import net.xcine.gameserver.datatables.xml.NpcWalkerRoutesData;
 import net.xcine.gameserver.datatables.xml.RecipeData;
+import net.xcine.gameserver.datatables.xml.SkillSpellbookData;
+import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.datatables.xml.StaticObjectsData;
 import net.xcine.gameserver.datatables.xml.SummonItemsData;
 import net.xcine.gameserver.datatables.xml.TeleportLocationData;
@@ -251,8 +251,8 @@ public class GameServer
 			_log.info("Could not find the extraced files. Please Check Your Data.");
 			throw new Exception("Could not initialize the skill table");
 		}
-		SkillTreeTable.getInstance();
-		SkillSpellbookTable.getInstance();
+		SkillTreeData.getInstance();
+		SkillSpellbookData.getInstance();
 		NobleSkillTable.getInstance();
 		HeroSkillTable.getInstance();
 		_log.info("Skills: All skills loaded.");

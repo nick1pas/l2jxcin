@@ -25,8 +25,8 @@ import javolution.text.TextBuilder;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.ClanTable;
-import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
+import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.FortManager;
 import net.xcine.gameserver.managers.FortSiegeManager;
@@ -1146,7 +1146,7 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 		if(player.getClan() == null)
 			return;
 
-		L2PledgeSkillLearn[] skills = SkillTreeTable.getInstance().getAvailablePledgeSkills(player);
+		L2PledgeSkillLearn[] skills = SkillTreeData.getInstance().getAvailablePledgeSkills(player);
 		AquireSkillList asl = new AquireSkillList(AquireSkillList.skillType.Clan);
 		int counts = 0;
 

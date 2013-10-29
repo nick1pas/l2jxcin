@@ -315,10 +315,8 @@ $MYG < ../sql/custom_weapon.sql &> /dev/null
 $MYG < ../sql/custom_notspawned.sql &> /dev/null
 $MYG < ../sql/dimensional_rift.sql &> /dev/null
 $MYG < ../sql/droplist.sql &> /dev/null
-$MYG < ../sql/enchant_skill_trees.sql &> /dev/null
 $MYG < ../sql/etcitem.sql &> /dev/null
 $MYG < ../sql/fish.sql &> /dev/null
-$MYG < ../sql/fishing_skill_trees.sql &> /dev/null
 $MYG < ../sql/forums.sql &> /dev/null
 $MYG < ../sql/games.sql &> /dev/null
 $MYG < ../sql/global_tasks.sql &> /dev/null
@@ -341,7 +339,6 @@ $MYG < ../sql/npcskills.sql &> /dev/null
 $MYG < ../sql/olympiad_nobles.sql&> /dev/null
 $MYG < ../sql/pets.sql &> /dev/null
 $MYG < ../sql/pkkills.sql &> /dev/null
-$MYG < ../sql/pledge_skill_trees.sql &> /dev/null
 $MYG < ../sql/posts.sql &> /dev/null
 $MYG < ../sql/quest_global_data.sql &> /dev/null
 $MYG < ../sql/raidboss_spawnlist.sql &> /dev/null
@@ -352,8 +349,6 @@ $MYG < ../sql/seven_signs.sql &> /dev/null
 $MYG < ../sql/seven_signs_status.sql &> /dev/null
 $MYG < ../sql/siege_clans.sql &> /dev/null
 $MYG < ../sql/skill_learn.sql &> /dev/null
-$MYG < ../sql/skill_spellbooks.sql &> /dev/null
-$MYG < ../sql/skill_trees.sql &> /dev/null
 $MYG < ../sql/spawnlist.sql &> /dev/null
 $MYG < ../sql/topic.sql &> /dev/null
 $MYG < ../sql/tvt.sql &> /dev/null

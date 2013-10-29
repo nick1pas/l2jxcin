@@ -65,13 +65,13 @@ import net.xcine.gameserver.datatables.sql.AccessLevels;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
-import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
 import net.xcine.gameserver.datatables.xml.FishTable;
 import net.xcine.gameserver.datatables.xml.HennaData;
 import net.xcine.gameserver.datatables.xml.RecipeData;
+import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.handler.ItemHandler;
@@ -524,12 +524,12 @@ public final class L2PcInstance extends L2PlayableInstance
 	/** The table containing all minimum level needed for each Expertise (None, D, C, B, A, S). */
 	private static final int[] EXPERTISE_LEVELS =
 	{
-			SkillTreeTable.getInstance().getExpertiseLevel(0), //NONE
-			SkillTreeTable.getInstance().getExpertiseLevel(1), //D
-			SkillTreeTable.getInstance().getExpertiseLevel(2), //C
-			SkillTreeTable.getInstance().getExpertiseLevel(3), //B
-			SkillTreeTable.getInstance().getExpertiseLevel(4), //A
-			SkillTreeTable.getInstance().getExpertiseLevel(5), //S
+			SkillTreeData.getInstance().getExpertiseLevel(0), //NONE
+			SkillTreeData.getInstance().getExpertiseLevel(1), //D
+			SkillTreeData.getInstance().getExpertiseLevel(2), //C
+			SkillTreeData.getInstance().getExpertiseLevel(3), //B
+			SkillTreeData.getInstance().getExpertiseLevel(4), //A
+			SkillTreeData.getInstance().getExpertiseLevel(5), //S
 	};
 
 	/** The Constant COMMON_CRAFT_LEVELS. */
@@ -4004,58 +4004,44 @@ private int _reviveRequested = 0;
 
 	}
 
-	/**
-	 * Give all available skills to the player.<br>
-	 * <br>
-	 */
 	public void giveAvailableSkills()
 	{
-//		int unLearnable = 0;
+		int unLearnable = 0;
 		int skillCounter = 0;
 
-		// Get available skills
-//		L2SkillLearn[] skills = SkillTreeTable.getInstance().getAvailableSkills(this, getClassId());
-//		while(skills.length > unLearnable)
-//		{
-//			unLearnable = 0;
-//			for(L2SkillLearn s : skills)
-		Collection<L2Skill> skills = SkillTreeTable.getInstance().getAllAvailableSkills(this, getClassId()); 
-	 	for (L2Skill sk : skills){ 
-//			{
-//				L2Skill sk = SkillTable.getInstance().getInfo(s.getId(), s.getLevel());
-//				if(sk == null || (sk.getId() == L2Skill.SKILL_DIVINE_INSPIRATION && !Config.AUTO_LEARN_DIVINE_INSPIRATION))
-//				{
-//					unLearnable++;
-//					continue;
-//				}
+		L2SkillLearn[] skills = SkillTreeData.getInstance().getAvailableSkills(this, getClassId());
+		while(skills.length > unLearnable)
+		{
+			unLearnable = 0;
+			for(L2SkillLearn s : skills)
+			{
+				L2Skill sk = SkillTable.getInstance().getInfo(s.getId(), s.getLevel());
+				if(sk == null || (sk.getId() == L2Skill.SKILL_DIVINE_INSPIRATION && !Config.AUTO_LEARN_DIVINE_INSPIRATION))
+				{
+					unLearnable++;
+					continue;
+				}
 
 				if(getSkillLevel(sk.getId()) == -1)
 				{
 					skillCounter++;
 				}
-				
-				// Penality skill are not auto learn
-				if(sk.getId() == 4267 || sk.getId() == 4270)
-					continue;
 
-				// fix when learning toggle skills
 				if(sk.isToggle())
 				{
 					L2Effect toggleEffect = getFirstEffect(sk.getId());
 					if(toggleEffect != null)
 					{
-						// stop old toggle skill effect, and give new toggle skill effect back
-						toggleEffect.exit(false);
-						sk.getEffects(this, this,false,false,false);
+						toggleEffect.exit();
+						sk.getEffects(this, this);
 					}
 				}
 
 				addSkill(sk, true);
 			}
 
-//			// Get new available skills
-//			skills = SkillTreeTable.getInstance().getAvailableSkills(this, getClassId());
-//		}
+			skills = SkillTreeData.getInstance().getAvailableSkills(this, getClassId());
+		}
 
 		sendMessage("You have learned " + skillCounter + " new skills.");
 		skills = null;
@@ -11236,7 +11222,7 @@ private int _reviveRequested = 0;
 		boolean foundskill = false;
 		if(!isGM())
 		{
-			Collection<L2SkillLearn> skillTree = SkillTreeTable.getInstance().getAllowedSkills(getClassId());
+			Collection<L2SkillLearn> skillTree = SkillTreeData.getInstance().getAllowedSkills(getClassId());
 			// loop through all skills of player
 			for(L2Skill skill : getAllSkills())
 			{
@@ -14854,7 +14840,7 @@ private int _reviveRequested = 0;
 			}
 
 			ClassId subTemplate = ClassId.values()[classId];
-			Collection<L2SkillLearn> skillTree = SkillTreeTable.getInstance().getAllowedSkills(subTemplate);
+			Collection<L2SkillLearn> skillTree = SkillTreeData.getInstance().getAllowedSkills(subTemplate);
 			subTemplate = null;
 
 			if(skillTree == null)

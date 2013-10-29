@@ -20,7 +20,7 @@ package net.xcine.gameserver.network.clientpackets;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.sql.SkillTreeTable;
+import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.model.L2EnchantSkillLearn;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2FolkInstance;
@@ -78,7 +78,7 @@ public final class RequestExEnchantSkillInfo extends L2GameClientPacket
 		if(!trainer.getTemplate().canTeach(activeChar.getClassId()))
 			return; // cheater
 
-		L2EnchantSkillLearn[] skills = SkillTreeTable.getInstance().getAvailableEnchantSkills(activeChar);
+		L2EnchantSkillLearn[] skills = SkillTreeData.getInstance().getAvailableEnchantSkills(activeChar);
 
 		for(L2EnchantSkillLearn s : skills)
 		{
@@ -92,9 +92,9 @@ public final class RequestExEnchantSkillInfo extends L2GameClientPacket
 		if(!canteach)
 			return; // cheater
 
-		int requiredSp = SkillTreeTable.getInstance().getSkillSpCost(activeChar, skill);
-		int requiredExp = SkillTreeTable.getInstance().getSkillExpCost(activeChar, skill);
-		byte rate = SkillTreeTable.getInstance().getSkillRate(activeChar, skill);
+		int requiredSp = SkillTreeData.getInstance().getSkillSpCost(activeChar, skill);
+		int requiredExp = SkillTreeData.getInstance().getSkillExpCost(activeChar, skill);
+		byte rate = SkillTreeData.getInstance().getSkillRate(activeChar, skill);
 		ExEnchantSkillInfo asi = new ExEnchantSkillInfo(skill.getId(), skill.getLevel(), requiredSp, requiredExp, rate);
 
 		if(Config.ES_SP_BOOK_NEEDED && (skill.getLevel() == 101 || skill.getLevel() == 141)) // only first lvl requires book

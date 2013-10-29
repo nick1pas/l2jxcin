@@ -27,9 +27,9 @@ import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.LevelUpData;
 import net.xcine.gameserver.datatables.sql.NpcTable;
-import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
+import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.model.L2World;
@@ -50,7 +50,7 @@ public interface EngineInterface
 
 	public RecipeController recipeController = RecipeController.getInstance();
 
-	public SkillTreeTable skillTreeTable = SkillTreeTable.getInstance();
+	public SkillTreeData skillTreeTable = SkillTreeData.getInstance();
 	public CharTemplateData charTemplates = CharTemplateData.getInstance();
 	public ClanTable clanTable = ClanTable.getInstance();
 

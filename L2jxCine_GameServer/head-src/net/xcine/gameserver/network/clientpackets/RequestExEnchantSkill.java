@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
+import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.model.L2EnchantSkillLearn;
 import net.xcine.gameserver.model.L2ShortCut;
 import net.xcine.gameserver.model.L2Skill;
@@ -92,7 +92,7 @@ public final class RequestExEnchantSkill extends L2GameClientPacket
 		byte _rate = 0;
 		int _baseLvl = 1;
 
-		L2EnchantSkillLearn[] skills = SkillTreeTable.getInstance().getAvailableEnchantSkills(player);
+		L2EnchantSkillLearn[] skills = SkillTreeData.getInstance().getAvailableEnchantSkills(player);
 
 		for(L2EnchantSkillLearn s : skills)
 		{

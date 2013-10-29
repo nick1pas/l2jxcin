@@ -24,7 +24,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import javolution.util.FastList;
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.model.FishData;
 
 import org.w3c.dom.Document;
@@ -34,7 +33,7 @@ import org.xml.sax.SAXException;
 
 public class FishTable
 {
-	private static final Logger _log = Logger.getLogger(SkillTreeTable.class.getName());
+	private static final Logger _log = Logger.getLogger(SkillTreeData.class.getName());
 
 	static class instance
 	{

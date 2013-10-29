@@ -24,9 +24,9 @@ import net.xcine.gameserver.GameServer;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.sql.CharNameTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
-import net.xcine.gameserver.datatables.sql.SkillTreeTable;
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
+import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.managers.QuestManager;
 import net.xcine.gameserver.model.L2ShortCut;
@@ -247,7 +247,7 @@ public final class CharacterCreate extends L2GameClientPacket
 					newChar.getInventory().equipItemAndRecord(item);
 		}
 
-		L2SkillLearn[] startSkills = SkillTreeTable.getInstance().getAvailableSkills(newChar, newChar.getClassId());
+		L2SkillLearn[] startSkills = SkillTreeData.getInstance().getAvailableSkills(newChar, newChar.getClassId());
 
 		for(L2SkillLearn startSkill : startSkills)
 		{

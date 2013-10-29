@@ -21,7 +21,7 @@ import javolution.text.TextBuilder;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.sql.SkillTreeTable;
+import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.model.L2EnchantSkillLearn;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2SkillLearn;
@@ -112,7 +112,7 @@ public class L2FolkInstance extends L2NpcInstance
 			return;
 		}
 		
-		L2SkillLearn[] skills = SkillTreeTable.getInstance().getAvailableSkills(player, classId);
+		L2SkillLearn[] skills = SkillTreeData.getInstance().getAvailableSkills(player, classId);
 		AquireSkillList asl = new AquireSkillList(AquireSkillList.skillType.Usual);
 		int counts = 0;
 		
@@ -125,7 +125,7 @@ public class L2FolkInstance extends L2NpcInstance
 				continue;
 			}
 			
-			int cost = SkillTreeTable.getInstance().getSkillCost(player, sk);
+			int cost = SkillTreeData.getInstance().getSkillCost(player, sk);
 			counts++;
 			
 			asl.addSkill(s.getId(), s.getLevel(), s.getLevel(), cost, 0);
@@ -133,7 +133,7 @@ public class L2FolkInstance extends L2NpcInstance
 		
 		if (counts == 0)
 		{
-			int minlevel = SkillTreeTable.getInstance().getMinLevelForNewSkill(player, classId);
+			int minlevel = SkillTreeData.getInstance().getMinLevelForNewSkill(player, classId);
 			
 			if (minlevel > 0)
 			{
@@ -220,7 +220,7 @@ public class L2FolkInstance extends L2NpcInstance
 			return;
 		}
 		
-		L2EnchantSkillLearn[] skills = SkillTreeTable.getInstance().getAvailableEnchantSkills(player);
+		L2EnchantSkillLearn[] skills = SkillTreeData.getInstance().getAvailableEnchantSkills(player);
 		ExEnchantSkillList esl = new ExEnchantSkillList();
 		int counts = 0;
 		
@@ -322,7 +322,7 @@ public class L2FolkInstance extends L2NpcInstance
 									continue;
 								}
 								
-								if (SkillTreeTable.getInstance().getAvailableSkills(player, cid).length == 0)
+								if (SkillTreeData.getInstance().getAvailableSkills(player, cid).length == 0)
 								{
 									continue;
 								}

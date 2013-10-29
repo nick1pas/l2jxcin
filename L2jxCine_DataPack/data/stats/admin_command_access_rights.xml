@@ -1,10 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-	<!-- Admin: Events -->
-	<adm_cmd adminCommand="admin_event" accessLevel="2"/>
-	<adm_cmd adminCommand="admin_start" accessLevel="2"/>
-	<adm_cmd adminCommand="admin_abort" accessLevel="2"/>
-
 	<!-- Admin: Buffs -->
 	<adm_cmd adminCommand="admin_getbuffs" accessLevel="3"/>
 	<adm_cmd adminCommand="admin_stopbuff" accessLevel="3"/>

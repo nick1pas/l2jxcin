@@ -61,10 +61,10 @@ import net.xcine.gameserver.datatables.HeroSkillTable;
 import net.xcine.gameserver.datatables.NobleSkillTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
-import net.xcine.gameserver.datatables.sql.AccessLevels;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
+import net.xcine.gameserver.datatables.xml.AccessLevelsData;
 import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
@@ -9776,28 +9776,28 @@ private int _reviveRequested = 0;
 		if(level == Config.MASTERACCESS_LEVEL)
 		{						
 			_log.warning("Admin Login at "+ fmt.format(new Date(System.currentTimeMillis())) +" " + getName() + " logs in game with AccessLevel "+ level +".");
-			_accessLevel = AccessLevels.getInstance()._masterAccessLevel;
+			_accessLevel = AccessLevelsData.getInstance()._masterAccessLevel;
 		}
 		else if(level == Config.USERACCESS_LEVEL)
 		{
-			_accessLevel = AccessLevels.getInstance()._userAccessLevel;
+			_accessLevel = AccessLevelsData.getInstance()._userAccessLevel;
 		}
 		else
 		{   if(level > 0){ 
 			_log.warning("GM Login at "+ fmt.format(new Date(System.currentTimeMillis())) +" " + getName() + " logs in game with AccessLevel "+ level +".");}
-			AccessLevel accessLevel = AccessLevels.getInstance().getAccessLevel(level);
+			AccessLevel accessLevel = AccessLevelsData.getInstance().getAccessLevel(level);
 
 			if(accessLevel == null)
 			{
 				if(level < 0)
 				{
-					AccessLevels.getInstance().addBanAccessLevel(level);
-					_accessLevel = AccessLevels.getInstance().getAccessLevel(level);
+					AccessLevelsData.getInstance().addBanAccessLevel(level);
+					_accessLevel = AccessLevelsData.getInstance().getAccessLevel(level);
 				}
 				else
 				{
 					_log.warning("Tried to set unregistered access level " + level + " to character " + getName() + ". Setting access level without privileges!");
-					_accessLevel = AccessLevels.getInstance()._userAccessLevel;
+					_accessLevel = AccessLevelsData.getInstance()._userAccessLevel;
 				}
 			}
 			else
@@ -9808,7 +9808,7 @@ private int _reviveRequested = 0;
 			accessLevel = null;
 		}
 
-		if(_accessLevel != AccessLevels.getInstance()._userAccessLevel)
+		if(_accessLevel != AccessLevelsData.getInstance()._userAccessLevel)
 		{
 			//L2EMU_EDIT
 			if(getAccessLevel().useNameColor())
@@ -9843,7 +9843,7 @@ private int _reviveRequested = 0;
 	public AccessLevel getAccessLevel()
 	{
 		if(Config.EVERYBODY_HAS_ADMIN_RIGHTS)
-			return AccessLevels.getInstance()._masterAccessLevel;
+			return AccessLevelsData.getInstance()._masterAccessLevel;
 		else if(_accessLevel == null)
 		{
 			setAccessLevel(Config.USERACCESS_LEVEL);

@@ -26,7 +26,7 @@ import java.util.concurrent.Future;
 
 import net.xcine.Config;
 import net.xcine.gameserver.controllers.GameTimeController;
-import net.xcine.gameserver.datatables.sql.TerritoryTable;
+import net.xcine.gameserver.datatables.xml.TerritoryData;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.managers.DimensionalRiftManager;
 import net.xcine.gameserver.model.L2Attackable;
@@ -529,11 +529,11 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			if(npc.getSpawn().getLocx() == 0 && npc.getSpawn().getLocy() == 0)
 			{
 				// If NPC with random fixed coord, don't move
-				if(TerritoryTable.getInstance().getProcMax(npc.getSpawn().getLocation()) > 0)
+				if(TerritoryData.getInstance().getProcMax(npc.getSpawn().getLocation()) > 0)
 					return;
 
 				// Calculate a destination point in the spawn area
-				int p[] = TerritoryTable.getInstance().getRandomPoint(npc.getSpawn().getLocation());
+				int p[] = TerritoryData.getInstance().getRandomPoint(npc.getSpawn().getLocation());
 				x1 = p[0];
 				y1 = p[1];
 				z1 = p[2];

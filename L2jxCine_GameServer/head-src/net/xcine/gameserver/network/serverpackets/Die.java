@@ -19,7 +19,7 @@
 package net.xcine.gameserver.network.serverpackets;
 
 import net.xcine.gameserver.datatables.AccessLevel;
-import net.xcine.gameserver.datatables.sql.AccessLevels;
+import net.xcine.gameserver.datatables.xml.AccessLevelsData;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.FortManager;
 import net.xcine.gameserver.model.L2Attackable;
@@ -45,7 +45,7 @@ public class Die extends L2GameServerPacket
 	private boolean _fake;
 	private boolean _sweepable;
 	private boolean _canTeleport;
-	private AccessLevel _access = AccessLevels.getInstance()._userAccessLevel;
+	private AccessLevel _access = AccessLevelsData.getInstance()._userAccessLevel;
 	private net.xcine.gameserver.model.L2Clan _clan;
 	L2Character _activeChar;
 

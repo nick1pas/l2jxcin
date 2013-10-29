@@ -20,7 +20,7 @@ package net.xcine.gameserver.model.spawn;
 import java.lang.reflect.Constructor;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.sql.TerritoryTable;
+import net.xcine.gameserver.datatables.xml.TerritoryData;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.templates.L2NpcTemplate;
@@ -70,7 +70,7 @@ public class L2GroupSpawn extends L2Spawn
 				if(getLocation() == 0)
 					return null;
 
-				int p[] = TerritoryTable.getInstance().getRandomPoint(getLocation());
+				int p[] = TerritoryData.getInstance().getRandomPoint(getLocation());
 				newlocx = p[0];
 				newlocy = p[1];
 				newlocz = p[2];

@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import javolution.util.FastList;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.sql.TerritoryTable;
+import net.xcine.gameserver.datatables.xml.TerritoryData;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.model.L2Attackable;
@@ -587,7 +587,7 @@ public class L2Spawn
 				return mob;
 
 			// Calculate the random position in the location area
-			int p[] = TerritoryTable.getInstance().getRandomPoint(getLocation());
+			int p[] = TerritoryData.getInstance().getRandomPoint(getLocation());
 
 			// Set the calculated position of the L2NpcInstance
 			newlocx = p[0];

@@ -10,7 +10,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.datatables.sql;
+package net.xcine.gameserver.datatables.xml;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,13 +30,13 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class AccessLevels
+public class AccessLevelsData
 {
-	private final static Logger _log = Logger.getLogger(AccessLevels.class.getName());
+	private final static Logger _log = Logger.getLogger(AccessLevelsData.class.getName());
 
 	public static final int _masterAccessLevelNum = Config.MASTERACCESS_LEVEL;
 	
-	private static AccessLevels _instance = null;
+	private static AccessLevelsData _instance = null;
 	
 	public static final int _userAccessLevelNum = 0;
 	public static AccessLevel _masterAccessLevel = new AccessLevel(_masterAccessLevelNum, "Master Access", Config.MASTERACCESS_NAME_COLOR, Config.MASTERACCESS_TITLE_COLOR, true, true, true, true, true, true, true, true, true, true, true);
@@ -44,7 +44,7 @@ public class AccessLevels
 
 	private FastMap<Integer, AccessLevel> _accessLevels = new FastMap<>();
 
-	private AccessLevels()
+	private AccessLevelsData()
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setValidating(false);
@@ -166,9 +166,9 @@ public class AccessLevels
 		_log.info("AccessLevels: Loaded " + _accessLevels.size() + " access from database.");
 	}
 
-	public static AccessLevels getInstance()
+	public static AccessLevelsData getInstance()
 	{
-		return _instance == null ? (_instance = new AccessLevels()) : _instance;
+		return _instance == null ? (_instance = new AccessLevelsData()) : _instance;
 	}
 
 	public AccessLevel getAccessLevel(int accessLevelNum)

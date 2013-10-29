@@ -10,7 +10,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.datatables.sql;
+package net.xcine.gameserver.datatables.xml;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,19 +32,19 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class TerritoryTable
+public class TerritoryData
 {
 	private static final Logger _log = Logger.getLogger(TradeController.class.getName());
 
-	private static final TerritoryTable _instance = new TerritoryTable();
+	private static final TerritoryData _instance = new TerritoryData();
 	private static Map<String, L2Territory> _territory;
 
-	public static TerritoryTable getInstance()
+	public static TerritoryData getInstance()
 	{
 		return _instance;
 	}
 
-	private TerritoryTable()
+	private TerritoryData()
 	{
 		_territory = new HashMap<>();
 		// load all data at server start

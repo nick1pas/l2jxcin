@@ -18,8 +18,8 @@
 package net.xcine.gameserver.managers;
 
 import net.xcine.gameserver.datatables.GmListTable;
-import net.xcine.gameserver.datatables.sql.AccessLevels;
 import net.xcine.gameserver.datatables.sql.ClanTable;
+import net.xcine.gameserver.datatables.xml.AccessLevelsData;
 import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
 import net.xcine.gameserver.datatables.xml.AugmentationData;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
@@ -29,7 +29,7 @@ public class DatatablesManager
 {
 	public static void reloadAll()
 	{
-		AccessLevels.getInstance();
+		AccessLevelsData.getInstance();
 		AdminCommandAccessRightsData.getInstance();
 		GmListTable.reload();
 		AugmentationData.reload();

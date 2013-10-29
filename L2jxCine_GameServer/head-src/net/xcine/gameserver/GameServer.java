@@ -46,7 +46,6 @@ import net.xcine.gameserver.datatables.OfflineTradeTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.ExtractableItemsData;
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
-import net.xcine.gameserver.datatables.sql.AccessLevels;
 import net.xcine.gameserver.datatables.sql.ArmorSetsTable;
 import net.xcine.gameserver.datatables.sql.CharNameTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
@@ -56,7 +55,7 @@ import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.LevelUpData;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
-import net.xcine.gameserver.datatables.sql.TerritoryTable;
+import net.xcine.gameserver.datatables.xml.AccessLevelsData;
 import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
 import net.xcine.gameserver.datatables.xml.AugmentationData;
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
@@ -73,6 +72,7 @@ import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.datatables.xml.StaticObjectsData;
 import net.xcine.gameserver.datatables.xml.SummonItemsData;
 import net.xcine.gameserver.datatables.xml.TeleportLocationData;
+import net.xcine.gameserver.datatables.xml.TerritoryData;
 import net.xcine.gameserver.datatables.xml.ZoneData;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.geo.geoeditorcon.GeoEditorListener;
@@ -222,7 +222,7 @@ public class GameServer
 		MapRegionTable.getInstance();
 		Announcements.getInstance();
 		AutoAnnouncementHandler.getInstance();
-		TerritoryTable.getInstance();
+		TerritoryData.getInstance();
 		
         if (!IdFactory.getInstance().isInitialized())
         {
@@ -401,7 +401,7 @@ public class GameServer
 		Hero.getInstance();
 		
 		Util.printSection("Access Levels");
-		AccessLevels.getInstance();
+		AccessLevelsData.getInstance();
 		AdminCommandAccessRightsData.getInstance();
 		GmListTable.getInstance();
 		

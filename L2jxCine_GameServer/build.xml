@@ -77,19 +77,6 @@
 
 	<target name="export" depends="jar">
 
-		<!-- copy todir="${build.dist.login}">
-			<fileset dir="config/others">
-				<include name="log.cfg" />
-				<include name="servername.xml" />
-			</fileset>
-		</copy>
-
-		<copy todir="${build.dist.game}">
-			<fileset dir="config/others">
-				<include name="log.cfg" />
-			</fileset>
-		</copy -->
-
 		<copy todir="${build.dist.game.lib}">
 			<fileset dir="${src-lib}">
 				<include name="*.jar" />
@@ -109,6 +96,8 @@
 				<include name="startLoginServer.*" />
 				<include name="anti_ddos.*" />
 				<include name="RegisterGameServer.*" />
+				<include name="servername.*" />
+				<include name="log.*" />
 			</fileset>
 		</copy>
 		<copy todir="${build.dist.game}">
@@ -134,8 +123,12 @@
 		
 		<mkdir dir="${build.dist.login}/config" />
 
+		<mkdir dir="${build.dist.login}/config/protected" />
+		
 		<mkdir dir="${build.dist.game}/config/others" />
 
+		<mkdir dir="${build.dist.game}/config/protected" />
+		
 		<!-- game server -->
 		<copy todir="${build.dist.game}/config">
 			<fileset dir="config">
@@ -166,13 +159,18 @@
 					</fileset>
 		</copy>
 		
-		<!-- copy todir="${build.dist.game}/">
-			<fileset dir="config/others">
-				<include name="*.*" />
-			</fileset>
-		</copy -->
-
-
+		<copy todir="${build.dist.login}/config/protected">
+					<fileset dir="config/protected">
+						<include name="*.*" />
+					</fileset>
+		</copy>
+		
+		<copy todir="${build.dist.game}/config/protected">
+					<fileset dir="config/protected">
+						<include name="*.*" />
+					</fileset>
+		</copy>
+	
 		<!-- login server -->
 		<copy todir="${build.dist.login}/config">
 			<fileset dir="config">
@@ -180,17 +178,8 @@
 				<include name="LoginServer.properties" />
 				<include name="Security.properties" />
 			</fileset>
-			<!-- fileset dir="config/others">
-				<include name="banned_ip.cfg" />
-			</fileset -->
 		</copy>
-
-		<copy todir="${build.dist.login}/config/others">
-		<fileset dir="config/others">
-				<include name="*.*" />
-		</fileset>
-		</copy>
-
+		
 		<delete dir="${build.classes}" />
 		<delete file="${build}/L2jxCine-core.jar" />
 

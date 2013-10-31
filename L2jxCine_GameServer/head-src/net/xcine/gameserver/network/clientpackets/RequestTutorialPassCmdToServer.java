@@ -3,12 +3,12 @@
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,7 +19,9 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class RequestTutorialPassCmdToServer extends L2GameClientPacket
 {
-	private String _bypass = null;
+	private static final String _C__7C_REQUESTTUTORIALPASSCMDTOSERVER = "[C] 7c RequestTutorialPassCmdToServer";
+
+	String _bypass = null;
 
 	@Override
 	protected void readImpl()
@@ -35,7 +37,7 @@ public class RequestTutorialPassCmdToServer extends L2GameClientPacket
 		if(player == null)
 			return;
 
-		QuestState qs = player.getQuestState("255_Tutorial");
+		QuestState qs = player.getQuestState("Q255_Tutorial");
 		if(qs != null)
 		{
 			qs.getQuest().notifyEvent(_bypass, null, player);
@@ -45,6 +47,6 @@ public class RequestTutorialPassCmdToServer extends L2GameClientPacket
 	@Override
 	public String getType()
 	{
-		return "[C] 7c RequestTutorialPassCmdToServer";
+		return _C__7C_REQUESTTUTORIALPASSCMDTOSERVER;
 	}
 }

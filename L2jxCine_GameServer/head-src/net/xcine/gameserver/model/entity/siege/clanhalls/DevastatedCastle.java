@@ -34,12 +34,11 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.model.L2Clan;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.entity.ClanHall;
@@ -69,8 +68,8 @@ public class DevastatedCastle
 	private ScheduledFuture<?> _mikhail;
 	private ScheduledFuture<?> _monsterdespawn;
 
-	private L2NpcInstance _minion1 = null;
-	private L2NpcInstance _minion2 = null;
+	private L2Npc _minion1 = null;
+	private L2Npc _minion2 = null;
 
 	private ArrayList<MonsterLocation> _monsters = new ArrayList<>();
 	private ArrayList<L2Spawn> _spawns = new ArrayList<>();
@@ -219,7 +218,7 @@ public class DevastatedCastle
 		Announce("Siege registration of Devastated castle has begun!");
 		Announce("Now its open for 2 hours!");
 
-		L2NpcInstance result = null;
+		L2Npc result = null;
 		try
 		{
 			L2NpcTemplate template = NpcTable.getInstance().getTemplate(MESSENGER_ID);
@@ -280,7 +279,7 @@ public class DevastatedCastle
 
 	public void Siege()
 	{
-		L2NpcInstance result = null;
+		L2Npc result = null;
 		L2NpcTemplate template = null;
 		L2Spawn spawn = null;
 
@@ -779,9 +778,9 @@ public class DevastatedCastle
 
 	protected class DeSpawnTimer implements Runnable
 	{
-		L2NpcInstance _npc = null;
+		L2Npc _npc = null;
 
-		public DeSpawnTimer(L2NpcInstance npc)
+		public DeSpawnTimer(L2Npc npc)
 		{
 			_npc = npc;
 		}

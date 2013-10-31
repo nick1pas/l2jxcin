@@ -72,7 +72,8 @@ public class Hero
 	public static final String CLAN_CREST = "clan_crest";
 	public static final String ALLY_NAME = "ally_name";
 	public static final String ALLY_CREST = "ally_crest";
-
+	public static final String ACTIVE = "active";
+	
 	public static Hero getInstance()
 	{
 		if (_instance == null)
@@ -486,7 +487,19 @@ public class Hero
 	{
 		return _heroItems;
 	}
-
+	
+	public boolean isInactiveHero(int id)
+	{
+		if(_heroes == null || _heroes.isEmpty())
+		{
+			return false;
+		}
+		if(_heroes.containsKey(id) && _heroes.get(id).getInteger(ACTIVE) == 0)
+		{
+			return true;
+		}
+		return false;
+	}
 	private void deleteItemsInDb()
 	{
 		Connection con = null;

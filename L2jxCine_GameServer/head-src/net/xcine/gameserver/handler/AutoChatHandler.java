@@ -29,10 +29,9 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.model.L2Character;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2SiegeGuardInstance;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSigns;
@@ -167,12 +166,12 @@ public class AutoChatHandler implements SpawnListener
 	 * @param chatDelay (-1 = default delay)
 	 * @return AutoChatInstance chatInst
 	 */
-	public AutoChatInstance registerChat(L2NpcInstance npcInst, String[] chatTexts, long chatDelay)
+	public AutoChatInstance registerChat(L2Npc npcInst, String[] chatTexts, long chatDelay)
 	{
 		return registerChat(npcInst.getNpcId(), npcInst, chatTexts, chatDelay);
 	}
 
-	private final AutoChatInstance registerChat(int npcId, L2NpcInstance npcInst, String[] chatTexts, long chatDelay)
+	private final AutoChatInstance registerChat(int npcId, L2Npc npcInst, String[] chatTexts, long chatDelay)
 	{
 		AutoChatInstance chatInst = null;
 
@@ -275,7 +274,7 @@ public class AutoChatHandler implements SpawnListener
 	 * that chat instance.
 	 */
 	@Override
-	public void npcSpawned(L2NpcInstance npc)
+	public void npcSpawned(L2Npc npc)
 	{
 		synchronized (_registeredChats)
 		{
@@ -354,7 +353,7 @@ public class AutoChatHandler implements SpawnListener
 		 * @param npcInst
 		 * @return objectId
 		 */
-		public int addChatDefinition(L2NpcInstance npcInst)
+		public int addChatDefinition(L2Npc npcInst)
 		{
 			return addChatDefinition(npcInst, null, 0);
 		}
@@ -368,7 +367,7 @@ public class AutoChatHandler implements SpawnListener
 		 * @param chatDelay 
 		 * @return objectId
 		 */
-		public int addChatDefinition(L2NpcInstance npcInst, String[] chatTexts, long chatDelay)
+		public int addChatDefinition(L2Npc npcInst, String[] chatTexts, long chatDelay)
 		{
 			int objectId = npcInst.getObjectId();
 
@@ -474,18 +473,18 @@ public class AutoChatHandler implements SpawnListener
 		/**
 		 * Returns a list of all NPC instances handled by this auto chat instance.
 		 * 
-		 * @return L2NpcInstance[] npcInsts
+		 * @return L2Npc[] npcInsts
 		 */
-		public L2NpcInstance[] getNPCInstanceList()
+		public L2Npc[] getNPCInstanceList()
 		{
-			List<L2NpcInstance> npcInsts = new FastList<>();
+			List<L2Npc> npcInsts = new FastList<>();
 
 			for(AutoChatDefinition chatDefinition : _chatDefinitions.values())
 			{
 				npcInsts.add(chatDefinition._npcInstance);
 			}
 
-			return npcInsts.toArray(new L2NpcInstance[npcInsts.size()]);
+			return npcInsts.toArray(new L2Npc[npcInsts.size()]);
 		}
 
 		/**
@@ -613,7 +612,7 @@ public class AutoChatHandler implements SpawnListener
 		private class AutoChatDefinition
 		{
 			protected int _chatIndex = 0;
-			protected L2NpcInstance _npcInstance;
+			protected L2Npc _npcInstance;
 
 			protected AutoChatInstance _chatInstance;
 
@@ -622,7 +621,7 @@ public class AutoChatHandler implements SpawnListener
 			private boolean _isActiveDefinition;
 			private boolean _randomChat;
 
-			protected AutoChatDefinition(AutoChatInstance chatInst, L2NpcInstance npcInst, String[] chatTexts, long chatDelay)
+			protected AutoChatDefinition(AutoChatInstance chatInst, L2Npc npcInst, String[] chatTexts, long chatDelay)
 			{
 				_npcInstance = npcInst;
 
@@ -645,7 +644,7 @@ public class AutoChatHandler implements SpawnListener
 				}
 			}
 
-			/*protected AutoChatDefinition(AutoChatInstance chatInst, L2NpcInstance npcInst)
+			/*protected AutoChatDefinition(AutoChatInstance chatInst, L2Npc npcInst)
 			{
 				this(chatInst, npcInst, null, -1);
 			}*/
@@ -774,7 +773,7 @@ public class AutoChatHandler implements SpawnListener
 				{
 					try
 					{
-						L2NpcInstance chatNpc = chatDef._npcInstance;
+						L2Npc chatNpc = chatDef._npcInstance;
 						List<L2PcInstance> nearbyPlayers = new FastList<>();
 						List<L2PcInstance> nearbyGMs = new FastList<>();
 

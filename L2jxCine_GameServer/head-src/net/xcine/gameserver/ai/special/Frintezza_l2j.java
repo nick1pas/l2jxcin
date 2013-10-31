@@ -17,7 +17,6 @@ package net.xcine.gameserver.ai.special;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
@@ -26,11 +25,11 @@ import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2CommandChannel;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Party;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
 import net.xcine.gameserver.model.actor.instance.L2MonsterInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.zone.type.L2BossZone;
@@ -264,10 +263,10 @@ public class Frintezza_l2j extends Quest implements Runnable
 	@SuppressWarnings("unused")
 	private L2GrandBossInstance frintezza, weakScarlet, strongScarlet, activeScarlet;
 	private L2MonsterInstance demon1, demon2, demon3, demon4, portrait1, portrait2, portrait3, portrait4;
-	private L2NpcInstance _frintezzaDummy, _overheadDummy, _portraitDummy1, _portraitDummy3, _scarletDummy;
+	private L2Npc _frintezzaDummy, _overheadDummy, _portraitDummy1, _portraitDummy3, _scarletDummy;
 	private List<L2PcInstance> _PlayersInside = new FastList<>();
-	private List<L2NpcInstance> _Room1Mobs = new FastList<>();
-	private List<L2NpcInstance> _Room2Mobs = new FastList<>();
+	private List<L2Npc> _Room1Mobs = new FastList<>();
+	private List<L2Npc> _Room2Mobs = new FastList<>();
 	private List<L2Attackable> Minions = new FastList<>();
 	
 	// Boss: Frintezza
@@ -302,7 +301,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAdvEvent (String event, L2NpcInstance npc, L2PcInstance player)
+	public String onAdvEvent (String event, L2Npc npc, L2PcInstance player)
 	{
 		long temp = 0;
 		if (event.equalsIgnoreCase("waiting"))
@@ -315,7 +314,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 		{
 			for (int i = 0; i <= 17; i++)
 			{
-				L2NpcInstance mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
+				L2Npc mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
 				synchronized(_Room1Mobs){
 					_Room1Mobs.add(mob);
 				}
@@ -326,7 +325,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 		{
 			for (int i = 18; i <= 26; i++)
 			{
-				L2NpcInstance mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
+				L2Npc mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
 				synchronized(_Room1Mobs){
 					_Room1Mobs.add(mob);
 				}
@@ -337,7 +336,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 		{
 			for (int i = 27; i <= 32; i++)
 			{
-				L2NpcInstance mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
+				L2Npc mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
 				synchronized(_Room1Mobs){
 					_Room1Mobs.add(mob);
 				}
@@ -348,7 +347,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 		{
 			for (int i = 33; i <= 40; i++)
 			{
-				L2NpcInstance mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
+				L2Npc mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
 				synchronized(_Room1Mobs){
 					_Room1Mobs.add(mob);
 				}
@@ -359,7 +358,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 		{
 			for (int i = 41; i <= 44; i++)
 			{
-				L2NpcInstance mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
+				L2Npc mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
 				synchronized(_Room2Mobs){
 					_Room2Mobs.add(mob);
 				}
@@ -370,7 +369,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 		{
 			for (int i = 45; i <= 131; i++)
 			{
-				L2NpcInstance mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
+				L2Npc mob = addSpawn(_mobLoc[i][0],_mobLoc[i][1],_mobLoc[i][2],_mobLoc[i][3],_mobLoc[i][4],false,0);
 				synchronized(_Room2Mobs){
 					_Room2Mobs.add(mob);
 				}
@@ -380,7 +379,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 		else if (event.equalsIgnoreCase("room1_del"))
 		{
 			synchronized(_Room1Mobs){
-				for (L2NpcInstance mob : _Room1Mobs)
+				for (L2Npc mob : _Room1Mobs)
 				{
 					if (mob != null)
 						mob.deleteMe();
@@ -392,7 +391,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 		else if (event.equalsIgnoreCase("room2_del"))
 		{
 			synchronized(_Room2Mobs){
-				for (L2NpcInstance mob : _Room2Mobs)
+				for (L2Npc mob : _Room2Mobs)
 				{
 					if (mob != null)
 						mob.deleteMe();
@@ -1309,7 +1308,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 		{
 			if (npc != null && !npc.isDead() && frintezza != null && !frintezza.isDead())
 			{
-				L2NpcInstance mob = addSpawn(npc.getNpcId()+2,npc.getX(),npc.getY(),npc.getZ(),npc.getHeading(),false,0);
+				L2Npc mob = addSpawn(npc.getNpcId()+2,npc.getX(),npc.getY(),npc.getZ(),npc.getHeading(),false,0);
 				//mob.setIsRaidMinion(true);
 				synchronized(Minions){
 					Minions.add((L2Attackable)mob);
@@ -1336,7 +1335,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onTalk (L2NpcInstance npc, L2PcInstance player)
+	public String onTalk (L2Npc npc, L2PcInstance player)
 	{
 		if (npc.getNpcId() == CUBE)
 		{
@@ -1529,7 +1528,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAttack (L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack (L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		_LastAction = System.currentTimeMillis();
 		if (npc.getNpcId() == FRINTEZZA)
@@ -1591,7 +1590,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onKill (L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill (L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		Integer status = GrandBossManager.getInstance().getBossStatus(FRINTEZZA);
 		
@@ -1720,7 +1719,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 	 * TODO: Update cords in script, im just lazy :)
 	 */
 	@Override
-	public L2NpcInstance addSpawn(int npcId, int x, int y, int z, int heading, boolean randomOffset, int despawnDelay)
+	public L2Npc addSpawn(int npcId, int x, int y, int z, int heading, boolean randomOffset, int despawnDelay)
 	{
 		// cords fix:
 		return super.addSpawn(npcId, getXFix(x), getYFix(y), getZFix(z), heading, randomOffset, despawnDelay);

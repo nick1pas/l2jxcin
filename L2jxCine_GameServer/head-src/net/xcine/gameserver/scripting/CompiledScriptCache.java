@@ -28,7 +28,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.script.Compilable;
 import javax.script.CompiledScript;
@@ -36,26 +35,15 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import javolution.util.FastMap;
-import net.xcine.Config;
 
-/**
- * Cache of Compiled Scripts
- * 
- * @author KenM
- */
 public class CompiledScriptCache implements Serializable
 {
-	/**
-	 * Version 1
-	 */
 	private static final long serialVersionUID = 1L;
-
-	private static final Logger LOG = Logger.getLogger(CompiledScriptCache.class.getName());
 
 	private Map<String, CompiledScriptHolder> _compiledScriptCache = new FastMap<>();
 	private transient boolean _modified = false;
 
-	public CompiledScript loadCompiledScript(ScriptEngine engine, File file) throws ScriptException
+	public CompiledScript loadCompiledScript(ScriptEngine engine, File file) throws FileNotFoundException, ScriptException
 	{
 		int len = L2ScriptEngineManager.SCRIPT_FOLDER.getPath().length() + 1;
 		String relativeName = file.getPath().substring(len);
@@ -63,77 +51,20 @@ public class CompiledScriptCache implements Serializable
 		CompiledScriptHolder csh = _compiledScriptCache.get(relativeName);
 		if(csh != null && csh.matches(file))
 		{
-			if(Config.DEBUG)
-			{
-				LOG.fine("Reusing cached compiled script: " + file);
-			}
 			return csh.getCompiledScript();
 		}
-		
-		if(Config.DEBUG)
-		{
-			LOG.info("Compiling script: " + file);
-		}
-		
 		Compilable eng = (Compilable) engine;
-		FileInputStream fis = null;
-		
-		BufferedReader buff = null;
-		InputStreamReader isr = null;
-		CompiledScript cs = null;
-		
-		try{
-			
-			fis = new FileInputStream(file);
-			isr = new InputStreamReader(fis);
-			buff = new BufferedReader(isr);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 
-			// TODO lock file
-			cs = eng.compile(buff);
-			if(cs instanceof Serializable)
+		CompiledScript cs = eng.compile(reader);
+		if(cs instanceof Serializable)
+		{
+			synchronized(_compiledScriptCache)
 			{
-				synchronized (_compiledScriptCache)
-				{
-					_compiledScriptCache.put(relativeName, new CompiledScriptHolder(cs, file));
-					_modified = true;
-				}
+				_compiledScriptCache.put(relativeName, new CompiledScriptHolder(cs, file));
+				_modified = true;
 			}
-			
-		}catch(IOException e){
-			
-			e.printStackTrace();
-		
-		}finally{
-			
-			if(buff != null)
-				try
-				{
-					buff.close();
-				}
-				catch(IOException e)
-				{
-					e.printStackTrace();
-				}
-			if(isr != null)
-				try
-				{
-					isr.close();
-				}
-				catch(IOException e)
-				{
-					e.printStackTrace();
-				}
-			if(fis != null)
-				try
-				{
-					fis.close();
-				}
-				catch(IOException e)
-				{
-					e.printStackTrace();
-				}
 		}
-		
 		return cs;
 	}
 
@@ -144,7 +75,7 @@ public class CompiledScriptCache implements Serializable
 
 	public void purge()
 	{
-		synchronized (_compiledScriptCache)
+		synchronized(_compiledScriptCache)
 		{
 			for(String path : _compiledScriptCache.keySet())
 			{
@@ -158,54 +89,15 @@ public class CompiledScriptCache implements Serializable
 		}
 	}
 
-	public void save()
+	@SuppressWarnings("resource")
+	public void save() throws FileNotFoundException, IOException
 	{
-		synchronized (_compiledScriptCache)
+		synchronized(_compiledScriptCache)
 		{
-			File file = null;
-			FileOutputStream out = null;
-			ObjectOutputStream oos = null;
-			
-			try
-			{
-				file = new File(L2ScriptEngineManager.SCRIPT_FOLDER, "CompiledScripts.cache");
-				out = new FileOutputStream(file);
-				oos = new ObjectOutputStream(out);
-				oos.writeObject(this);
-				_modified = false;
-			}
-			catch(FileNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			
-			}finally{
-				
-				if(oos != null)
-					try
-					{
-						oos.close();
-					}
-					catch(IOException e)
-					{
-						e.printStackTrace();
-					}
-				
-				if(out != null)
-					try
-					{
-						out.close();
-					}
-					catch(IOException e)
-					{
-						e.printStackTrace();
-					}
-				
-			}
-			
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(L2ScriptEngineManager.SCRIPT_FOLDER, "CompiledScripts.dat")));
+			oos.writeObject(this);
+			_modified = false;
 		}
 	}
+
 }

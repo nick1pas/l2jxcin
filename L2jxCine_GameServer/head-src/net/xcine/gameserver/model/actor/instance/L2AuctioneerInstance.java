@@ -28,7 +28,7 @@ import javolution.util.FastMap;
 
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
-import net.xcine.gameserver.datatables.csv.MapRegionTable;
+import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.managers.AuctionManager;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.model.L2Clan;
@@ -40,7 +40,7 @@ import net.xcine.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.xcine.gameserver.network.serverpackets.ValidateLocation;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 
-public final class L2AuctioneerInstance extends L2FolkInstance
+public final class L2AuctioneerInstance extends L2NpcInstance
 {
 	private static final int COND_ALL_FALSE = 0;
 	private static final int COND_BUSY_BECAUSE_OF_SIEGE = 1;
@@ -687,7 +687,7 @@ public final class L2AuctioneerInstance extends L2FolkInstance
 			{
 				NpcHtmlMessage html = new NpcHtmlMessage(1);
 				html.setFile("data/html/auction/location.htm");
-				html.replace("%location%", MapRegionTable.getInstance().getClosestTownName(player));
+				html.replace("%location%", MapRegionData.getInstance().getClosestTownName(player));
 				html.replace("%LOCATION%", getPictureName(player));
 				html.replace("%AGIT_LINK_BACK%", "bypass -h npc_" + getObjectId() + "_start");
 				player.sendPacket(html);
@@ -744,7 +744,7 @@ public final class L2AuctioneerInstance extends L2FolkInstance
 
 	private String getPictureName(L2PcInstance plyr)
 	{
-		int nearestTownId = MapRegionTable.getInstance().getMapRegion(plyr.getX(), plyr.getY());
+		int nearestTownId = MapRegionData.getInstance().getMapRegion(plyr.getX(), plyr.getY());
 		String nearestTown;
 
 		switch(nearestTownId)

@@ -16,7 +16,7 @@ package net.xcine.gameserver.skills.effects;
 
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.model.L2Effect;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.actor.instance.L2SiegeSummonInstance;
 import net.xcine.gameserver.network.serverpackets.MyTargetSelected;
 import net.xcine.gameserver.skills.Env;
@@ -46,7 +46,7 @@ public class EffectTargetMe extends L2Effect
 	@Override
 	public void onStart()
 	{
-		if(getEffected() instanceof L2PlayableInstance)
+		if(getEffected() instanceof L2Playable)
 		{
 			if(getEffected() instanceof L2SiegeSummonInstance)
 				return;

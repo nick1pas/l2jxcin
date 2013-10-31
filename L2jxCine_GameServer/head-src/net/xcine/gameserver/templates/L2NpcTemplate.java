@@ -24,11 +24,11 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.gameserver.ai.special.manager.AIExtend;
 import net.xcine.gameserver.model.L2DropCategory;
 import net.xcine.gameserver.model.L2DropData;
 import net.xcine.gameserver.model.L2MinionData;
+import net.xcine.gameserver.model.L2NpcAIData;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.base.ClassId;
 import net.xcine.gameserver.model.quest.Quest;
@@ -72,7 +72,8 @@ public final class L2NpcTemplate extends L2CharTemplate
 	public Race race;
 	
 	private boolean _custom;
-
+	private L2NpcAIData _AIdataStatic = new L2NpcAIData();
+	
 	public static enum AbsorbCrystalType
 	{
 		LAST_HIT,
@@ -540,6 +541,16 @@ public final class L2NpcTemplate extends L2CharTemplate
 	
 	public final boolean isCustom(){
 		return _custom;
+	}
+
+	public void setAIData(L2NpcAIData aidata)
+	{
+		_AIdataStatic = aidata;
+	}
+	
+	public L2NpcAIData getAIDataStatic()
+	{
+		return _AIdataStatic;
 	}
 
 }

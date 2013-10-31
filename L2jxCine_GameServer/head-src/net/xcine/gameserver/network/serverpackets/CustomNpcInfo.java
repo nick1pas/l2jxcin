@@ -15,18 +15,18 @@
 package net.xcine.gameserver.network.serverpackets;
 
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
+import net.xcine.gameserver.model.L2Npc;
 
 public class CustomNpcInfo extends L2GameServerPacket
 {
 
 	private static final String _S__03_CUSTOMNPCINFO = "[S] 03 CustomNpcInfo [dddddsddd dddddddddddd dddddddd hhhh d hhhhhhhhhhhh d hhhh hhhhhhhhhhhhhhhh dddddd dddddddd ffff ddd s ddddd ccccccc h c d c h ddd cc d ccc ddddddddddd]";
-	private L2NpcInstance _activeChar;
+	private L2Npc _activeChar;
 
 	/**
 	 * @param cha 
 	 */
-	public CustomNpcInfo(L2NpcInstance cha)
+	public CustomNpcInfo(L2Npc cha)
 	{
 		_activeChar = cha;
 		_activeChar.setClientX(_activeChar.getPosition().getX());

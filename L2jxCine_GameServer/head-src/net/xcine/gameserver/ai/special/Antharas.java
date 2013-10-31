@@ -32,11 +32,11 @@ import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Character;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
 import net.xcine.gameserver.model.actor.instance.L2MonsterInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.position.L2CharPosition;
 import net.xcine.gameserver.model.quest.Quest;
@@ -81,13 +81,13 @@ public class Antharas extends Quest implements Runnable
 	private final int _teleportCubeLocation[][] = { { 177615, 114941, -7709, 0 } };
 	
 	protected List<L2Spawn> _teleportCubeSpawn = new FastList<>();
-	protected List<L2NpcInstance> _teleportCube = new FastList<>();
+	protected List<L2Npc> _teleportCube = new FastList<>();
 	
 	// Spawn data of monsters.
 	protected HashMap<Integer, L2Spawn> _monsterSpawn = new HashMap<>();
 	
 	// Instance of monsters.
-	protected List<L2NpcInstance> _monsters = new FastList<>();
+	protected List<L2Npc> _monsters = new FastList<>();
 	protected L2GrandBossInstance _antharas = null;
 	
 	// monstersId
@@ -602,7 +602,7 @@ public class Antharas extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAggroRangeEnter (L2NpcInstance npc, L2PcInstance player, boolean isPet)
+	public String onAggroRangeEnter (L2Npc npc, L2PcInstance player, boolean isPet)
 	{
 		switch (npc.getNpcId())
 		{
@@ -623,9 +623,9 @@ public class Antharas extends Quest implements Runnable
 	// Do self destruction.
 	private class SelfDestructionOfBomber implements Runnable
 	{
-		private L2NpcInstance _bomber;
+		private L2Npc _bomber;
 		
-		public SelfDestructionOfBomber(L2NpcInstance bomber)
+		public SelfDestructionOfBomber(L2Npc bomber)
 		{
 			_bomber = bomber;
 		}
@@ -660,7 +660,7 @@ public class Antharas extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onSpellFinished(L2NpcInstance npc, L2PcInstance player, L2Skill skill)
+	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
 	{
 		if (npc.isInvul())
 		{
@@ -748,7 +748,7 @@ public class Antharas extends Quest implements Runnable
 		}
 		
 		// Delete monsters.
-		for (L2NpcInstance mob : _monsters)
+		for (L2Npc mob : _monsters)
 		{
 			mob.getSpawn().stopRespawn();
 			mob.deleteMe();
@@ -756,7 +756,7 @@ public class Antharas extends Quest implements Runnable
 		_monsters.clear();
 		
 		// Delete teleport cube.
-		for (L2NpcInstance cube : _teleportCube)
+		for (L2Npc cube : _teleportCube)
 		{
 			cube.getSpawn().stopRespawn();
 			cube.deleteMe();
@@ -834,10 +834,10 @@ public class Antharas extends Quest implements Runnable
 	// Move at random on after Antharas appears.
 	private static class MoveAtRandom implements Runnable
 	{
-		private L2NpcInstance _npc;
+		private L2Npc _npc;
 		private L2CharPosition _pos;
 		
-		public MoveAtRandom(L2NpcInstance npc, L2CharPosition pos)
+		public MoveAtRandom(L2Npc npc, L2CharPosition pos)
 		{
 			_npc = npc;
 			_pos = pos;
@@ -851,7 +851,7 @@ public class Antharas extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAttack (L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack (L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		
 		if (npc.getSpawn()!=null && !npc.getSpawn().is_customBossInstance() && npc.getNpcId() == 29019 || npc.getNpcId() == 29066 || npc.getNpcId() == 29067 || npc.getNpcId() == 29068)
@@ -890,7 +890,7 @@ public class Antharas extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onKill (L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill (L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		if (npc.getNpcId() == 29019 || npc.getNpcId() == 29066 || npc.getNpcId() == 29067 || npc.getNpcId() == 29068)
 		{

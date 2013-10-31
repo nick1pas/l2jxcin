@@ -20,7 +20,7 @@ import javolution.util.FastSet;
 
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.model.L2Attackable;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.CreatureSay;
@@ -112,7 +112,7 @@ public class SummonMinions extends Quest implements Runnable
 	}
 
 	@Override
-	public String onAttack(L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		int npcObjId = npc.getObjectId();
@@ -232,7 +232,7 @@ public class SummonMinions extends Quest implements Runnable
 	}
 
 	@Override
-	public String onKill(L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		int npcObjId = npc.getObjectId();

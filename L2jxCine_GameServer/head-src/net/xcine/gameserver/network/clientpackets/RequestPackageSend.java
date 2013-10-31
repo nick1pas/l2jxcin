@@ -21,12 +21,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.model.ItemContainer;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.PcFreight;
-import net.xcine.gameserver.model.actor.instance.L2FolkInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -109,9 +108,9 @@ public final class RequestPackageSend extends L2GameClientPacket
 		if(warehouse == null)
 			return;
 
-		L2FolkInstance manager = player.getLastFolkNPC();
+		L2NpcInstance manager = player.getLastFolkNPC();
 
-		if((manager == null || !player.isInsideRadius(manager, L2NpcInstance.INTERACTION_DISTANCE, false, false)) && !player.isGM())
+		if((manager == null || !player.isInsideRadius(manager, L2Npc.INTERACTION_DISTANCE, false, false)) && !player.isGM())
 			return;
 
 		if(warehouse instanceof PcFreight && !player.getAccessLevel().allowTransaction())

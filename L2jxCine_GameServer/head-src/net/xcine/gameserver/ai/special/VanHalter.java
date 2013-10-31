@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
@@ -37,9 +36,9 @@ import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Effect;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2RaidBossInstance;
 import net.xcine.gameserver.model.actor.position.L2CharPosition;
@@ -82,17 +81,17 @@ public class VanHalter extends Quest implements Runnable
 	protected L2Spawn _vanHalterSpawn = null;
 
 	// Instance of monsters.
-	protected List<L2NpcInstance> _monsters = new FastList<>();
-	protected List<L2NpcInstance> _royalGuard = new FastList<>();
-	protected List<L2NpcInstance> _royalGuardCaptain = new FastList<>();
-	protected List<L2NpcInstance> _royalGuardHepler = new FastList<>();
-	protected List<L2NpcInstance> _triolRevelation = new FastList<>();
-	protected List<L2NpcInstance> _guardOfAltar = new FastList<>();
-	protected Map<Integer, L2NpcInstance> _cameraMarker = new FastMap<>();
+	protected List<L2Npc> _monsters = new FastList<>();
+	protected List<L2Npc> _royalGuard = new FastList<>();
+	protected List<L2Npc> _royalGuardCaptain = new FastList<>();
+	protected List<L2Npc> _royalGuardHepler = new FastList<>();
+	protected List<L2Npc> _triolRevelation = new FastList<>();
+	protected List<L2Npc> _guardOfAltar = new FastList<>();
+	protected Map<Integer, L2Npc> _cameraMarker = new FastMap<>();
 	protected List<L2DoorInstance> _doorOfAltar = new FastList<>();
 	protected List<L2DoorInstance> _doorOfSacrifice = new FastList<>();
-	protected L2NpcInstance _ritualOffering = null;
-	protected L2NpcInstance _ritualSacrifice = null;
+	protected L2Npc _ritualOffering = null;
+	protected L2Npc _ritualSacrifice = null;
 	protected L2RaidBossInstance _vanHalter = null;
 
 	// Task
@@ -257,7 +256,7 @@ public class VanHalter extends Quest implements Runnable
 	}
 
 	@Override
-	public String onAttack(L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		if(npc.getNpcId() == 29062)
 		{
@@ -270,7 +269,7 @@ public class VanHalter extends Quest implements Runnable
 	}
 
 	@Override
-	public String onKill(L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		if(npcId == 32058 || npcId == 32059 || npcId == 32060 || npcId == 32061 || npcId == 32062 || npcId == 32063 || npcId == 32064 || npcId == 32065 || npcId == 32066)
@@ -365,7 +364,7 @@ public class VanHalter extends Quest implements Runnable
 
 	protected void deleteRoyalGuard()
 	{
-		for(L2NpcInstance rg : _royalGuard)
+		for(L2Npc rg : _royalGuard)
 		{
 			rg.getSpawn().stopRespawn();
 			rg.deleteMe();
@@ -454,7 +453,7 @@ public class VanHalter extends Quest implements Runnable
 
 	protected void deleteTriolRevelation()
 	{
-		for(L2NpcInstance tr : _triolRevelation)
+		for(L2Npc tr : _triolRevelation)
 		{
 			tr.getSpawn().stopRespawn();
 			tr.deleteMe();
@@ -539,7 +538,7 @@ public class VanHalter extends Quest implements Runnable
 
 	protected void deleteRoyalGuardCaptain()
 	{
-		for(L2NpcInstance tr : _royalGuardCaptain)
+		for(L2Npc tr : _royalGuardCaptain)
 		{
 			tr.getSpawn().stopRespawn();
 			tr.deleteMe();
@@ -618,7 +617,7 @@ public class VanHalter extends Quest implements Runnable
 
 	protected void deleteRoyalGuardHepler()
 	{
-		for(L2NpcInstance tr : _royalGuardHepler)
+		for(L2Npc tr : _royalGuardHepler)
 		{
 			tr.getSpawn().stopRespawn();
 			tr.deleteMe();
@@ -701,7 +700,7 @@ public class VanHalter extends Quest implements Runnable
 
 	protected void deleteGuardOfAltar()
 	{
-		for(L2NpcInstance tr : _guardOfAltar)
+		for(L2Npc tr : _guardOfAltar)
 		{
 			tr.getSpawn().stopRespawn();
 			tr.deleteMe();
@@ -1270,7 +1269,7 @@ public class VanHalter extends Quest implements Runnable
 	{
 		L2Skill bleed = SkillTable.getInstance().getInfo(4615, 12);
 
-		for(L2NpcInstance tr : _triolRevelation)
+		for(L2Npc tr : _triolRevelation)
 		{
 			if(!tr.getKnownList().getKnownPlayersInRadius(tr.getAggroRange()).iterator().hasNext() || tr.isDead())
 			{

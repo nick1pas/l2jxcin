@@ -23,8 +23,8 @@ import java.util.logging.Logger;
 
 import javolution.text.TextBuilder;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.model.multisell.L2Multisell;
 import net.xcine.gameserver.network.SystemMessageId;
@@ -41,7 +41,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  * @author godson
  */
 
-public class L2OlympiadManagerInstance extends L2FolkInstance
+public class L2OlympiadManagerInstance extends L2NpcInstance
 {
     private static Logger _logOlymp = Logger.getLogger(L2OlympiadManagerInstance.class.getName());
     
@@ -165,8 +165,8 @@ public class L2OlympiadManagerInstance extends L2FolkInstance
                     }
                     break;
                 case 7:
-                	L2Multisell.getInstance().SeparateAndSend(102, player, false, getCastle().getTaxRate());
-                    break;
+                	L2Multisell.getInstance().SeparateAndSend(102, player, ((L2Npc)player.getTarget()).getNpcId(), false, getCastle().getTaxRate(), false);
+					break;
                     default:
                         _logOlymp.warning("Olympiad System: Couldnt send packet for request " + val);
                     break;

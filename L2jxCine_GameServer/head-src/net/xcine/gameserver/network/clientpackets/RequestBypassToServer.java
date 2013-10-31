@@ -28,6 +28,7 @@ import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
 import net.xcine.gameserver.handler.AdminCommandHandler;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.handler.custom.CustomBypassHandler;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2ClassMasterInstance;
@@ -35,10 +36,7 @@ import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2SymbolMakerInstance;
 import net.xcine.gameserver.model.actor.position.L2CharPosition;
-import net.xcine.gameserver.model.entity.event.CTF;
-import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.L2Event;
-import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
@@ -150,64 +148,6 @@ public final class RequestBypassToServer extends L2GameClientPacket
 					{
 						L2Event.inscribePlayer(activeChar);
 					}
-					else if(_command.substring(endOfId + 1).startsWith("tvt_player_join "))
-					{
-						String teamName = _command.substring(endOfId + 1).substring(16);
-
-						if(TvT.is_joining())
-						{
-							TvT.addPlayer(activeChar, teamName);
-						}
-						else
-						{
-							activeChar.sendMessage("The event is already started. You can not join now!");
-						}
-					}
-
-					else if(_command.substring(endOfId + 1).startsWith("tvt_player_leave"))
-					{
-						if(TvT.is_joining())
-						{
-							TvT.removePlayer(activeChar);
-						}
-						else
-						{
-							activeChar.sendMessage("The event is already started. You can not leave now!");
-						}
-					}
-
-					else if(_command.substring(endOfId+1).startsWith("dmevent_player_join"))
-					{
-						if(DM.is_joining())
-							DM.addPlayer(activeChar);
-						else
-							activeChar.sendMessage("The event is already started. You can't join now!");
-					}
-
-					else if(_command.substring(endOfId+1).startsWith("dmevent_player_leave"))
-					{
-						if(DM.is_joining())
-							DM.removePlayer(activeChar);
-						else
-							activeChar.sendMessage("The event is already started. You can't leave now!");
-					}
-
-					else if(_command.substring(endOfId+1).startsWith("ctf_player_join "))
-					{
-						String teamName = _command.substring(endOfId+1).substring(16);
-						if(CTF.is_joining())
-							CTF.addPlayer(activeChar, teamName);
-						else
-							activeChar.sendMessage("The event is already started. You can't join now!");
-					}
-
-					else if(_command.substring(endOfId+1).startsWith("ctf_player_leave"))
-					{
-						if(CTF.is_joining())
-							CTF.removePlayer(activeChar);
-						else
-							activeChar.sendMessage("The event is already started. You can't leave now!");
-					}
 
 					if(_command.substring(endOfId+1).startsWith("vip_joinVIPTeam"))
 					{
@@ -230,7 +170,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 					}
 
 					else if((Config.ALLOW_CLASS_MASTERS && Config.ALLOW_REMOTE_CLASS_MASTERS && object instanceof L2ClassMasterInstance)
-						|| (object instanceof L2NpcInstance && endOfId > 0 && activeChar.isInsideRadius(object, L2NpcInstance.INTERACTION_DISTANCE, false, false)))
+						|| (object instanceof L2NpcInstance && endOfId > 0 && activeChar.isInsideRadius(object, L2Npc.INTERACTION_DISTANCE, false, false)))
 					{
 						((L2NpcInstance) object).onBypassFeedback(activeChar, _command.substring(endOfId + 1));
 					}

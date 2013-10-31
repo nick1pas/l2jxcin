@@ -21,7 +21,7 @@ package net.xcine.gameserver.network.clientpackets;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.csv.MapRegionTable;
+import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.serverpackets.CharMoveToLocation;
@@ -61,7 +61,7 @@ public final class ValidatePosition extends L2GameClientPacket
 			return;
 		
 		if(activeChar.getX() == 0 && activeChar.getY() == 0) {
-			activeChar.teleToLocation(MapRegionTable.TeleportWhereType.Town);
+			activeChar.teleToLocation(MapRegionData.TeleportWhereType.Town);
 			clientToServer(activeChar);
 		}
 		

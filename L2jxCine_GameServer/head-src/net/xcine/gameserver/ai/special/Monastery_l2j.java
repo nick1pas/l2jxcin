@@ -18,19 +18,18 @@ package net.xcine.gameserver.ai.special;
 import java.util.Collection;
 
 import javolution.util.FastList;
-
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2Skill.SkillType;
 import net.xcine.gameserver.model.L2Summon;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.CreatureSay;
 import net.xcine.gameserver.util.Util;
@@ -55,7 +54,7 @@ public class Monastery_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAggroRangeEnter(L2NpcInstance npc, L2PcInstance player, boolean isPet)
+	public String onAggroRangeEnter(L2Npc npc, L2PcInstance player, boolean isPet)
 	{
 		if (Util.contains(mobs1,npc.getNpcId()) && !npc.isInCombat() && npc.getTarget() == null)
 		{
@@ -90,18 +89,18 @@ public class Monastery_l2j extends Quest implements Runnable
 	
 	
 	@Override
-	public String onSpawn(L2NpcInstance npc)
+	public String onSpawn(L2Npc npc)
 	{
 		if (Util.contains(mobs1,npc.getNpcId()))
 		{
-			FastList<L2PlayableInstance> result = new FastList<>();
+			FastList<L2Playable> result = new FastList<>();
 			Collection<L2Object> objs = npc.getKnownList().getKnownObjects().values();
 			for (L2Object obj : objs)
 			{
 				if (obj instanceof L2PcInstance || obj instanceof L2PetInstance)
 				{
 					if (Util.checkIfInRange(npc.getAggroRange(), npc, obj, true) && !((L2Character) obj).isDead())
-						result.add((L2PlayableInstance) obj);
+						result.add((L2Playable) obj);
 				}
 			}
 			if (!result.isEmpty() && result.size() != 0)
@@ -109,7 +108,7 @@ public class Monastery_l2j extends Quest implements Runnable
 				Object[] characters = result.toArray();
 				for (Object obj : characters)
 				{
-					L2PlayableInstance target = (L2PlayableInstance) (obj instanceof L2PcInstance ? obj : ((L2Summon) obj).getOwner());
+					L2Playable target = (L2Playable) (obj instanceof L2PcInstance ? obj : ((L2Summon) obj).getOwner());
 					
 					if(target.getActiveWeaponInstance() == null || (target instanceof L2PcInstance && ((L2PcInstance)target).isSilentMoving()) || (target instanceof L2Summon && ((L2Summon)target).getOwner().isSilentMoving())){
 						continue;
@@ -146,7 +145,7 @@ public class Monastery_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onSpellFinished(L2NpcInstance npc, L2PcInstance player, L2Skill skill)
+	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
 	{
 		if (Util.contains(mobs1,npc.getNpcId()) && skill.getId() == 4589)
 		{

@@ -18,16 +18,15 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.cache.HtmCache;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.managers.GrandBossManager;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.spawn.L2Spawn;
@@ -49,7 +48,7 @@ public class IceFairySirra extends Quest implements Runnable
 	private static final int SILVER_HEMOCYTE = 8057;
 	private static L2BossZone _freyasZone;
 	private static L2PcInstance _player = null;
-	protected FastList<L2NpcInstance> _allMobs = new FastList<>();
+	protected FastList<L2Npc> _allMobs = new FastList<>();
 	protected Future<?> _onDeadEventTask = null;
 
 	public IceFairySirra(int id, String name, String descr)
@@ -72,7 +71,7 @@ public class IceFairySirra extends Quest implements Runnable
 	}
 
 	@Override
-	public String onFirstTalk(L2NpcInstance npc, L2PcInstance player)
+	public String onFirstTalk(L2Npc npc, L2PcInstance player)
 	{
 		if(player.getQuestState("IceFairySirra") == null)
 		{
@@ -93,7 +92,7 @@ public class IceFairySirra extends Quest implements Runnable
 	}
 
 	@Override
-	public String onAdvEvent(String event, L2NpcInstance npc, L2PcInstance player)
+	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		if(event.equalsIgnoreCase("check_condition"))
 		{
@@ -175,7 +174,7 @@ public class IceFairySirra extends Quest implements Runnable
 			return;
 		}
 		_freyasZone.setZoneEnabled(false);
-		L2NpcInstance steward = findTemplate(STEWARD);
+		L2Npc steward = findTemplate(STEWARD);
 		if(steward != null)
 		{
 			steward.setBusy(false);
@@ -190,7 +189,7 @@ public class IceFairySirra extends Quest implements Runnable
 		cancelQuestTimer("20MinutesRemaining", null, _player);
 		cancelQuestTimer("10MinutesRemaining", null, _player);
 		cancelQuestTimer("End", null, _player);
-		for(L2NpcInstance mob : _allMobs)
+		for(L2Npc mob : _allMobs)
 		{
 			try
 			{
@@ -208,9 +207,9 @@ public class IceFairySirra extends Quest implements Runnable
 		_allMobs.clear();
 	}
 
-	public L2NpcInstance findTemplate(int npcId)
+	public L2Npc findTemplate(int npcId)
 	{
-		L2NpcInstance npc = null;
+		L2Npc npc = null;
 		for(L2Spawn spawn : SpawnTable.getInstance().getSpawnTable().values())
 		{
 			if(spawn != null && spawn.getNpcid() == npcId)
@@ -426,7 +425,7 @@ public class IceFairySirra extends Quest implements Runnable
 		return "data/html/npcdefault.htm";
 	}
 
-	public void sendHtml(L2NpcInstance npc, L2PcInstance player, String filename)
+	public void sendHtml(L2Npc npc, L2PcInstance player, String filename)
 	{
 		NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 		html.setFile(filename);

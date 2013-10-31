@@ -171,5 +171,15 @@ public class L2CharTemplate
 		
 		
 	}
+	
+	public int getCollisionRadius()
+	{
+		return collisionRadius;
+	}
+	
+	public int getCollisionHeight()
+	{
+		return collisionHeight;
+	}
 
 }

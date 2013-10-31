@@ -29,14 +29,13 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
+import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.idfactory.IdFactory;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.Location;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.thread.ThreadPoolManager;
@@ -585,7 +584,7 @@ public class AutoSpawn
 				// Add the new spawn information to the spawn table, but do not
 				// store it.
 				SpawnTable.getInstance().addNewSpawn(newSpawn, false);
-				L2NpcInstance npcInst = null;
+				L2Npc npcInst = null;
 
 				if(spawnInst._spawnCount == 1)
 				{
@@ -610,7 +609,7 @@ public class AutoSpawn
 					}
 				}
 
-				String nearestTown = MapRegionTable.getInstance().getClosestTownName(npcInst);
+				String nearestTown = MapRegionData.getInstance().getClosestTownName(npcInst);
 
 				// Announce to all players that the spawn has taken place, with
 				// the nearest town location.
@@ -680,13 +679,13 @@ public class AutoSpawn
 					return;
 				}
 
-				L2NpcInstance[] npc_instances = spawnInst.getNPCInstanceList();
+				L2Npc[] npc_instances = spawnInst.getNPCInstanceList();
 				if(npc_instances == null){
 					_log.info("AutoSpawnHandler: No spawn registered");
 					return;
 				}
 				
-				for(L2NpcInstance npcInst : npc_instances)
+				for(L2Npc npcInst : npc_instances)
 				{
 					if(npcInst == null)
 					{
@@ -740,7 +739,7 @@ public class AutoSpawn
 
 		protected int _lastLocIndex = -1;
 
-		private List<L2NpcInstance> _npcList = new FastList<>();
+		private List<L2Npc> _npcList = new FastList<>();
 
 		private List<Location> _locList = new FastList<>();
 
@@ -763,12 +762,12 @@ public class AutoSpawn
 			_spawnActive = activeValue;
 		}
 
-		protected boolean addNpcInstance(L2NpcInstance npcInst)
+		protected boolean addNpcInstance(L2Npc npcInst)
 		{
 			return _npcList.add(npcInst);
 		}
 
-		protected boolean removeNpcInstance(L2NpcInstance npcInst)
+		protected boolean removeNpcInstance(L2Npc npcInst)
 		{
 			return _npcList.remove(npcInst);
 		}
@@ -808,13 +807,13 @@ public class AutoSpawn
 			return _locList.toArray(new Location[_locList.size()]);
 		}
 
-		public L2NpcInstance[] getNPCInstanceList()
+		public L2Npc[] getNPCInstanceList()
 		{
-			L2NpcInstance[] ret;
+			L2Npc[] ret;
 
 			synchronized (_npcList)
 			{
-				ret = new L2NpcInstance[_npcList.size()];
+				ret = new L2Npc[_npcList.size()];
 				_npcList.toArray(ret);
 			}
 
@@ -825,7 +824,7 @@ public class AutoSpawn
 		{
 			List<L2Spawn> npcSpawns = new FastList<>();
 
-			for(L2NpcInstance npcInst : _npcList)
+			for(L2Npc npcInst : _npcList)
 			{
 				npcSpawns.add(npcInst.getSpawn());
 			}

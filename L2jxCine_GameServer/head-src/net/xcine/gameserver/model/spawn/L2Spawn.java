@@ -24,25 +24,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.xml.TerritoryData;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.model.L2Attackable;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.util.random.Rnd;
 
 /**
- * This class manages the spawn and respawn of a group of L2NpcInstance that are in the same are and have the same type.
+ * This class manages the spawn and respawn of a group of L2Npc that are in the same are and have the same type.
  * <B><U> Concept</U> :</B><BR>
  * <BR>
- * L2NpcInstance can be spawned either in a random position into a location area (if Lox=0 and Locy=0), either at an
- * exact position. The heading of the L2NpcInstance can be a random heading if not defined (value= -1) or an exact
+ * L2Npc can be spawned either in a random position into a location area (if Lox=0 and Locy=0), either at an
+ * exact position. The heading of the L2Npc can be a random heading if not defined (value= -1) or an exact
  * heading (ex : merchant...).<BR>
  * <BR>
  * 
@@ -64,13 +63,13 @@ public class L2Spawn
 
 	// private String _location = DEFAULT_LOCATION;
 
-	/** The identifier of the location area where L2NpcInstance can be spwaned */
+	/** The identifier of the location area where L2Npc can be spwaned */
 	private int _location;
 
-	/** The maximum number of L2NpcInstance that can manage this L2Spawn */
+	/** The maximum number of L2Npc that can manage this L2Spawn */
 	private int _maximumCount;
 
-	/** The current number of L2NpcInstance managed by this L2Spawn */
+	/** The current number of L2Npc managed by this L2Spawn */
 	private int _currentCount;
 
 	/** The current number of SpawnTask in progress or stand by of this L2Spawn */
@@ -85,10 +84,10 @@ public class L2Spawn
 	/** The Z position of the spwan point */
 	private int _locZ;
 
-	/** The heading of L2NpcInstance when they are spawned */
+	/** The heading of L2Npc when they are spawned */
 	private int _heading;
 
-	/** The delay between a L2NpcInstance remove and its re-spawn */
+	/** The delay between a L2Npc remove and its re-spawn */
 	private int _respawnDelay;
 
 	/** Minimum delay RaidBoss */
@@ -97,25 +96,25 @@ public class L2Spawn
 	/** Maximum delay RaidBoss */
 	private int _respawnMaxDelay;
 
-	/** The generic constructor of L2NpcInstance managed by this L2Spawn */
+	/** The generic constructor of L2Npc managed by this L2Spawn */
 	private Constructor<?> _constructor;
 
-	/** If True a L2NpcInstance is respawned each time that another is killed */
+	/** If True a L2Npc is respawned each time that another is killed */
 	private boolean _doRespawn;
 
 	private int _instanceId = 0;
 
-	private L2NpcInstance _lastSpawn;
+	private L2Npc _lastSpawn;
 	private static List<SpawnListener> _spawnListeners = new FastList<>();
 
 	/** The task launching the function doSpawn() */
 	class SpawnTask implements Runnable
 	{
-		//L2NpcInstance _instance;
+		//L2Npc _instance;
 		//int _objId;
-		private L2NpcInstance _oldNpc;
+		private L2Npc _oldNpc;
 
-		public SpawnTask(/*int objid*/L2NpcInstance pOldNpc)
+		public SpawnTask(/*int objid*/L2Npc pOldNpc)
 		{
 			//_objId= objid;
 			_oldNpc = pOldNpc;
@@ -151,13 +150,13 @@ public class L2Spawn
 	 * server cache memory (reduce memory use). When a new instance of L2Spawn is created, server just create a link
 	 * between the instance and the template. This link is stored in <B>_template</B><BR>
 	 * <BR>
-	 * Each L2NpcInstance is linked to a L2Spawn that manages its spawn and respawn (delay, location...). This link is
-	 * stored in <B>_spawn</B> of the L2NpcInstance<BR>
+	 * Each L2Npc is linked to a L2Spawn that manages its spawn and respawn (delay, location...). This link is
+	 * stored in <B>_spawn</B> of the L2Npc<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
 	 * <li>Set the _template of the L2Spawn</li> <li>Calculate the implementationName used to generate the generic
-	 * constructor of L2NpcInstance managed by this L2Spawn</li> <li>Create the generic constructor of L2NpcInstance
+	 * constructor of L2Npc managed by this L2Spawn</li> <li>Create the generic constructor of L2Npc
 	 * managed by this L2Spawn</li><BR>
 	 * <BR>
 	 * 
@@ -174,7 +173,7 @@ public class L2Spawn
 		if(_template == null)
 			return;
 
-		// The Name of the L2NpcInstance type managed by this L2Spawn
+		// The Name of the L2Npc type managed by this L2Spawn
 		String implementationName = _template.type; // implementing class name
 
 		if(mobTemplate.npcId == 30995)
@@ -189,7 +188,7 @@ public class L2Spawn
 			implementationName = "L2SymbolMaker";
 		}
 
-		// Create the generic constructor of L2NpcInstance managed by this L2Spawn
+		// Create the generic constructor of L2Npc managed by this L2Spawn
 		Class<?>[] parameters =
 		{
 				int.class, L2NpcTemplate.class
@@ -199,7 +198,7 @@ public class L2Spawn
 	}
 
 	/**
-	 * @return the maximum number of L2NpcInstance that this L2Spawn can manage.
+	 * @return the maximum number of L2Npc that this L2Spawn can manage.
 	 */
 	public int getAmount()
 	{
@@ -215,7 +214,7 @@ public class L2Spawn
 	}
 
 	/**
-	 * @return the Identifier of the location area where L2NpcInstance can be spwaned.
+	 * @return the Identifier of the location area where L2Npc can be spwaned.
 	 */
 	public int getLocation()
 	{
@@ -247,7 +246,7 @@ public class L2Spawn
 	}
 
 	/**
-	 * @return the Identifier of the L2NpcInstance manage by this L2Spwan contained in the L2NpcTemplate.
+	 * @return the Identifier of the L2Npc manage by this L2Spwan contained in the L2NpcTemplate.
 	 */
 	public int getNpcid()
 	{
@@ -258,7 +257,7 @@ public class L2Spawn
 	}
 
 	/**
-	 * @return the heading of L2NpcInstance when they are spawned.
+	 * @return the heading of L2Npc when they are spawned.
 	 */
 	public int getHeading()
 	{
@@ -266,7 +265,7 @@ public class L2Spawn
 	}
 
 	/**
-	 * @return the delay between a L2NpcInstance remove and its re-spawn.
+	 * @return the delay between a L2Npc remove and its re-spawn.
 	 */
 	public int getRespawnDelay()
 	{
@@ -290,7 +289,7 @@ public class L2Spawn
 	}
 
 	/**
-	 * Set the maximum number of L2NpcInstance that this L2Spawn can manage.
+	 * Set the maximum number of L2Npc that this L2Spawn can manage.
 	 * @param amount 
 	 */
 	public void setAmount(int amount)
@@ -308,7 +307,7 @@ public class L2Spawn
 	}
 
 	/**
-	 * Set the Identifier of the location area where L2NpcInstance can be spwaned.
+	 * Set the Identifier of the location area where L2Npc can be spwaned.
 	 * @param location 
 	 */
 	public void setLocation(int location)
@@ -362,7 +361,7 @@ public class L2Spawn
 	}
 
 	/**
-	 * Set the heading of L2NpcInstance when they are spawned.
+	 * Set the heading of L2Npc when they are spawned.
 	 * @param heading 
 	 */
 	public void setHeading(int heading)
@@ -412,12 +411,12 @@ public class L2Spawn
 	}
 
 	/**
-	 * Decrease the current number of L2NpcInstance of this L2Spawn and if necessary create a SpawnTask to launch after
+	 * Decrease the current number of L2Npc of this L2Spawn and if necessary create a SpawnTask to launch after
 	 * the respawn Delay.<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
-	 * <li>Decrease the current number of L2NpcInstance of this L2Spawn</li> <li>Check if respawn is possible to prevent
+	 * <li>Decrease the current number of L2Npc of this L2Spawn</li> <li>Check if respawn is possible to prevent
 	 * multiple respawning caused by lag</li> <li>Update the current number of SpawnTask in progress or stand by of this
 	 * L2Spawn</li> <li>Create a new SpawnTask to launch after the respawn Delay</li><BR>
 	 * <BR>
@@ -426,9 +425,9 @@ public class L2Spawn
 	 * <BR>
 	 * @param oldNpc 
 	 */
-	public void decreaseCount(/*int npcId*/L2NpcInstance oldNpc)
+	public void decreaseCount(/*int npcId*/L2Npc oldNpc)
 	{
-		// Decrease the current number of L2NpcInstance of this L2Spawn
+		// Decrease the current number of L2Npc of this L2Spawn
 		_currentCount--;
 
 		// Check if respawn is possible to prevent multiple respawning caused by lag
@@ -447,7 +446,7 @@ public class L2Spawn
 	 * Create the initial spawning and set _doRespawn to True.<BR>
 	 * <BR>
 	 * 
-	 * @return The number of L2NpcInstance that were spawned
+	 * @return The number of L2Npc that were spawned
 	 */
 	public int init()
 	{
@@ -461,10 +460,10 @@ public class L2Spawn
 	}
 
 	/**
-	 * Create a L2NpcInstance in this L2Spawn.
+	 * Create a L2Npc in this L2Spawn.
 	 * @return 
 	 */
-	public L2NpcInstance spawnOne()
+	public L2Npc spawnOne()
 	{
 		return doSpawn();
 	}
@@ -486,31 +485,31 @@ public class L2Spawn
 	}
 
 	/**
-	 * Create the L2NpcInstance, add it to the world and launch its OnSpawn action.<BR>
+	 * Create the L2Npc, add it to the world and launch its OnSpawn action.<BR>
 	 * <BR>
 	 * <B><U> Concept</U> :</B><BR>
 	 * <BR>
-	 * L2NpcInstance can be spawned either in a random position into a location area (if Lox=0 and Locy=0), either at an
-	 * exact position. The heading of the L2NpcInstance can be a random heading if not defined (value= -1) or an exact
+	 * L2Npc can be spawned either in a random position into a location area (if Lox=0 and Locy=0), either at an
+	 * exact position. The heading of the L2Npc can be a random heading if not defined (value= -1) or an exact
 	 * heading (ex : merchant...).<BR>
 	 * <BR>
 	 * <B><U> Actions for an random spawn into location area</U> : <I>(if Locx=0 and Locy=0)</I></B><BR>
 	 * <BR>
-	 * <li>Get L2NpcInstance Init parameters and its generate an Identifier</li> <li>Call the constructor of the
-	 * L2NpcInstance</li> <li>Calculate the random position in the location area (if Locx=0 and Locy=0) or get its exact
-	 * position from the L2Spawn</li> <li>Set the position of the L2NpcInstance</li> <li>Set the HP and MP of the
-	 * L2NpcInstance to the max</li> <li>Set the heading of the L2NpcInstance (random heading if not defined : value=-1)
-	 * </li> <li>Link the L2NpcInstance to this L2Spawn</li> <li>Init other values of the L2NpcInstance (ex : from its
+	 * <li>Get L2Npc Init parameters and its generate an Identifier</li> <li>Call the constructor of the
+	 * L2Npc</li> <li>Calculate the random position in the location area (if Locx=0 and Locy=0) or get its exact
+	 * position from the L2Spawn</li> <li>Set the position of the L2Npc</li> <li>Set the HP and MP of the
+	 * L2Npc to the max</li> <li>Set the heading of the L2Npc (random heading if not defined : value=-1)
+	 * </li> <li>Link the L2Npc to this L2Spawn</li> <li>Init other values of the L2Npc (ex : from its
 	 * L2CharTemplate for INT, STR, DEX...) and add it in the world</li> <li>Lauch the action OnSpawn fo the
-	 * L2NpcInstance</li><BR>
+	 * L2Npc</li><BR>
 	 * <BR>
-	 * <li>Increase the current number of L2NpcInstance managed by this L2Spawn</li><BR>
+	 * <li>Increase the current number of L2Npc managed by this L2Spawn</li><BR>
 	 * <BR>
 	 * @return 
 	 */
-	public L2NpcInstance doSpawn()
+	public L2Npc doSpawn()
 	{
-		L2NpcInstance mob = null;
+		L2Npc mob = null;
 		try
 		{
 			// Check if the L2Spawn is not a L2Pet or L2Minion spawn
@@ -521,13 +520,13 @@ public class L2Spawn
 				return mob;
 			}
 
-			// Get L2NpcInstance Init parameters and its generate an Identifier
+			// Get L2Npc Init parameters and its generate an Identifier
 			Object[] parameters =
 			{
 					IdFactory.getInstance().getNextId(), _template
 			};
 
-			// Call the constructor of the L2NpcInstance
+			// Call the constructor of the L2Npc
 			// (can be a L2ArtefactInstance, L2FriendlyMobInstance, L2GuardInstance, L2MonsterInstance, L2SiegeGuardInstance, L2BoxInstance,
 			// L2FeedableBeastInstance, L2TamedBeastInstance, L2FolkInstance)
 			Object tmp = _constructor.newInstance(parameters);
@@ -535,11 +534,11 @@ public class L2Spawn
 			// Must be done before object is spawned into visible world
 			((L2Object) tmp).setInstanceId(_instanceId);
 
-			// Check if the Instance is a L2NpcInstance
-			if(!(tmp instanceof L2NpcInstance))
+			// Check if the Instance is a L2Npc
+			if(!(tmp instanceof L2Npc))
 				return mob;
 
-			mob = (L2NpcInstance) tmp;
+			mob = (L2Npc) tmp;
 
 			return intializeNpcInstance(mob);
 		}
@@ -557,7 +556,7 @@ public class L2Spawn
 	 * @param mob
 	 * @return
 	 */
-	private L2NpcInstance intializeNpcInstance(L2NpcInstance mob)
+	private L2Npc intializeNpcInstance(L2Npc mob)
 	{
 		int newlocx, newlocy, newlocz;
 
@@ -580,7 +579,7 @@ public class L2Spawn
 			}
 		}
 
-		// If Locx=0 and Locy=0, the L2NpcInstance must be spawned in an area defined by location
+		// If Locx=0 and Locy=0, the L2Npc must be spawned in an area defined by location
 		if(getLocx() == 0 && getLocy() == 0)
 		{
 			if(getLocation() == 0)
@@ -589,14 +588,14 @@ public class L2Spawn
 			// Calculate the random position in the location area
 			int p[] = TerritoryData.getInstance().getRandomPoint(getLocation());
 
-			// Set the calculated position of the L2NpcInstance
+			// Set the calculated position of the L2Npc
 			newlocx = p[0];
 			newlocy = p[1];
 			newlocz = GeoData.getInstance().getSpawnHeight(newlocx, newlocy, p[2], p[3], _id);
 		}
 		else
 		{
-			// The L2NpcInstance is spawned at the exact position (Lox, Locy, Locz)
+			// The L2Npc is spawned at the exact position (Lox, Locy, Locz)
 			newlocx = getLocx();
 			newlocy = getLocy();
 			newlocz = doCorrect ? GeoData.getInstance().getSpawnHeight(newlocx, newlocy, getLocz(), getLocz(), _id) : getLocz();
@@ -606,10 +605,10 @@ public class L2Spawn
 		{
 			mob.stopAllEffects();
 
-			// Set the HP and MP of the L2NpcInstance to the max
+			// Set the HP and MP of the L2Npc to the max
 			mob.setCurrentHpMp(mob.getMaxHp(), mob.getMaxMp());
 
-			// Set the heading of the L2NpcInstance (random heading if not defined)
+			// Set the heading of the L2Npc (random heading if not defined)
 			if(getHeading() == -1)
 			{
 				mob.setHeading(Rnd.nextInt(61794));
@@ -622,10 +621,10 @@ public class L2Spawn
 			// Reset decay info
 			mob.setDecayed(false);
 
-			// Link the L2NpcInstance to this L2Spawn
+			// Link the L2Npc to this L2Spawn
 			mob.setSpawn(this);
 
-			// Init other values of the L2NpcInstance (ex : from its L2CharTemplate for INT, STR, DEX...) and add it in the world as a visible object
+			// Init other values of the L2Npc (ex : from its L2CharTemplate for INT, STR, DEX...) and add it in the world as a visible object
 			mob.spawnMe(newlocx, newlocy, newlocz);
 
 			L2Spawn.notifyNpcSpawned(mob);
@@ -642,7 +641,7 @@ public class L2Spawn
 				quest.notifySpawn(mob);
 			}
 
-			// Increase the current number of L2NpcInstance managed by this L2Spawn
+			// Increase the current number of L2Npc managed by this L2Spawn
 			_currentCount++;
 		}
 		return mob;
@@ -664,7 +663,7 @@ public class L2Spawn
 		}
 	}
 
-	public static void notifyNpcSpawned(L2NpcInstance npc)
+	public static void notifyNpcSpawned(L2Npc npc)
 	{
 		synchronized (_spawnListeners)
 		{
@@ -693,7 +692,7 @@ public class L2Spawn
 		_respawnDelay = i * 1000;
 	}
 
-	public L2NpcInstance getLastSpawn()
+	public L2Npc getLastSpawn()
 	{
 		return _lastSpawn;
 	}
@@ -701,10 +700,10 @@ public class L2Spawn
 	/**
 	 * @param oldNpc
 	 */
-	public void respawnNpc(L2NpcInstance oldNpc)
+	public void respawnNpc(L2Npc oldNpc)
 	{
 		oldNpc.refreshID();
-		/*L2NpcInstance instance = */intializeNpcInstance(oldNpc);
+		/*L2Npc instance = */intializeNpcInstance(oldNpc);
 	}
 
 	public L2NpcTemplate getTemplate()

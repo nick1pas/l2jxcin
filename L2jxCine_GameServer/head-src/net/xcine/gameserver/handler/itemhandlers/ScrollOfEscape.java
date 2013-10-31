@@ -22,19 +22,15 @@ import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.controllers.GameTimeController;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.datatables.csv.MapRegionTable;
+import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.ClanHallManager;
-import net.xcine.gameserver.managers.FortManager;
 import net.xcine.gameserver.model.L2Object;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
-import net.xcine.gameserver.model.entity.event.CTF;
-import net.xcine.gameserver.model.entity.event.DM;
-import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.MagicSkillUser;
@@ -93,7 +89,7 @@ public class ScrollOfEscape implements IItemHandler
 	 * @see net.xcine.gameserver.handler.IItemHandler#useItem(net.xcine.gameserver.model.L2PcInstance, net.xcine.gameserver.model.L2ItemInstance)
 	 */
 	@Override
-	public void useItem(L2PlayableInstance playable, L2ItemInstance item)
+	public void useItem(L2Playable playable, L2ItemInstance item)
 	{
 		if(!(playable instanceof L2PcInstance))
 			return;
@@ -107,27 +103,6 @@ public class ScrollOfEscape implements IItemHandler
 		if(activeChar.isSitting())
 		{
 			activeChar.sendPacket(new SystemMessage(SystemMessageId.CANT_MOVE_SITTING));
-			return;
-		}
-
-		//if(activeChar._inEventTvT && TvT._started)
-		if(activeChar._inEventTvT && TvT.is_started())
-		{
-			activeChar.sendMessage("You can't use Scroll of Escape in TvT.");
-			return;
-		}
-
-		//if(activeChar._inEventDM && DM._started)
-		if(activeChar._inEventDM && DM.is_started())
-		{
-			activeChar.sendMessage("You can't use Scroll of Escape in DM.");
-			return;
-		}
-
-		//if(activeChar._inEventCTF && CTF._started)
-		if(activeChar._inEventCTF && CTF.is_started())
-		{
-			activeChar.sendMessage("You can't use Scroll of Escape in CTF.");
 			return;
 		}
 
@@ -259,21 +234,13 @@ public class ScrollOfEscape implements IItemHandler
 				if((_itemId == 1830 || _itemId == 5859))
 				{
 					if (CastleManager.getInstance().getCastleByOwner(_activeChar.getClan()) != null)
-						_activeChar.teleToLocation(MapRegionTable.TeleportWhereType.Castle);
+						_activeChar.teleToLocation(MapRegionData.TeleportWhereType.Castle);
 					else
-						_activeChar.teleToLocation(MapRegionTable.TeleportWhereType.Town);
-				}
-				// escape to fortress if own's one if own's one
-				else if((_itemId == 1830 || _itemId == 5859))
-				{
-					if (FortManager.getInstance().getFortByOwner(_activeChar.getClan()) != null)
-						_activeChar.teleToLocation(MapRegionTable.TeleportWhereType.Fortress);
-					else
-						_activeChar.teleToLocation(MapRegionTable.TeleportWhereType.Town);
+						_activeChar.teleToLocation(MapRegionData.TeleportWhereType.Town);
 				}
 				else if((_itemId == 1829 || _itemId == 5858) && _activeChar.getClan() != null && ClanHallManager.getInstance().getClanHallByOwner(_activeChar.getClan()) != null) // escape to clan hall if own's one
 				{
-					_activeChar.teleToLocation(MapRegionTable.TeleportWhereType.ClanHall);
+					_activeChar.teleToLocation(MapRegionData.TeleportWhereType.ClanHall);
 				}
 				else if(_itemId == 5858) // do nothing
 				{
@@ -287,7 +254,7 @@ public class ScrollOfEscape implements IItemHandler
 				{
 					if(_itemId < 7117)
 					{
-						_activeChar.teleToLocation(MapRegionTable.TeleportWhereType.Town);
+						_activeChar.teleToLocation(MapRegionData.TeleportWhereType.Town);
 					}
 					else
 					{
@@ -375,7 +342,7 @@ public class ScrollOfEscape implements IItemHandler
 								_activeChar.teleToLocation(108275, -53785, -2524, true); // Varka Silenos Village
 								break;
 							default:
-								_activeChar.teleToLocation(MapRegionTable.TeleportWhereType.Town);
+								_activeChar.teleToLocation(MapRegionData.TeleportWhereType.Town);
 								break;
 						}
 					}

@@ -21,10 +21,10 @@ package net.xcine.gameserver.handler.skillhandlers;
 import net.xcine.gameserver.handler.ISkillHandler;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Object;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2Skill.SkillType;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.skills.Formulas;
 
 /*
@@ -46,7 +46,7 @@ public class CpDam implements ISkillHandler
 	@Override
 	public void useSkill(L2Character activeChar, L2Skill skill, L2Object[] targets)
 	{
-		if(!(activeChar instanceof L2PlayableInstance)){
+		if(!(activeChar instanceof L2Playable)){
 			//no cp damages for not playable instances
 			return;
 		}

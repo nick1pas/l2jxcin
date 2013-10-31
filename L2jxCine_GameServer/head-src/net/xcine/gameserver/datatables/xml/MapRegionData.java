@@ -1,64 +1,57 @@
 /*
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
- *
- * http://www.gnu.org/copyleft/gpl.html
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.datatables.csv;
+package net.xcine.gameserver.datatables.xml;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.LineNumberReader;
+import java.io.InputStreamReader;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
 import java.util.logging.Logger;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import net.xcine.Config;
 import net.xcine.gameserver.managers.ArenaManager;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.ClanHallManager;
-import net.xcine.gameserver.managers.FortManager;
 import net.xcine.gameserver.managers.TownManager;
 import net.xcine.gameserver.model.L2Character;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.Location;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.ClanHall;
 import net.xcine.gameserver.model.entity.siege.Castle;
-import net.xcine.gameserver.model.entity.siege.Fort;
+import net.xcine.gameserver.model.entity.siege.clanhalls.BanditStrongholdSiege;
+import net.xcine.gameserver.model.entity.siege.clanhalls.WildBeastFarmSiege;
 import net.xcine.gameserver.model.zone.type.L2ArenaZone;
 import net.xcine.gameserver.model.zone.type.L2ClanHallZone;
-import net.xcine.gameserver.model.zone.type.L2TownZone;
 
-/**
- * @version $Revision: 1.2 $ $Date: 2009/04/29 13:58:30 $
- * @author programmos
- */
-public class MapRegionTable
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+public class MapRegionData
 {
-	private static Logger _log = Logger.getLogger(MapRegionTable.class.getName());
+	private static final Logger _log = Logger.getLogger(MapRegionData.class.getName());
 
-	private static MapRegionTable _instance;
+	private static MapRegionData _instance;
 
 	private final int[][] _regions = new int[19][21];
 
-	private final int[][] _pointsWithKarmas;
+	private final int[][] _pointsWithKarmas = new int[19][3];
 
 	public static enum TeleportWhereType
 	{
@@ -69,104 +62,68 @@ public class MapRegionTable
 		Fortress
 	}
 
-	public static MapRegionTable getInstance()
+	public static MapRegionData getInstance()
 	{
 		if(_instance == null)
 		{
-			_instance = new MapRegionTable();
+			_instance = new MapRegionData();
 		}
 
 		return _instance;
 	}
 
-	private MapRegionTable()
+	private MapRegionData()
 	{
-		FileReader reader = null;
-		BufferedReader buff = null;
-		LineNumberReader lnr = null;
-		
+		int t = 0;
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setValidating(false);
+		factory.setIgnoringComments(true);
+		File f = new File(Config.DATAPACK_ROOT + "/data/stats/map_region.xml");
+		if(!f.exists())
+		{
+			_log.warning("map_region.xml could not be loaded: file not found");
+			return;
+		}
 		try
 		{
-			File fileData = new File(Config.DATAPACK_ROOT+"/data/csv/mapregion.csv");
-			
-			reader = new FileReader(fileData);
-			buff = new BufferedReader(reader);
-			lnr = new LineNumberReader(buff);
-			
-			String line = null;
-
 			int region;
-
-			while((line = lnr.readLine()) != null)
+			InputSource in = new InputSource(new InputStreamReader(new FileInputStream(f), "UTF-8"));
+			in.setEncoding("UTF-8");
+			Document doc = factory.newDocumentBuilder().parse(in);
+			for(Node n = doc.getFirstChild(); n != null; n = n.getNextSibling())
 			{
-				//ignore comments
-				if(line.trim().length() == 0 || line.startsWith("#"))
+				if(n.getNodeName().equalsIgnoreCase("list"))
 				{
-					continue;
-				}
-
-				StringTokenizer st = new StringTokenizer(line, ";");
-
-				region = Integer.parseInt(st.nextToken());
-
-				for(int j = 0; j < 10; j++)
-				{
-					_regions[j][region] = Integer.parseInt(st.nextToken());
+					for(Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
+					{
+						if(d.getNodeName().equalsIgnoreCase("map"))
+						{
+							region = Integer.valueOf(d.getAttributes().getNamedItem("region").getNodeValue());
+							for(int j = 0; j < 10; j++)
+							{
+								_regions[j][region] = Integer.valueOf(d.getAttributes().getNamedItem("sec" + j).getNodeValue());
+							}
+							t++;
+						}
+					}
 				}
 			}
 		}
-		catch(FileNotFoundException e)
+		catch(SAXException e)
 		{
-			if(Config.ENABLE_ALL_EXCEPTIONS)
-				e.printStackTrace();
-			
-			_log.warning("mapregion.csv is missing in data folder");
+			_log.warning("error while loading map region");
 		}
-		catch(NoSuchElementException e1)
+		catch(IOException e)
 		{
-			_log.warning("Error for structure CSV file: ");
-			e1.printStackTrace();
+			_log.warning("error while loading map region");
 		}
-		catch(IOException e0)
+		catch(ParserConfigurationException e)
 		{
-			_log.warning("Error while creating table: " + e0);
-			e0.printStackTrace();
-		}
-		finally
-		{
-			if(lnr != null)
-				try
-				{
-					lnr.close();
-				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			
-			if(buff != null)
-				try
-				{
-					buff.close();
-				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			
-			if(reader != null)
-				try
-				{
-					reader.close();
-				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			
+			_log.warning("error while loading map region");
 		}
 
-		_pointsWithKarmas = new int[19][3];
+		_log.info("MapRegionTable: Loaded " + t + " regions.");
+
 		//Talking Island
 		_pointsWithKarmas[0][0] = -79077;
 		_pointsWithKarmas[0][1] = 240355;
@@ -315,8 +272,8 @@ public class MapRegionTable
 				castle = 9;
 				break; //Town of Shuttgart
 			case 17:
-				castle = 4;
-				break; //Ivory Tower
+				castle = 2;
+				break; //Floran Village
 			case 18:
 				castle = 8;
 				break; //Primeval Isle Wharf
@@ -402,7 +359,7 @@ public class MapRegionTable
 		return nearestTown;
 	}
 
-	public Location getTeleToLocation(final L2Character activeChar, TeleportWhereType teleportWhere)
+	public Location getTeleToLocation(L2Character activeChar, TeleportWhereType teleportWhere)
 	{
 		int[] coord;
 
@@ -415,7 +372,6 @@ public class MapRegionTable
 				return new Location(12661, 181687, -3560);
 
 			Castle castle = null;
-			Fort fort = null;
 			ClanHall clanhall = null;
 
 			if(player.getClan() != null)
@@ -439,21 +395,10 @@ public class MapRegionTable
 					castle = CastleManager.getInstance().getCastleByOwner(player.getClan());
 				}
 
-				// If teleport to fort
-				if(teleportWhere == TeleportWhereType.Fortress)
-				{
-					fort = FortManager.getInstance().getFortByOwner(player.getClan());
-				}
-
-				// Check if player is on castle&fortress ground
+				// Check if player is on castle ground
 				if(castle == null)
 				{
 					castle = CastleManager.getInstance().getCastle(player);
-				}
-
-				if(fort == null)
-				{
-					fort = FortManager.getInstance().getFort(player);
 				}
 
 				if(castle != null && castle.getCastleId() > 0)
@@ -469,47 +414,34 @@ public class MapRegionTable
 					if(teleportWhere == TeleportWhereType.SiegeFlag && castle.getSiege().getIsInProgress())
 					{
 						// Check if player's clan is attacker
-						List<L2NpcInstance> flags = castle.getSiege().getFlag(player.getClan());
+						List<L2Npc> flags = castle.getSiege().getFlag(player.getClan());
 						if(flags != null && !flags.isEmpty())
 						{
 							// Spawn to flag - Need more work to get player to the nearest flag
-							L2NpcInstance flag = flags.get(0);
+							L2Npc flag = flags.get(0);
 							return new Location(flag.getX(), flag.getY(), flag.getZ());
 						}
 						flags = null;
 					}
 				}
 
-				else if(fort != null && fort.getFortId() > 0)
+				if (BanditStrongholdSiege.getInstance().isPlayerRegister(((L2PcInstance)activeChar).getClan(),activeChar.getName()))
 				{
-					// teleporting to castle or fortress
-					// is on caslte with siege and player's clan is defender
-					if(teleportWhere == TeleportWhereType.Fortress || teleportWhere == TeleportWhereType.Fortress && fort.getSiege().getIsInProgress() && fort.getSiege().getDefenderClan(player.getClan()) != null)
-					{
-						coord = fort.getZone().getSpawn();
-						return new Location(coord[0], coord[1], coord[2]);
-					}
+					L2Npc flag = BanditStrongholdSiege.getInstance().getSiegeFlag(((L2PcInstance)activeChar).getClan());
+					if (flag != null)
+						return new Location(flag.getX(), flag.getY(), flag.getZ());
+				}
 
-					if(teleportWhere == TeleportWhereType.SiegeFlag && fort.getSiege().getIsInProgress())
-					{
-						// check if player's clan is attacker
-						List<L2NpcInstance> flags = fort.getSiege().getFlag(player.getClan());
-
-						if(flags != null && !flags.isEmpty())
-						{
-							// spawn to flag
-							L2NpcInstance flag = flags.get(0);
-							return new Location(flag.getX(), flag.getY(), flag.getZ());
-						}
-
-						flags = null;
-					}
+				if (WildBeastFarmSiege.getInstance().isPlayerRegister(((L2PcInstance)activeChar).getClan(),activeChar.getName()))
+				{
+					L2Npc flag = WildBeastFarmSiege.getInstance().getSiegeFlag(((L2PcInstance)activeChar).getClan());
+					if (flag != null)
+						return new Location(flag.getX(), flag.getY(), flag.getZ());
 				}
 
 			}
 
 			castle = null;
-			fort = null;
 
 			// teleport RED PK 5+ to Floran Village
 			if(player.getPkKills() > 5 && player.getKarma() > 1)
@@ -532,20 +464,14 @@ public class MapRegionTable
 				coord = arena.getSpawnLoc();
 				return new Location(coord[0], coord[1], coord[2]);
 			}
+			
+			player = null;
 		}
 
 		// Get the nearest town
-		L2TownZone local_zone = null;
-		if(activeChar!=null && (local_zone = TownManager.getInstance().getClosestTown(activeChar))!=null)
-		{
-			coord = local_zone.getSpawnLoc();
-			return new Location(coord[0], coord[1], coord[2]);
-		}
-		
-		local_zone = TownManager.getInstance().getTown(9); //giran
-		coord = local_zone.getSpawnLoc();
+		// TODO: Micht: Maybe we should add some checks to prevent exception here.
+		coord = TownManager.getInstance().getClosestTown(activeChar).getSpawnLoc();
+
 		return new Location(coord[0], coord[1], coord[2]);
-		
-		
 	}
 }

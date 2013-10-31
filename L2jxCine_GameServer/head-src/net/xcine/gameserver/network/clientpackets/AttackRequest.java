@@ -17,10 +17,6 @@ package net.xcine.gameserver.network.clientpackets;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.actor.instance.L2SummonInstance;
-import net.xcine.gameserver.model.entity.event.CTF;
-import net.xcine.gameserver.model.entity.event.DM;
-import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
 
 @SuppressWarnings("unused")
@@ -82,55 +78,6 @@ public final class AttackRequest extends L2GameClientPacket
 		// Only GMs can directly attack invisible characters
 		if (target instanceof L2PcInstance && ((L2PcInstance) target).getAppearance().getInvisible() && !activeChar.isGM())
 			return;
-		
-		// During teleport phase, players cant do any attack
-		if ((TvT.is_teleport() && activeChar._inEventTvT) || (CTF.is_teleport() && activeChar._inEventCTF) || (DM.is_teleport() && activeChar._inEventDM))
-		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
-		}
-		
-		// No attacks to same team in Event
-		if (TvT.is_started())
-		{
-			if (target instanceof L2PcInstance)
-			{
-				if ((activeChar._inEventTvT && ((L2PcInstance) target)._inEventTvT) && activeChar._teamNameTvT.equals(((L2PcInstance) target)._teamNameTvT))
-				{
-					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-					return;
-				}
-			}
-			else if (target instanceof L2SummonInstance)
-			{
-				if ((activeChar._inEventTvT && ((L2SummonInstance) target).getOwner()._inEventTvT) && activeChar._teamNameTvT.equals(((L2SummonInstance) target).getOwner()._teamNameTvT))
-				{
-					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-					return;
-				}
-			}
-		}
-		
-		// No attacks to same team in Event
-		if (CTF.is_started())
-		{
-			if (target instanceof L2PcInstance)
-			{
-				if ((activeChar._inEventCTF && ((L2PcInstance) target)._inEventCTF) && activeChar._teamNameCTF.equals(((L2PcInstance) target)._teamNameCTF))
-				{
-					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-					return;
-				}
-			}
-			else if (target instanceof L2SummonInstance)
-			{
-				if ((activeChar._inEventCTF && ((L2SummonInstance) target).getOwner()._inEventCTF) && activeChar._teamNameCTF.equals(((L2SummonInstance) target).getOwner()._teamNameCTF))
-				{
-					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-					return;
-				}
-			}
-		}
 		
 		if (activeChar.getTarget() != target)
 			target.onAction(activeChar);

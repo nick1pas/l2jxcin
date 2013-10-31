@@ -13,9 +13,9 @@ import java.util.logging.Logger;
 
 import net.xcine.Config;
 import net.xcine.gameserver.handler.IItemHandler;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.network.serverpackets.SocialAction;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
@@ -33,7 +33,7 @@ public class HeroCustomItem implements IItemHandler
 	String INSERT_DATA = "REPLACE INTO characters_custom_data (obj_Id, char_name, hero, noble, donator, hero_end_date) VALUES (?,?,?,?,?,?)";
 
 	@Override
-	public void useItem(L2PlayableInstance playable, L2ItemInstance item)
+	public void useItem(L2Playable playable, L2ItemInstance item)
 	{
 		if(Config.HERO_CUSTOM_ITEMS)
 		{

@@ -16,12 +16,11 @@ package net.xcine.gameserver.ai.special;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 
@@ -37,7 +36,7 @@ public class ZombieGatekeepers extends Quest implements Runnable
 	private FastMap<Integer, FastList<L2Character>> _attackersList = new FastMap<>();
 	
 	@Override
-	public String onAttack(L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		int npcObjId = npc.getObjectId();
 		
@@ -58,7 +57,7 @@ public class ZombieGatekeepers extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAggroRangeEnter(L2NpcInstance npc, L2PcInstance player, boolean isPet)
+	public String onAggroRangeEnter(L2Npc npc, L2PcInstance player, boolean isPet)
 	{
 		int npcObjId = npc.getObjectId();
 		
@@ -94,7 +93,7 @@ public class ZombieGatekeepers extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onKill(L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		int npcObjId = npc.getObjectId();
 		if (_attackersList.get(npcObjId) != null)

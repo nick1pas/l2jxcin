@@ -14,7 +14,7 @@ import net.xcine.gameserver.model.L2Effect;
 import net.xcine.gameserver.model.actor.instance.L2ArtefactInstance;
 import net.xcine.gameserver.model.actor.instance.L2ControlTowerInstance;
 import net.xcine.gameserver.model.actor.instance.L2EffectPointInstance;
-import net.xcine.gameserver.model.actor.instance.L2FolkInstance;
+import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2SiegeFlagInstance;
 import net.xcine.gameserver.model.actor.instance.L2SiegeSummonInstance;
 import net.xcine.gameserver.network.serverpackets.BeginRotation;
@@ -58,7 +58,7 @@ public class EffectBluff extends L2Effect
 		if(getEffected().isDead() || getEffected().isAfraid())
 			return;
 
-		if(getEffected() instanceof L2FolkInstance || getEffected() instanceof L2ControlTowerInstance || getEffected() instanceof L2ArtefactInstance || getEffected() instanceof L2EffectPointInstance || getEffected() instanceof L2SiegeFlagInstance || getEffected() instanceof L2SiegeSummonInstance)
+		if(getEffected() instanceof L2NpcInstance || getEffected() instanceof L2ControlTowerInstance || getEffected() instanceof L2ArtefactInstance || getEffected() instanceof L2EffectPointInstance || getEffected() instanceof L2SiegeFlagInstance || getEffected() instanceof L2SiegeSummonInstance)
 			return;
 
 		super.onStart();

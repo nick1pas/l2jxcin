@@ -1,4 +1,5 @@
-/* This program is free software; you can redistribute it and/or modify
+/*
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
  * any later version.
@@ -19,30 +20,16 @@ package net.xcine.gameserver.model.actor.knownlist;
 
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
-import net.xcine.gameserver.model.actor.instance.L2FortSiegeGuardInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2SiegeGuardInstance;
 
 public class DoorKnownList extends CharKnownList
 {
-	// =========================================================
-	// Data Field
-
-	// =========================================================
-	// Constructor
 	public DoorKnownList(L2DoorInstance activeChar)
 	{
 		super(activeChar);
 	}
 
-	// =========================================================
-	// Method - Public
-
-	// =========================================================
-	// Method - Private
-
-	// =========================================================
-	// Property - Public
 	@Override
 	public final L2DoorInstance getActiveChar()
 	{
@@ -52,11 +39,15 @@ public class DoorKnownList extends CharKnownList
 	@Override
 	public int getDistanceToForgetObject(L2Object object)
 	{
-		if(object instanceof L2SiegeGuardInstance || object instanceof L2FortSiegeGuardInstance)
+		if(object instanceof L2SiegeGuardInstance)
+		{
 			return 800;
+		}
 
 		if(!(object instanceof L2PcInstance))
+		{
 			return 0;
+		}
 
 		return 4000;
 	}
@@ -64,12 +55,17 @@ public class DoorKnownList extends CharKnownList
 	@Override
 	public int getDistanceToWatchObject(L2Object object)
 	{
-		if(object instanceof L2SiegeGuardInstance || object instanceof L2FortSiegeGuardInstance)
+		if(object instanceof L2SiegeGuardInstance)
+		{
 			return 600;
+		}
 
 		if(!(object instanceof L2PcInstance))
+		{
 			return 0;
+		}
 
 		return 2000;
 	}
+
 }

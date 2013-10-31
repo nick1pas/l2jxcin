@@ -19,7 +19,7 @@ import java.util.Collection;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.model.L2Attackable;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.position.L2CharPosition;
 import net.xcine.gameserver.model.quest.Quest;
@@ -233,7 +233,7 @@ public class Gordon extends Quest implements Runnable
 	}
 
 	@Override
-	public String onAdvEvent(String event, L2NpcInstance npc, L2PcInstance player)
+	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		X = WALKS[_isWalkTo - 1][0];
 		Y = WALKS[_isWalkTo - 1][1];
@@ -252,7 +252,7 @@ public class Gordon extends Quest implements Runnable
 			cancelQuestTimer("check_ai", null, null);
 			if(!_isSpawned)
 			{
-				L2NpcInstance gordon_ai = findTemplate(GORDON);
+				L2Npc gordon_ai = findTemplate(GORDON);
 				if(gordon_ai != null)
 				{
 					_isSpawned = true;
@@ -339,7 +339,7 @@ public class Gordon extends Quest implements Runnable
 	}
 
 	@Override
-	public String onSpawn(L2NpcInstance npc)
+	public String onSpawn(L2Npc npc)
 	{
 		if(npc.getNpcId() == GORDON && _npcBlock == 0)
 		{
@@ -351,7 +351,7 @@ public class Gordon extends Quest implements Runnable
 	}
 
 	@Override
-	public String onAttack(L2NpcInstance npc, L2PcInstance player, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance player, int damage, boolean isPet)
 	{
 		if(npc.getNpcId() == GORDON)
 		{
@@ -369,7 +369,7 @@ public class Gordon extends Quest implements Runnable
 	}
 
 	@Override
-	public String onKill(L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		if(npc.getNpcId() == GORDON)
 		{
@@ -380,9 +380,9 @@ public class Gordon extends Quest implements Runnable
 		return super.onKill(npc, killer, isPet);
 	}
 
-	public L2NpcInstance findTemplate(int npcId)
+	public L2Npc findTemplate(int npcId)
 	{
-		L2NpcInstance npc = null;
+		L2Npc npc = null;
 		for(L2Spawn spawn : SpawnTable.getInstance().getSpawnTable().values())
 		{
 			if(spawn != null && spawn.getNpcid() == npcId)

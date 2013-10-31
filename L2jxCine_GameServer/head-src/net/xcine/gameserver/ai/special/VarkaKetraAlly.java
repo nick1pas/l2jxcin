@@ -15,9 +15,9 @@
 package net.xcine.gameserver.ai.special;
 
 import net.xcine.gameserver.datatables.SkillTable;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.InventoryUpdate;
@@ -94,7 +94,7 @@ public class VarkaKetraAlly extends Quest implements Runnable
 	};
 
 	@Override
-	public String onAttack(L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		if(attacker.getAllianceWithVarkaKetra() != 0)
 		{
@@ -112,7 +112,7 @@ public class VarkaKetraAlly extends Quest implements Runnable
 	}
 
 	@Override
-	public String onKill(L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		if(killer.getParty() != null)
 		{
@@ -132,7 +132,7 @@ public class VarkaKetraAlly extends Quest implements Runnable
 		return super.onKill(npc, killer, isPet);
 	}
 
-	private void decreaseAlly(L2NpcInstance npc, L2PcInstance player)
+	private void decreaseAlly(L2Npc npc, L2PcInstance player)
 	{
 		if(player.getAllianceWithVarkaKetra() != 0)
 		{

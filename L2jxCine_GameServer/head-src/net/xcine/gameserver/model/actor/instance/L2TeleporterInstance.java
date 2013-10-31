@@ -26,6 +26,7 @@ import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.managers.SiegeManager;
 import net.xcine.gameserver.managers.TownManager;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2TeleportLocation;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.model.zone.type.L2BossZone;
@@ -41,7 +42,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  * @author NightMarez
  * @version $Revision: 1.3.2.2.2.5 $ $Date: 2005/03/27 15:29:32 $
  */
-public final class L2TeleporterInstance extends L2FolkInstance
+public final class L2TeleporterInstance extends L2Npc
 {
 	//private static Logger _log = Logger.getLogger(L2TeleporterInstance.class.getName());
 

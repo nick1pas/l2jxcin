@@ -26,12 +26,10 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.util.Point3D;
 import net.xcine.util.object.L2ObjectMap;
 import net.xcine.util.object.L2ObjectSet;
@@ -925,7 +923,7 @@ public final class L2World
 	 * @param object L2object that determine the current L2WorldRegion
 	 * @return the visible playable
 	 */
-	public FastList<L2PlayableInstance> getVisiblePlayable(L2Object object)
+	public FastList<L2Playable> getVisiblePlayable(L2Object object)
 	{
 		L2WorldRegion reg = object.getWorldRegion();
 
@@ -933,7 +931,7 @@ public final class L2World
 			return null;
 
 		// Create an FastList in order to contain all visible L2Object
-		FastList<L2PlayableInstance> result = new FastList<>();
+		FastList<L2Playable> result = new FastList<>();
 
 		// Create a FastList containing all regions around the current region
 		FastList<L2WorldRegion> regions = reg.getSurroundingRegions();
@@ -942,12 +940,12 @@ public final class L2World
 		for(int i = 0; i < regions.size(); i++)
 		{
 			// Create an Iterator to go through the visible L2Object of the L2WorldRegion
-			Iterator<L2PlayableInstance> playables = regions.get(i).iterateAllPlayers();
+			Iterator<L2Playable> playables = regions.get(i).iterateAllPlayers();
 
 			// Go through visible object of the selected region
 			while(playables.hasNext())
 			{
-				L2PlayableInstance _object = playables.next();
+				L2Playable _object = playables.next();
 
 				if(_object == null)
 				{

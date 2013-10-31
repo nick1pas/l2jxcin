@@ -31,7 +31,7 @@ import net.xcine.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.xcine.gameserver.network.serverpackets.ValidateLocation;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 
-public final class L2MercManagerInstance extends L2FolkInstance
+public final class L2MercManagerInstance extends L2NpcInstance
 {
 	//private static Logger _log = Logger.getLogger(L2MercManagerInstance.class.getName());
 

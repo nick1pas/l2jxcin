@@ -24,7 +24,7 @@ import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.CreatureSay;
@@ -139,7 +139,7 @@ public class Transform extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAttack(L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		for (Transformer monster : _mobs)
 		{
@@ -172,7 +172,7 @@ public class Transform extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onKill(L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		for (Transformer monster : _mobs)
 		{
@@ -200,7 +200,7 @@ public class Transform extends Quest implements Runnable
 	private class NPCSpawnTask implements Runnable
 	{
 		
-		private L2NpcInstance spawn;
+		private L2Npc spawn;
 		private long spawnEffectTime;
 		private int spawnAbnormalEffect;
 		
@@ -209,7 +209,7 @@ public class Transform extends Quest implements Runnable
 		 * @param spawnEffectTime
 		 * @param spawnAbnormalEffect
 		 */
-		public NPCSpawnTask(L2NpcInstance spawn, long spawnEffectTime, int spawnAbnormalEffect)
+		public NPCSpawnTask(L2Npc spawn, long spawnEffectTime, int spawnAbnormalEffect)
 		{
 			super();
 			this.spawn = spawn;

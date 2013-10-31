@@ -28,7 +28,6 @@ import net.xcine.gameserver.model.actor.instance.L2PetInstance;
 import net.xcine.gameserver.model.base.ClassLevel;
 import net.xcine.gameserver.model.base.PlayerClass;
 import net.xcine.gameserver.model.base.SubClass;
-import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.quest.QuestState;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.PledgeShowMemberListUpdate;
@@ -238,8 +237,6 @@ public class PcStat extends PlayableStat
 
 		if(getActiveChar().isInFunEvent())
 		{
-			if(getActiveChar()._inEventTvT && TvT.get_maxlvl() == getLevel() && !TvT.is_started())
-				TvT.removePlayer(getActiveChar());
 			getActiveChar().sendMessage("Your event sign up was canceled.");
 		}
 

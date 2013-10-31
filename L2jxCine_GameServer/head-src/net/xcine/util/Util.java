@@ -18,6 +18,8 @@
  */
 package net.xcine.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -266,6 +268,12 @@ public class Util
 		printJvmInfo();
 	}
 
+	public static String getStackTrace(Throwable t)
+	{
+		StringWriter sw = new StringWriter();
+		t.printStackTrace(new PrintWriter(sw));
+		return sw.toString();
+	}
 	/**
 	 * converts a given time from minutes -> miliseconds
 	 * @param minutesToConvert 

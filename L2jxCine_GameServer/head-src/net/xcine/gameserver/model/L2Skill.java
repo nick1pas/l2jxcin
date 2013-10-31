@@ -26,8 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
-import net.xcine.Config;
 import net.xcine.gameserver.datatables.HeroSkillTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.xml.SkillTreeData;
@@ -41,12 +39,8 @@ import net.xcine.gameserver.model.actor.instance.L2MonsterInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.actor.instance.L2SummonInstance;
 import net.xcine.gameserver.model.base.ClassId;
-import net.xcine.gameserver.model.entity.event.CTF;
-import net.xcine.gameserver.model.entity.event.DM;
-import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.entity.siege.Siege;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.EtcStatusUpdate;
@@ -509,7 +503,11 @@ public abstract class L2Skill
 	
 	private final int _minChance;
 	private final int _maxChance;
-	
+
+	private final String _flyType;
+	private final int _flyRadius;
+	private final float _flyCourse;
+
 	private final boolean _singleEffect;
 	
 	private final boolean _isDebuff;
@@ -621,6 +619,10 @@ public abstract class L2Skill
 		
 		_minChance = set.getInteger("minChance", 1);
 		_maxChance = set.getInteger("maxChance", 99);
+		
+		_flyType = set.getString("flyType", null);
+		_flyRadius = set.getInteger("flyRadius", 0);
+		_flyCourse = set.getFloat("flyCourse", 0);
 		
 		String canLearn = set.getString("canLearn", null);
 		if(canLearn == null)
@@ -1663,14 +1665,14 @@ public abstract class L2Skill
 				// Go through the L2Character _knownList
 				for(L2Object obj : activeChar.getKnownList().getKnownCharactersInRadius(radius))
 				{
-					if(obj == null || !(activeChar instanceof L2PlayableInstance) && !(obj instanceof L2PlayableInstance))
+					if(obj == null || !(activeChar instanceof L2Playable) && !(obj instanceof L2Playable))
 						continue;
 					
 					// Like L2OFF you can cast the skill on peace zone but hasn't any effect
 					if(isOffensive() && L2Character.isInsidePeaceZone(target, activeChar))
 						continue;
 						
-					if(src != null && (obj instanceof L2Attackable || obj instanceof L2PlayableInstance))
+					if(src != null && (obj instanceof L2Attackable || obj instanceof L2Playable))
 					{
 						// Don't add this target if this is a Pc->Pc pvp casting and pvp condition not met
 						if(obj == activeChar || obj == src)
@@ -1803,7 +1805,7 @@ public abstract class L2Skill
 			case TARGET_AREA:
 			{
 				// Like L2OFF players can use TARGET_AREA skills on NPC in peacezone
-				if(!(target instanceof L2Attackable || target instanceof L2PlayableInstance || target instanceof L2NpcInstance) || //   Target is not L2Attackable or L2PlayableInstance or L2NpcInstance
+				if(!(target instanceof L2Attackable || target instanceof L2Playable || target instanceof L2NpcInstance) || //   Target is not L2Attackable or L2Playable or L2NpcInstance
 				getCastRange() >= 0 && (target == activeChar || target.isAlikeDead())) //target is null or self or dead/faking
 				{
 					activeChar.sendPacket(new SystemMessage(SystemMessageId.TARGET_IS_INCORRECT));
@@ -1831,7 +1833,7 @@ public abstract class L2Skill
 					cha = activeChar;
 				}
 
-				boolean effectOriginIsL2PlayableInstance = cha instanceof L2PlayableInstance;
+				boolean effectOriginIsL2Playable = cha instanceof L2Playable;
 
 				L2PcInstance src = null;
 				if(activeChar instanceof L2PcInstance)
@@ -1849,11 +1851,11 @@ public abstract class L2Skill
 
 				for(L2Object obj : activeChar.getKnownList().getKnownObjects().values())
 				{
-					if(obj == null || !(activeChar instanceof L2PlayableInstance) && !(obj instanceof L2PlayableInstance))
+					if(obj == null || !(activeChar instanceof L2Playable) && !(obj instanceof L2Playable))
 						continue;
 						
 					
-					if(!(obj instanceof L2Attackable || obj instanceof L2PlayableInstance))
+					if(!(obj instanceof L2Attackable || obj instanceof L2Playable))
 					{
 						continue;
 					}
@@ -1887,7 +1889,7 @@ public abstract class L2Skill
 							continue;
 						}
 
-						if(src != null) // caster is l2playableinstance and exists
+						if(src != null) // caster is L2Playable and exists
 						{
 							//check for Events
 							if(obj instanceof L2PcInstance){
@@ -1900,7 +1902,7 @@ public abstract class L2Skill
 								
 								//if src is in event and trg not OR viceversa:
 								//to be fixed for mixed events status (in TvT joining phase, someone can attack a partecipating CTF player with area attack) 
-								if( ((src._inEvent || src._inEventCTF || src._inEventDM || src._inEventTvT || src._inEventVIP) && (!trg._inEvent && !trg._inEventCTF && !trg._inEventDM && !trg._inEventTvT && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventCTF || trg._inEventDM || trg._inEventTvT || trg._inEventVIP) && (!src._inEvent && !src._inEventCTF && !src._inEventDM && !src._inEventTvT && !src._inEventVIP))  ){
+								if( ((src._inEvent ||  src._inEventVIP) && (!trg._inEvent && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventVIP) && (!src._inEvent && !src._inEventVIP))  ){
 									continue;
 								}
 								
@@ -1914,7 +1916,7 @@ public abstract class L2Skill
 								
 								//if src is in event and trg not OR viceversa:
 								//to be fixed for mixed events status (in TvT joining phase, someone can attack a partecipating CTF player with area attack) 
-								if( ((src._inEvent || src._inEventCTF || src._inEventDM || src._inEventTvT || src._inEventVIP) && (!trg._inEvent && !trg._inEventCTF && !trg._inEventDM && !trg._inEventTvT && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventCTF || trg._inEventDM || trg._inEventTvT || trg._inEventVIP) && (!src._inEvent && !src._inEventCTF && !src._inEventDM && !src._inEventTvT && !src._inEventVIP))  ){
+								if( ((src._inEvent || src._inEventVIP) && (!trg._inEvent && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventVIP) && (!src._inEvent && !src._inEventVIP))  ){
 									continue;
 								}
 								
@@ -2010,10 +2012,10 @@ public abstract class L2Skill
 							}
 						}
 						else
-						// Skill user is not L2PlayableInstance
+						// Skill user is not L2Playable
 						{
-							if(effectOriginIsL2PlayableInstance && // If effect starts at L2PlayableInstance and
-							!(obj instanceof L2PlayableInstance))
+							if(effectOriginIsL2Playable && // If effect starts at L2Playable and
+							!(obj instanceof L2Playable))
 							{
 								continue;
 							}
@@ -2084,7 +2086,7 @@ public abstract class L2Skill
 							
 							//if src is in event and trg not OR viceversa:
 							//to be fixed for mixed events status (in TvT joining phase, someone can attack a partecipating CTF player with area attack) 
-							if(((src._inEvent || src._inEventCTF || src._inEventDM || src._inEventTvT || src._inEventVIP) && (!trg._inEvent && !trg._inEventCTF && !trg._inEventDM && !trg._inEventTvT && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventCTF || trg._inEventDM || trg._inEventTvT || trg._inEventVIP) && (!src._inEvent && !src._inEventCTF && !src._inEventDM && !src._inEventTvT && !src._inEventVIP))  ){
+							if(((src._inEvent || src._inEventVIP) && (!trg._inEvent && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventVIP) && (!src._inEvent && !src._inEventVIP))  ){
 								continue;
 							}
 							
@@ -2098,7 +2100,7 @@ public abstract class L2Skill
 							
 							//if src is in event and trg not OR viceversa:
 							//to be fixed for mixed events status (in TvT joining phase, someone can attack a partecipating CTF player with area attack) 
-							if( ((src._inEvent || src._inEventCTF || src._inEventDM || src._inEventTvT || src._inEventVIP) && (!trg._inEvent && !trg._inEventCTF && !trg._inEventDM && !trg._inEventTvT && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventCTF || trg._inEventDM || trg._inEventTvT || trg._inEventVIP) && (!src._inEvent && !src._inEventCTF && !src._inEventDM && !src._inEventTvT && !src._inEventVIP))  ){
+							if( ((src._inEvent || src._inEventVIP) && (!trg._inEvent && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventVIP) && (!src._inEvent && !src._inEventVIP))  ){
 								continue;
 							}
 							
@@ -2164,24 +2166,6 @@ public abstract class L2Skill
 							continue;
 						}
 
-						//check if allow interference is allowed if player is not on event but target is on event
-						//if(((TvT._started && !Config.TVT_ALLOW_INTERFERENCE) || (CTF._started && !Config.CTF_ALLOW_INTERFERENCE) || (DM._started && !Config.DM_ALLOW_INTERFERENCE)) && !player.isGM())
-						if(((TvT.is_started() && !Config.TVT_ALLOW_INTERFERENCE) || (CTF.is_started() && !Config.CTF_ALLOW_INTERFERENCE) || (DM.is_started() && !Config.DM_ALLOW_INTERFERENCE))/* && !player.isGM()*/)
-						{
-							if((partyMember._inEventTvT && !player._inEventTvT) || (!partyMember._inEventTvT && player._inEventTvT))
-							{
-								continue;
-							}
-							if((partyMember._inEventCTF && !player._inEventCTF) || (!partyMember._inEventCTF && player._inEventCTF))
-							{
-								continue;
-							}
-							if((partyMember._inEventDM && !player._inEventDM) || (!partyMember._inEventDM && player._inEventDM))
-							{
-								continue;
-							}
-						}
-
 						if(!partyMember.isDead() && Util.checkIfInRange(getSkillRadius(), activeChar, partyMember, true))
 						{
 							L2PcInstance src = null;
@@ -2199,7 +2183,7 @@ public abstract class L2Skill
 							//if src is in event and trg not OR viceversa:
 							//to be fixed for mixed events status (in TvT joining phase, someone can attack a partecipating CTF player with area attack) 
 							if(src!= null)
-								if( ((src._inEvent || src._inEventCTF || src._inEventDM || src._inEventTvT || src._inEventVIP) && (!trg._inEvent && !trg._inEventCTF && !trg._inEventDM && !trg._inEventTvT && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventCTF || trg._inEventDM || trg._inEventTvT || trg._inEventVIP) && (!src._inEvent && !src._inEventCTF && !src._inEventDM && !src._inEventTvT && !src._inEventVIP))  ){
+								if( ((src._inEvent || src._inEventVIP) && (!trg._inEvent && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventVIP) && (!src._inEvent  && !src._inEventVIP))  ){
 									continue;
 								}
 							
@@ -2338,24 +2322,12 @@ public abstract class L2Skill
 								//if src is in event and trg not OR viceversa:
 								//to be fixed for mixed events status (in TvT joining phase, someone can attack a partecipating CTF player with area attack) 
 								if( ((src._inEvent 
-										|| src._inEventCTF
-										|| src._inEventDM 
-										|| src._inEventTvT 
 										|| src._inEventVIP) 
 										&& (!playerTarget._inEvent 
-												&& !playerTarget._inEventCTF 
-												&& !playerTarget._inEventDM 
-												&& !playerTarget._inEventTvT 
 												&& !playerTarget._inEventVIP)) 
 												|| ((playerTarget._inEvent 
-														|| playerTarget._inEventCTF 
-														|| playerTarget._inEventDM 
-														|| playerTarget._inEventTvT
 														|| playerTarget._inEventVIP) 
 														&& (!src._inEvent
-																&& !src._inEventCTF 
-																&& !src._inEventDM 
-																&& !src._inEventTvT
 																&& !src._inEventVIP))  ){
 									continue;
 								}
@@ -2492,7 +2464,7 @@ public abstract class L2Skill
 
 							//if src is in event and trg not OR viceversa:
 							//to be fixed for mixed events status (in TvT joining phase, someone can attack a partecipating CTF player with area attack) 
-								if( ((src._inEvent || src._inEventCTF || src._inEventDM || src._inEventTvT || src._inEventVIP) && (!trg._inEvent && !trg._inEventCTF && !trg._inEventDM && !trg._inEventTvT && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventCTF || trg._inEventDM || trg._inEventTvT || trg._inEventVIP) && (!src._inEvent && !src._inEventCTF && !src._inEventDM && !src._inEventTvT && !src._inEventVIP))  ){
+								if( ((src._inEvent || src._inEventVIP) && (!trg._inEvent && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventVIP) && (!src._inEvent && !src._inEventVIP))  ){
 									continue;
 								}
 
@@ -2746,7 +2718,7 @@ public abstract class L2Skill
 							continue;
 						}
 
-						if(!(obj instanceof L2Attackable || obj instanceof L2PlayableInstance) || ((L2Character) obj).isDead() || (L2Character) obj == activeChar)
+						if(!(obj instanceof L2Attackable || obj instanceof L2Playable) || ((L2Character) obj).isDead() || (L2Character) obj == activeChar)
 						{
 							continue;
 						}
@@ -2838,7 +2810,7 @@ public abstract class L2Skill
 						//if src is in event and trg not OR viceversa:
 						//to be fixed for mixed events status (in TvT joining phase, someone can attack a partecipating CTF player with area attack) 
 						if(src!=null && trg!=null)
-							if( ((src._inEvent || src._inEventCTF || src._inEventDM || src._inEventTvT || src._inEventVIP) && (!trg._inEvent && !trg._inEventCTF && !trg._inEventDM && !trg._inEventTvT && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventCTF || trg._inEventDM || trg._inEventTvT || trg._inEventVIP) && (!src._inEvent && !src._inEventCTF && !src._inEventDM && !src._inEventTvT && !src._inEventVIP))  ){
+							if( ((src._inEvent || src._inEventVIP) && (!trg._inEvent && !trg._inEventVIP)) || ((trg._inEvent || trg._inEventVIP) && (!src._inEvent && !src._inEventVIP))  ){
 								continue;
 							}
 						
@@ -3365,14 +3337,11 @@ public abstract class L2Skill
 			
 			//if src is in event and trg not OR viceversa, the target must be not attackable
 			//to be fixed for mixed events status (in TvT joining phase, someone can attack a partecipating CTF player with area attack) 
-			if( ((activeCh._inEvent || activeCh._inEventCTF || activeCh._inEventDM || activeCh._inEventTvT || activeCh._inEventVIP) && (!targetChar._inEvent && !targetChar._inEventCTF && !targetChar._inEventDM && !targetChar._inEventTvT && !targetChar._inEventVIP)) || ((targetChar._inEvent || targetChar._inEventCTF || targetChar._inEventDM || targetChar._inEventTvT || targetChar._inEventVIP) && (!activeCh._inEvent && !activeCh._inEventCTF && !activeCh._inEventDM && !activeCh._inEventTvT && !activeCh._inEventVIP))  ){
+			if( ((activeCh._inEvent || activeCh._inEventVIP) && (!targetChar._inEvent  && !targetChar._inEventVIP)) || ((targetChar._inEvent || targetChar._inEventVIP) && (!activeCh._inEvent && !activeCh._inEventVIP))  ){
 				return true;
 			}
 			
 			if((activeCh._inEvent && targetChar._inEvent) || 
-					(activeCh._inEventDM && targetChar._inEventDM) || 
-					(activeCh._inEventTvT && targetChar._inEventTvT) ||
-					(activeCh._inEventCTF && targetChar._inEventCTF) ||
 					(activeCh._inEventVIP && targetChar._inEventVIP)){
 				
 				return false;
@@ -3440,7 +3409,21 @@ public abstract class L2Skill
 	{
 		return _advancedFlag;
 	}
-	
+
+	public final String getFlyType()
+	{
+		return _flyType;
+	}
+
+	public final int getFlyRadius()
+	{
+		return _flyRadius;
+	}
+
+	public final float getFlyCourse()
+	{
+		return _flyCourse;
+	}
 	/**
 	 * @return the _advancedMultiplier
 	 */

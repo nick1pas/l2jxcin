@@ -20,7 +20,7 @@ package net.xcine.gameserver.model.zone.type;
 import javolution.util.FastList;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.csv.MapRegionTable;
+import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -189,7 +189,7 @@ public class L2CastleZone extends L2ZoneType
 				continue;
 			}
 
-			((L2PcInstance) temp).teleToLocation(MapRegionTable.TeleportWhereType.Town);
+			((L2PcInstance) temp).teleToLocation(MapRegionData.TeleportWhereType.Town);
 		}
 	}
 

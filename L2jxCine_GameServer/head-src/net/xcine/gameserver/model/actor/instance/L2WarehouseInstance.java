@@ -22,6 +22,7 @@ import java.util.Map;
 
 import net.xcine.Config;
 import net.xcine.gameserver.model.L2Clan;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.PcFreight;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
@@ -37,7 +38,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  * 
  * @version $Revision: 1.3.4.10 $ $Date: 2005/04/06 16:13:41 $
  */
-public final class L2WarehouseInstance extends L2FolkInstance
+public final class L2WarehouseInstance extends L2Npc
 {
 	//private static Logger _log = Logger.getLogger(L2WarehouseInstance.class.getName());
 

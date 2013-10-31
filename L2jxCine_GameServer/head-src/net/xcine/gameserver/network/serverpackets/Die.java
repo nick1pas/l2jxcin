@@ -21,16 +21,12 @@ package net.xcine.gameserver.network.serverpackets;
 import net.xcine.gameserver.datatables.AccessLevel;
 import net.xcine.gameserver.datatables.xml.AccessLevelsData;
 import net.xcine.gameserver.managers.CastleManager;
-import net.xcine.gameserver.managers.FortManager;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
+import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.L2SiegeClan;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.entity.event.CTF;
-import net.xcine.gameserver.model.entity.event.DM;
-import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.entity.siege.Castle;
-import net.xcine.gameserver.model.entity.siege.Fort;
 
 /**
  * sample 0b 952a1048 objectId 00000000 00000000 00000000 00000000 00000000 00000000 format dddddd rev 377 format
@@ -45,8 +41,8 @@ public class Die extends L2GameServerPacket
 	private boolean _fake;
 	private boolean _sweepable;
 	private boolean _canTeleport;
-	private AccessLevel _access = AccessLevelsData.getInstance()._userAccessLevel;
-	private net.xcine.gameserver.model.L2Clan _clan;
+	private AccessLevel _access = AccessLevelsData._userAccessLevel;
+	private L2Clan _clan;
 	L2Character _activeChar;
 
 	/**
@@ -60,10 +56,7 @@ public class Die extends L2GameServerPacket
 			L2PcInstance player = (L2PcInstance) cha;
 			_access = player.getAccessLevel();
 			_clan = player.getClan();
-			_canTeleport = !((TvT.is_started() && player._inEventTvT)
-							|| (DM.is_started() && player._inEventDM)
-							|| (CTF.is_started() && player._inEventCTF)
-							|| player.isInFunEvent()
+			_canTeleport = !(player.isInFunEvent()
 							|| player.isPendingRevive());
 		}
 		_charObjId = cha.getObjectId();
@@ -99,22 +92,12 @@ public class Die extends L2GameServerPacket
 			L2SiegeClan siegeClan = null;
 			Boolean isInDefense = false;
 			Castle castle = CastleManager.getInstance().getCastle(_activeChar);
-			Fort fort = FortManager.getInstance().getFort(_activeChar);
 
 			if(castle != null && castle.getSiege().getIsInProgress())
 			{
 				//siege in progress
 				siegeClan = castle.getSiege().getAttackerClan(_clan);
 				if(siegeClan == null && castle.getSiege().checkIsDefender(_clan))
-				{
-					isInDefense = true;
-				}
-			}
-			else if(fort != null && fort.getSiege().getIsInProgress())
-			{
-				//siege in progress
-				siegeClan = fort.getSiege().getAttackerClan(_clan);
-				if(siegeClan == null && fort.getSiege().checkIsDefender(_clan))
 				{
 					isInDefense = true;
 				}

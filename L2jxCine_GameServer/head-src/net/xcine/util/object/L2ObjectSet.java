@@ -22,7 +22,7 @@ import java.util.Iterator;
 
 import net.xcine.Config;
 import net.xcine.gameserver.model.L2Object;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
+import net.xcine.gameserver.model.L2Playable;
 
 /**
  * This class ...
@@ -44,7 +44,7 @@ public abstract class L2ObjectSet<T extends L2Object> implements Iterable<T>
 		}
 	}
 
-	public static L2ObjectSet<L2PlayableInstance> createL2PlayerSet()
+	public static L2ObjectSet<L2Playable> createL2PlayerSet()
 	{
 		switch(Config.SET_TYPE)
 		{

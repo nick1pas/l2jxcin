@@ -19,7 +19,7 @@ package net.xcine.gameserver.model.zone.type;
 
 import javolution.util.FastMap;
 
-import net.xcine.gameserver.datatables.csv.MapRegionTable;
+import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.Location;
@@ -142,7 +142,7 @@ public class L2ClanHallZone extends L2ZoneType
 				continue;
 			}
 
-			((L2PcInstance) temp).teleToLocation(MapRegionTable.TeleportWhereType.Town);
+			((L2PcInstance) temp).teleToLocation(MapRegionData.TeleportWhereType.Town);
 		}
 	}
 

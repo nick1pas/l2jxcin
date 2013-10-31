@@ -24,10 +24,10 @@ import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.CastleManorManager;
 import net.xcine.gameserver.managers.CastleManorManager.CropProcure;
 import net.xcine.gameserver.model.L2Manor;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2ManorManagerInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
@@ -90,7 +90,7 @@ public class RequestProcureCropList extends L2GameClientPacket
 			target = player.getLastFolkNPC();
 		}
 
-		if(!player.isGM() && (target == null || !(target instanceof L2ManorManagerInstance) || !player.isInsideRadius(target, L2NpcInstance.INTERACTION_DISTANCE, false, false)))
+		if(!player.isGM() && (target == null || !(target instanceof L2ManorManagerInstance) || !player.isInsideRadius(target, L2Npc.INTERACTION_DISTANCE, false, false)))
 			return;
 
 		if(_size < 1)

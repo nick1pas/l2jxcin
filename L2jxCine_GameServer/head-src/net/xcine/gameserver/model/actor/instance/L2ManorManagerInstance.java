@@ -21,7 +21,6 @@ package net.xcine.gameserver.model.actor.instance;
 import java.util.StringTokenizer;
 
 import javolution.util.FastList;
-
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.controllers.TradeController;
 import net.xcine.gameserver.datatables.sql.ItemTable;
@@ -46,9 +45,6 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 
 public class L2ManorManagerInstance extends L2MerchantInstance
 {
-
-	//private static Logger _log = Logger.getLogger(L2ManorManagerInstance.class.getName());
-
 	public L2ManorManagerInstance(int objectId, L2NpcTemplate template)
 	{
 		super(objectId, template);
@@ -58,34 +54,29 @@ public class L2ManorManagerInstance extends L2MerchantInstance
 	public void onAction(L2PcInstance player)
 	{
 		if(!canTarget(player))
+		{
 			return;
+		}
 		player.setLastFolkNPC(this);
 
-		// Check if the L2PcInstance already target the L2NpcInstance
 		if(this != player.getTarget())
 		{
-			// Set the target of the L2PcInstance player
 			player.setTarget(this);
 
-			// Send a Server->Client packet MyTargetSelected to the L2PcInstance player
 			MyTargetSelected my = new MyTargetSelected(getObjectId(), 0);
 			player.sendPacket(my);
 			my = null;
 
-			// Send a Server->Client packet ValidateLocation to correct the L2NpcInstance position and heading on the client
 			player.sendPacket(new ValidateLocation(this));
 		}
 		else
 		{
-			// Calculate the distance between the L2PcInstance and the L2NpcInstance
 			if(!canInteract(player))
 			{
-				// Notify the L2PcInstance AI with AI_INTENTION_INTERACT
 				player.getAI().setIntention(CtrlIntention.AI_INTENTION_INTERACT, this);
 			}
 			else
 			{
-				// If player is a lord of this manor, alternative message from NPC
 				if(CastleManorManager.getInstance().isDisabled())
 				{
 					NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
@@ -95,11 +86,7 @@ public class L2ManorManagerInstance extends L2MerchantInstance
 					player.sendPacket(html);
 					html = null;
 				}
-				else if(!player.isGM() // Player is not GM
-						&& getCastle() != null && getCastle().getCastleId() > 0 // Verification of castle
-						&& player.getClan() != null // Player have clan
-						&& getCastle().getOwnerId() == player.getClanId() // Player's clan owning the castle
-						&& player.isClanLeader() // Player is clan leader of clan (then he is the lord)
+				else if(!player.isGM() && getCastle() != null && getCastle().getCastleId() > 0 && player.getClan() != null && getCastle().getOwnerId() == player.getClanId() && player.isClanLeader()
 				)
 				{
 					showMessageWindow(player, "manager-lord.htm");
@@ -110,7 +97,7 @@ public class L2ManorManagerInstance extends L2MerchantInstance
 				}
 			}
 		}
-		// Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet
+
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 
@@ -140,15 +127,13 @@ public class L2ManorManagerInstance extends L2MerchantInstance
 	@Override
 	public void onBypassFeedback(L2PcInstance player, String command)
 	{
-		// BypassValidation Exploit plug.
 		if(player.getLastFolkNPC() == null || player.getLastFolkNPC().getObjectId() != getObjectId())
+		{
 			return;
+		}
 
 		if(command.startsWith("manor_menu_select"))
 		{
-			// input string format:
-			// manor_menu_select?ask=X&state=Y&time=X
-
 			if(CastleManorManager.getInstance().isUnderMaintenance())
 			{
 				player.sendPacket(ActionFailed.STATIC_PACKET);
@@ -169,13 +154,12 @@ public class L2ManorManagerInstance extends L2MerchantInstance
 			}
 			else
 			{
-				// info for requested manor
 				castleId = state;
 			}
 
 			switch(ask)
-			{ // Main action
-				case 1: // Seed purchase
+			{
+				case 1:
 					if(castleId != getCastle().getCastleId())
 					{
 						player.sendPacket(new SystemMessage(SystemMessageId.HERE_YOU_CAN_BUY_ONLY_SEEDS_OF_S1_MANOR));
@@ -203,10 +187,10 @@ public class L2ManorManagerInstance extends L2MerchantInstance
 						seeds = null;
 					}
 					break;
-				case 2: // Crop sales
+				case 2:
 					player.sendPacket(new ExShowSellCropList(player, castleId, getCastle().getCropProcure(CastleManorManager.PERIOD_CURRENT)));
 					break;
-				case 3: // Current seeds (Manor info)
+				case 3:
 					if(time == 1 && !CastleManager.getInstance().getCastleById(castleId).isNextPeriodApproved())
 					{
 						player.sendPacket(new ExShowSeedInfo(castleId, null));
@@ -216,7 +200,7 @@ public class L2ManorManagerInstance extends L2MerchantInstance
 						player.sendPacket(new ExShowSeedInfo(castleId, CastleManager.getInstance().getCastleById(castleId).getSeedProduction(time)));
 					}
 					break;
-				case 4: // Current crops (Manor info)
+				case 4:
 					if(time == 1 && !CastleManager.getInstance().getCastleById(castleId).isNextPeriodApproved())
 					{
 						player.sendPacket(new ExShowCropInfo(castleId, null));
@@ -226,13 +210,13 @@ public class L2ManorManagerInstance extends L2MerchantInstance
 						player.sendPacket(new ExShowCropInfo(castleId, CastleManager.getInstance().getCastleById(castleId).getCropProcure(time)));
 					}
 					break;
-				case 5: // Basic info (Manor info)
+				case 5:
 					player.sendPacket(new ExShowManorDefaultInfo());
 					break;
-				case 6: // Buy harvester
+				case 6:
 					showBuyWindow(player, "3" + getNpcId());
 					break;
-				case 9: // Edit sales (Crop sales)
+				case 9:
 					player.sendPacket(new ExShowProcureCropDetail(state));
 					break;
 			}
@@ -242,7 +226,7 @@ public class L2ManorManagerInstance extends L2MerchantInstance
 		else if(command.startsWith("help"))
 		{
 			StringTokenizer st = new StringTokenizer(command, " ");
-			st.nextToken(); // discard first
+			st.nextToken();
 			String filename = "manor_client_help00" + st.nextToken() + ".htm";
 			showMessageWindow(player, filename);
 			st = null;
@@ -262,9 +246,7 @@ public class L2ManorManagerInstance extends L2MerchantInstance
 	@Override
 	public String getHtmlPath(int npcId, int val)
 	{
-		return "data/html/manormanager/manager.htm"; // Used only in parent method
-		// to return from "Territory status"
-		// to initial screen.
+		return "data/html/manormanager/manager.htm";
 	}
 
 	private void showMessageWindow(L2PcInstance player, String filename)
@@ -277,4 +259,5 @@ public class L2ManorManagerInstance extends L2MerchantInstance
 		player.sendPacket(html);
 		html = null;
 	}
+
 }

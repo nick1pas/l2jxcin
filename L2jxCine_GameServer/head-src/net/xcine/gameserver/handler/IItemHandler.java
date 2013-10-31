@@ -18,8 +18,8 @@
  */
 package net.xcine.gameserver.handler;
 
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 
 /**
  * Mother class of all itemHandlers.<BR>
@@ -37,7 +37,7 @@ public interface IItemHandler
 	 * @param playable : L2PlayableInstance designating the player
 	 * @param item : L2ItemInstance designating the item to use
 	 */
-	public void useItem(L2PlayableInstance playable, L2ItemInstance item);
+	public void useItem(L2Playable playable, L2ItemInstance item);
 
 	/**
 	 * Returns the list of item IDs corresponding to the type of item.<BR>

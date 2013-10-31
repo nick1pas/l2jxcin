@@ -20,10 +20,10 @@ package net.xcine.gameserver.handler.itemhandlers;
 
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.handler.IItemHandler;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
 import net.xcine.gameserver.network.serverpackets.MagicSkillUser;
@@ -44,7 +44,7 @@ public class Firework implements IItemHandler
 	};
 
 	@Override
-	public void useItem(L2PlayableInstance playable, L2ItemInstance item)
+	public void useItem(L2Playable playable, L2ItemInstance item)
 	{
 		if(!(playable instanceof L2PcInstance))
 			return; // prevent Class cast exception

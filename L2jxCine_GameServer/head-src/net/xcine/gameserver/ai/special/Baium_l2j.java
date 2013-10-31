@@ -24,19 +24,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Effect;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2Summon;
 import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
 import net.xcine.gameserver.model.actor.instance.L2MonsterInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.quest.Quest;
@@ -51,36 +50,6 @@ import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.util.Util;
 import net.xcine.util.random.Rnd;
 
-/**
- * Baium AI
- * 
- * Note1: if the server gets rebooted while players are still fighting Baium, there is no lock, but
- *   players also lose their ability to wake baium up.  However, should another person
- *   enter the room and wake him up, the players who had stayed inside may join the raid.
- *   This can be helpful for players who became victims of a reboot (they only need 1 new player to
- *   enter and wake up baium) and is not too exploitable since any player wishing to exploit it
- *   would have to suffer 5 days of being parked in an empty room.
- * Note2: Neither version of Baium should be a permanent spawn.  This script is fully capable of
- *   spawning the statue-version when the lock expires and switching it to the mob version promptly.
- *
- * Additional notes ( source http://aleenaresron.blogspot.com/2006_08_01_archive.html ):
- *   * Baium only first respawns five days after his last death. And from those five days he will
- *       respawn within 1-8 hours of his last death. So, you have to know his last time of death.
- *   * If by some freak chance you are the only one in Baium's chamber and NO ONE comes in
- *       [ha, ha] you or someone else will have to wake Baium. There is a good chance that Baium
- *       will automatically kill whoever wakes him. There are some people that have been able to
- *       wake him and not die, however if you've already gone through the trouble of getting the
- *       bloody fabric and camped him out and researched his spawn time, are you willing to take that
- *       chance that you'll wake him and not be able to finish your quest? Doubtful.
- *       [ this powerful attack vs the player who wakes him up is NOT yet implemented here]
- *   * once someone starts attacking Baium no one else can port into the chamber where he is.
- *       Unlike with the other raid bosses, you can just show up at any time as long as you are there
- *       when they die. Not true with Baium. Once he gets attacked, the port to Baium closes. byebye,
- *       see you in 5 days.  If nobody attacks baium for 30 minutes, he auto-despawns and unlocks the
- *       vortex
- * 
- * @author Fulminus version 0.1
- */
 public class Baium_l2j  extends Quest implements Runnable
 {
 	protected static final Logger _log = Logger.getLogger(Baium_l2j.class.getName());
@@ -108,7 +77,7 @@ public class Baium_l2j  extends Quest implements Runnable
 	};
 	
 	private long _LastAttackVsBaiumTime = 0;
-	private List<L2NpcInstance> _Minions = new ArrayList<>(5);
+	private List<L2Npc> _Minions = new ArrayList<>(5);
 	protected L2BossZone _Zone;
 	
 	public Baium_l2j (int questId, String name, String descr)
@@ -166,7 +135,7 @@ public class Baium_l2j  extends Quest implements Runnable
 				Announcements.getInstance().announceToAll("Raid boss " + baium.getName() + " spawned in world.");
 			}
 			GrandBossManager.getInstance().addBoss(baium);
-			final L2NpcInstance _baium = baium;
+			final L2Npc _baium = baium;
 			ThreadPoolManager.getInstance().scheduleGeneral(new Runnable() {
 				@Override
 				public void run()
@@ -197,7 +166,7 @@ public class Baium_l2j  extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2NpcInstance npc, L2PcInstance player)
+	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		if (event.equalsIgnoreCase("baium_unlock"))
 		{
@@ -236,7 +205,7 @@ public class Baium_l2j  extends Quest implements Runnable
 				npc.setRunning();
 				
 				startQuestTimer("skill_range", 500, npc, null, true);
-				final L2NpcInstance baium = npc;
+				final L2Npc baium = npc;
 				ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 				{
 					@Override
@@ -246,7 +215,7 @@ public class Baium_l2j  extends Quest implements Runnable
 						{
 							baium.setIsInvul(false);
 							// baium.setIsImobilised(false);
-							// for (L2NpcInstance minion : _Minions)
+							// for (L2Npc minion : _Minions)
 							// minion.setShowSummonAnimation(false);
 							baium.getAttackByList().addAll(_Zone.getCharactersInside().values());
 							
@@ -283,7 +252,7 @@ public class Baium_l2j  extends Quest implements Runnable
 				if (_LastAttackVsBaiumTime + Config.BAIUM_SLEEP * 1000 < System.currentTimeMillis())
 				{
 					npc.deleteMe(); // despawn the live-baium
-					for (L2NpcInstance minion : _Minions)
+					for (L2Npc minion : _Minions)
 						if (minion != null)
 						{
 							minion.getSpawn().stopRespawn();
@@ -309,7 +278,7 @@ public class Baium_l2j  extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onTalk(L2NpcInstance npc,final L2PcInstance player)
+	public String onTalk(L2Npc npc,final L2PcInstance player)
 	{
 		int npcId = npc.getNpcId();
 		String htmltext = "";
@@ -330,7 +299,7 @@ public class Baium_l2j  extends Quest implements Runnable
 				npc.deleteMe();
 				L2GrandBossInstance baium = (L2GrandBossInstance) addSpawn(LIVE_BAIUM, npc);
 				GrandBossManager.getInstance().addBoss(baium);
-				final L2NpcInstance _baium = baium;
+				final L2Npc _baium = baium;
 				ThreadPoolManager.getInstance().scheduleGeneral(new Runnable() {
 					@Override
 					public void run()
@@ -377,7 +346,7 @@ public class Baium_l2j  extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onSpellFinished(L2NpcInstance npc, L2PcInstance player, L2Skill skill)
+	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
 	{
 		if (npc.isInvul())
 		{
@@ -392,7 +361,7 @@ public class Baium_l2j  extends Quest implements Runnable
 	}
 
 	@Override
-	public String onAttack (L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack (L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		if (!_Zone.isInsideZone(attacker))
 		{
@@ -432,7 +401,7 @@ public class Baium_l2j  extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onKill (L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill (L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		npc.broadcastPacket(new PlaySound(1, "BS01_D", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
 		
@@ -450,7 +419,7 @@ public class Baium_l2j  extends Quest implements Runnable
 			GrandBossManager.getInstance().setStatsSet(LIVE_BAIUM,info);
 		}
 		
-		for (L2NpcInstance minion : _Minions)
+		for (L2Npc minion : _Minions)
 			if (minion != null)
 			{
 				minion.getSpawn().stopRespawn();
@@ -464,7 +433,7 @@ public class Baium_l2j  extends Quest implements Runnable
 		return super.onKill(npc,killer,isPet);
 	}
 	
-	public L2Character getRandomTarget(L2NpcInstance npc)
+	public L2Character getRandomTarget(L2Npc npc)
 	{
 		FastList<L2Character> result = new FastList<>();
 		Collection<L2Object> objs = npc.getKnownList().getKnownObjects().values();
@@ -518,7 +487,7 @@ public class Baium_l2j  extends Quest implements Runnable
 		}
 		if (result.isEmpty())
 		{
-			for (L2NpcInstance minion : _Minions)
+			for (L2Npc minion : _Minions)
 				if (minion != null)
 					result.add(minion);
 		}
@@ -540,7 +509,7 @@ public class Baium_l2j  extends Quest implements Runnable
 		
 	}
 	
-	public synchronized void callSkillAI(L2NpcInstance npc)
+	public synchronized void callSkillAI(L2Npc npc)
 	{
 		if (npc.isInvul() || npc.isCastingNow()) return;
 		
@@ -586,7 +555,7 @@ public class Baium_l2j  extends Quest implements Runnable
 		}
 	}
 	
-	public int getRandomSkill(L2NpcInstance npc)
+	public int getRandomSkill(L2Npc npc)
 	{
 		int skill;
 		if( npc.getCurrentHp() > ( ( npc.getMaxHp() * 3 ) / 4.0 ) )
@@ -636,7 +605,7 @@ public class Baium_l2j  extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onSkillUse(L2NpcInstance npc, L2PcInstance caster, L2Skill skill)
+	public String onSkillUse(L2Npc npc, L2PcInstance caster, L2Skill skill)
 	{
 		if (npc.isInvul())
 		{

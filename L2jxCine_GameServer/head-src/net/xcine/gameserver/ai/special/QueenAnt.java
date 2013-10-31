@@ -21,14 +21,13 @@ package net.xcine.gameserver.ai.special;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Attackable;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.quest.Quest;
@@ -173,7 +172,7 @@ public class QueenAnt extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2NpcInstance npc, L2PcInstance player)
+	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		Event event_enum = Event.valueOf(event);
 		
@@ -287,7 +286,7 @@ public class QueenAnt extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onFactionCall(L2NpcInstance npc, L2NpcInstance caller, L2PcInstance attacker, boolean isPet)
+	public String onFactionCall(L2Npc npc, L2Npc caller, L2PcInstance attacker, boolean isPet)
 	{
 		if (caller == null || npc == null)
 			return super.onFactionCall(npc, caller, attacker, isPet);
@@ -311,9 +310,9 @@ public class QueenAnt extends Quest implements Runnable
 			}
 			else if (callerId == QUEEN)
 			{
-				if (npc.getTarget() != null && npc.getTarget() instanceof L2NpcInstance)
+				if (npc.getTarget() != null && npc.getTarget() instanceof L2Npc)
 				{
-					if (((L2NpcInstance) npc.getTarget()).getNpcId() == LARVA)
+					if (((L2Npc) npc.getTarget()).getNpcId() == LARVA)
 						return null;
 				}
 				npc.setTarget(caller);
@@ -325,7 +324,7 @@ public class QueenAnt extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAttack(L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		if (npcId == NURSE)
@@ -337,7 +336,7 @@ public class QueenAnt extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onKill(L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		

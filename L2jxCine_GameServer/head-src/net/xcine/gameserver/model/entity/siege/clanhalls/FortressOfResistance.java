@@ -33,12 +33,11 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.model.L2Clan;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.spawn.L2Spawn;
@@ -216,7 +215,7 @@ public class FortressOfResistance
 		Announce("Capture registration of Partisan Hideout has begun!");
 		Announce("Now its open for 1 hours!");
 
-		L2NpcInstance result = null;
+		L2Npc result = null;
 		try
 		{
 			L2NpcTemplate template = NpcTable.getInstance().getTemplate(MESSENGER_ID);
@@ -255,7 +254,7 @@ public class FortressOfResistance
 			_clansDamageInfo.clear();
 		}
 
-		L2NpcInstance result = null;
+		L2Npc result = null;
 		try
 		{
 			L2NpcTemplate template = NpcTable.getInstance().getTemplate(BOSS_ID);
@@ -283,9 +282,9 @@ public class FortressOfResistance
 
 	protected class DeSpawnTimer implements Runnable
 	{
-		L2NpcInstance _npc = null;
+		L2Npc _npc = null;
 
-		public DeSpawnTimer(L2NpcInstance npc)
+		public DeSpawnTimer(L2Npc npc)
 		{
 			_npc = npc;
 		}

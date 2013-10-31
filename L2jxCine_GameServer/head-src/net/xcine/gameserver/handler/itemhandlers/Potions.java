@@ -24,22 +24,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.model.L2Effect;
 import net.xcine.gameserver.model.L2Effect.EffectType;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2Summon;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
-import net.xcine.gameserver.model.entity.event.CTF;
-import net.xcine.gameserver.model.entity.event.DM;
-import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
@@ -215,34 +211,13 @@ public class Potions implements IItemHandler
 	};
 	
 	@Override
-	public synchronized void useItem(L2PlayableInstance playable, L2ItemInstance item)
+	public void useItem(L2Playable playable, L2ItemInstance item)
 	{
 		
 		if (playable instanceof L2PcInstance)
 		{
 			L2PcInstance activeChar;
 			activeChar = (L2PcInstance) playable;
-			
-			// if(activeChar._inEventTvT && TvT._started && !Config.TVT_ALLOW_POTIONS)
-			if (activeChar._inEventTvT && TvT.is_started() && !Config.TVT_ALLOW_POTIONS)
-			{
-				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-				return;
-			}
-			
-			// if(activeChar._inEventDM && DM._started && !Config.DM_ALLOW_POTIONS)
-			if (activeChar._inEventDM && DM.is_started() && !Config.DM_ALLOW_POTIONS)
-			{
-				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-				return;
-			}
-			
-			// if(activeChar._inEventCTF && CTF._started && !Config.CTF_ALLOW_POTIONS)
-			if (activeChar._inEventCTF && CTF.is_started() && !Config.CTF_ALLOW_POTIONS)
-			{
-				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-				return;
-			}
 			
 			// if(activeChar._inEventVIP && VIP._started)
 			if (activeChar._inEventVIP && VIP._started)
@@ -638,7 +613,7 @@ public class Potions implements IItemHandler
 		
 	}
 	
-	private boolean isEffectReplaceable(L2PlayableInstance activeChar, Enum<EffectType> effectType, int itemId)
+	private boolean isEffectReplaceable(L2Playable activeChar, Enum<EffectType> effectType, int itemId)
 	{
 		L2Effect[] effects = activeChar.getAllEffects();
 		
@@ -667,7 +642,7 @@ public class Potions implements IItemHandler
 		return true;
 	}
 	
-	public boolean usePotion(L2PlayableInstance player, int magicId, int level)
+	public boolean usePotion(L2Playable player, int magicId, int level)
 	{
 		if (player instanceof L2PcInstance)
 		{
@@ -754,7 +729,7 @@ public class Potions implements IItemHandler
 		return ITEM_IDS;
 	}
 	
-	public static void delete_Potion_Item(L2PlayableInstance playable, Integer skill_id, Integer skill_level)
+	public static void delete_Potion_Item(L2Playable playable, Integer skill_id, Integer skill_level)
 	{
 		
 		if (!(playable instanceof L2PcInstance) && !(playable instanceof L2Summon))

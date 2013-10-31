@@ -26,7 +26,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.csv.MapRegionTable;
+import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.handler.IVoicedCommandHandler;
 import net.xcine.gameserver.handler.VoicedCommandHandler;
 import net.xcine.gameserver.managers.PetitionManager;
@@ -302,10 +302,10 @@ public final class Say2 extends L2GameClientPacket
 
 		           if(Config.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("on") || Config.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("gm") && activeChar.isGM())
 		           {
-		              int region = MapRegionTable.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
+		              int region = MapRegionData.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
 		              for(L2PcInstance player : L2World.getInstance().getAllPlayers())
 		              {
-		                 if(region == MapRegionTable.getInstance().getMapRegion(player.getX(), player.getY()))
+		                 if(region == MapRegionData.getInstance().getMapRegion(player.getX(), player.getY()))
 		                 {
 							// Like L2OFF if player is blocked can't read the message
 							if(!player.getBlockList().isInBlockList(activeChar.getName()))               	 
@@ -378,10 +378,10 @@ public final class Say2 extends L2GameClientPacket
 							return;
 						}
 						
-						int region = MapRegionTable.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
+						int region = MapRegionData.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
 						for(L2PcInstance player : L2World.getInstance().getAllPlayers())
 						{
-							if(region == MapRegionTable.getInstance().getMapRegion(player.getX(), player.getY()))
+							if(region == MapRegionData.getInstance().getMapRegion(player.getX(), player.getY()))
 							{
 								// Like L2OFF if player is blocked can't read the message
 								if(!player.getBlockList().isInBlockList(activeChar.getName()))
@@ -392,10 +392,10 @@ public final class Say2 extends L2GameClientPacket
 					}
 					else
 					{
-						int region = MapRegionTable.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
+						int region = MapRegionData.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
 						for(L2PcInstance player : L2World.getInstance().getAllPlayers())
 						{
-							if(region == MapRegionTable.getInstance().getMapRegion(player.getX(), player.getY()))
+							if(region == MapRegionData.getInstance().getMapRegion(player.getX(), player.getY()))
 							{
 								// Like L2OFF if player is blocked can't read the message
 								if(!player.getBlockList().isInBlockList(activeChar.getName()))

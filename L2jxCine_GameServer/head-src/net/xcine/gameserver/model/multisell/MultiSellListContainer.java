@@ -22,25 +22,21 @@ import java.util.List;
 
 import javolution.util.FastList;
 
-/**
- * @author programmos
- */
 public class MultiSellListContainer
 {
 	private int _listId;
 	private boolean _applyTaxes = false;
+	private boolean _isCommunity = false;
 	private boolean _maintainEnchantment = false;
+	private List<Integer> _npcIds;
 
-	List<MultiSellEntry> _entriesC;
+	private List<MultiSellEntry> _entriesC;
 
 	public MultiSellListContainer()
 	{
 		_entriesC = new FastList<>();
 	}
 
-	/**
-	 * @param listId The listId to set.
-	 */
 	public void setListId(int listId)
 	{
 		_listId = listId;
@@ -56,9 +52,11 @@ public class MultiSellListContainer
 		_maintainEnchantment = maintainEnchantment;
 	}
 
-	/**
-	 * @return Returns the listId.
-	 */
+	public void addNpcId(int objId)
+	{
+		_npcIds.add(objId);
+	}
+
 	public int getListId()
 	{
 		return _listId;
@@ -83,4 +81,32 @@ public class MultiSellListContainer
 	{
 		return _entriesC;
 	}
+
+	public boolean checkNpcId(int npcId)
+	{
+		if(_npcIds == null)
+		{
+			synchronized (this)
+			{
+				if(_npcIds == null)
+				{
+					_npcIds = new FastList<>();
+				}
+			}
+
+			return false;
+		}
+
+		return _npcIds.contains(npcId);
+	}
+	
+    public void setIsCommunity(boolean val)
+    {
+        _isCommunity = val;
+    }
+
+    public boolean getIsCommunity()
+    {
+        return _isCommunity;
+    }
 }

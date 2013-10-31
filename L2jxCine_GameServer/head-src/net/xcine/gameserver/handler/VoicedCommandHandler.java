@@ -25,12 +25,9 @@ import javolution.util.FastMap;
 import net.xcine.Config;
 import net.xcine.gameserver.GameServer;
 import net.xcine.gameserver.handler.voicedcommandhandlers.BankingCmd;
-import net.xcine.gameserver.handler.voicedcommandhandlers.CTFCmd;
-import net.xcine.gameserver.handler.voicedcommandhandlers.DMCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.OfflineShop;
 import net.xcine.gameserver.handler.voicedcommandhandlers.Online;
 import net.xcine.gameserver.handler.voicedcommandhandlers.StatsCmd;
-import net.xcine.gameserver.handler.voicedcommandhandlers.TvTCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.Voting;
 import net.xcine.gameserver.handler.voicedcommandhandlers.Wedding;
 
@@ -65,21 +62,6 @@ public class VoicedCommandHandler
 		if (Config.BANKING_SYSTEM_ENABLED)
 		{
 			registerVoicedCommandHandler(new BankingCmd());
-		}
-		
-		if (Config.CTF_COMMAND)
-		{
-			registerVoicedCommandHandler(new CTFCmd());
-		}
-		
-		if (Config.TVT_COMMAND)
-		{
-			registerVoicedCommandHandler(new TvTCmd());
-		}
-		
-		if (Config.DM_COMMAND)
-		{
-			registerVoicedCommandHandler(new DMCmd());
 		}
 		
 		if (Config.L2JMOD_ALLOW_WEDDING)

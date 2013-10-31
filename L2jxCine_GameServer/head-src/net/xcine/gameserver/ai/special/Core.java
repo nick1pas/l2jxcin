@@ -21,12 +21,11 @@ package net.xcine.gameserver.ai.special;
 import java.util.List;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Attackable;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.quest.Quest;
@@ -132,7 +131,7 @@ public class Core extends Quest implements Runnable
 	}
 
 	@Override
-	public String onAdvEvent(String event, L2NpcInstance npc, L2PcInstance player)
+	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		Integer status = GrandBossManager.getInstance().getBossStatus(CORE);
 			
@@ -170,7 +169,7 @@ public class Core extends Quest implements Runnable
 	}
 
 	@Override
-	public String onAttack(L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		if(npc.getNpcId() == CORE)
 		{
@@ -192,7 +191,7 @@ public class Core extends Quest implements Runnable
 	}
 
 	@Override
-	public String onKill(L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		String name = npc.getName();

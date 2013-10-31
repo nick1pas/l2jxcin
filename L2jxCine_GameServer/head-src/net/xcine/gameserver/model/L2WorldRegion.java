@@ -23,14 +23,11 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.ai.L2AttackableAI;
-import net.xcine.gameserver.ai.L2FortSiegeGuardAI;
 import net.xcine.gameserver.ai.L2SiegeGuardAI;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.spawn.L2Spawn;
 import net.xcine.gameserver.model.zone.L2ZoneManager;
 import net.xcine.gameserver.model.zone.L2ZoneType;
@@ -48,10 +45,10 @@ public final class L2WorldRegion
 	private static Logger _log = Logger.getLogger(L2WorldRegion.class.getName());
 
 	/**
-	 * L2ObjectHashSet(L2PlayableInstance) containing L2PlayableInstance of all player & summon in game in this
+	 * L2ObjectHashSet(L2Playable) containing L2Playable of all player & summon in game in this
 	 * L2WorldRegion
 	 */
-	private L2ObjectSet<L2PlayableInstance> _allPlayable;
+	private L2ObjectSet<L2Playable> _allPlayable;
 
 	/** L2ObjectHashSet(L2Object) containing L2Object visible in this L2WorldRegion */
 	private L2ObjectSet<L2Object> _visibleObjects;
@@ -216,8 +213,6 @@ public final class L2WorldRegion
 						// stop the ai tasks
 						if(mob.getAI() instanceof L2AttackableAI)
 							((L2AttackableAI) mob.getAI()).stopAITask();
-						else if(mob.getAI() instanceof L2FortSiegeGuardAI)
-							((L2FortSiegeGuardAI) mob.getAI()).stopAITask();
 						else if(mob.getAI() instanceof L2SiegeGuardAI)
 							((L2SiegeGuardAI) mob.getAI()).stopAITask();
 
@@ -365,9 +360,9 @@ public final class L2WorldRegion
 
 		_visibleObjects.put(object);
 
-		if(object instanceof L2PlayableInstance)
+		if(object instanceof L2Playable)
 		{
-			_allPlayable.put((L2PlayableInstance) object);
+			_allPlayable.put((L2Playable) object);
 
 			// if this is the first player to enter the region, activate self & neighbors
 			if(_allPlayable.size() == 1 && !Config.GRIDS_ALWAYS_ON)
@@ -397,9 +392,9 @@ public final class L2WorldRegion
 
 		_visibleObjects.remove(object);
 
-		if(object instanceof L2PlayableInstance)
+		if(object instanceof L2Playable)
 		{
-			_allPlayable.remove((L2PlayableInstance) object);
+			_allPlayable.remove((L2Playable) object);
 
 			if(_allPlayable.size() == 0 && !Config.GRIDS_ALWAYS_ON)
 			{
@@ -424,7 +419,7 @@ public final class L2WorldRegion
 		return _surroundingRegions;
 	}
 
-	public Iterator<L2PlayableInstance> iterateAllPlayers()
+	public Iterator<L2Playable> iterateAllPlayers()
 	{
 		return _allPlayable.iterator();
 	}

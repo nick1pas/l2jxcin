@@ -5086,7 +5086,25 @@ public enum SystemMessageId
      * Message: A manor cannot be set up between 6 a.m. and 8 p.m.
      */
     THE_CURRENT_RECORD_FOR_THIS_OLYMPIAD_SESSION_IS_S1_MATCHES_S2_WINS_S3_DEFEATS_YOU_HAVE_EARNED_S4_OLYMPIAD_POINTS(1673),
-    
+
+	/**
+	* ID: 1686<br>
+	* Message: Stones and mortar tumble to the earth - the castle wall has taken damage!
+	*/
+	CASTLE_WALL_DAMAGED(1686),
+
+	/**
+	* ID: 288<br>
+	* Message: The castle gate has been broken down.
+	*/
+	CASTLE_GATE_BROKEN_DOWN(288),
+
+	/**
+	* ID: 748<br>
+	* Message: The distance is too far and so the casting has been stopped.
+	*/
+	DIST_TOO_FAR_CASTING_STOPPED(748),
+
 	;
 	
     private int _id;

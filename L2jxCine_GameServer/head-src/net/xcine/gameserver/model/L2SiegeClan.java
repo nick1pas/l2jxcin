@@ -31,7 +31,7 @@ public class L2SiegeClan
 	// ===============================================================
 	// Data Field
 	private int _clanId = 0;
-	private List<L2NpcInstance> _flag = new FastList<>();
+	private List<L2Npc> _flag = new FastList<>();
 	private int _numFlagsAdded = 0;
 	private SiegeClanType _type;
 	
@@ -65,7 +65,7 @@ public class L2SiegeClan
 		getFlag().add(flag);
 	}
 	
-	public boolean removeFlag(L2NpcInstance flag)
+	public boolean removeFlag(L2Npc flag)
 	{
 		if (flag == null)
 			return false;
@@ -114,7 +114,7 @@ public class L2SiegeClan
 	
 	public void removeFlags()
 	{
-		for (L2NpcInstance flag : getFlag())
+		for (L2Npc flag : getFlag())
 		{
 			removeFlag(flag);
 		}
@@ -127,7 +127,7 @@ public class L2SiegeClan
 		return _clanId;
 	}
 	
-	public final List<L2NpcInstance> getFlag()
+	public final List<L2Npc> getFlag()
 	{
 		if (_flag == null)
 		{

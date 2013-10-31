@@ -24,6 +24,7 @@ import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.managers.FourSepulchersManager;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
@@ -41,7 +42,7 @@ import net.xcine.util.random.Rnd;
 /**
  * @author sandman
  */
-public class L2SepulcherNpcInstance extends L2NpcInstance
+public class L2SepulcherNpcInstance extends L2Npc
 {
 	protected static Map<Integer, Integer> _hallGateKeepers = new FastMap<>();
 

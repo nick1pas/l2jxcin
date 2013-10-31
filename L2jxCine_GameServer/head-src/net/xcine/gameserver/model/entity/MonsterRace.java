@@ -19,16 +19,20 @@
 package net.xcine.gameserver.model.entity;
 
 import java.lang.reflect.Constructor;
+import java.util.logging.Logger;
 
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.idfactory.IdFactory;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.templates.L2NpcTemplate;
+import net.xcine.logs.Log;
 import net.xcine.util.random.Rnd;
 
 public class MonsterRace
 {
-	private L2NpcInstance[] _monsters;
+	private final static Logger _log = Logger.getLogger(MonsterRace.class.getName());
+
+	private L2Npc[] _monsters;
 	private static MonsterRace _instance;
 	private Constructor<?> _constructor;
 	private int[][] _speeds;
@@ -36,7 +40,7 @@ public class MonsterRace
 
 	private MonsterRace()
 	{
-		_monsters = new L2NpcInstance[8];
+		_monsters = new L2Npc[8];
 		_speeds = new int[8][20];
 		_first = new int[2];
 		_second = new int[2];
@@ -77,13 +81,12 @@ public class MonsterRace
 				L2NpcTemplate template = NpcTable.getInstance().getTemplate(id + random);
 				_constructor = Class.forName("net.xcine.gameserver.model.actor.instance." + template.type + "Instance").getConstructors()[0];
 				int objectId = IdFactory.getInstance().getNextId();
-				_monsters[i] = (L2NpcInstance) _constructor.newInstance(objectId, template);
+				_monsters[i] = (L2Npc) _constructor.newInstance(objectId, template);
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				_log.warning("");
 			}
-			//_log.info("Monster "+i+" is id: "+(id+random));
 		}
 		newSpeeds();
 
@@ -126,17 +129,11 @@ public class MonsterRace
 		}
 	}
 
-	/**
-	 * @return Returns the monsters.
-	 */
-	public L2NpcInstance[] getMonsters()
+	public L2Npc[] getMonsters()
 	{
 		return _monsters;
 	}
 
-	/**
-	 * @return Returns the speeds.
-	 */
 	public int[][] getSpeeds()
 	{
 		return _speeds;
@@ -151,4 +148,5 @@ public class MonsterRace
 	{
 		return _second[0];
 	}
+
 }

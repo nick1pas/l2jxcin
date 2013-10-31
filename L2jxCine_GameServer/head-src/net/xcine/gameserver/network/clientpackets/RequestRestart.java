@@ -125,7 +125,7 @@ public final class RequestRestart extends L2GameClientPacket
 		}
 
 		// Check if player is in Event
-		if(player._inEventCTF || player._inEventDM || player._inEventTvT || player._inEventVIP){
+		if(player._inEventVIP){
 			player.sendMessage("You can't restart during Event.");
 			sendPacket(RestartResponse.valueOf(false));
 			return;

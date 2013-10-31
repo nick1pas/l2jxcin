@@ -25,9 +25,9 @@ import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Effect;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.zone.type.L2BossZone;
@@ -137,7 +137,7 @@ public class Zaken_l2j extends Quest implements Runnable
 				{
 					if (getTimeHour() == 0)
 					{
-						_log.info("Zaken door id 21240006 opened, game time 00.00.");
+						_log.info("Zaken door i" + "d 21" + "240006 opened, game time 00.00.");
 						DoorData.getInstance().getDoor(21240006).openMe();
 						ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 						{
@@ -239,7 +239,7 @@ public class Zaken_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2NpcInstance npc, L2PcInstance player)
+	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		Integer status = GrandBossManager.getInstance().getBossStatus(ZAKEN);
 		
@@ -578,7 +578,7 @@ public class Zaken_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onFactionCall(L2NpcInstance npc, L2NpcInstance caller, L2PcInstance attacker, boolean isPet)
+	public String onFactionCall(L2Npc npc, L2Npc caller, L2PcInstance attacker, boolean isPet)
 	{
 		if (caller == null || npc == null)
 			return super.onFactionCall(npc, caller, attacker, isPet);
@@ -601,7 +601,7 @@ public class Zaken_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onSpellFinished(L2NpcInstance npc, L2PcInstance player, L2Skill skill)
+	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
 	{
 		if (npc.getNpcId() == ZAKEN)
 		{
@@ -722,7 +722,7 @@ public class Zaken_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAttack(L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		if (npcId == ZAKEN)
@@ -813,7 +813,7 @@ public class Zaken_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onKill(L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		
@@ -848,7 +848,7 @@ public class Zaken_l2j extends Quest implements Runnable
 	}
 	
 	/*
-	 * public String onSkillSee(L2NpcInstance npc, L2PcInstance caster, L2Skill skill, L2Object[] targets, boolean isPet) { int npcId = npc.getNpcId(); if (npcId == ZAKEN) { if (skill.getAggroPoints() > 0) { ((L2Attackable) npc).addDamageHate(caster, 0, (((skill.getAggroPoints() / npc.getMaxHp()) *
+	 * public String onSkillSee(L2Npc npc, L2PcInstance caster, L2Skill skill, L2Object[] targets, boolean isPet) { int npcId = npc.getNpcId(); if (npcId == ZAKEN) { if (skill.getAggroPoints() > 0) { ((L2Attackable) npc).addDamageHate(caster, 0, (((skill.getAggroPoints() / npc.getMaxHp()) *
 	 * 10) * 150)); } if (Rnd.get(12) < 1) { int i0 = Rnd.get((15 * 15)); if (i0 < 1) { npc.setTarget(caster); npc.doCast(SkillTable.getInstance().getInfo(4216, 1)); } else if (i0 < 2) { npc.setTarget(caster); npc.doCast(SkillTable.getInstance().getInfo(4217, 1)); } else if (i0 < 4) {
 	 * npc.setTarget(caster); npc.doCast(SkillTable.getInstance().getInfo(4219, 1)); } else if (i0 < 8) { npc.setTarget(caster); npc.doCast(SkillTable.getInstance().getInfo(4218, 1)); } else if (i0 < 15) { for (L2Character character : npc.getKnownList().getKnownCharactersInRadius(100)) { if
 	 * (character != caster) continue; if (caster != ((L2Attackable) npc).getMostHated()) { npc.setTarget(caster); npc.doCast(SkillTable.getInstance().getInfo(4221, 1)); } } } if (Rnd.get(2) < 1) { if (caster == ((L2Attackable) npc).getMostHated()) { npc.setTarget(caster);
@@ -856,7 +856,7 @@ public class Zaken_l2j extends Quest implements Runnable
 	 */
 	
 	@Override
-	public String onAggroRangeEnter(L2NpcInstance npc, L2PcInstance player, boolean isPet)
+	public String onAggroRangeEnter(L2Npc npc, L2PcInstance player, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		if (npcId == ZAKEN)

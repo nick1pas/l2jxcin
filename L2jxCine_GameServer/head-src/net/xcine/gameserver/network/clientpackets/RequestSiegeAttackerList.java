@@ -19,10 +19,7 @@
 package net.xcine.gameserver.network.clientpackets;
 
 import net.xcine.gameserver.managers.CastleManager;
-import net.xcine.gameserver.managers.FortManager;
 import net.xcine.gameserver.model.entity.siege.Castle;
-import net.xcine.gameserver.model.entity.siege.Fort;
-import net.xcine.gameserver.network.serverpackets.FortSiegeAttackerList;
 import net.xcine.gameserver.network.serverpackets.SiegeAttackerList;
 
 /**
@@ -49,16 +46,6 @@ public final class RequestSiegeAttackerList extends L2GameClientPacket
 				return;
 
 			SiegeAttackerList sal = new SiegeAttackerList(castle);
-			sendPacket(sal);
-		}
-		else
-		{
-			Fort fort = FortManager.getInstance().getFortById(_castleId);
-
-			if(fort == null)
-				return;
-
-			FortSiegeAttackerList sal = new FortSiegeAttackerList(fort);
 			sendPacket(sal);
 		}
 	}

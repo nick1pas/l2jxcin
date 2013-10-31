@@ -18,18 +18,17 @@ package net.xcine.gameserver.ai.special;
 import java.util.Collection;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Effect;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2Summon;
 import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.quest.QuestTimer;
@@ -128,7 +127,7 @@ public class Valakas_l2j extends Quest implements Runnable
 				final int mp = info.getInteger("currentMP");
 				L2GrandBossInstance valakas = (L2GrandBossInstance) addSpawn(VALAKAS, loc_x, loc_y, loc_z, heading, false, 0);
 				GrandBossManager.getInstance().addBoss(valakas);
-				final L2NpcInstance _valakas = valakas;
+				final L2Npc _valakas = valakas;
 				
 				ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 				{
@@ -161,7 +160,7 @@ public class Valakas_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2NpcInstance npc, L2PcInstance player)
+	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		if (npc != null)
 		{
@@ -359,7 +358,7 @@ public class Valakas_l2j extends Quest implements Runnable
 				GrandBossManager.getInstance().addBoss(valakas);
 				
 				lastAttackTime = System.currentTimeMillis();
-				final L2NpcInstance _valakas = valakas;
+				final L2Npc _valakas = valakas;
 				ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 				{
 					@Override
@@ -390,7 +389,7 @@ public class Valakas_l2j extends Quest implements Runnable
 	}
 
 	@Override
-	public String onAttack (L2NpcInstance npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack (L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
 	{
 		if (npc.isInvul())
 		{
@@ -622,7 +621,7 @@ public class Valakas_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onKill(L2NpcInstance npc, L2PcInstance killer, boolean isPet)
+	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
 		npc.broadcastPacket(new SpecialCamera(npc.getObjectId(),1700,2000,130,-1,0));
 		npc.broadcastPacket(new PlaySound(1, "B03_D", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
@@ -643,7 +642,7 @@ public class Valakas_l2j extends Quest implements Runnable
 		return super.onKill(npc, killer, isPet);
 	}
 	
-	public void getRandomSkill(L2NpcInstance npc)
+	public void getRandomSkill(L2Npc npc)
 	{
 		if (npc.isInvul() || npc.isCastingNow())
 		{
@@ -914,7 +913,7 @@ public class Valakas_l2j extends Quest implements Runnable
 			callSkillAI(npc, c2, skill);
 	}
 	
-	public void callSkillAI(L2NpcInstance npc, L2Character c2, L2Skill skill)
+	public void callSkillAI(L2Npc npc, L2Character c2, L2Skill skill)
 	{
 		QuestTimer timer = getQuestTimer("launch_random_skill", npc, null);
 		
@@ -959,7 +958,7 @@ public class Valakas_l2j extends Quest implements Runnable
 		}
 	}
 	
-	public void broadcastSpawn(L2NpcInstance npc)
+	public void broadcastSpawn(L2Npc npc)
 	{
 		Collection<L2Object> objs = npc.getKnownList().getKnownObjects().values();
 		{
@@ -978,7 +977,7 @@ public class Valakas_l2j extends Quest implements Runnable
 		return;
 	}
 	
-	public L2Character getRandomTarget(L2NpcInstance npc)
+	public L2Character getRandomTarget(L2Npc npc)
 	{
 		FastList<L2Character> result = new FastList<>();
 		Collection<L2Object> objs = npc.getKnownList().getKnownObjects().values();
@@ -1001,7 +1000,7 @@ public class Valakas_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onSpellFinished(L2NpcInstance npc, L2PcInstance player, L2Skill skill)
+	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
 	{
 		if (npc.isInvul())
 		{
@@ -1015,7 +1014,7 @@ public class Valakas_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onAggroRangeEnter(L2NpcInstance npc, L2PcInstance player, boolean isPet)
+	public String onAggroRangeEnter(L2Npc npc, L2PcInstance player, boolean isPet)
 	{
 		int i1 = 0;
 		
@@ -1538,7 +1537,7 @@ public class Valakas_l2j extends Quest implements Runnable
 	}
 	
 	@Override
-	public String onSkillUse(L2NpcInstance npc, L2PcInstance caster, L2Skill skill)
+	public String onSkillUse(L2Npc npc, L2PcInstance caster, L2Skill skill)
 	{
 		if (npc.isInvul())
 		{

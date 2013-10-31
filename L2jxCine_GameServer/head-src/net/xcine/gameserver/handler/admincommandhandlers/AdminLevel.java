@@ -6,8 +6,8 @@ import net.xcine.Config;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.model.L2Object;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 
@@ -21,22 +21,6 @@ public class AdminLevel implements IAdminCommandHandler
 	@Override
 	public boolean useAdminCommand(String command, L2PcInstance activeChar)
 	{
-		/*
-		if(!AdminCommandAccessRights.getInstance().hasAccess(command, activeChar.getAccessLevel())){
-			return false;
-		}
-		
-		if(Config.GMAUDIT)
-		{
-			Logger _logAudit = Logger.getLogger("gmaudit");
-			LogRecord record = new LogRecord(Level.INFO, command);
-			record.setParameters(new Object[]
-			{
-					"GM: " + activeChar.getName(), " to target [" + activeChar.getTarget() + "] "
-			});
-			_logAudit.log(record);
-		}
-		*/
 
 		L2Object targetChar = activeChar.getTarget();
 		StringTokenizer st = new StringTokenizer(command, " ");
@@ -52,9 +36,9 @@ public class AdminLevel implements IAdminCommandHandler
 		{
 			try
 			{
-				if(targetChar instanceof L2PlayableInstance)
+				if(targetChar instanceof L2Playable)
 				{
-					((L2PlayableInstance) targetChar).getStat().addLevel(Byte.parseByte(val));
+					((L2Playable) targetChar).getStat().addLevel(Byte.parseByte(val));
 				}
 			}
 			catch(NumberFormatException e)
@@ -69,13 +53,13 @@ public class AdminLevel implements IAdminCommandHandler
 		{
 			try
 			{
-				if(targetChar == null || !(targetChar instanceof L2PlayableInstance))
+				if(targetChar == null || !(targetChar instanceof L2Playable))
 				{
 					activeChar.sendPacket(new SystemMessage(SystemMessageId.TARGET_IS_INCORRECT)); // incorrect
 					return false;
 				}
 
-				final L2PlayableInstance targetPlayer = (L2PlayableInstance) targetChar;
+				final L2Playable targetPlayer = (L2Playable) targetChar;
 
 				final byte lvl = Byte.parseByte(val);
 				int max_level = ExperienceData.getInstance().getMaxLevel();

@@ -19,10 +19,10 @@ package net.xcine.gameserver.model.actor.status;
 
 import net.xcine.Config;
 import net.xcine.gameserver.model.L2Character;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Summon;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.actor.instance.L2SummonInstance;
 import net.xcine.gameserver.model.entity.Duel;
 import net.xcine.gameserver.network.SystemMessageId;
@@ -114,7 +114,7 @@ public class PcStatus extends PlayableStatus
 				}
 			}
 
-			if(attacker instanceof L2PlayableInstance/* || attacker instanceof L2SiegeGuardInstance*/)
+			if(attacker instanceof L2Playable/* || attacker instanceof L2SiegeGuardInstance*/)
 			{
 				if(getCurrentCp() >= value)
 				{

@@ -25,6 +25,7 @@ import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.xml.SummonItemsData;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.idfactory.IdFactory;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2SummonItem;
 import net.xcine.gameserver.model.L2World;
@@ -32,10 +33,6 @@ import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance.SkillDat;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
-import net.xcine.gameserver.model.entity.event.CTF;
-import net.xcine.gameserver.model.entity.event.DM;
-import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.spawn.L2Spawn;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
@@ -49,7 +46,7 @@ import net.xcine.gameserver.thread.ThreadPoolManager;
 public class SummonItems implements IItemHandler
 {
 	@Override
-	public void useItem(L2PlayableInstance playable, L2ItemInstance item)
+	public void useItem(L2Playable playable, L2ItemInstance item)
 	{
 		if (!(playable instanceof L2PcInstance))
 			return;
@@ -61,31 +58,7 @@ public class SummonItems implements IItemHandler
 			playable.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		
-		// if(activeChar._inEventTvT && TvT._started && !Config.TVT_ALLOW_SUMMON)
-		if (activeChar._inEventTvT && TvT.is_started() && !Config.TVT_ALLOW_SUMMON)
-		{
-			ActionFailed af = ActionFailed.STATIC_PACKET;
-			activeChar.sendPacket(af);
-			return;
-		}
-		
-		// if(activeChar._inEventDM && DM._started && !Config.DM_ALLOW_SUMMON)
-		if (activeChar._inEventDM && DM.is_started() && !Config.DM_ALLOW_SUMMON)
-		{
-			ActionFailed af = ActionFailed.STATIC_PACKET;
-			activeChar.sendPacket(af);
-			return;
-		}
-		
-		// if(activeChar._inEventCTF && CTF._started && !Config.CTF_ALLOW_SUMMON)
-		if (activeChar._inEventCTF && CTF.is_started() && !Config.CTF_ALLOW_SUMMON)
-		{
-			ActionFailed af = ActionFailed.STATIC_PACKET;
-			activeChar.sendPacket(af);
-			return;
-		}
-		
+
 		if (activeChar.isSitting())
 		{
 			activeChar.sendPacket(new SystemMessage(SystemMessageId.CANT_MOVE_SITTING));

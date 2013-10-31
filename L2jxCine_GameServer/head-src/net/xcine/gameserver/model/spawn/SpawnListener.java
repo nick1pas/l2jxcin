@@ -18,7 +18,7 @@
  */
 package net.xcine.gameserver.model.spawn;
 
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
+import net.xcine.gameserver.model.L2Npc;
 
 /**
  * This class ...
@@ -29,5 +29,5 @@ import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 
 public interface SpawnListener
 {
-	public void npcSpawned(L2NpcInstance npc);
+	public void npcSpawned(L2Npc npc);
 }

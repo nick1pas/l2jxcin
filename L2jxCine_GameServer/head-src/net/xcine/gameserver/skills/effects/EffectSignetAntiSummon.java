@@ -20,9 +20,9 @@ package net.xcine.gameserver.skills.effects;
 import net.xcine.gameserver.ai.CtrlEvent;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Effect;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.actor.instance.L2EffectPointInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.skills.Env;
@@ -62,7 +62,7 @@ public final class EffectSignetAntiSummon extends L2Effect
 				continue;
 			}
 
-			if(cha instanceof L2PlayableInstance)
+			if(cha instanceof L2Playable)
 			{
 				L2PcInstance owner = (L2PcInstance) cha;
 				if(owner.getPet() != null)

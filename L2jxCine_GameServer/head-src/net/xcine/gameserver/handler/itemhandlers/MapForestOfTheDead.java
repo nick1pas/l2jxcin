@@ -19,11 +19,10 @@
 package net.xcine.gameserver.handler.itemhandlers;
 
 import javolution.text.TextBuilder;
-
 import net.xcine.gameserver.handler.IItemHandler;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.network.serverpackets.NpcHtmlMessage;
 
 public class MapForestOfTheDead implements IItemHandler
@@ -37,7 +36,7 @@ public class MapForestOfTheDead implements IItemHandler
 	};
 
 	@Override
-	public void useItem(L2PlayableInstance playable, L2ItemInstance item)
+	public void useItem(L2Playable playable, L2ItemInstance item)
 	{
 		if(!(playable instanceof L2PcInstance))
 			return;

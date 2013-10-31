@@ -1,8 +1,8 @@
 package net.xcine.gameserver.geo.util;
 
 
-import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.xml.DoorData;
+import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.geo.pathfinding.Node;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
 
@@ -29,7 +29,7 @@ public class Door
 		int region;
 		try
 		{
-			region = MapRegionTable.getInstance().getMapRegion(x, y);
+			region = MapRegionData.getInstance().getMapRegion(x, y);
 		}
 		catch(Exception e)
 		{

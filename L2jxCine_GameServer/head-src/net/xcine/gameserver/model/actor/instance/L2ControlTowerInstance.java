@@ -24,6 +24,7 @@ import javolution.util.FastList;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.model.L2Character;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.spawn.L2Spawn;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
 import net.xcine.gameserver.network.serverpackets.MyTargetSelected;
@@ -31,7 +32,7 @@ import net.xcine.gameserver.network.serverpackets.StatusUpdate;
 import net.xcine.gameserver.network.serverpackets.ValidateLocation;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 
-public class L2ControlTowerInstance extends L2NpcInstance
+public class L2ControlTowerInstance extends L2Npc
 {
 
 	private List<L2Spawn> _guards;

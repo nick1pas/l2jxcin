@@ -22,13 +22,12 @@ import java.util.Collection;
 import java.util.Map;
 
 import javolution.util.FastMap;
-
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Object;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2BoatInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.util.Util;
 
 public class ObjectKnownList
@@ -121,7 +120,7 @@ public class ObjectKnownList
 	// Method - Private
 	private final void findCloseObjects()
 	{
-		boolean isActiveObjectPlayable = getActiveObject() instanceof L2PlayableInstance;
+		boolean isActiveObjectPlayable = getActiveObject() instanceof L2Playable;
 
 		if(isActiveObjectPlayable)
 		{
@@ -139,11 +138,11 @@ public class ObjectKnownList
 				}
 
 				// Try to add object to active object's known objects
-				// L2PlayableInstance sees everything
+				// L2Playable sees everything
 				addKnownObject(object);
 
 				// Try to add active object to object's known objects
-				// Only if object is a L2Character and active object is a L2PlayableInstance
+				// Only if object is a L2Character and active object is a L2Playable
 				if(object instanceof L2Character)
 				{
 					object.getKnownList().addKnownObject(getActiveObject());
@@ -154,7 +153,7 @@ public class ObjectKnownList
 		}
 		else
 		{
-			Collection<L2PlayableInstance> playables = L2World.getInstance().getVisiblePlayable(getActiveObject());
+			Collection<L2Playable> playables = L2World.getInstance().getVisiblePlayable(getActiveObject());
 
 			if(playables == null)
 				return;
@@ -168,7 +167,7 @@ public class ObjectKnownList
 				}
 
 				// Try to add object to active object's known objects
-				// L2Character only needs to see visible L2PcInstance and L2PlayableInstance,
+				// L2Character only needs to see visible L2PcInstance and L2Playable,
 				// when moving. Other l2characters are currently only known from initial spawn area.
 				// Possibly look into getDistanceToForgetObject values before modifying this approach...
 				addKnownObject(playable);

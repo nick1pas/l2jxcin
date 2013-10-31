@@ -22,8 +22,8 @@ import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.model.L2EnchantSkillLearn;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Skill;
-import net.xcine.gameserver.model.actor.instance.L2FolkInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.serverpackets.ExEnchantSkillInfo;
@@ -58,13 +58,13 @@ public final class RequestExEnchantSkillInfo extends L2GameClientPacket
 		if(activeChar.getLevel() < 76)
 			return;
 
-		L2FolkInstance trainer = activeChar.getLastFolkNPC();
+		L2NpcInstance trainer = activeChar.getLastFolkNPC();
 		if(trainer == null)
 		{
 			return;
 		}
 		
-		if (!activeChar.isInsideRadius(trainer, L2NpcInstance.INTERACTION_DISTANCE, false, false) && !activeChar.isGM())
+		if (!activeChar.isInsideRadius(trainer, L2Npc.INTERACTION_DISTANCE, false, false) && !activeChar.isGM())
 		{
 			return;
 		}

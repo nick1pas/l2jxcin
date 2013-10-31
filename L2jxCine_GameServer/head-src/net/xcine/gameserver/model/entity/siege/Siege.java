@@ -32,9 +32,9 @@ import javolution.util.FastList;
 import net.xcine.Config;
 import net.xcine.crypt.nProtect;
 import net.xcine.crypt.nProtect.RestrictionType;
-import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
+import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.managers.MercTicketManager;
 import net.xcine.gameserver.managers.SiegeGuardManager;
@@ -42,6 +42,7 @@ import net.xcine.gameserver.managers.SiegeManager;
 import net.xcine.gameserver.managers.SiegeManager.SiegeSpawn;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Clan;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2SiegeClan;
 import net.xcine.gameserver.model.L2SiegeClan.SiegeClanType;
@@ -105,6 +106,8 @@ public class Siege
 
 	protected static final Logger _log = Logger.getLogger(Siege.class.getName());
 	private final SimpleDateFormat fmt = new SimpleDateFormat("H:mm.");
+	private int _flameTowerCount;
+	private int _flameTowerMaxCount;
 	
 	/**
 	 * The Enum TeleportWhoType.
@@ -394,13 +397,13 @@ public class Siege
 			removeFlags();
 			
 			// Teleport to the second closest town
-			teleportPlayer(Siege.TeleportWhoType.Attacker, MapRegionTable.TeleportWhereType.Town);
+			teleportPlayer(Siege.TeleportWhoType.Attacker, MapRegionData.TeleportWhereType.Town);
 			
 			// Teleport to the second closest town
-			teleportPlayer(Siege.TeleportWhoType.DefenderNotOwner, MapRegionTable.TeleportWhereType.Town);
+			teleportPlayer(Siege.TeleportWhoType.DefenderNotOwner, MapRegionData.TeleportWhereType.Town);
 			
 			// Teleport to the second closest town
-			teleportPlayer(Siege.TeleportWhoType.Spectator, MapRegionTable.TeleportWhereType.Town);
+			teleportPlayer(Siege.TeleportWhoType.Spectator, MapRegionData.TeleportWhereType.Town);
 			
 			// Flag so that siege instance can be started
 			_isInProgress = false;
@@ -586,10 +589,10 @@ public class Siege
 				}
 
 				// Teleport to the second closest town
-				teleportPlayer(Siege.TeleportWhoType.Attacker, MapRegionTable.TeleportWhereType.SiegeFlag);
+				teleportPlayer(Siege.TeleportWhoType.Attacker, MapRegionData.TeleportWhereType.SiegeFlag);
 
 				// Teleport to the second closest town
-				teleportPlayer(Siege.TeleportWhoType.Spectator, MapRegionTable.TeleportWhereType.Town);
+				teleportPlayer(Siege.TeleportWhoType.Spectator, MapRegionData.TeleportWhereType.Town);
 
 				// Removes defenders' flags
 				removeDefenderFlags();
@@ -653,7 +656,7 @@ public class Siege
 			updatePlayerSiegeStateFlags(false);
 			
 			// Teleport to the closest town
-			teleportPlayer(Siege.TeleportWhoType.Attacker, MapRegionTable.TeleportWhereType.Town);
+			teleportPlayer(Siege.TeleportWhoType.Attacker, MapRegionData.TeleportWhereType.Town);
 			
 			_controlTowerCount = 0;
 			_controlTowerMaxCount = 0;
@@ -1055,7 +1058,7 @@ public class Siege
 	 *
 	 * @param ct the ct
 	 */
-	public void killedCT(L2NpcInstance ct)
+	public void killedCT(L2Npc ct)
 	{
 		// Add respawn penalty to defenders for each control tower lose
 		_defenderRespawnDelayPenalty += SiegeManager.getInstance().getControlTowerLosePenalty();
@@ -1264,7 +1267,7 @@ public class Siege
 	 * @param teleportWho the teleport who
 	 * @param teleportWhere the teleport where
 	 */
-	public void teleportPlayer(TeleportWhoType teleportWho, MapRegionTable.TeleportWhereType teleportWhere)
+	public void teleportPlayer(TeleportWhoType teleportWho, MapRegionData.TeleportWhereType teleportWhere)
 	{
 		List<L2PcInstance> players;
 		switch(teleportWho)
@@ -2026,7 +2029,7 @@ public class Siege
 	 * @param clan the clan
 	 * @return the flag
 	 */
-	public List<L2NpcInstance> getFlag(L2Clan clan)
+	public List<L2Npc> getFlag(L2Clan clan)
 	{
 		if(clan != null)
 		{
@@ -2036,7 +2039,24 @@ public class Siege
 		}
 		return null;
 	}
-
+	
+	/**
+	 * @return the max count of flame type towers.
+	 */
+	public int getFlameTowerMaxCount()
+	{
+		return _flameTowerMaxCount;
+	}
+	
+	public void disableTraps()
+	{
+		_flameTowerCount--;
+	}
+	
+	public boolean isTrapsActive()
+	{
+		return _flameTowerCount > 0;
+	}
 	/**
 	 * Gets the siege guard manager.
 	 *

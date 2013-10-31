@@ -12,7 +12,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 /**
  * @author eX1steam, L2jxCine
  */
-public class L2CastleBlacksmithInstance extends L2FolkInstance
+public class L2CastleBlacksmithInstance extends L2NpcInstance
 {
 	protected static final int COND_ALL_FALSE = 0;
 	protected static final int COND_BUSY_BECAUSE_OF_SIEGE = 1;

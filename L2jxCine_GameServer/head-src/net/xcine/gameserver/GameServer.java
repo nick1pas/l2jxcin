@@ -45,7 +45,6 @@ import net.xcine.gameserver.datatables.NobleSkillTable;
 import net.xcine.gameserver.datatables.OfflineTradeTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.ExtractableItemsData;
-import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.sql.ArmorSetsTable;
 import net.xcine.gameserver.datatables.sql.CharNameTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
@@ -65,6 +64,7 @@ import net.xcine.gameserver.datatables.xml.FishTable;
 import net.xcine.gameserver.datatables.xml.HelperBuffData;
 import net.xcine.gameserver.datatables.xml.HennaData;
 import net.xcine.gameserver.datatables.xml.L2PetDataData;
+import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.datatables.xml.NpcWalkerRoutesData;
 import net.xcine.gameserver.datatables.xml.RecipeData;
 import net.xcine.gameserver.datatables.xml.SkillSpellbookData;
@@ -98,8 +98,6 @@ import net.xcine.gameserver.managers.CursedWeaponsManager;
 import net.xcine.gameserver.managers.DayNightSpawnManager;
 import net.xcine.gameserver.managers.DimensionalRiftManager;
 import net.xcine.gameserver.managers.DuelManager;
-import net.xcine.gameserver.managers.FortManager;
-import net.xcine.gameserver.managers.FortSiegeManager;
 import net.xcine.gameserver.managers.FourSepulchersManager;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.managers.ItemsOnGroundManager;
@@ -117,7 +115,6 @@ import net.xcine.gameserver.model.ipCatcher;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.entity.Hero;
 import net.xcine.gameserver.model.entity.MonsterRace;
-import net.xcine.gameserver.model.entity.event.manager.EventManager;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSigns;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSignsFestival;
@@ -219,7 +216,7 @@ public class GameServer
 		
 		Util.printSection("World");
 		L2World.getInstance();
-		MapRegionTable.getInstance();
+		MapRegionData.getInstance();
 		Announcements.getInstance();
 		AutoAnnouncementHandler.getInstance();
 		TerritoryData.getInstance();
@@ -377,8 +374,6 @@ public class GameServer
 		Util.printSection("Castles");
 		CastleManager.getInstance();
 		SiegeManager.getInstance();
-		FortManager.getInstance();
-		FortSiegeManager.getInstance();
 		CrownManager.getInstance();
 		
 		Util.printSection("Boat");
@@ -513,22 +508,7 @@ public class GameServer
 		}
 		else
 			_log.info("All custom mods are Disabled.");
-		
-		Util.printSection("EventManager");
-		EventManager.getInstance().startEventRegistration();
-		
-		if (EventManager.TVT_EVENT_ENABLED || EventManager.CTF_EVENT_ENABLED || EventManager.DM_EVENT_ENABLED)
-		{
-			if (EventManager.TVT_EVENT_ENABLED)
-				_log.info("TVT Event is Enabled.");
-			if (EventManager.CTF_EVENT_ENABLED)
-				_log.info("CTF Event is Enabled.");
-			if (EventManager.DM_EVENT_ENABLED)
-				_log.info("DM Event is Enabled.");
-		}
-		else
-			_log.info("All events are Disabled.");
-		
+
 		if ((Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) && Config.RESTORE_OFFLINERS)
 			OfflineTradeTable.restoreOfflineTraders();
 

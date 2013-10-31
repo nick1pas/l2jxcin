@@ -19,7 +19,7 @@
 package net.xcine.gameserver.skills.effects;
 
 import net.xcine.gameserver.model.L2Effect;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.skills.Env;
 
 /**
@@ -42,9 +42,9 @@ final class EffectPhoenixBless extends L2Effect
 	@Override
 	public void onStart()
 	{
-		if(getEffected() instanceof L2PlayableInstance)
+		if(getEffected() instanceof L2Playable)
 		{
-			((L2PlayableInstance) getEffected()).startPhoenixBlessing(this);
+			((L2Playable) getEffected()).startPhoenixBlessing();
 		}
 	}
 
@@ -52,9 +52,9 @@ final class EffectPhoenixBless extends L2Effect
 	@Override
 	public void onExit()
 	{
-		if(getEffected() instanceof L2PlayableInstance)
+		if(getEffected() instanceof L2Playable)
 		{
-			((L2PlayableInstance) getEffected()).stopPhoenixBlessing(this);
+			((L2Playable) getEffected()).stopPhoenixBlessing(this);
 		}
 	}
 

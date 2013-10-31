@@ -269,17 +269,10 @@ public final class UseItem extends L2GameClientPacket
 			int bodyPart = item.getItem().getBodyPart();
 			
 			// Like L2OFF you can't use equips while you are casting
-			if ((activeChar.isCastingNow() || activeChar.isCastingPotionNow() || activeChar.isMounted() || (activeChar._inEventCTF && activeChar._haveFlagCTF)))
+			if ((activeChar.isCastingNow() || activeChar.isCastingPotionNow() || activeChar.isMounted()))
 			{
-				if (activeChar._inEventCTF && activeChar._haveFlagCTF)
-				{
-					activeChar.sendMessage("This item can not be equipped when you have the flag.");
-				}
-				else
-				{
 					SystemMessage sm = new SystemMessage(SystemMessageId.CANNOT_USE_ITEM_WHILE_USING_MAGIC);
 				    activeChar.sendPacket(sm);
-				}
 				return;
 			}
 

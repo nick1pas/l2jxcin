@@ -22,14 +22,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 import javolution.text.TextBuilder;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.managers.CastleManager;
-import net.xcine.gameserver.managers.FortManager;
-import net.xcine.gameserver.managers.FortSiegeManager;
 import net.xcine.gameserver.managers.SiegeManager;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Clan;
@@ -43,7 +40,6 @@ import net.xcine.gameserver.model.base.PlayerRace;
 import net.xcine.gameserver.model.base.SubClass;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.model.entity.siege.Castle;
-import net.xcine.gameserver.model.entity.siege.Fort;
 import net.xcine.gameserver.model.quest.QuestState;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
@@ -60,7 +56,7 @@ import net.xcine.gameserver.util.Util;
  * @version $Revision: 1.4.2.3.2.8 $ $Date: 2009/04/13 02:10:41 $
  * @author programmos
  */
-public final class L2VillageMasterInstance extends L2FolkInstance
+public final class L2VillageMasterInstance extends L2NpcInstance
 {
 	//private static Logger _log = Logger.getLogger(L2VillageMasterInstance.class.getName());
 
@@ -348,15 +344,7 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 						player.setLocked(false);
 						return;
 					}
-					
-					// You can't add Subclass when you are registered in Events (TVT, CTF, DM)
-					if(player._inEventTvT || player._inEventCTF || player._inEventDM)
-					{
-						player.sendMessage("You can't add a subclass while in an event.");
-						player.setLocked(false);
-						return;
-					}
-					
+
 					// Check player level
 					if(player.getLevel() < 75)
 					{
@@ -469,14 +457,6 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 						return;
 					}
 					
-					// You can't change Subclass when you are registered in Events (TVT, CTF, DM)
-					if(player._inEventTvT || player._inEventCTF || player._inEventDM)
-					{
-						player.sendMessage("You can't change subclass while in an event.");
-						player.setLocked(false);
-						return;
-					}
-					
 					// You can't change Subclass when you are registered in Olympiad
 					if(Olympiad.getInstance().isRegisteredInComp(player) || player.getOlympiadGameId() > 0)
 					{
@@ -534,14 +514,6 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 					if (!player.getFloodProtectors().getSubclass().tryPerformAction("delete subclass"))
 					{
 						_log.warning("Player "+player.getName()+" has performed a subclass change too fast");
-						player.setLocked(false);
-						return;
-					}
-				
-					// You can't delete Subclass when you are registered in Events (TVT, CTF, DM)
-					if(player._inEventTvT || player._inEventCTF || player._inEventDM)
-					{
-						player.sendMessage("You can't delete a subclass while in an event.");
 						player.setLocked(false);
 						return;
 					}
@@ -687,15 +659,6 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 			}
 		}
 
-		for(Fort fort : FortManager.getInstance().getForts())
-		{
-			if(FortSiegeManager.getInstance().checkIsRegistered(clan, fort.getFortId()))
-			{
-				player.sendPacket(new SystemMessage(SystemMessageId.CANNOT_DISSOLVE_WHILE_IN_SIEGE));
-				return;
-			}
-		}
-
 		if(player.isInsideZone(L2Character.ZONE_SIEGE))
 		{
 			player.sendPacket(new SystemMessage(SystemMessageId.CANNOT_DISSOLVE_WHILE_IN_SIEGE));
@@ -796,8 +759,7 @@ public final class L2VillageMasterInstance extends L2FolkInstance
 			return;
 		}
 		
-		if(SiegeManager.getInstance().checkIsRegisteredInSiege(clan)
-				|| FortSiegeManager.getInstance().checkIsRegisteredInSiege(clan))
+		if(SiegeManager.getInstance().checkIsRegisteredInSiege(clan))
 		{
 			player.sendMessage("Cannot change clan leader while registered in Siege");
 			return;

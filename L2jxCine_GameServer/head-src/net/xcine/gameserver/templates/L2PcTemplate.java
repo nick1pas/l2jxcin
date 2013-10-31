@@ -100,7 +100,8 @@ public class L2PcTemplate extends L2CharTemplate
 	/**
 	 * @return
 	 */
-	public double getCollisionRadius()
+	@Override
+	public int getCollisionRadius()
 	{
 		return _currentCollisionRadius;
 	}
@@ -108,7 +109,8 @@ public class L2PcTemplate extends L2CharTemplate
 	/**
 	 * @return
 	 */
-	public double getCollisionHeight()
+	@Override
+	public int getCollisionHeight()
 	{
 		return _currentCollisionHeight;
 	}

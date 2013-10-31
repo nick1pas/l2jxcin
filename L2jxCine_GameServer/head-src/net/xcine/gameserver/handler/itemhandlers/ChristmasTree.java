@@ -22,11 +22,11 @@ import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.idfactory.IdFactory;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
+import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.spawn.L2Spawn;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
@@ -49,7 +49,7 @@ public class ChristmasTree implements IItemHandler
 	};
 
 	@Override
-	public void useItem(L2PlayableInstance playable, L2ItemInstance item)
+	public void useItem(L2Playable playable, L2ItemInstance item)
 	{
 		L2PcInstance activeChar = (L2PcInstance) playable;
 
@@ -81,7 +81,7 @@ public class ChristmasTree implements IItemHandler
 			spawn.setLocx(target.getX());
 			spawn.setLocy(target.getY());
 			spawn.setLocz(target.getZ());
-			L2NpcInstance result = spawn.spawnOne();
+			L2Npc result = spawn.spawnOne();
 
 			activeChar.destroyItem("Consume", item.getObjectId(), 1, null, false);
 
@@ -111,11 +111,11 @@ public class ChristmasTree implements IItemHandler
 
 	public class DeSpawn implements Runnable
 	{
-		L2NpcInstance _npc = null;
+		L2Npc _npc = null;
 
-		public DeSpawn(L2NpcInstance npc)
+		public DeSpawn(L2Npc result)
 		{
-			_npc = npc;
+			_npc = result;
 		}
 
 		@Override

@@ -21,6 +21,7 @@ import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.L2ClanMember;
+import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.entity.ClanHall;
 import net.xcine.gameserver.model.entity.siege.clanhalls.BanditStrongholdSiege;
 import net.xcine.gameserver.model.entity.siege.clanhalls.WildBeastFarmSiege;
@@ -34,7 +35,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  * @author MHard L2EmuRT
  */
 
-public class L2ClanHallSiegeInfInstance extends L2NpcInstance
+public class L2ClanHallSiegeInfInstance extends L2Npc
 {
 	public L2ClanHallSiegeInfInstance(int objectId, L2NpcTemplate template)
 	{
@@ -118,11 +119,11 @@ public class L2ClanHallSiegeInfInstance extends L2NpcInstance
 
 			if(quest.length() == 0)
 			{
-				showQuestWindow(player);
+				showQuestWindow(player, this);
 			}
 			else
 			{
-				showQuestWindow(player, quest);
+				showQuestWindow(player, this, quest);
 			}
 		}
 		else if(command.startsWith("Registration"))

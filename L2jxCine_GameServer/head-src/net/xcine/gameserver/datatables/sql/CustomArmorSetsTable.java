@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.logging.Logger;
 
+import net.xcine.gameserver.datatables.xml.ArmorSetsData;
 import net.xcine.gameserver.model.L2ArmorSet;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
@@ -62,7 +63,7 @@ public final class CustomArmorSetsTable
 				int shield = rset.getInt("shield");
 				int shield_skill_id = rset.getInt("shield_skill_id");
 				int enchant6skill = rset.getInt("enchant6skill");
-				ArmorSetsTable.getInstance().addObj(chest, new L2ArmorSet(chest, legs, head, gloves, feet, skill_id, shield, shield_skill_id, enchant6skill));
+				ArmorSetsData.getInstance().addObj(chest, new L2ArmorSet(chest, legs, head, gloves, feet, skill_id, shield, shield_skill_id, enchant6skill));
 			}
 			_log.finest("ArmorSetsTable: Loaded custom armor sets.");
 

@@ -45,7 +45,6 @@ import net.xcine.gameserver.datatables.NobleSkillTable;
 import net.xcine.gameserver.datatables.OfflineTradeTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.ExtractableItemsData;
-import net.xcine.gameserver.datatables.sql.ArmorSetsTable;
 import net.xcine.gameserver.datatables.sql.CharNameTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.CustomArmorSetsTable;
@@ -56,6 +55,7 @@ import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.AccessLevelsData;
 import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
+import net.xcine.gameserver.datatables.xml.ArmorSetsData;
 import net.xcine.gameserver.datatables.xml.AugmentationData;
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.datatables.xml.DoorData;
@@ -262,7 +262,7 @@ public class GameServer
 			_log.info("Could not find the extraced files. Please Check Your Data.");
 			throw new Exception("Could not initialize the item table");
 		}
-		ArmorSetsTable.getInstance();
+		ArmorSetsData.getInstance();
 		if (Config.CUSTOM_ARMORSETS_TABLE)
 		{
 			CustomArmorSetsTable.getInstance();

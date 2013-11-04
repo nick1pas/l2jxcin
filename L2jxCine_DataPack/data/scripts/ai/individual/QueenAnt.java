@@ -16,7 +16,7 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.List;
 
@@ -36,8 +36,9 @@ import net.xcine.gameserver.network.serverpackets.PlaySound;
 import net.xcine.gameserver.network.serverpackets.SocialAction;
 import net.xcine.gameserver.templates.StatsSet;
 import net.xcine.util.random.Rnd;
+import ai.AbstractNpcAI;
 
-public class QueenAnt extends Quest implements Runnable
+public class QueenAnt extends AbstractNpcAI
 {
 	private static final int QUEEN = 29001;
 	private static final int LARVA = 29002;
@@ -69,9 +70,9 @@ public class QueenAnt extends Quest implements Runnable
 		LARVA_DESPAWN
 	}
 	
-	public QueenAnt(int questId, String name, String descr)
+	public QueenAnt(String name, String descr)
 	{
-		super(questId, name, descr);
+		super(name, descr);
 		
 		int[] mobs =
 		{
@@ -400,9 +401,8 @@ public class QueenAnt extends Quest implements Runnable
 		}
 		return super.onKill(npc, killer, isPet);
 	}
-	
-	@Override
-	public void run()
+	public static void main(String[] args)
 	{
+		new QueenAnt(QueenAnt.class.getSimpleName(), "ai/individual");
 	}
 }

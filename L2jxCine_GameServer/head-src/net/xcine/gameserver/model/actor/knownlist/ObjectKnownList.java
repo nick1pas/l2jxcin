@@ -18,7 +18,9 @@
  */
 package net.xcine.gameserver.model.actor.knownlist;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastMap;
@@ -32,20 +34,13 @@ import net.xcine.gameserver.util.Util;
 
 public class ObjectKnownList
 {
-	// =========================================================
-	// Data Field
 	private L2Object _activeObject;
 	private Map<Integer, L2Object> _knownObjects;
-
-	// =========================================================
-	// Constructor
 	public ObjectKnownList(L2Object activeObject)
 	{
 		_activeObject = activeObject;
 	}
 
-	// =========================================================
-	// Method - Public
 	public boolean addKnownObject(L2Object object)
 	{
 		return addKnownObject(object, null);
@@ -86,7 +81,20 @@ public class ObjectKnownList
 	{
 		getKnownObjects().clear();
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	public final <A> Collection<A> getKnownType(Class<A> type)
+	{
+		List<A> result = new ArrayList<>();
+		
+		for (L2Object obj : _knownObjects.values())
+		{
+			if (type.isAssignableFrom(obj.getClass()))
+				result.add((A) obj);
+		}
+		return result;
+	}
+	
 	public boolean removeKnownObject(L2Object object)
 	{
 		if(object == null)

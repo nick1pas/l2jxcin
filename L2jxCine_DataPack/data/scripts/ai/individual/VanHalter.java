@@ -16,7 +16,7 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -52,6 +52,7 @@ import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 import net.xcine.util.random.Rnd;
+import ai.AbstractNpcAI;
 
 /**
  * This class ... control for sequence of fight against "High Priestess van Halter".
@@ -60,7 +61,7 @@ import net.xcine.util.random.Rnd;
  * @author L2J_JP SANDMAN
  **/
 
-public class VanHalter extends Quest implements Runnable
+public class VanHalter extends AbstractNpcAI
 {
 	private static final Logger _log = Logger.getLogger(VanHalter.class.getName());
 
@@ -118,9 +119,9 @@ public class VanHalter extends Quest implements Runnable
 	private static final byte ALIVE = 2;
 
 	// Initialize
-	public VanHalter(int questId, String name, String descr)
+	public VanHalter(String name, String descr)
 	{
-		super(questId, name, descr);
+		super(name, descr);
 
 		int[] mobs =
 		{
@@ -1883,8 +1884,8 @@ public class VanHalter extends Quest implements Runnable
 			}
 		}
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		new VanHalter(VanHalter.class.getSimpleName(), "ai/individual");
+	}
 }

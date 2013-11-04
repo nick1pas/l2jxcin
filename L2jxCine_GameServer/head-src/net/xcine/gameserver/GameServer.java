@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import net.xcine.Config;
 import net.xcine.ServerType;
 import net.xcine.crypt.nProtect;
-import net.xcine.gameserver.ai.special.manager.AILoader;
 import net.xcine.gameserver.cache.CrestCache;
 import net.xcine.gameserver.cache.HtmCache;
 import net.xcine.gameserver.communitybbs.Manager.ForumsBBSManager;
@@ -455,15 +454,6 @@ public class GameServer
 		else
 			_log.info("Quest: disable load.");
 		
-		Util.printSection("AI");
-		if (!Config.ALT_DEV_NO_AI)
-		{
-			AILoader.init();
-		}
-		else
-		{
-			_log.info("AI: disable load.");
-		}
 		
 		Util.printSection("Scripts");
 		if (!Config.ALT_DEV_NO_SCRIPT)

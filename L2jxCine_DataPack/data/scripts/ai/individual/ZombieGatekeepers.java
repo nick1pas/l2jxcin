@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -22,13 +22,13 @@ import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.quest.Quest;
+import ai.AbstractNpcAI;
 
-public class ZombieGatekeepers extends Quest implements Runnable
+public class ZombieGatekeepers extends AbstractNpcAI
 {
-	public ZombieGatekeepers(int questId, String name, String descr)
+	public ZombieGatekeepers(String name, String descr)
 	{
-		super(questId, name, descr);
+		super(name, descr);
 		super.addAttackId(22136);
 		super.addAggroRangeEnterId(22136);
 	}
@@ -103,9 +103,8 @@ public class ZombieGatekeepers extends Quest implements Runnable
 		
 		return super.onKill(npc, killer, isPet);
 	}
-	
-	@Override
-	public void run()
+	public static void main(String[] args)
 	{
+		new ZombieGatekeepers(ZombieGatekeepers.class.getSimpleName(), "ai/individual");
 	}
 }

@@ -16,9 +16,11 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.List;
+
+import ai.AbstractNpcAI;
 
 import javolution.util.FastList;
 import net.xcine.Config;
@@ -38,7 +40,7 @@ import net.xcine.util.random.Rnd;
  * Core AI
  * @author qwerty
  */
-public class Core extends Quest implements Runnable
+public class Core extends AbstractNpcAI
 {
 	private static final int CORE = 29006;
 	private static final int DEATH_KNIGHT = 29007;
@@ -59,9 +61,9 @@ public class Core extends Quest implements Runnable
 
 	//private static final Logger _log = Logger.getLogger(Core.class.getName());
 
-	public Core(int id, String name, String descr)
+	public Core(String name, String descr)
 	{
-		super(id, name, descr);
+		super(name, descr);
 		
 		int[] mobs =
 		{
@@ -253,8 +255,8 @@ public class Core extends Quest implements Runnable
 			Minions.add((L2Attackable) addSpawn(SUSCEPTOR, x, 110300, npc.getZ(), 280 + Rnd.get(40), false, 0));
 		}
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		new Core(Core.class.getSimpleName(), "ai/individual");
+	}
 }

@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-import net.xcine.gameserver.ai.special.manager.AIExtend;
 import net.xcine.gameserver.model.L2DropCategory;
 import net.xcine.gameserver.model.L2DropData;
 import net.xcine.gameserver.model.L2MinionData;
@@ -122,7 +121,6 @@ public final class L2NpcTemplate extends L2CharTemplate
 	private Map<Stats, Double> _vulnerabilities = new FastMap<>();
 	// contains a list of quests for each event type (questStart, questAttack, questKill, etc)
 	private Map<Quest.QuestEventType, Quest[]> _questEvents = new FastMap<>();
-	private static FastMap<AIExtend.Action, AIExtend[]> _aiEvents = new FastMap<>();
 
 	/**
 	 * Constructor of L2Character.<BR>
@@ -360,65 +358,6 @@ public final class L2NpcTemplate extends L2CharTemplate
 			return new Quest[0];
 		
 		return _questEvents.get(EventType);
-	}
-
-	//TODO
-	public void addAIEvent(AIExtend.Action actionType, AIExtend ai)
-	{
-		if(_aiEvents.get(actionType) == null)
-		{
-			_aiEvents.put(actionType, new AIExtend[]
-			{
-				ai
-			});
-		}
-		else
-		{
-			AIExtend[] _ai = _aiEvents.get(actionType);
-			int len = _ai.length;
-
-			// if only one registration per npc is allowed for this event type
-			// then only register this NPC if not already registered for the specified event.
-			// if a quest allows multiple registrations, then register regardless of count
-			// In all cases, check if this new registration is replacing an older copy of the SAME quest
-			if(!actionType.isRegistred())
-			{
-				if(_ai[0].getID() == ai.getID())
-				{
-					_ai[0] = ai;
-				}
-				else
-				{
-					_log.warning("Skipped AI: \"" + ai.getID() + "\".");
-				}
-			}
-			else
-			{
-				// be ready to add a new quest to a new copy of the list, with larger size than previously.
-				AIExtend[] tmp = new AIExtend[len + 1];
-				// loop through the existing quests and copy them to the new list.  While doing so, also 
-				// check if this new quest happens to be just a replacement for a previously loaded quest.  
-				// If so, just save the updated reference and do NOT use the new list. Else, add the new
-				// quest to the end of the new list
-				for(int i = 0; i < len; i++)
-				{
-					if(_ai[i].getID() == ai.getID())
-					{
-						_ai[i] = ai;
-						return;
-					}
-					tmp[i] = _ai[i];
-				}
-
-				tmp[len] = ai;
-				_aiEvents.put(actionType, tmp);
-			}
-		}
-	}
-
-	public static void clearAI()
-	{
-		_aiEvents.clear();
 	}
 
 	public StatsSet getStatsSet()

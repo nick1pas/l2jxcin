@@ -16,7 +16,7 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.ArrayList;
 
@@ -29,8 +29,9 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.CreatureSay;
 import net.xcine.util.random.Rnd;
+import ai.AbstractNpcAI;
 
-public class Transform extends Quest implements Runnable
+public class Transform extends AbstractNpcAI
 {
 	private ArrayList<Transformer> _mobs = new ArrayList<>();
 	
@@ -79,9 +80,9 @@ public class Transform extends Quest implements Runnable
 		"This time at the last! The end!"
 	};
 	
-	public Transform(int questId, String name, String descr)
+	public Transform(String name, String descr)
 	{
-		super(questId, name, descr);
+		super(name, descr);
 		
 		_mobs.add(new Transformer(21261, 21262, 1, 5)); // 1st mutation Ol Mahum Transcender
 		_mobs.add(new Transformer(21262, 21263, 1, 5)); // 2st mutation Ol Mahum Transcender
@@ -191,11 +192,6 @@ public class Transform extends Quest implements Runnable
 		}
 		return super.onKill(npc, killer, isPet);
 	}
-
-	@Override
-	public void run()
-	{
-	}
 	
 	private class NPCSpawnTask implements Runnable
 	{
@@ -232,5 +228,9 @@ public class Transform extends Quest implements Runnable
 			
 			spawn.stopAbnormalEffect(spawnAbnormalEffect);
 		}
+	}
+	public static void main(String[] args)
+	{
+		new Transform(Transform.class.getSimpleName(), "ai/individual");
 	}
 }

@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import static net.xcine.gameserver.ai.CtrlIntention.AI_INTENTION_FOLLOW;
 import static net.xcine.gameserver.ai.CtrlIntention.AI_INTENTION_IDLE;
@@ -38,7 +38,6 @@ import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
 import net.xcine.gameserver.model.actor.instance.L2MonsterInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.Announcements;
-import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.quest.QuestTimer;
 import net.xcine.gameserver.model.zone.type.L2BossZone;
 import net.xcine.gameserver.network.serverpackets.Earthquake;
@@ -49,8 +48,9 @@ import net.xcine.gameserver.templates.StatsSet;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.util.Util;
 import net.xcine.util.random.Rnd;
+import ai.AbstractNpcAI;
 
-public class Baium_l2j  extends Quest implements Runnable
+public class Baium_l2j  extends AbstractNpcAI
 {
 	protected static final Logger _log = Logger.getLogger(Baium_l2j.class.getName());
 	
@@ -80,9 +80,9 @@ public class Baium_l2j  extends Quest implements Runnable
 	private List<L2Npc> _Minions = new ArrayList<>(5);
 	protected L2BossZone _Zone;
 	
-	public Baium_l2j (int questId, String name, String descr)
+	public Baium_l2j (String name, String descr)
 	{
-		super(questId, name, descr);
+		super(name, descr);
 		
 		int[] mob = {LIVE_BAIUM};
 		this.registerMobs(mob);
@@ -632,8 +632,8 @@ public class Baium_l2j  extends Quest implements Runnable
 		}
 		return dist;
 	}
-	
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		new Baium_l2j(Baium_l2j.class.getSimpleName(), "ai/individual");
+	}
 }

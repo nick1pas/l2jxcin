@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.Collection;
 
@@ -30,13 +30,13 @@ import net.xcine.gameserver.model.L2Skill.SkillType;
 import net.xcine.gameserver.model.L2Summon;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
-import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.CreatureSay;
 import net.xcine.gameserver.util.Util;
 import net.xcine.util.random.Rnd;
+import ai.AbstractNpcAI;
 
 
-public class Monastery_l2j extends Quest implements Runnable
+public class Monastery_l2j extends AbstractNpcAI
 {
 	static final int[] mobs1 = {22124, 22125, 22126, 22127, 22129};
 	static final int[] mobs2 = {22134, 22135};
@@ -46,9 +46,9 @@ public class Monastery_l2j extends Quest implements Runnable
 		"name, why would you choose the path of darkness?!",
 		"name! How dare you defy the will of Einhasad!"
 	};
-	public Monastery_l2j(int questId, String name, String descr)
+	public Monastery_l2j(String name, String descr)
 	{
-		super(questId, name, descr);
+		super(name, descr);
 		registerMobs(mobs1, QuestEventType.ON_AGGRO_RANGE_ENTER, QuestEventType.ON_SPAWN, QuestEventType.ON_SPELL_FINISHED);
 		registerMobs(mobs2, QuestEventType.ON_SPELL_FINISHED);
 	}
@@ -167,10 +167,9 @@ public class Monastery_l2j extends Quest implements Runnable
 		
 		return super.onSpellFinished(npc, player, skill);
 	}
-	
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		new Monastery_l2j(Monastery_l2j.class.getSimpleName(), "ai/individual");
+	}
 	
 }

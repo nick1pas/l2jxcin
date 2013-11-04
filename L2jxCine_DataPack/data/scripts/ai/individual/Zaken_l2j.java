@@ -12,9 +12,11 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.logging.Logger;
+
+import ai.AbstractNpcAI;
 
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
@@ -39,7 +41,7 @@ import net.xcine.util.random.Rnd;
 /**
  * Zaken AI
  */
-public class Zaken_l2j extends Quest implements Runnable
+public class Zaken_l2j extends AbstractNpcAI
 {
 	protected static final Logger log = Logger.getLogger(Zaken_l2j.class.getName());
 	
@@ -123,9 +125,9 @@ public class Zaken_l2j extends Quest implements Runnable
 	
 	private static L2BossZone _Zone;
 	
-	public Zaken_l2j(int questId, String name, String descr)
+	public Zaken_l2j(String name, String descr)
 	{
-		super(questId, name, descr);
+		super(name, descr);
 		
 		// Zaken doors handling
 		ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new Runnable()
@@ -947,8 +949,8 @@ public class Zaken_l2j extends Quest implements Runnable
 		return (GameTimeController.getInstance().getGameTime() / 60) % 24;
 	}
 	
-	@Override
-	public void run()
+	public static void main(String[] args)
 	{
-	}	
+		new Zaken_l2j(Zaken_l2j.class.getSimpleName(), "ai/individual");
+	}
 }

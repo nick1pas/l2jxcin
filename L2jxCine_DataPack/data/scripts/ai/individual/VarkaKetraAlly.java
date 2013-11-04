@@ -12,8 +12,9 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
+import ai.AbstractNpcAI;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Skill;
@@ -23,11 +24,11 @@ import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.InventoryUpdate;
 import net.xcine.gameserver.util.Util;
 
-public class VarkaKetraAlly extends Quest implements Runnable
+public class VarkaKetraAlly extends AbstractNpcAI
 {
-	public VarkaKetraAlly(int questId, String name, String descr)
+	public VarkaKetraAlly(String name, String descr)
 	{
-		super(questId, name, descr);
+		super(name, descr);
 		int[] mobs =
 		{
 				// ketra mobs
@@ -229,8 +230,8 @@ public class VarkaKetraAlly extends Quest implements Runnable
 			player.sendPacket(u);
 		}
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		new VarkaKetraAlly(VarkaKetraAlly.class.getSimpleName(), "ai/individual");
+	}
 }

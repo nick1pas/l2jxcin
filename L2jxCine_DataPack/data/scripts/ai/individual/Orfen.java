@@ -16,7 +16,7 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
@@ -30,12 +30,13 @@ import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.PlaySound;
 import net.xcine.gameserver.templates.StatsSet;
 import net.xcine.util.random.Rnd;
+import ai.AbstractNpcAI;
 
 /**
  * @author Shyla
  * @author L2jxCine
  */
-public class Orfen extends Quest implements Runnable
+public class Orfen extends AbstractNpcAI
 {
 	private static final int ORFEN = 29014;
 	private static final int LIVE = 0;
@@ -58,9 +59,9 @@ public class Orfen extends Quest implements Runnable
 	 * @param name
 	 * @param descr
 	 */
-	public Orfen(int questId, String name, String descr)
+	public Orfen(String name, String descr)
 	{
-		super(questId, name, descr);
+		super(name, descr);
 		
 		StatsSet info = GrandBossManager.getInstance().getStatsSet(ORFEN);		
 		Integer status = GrandBossManager.getInstance().getBossStatus(ORFEN);
@@ -273,9 +274,8 @@ public class Orfen extends Quest implements Runnable
 		
 		return super.onKill(npc, killer, isPet);
 	}
-	
-	@Override
-	public void run()
+	public static void main(String[] args)
 	{
-	}	
+		new Orfen(Orfen.class.getSimpleName(), "ai/individual");
+	}
 }

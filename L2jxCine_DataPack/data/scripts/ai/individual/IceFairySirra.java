@@ -12,10 +12,12 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.concurrent.Future;
 import java.util.logging.Level;
+
+import ai.AbstractNpcAI;
 
 import javolution.util.FastList;
 import net.xcine.Config;
@@ -42,7 +44,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  * @author Kerberos
  */
 
-public class IceFairySirra extends Quest implements Runnable
+public class IceFairySirra extends AbstractNpcAI
 {
 	private static final int STEWARD = 32029;
 	private static final int SILVER_HEMOCYTE = 8057;
@@ -51,9 +53,9 @@ public class IceFairySirra extends Quest implements Runnable
 	protected FastList<L2Npc> _allMobs = new FastList<>();
 	protected Future<?> _onDeadEventTask = null;
 
-	public IceFairySirra(int id, String name, String descr)
+	public IceFairySirra(String name, String descr)
 	{
-		super(id, name, descr);
+		super(name, descr);
 		int[] mobs =
 		{
 				STEWARD, 22100, 22102, 22104
@@ -433,8 +435,8 @@ public class IceFairySirra extends Quest implements Runnable
 		player.sendPacket(html);
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		new IceFairySirra(IceFairySirra.class.getSimpleName(), "ai/individual");
+	}
 }

@@ -16,7 +16,7 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -39,7 +39,6 @@ import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
 import net.xcine.gameserver.model.actor.instance.L2MonsterInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.position.L2CharPosition;
-import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.spawn.L2Spawn;
 import net.xcine.gameserver.model.zone.type.L2BossZone;
 import net.xcine.gameserver.network.serverpackets.Earthquake;
@@ -50,6 +49,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.templates.StatsSet;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.util.random.Rnd;
+import ai.AbstractNpcAI;
 
 /**
  * This class ... control for sequence of fight against Antharas.
@@ -57,7 +57,7 @@ import net.xcine.util.random.Rnd;
  * @version $Revision: $ $Date: $
  * @author L2J_JP SANDMAN
  */
-public class Antharas extends Quest implements Runnable
+public class Antharas extends AbstractNpcAI
 {
 	// config
 	private static final int FWA_ACTIVITYTIMEOFANTHARAS = 120;
@@ -120,9 +120,9 @@ public class Antharas extends Quest implements Runnable
 	
 
 	// Boss: Antharas
-	public Antharas(int id,String name,String descr)
+	public Antharas(String name,String descr)
 	{
-		super(id,name,descr);
+		super(name,descr);
 		int[] mob = {ANTHARASOLDID,ANTHARASWEAKID,ANTHARASNORMALID,ANTHARASSTRONGID,29069,29070,29071,29072,29073,29074,29075,29076};
 		this.registerMobs(mob);
 		init();
@@ -920,9 +920,9 @@ public class Antharas extends Quest implements Runnable
 			_monsters.remove(npc);
 		return super.onKill(npc,killer,isPet);
 	}
-	
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		new Antharas(Antharas.class.getSimpleName(), "ai/individual");
+	}
 
 }

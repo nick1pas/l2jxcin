@@ -12,9 +12,11 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.Collection;
+
+import ai.AbstractNpcAI;
 
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
@@ -31,7 +33,7 @@ import net.xcine.gameserver.model.spawn.L2Spawn;
  * @author TOFIZ
  * @version $Revision: 1.1 $ $Date: 2008/08/21 $
  */
-public class Gordon extends Quest implements Runnable
+public class Gordon extends AbstractNpcAI
 {
 	private static final int GORDON = 29095;
 	private static int _npcMoveX = 0;
@@ -213,9 +215,9 @@ public class Gordon extends Quest implements Runnable
 	private static boolean _isAttacked = false;
 	private static boolean _isSpawned = false;
 
-	public Gordon(int id, String name, String descr)
+	public Gordon(String name, String descr)
 	{
-		super(id, name, descr);
+		super(name, descr);
 
 		addEventId(GORDON, Quest.QuestEventType.ON_KILL);
 		addEventId(GORDON, Quest.QuestEventType.ON_ATTACK);
@@ -393,8 +395,8 @@ public class Gordon extends Quest implements Runnable
 		}
 		return npc;
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		new Gordon(Gordon.class.getSimpleName(), "ai/individual");
+	}
 }

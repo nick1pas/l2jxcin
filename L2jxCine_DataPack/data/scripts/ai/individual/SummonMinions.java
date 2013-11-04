@@ -12,12 +12,11 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
-
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Npc;
@@ -25,8 +24,9 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.CreatureSay;
 import net.xcine.util.random.Rnd;
+import ai.AbstractNpcAI;
 
-public class SummonMinions extends Quest implements Runnable
+public class SummonMinions extends AbstractNpcAI
 {
 	private static int HasSpawned;
 	private static FastSet<Integer> myTrackingSet = new FastSet<>(); //Used to track instances of npcs
@@ -96,9 +96,9 @@ public class SummonMinions extends Quest implements Runnable
 		}); //Pythia
 	}
 
-	public SummonMinions(int questId, String name, String descr)
+	public SummonMinions(String name, String descr)
 	{
-		super(questId, name, descr);
+		super(name, descr);
 		int[] mobs =
 		{
 				20767, 21524, 21531, 21539, 22257, 22258, 22259, 22260, 22261, 22262, 22263, 22264, 22265, 22266
@@ -242,8 +242,8 @@ public class SummonMinions extends Quest implements Runnable
 		}
 		return super.onKill(npc, killer, isPet);
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		new SummonMinions(SummonMinions.class.getSimpleName(), "ai/individual");
+	}
 }

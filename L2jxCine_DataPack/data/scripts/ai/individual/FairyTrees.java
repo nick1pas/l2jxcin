@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
@@ -21,16 +21,16 @@ import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.util.random.Rnd;
+import ai.AbstractNpcAI;
 
-public class FairyTrees extends Quest implements Runnable
+public class FairyTrees extends AbstractNpcAI
 {
 	private static final int[] trees = { 27185, 27186, 27187, 27188 };
 
-	public FairyTrees(int questId, String name, String descr)
+	public FairyTrees(String name, String descr)
 	{
-		super(questId, name, descr);
+		super(name, descr);
 
 		for(int mob : trees)
 		{
@@ -69,10 +69,8 @@ public class FairyTrees extends Quest implements Runnable
 		}
 		return super.onKill(npc, killer, isPet);
 	}
-	
-	@Override
-	public void run()
+	public static void main(String[] args)
 	{
-		
+		new FairyTrees(FairyTrees.class.getSimpleName(), "ai/individual");
 	}
 }

@@ -27,6 +27,8 @@ import java.util.logging.Logger;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.xml.MapRegionData;
+import net.xcine.gameserver.event.EventManager;
+import net.xcine.gameserver.event.LMS;
 import net.xcine.gameserver.handler.IVoicedCommandHandler;
 import net.xcine.gameserver.handler.VoicedCommandHandler;
 import net.xcine.gameserver.managers.PetitionManager;
@@ -61,7 +63,8 @@ public final class Say2 extends L2GameClientPacket
 	public final static int PARTYROOM_COMMANDER = 15; //(Yellow)
 	public final static int HERO_VOICE = 17; //%
 	public final static int CRITICAL_ANNOUNCE = 18;
-
+	private boolean _isInLMS;
+	 
 	private final static String[] CHAT_NAMES =
 	{
 			"ALL  ", "SHOUT", "TELL ", "PARTY", "CLAN ", "GM   ", "PETITION_PLAYER", "PETITION_GM", "TRADE", "ALLIANCE", "ANNOUNCEMENT", //10
@@ -236,6 +239,18 @@ public final class Say2 extends L2GameClientPacket
 		}
 		
 		CreatureSay cs = new CreatureSay(activeChar.getObjectId(), _type, activeChar.getName(), _text);
+
+		if(EventManager.getInstance().isRegistered(activeChar))
+				EventManager.getInstance().getCurrentEvent().onSay(_type, activeChar, _text);
+		
+		_isInLMS = EventManager.getInstance().isRegistered(activeChar) && EventManager.getInstance().getCurrentEvent() instanceof LMS;
+		
+		if(_isInLMS)
+		{
+			activeChar.sendMessage("You cannot talk while in LMS");
+			return;
+		}
+		
 		switch(_type)
 		{
 			case TELL:

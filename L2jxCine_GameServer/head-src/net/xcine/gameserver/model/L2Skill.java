@@ -29,6 +29,7 @@ import javolution.util.FastList;
 import net.xcine.gameserver.datatables.HeroSkillTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.xml.SkillTreeData;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.managers.SiegeManager;
 import net.xcine.gameserver.model.actor.instance.L2ArtefactInstance;
@@ -257,7 +258,9 @@ public abstract class L2Skill
 		COREDONE,
 		ZAKENPLAYER,
 		ZAKENSELF,
-
+		BOMB,
+		CAPTURE,
+		
 		// unimplemented
 		NOTDONE;
 
@@ -2020,6 +2023,20 @@ public abstract class L2Skill
 								continue;
 							}
 						}
+
+                        if(obj instanceof L2PcInstance && activeChar instanceof L2PcInstance)
+	                        	if(EventManager.getInstance().getCurrentEvent().numberOfTeams() > 1 &&
+	                        		 EventManager.getInstance().isRegistered((L2PcInstance)activeChar) &&
+	                        		 EventManager.getInstance().isRegistered((L2PcInstance)obj) &&
+	                        		 EventManager.getInstance().getCurrentEvent().getTeam((L2PcInstance)obj) == EventManager.getInstance().getCurrentEvent().getTeam((L2PcInstance)activeChar))
+	                        			continue;
+	                        	
+	                    	if(obj instanceof L2Summon && activeChar instanceof L2PcInstance)
+	                    		if(EventManager.getInstance().getCurrentEvent().numberOfTeams() > 1 &&
+	                    				EventManager.getInstance().isRegistered((L2PcInstance)activeChar) &&
+	                    				EventManager.getInstance().isRegistered(((L2Summon)obj).getOwner()) &&
+	                    				EventManager.getInstance().getCurrentEvent().getTeam(((L2Summon)obj).getOwner()) == EventManager.getInstance().getCurrentEvent().getTeam((L2PcInstance)activeChar))
+	                    					continue;
 
 						targetList.add((L2Character) obj);
 					}

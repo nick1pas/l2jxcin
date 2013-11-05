@@ -296,7 +296,7 @@
   <set name="effectRange" val="900"/>
 </skill>
 <!-- Status:Fixed Pack:L2jxCine author:Nefer -->
-<skill id="5219" levels="1" name="Huge Pig Stun">
+<!--<skill id="5219" levels="1" name="Huge Pig Stun">
   <set name="magicLvl" val="95"/>
   <set name="lvlDepend" val="1"/>
   <set name="power" val="50"/>
@@ -312,9 +312,9 @@
   <for>
     <effect count="1" name="Stun" time="5" val="0" stackOrder="1" stackType="Stun" effectPower="80" effectType="STUN"/>
   </for>
-</skill>
+</skill>-->
 <!-- Status:Fixed Pack:L2jxCine author:Nefer -->
-<skill id="5220" levels="1" name="Huge Pig Fear">
+<!--<skill id="5220" levels="1" name="Huge Pig Fear">
   <set name="mpConsume" val="150"/>
   <set name="target" val="TARGET_ONE"/>
   <set name="power" val="50" />
@@ -329,7 +329,31 @@
   <for>
     <effect count="5" name="Fear" time="6" val="0"/>
   </for>
+</skill>-->
+<skill id="5220" levels="1" name="Bomb">
+  <set name="mpInitialConsume" val="50" />
+  <set name="target" val="TARGET_SELF" />
+  <set name="reuseDelay" val="10000" />
+  <set name="hitTime" val="1000" />
+  <set name="staticReuse" val="true" />
+  <set name="staticHitTime" val="true" />
+  <set name="skillType" val="BOMB" />
+  <set name="operateType" val="OP_ACTIVE" />
+  <set name="castRange" val="85" />
+  <set name="effectRange" val="400" />
 </skill>
+<skill id="5219" levels="1" name="Capture">
+  <set name="mpInitialConsume" val="50" />
+  <set name="target" val="TARGET_ONE" />
+  <set name="reuseDelay" val="10000" />
+  <set name="hitTime" val="2000" />
+  <set name="staticReuse" val="true" />
+  <set name="staticHitTime" val="true" />
+  <set name="skillType" val="CAPTURE" />
+  <set name="operateType" val="OP_ACTIVE" />
+  <set name="castRange" val="85" />
+  <set name="effectRange" val="400" />
+ </skill>
 <!-- Status:Fixed Pack:L2jxCine author:Nefer -->
 <skill id="5267" levels="9" name="Trap Explosion">
   <table name="#magicLvl">28 36 44 48 52 56 60 68 74</table> <!-- Guessing levels 3-9 -->

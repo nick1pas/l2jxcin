@@ -43,6 +43,7 @@ import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.datatables.xml.MapRegionData.TeleportWhereType;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.geo.pathfinding.Node;
 import net.xcine.gameserver.geo.pathfinding.PathFinding;
@@ -160,6 +161,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	private boolean _isNoRndWalk = false;
 	private volatile boolean _isCastingSimultaneouslyNow = false;
 	private L2Skill _lastSimultaneousSkillCast;
+	protected boolean _showSummonAnimation = false;
 	// Data Field
 	/** The attack stance. */
 	private long attackStance;
@@ -1096,6 +1098,53 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	 */
 	protected void doAttack(L2Character target)
 	{
+		if (this instanceof L2PcInstance)
+			if (EventManager.getInstance().isRegistered((L2PcInstance) this))
+			{
+				
+				if (target instanceof L2PcInstance)
+					if (EventManager.getInstance().areTeammates(
+						(L2PcInstance) this, (L2PcInstance) target)
+						&& !EventManager.getInstance().getBoolean(
+							"friendlyFireEnabled"))
+					{
+						sendPacket(new ActionFailed());
+						return;
+					}
+				
+				if (!EventManager.getInstance().getCurrentEvent()
+					.canAttack((L2PcInstance) this, target))
+				{
+					sendPacket(new ActionFailed());
+					return;
+				}
+			}
+			
+		if (this instanceof L2Summon)
+		{
+			if (EventManager.getInstance().isRegistered(
+				((L2Summon) this).getOwner()))
+			{
+				if (target instanceof L2PcInstance)
+					if (EventManager.getInstance()
+						.areTeammates(((L2Summon) this).getOwner(),
+							(L2PcInstance) target)
+							&& !EventManager.getInstance().getBoolean(
+								"friendlyFireEnabled"))
+						{	
+							sendPacket(new ActionFailed());
+							return;
+						}
+				
+				if (!EventManager.getInstance().getCurrentEvent()
+					.canAttack(((L2Summon) this).getOwner(), target))
+				{
+					sendPacket(new ActionFailed());
+					return;
+				}
+			}
+		}			
+		
 		if(Config.DEBUG)
 		{
 			_log.fine(getName() + " doAttack: target=" + target);
@@ -1440,6 +1489,10 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 			{
 				weaponInst.setChargedSoulshot(L2ItemInstance.CHARGED_NONE);
 			}
+ 						
+            if(this instanceof L2PcInstance && target instanceof L2PcInstance) 
+            	if(EventManager.getInstance().isRegistered((L2PcInstance)this)) 
+        			EventManager.getInstance().getCurrentEvent().onHit((L2PcInstance)this,(L2PcInstance)target); 
 
 			if(player != null)
 			{
@@ -1799,6 +1852,76 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	
 	private void beginCast(L2Skill skill, boolean simultaneously)
 	{
+	 	
+		try{
+			if(getTarget() != null)
+			{
+				if (this instanceof L2PcInstance)
+				{
+					if (EventManager.getInstance().isRegistered((L2PcInstance) this))
+					{
+						if (!EventManager.getInstance().getCurrentEvent()
+							.canAttack((L2PcInstance) this, getTarget()))
+							return;
+				
+						if (this.getTarget() instanceof L2PcInstance)
+							if (EventManager.getInstance().areTeammates(
+								(L2PcInstance) this,
+								(L2PcInstance) this.getTarget())
+								&& !EventManager.getInstance().getBoolean(
+									"friendlyFireEnabled")
+									&& skill.isOffensive())
+									{
+									getAI().notifyEvent(CtrlEvent.EVT_CANCEL);
+									return;
+									}
+				
+						if (!EventManager.getInstance().getCurrentEvent()
+							.canAttack((L2PcInstance) this, this.getTarget()))
+							{
+								getAI().notifyEvent(CtrlEvent.EVT_CANCEL);
+								return;
+							}
+						}
+					}
+				
+				if (this instanceof L2Summon)
+				{
+						if(((L2Summon) this).getOwner() != null)
+							if (EventManager.getInstance().isRegistered(
+									((L2Summon) this).getOwner()))
+							{
+								if (!EventManager.getInstance().getCurrentEvent()
+										.canAttack(((L2Summon) this).getOwner(), getTarget()))
+									return;
+					
+								if (this.getTarget() instanceof L2PcInstance)
+									if (EventManager.getInstance().areTeammates(
+											((L2Summon) this).getOwner(),
+											(L2PcInstance) this.getTarget())
+											&& !EventManager.getInstance().getBoolean(
+													"friendlyFireEnabled")
+											&& skill.isOffensive())
+									{
+										getAI().notifyEvent(CtrlEvent.EVT_CANCEL);
+										return;
+									}
+					
+								if (!EventManager
+										.getInstance()
+										.getCurrentEvent()
+										.canAttack(((L2Summon) this).getOwner(),
+												this.getTarget()))
+								{
+									getAI().notifyEvent(CtrlEvent.EVT_CANCEL);
+									return;
+					
+								}
+							}
+					}
+				}
+				}catch(ClassCastException e){}
+				
 		L2Character activeChar = this;
 		if (skill == null) 
 		{ 
@@ -6086,7 +6209,7 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 		if(Config.GEODATA > 0 && Config.COORD_SYNCHRONIZE == 2 && !isFlying() && !isInsideZone(L2Character.ZONE_WATER) && !m.disregardingGeodata && GameTimeController.getGameTicks() % 10 == 0 // once a second to reduce possible cpu load
 			&& !(this instanceof L2BoatInstance))
 		{
-			short geoHeight = GeoData.getInstance().getSpawnHeight(xPrev, yPrev, zPrev - 30, zPrev + 30, getObjectId());
+			short geoHeight = GeoData.getInstance().getSpawnHeight(xPrev, yPrev, zPrev - 30, zPrev + 30,null);
 			dz = m._zDestination - geoHeight;
 			// quite a big difference, compare to validatePosition packet
 			if(this instanceof L2PcInstance && Math.abs(((L2PcInstance) this).getClientZ() - geoHeight) > 200 && Math.abs(((L2PcInstance) this).getClientZ() - geoHeight) < 1500)
@@ -11129,6 +11252,21 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 	{
 		_lastSimultaneousSkillCast = skill;
 	} 
+
+	public boolean isShowSummonAnimation()
+	{
+		return _showSummonAnimation;
+	}
+
+	public void setShowSummonAnimation(boolean showSummonAnimation)
+	{
+		_showSummonAnimation = showSummonAnimation;
+	}
+
+	public final boolean setIsDead(boolean value)
+	{ 
+		return !isFakeDeath() && (getCurrentHp() < 0.5);
+	}
 	
 	private class UsePotionTask implements Runnable
 	{

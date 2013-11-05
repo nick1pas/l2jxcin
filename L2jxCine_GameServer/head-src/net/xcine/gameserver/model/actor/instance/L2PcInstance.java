@@ -71,6 +71,7 @@ import net.xcine.gameserver.datatables.xml.HennaData;
 import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.datatables.xml.RecipeData;
 import net.xcine.gameserver.datatables.xml.SkillTreeData;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.handler.ItemHandler;
@@ -137,7 +138,6 @@ import net.xcine.gameserver.model.base.Race;
 import net.xcine.gameserver.model.base.SubClass;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.entity.Duel;
-import net.xcine.gameserver.model.entity.event.L2Event;
 import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSigns;
@@ -230,62 +230,26 @@ import net.xcine.util.Point3D;
 import net.xcine.util.database.L2DatabaseFactory;
 import net.xcine.util.random.Rnd;
 
-/**
- * This class represents all player characters in the world.<br>
- * There is always a client-thread connected to this (except if a player-store is activated upon logout).
- * @version $Revision: 1.6.4 $ $Date: 2009/05/12 19:46:09 $
- * @author L2jxCine dev
- */
 public final class L2PcInstance extends L2Playable
 {
-	/** The Constant RESTORE_SKILLS_FOR_CHAR. */
 	private static final String RESTORE_SKILLS_FOR_CHAR = "SELECT skill_id,skill_level FROM character_skills WHERE char_obj_id=? AND class_index=?";
-
-	/** The Constant ADD_NEW_SKILL. */
 	private static final String ADD_NEW_SKILL = "INSERT INTO character_skills (char_obj_id,skill_id,skill_level,skill_name,class_index) VALUES (?,?,?,?,?)";
-
-	/** The Constant UPDATE_CHARACTER_SKILL_LEVEL. */
 	private static final String UPDATE_CHARACTER_SKILL_LEVEL = "UPDATE character_skills SET skill_level=? WHERE skill_id=? AND char_obj_id=? AND class_index=?";
-
-	/** The Constant DELETE_SKILL_FROM_CHAR. */
 	private static final String DELETE_SKILL_FROM_CHAR = "DELETE FROM character_skills WHERE skill_id=? AND char_obj_id=? AND class_index=?";
-
-	/** The Constant DELETE_CHAR_SKILLS. */
 	private static final String DELETE_CHAR_SKILLS = "DELETE FROM character_skills WHERE char_obj_id=? AND class_index=?";
-
-	/** The Constant ADD_SKILL_SAVE. */
-	//private static final String ADD_SKILL_SAVE = "INSERT INTO character_skills_save (char_obj_id,skill_id,skill_level,effect_count,effect_cur_time,reuse_delay,restore_type,class_index,buff_index) VALUES (?,?,?,?,?,?,?,?,?)";
 	private static final String ADD_SKILL_SAVE = "INSERT INTO character_skills_save (char_obj_id,skill_id,skill_level,effect_count,effect_cur_time,reuse_delay,systime,restore_type,class_index,buff_index) VALUES (?,?,?,?,?,?,?,?,?,?)";
-
-	/** The Constant RESTORE_SKILL_SAVE. */
 	private static final String RESTORE_SKILL_SAVE = "SELECT skill_id,skill_level,effect_count,effect_cur_time, reuse_delay FROM character_skills_save WHERE char_obj_id=? AND class_index=? AND restore_type=? ORDER BY buff_index ASC";
-
-	/** The Constant DELETE_SKILL_SAVE. */
 	private static final String DELETE_SKILL_SAVE = "DELETE FROM character_skills_save WHERE char_obj_id=? AND class_index=?";
-
-	/** The _is the vip. */
+	
+	
 	public boolean _isVIP = false, _inEventVIP = false, _isNotVIP = false, _isTheVIP = false;
-
-	/** The _original karma vip. */
 	public int _originalNameColourVIP, _originalKarmaVIP;
-	
-	/** The _vote timestamp. */
 	private long _voteTimestamp = 0;
-
-	/** The _posticipate sit. */
 	private boolean _posticipateSit;
-	
-	/** The sitting task launched. */
 	protected boolean sittingTaskLaunched;
 	private boolean _sitdowntask;
-	
-	/** The saved_status. */
 	private PlayerStatus saved_status = null;
-	
-	/** The _instance login time. */
 	private final long _instanceLoginTime;
-	
-	/** The _last teleport action. */
 	private long _lastTeleportAction = 0;
 	
 	/**
@@ -4506,7 +4470,7 @@ private int _reviveRequested = 0;
 			return;
 		}
 		
-		if(L2Event.active && eventSitForced)
+		if (EventManager.getInstance().isRunning() && eventSitForced)
 		{
 			sendMessage("A dark force beyond your mortal understanding makes your knees to shake when you try to stand up ...");
 		}
@@ -5899,6 +5863,12 @@ private int _reviveRequested = 0;
 	@Override
 	public void onAction(L2PcInstance player)
 	{
+		if(!EventManager.getInstance().canTargetPlayer(this, player))
+		{
+			player.sendPacket(new ActionFailed());
+			return;
+		}
+		
 		// Check if the L2PcInstance is confused
 		if (player.isOutOfControl())
 		{
@@ -7466,6 +7436,19 @@ private int _reviveRequested = 0;
 				{
 					doPkInfo(pk);
 				}
+							
+				L2PcInstance ek = null;
+				
+				if (killer instanceof L2PcInstance)
+					ek = (L2PcInstance) killer;
+				if(killer instanceof L2Summon)
+					ek = ((L2Summon) killer).getOwner();
+				
+				if(ek != null && EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered(ek))
+				{
+					EventManager.getInstance().getCurrentEvent().onKill(this,ek);
+					EventManager.getInstance().getCurrentEvent().onDie(this,ek);
+				}
 				
 				if (atEvent)
 				{
@@ -7778,6 +7761,9 @@ private int _reviveRequested = 0;
 		
 		// If in duel and you kill (only can kill l2summon), do nothing
 		if (isInDuel() && targetPlayer.isInDuel())
+			return;
+				
+		if (EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered(targetPlayer))
 			return;
 		
 		// If in Arena, do nothing
@@ -8454,6 +8440,9 @@ private int _reviveRequested = 0;
 
 		setPvpFlagLasts(System.currentTimeMillis() + Config.PVP_NORMAL_TIME);
 
+		if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
+			return;
+
 		if(getPvpFlag() == 0)
 		{
 			startPvPFlag();
@@ -8480,7 +8469,10 @@ private int _reviveRequested = 0;
 
 		if(player_target == null)
 			return;
-
+				
+		if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
+			return;
+		
 		if((VIP._started && _inEventVIP && player_target._inEventVIP))
 			return;
 
@@ -8598,7 +8590,10 @@ private int _reviveRequested = 0;
 		{
 			_log.fine(getName() + " died and lost " + lostExp + " experience.");
 		}
-
+		
+		if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
+			lostExp = 0;
+		
 		// Set the new Experience value of the L2PcInstance
 		getStat().addExp(-lostExp);
 	}
@@ -11817,6 +11812,9 @@ private int _reviveRequested = 0;
 			// Check if the L2PcInstance is in an arena or a siege area
 			if (isInsideZone(ZONE_PVP) && ((L2PcInstance) attacker).isInsideZone(ZONE_PVP))
 				return true;
+						
+			if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered((L2PcInstance)attacker) && EventManager.getInstance().isRunning())
+				return true;
 			
 			if (getClan() != null)
 			{
@@ -11881,6 +11879,17 @@ private int _reviveRequested = 0;
 	 */
 	public void useMagic(L2Skill skill, boolean forceUse, boolean dontMove)
 	{
+		if(EventManager.getInstance().isRegistered(this)) 
+			if(!EventManager.getInstance().getCurrentEvent().getBoolean("allowUseMagic")) 
+			{ 
+				sendPacket(new ActionFailed()); 
+				return; 
+			} 
+		
+		if(EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(this))
+			if(!EventManager.getInstance().getCurrentEvent().onUseMagic(skill))
+				return;
+			
 		if(isDead())
 		{
 			abortCast();
@@ -12527,8 +12536,8 @@ private int _reviveRequested = 0;
 		return false;
 	}
 
-	/*
-	public boolean checkPvpSkill(L2Object target, L2Skill skill)
+	
+	/*public boolean checkPvpSkill(L2Object target, L2Skill skill)
 	{
 		if(target != null && (target instanceof L2PcInstance || target instanceof L2Summon))
 		{
@@ -12595,6 +12604,9 @@ private int _reviveRequested = 0;
 	 */
 	public boolean checkPvpSkill(L2Object target, L2Skill skill)
 	{
+		if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered((L2PcInstance)target) && EventManager.getInstance().isRunning())
+			return true;
+							
 		return checkPvpSkill(target, skill, false);
 	}
 	
@@ -12639,6 +12651,9 @@ private int _reviveRequested = 0;
 			else if ((skilldat != null && !skilldat.isCtrlPressed() && skill.isOffensive() && !srcIsSummon)
 			/* || (skilldatpet != null && !skilldatpet.isCtrlPressed() && skill.isOffensive() && srcIsSummon) */)
 			{
+				if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered((L2PcInstance)target) && EventManager.getInstance().isRunning())
+					return true;
+									
 				if (getClan() != null && ((L2PcInstance) target).getClan() != null)
 				{
 					if (getClan().isAtWarWith(((L2PcInstance) target).getClan().getClanId()) && ((L2PcInstance) target).getClan().isAtWarWith(getClan().getClanId()))
@@ -14806,6 +14821,9 @@ private int _reviveRequested = 0;
 	 */
 	public synchronized boolean setActiveClass(int classIndex)
 	{
+		if(EventManager.getInstance().players.contains(this)) 
+			return false;
+					
 		if(isInCombat() || this.getAI().getIntention() == CtrlIntention.AI_INTENTION_ATTACK){
 			sendMessage("Impossible switch class if in combat");
 			sendPacket( ActionFailed.STATIC_PACKET );
@@ -16281,6 +16299,10 @@ private int _reviveRequested = 0;
 		{
 			setXYZ(_obsX, _obsY, _obsZ);
 		}
+ 		
+		EventManager.getInstance().onLogout(this);
+		if(EventManager.getInstance().isRegistered(this))
+			EventManager.getInstance().getCurrentEvent().onLogout(this);
 		
 	      if(isTeleporting())
 	        {
@@ -17604,7 +17626,10 @@ private int _reviveRequested = 0;
 	{
 		if(getDeathPenaltyBuffLevel() >= 15) //maximum level reached
 			return;
-
+				
+		if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
+			return;
+		
 		if(getDeathPenaltyBuffLevel() != 0)
 		{
 			L2Skill skill = SkillTable.getInstance().getInfo(5076, getDeathPenaltyBuffLevel());

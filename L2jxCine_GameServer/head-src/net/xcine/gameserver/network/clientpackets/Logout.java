@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import net.xcine.Config;
 import net.xcine.gameserver.communitybbs.Manager.RegionBBSManager;
 import net.xcine.gameserver.datatables.SkillTable;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Party;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -87,7 +88,14 @@ public final class Logout extends L2GameClientPacket
 			player.sendPacket(SystemMessage.sendString("A superior power doesn't allow you to leave the event."));
 			return;
 		}
-		
+
+		if(EventManager.getInstance().isRegistered(player) && !EventManager.getInstance().getBoolean("restartAllowed"))
+		{
+			player.sendMessage("You cannot logout while you are a participant in an event.");
+			sendPacket(new ActionFailed());
+			return;
+		}
+
 		if (player.isInOlympiadMode() || Olympiad.getInstance().isRegistered(player))
 		{
 			player.sendMessage("You can't Logout in Olympiad mode.");

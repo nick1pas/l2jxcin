@@ -219,6 +219,7 @@ echo *** Sucesfull 41 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/fish.sql
 
 echo *** Sucesfull 42 percents. ***
+%mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/phoenix.sql
 
 echo *** Sucesfull 43 percents. ***
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/forums.sql

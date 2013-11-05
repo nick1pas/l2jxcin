@@ -33,6 +33,7 @@ import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.HelperBuffData;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.CustomNpcInstanceManager;
@@ -2062,7 +2063,20 @@ public class L2Npc extends L2Character
 				filename = getHtmlPath(npcId, val);
 				break;
 		}
-
+ 		
+		if (npcId == EventManager.getInstance().getInt("managerNpcId"))
+        {
+            EventManager.getInstance().showFirstHtml(player,getObjectId());
+            player.sendPacket(ActionFailed.STATIC_PACKET);
+            return;
+        }
+		
+        if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(player) && EventManager.getInstance().getCurrentEvent().onTalkNpc(this, player))
+        {
+            player.sendPacket(ActionFailed.STATIC_PACKET);
+            return;
+        }
+		
 		if(this instanceof L2CastleTeleporterInstance)
 		{
 			((L2CastleTeleporterInstance)this).showChatWindow(player);

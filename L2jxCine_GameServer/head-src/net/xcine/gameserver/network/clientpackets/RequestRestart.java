@@ -24,6 +24,7 @@ import net.xcine.Config;
 import net.xcine.gameserver.GameServer;
 import net.xcine.gameserver.communitybbs.Manager.RegionBBSManager;
 import net.xcine.gameserver.datatables.SkillTable;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.model.Inventory;
 import net.xcine.gameserver.model.L2Party;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -103,6 +104,13 @@ public final class RequestRestart extends L2GameClientPacket
 			sendPacket(RestartResponse.valueOf(false));
 			return;
 		}
+
+        if(EventManager.getInstance().isRegistered(player) && !EventManager.getInstance().getBoolean("restartAllowed"))
+    	{
+    		player.sendMessage("You cannot restart while you are a participant in an event.");
+    		sendPacket(new ActionFailed());
+    		return;
+    	}
 
 		// Prevent player from restarting if they are a festival participant
 		// and it is in progress, otherwise notify party members that the player

@@ -46,6 +46,7 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import net.xcine.Config;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.managers.OlympiadStadiaManager;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -411,7 +412,13 @@ public class Olympiad
 			noble.sendPacket(sm);
 			return false;
 		}
-		
+		 
+		if(EventManager.getInstance().players.contains(noble)) 
+		{ 
+			noble.sendMessage("You can't join olympiad while participating on an Event."); 
+			return false; 
+		} 
+				
 		if (!noble.isNoble())
 		{
 			sm = new SystemMessage(SystemMessageId.ONLY_NOBLESS_CAN_PARTICIPATE_IN_THE_OLYMPIAD);
@@ -961,6 +968,12 @@ public class Olympiad
 			spectator.sendMessage("You are already registered to an Event");
 			return;
 		}
+				
+		if(EventManager.getInstance().players.contains(spectator)) 
+		{ 
+			spectator.sendMessage("You can not observe games while registered for an event!"); 
+			return; 
+		} 
 		
 		OlympiadManager.STADIUMS[id].addSpectator(id, spectator, storeCoords);
 		if (OlympiadManager.getInstance().getOlympiadGame(id) != null)

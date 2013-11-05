@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.handler.ItemHandler;
 import net.xcine.gameserver.managers.CastleManager;
@@ -140,6 +141,10 @@ public final class UseItem extends L2GameClientPacket
 			activeChar.sendMessage("Blessed Scroll of Escape: Castle cannot be used due to unsuitable terms.");
 			return;
 		}
+ 		
+		if(EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(activeChar)) 
+			if(!EventManager.getInstance().getCurrentEvent().onUseItem(activeChar,item)) 
+				return;
 		
 		if (activeChar.isFishing() && (itemId < 6535 || itemId > 6540))
 		{

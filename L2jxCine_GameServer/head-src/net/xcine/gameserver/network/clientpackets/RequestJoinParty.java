@@ -21,6 +21,8 @@ package net.xcine.gameserver.network.clientpackets;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
+import net.xcine.gameserver.event.EventManager;
+import net.xcine.gameserver.event.LMS;
 import net.xcine.gameserver.model.L2Party;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -34,6 +36,7 @@ public final class RequestJoinParty extends L2GameClientPacket
 	
 	private String _name;
 	private int _itemDistribution;
+	private boolean _isInLMS;
 	
 	@Override
 	protected void readImpl()
@@ -47,6 +50,7 @@ public final class RequestJoinParty extends L2GameClientPacket
 	{
 		L2PcInstance requestor = getClient().getActiveChar();
 		L2PcInstance target = L2World.getInstance().getPlayer(_name);
+		_isInLMS = EventManager.getInstance().isRegistered(requestor) && EventManager.getInstance().getCurrentEvent() instanceof LMS;
 		
 		if (requestor == null)
 			return;
@@ -60,6 +64,12 @@ public final class RequestJoinParty extends L2GameClientPacket
 		if (target == null)
 		{
 			requestor.sendPacket(new SystemMessage(SystemMessageId.TARGET_IS_INCORRECT));
+			return;
+		}
+ 		
+		if(_isInLMS)
+		{
+			requestor.sendMessage("You cannot make party in LMS");
 			return;
 		}
 		

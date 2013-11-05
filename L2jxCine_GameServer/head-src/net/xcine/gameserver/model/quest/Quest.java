@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
@@ -39,15 +40,14 @@ import net.xcine.gameserver.model.L2Party;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.SystemMessageId;
+import net.xcine.gameserver.network.serverpackets.ActionFailed;
 import net.xcine.gameserver.network.serverpackets.ConfirmDlg;
 import net.xcine.gameserver.network.serverpackets.NpcHtmlMessage;
-import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.scripting.ManagedScript;
 import net.xcine.gameserver.scripting.ScriptManager;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.util.ResourceUtil;
-import net.xcine.util.Util;
 import net.xcine.util.database.L2DatabaseFactory;
 import net.xcine.util.random.Rnd;
 
@@ -58,6 +58,7 @@ public class Quest extends ManagedScript
 	private static Map<String, Quest> _allEventsS = new FastMap<>();
 	private Map<String, FastList<QuestTimer>> _allEventTimers = new FastMap<>();
 	private final ReentrantReadWriteLock _rwLock = new ReentrantReadWriteLock();
+
 
 	private final int _questId;
 	private final String _name;
@@ -349,7 +350,7 @@ public class Quest extends ManagedScript
 			return showError(attacker, e);
 		}
 
-		return showResult(attacker, res);
+		return showResult(npc, attacker, res);
 	}
 
 	public final boolean notifyDeath(L2Character killer, L2Character victim, QuestState qs)
@@ -365,7 +366,7 @@ public class Quest extends ManagedScript
 			return showError(qs.getPlayer(), e);
 		}
 
-		return showResult(qs.getPlayer(), res);
+		return showResult(null, qs.getPlayer(), res);
 	}
 
 	public final boolean notifyEvent(String event, L2Npc npc, L2PcInstance player)
@@ -381,7 +382,7 @@ public class Quest extends ManagedScript
 			return showError(player, e);
 		}
 
-		return showResult(player, res);
+		return showResult(npc, player, res);
 	}
 
 	public final boolean notifyKill(L2Npc npc, L2PcInstance killer, boolean isPet)
@@ -397,7 +398,7 @@ public class Quest extends ManagedScript
 			return showError(killer, e);
 		}
 
-		return showResult(killer, res);
+		return showResult(npc, killer, res);
 	}
 
 	public final boolean notifySkillSee(L2Npc npc, L2PcInstance caster, L2Skill skill, L2Object[] targets, boolean isPet)
@@ -422,7 +423,7 @@ public class Quest extends ManagedScript
 
 		qs.getPlayer().setLastQuestNpcObject(npc.getObjectId());
 
-		return showResult(qs.getPlayer(), res);
+		return showResult(npc, qs.getPlayer(), res);
 	}
 
 	public final boolean notifyFirstTalk(L2Npc npc, L2PcInstance player)
@@ -443,7 +444,7 @@ public class Quest extends ManagedScript
 
 		if(res != null && res.length() > 0)
 		{
-			return showResult(player, res);
+			return showResult(npc, player, res);
 		}
 
 		npc.showChatWindow(player);
@@ -464,7 +465,7 @@ public class Quest extends ManagedScript
 			return showError(caster, e);
 		}
 
-		return showResult(caster, res);
+		return showResult(npc, caster, res);
 	}
 
 	public final boolean notifySpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
@@ -479,7 +480,7 @@ public class Quest extends ManagedScript
 			return showError(player, e);
 		}
 
-		return showResult(player, res);
+		return showResult(npc, player, res);
 	}
 
 	public final boolean notifyFactionCall(L2Npc npc, L2Npc caller, L2PcInstance attacker, boolean isPet)
@@ -494,7 +495,7 @@ public class Quest extends ManagedScript
 			return showError(attacker, e);
 		}
 
-		return showResult(attacker, res);
+		return showResult(caller, attacker, res);
 	}
 
 	public final boolean notifyAttackAct(L2Npc npc, L2PcInstance victim)
@@ -508,7 +509,7 @@ public class Quest extends ManagedScript
 		{
 			return showError(victim, e);
 		}
-		return showResult(victim, res);
+		return showResult(npc, victim, res);
 	}
 	
 	public class TmpOnAggroEnter implements Runnable
@@ -536,7 +537,7 @@ public class Quest extends ManagedScript
 			{
 				showError(_pc, e);
 			}
-			showResult(_pc, res);
+			showResult(_npc, _pc, res);
 			
 		}
 	}
@@ -549,18 +550,16 @@ public class Quest extends ManagedScript
 
 	public final boolean notifySpawn(L2Npc npc)
 	{
-		String res = null;
 		try
 		{
-			res = onSpawn(npc);
+			onSpawn(npc);
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
-			_log.warning("");
+			_log.log(Level.WARNING, "Exception on onSpawn() in notifySpawn(): " + e.getMessage(), e);
 			return true;
 		}
-
-		return showResult(npc, res);
+		return false;
 	}
 
 	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
@@ -662,49 +661,56 @@ public class Quest extends ManagedScript
 		return null;
 	}
 	
-	public boolean showError(L2PcInstance player, Throwable t)
+	public boolean showError(L2PcInstance player, Throwable e)
 	{
-		_log.warning(getScriptFile().getAbsolutePath());
-		if (t.getMessage() == null)
-			t.printStackTrace();
-		if (player != null && player.getAccessLevel().isGm())
+		_log.log(Level.WARNING, getScriptFile().getAbsolutePath(), e);
+		
+		if (e.getMessage() == null)
+			e.printStackTrace();
+		
+		if (player != null && player.isGM())
 		{
-			String res = "<html><body><title>Script error</title>" + Util.getStackTrace(t) + "</body></html>";
-			return showResult(player, res);
+			NpcHtmlMessage npcReply = new NpcHtmlMessage(0);
+			npcReply.setHtml("<html><body><title>Script error</title>" + e.getMessage() + "</body></html>");
+			player.sendPacket(npcReply);
+			player.sendPacket(ActionFailed.STATIC_PACKET);
+			return true;
 		}
 		return false;
 	}
 
-	public boolean showResult(L2Character object, String res)
+	public boolean showResult(L2Npc npc, L2PcInstance player, String result)
 	{
-		if(res == null)
+		if (player == null || result == null || result.isEmpty())
+			return false;
+		
+		if (result.endsWith(".htm") || result.endsWith(".html"))
 		{
-			return true;
-		}
-
-		if(object instanceof L2PcInstance)
-		{
-			L2PcInstance player = (L2PcInstance) object;
-
-			if(res.endsWith(".htm"))
-			{
-				showHtmlFile(player, res);
-			}
-			else if(res.startsWith("<html>"))
-			{
-				NpcHtmlMessage npcReply = new NpcHtmlMessage(5);
-				npcReply.setHtml(res);
-				npcReply.replace("%playername%", player.getName());
-				player.sendPacket(npcReply);
-				npcReply = null;
-			}
+			NpcHtmlMessage npcReply = new NpcHtmlMessage(npc == null ? 0 : npc.getNpcId());
+			if (isRealQuest())
+				npcReply.setFile("./data/scripts/quests/" + getName() + "/" + result);
 			else
-			{
-				player.sendPacket(new SystemMessage(SystemMessageId.S1_S2).addString(res));
-			}
-
-			player = null;
+				npcReply.setFile("./data/scripts/" + getDescr() + "/" + getName() + "/" + result);
+			
+			if (npc != null)
+				npcReply.replace("%objectId%", String.valueOf(npc.getObjectId()));
+			
+			player.sendPacket(npcReply);
+			player.sendPacket(ActionFailed.STATIC_PACKET);
 		}
+		else if (result.startsWith("<html>"))
+		{
+			NpcHtmlMessage npcReply = new NpcHtmlMessage(npc == null ? 0 : npc.getNpcId());
+			npcReply.setHtml(result);
+			
+			if (npc != null)
+				npcReply.replace("%objectId%", String.valueOf(npc.getObjectId()));
+			
+			player.sendPacket(npcReply);
+			player.sendPacket(ActionFailed.STATIC_PACKET);
+		}
+		else
+			player.sendMessage(result);
 
 		return false;
 	}
@@ -1265,33 +1271,10 @@ public class Quest extends ManagedScript
 
 	public String showHtmlFile(L2PcInstance player, String fileName)
 	{
-		String questId = getName();
-
-		String directory = getDescr().toLowerCase();
-		String content = HtmCache.getInstance().getHtm("data/scripts/" + directory + "/" + questId + "/" + fileName);
-
-		if(content == null)
-		{
-			content = HtmCache.getInstance().getHtmForce("data/scripts/quests/" + questId + "/" + fileName);
-		}
-
-		if(player != null && player.getTarget() != null)
-		{
-			content = content.replaceAll("%objectId%", String.valueOf(player.getTarget().getObjectId()));
-		}
-
-		if(content != null)
-		{
-			NpcHtmlMessage npcReply = new NpcHtmlMessage(5);
-			npcReply.setHtml(content);
-			npcReply.replace("%playername%", player.getName());
-			player.sendPacket(npcReply);
-			npcReply = null;
-		}
-
-		if ((player.isGM()) && (player.getAccessLevel().getLevel() == Config.MASTERACCESS_LEVEL))
-			player.sendChatMessage(0, 0, "HTML", "scripts/" + directory + "/" + questId + "/" + fileName);
-		return content;
+		if (isRealQuest())
+			return HtmCache.getInstance().getHtmForce("./data/scripts/quests/" + getName() + "/" + fileName);
+		
+		return HtmCache.getInstance().getHtmForce("./data/scripts/" + getDescr() + "/" + getName() + "/" + fileName);
 	}
 
 	public L2Npc addSpawn(int npcId, L2Character cha)
@@ -1382,7 +1365,7 @@ public class Quest extends ManagedScript
 			{
 				showError(_caster, e);
 			}
-			showResult(_caster, res);
+			showResult(_npc, _caster, res);
 		}
 	}
 
@@ -1409,7 +1392,16 @@ public class Quest extends ManagedScript
 			}
 		}
 	}
-
+	
+	/**
+	 * Return type of the quest.
+	 * @return boolean : True for (live) quest, False for script, AI, etc.
+	 */
+	public boolean isRealQuest()
+	{
+		return _questId > 0;
+	}
+	
 	public static <T> boolean contains(T[] array, T obj)
 	{
 		for(int i = 0; i < array.length; i++)

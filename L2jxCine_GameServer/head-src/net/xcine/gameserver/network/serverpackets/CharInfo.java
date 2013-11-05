@@ -24,6 +24,9 @@ import java.util.logging.Logger;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.NpcTable;
+import net.xcine.gameserver.event.EventManager;
+import net.xcine.gameserver.event.LMS;
+import net.xcine.gameserver.event.dm;
 import net.xcine.gameserver.managers.CursedWeaponsManager;
 import net.xcine.gameserver.model.Inventory;
 import net.xcine.gameserver.model.L2Character;
@@ -81,7 +84,9 @@ public class CharInfo extends L2GameServerPacket
 	private int _runSpd, _walkSpd, _swimRunSpd, _swimWalkSpd, _flRunSpd, _flWalkSpd, _flyRunSpd, _flyWalkSpd;
 	private float _moveMultiplier, _attackSpeedMultiplier;
 	private int _maxCp;
-
+	private boolean _isInLMS;
+	private boolean _isInDM;
+	
 	/**
 	 * @param cha 
 	 */
@@ -102,6 +107,8 @@ public class CharInfo extends L2GameServerPacket
 		_swimRunSpd = _flRunSpd = _flyRunSpd = _runSpd;
 		_swimWalkSpd = _flWalkSpd = _flyWalkSpd = _walkSpd;
 		_maxCp = _activeChar.getMaxCp();
+		_isInLMS = EventManager.getInstance().isRegistered(_activeChar) && EventManager.getInstance().getCurrentEvent() instanceof LMS;
+		_isInDM = EventManager.getInstance().isRegistered(_activeChar) && EventManager.getInstance().getCurrentEvent() instanceof dm;
 	}
 
 	@Override
@@ -164,7 +171,15 @@ public class CharInfo extends L2GameServerPacket
 				//	writeC(_activeChar.getAppearance().getInvisible() ? 1 : 0); // invisible ?? 0=false  1=true   2=summoned (only works if model has a summon animation)
 				//}
 
-				writeS(_activeChar.getName());
+				if(_isInLMS || _isInDM)
+				{
+					writeS("Player");
+				}
+				else
+				{			
+					writeS(_activeChar.getName());
+				}
+				//->writeS(_activeChar.getName());
 
 				if(_activeChar.getAppearance().getInvisible())
 				//if(gmSeeInvis)
@@ -209,7 +224,14 @@ public class CharInfo extends L2GameServerPacket
 			writeD(_z);
 			writeD(_heading);
 			writeD(_activeChar.getObjectId());
-			writeS(_activeChar.getName());
+			if(_isInLMS || _isInDM)
+			{
+				writeS("Player");
+			}
+			else
+			{
+				writeS(_activeChar.getName());
+			}
 			writeD(_activeChar.getRace().ordinal());
 			writeD(_activeChar.getAppearance().getSex() ? 1 : 0);
 
@@ -222,19 +244,36 @@ public class CharInfo extends L2GameServerPacket
 				writeD(_activeChar.getBaseClass());
 			}
 
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_DHAIR));
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HEAD));
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_RHAND));
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LHAND));
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_GLOVES));
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_CHEST));
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LEGS));
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_FEET));
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_BACK));
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LRHAND));
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HAIR));
-			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_FACE));
-
+			if(_isInLMS || _isInDM)
+            {
+				 writeD(0);
+				 writeD(0);
+				 writeD(0);
+				 writeD(0);
+				 writeD(0);
+				 writeD(6408);
+				 writeD(0);
+				 writeD(0);
+				 writeD(0);
+				 writeD(0);
+				 writeD(0);
+				 writeD(0);
+            }
+            else
+            {
+	   			 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_DHAIR));
+	   			 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HEAD));
+	   			 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_RHAND));
+	   			 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LHAND));
+	   		 	 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_GLOVES));
+	   			 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_CHEST));
+	   			 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LEGS));
+	   			 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_FEET));
+	   			 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_BACK));
+	   			 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LRHAND));
+	   			 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HAIR));
+	   			 writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_FACE));
+            }
 			// c6 new h's
 			writeH(0x00);
 			writeH(0x00);
@@ -295,10 +334,20 @@ public class CharInfo extends L2GameServerPacket
 				writeS(_activeChar.getTitle());
 			}
 
-			writeD(_activeChar.getClanId());
-			writeD(_activeChar.getClanCrestId());
-			writeD(_activeChar.getAllyId());
-			writeD(_activeChar.getAllyCrestId());
+	        if(_isInLMS || _isInDM)
+            {
+				writeD(0);
+				writeD(0);
+				writeD(0);
+				writeD(0);
+            }
+            else
+            {
+            	writeD(_activeChar.getClanId());
+    			writeD(_activeChar.getClanCrestId());
+    			writeD(_activeChar.getAllyId());
+    			writeD(_activeChar.getAllyCrestId());
+            }
 			// In UserInfo leader rights and siege flags, but here found nothing??
 			// Therefore RelationChanged packet with that info is required
 			writeD(0);

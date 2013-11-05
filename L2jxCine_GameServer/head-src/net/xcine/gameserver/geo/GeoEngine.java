@@ -45,6 +45,7 @@ import net.xcine.gameserver.model.Location;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2SiegeGuardInstance;
+import net.xcine.gameserver.model.spawn.L2Spawn;
 import net.xcine.util.Point3D;
 
 public final class GeoEngine extends GeoData
@@ -86,9 +87,9 @@ public final class GeoEngine extends GeoData
 	}
 
 	@Override
-	public short getSpawnHeight(int x, int y, int zmin, int zmax, int spawnid)
+	public short getSpawnHeight(int x, int y, int zmin, int zmax, L2Spawn spawn)
 	{
-		return nGetSpawnHeight((x - L2World.MAP_MIN_X) >> 4, (y - L2World.MAP_MIN_Y) >> 4, zmin, zmax, spawnid);
+		return nGetSpawnHeight((x - L2World.MAP_MIN_X) >> 4, (y - L2World.MAP_MIN_Y) >> 4, zmin, zmax, spawn);
 	}
 
 	@Override
@@ -982,10 +983,10 @@ public final class GeoEngine extends GeoData
 	 * @param geoy
 	 * @param zmin
 	 * @param zmax
-	 * @param spawnid 
+	 * @param spawn 
 	 * @return Z betwen zmin and zmax
 	 */
-	private short nGetSpawnHeight(int geox, int geoy, int zmin, int zmax, int spawnid)
+	private short nGetSpawnHeight(int geox, int geoy, int zmin, int zmax, L2Spawn spawn)
 	{
 		short region = getRegionOffset(geox, geoy);
 		int blockX = getBlock(geox);
@@ -1055,14 +1056,14 @@ public final class GeoEngine extends GeoData
 			if(temph > zmax + 200 || temph < zmin - 200)
 			{
 				if(Config.DEBUG)
-					_log.log(Level.WARNING,"SpawnHeight Error - Couldnt find correct layer to spawn NPC - GeoData or Spawnlist Bug!: zmin: " + zmin + " zmax: " + zmax + " value: " + temph + " SpawnId: " + spawnid + " at: " + geox + " : " + geoy);
+					_log.log(Level.WARNING,"SpawnHeight Error - Couldnt find correct layer to spawn NPC - GeoData or Spawnlist Bug!: zmin: " + zmin + " zmax: " + zmax + " value: " + temph + " SpawnId: " + spawn + " at: " + geox + " : " + geoy);
 				return (short) zmin;
 			}
 		}
 		if(temph > zmax + 1000 || temph < zmin - 1000)
 		{
 			if(Config.DEBUG)
-				_log.log(Level.WARNING,"SpawnHeight Error - Spawnlist z value is wrong or GeoData error: zmin: " + zmin + " zmax: " + zmax + " value: " + temph + " SpawnId: " + spawnid + " at: " + geox + " : " + geoy);
+				_log.log(Level.WARNING,"SpawnHeight Error - Spawnlist z value is wrong or GeoData error: zmin: " + zmin + " zmax: " + zmax + " value: " + temph + " SpawnId: " + spawn + " at: " + geox + " : " + geoy);
 			return (short) zmin;
 		}
 		return temph;

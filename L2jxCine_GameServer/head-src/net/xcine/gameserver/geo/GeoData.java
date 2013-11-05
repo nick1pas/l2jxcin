@@ -25,6 +25,7 @@ import net.xcine.gameserver.geo.pathfinding.Node;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.Location;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.spawn.L2Spawn;
 import net.xcine.util.Point3D;
 
 
@@ -79,10 +80,10 @@ public class GeoData
 	 * @param y
 	 * @param zmin
 	 * @param zmax
-	 * @param spawnid
+	 * @param spawn
 	 * @return
 	 */
-	public short getSpawnHeight(int x, int y, int zmin, int zmax, int spawnid)
+	public short getSpawnHeight(int x, int y, int zmin, int zmax, L2Spawn spawn)
 	{
 		return (short) zmin;
 	}

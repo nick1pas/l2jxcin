@@ -73,6 +73,9 @@ import net.xcine.gameserver.datatables.xml.SummonItemsData;
 import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.datatables.xml.TerritoryData;
 import net.xcine.gameserver.datatables.xml.ZoneData;
+import net.xcine.gameserver.event.EventBuffer;
+import net.xcine.gameserver.event.EventManager;
+import net.xcine.gameserver.event.EventStats;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.geo.geoeditorcon.GeoEditorListener;
 import net.xcine.gameserver.geo.pathfinding.PathFinding;
@@ -510,6 +513,11 @@ public class GameServer
 		_log.info("Maximum Numbers of Connected Players: " + Config.MAXIMUM_ONLINE_USERS);
 		_log.info("GameServer Started, free memory " + Memory.getFreeMemory() + " Mb of " + Memory.getTotalMemory() + " Mb");
 		_log.info("Used memory: " + Memory.getUsedMemory() + " MB");
+				
+		EventManager.getInstance();
+		EventStats.getInstance();
+		if(EventManager.getInstance().getBoolean("eventBufferEnabled"))
+			EventBuffer.getInstance();
 		
 		Util.printSection("Java specific");
 		_log.info("JRE name: " + System.getProperty("java.vendor"));

@@ -18,6 +18,9 @@
  */
 package net.xcine.gameserver.network.clientpackets;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +28,9 @@ import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.communitybbs.CommunityBoard;
 import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
+import net.xcine.gameserver.event.EventBuffer;
+import net.xcine.gameserver.event.EventManager;
+import net.xcine.gameserver.event.EventStats;
 import net.xcine.gameserver.handler.AdminCommandHandler;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.handler.custom.CustomBypassHandler;
@@ -42,6 +48,7 @@ import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
 import net.xcine.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.xcine.gameserver.util.GMAudit;
+import net.xcine.util.database.L2DatabaseFactory;
 
 public final class RequestBypassToServer extends L2GameClientPacket
 {
@@ -114,6 +121,19 @@ public final class RequestBypassToServer extends L2GameClientPacket
 				}
 
 				ach.useAdminCommand(_command, activeChar);
+			}
+
+			else if(_command.startsWith("event_vote"))
+			{
+				EventManager.getInstance().addVote(activeChar, Integer.parseInt(_command.substring(11)));
+			}
+			else if(_command.equals("event_register"))
+			{
+				EventManager.getInstance().registerPlayer(activeChar);
+			}
+			else if(_command.equals("event_unregister"))
+			{
+				EventManager.getInstance().unregisterPlayer(activeChar);
 			}
 			else if(_command.equals("come_here") && activeChar.isGM())
 			{
@@ -249,6 +269,53 @@ public final class RequestBypassToServer extends L2GameClientPacket
 				}
 			}
 
+			else if (_command.startsWith("eventvote ")) 
+		 	{ 
+		 	        EventManager.getInstance().addVote(activeChar, Integer.parseInt(_command.substring(10))); 
+		 	} 
+		 	else if (_command.startsWith("eventstats ")) 
+		 	{
+		 			Connection con = null;
+		 			PreparedStatement statement = null;
+		 			con = L2DatabaseFactory.getInstance().getConnection();
+		 			statement = con.prepareStatement("SELECT characters.char_name, event_stats_full.* FROM event_stats_full INNER JOIN characters ON characters.obj_Id = event_stats_full.player ORDER BY event_stats_full.wins DESC");
+		 			ResultSet rset = statement.executeQuery();
+		 			if (!rset.last())
+		 			{
+		 				rset.close();
+		 				statement.close();
+		 				con.close();
+		 				this.getClient().activeChar.sendMessage("Currently there are no statistics to show.");
+		 				return;
+		 			}
+		 			rset.close();
+	 				statement.close();
+	 				con.close();
+		 	        EventStats.getInstance().showHtml(Integer.parseInt(_command.substring(11)),activeChar); 
+		 	} 
+		 	else if (_command.startsWith("eventstats_show ")) 
+		 	{ 
+		 	        EventStats.getInstance().showPlayerStats(Integer.parseInt(_command.substring(16)),activeChar); 
+		 	} 
+		 	else if (_command.equals("eventbuffershow")) 
+		 	{ 
+		 	        EventBuffer.getInstance().showHtml(activeChar); 
+		 	} 
+		 	else if (_command.startsWith("eventbuffer ")) 
+		 	{ 
+		 	        EventBuffer.getInstance().changeList(activeChar, Integer.parseInt(_command.substring(12,_command.length()-2)), (Integer.parseInt(_command.substring(_command.length()-1)) == 0 ? false : true)); 
+		 	        EventBuffer.getInstance().showHtml(activeChar); 
+		 	} 
+			else if (_command.startsWith("eventinfo "))
+			{
+				int eventId = Integer.valueOf(_command.substring(10));
+				
+				NpcHtmlMessage html = new NpcHtmlMessage(0);
+				html.setFile("data/html/eventinfo/"+eventId+".htm");
+				activeChar.sendPacket(html);
+				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			}
+			
 			// Jstar's Custom Bypass Caller!
 			else if(_command.startsWith("custom_"))
 			{

@@ -20,13 +20,6 @@ package net.xcine.gameserver.model.spawn;
 
 import net.xcine.gameserver.model.L2Npc;
 
-/**
- * This class ...
- * 
- * @author luisantonioa
- * @version $Revision: 1.2 $ $Date: 2004/06/27 08:12:59 $
- */
-
 public interface SpawnListener
 {
 	public void npcSpawned(L2Npc npc);

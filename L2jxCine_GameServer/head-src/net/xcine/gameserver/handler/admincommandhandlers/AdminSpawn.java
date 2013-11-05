@@ -23,18 +23,21 @@ import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 import javolution.text.TextBuilder;
-
 import net.xcine.Config;
+import net.xcine.gameserver.datatables.FenceTable;
 import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
+import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.managers.DayNightSpawnManager;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.managers.RaidBossSpawnManager;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2World;
+import net.xcine.gameserver.model.L2WorldRegion;
+import net.xcine.gameserver.model.actor.instance.L2FenceInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.spawn.L2Spawn;
 import net.xcine.gameserver.network.SystemMessageId;
@@ -65,7 +68,10 @@ public class AdminSpawn implements IAdminCommandHandler
 			"admin_show_npcs",
 			"admin_teleport_reload",
 			"admin_spawnnight",
-			"admin_spawnday"
+			"admin_spawnday",
+			"admin_spawnfence",
+			"admin_deletefence",
+			"admin_listfence"
 	};
 
 	public static Logger _log = Logger.getLogger(AdminSpawn.class.getName());
@@ -151,38 +157,6 @@ public class AdminSpawn implements IAdminCommandHandler
 		}
 		// Command spawn '//spawn name numberSpawn respawnTime'.
 		// With command '//spawn name' the respawnTime will be 10 seconds.
-		else if(command.startsWith("admin_spawn") || command.startsWith("admin_spawn_monster"))
-		{
-			StringTokenizer st = new StringTokenizer(command, " ");
-			try
-			{
-				String cmd = st.nextToken();
-				String id = st.nextToken();
-				int mobCount = 1;
-				int respawnTime = 10;
-				if(st.hasMoreTokens())
-					mobCount = Integer.parseInt(st.nextToken());
-				if(st.hasMoreTokens())
-					respawnTime = Integer.parseInt(st.nextToken());
-
-				if(cmd.equalsIgnoreCase("admin_spawn_once"))
-					spawnMonster(activeChar, id, respawnTime, mobCount, false);
-				else
-					spawnMonster(activeChar, id, respawnTime, mobCount, true);
-
-				cmd = null;
-				id = null;
-			}
-			catch(Exception e)
-			{ // Case of wrong or missing monster data
-				if(Config.ENABLE_ALL_EXCEPTIONS)
-					e.printStackTrace();
-				
-				AdminHelpPage.showHelpPage(activeChar, "spawns.htm");
-			}
-
-			st = null;
-		}
 		// Command for unspawn all Npcs on Server, use //repsawnall to respawn the npc
 		else if(command.startsWith("admin_unspawnall"))
 		{
@@ -221,6 +195,102 @@ public class AdminSpawn implements IAdminCommandHandler
 			GmListTable.broadcastMessageToGMs("Teleport List Table reloaded.");
 		}
 
+		else if (command.startsWith("admin_spawnfence"))
+		{
+			StringTokenizer st = new StringTokenizer(command, " ");
+			try
+			{
+				st.nextToken();
+				int type = Integer.parseInt(st.nextToken());
+				int width = Integer.parseInt(st.nextToken());
+				int length = Integer.parseInt(st.nextToken());
+				int height = 1;
+				if (st.hasMoreTokens())
+					height = Math.min(Integer.parseInt(st.nextToken()), 3);
+				for (int i = 0;i < height;i++)
+				{
+					L2FenceInstance fence = new L2FenceInstance(IdFactory.getInstance().getNextId(), type, width, length, activeChar.getX(), activeChar.getY());
+					fence.spawnMe(activeChar.getX(), activeChar.getY(), activeChar.getZ());
+					FenceTable.addFence(fence);
+				}
+			}
+			catch (Exception e)
+			{
+				activeChar.sendMessage("Usage: //spawnfence <type> <width> <length> [<height>]");
+			}
+		}
+		else if (command.startsWith("admin_deletefence"))
+		{
+			StringTokenizer st = new StringTokenizer(command, " ");
+			st.nextToken();
+			try
+			{
+				L2Object fence = null;
+				if (activeChar.getTarget() instanceof L2FenceInstance)
+					fence = activeChar.getTarget();
+				else if (st.hasMoreTokens())
+				{
+					L2Object object = L2World.getInstance().findObject(Integer.parseInt(st.nextToken()));
+					if (object instanceof L2FenceInstance)
+						fence = object;
+				}
+				if (fence != null)
+				{
+					L2WorldRegion region = fence.getWorldRegion();
+					fence.decayMe();
+					if (region != null)
+						region.removeVisibleObject(fence);
+					fence.getKnownList().removeAllKnownObjects();
+					L2World.getInstance().removeObject(fence);
+					activeChar.sendMessage("Deleted fence " + fence.getObjectId());
+					if (fence instanceof L2FenceInstance)
+						FenceTable.removeFence((L2FenceInstance) fence);
+					if (st.hasMoreTokens())
+						listFences(activeChar);
+				}
+				else
+					throw new RuntimeException();
+			}
+			catch (Exception e)
+			{
+				activeChar.sendMessage("No fence targeted with shift+click or //deletefence <fence_objectId>");
+			}
+		}
+		else if (command.startsWith("admin_listfence"))
+			listFences(activeChar);
+			else if(command.startsWith("admin_spawn") || command.startsWith("admin_spawn_monster"))
+			{
+				StringTokenizer st = new StringTokenizer(command, " ");
+				try
+				{
+					String cmd = st.nextToken();
+					String id = st.nextToken();
+					int mobCount = 1;
+					int respawnTime = 10;
+					if(st.hasMoreTokens())
+						mobCount = Integer.parseInt(st.nextToken());
+					if(st.hasMoreTokens())
+						respawnTime = Integer.parseInt(st.nextToken());
+
+					if(cmd.equalsIgnoreCase("admin_spawn_once"))
+						spawnMonster(activeChar, id, respawnTime, mobCount, false);
+					else
+						spawnMonster(activeChar, id, respawnTime, mobCount, true);
+
+					cmd = null;
+					id = null;
+				}
+				catch(Exception e)
+				{ // Case of wrong or missing monster data
+					if(Config.ENABLE_ALL_EXCEPTIONS)
+						e.printStackTrace();
+					
+					AdminHelpPage.showHelpPage(activeChar, "spawns.htm");
+				}
+
+				st = null;
+			}
+		
 		return true;
 	}
 
@@ -229,7 +299,20 @@ public class AdminSpawn implements IAdminCommandHandler
 	{
 		return ADMIN_COMMANDS;
 	}
-
+	
+	private static void listFences(L2PcInstance activeChar)
+	{
+		TextBuilder tb = new TextBuilder();
+		
+		tb.append("<html><body>Total Fences: " + FenceTable.getAllFences().size() + "<br><br>");
+		for (L2FenceInstance fence : FenceTable.getAllFences())
+			tb.append("<a action=\"bypass -h admin_deletefence " + fence.getObjectId() + " 1\">Fence: " + fence.getObjectId() + " [" + fence.getX() + " " + fence.getY() + " " + fence.getZ() + "]</a><br>");
+		tb.append("</body></html>");
+		
+		NpcHtmlMessage html = new NpcHtmlMessage(0);
+		html.setHtml(tb.toString());
+		activeChar.sendPacket(html);
+	}
 	private void spawnMonster(L2PcInstance activeChar, String monsterId, int respawnTime, int mobCount, boolean permanent)
 	{
 		L2Object target = activeChar.getTarget();

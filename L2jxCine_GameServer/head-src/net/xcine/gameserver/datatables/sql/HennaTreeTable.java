@@ -27,12 +27,10 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.gameserver.datatables.xml.HennaData;
 import net.xcine.gameserver.model.actor.instance.L2HennaInstance;
 import net.xcine.gameserver.model.base.ClassId;
 import net.xcine.gameserver.templates.L2Henna;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -59,10 +57,8 @@ public class HennaTreeTable
 		int classId = 0;
 		int count = 0;
 
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			final PreparedStatement statement = con.prepareStatement("SELECT class_name, id, parent_id FROM class_list ORDER BY id");
 			final ResultSet classlist = statement.executeQuery();
 			List<L2HennaInstance> list;
@@ -123,10 +119,6 @@ public class HennaTreeTable
 		catch(Exception e)
 		{
 			_log.severe("error while creating henna tree for classId {}"+" "+ classId+" "+ e);
-		}
-		finally
-		{
-			CloseUtil.close(con);
 		}
 
 		_log.finest("HennaTreeTable: Loaded {} Henna Tree Templates."+" "+ count);

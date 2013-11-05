@@ -112,10 +112,8 @@ public class ClanTable
 	{
 		_clans = new FastMap<>();
 		L2Clan clan;
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			final PreparedStatement statement = con.prepareStatement("SELECT clan_id FROM clan_data");
 			final ResultSet result = statement.executeQuery();
 
@@ -147,10 +145,6 @@ public class ClanTable
 		catch(Exception e)
 		{
 			_log.severe("data error on ClanTable"+" "+ e);
-		}
-		finally
-		{
-			CloseUtil.close(con);
 		}
 
 		restorewars();

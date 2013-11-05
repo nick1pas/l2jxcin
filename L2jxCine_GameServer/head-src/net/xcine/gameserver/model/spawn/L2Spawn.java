@@ -36,87 +36,36 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.util.random.Rnd;
 
-/**
- * This class manages the spawn and respawn of a group of L2Npc that are in the same are and have the same type.
- * <B><U> Concept</U> :</B><BR>
- * <BR>
- * L2Npc can be spawned either in a random position into a location area (if Lox=0 and Locy=0), either at an
- * exact position. The heading of the L2Npc can be a random heading if not defined (value= -1) or an exact
- * heading (ex : merchant...).<BR>
- * <BR>
- * 
- * @author Nightmare
- * @version $Revision: 1.9.2.3.2.8 $ $Date: 2005/03/27 15:29:32 $
- */
 public class L2Spawn
 {
 	protected static final Logger _log = Logger.getLogger(L2Spawn.class.getName());
 
-	/**
-	 * The link on the L2NpcTemplate object containing generic and static properties of this spawn (ex : RewardExp,
-	 * RewardSP, AggroRange...)
-	 */
 	private L2NpcTemplate _template;
-
-	/** The Identifier of this spawn in the spawn table */
 	private int _id;
-
-	// private String _location = DEFAULT_LOCATION;
-
-	/** The identifier of the location area where L2Npc can be spwaned */
 	private int _location;
-
-	/** The maximum number of L2Npc that can manage this L2Spawn */
 	private int _maximumCount;
-
-	/** The current number of L2Npc managed by this L2Spawn */
 	private int _currentCount;
-
-	/** The current number of SpawnTask in progress or stand by of this L2Spawn */
 	protected int _scheduledCount;
-
-	/** The X position of the spwan point */
 	private int _locX;
-
-	/** The Y position of the spwan point */
 	private int _locY;
-
-	/** The Z position of the spwan point */
 	private int _locZ;
-
-	/** The heading of L2Npc when they are spawned */
 	private int _heading;
-
-	/** The delay between a L2Npc remove and its re-spawn */
 	private int _respawnDelay;
-
-	/** Minimum delay RaidBoss */
 	private int _respawnMinDelay;
-
-	/** Maximum delay RaidBoss */
 	private int _respawnMaxDelay;
-
-	/** The generic constructor of L2Npc managed by this L2Spawn */
 	private Constructor<?> _constructor;
-
-	/** If True a L2Npc is respawned each time that another is killed */
 	private boolean _doRespawn;
-
 	private int _instanceId = 0;
-
 	private L2Npc _lastSpawn;
 	private static List<SpawnListener> _spawnListeners = new FastList<>();
 
-	/** The task launching the function doSpawn() */
+
 	class SpawnTask implements Runnable
 	{
-		//L2Npc _instance;
-		//int _objId;
 		private L2Npc _oldNpc;
 
-		public SpawnTask(/*int objid*/L2Npc pOldNpc)
+		public SpawnTask(L2Npc pOldNpc)
 		{
-			//_objId= objid;
 			_oldNpc = pOldNpc;
 		}
 

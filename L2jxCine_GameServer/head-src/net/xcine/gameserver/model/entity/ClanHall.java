@@ -45,111 +45,42 @@ import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
-/**
- * The Class ClanHall.
- */
 public class ClanHall
 {
-	/** The Constant _log. */
 	protected static final Logger _log = Logger.getLogger(ClanHall.class.getName());
-
-	/** The _clan hall id. */
 	private int _clanHallId;
-	
-	/** The _doors. */
 	private List<L2DoorInstance> _doors = new FastList<>();
-	
-	/** The _door default. */
 	private List<String> _doorDefault = new FastList<>();
-	
-	/** The _name. */
 	private String _name;
-	
-	/** The _owner id. */
 	private int _ownerId;
-	
-	/** The _owner clan. */
 	private L2Clan _ownerClan;
-	
-	/** The _lease. */
 	private int _lease;
-	
-	/** The _desc. */
 	private String _desc;
-	
-	/** The _location. */
 	private String _location;
-	
-	/** The _paid until. */
 	protected long _paidUntil;
-	
-	/** The _zone. */
 	private L2ClanHallZone _zone;
-	
-	/** The _grade. */
 	private int _grade;
-	
-	/** The _ch rate. */
 	protected final int _chRate = 604800000;
-	
-	/** The _is free. */
 	protected boolean _isFree = true;
-	
-	/** The _functions. */
 	private Map<Integer, ClanHallFunction> _functions;
-	
-	/** The _paid. */
 	protected boolean _paid;
-
-	/** Clan Hall Functions. */
 	public static final int FUNC_TELEPORT = 1;
-	
-	/** The Constant FUNC_ITEM_CREATE. */
 	public static final int FUNC_ITEM_CREATE = 2;
-	
-	/** The Constant FUNC_RESTORE_HP. */
 	public static final int FUNC_RESTORE_HP = 3;
-	
-	/** The Constant FUNC_RESTORE_MP. */
 	public static final int FUNC_RESTORE_MP = 4;
-	
-	/** The Constant FUNC_RESTORE_EXP. */
 	public static final int FUNC_RESTORE_EXP = 5;
-	
-	/** The Constant FUNC_SUPPORT. */
 	public static final int FUNC_SUPPORT = 6;
-	
-	/** The Constant FUNC_DECO_FRONTPLATEFORM. */
 	public static final int FUNC_DECO_FRONTPLATEFORM = 7;
-	
-	/** The Constant FUNC_DECO_CURTAINS. */
 	public static final int FUNC_DECO_CURTAINS = 8;
 
-	/**
-	 * The Class ClanHallFunction.
-	 */
 	public class ClanHallFunction
 	{
-		
-		/** The _type. */
 		private int _type;
-		
-		/** The _lvl. */
 		private int _lvl;
-		
-		/** The _fee. */
 		protected int _fee;
-		
-		/** The _temp fee. */
 		protected int _tempFee;
-		
-		/** The _rate. */
 		private long _rate;
-		
-		/** The _end date. */
 		private long _endDate;
-		
-		/** The _in debt. */
 		protected boolean _inDebt;
 
 		/**
@@ -279,15 +210,9 @@ public class ClanHall
 		private class FunctionTask implements Runnable
 		{
 			
-			/**
-			 * Instantiates a new function task.
-			 */
 			public FunctionTask()
 			{}
 
-			/* (non-Javadoc)
-			 * @see java.lang.Runnable#run()
-			 */
 			@Override
 			public void run()
 			{

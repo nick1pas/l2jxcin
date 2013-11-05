@@ -53,7 +53,6 @@ public class GeoData
 		return SingletonHolder.INSTANCE;
 	}
 
-	// Public Methods
 	/**
 	 * @param x
 	 * @param y
@@ -105,22 +104,16 @@ public class GeoData
 	 */
 	public boolean canSeeTarget(L2Object cha, L2Object target)
 	{
-		//If geo is off do simple check :]
-		//Don't allow casting on players on different dungeon lvls etc
 		return Math.abs(target.getZ() - cha.getZ()) < 1000;
 	}
 
 	public boolean canSeeTarget(L2Object cha, Point3D worldPosition)
 	{
-		//If geo is off do simple check :]
-		//Don't allow casting on players on different dungeon lvls etc
 		return Math.abs(worldPosition.getZ() - cha.getZ()) < 1000;
 	}
 
 	public boolean canSeeTarget(int x, int y, int z, int tx, int ty, int tz)
 	{
-		// If geo is off do simple check :]
-		// Don't allow casting on players on different dungeon lvls etc
 		return (Math.abs(z - tz) < 1000);
 	}
 
@@ -170,7 +163,6 @@ public class GeoData
 	 */
 	public void addGeoDataBug(L2PcInstance gm, String comment)
 	{
-		//Do Nothing
 	}
 
 	public void unloadGeodata(byte rx, byte ry)

@@ -25,7 +25,6 @@ import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.templates.L2NpcTemplate;
-import net.xcine.logs.Log;
 import net.xcine.util.random.Rnd;
 
 public class MonsterRace

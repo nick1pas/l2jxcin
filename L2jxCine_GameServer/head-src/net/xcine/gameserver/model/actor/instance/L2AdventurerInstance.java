@@ -26,9 +26,6 @@ import net.xcine.gameserver.network.serverpackets.RadarControl;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 
 /**
- * This class ...
- * 
- * @version $Revision: $ $Date: $
  * @author LBaldi
  */
 public class L2AdventurerInstance extends L2NpcInstance

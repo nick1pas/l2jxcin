@@ -51,7 +51,6 @@ public class ChristmasManager
 	protected List<L2Npc> objectQueue = new FastList<>();
 	protected Random rand = new Random();
 
-	// X-Mas message list
 	protected String[] message =
 	{
 			"Ho Ho Ho... Merry Christmas!",
@@ -125,7 +124,6 @@ public class ChristmasManager
 			"May you have the best of Christmas this year and all your dreams come true.",
 			"May the miracle of Christmas fill your heart with warmth and love. Merry Christmas!"
 	},
-
 			sender =
 			{
 					"Santa Claus",

@@ -44,10 +44,6 @@ public class BoatManager
 		return SingletonHolder._instance;
 	}
 
-	// =========================================================
-
-	// =========================================================
-	// Data Field
 	private Map<Integer, L2BoatInstance> _staticItems = new FastMap<>();
 
 	public BoatManager()
@@ -56,8 +52,6 @@ public class BoatManager
 		load();
 	}
 
-	// =========================================================
-	// Method - Private
 	private final void load()
 	{
 		if(!Config.ALLOW_BOAT)
@@ -244,8 +238,6 @@ public class BoatManager
 		return boat;
 	}
 
-	// =========================================================
-	// Property - Public
 	/**
 	 * @param boatId
 	 * @return

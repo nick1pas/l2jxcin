@@ -546,4 +546,10 @@
 	<adm_cmd adminCommand="admin_setinstance" accessLevel="1"/>
 	<adm_cmd adminCommand="admin_ghoston" accessLevel="1"/>
 	<adm_cmd adminCommand="admin_ghostoff" accessLevel="1"/>
+	 	
+	<!-- FENCES -->
+	<adm_cmd adminCommand="admin_spawnfence" accessLevel="1" />
+	<adm_cmd adminCommand="admin_deletefence" accessLevel="1" />
+	<adm_cmd adminCommand="admin_listfence" accessLevel="1" />
+	
 </list>

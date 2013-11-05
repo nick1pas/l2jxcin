@@ -12339,7 +12339,7 @@ private int _reviveRequested = 0;
 				// Calculate the distance between the L2PcInstance and the target
 				if (sklTargetType == SkillTargetType.TARGET_GROUND)
 				{
-					if (!isInsideRadius(getCurrentSkillWorldPosition().getX(), getCurrentSkillWorldPosition().getY(), getCurrentSkillWorldPosition().getZ(), (int) (skill.getCastRange() + getTemplate().getCollisionRadius()), false, false))
+					if (!isInsideRadius(getCurrentSkillWorldPosition().getX(), getCurrentSkillWorldPosition().getY(), getCurrentSkillWorldPosition().getZ(), skill.getCastRange() + getTemplate().getCollisionRadius(), false, false))
 					{
 						// Send a System Message to the caster
 						sendPacket(SystemMessageId.TARGET_TOO_FAR);
@@ -12361,7 +12361,7 @@ private int _reviveRequested = 0;
 			}
 			else if (sklType == SkillType.SIGNET) // Check range for SIGNET skills
 			{
-				if (!isInsideRadius(getCurrentSkillWorldPosition().getX(), getCurrentSkillWorldPosition().getY(), getCurrentSkillWorldPosition().getZ(), (int) (skill.getCastRange() + getTemplate().getCollisionRadius()), false, false))
+				if (!isInsideRadius(getCurrentSkillWorldPosition().getX(), getCurrentSkillWorldPosition().getY(), getCurrentSkillWorldPosition().getZ(), skill.getCastRange() + getTemplate().getCollisionRadius(), false, false))
 				{
 					// Send a System Message to the caster
 					sendPacket(SystemMessageId.TARGET_TOO_FAR);

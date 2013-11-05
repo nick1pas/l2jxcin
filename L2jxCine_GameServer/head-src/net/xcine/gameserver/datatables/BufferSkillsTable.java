@@ -21,10 +21,8 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.model.L2Skill;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -59,19 +57,14 @@ public class BufferSkillsTable
 
 	private void load()
 	{
-		Connection con = null;
-		/*
-		 * Fist of all whole info is load into an map: auxMap. Info about buff types is also collected now into a list: typeList. Prizes for buffs are also read and stored.
-		 */
 		int id = 0;
 		int level = 0;
 		String type = "";
 		int adena = 0;
 		int count = 0;
 		int typesCount = 0;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement(SQL_LOAD_SKILLS);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next())
@@ -102,7 +95,6 @@ public class BufferSkillsTable
 		}
 		finally
 		{
-			CloseUtil.close(con);
 			_log.fine("BufferSkillsTable: Loaded " + count + " skills and " + typesCount + " types.");
 		}
 		/*

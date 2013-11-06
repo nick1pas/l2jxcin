@@ -180,23 +180,12 @@ public class Quest extends ManagedScript
 		 */
 		@Deprecated
 		MOB_TARGETED_BY_SKILL(true),
-
-		/** on spell finished action when npc finish casting skill */
 		ON_SPELL_FINISHED(true),
-
-		/** a person came within the Npc/Mob's range */
+		ON_SKILL_SEE(true), // NPC or Mob saw a person casting a skill (regardless what the target is).
 		ON_AGGRO_RANGE_ENTER(true),
-
-		/** OnSpawn Ð Ò‘Ð ÂµÐ â„–Ð¡ÐƒÐ¡â€šÐ Ð†Ð Ñ‘Ð Âµ Ð Ñ—Ð¡Ð‚Ð Ñ‘ Ð¡ÐƒÐ Ñ—Ð Â°Ð¡Ñ“Ð Ð…Ð Âµ Ð Ñ˜Ð Ñ•Ð Â±Ð Â° */
 		ON_SPAWN(true),
-
-		/** OnSkillUse Ð Ò‘Ð ÂµÐ â„–Ð¡ÐƒÐ¡â€šÐ Ð†Ð Ñ‘Ð Âµ Ð Ñ—Ð¡Ð‚Ð Ñ‘ Ð Ñ‘Ð¡ÐƒÐ Ñ—Ð Ñ•Ð Â»Ð¡ÐŠÐ Â·Ð Ñ•Ð Ð†Ð Â°Ð Ð…Ð Ñ‘Ð Ñ‘ Ð¡ÐƒÐ Ñ”Ð Ñ‘Ð Â»Ð Â»Ð Â° (MOB_TARGETED_BY_SKILL) */
 		ON_SKILL_USE(true),
-
-		/** OnKill Ð Ò‘Ð ÂµÐ â„–Ð¡ÐƒÐ¡â€šÐ Ð†Ð Ñ‘Ð Âµ Ð Ñ—Ð¡Ð‚Ð Ñ‘ Ð¡Ñ“Ð Â±Ð Ñ‘Ð â„–Ð¡ÐƒÐ¡â€šÐ Ð†Ð Âµ (MOBKILLED) */
 		ON_KILL(true),
-
-		/** OnAttack Ð Ò‘Ð ÂµÐ â„–Ð¡ÐƒÐ¡â€šÐ Ð†Ð Ñ‘Ð Âµ Ð Ñ—Ð¡Ð‚Ð Ñ‘ Ð Â°Ð¡â€šÐ Â°Ð Ñ”Ð Âµ (MOBGOTATTACKED) */
 		ON_ATTACK(true);
 
 		// control whether this event type is allowed for the same npc template in multiple quests
@@ -864,7 +853,7 @@ public class Quest extends ManagedScript
 	 * @param res : String pointing out the message to show at the player
 	 * @return boolean
 	 */
-	private boolean showResult(L2Character object, String res)
+	public boolean showResult(L2Character object, String res)
 	{
 		if(res == null)
 			return true;
@@ -1815,7 +1804,46 @@ public class Quest extends ManagedScript
 			addEventId(id, QuestEventType.ON_AGGRO_RANGE_ENTER);
 		}
 	}
-	
+
+	public String onSkillSee(L2NpcInstance npc, L2PcInstance caster, L2Skill skill, L2Object[] targets, boolean isPet)
+	{
+		return null;
+	}
+
+	public class tmpOnSkillSee implements Runnable
+	{
+		private final L2NpcInstance _npc;
+		private final L2PcInstance _caster;
+		private final L2Skill _skill;
+		private final L2Object[] _targets;
+		private final boolean _isPet;
+
+		public tmpOnSkillSee(L2NpcInstance npc, L2PcInstance caster, L2Skill skill, L2Object[] targets, boolean isPet)
+		{
+			_npc = npc;
+			_caster = caster;
+			_skill = skill;
+			_targets = targets;
+			_isPet = isPet;
+		}
+
+		@Override
+		public void run()
+		{
+			String res = null;
+			try
+			{
+				res = onSkillSee(_npc, _caster, _skill, _targets, _isPet);
+			}
+			catch (Exception e)
+			{
+				showError(_caster, e);
+			}
+			showResult(_caster, res);
+
+		}
+	}
+
 	/**
 	 * This is used to register all monsters contained in mobs for a particular script
 	 * event types defined in types.

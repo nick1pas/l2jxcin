@@ -20,7 +20,6 @@ package net.xcine.gameserver.ai.special.manager;
 
 import java.util.logging.Logger;
 
-import net.xcine.gameserver.ai.special.Antharas;
 import net.xcine.gameserver.ai.special.Baium_l2j;
 import net.xcine.gameserver.ai.special.Barakiel;
 import net.xcine.gameserver.ai.special.Core;
@@ -54,7 +53,6 @@ public class AILoader
 	public static void init()
 	{
 		_log.info("AI load:");
-		ThreadPoolManager.getInstance().scheduleAi(new Antharas(-1, "antharas", "ai"), 100);
 		ThreadPoolManager.getInstance().scheduleAi(new Baium_l2j(-1, "baium", "ai"), 200);
 		ThreadPoolManager.getInstance().scheduleAi(new Core(-1, "core", "ai"), 300);
 		ThreadPoolManager.getInstance().scheduleAi(new QueenAnt(-1, "queen_ant", "ai"), 400);

@@ -22,11 +22,11 @@ import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.model.L2Character;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.entity.siege.Castle;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
@@ -52,7 +52,7 @@ public class ScrollOfResurrection implements IItemHandler
 	 * @see net.xcine.gameserver.handler.IItemHandler#useItem(net.xcine.gameserver.model.L2PcInstance, net.xcine.gameserver.model.L2ItemInstance)
 	 */
 	@Override
-	public void useItem(L2Playable playable, L2ItemInstance item)
+	public void useItem(L2PlayableInstance playable, L2ItemInstance item)
 	{
 		if (!(playable instanceof L2PcInstance))
 			return;

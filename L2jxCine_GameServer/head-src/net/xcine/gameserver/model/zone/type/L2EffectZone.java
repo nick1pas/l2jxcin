@@ -20,11 +20,12 @@ import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
+
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.model.L2Character;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.zone.L2ZoneType;
 import net.xcine.gameserver.network.serverpackets.EtcStatusUpdate;
 import net.xcine.gameserver.thread.ThreadPoolManager;
@@ -217,7 +218,7 @@ public class L2EffectZone extends L2ZoneType
 					
 					if (temp != null && !temp.isDead())
 					{
-						if(!(temp instanceof L2Playable)) //effect on zones are just applied to Playable Instances
+						if(!(temp instanceof L2PlayableInstance)) //effect on zones are just applied to Playable Instances
 							continue;
 						
 						if (Rnd.get(100) < getChance())

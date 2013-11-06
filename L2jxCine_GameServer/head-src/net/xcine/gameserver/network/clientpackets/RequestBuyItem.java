@@ -25,7 +25,6 @@ import net.xcine.Config;
 import net.xcine.gameserver.cache.HtmCache;
 import net.xcine.gameserver.controllers.TradeController;
 import net.xcine.gameserver.datatables.sql.ItemTable;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2TradeList;
 import net.xcine.gameserver.model.actor.instance.L2CastleChamberlainInstance;
@@ -106,7 +105,7 @@ public final class RequestBuyItem extends L2GameClientPacket
 		L2Object target = player.getTarget();
 		if(!player.isGM() && (target == null // No target (ie GM Shop)
 				|| !(target instanceof L2MerchantInstance || target instanceof L2FishermanInstance || target instanceof L2MercManagerInstance || target instanceof L2ClanHallManagerInstance || target instanceof L2CastleChamberlainInstance) // Target not a merchant, fisherman or mercmanager
-		|| !player.isInsideRadius(target, L2Npc.INTERACTION_DISTANCE, false, false) // Distance is too far
+		|| !player.isInsideRadius(target, L2NpcInstance.INTERACTION_DISTANCE, false, false) // Distance is too far
 		))
 			return;
 

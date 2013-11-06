@@ -18,14 +18,13 @@
  */
 package net.xcine.gameserver.model.actor.instance;
 
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.multisell.L2Multisell;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 
 /**
  * @author zabbix Lets drink to code!
  */
-public class L2BlacksmithInstance extends L2NpcInstance
+public class L2BlacksmithInstance extends L2FolkInstance
 {
 	public L2BlacksmithInstance(int objectId, L2NpcTemplate template)
 	{
@@ -38,7 +37,7 @@ public class L2BlacksmithInstance extends L2NpcInstance
 		if(command.startsWith("multisell"))
 		{
 			int listId = Integer.parseInt(command.substring(9).trim());
-			L2Multisell.getInstance().SeparateAndSend(listId, player, ((L2Npc)player.getTarget()).getNpcId(), false, getCastle().getTaxRate(), false);
+			L2Multisell.getInstance().SeparateAndSend(listId, player, false, getCastle().getTaxRate());
 		}
 		super.onBypassFeedback(player, command);
 	}

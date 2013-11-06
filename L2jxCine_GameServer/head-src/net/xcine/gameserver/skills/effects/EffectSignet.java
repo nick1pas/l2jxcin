@@ -20,11 +20,11 @@ package net.xcine.gameserver.skills.effects;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Effect;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2Summon;
 import net.xcine.gameserver.model.actor.instance.L2EffectPointInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.MagicSkillUser;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
@@ -93,7 +93,7 @@ public final class EffectSignet extends L2Effect
 				 * Like L2OFF if the skill is offensive must not effect the caster, clan, ally, party
 				 */
 				
-				if (cha instanceof L2Playable)
+				if (cha instanceof L2PlayableInstance)
 				{
 					if ((cha instanceof L2Summon && ((L2Summon) cha).getOwner() == caster))
 						continue;
@@ -121,7 +121,7 @@ public final class EffectSignet extends L2Effect
 				 * Like L2OFF if the skill is not offensive must effect only the caster, clan, ally, party
 				 */
 				
-				if (cha instanceof L2Playable)
+				if (cha instanceof L2PlayableInstance)
 				{
 					if (!(cha instanceof L2Summon && ((L2Summon) cha).getOwner() == caster))
 						continue;

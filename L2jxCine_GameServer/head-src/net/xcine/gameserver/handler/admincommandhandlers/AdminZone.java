@@ -21,7 +21,7 @@ package net.xcine.gameserver.handler.admincommandhandlers;
 import java.util.StringTokenizer;
 
 import net.xcine.gameserver.datatables.GmListTable;
-import net.xcine.gameserver.datatables.xml.MapRegionData;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.Location;
@@ -88,22 +88,22 @@ public class AdminZone implements IAdminCommandHandler
 				activeChar.sendMessage("This is NOT a no landing zone.");
 			}
 
-			activeChar.sendMessage("MapRegion: x:" + MapRegionData.getInstance().getMapRegionX(activeChar.getX()) + " y:" + MapRegionData.getInstance().getMapRegionX(activeChar.getY()));
+			activeChar.sendMessage("MapRegion: x:" + MapRegionTable.getInstance().getMapRegionX(activeChar.getX()) + " y:" + MapRegionTable.getInstance().getMapRegionX(activeChar.getY()));
 
-			activeChar.sendMessage("Closest Town: " + MapRegionData.getInstance().getClosestTownName(activeChar));
+			activeChar.sendMessage("Closest Town: " + MapRegionTable.getInstance().getClosestTownName(activeChar));
 
 			Location loc;
 
-			loc = MapRegionData.getInstance().getTeleToLocation(activeChar, MapRegionData.TeleportWhereType.Castle);
+			loc = MapRegionTable.getInstance().getTeleToLocation(activeChar, MapRegionTable.TeleportWhereType.Castle);
 			activeChar.sendMessage("TeleToLocation (Castle): x:" + loc.getX() + " y:" + loc.getY() + " z:" + loc.getZ());
 
-			loc = MapRegionData.getInstance().getTeleToLocation(activeChar, MapRegionData.TeleportWhereType.ClanHall);
+			loc = MapRegionTable.getInstance().getTeleToLocation(activeChar, MapRegionTable.TeleportWhereType.ClanHall);
 			activeChar.sendMessage("TeleToLocation (ClanHall): x:" + loc.getX() + " y:" + loc.getY() + " z:" + loc.getZ());
 
-			loc = MapRegionData.getInstance().getTeleToLocation(activeChar, MapRegionData.TeleportWhereType.SiegeFlag);
+			loc = MapRegionTable.getInstance().getTeleToLocation(activeChar, MapRegionTable.TeleportWhereType.SiegeFlag);
 			activeChar.sendMessage("TeleToLocation (SiegeFlag): x:" + loc.getX() + " y:" + loc.getY() + " z:" + loc.getZ());
 
-			loc = MapRegionData.getInstance().getTeleToLocation(activeChar, MapRegionData.TeleportWhereType.Town);
+			loc = MapRegionTable.getInstance().getTeleToLocation(activeChar, MapRegionTable.TeleportWhereType.Town);
 			activeChar.sendMessage("TeleToLocation (Town): x:" + loc.getX() + " y:" + loc.getY() + " z:" + loc.getZ());
 
 			loc = null;

@@ -31,12 +31,19 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import javolution.util.FastMap;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+
 import net.xcine.Config;
 import net.xcine.gameserver.model.CursedWeapon;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2World;
+import net.xcine.gameserver.model.actor.instance.L2CommanderInstance;
 import net.xcine.gameserver.model.actor.instance.L2FestivalMonsterInstance;
+import net.xcine.gameserver.model.actor.instance.L2FortSiegeGuardInstance;
 import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -46,10 +53,6 @@ import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 
 /**
  * @author Micht
@@ -337,7 +340,9 @@ public class CursedWeaponsManager
 		if(attackable instanceof L2SiegeGuardInstance 
 			|| attackable instanceof L2RiftInvaderInstance 
 			|| attackable instanceof L2FestivalMonsterInstance 
-			|| attackable instanceof L2GrandBossInstance )
+			|| attackable instanceof L2GrandBossInstance 
+			|| attackable instanceof L2FortSiegeGuardInstance 
+			|| attackable instanceof L2CommanderInstance)
 			return;
 
 		if(player.isCursedWeaponEquiped())

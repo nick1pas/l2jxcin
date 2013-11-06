@@ -42,7 +42,10 @@ import net.xcine.gameserver.model.CharSelectInfoPackage;
 import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.entity.event.CTF;
+import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.L2Event;
+import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
@@ -841,7 +844,14 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 						L2Event.connectionLossData.put(player.getName(), data);
 						data = null;
 					}else{
-						if(player._inEventVIP){
+						
+						if(player._inEventCTF){
+							CTF.onDisconnect(player);
+						}else if(player._inEventDM){
+							DM.onDisconnect(player);
+						}else if(player._inEventTvT){
+							TvT.onDisconnect(player);
+						}else if(player._inEventVIP){
 							VIP.onDisconnect(player);
 						}
 						
@@ -926,7 +936,14 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 						L2Event.connectionLossData.put(player.getName(), data);
 						data = null;
 					}else{
-						 if(player._inEventVIP){
+						
+						if(player._inEventCTF){
+							CTF.onDisconnect(player);
+						}else if(player._inEventDM){
+							DM.onDisconnect(player);
+						}else if(player._inEventTvT){
+							TvT.onDisconnect(player);
+						}else if(player._inEventVIP){
 							VIP.onDisconnect(player);
 						}
 						

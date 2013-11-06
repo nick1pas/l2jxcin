@@ -22,7 +22,9 @@ import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.model.L2Effect;
 import net.xcine.gameserver.model.Location;
-import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
+import net.xcine.gameserver.model.actor.instance.L2CommanderInstance;
+import net.xcine.gameserver.model.actor.instance.L2FolkInstance;
+import net.xcine.gameserver.model.actor.instance.L2FortSiegeGuardInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2SiegeFlagInstance;
 import net.xcine.gameserver.model.actor.instance.L2SiegeGuardInstance;
@@ -78,7 +80,7 @@ final class EffectFear extends L2Effect
 		if(getEffected() instanceof L2PcInstance && getEffector() instanceof L2PcInstance && getSkill().getId() != 1376 && getSkill().getId() != 1169 && getSkill().getId() != 65 && getSkill().getId() != 1092)
 			return false;
 
-		if(getEffected() instanceof L2NpcInstance)
+		if(getEffected() instanceof L2FolkInstance)
 			return false;
 
 		if(getEffected() instanceof L2SiegeGuardInstance)
@@ -89,6 +91,9 @@ final class EffectFear extends L2Effect
 			return false;
 
 		if(getEffected() instanceof L2SiegeSummonInstance)
+			return false;
+
+		if(getEffected() instanceof L2FortSiegeGuardInstance || getEffected() instanceof L2CommanderInstance)
 			return false;
 
 		int posX = getEffected().getX();

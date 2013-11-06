@@ -30,6 +30,7 @@ import net.xcine.gameserver.model.L2Skill.SkillType;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.actor.instance.L2SiegeSummonInstance;
 import net.xcine.gameserver.model.actor.knownlist.SummonKnownList;
 import net.xcine.gameserver.model.actor.stat.SummonStat;
@@ -48,7 +49,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.templates.L2Weapon;
 import net.xcine.gameserver.util.sql.SQLQueue;
 
-public abstract class L2Summon extends L2Playable
+public abstract class L2Summon extends L2PlayableInstance
 {
 	//private static Logger _log = Logger.getLogger(L2Summon.class.getName());
 

@@ -1,5 +1,4 @@
-/*
- * This program is free software; you can redistribute it and/or modify
+/* This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
  * any later version.
@@ -18,22 +17,39 @@
  */
 package net.xcine.gameserver.model.actor.stat;
 
-import net.xcine.gameserver.model.L2Npc;
+import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.skills.Stats;
+
+/**
+ * @author programmos
+ */
 
 public class NpcStat extends CharStat
 {
-	public NpcStat(L2Npc activeChar)
+	// =========================================================
+	// Data Field
+
+	// =========================================================
+	// Constructor
+	public NpcStat(L2NpcInstance activeChar)
 	{
 		super(activeChar);
 
 		setLevel(getActiveChar().getTemplate().level);
 	}
 
+	// =========================================================
+	// Method - Public
+
+	// =========================================================
+	// Method - Private
+
+	// =========================================================
+	// Property - Public
 	@Override
-	public L2Npc getActiveChar()
+	public L2NpcInstance getActiveChar()
 	{
-		return (L2Npc) super.getActiveChar();
+		return (L2NpcInstance) super.getActiveChar();
 	}
 
 	@Override
@@ -41,5 +57,21 @@ public class NpcStat extends CharStat
 	{
 		return (int) calcStat(Stats.MAX_HP, getActiveChar().getTemplate().baseHpMax, null, null);
 	}
-
+	/*
+	@Override
+	public final int getWalkSpeed()
+	{
+		return  getRunSpeed()/2;
+	}
+	
+	@Override
+	public float getMovementSpeedMultiplier()
+	{
+		if (getActiveChar() == null)
+			return 1;
+		float val = getRunSpeed() * 1f / getActiveChar().getTemplate().baseRunSpd;
+		val = val/2;
+		return val;
+	} 
+	*/
 }

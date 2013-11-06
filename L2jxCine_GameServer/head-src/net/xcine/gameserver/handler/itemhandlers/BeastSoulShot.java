@@ -20,12 +20,12 @@ package net.xcine.gameserver.handler.itemhandlers;
 
 import net.xcine.Config;
 import net.xcine.gameserver.handler.IItemHandler;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Summon;
 import net.xcine.gameserver.model.actor.instance.L2BabyPetInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ExAutoSoulShot;
 import net.xcine.gameserver.network.serverpackets.MagicSkillUser;
@@ -47,7 +47,7 @@ public class BeastSoulShot implements IItemHandler
 	};
 
 	@Override
-	public void useItem(L2Playable playable, L2ItemInstance item)
+	public void useItem(L2PlayableInstance playable, L2ItemInstance item)
 	{
 		if(playable == null)
 			return;

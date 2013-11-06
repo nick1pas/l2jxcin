@@ -39,7 +39,7 @@ import net.xcine.gameserver.templates.StatsSet;
  *
  * @author Tempy
  */
-public final class L2FestivalGuideInstance extends L2NpcInstance
+public final class L2FestivalGuideInstance extends L2FolkInstance
 {
 	/** The _festival type. */
 	protected int _festivalType;

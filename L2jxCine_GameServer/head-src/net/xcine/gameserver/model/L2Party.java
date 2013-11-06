@@ -23,6 +23,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.Future;
 
 import javolution.util.FastList;
+
 import net.xcine.Config;
 import net.xcine.gameserver.controllers.GameTimeController;
 import net.xcine.gameserver.datatables.sql.ItemTable;
@@ -30,6 +31,7 @@ import net.xcine.gameserver.managers.DuelManager;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.actor.instance.L2SummonInstance;
 import net.xcine.gameserver.model.entity.DimensionalRift;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSignsFestival;
@@ -695,10 +697,10 @@ public class L2Party
 	 * @param rewardedMembers The list of L2PcInstance to reward
 	 * @param topLvl 
 	 */
-	public void distributeXpAndSp(long xpReward, int spReward, List<L2Playable> rewardedMembers, int topLvl)
+	public void distributeXpAndSp(long xpReward, int spReward, List<L2PlayableInstance> rewardedMembers, int topLvl)
 	{
 		L2SummonInstance summon = null;
-		List<L2Playable> validMembers = getValidMembers(rewardedMembers, topLvl);
+		List<L2PlayableInstance> validMembers = getValidMembers(rewardedMembers, topLvl);
 
 		float penalty;
 		double sqLevel;
@@ -709,7 +711,7 @@ public class L2Party
 
 		double sqLevelSum = 0;
 
-		for(L2Playable character : validMembers)
+		for(L2PlayableInstance character : validMembers)
 		{
 			sqLevelSum += character.getLevel() * character.getLevel();
 		}
@@ -803,14 +805,14 @@ public class L2Party
 		_partyLvl = newLevel;
 	}
 
-	private List<L2Playable> getValidMembers(List<L2Playable> members, int topLvl)
+	private List<L2PlayableInstance> getValidMembers(List<L2PlayableInstance> members, int topLvl)
 	{
-		List<L2Playable> validMembers = new FastList<>();
+		List<L2PlayableInstance> validMembers = new FastList<>();
 
 		// Fixed LevelDiff cutoff point
 		if(Config.PARTY_XP_CUTOFF_METHOD.equalsIgnoreCase("level"))
 		{
-			for(L2Playable member : members)
+			for(L2PlayableInstance member : members)
 			{
 				if(topLvl - member.getLevel() <= Config.PARTY_XP_CUTOFF_LEVEL)
 				{
@@ -823,12 +825,12 @@ public class L2Party
 		{
 			int sqLevelSum = 0;
 
-			for(L2Playable member : members)
+			for(L2PlayableInstance member : members)
 			{
 				sqLevelSum += member.getLevel() * member.getLevel();
 			}
 
-			for(L2Playable member : members)
+			for(L2PlayableInstance member : members)
 			{
 				int sqLevel = member.getLevel() * member.getLevel();
 
@@ -843,7 +845,7 @@ public class L2Party
 		{
 			int sqLevelSum = 0;
 
-			for(L2Playable member : members)
+			for(L2PlayableInstance member : members)
 			{
 				sqLevelSum += member.getLevel() * member.getLevel();
 			}
@@ -858,7 +860,7 @@ public class L2Party
 				i = BONUS_EXP_SP.length - 1;
 			}
 
-			for(L2Playable member : members)
+			for(L2PlayableInstance member : members)
 			{
 				int sqLevel = member.getLevel() * member.getLevel();
 

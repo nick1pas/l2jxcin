@@ -5,9 +5,9 @@ import java.util.logging.Logger;
 import net.xcine.Config;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Object;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.L2WorldRegion;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 
 public class KnownListUpdateTaskManager
@@ -93,7 +93,7 @@ public class KnownListUpdateTaskManager
 				object.getKnownList().forgetObjects(); //TODO
 				continue;
 			}
-			if(object instanceof L2Playable /*|| (false && object instanceof L2GuardInstance)*/|| fullUpdate)
+			if(object instanceof L2PlayableInstance /*|| (false && object instanceof L2GuardInstance)*/|| fullUpdate)
 			{
 				for(L2WorldRegion regi : region.getSurroundingRegions()) // offer members of this and surrounding regions
 				{

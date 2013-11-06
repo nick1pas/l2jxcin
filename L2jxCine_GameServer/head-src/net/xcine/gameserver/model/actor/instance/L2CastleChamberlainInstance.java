@@ -51,7 +51,7 @@ import net.xcine.gameserver.util.Util;
  * Castle Chamberlains implementation used for: - tax rate control - regional manor system control - castle treasure
  * control - ...
  */
-public class L2CastleChamberlainInstance extends L2NpcInstance
+public class L2CastleChamberlainInstance extends L2FolkInstance
 {
 	//    private static Logger _log = Logger.getLogger(L2CastleChamberlainInstance.class.getName());
 

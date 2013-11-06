@@ -1,3 +1,31 @@
+/*
+ * $Header: WayPointNode.java, 20/07/2005 19:49:29 luisantonioa Exp $
+ *
+ * $Author: luisantonioa $
+ * $Date: 20/07/2005 19:49:29 $
+ * $Revision: 1 $
+ * $Log: WayPointNode.java,v $
+ * Revision 1  20/07/2005 19:49:29  luisantonioa
+ * Added copyright notice
+ *
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.
+ *
+ * http://www.gnu.org/copyleft/gpl.html
+ */
 package net.xcine.gameserver.model.waypoint;
 
 import java.util.Collections;
@@ -14,6 +42,12 @@ import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.serverpackets.MyTargetSelected;
 import net.xcine.util.Point3D;
+
+/**
+ * This class ...
+ * 
+ * @version $Revision: 1.2 $ $Date: 2004/06/27 08:12:59 $
+ */
 
 public class WayPointNode extends L2Object
 {
@@ -33,6 +67,9 @@ public class WayPointNode extends L2Object
 		_linkLists = Collections.synchronizedMap(new WeakHashMap<WayPointNode, List<WayPointNode>>());
 	}
 
+	/* (non-Javadoc)
+	 * @see net.xcine.gameserver.model.L2Object#isAutoAttackable(net.xcine.gameserver.model.L2Character)
+	 */
 	@Override
 	public boolean isAutoAttackable(L2Character attacker)
 	{

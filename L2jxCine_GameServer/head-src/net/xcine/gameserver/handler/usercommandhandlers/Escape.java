@@ -21,10 +21,13 @@ package net.xcine.gameserver.handler.usercommandhandlers;
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.controllers.GameTimeController;
-import net.xcine.gameserver.datatables.xml.MapRegionData;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.handler.IUserCommandHandler;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.entity.event.CTF;
+import net.xcine.gameserver.model.entity.event.DM;
+import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.MagicSkillUser;
@@ -33,6 +36,10 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.util.Broadcast;
 
+/**
+ *
+ *
+ */
 public class Escape implements IUserCommandHandler
 {
 	private static final int[] COMMAND_IDS =
@@ -53,6 +60,27 @@ public class Escape implements IUserCommandHandler
 		if(activeChar.isFestivalParticipant())
 		{
 			activeChar.sendMessage("You may not use an escape command in a festival.");
+			return false;
+		}
+
+		// Check to see if the current player is in TVT Event.
+		if(activeChar._inEventTvT && TvT.is_started())
+		{
+			activeChar.sendMessage("You may not use an escape skill in TvT.");
+			return false;
+		}
+
+		// Check to see if the current player is in CTF Event.
+		if(activeChar._inEventCTF && CTF.is_started())
+		{
+			activeChar.sendMessage("You may not use an escape skill in CTF.");
+			return false;
+		}
+
+		// Check to see if the current player is in DM Event.
+		if(activeChar._inEventDM && DM.is_started())
+		{
+			activeChar.sendMessage("You may not use an escape skill in DM.");
 			return false;
 		}
 
@@ -160,7 +188,7 @@ public class Escape implements IUserCommandHandler
 					return;
 				}
 				
-				_activeChar.teleToLocation(MapRegionData.TeleportWhereType.Town);
+				_activeChar.teleToLocation(MapRegionTable.TeleportWhereType.Town);
 			}
 			catch(Throwable e)
 			{

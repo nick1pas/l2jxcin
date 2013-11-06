@@ -34,7 +34,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  * @author NightMarez
  * @version $Revision: 1.3.2.2.2.5 $ $Date: 2005/03/27 15:29:32 $
  */
-public final class L2ObservationInstance extends L2NpcInstance
+public final class L2ObservationInstance extends L2FolkInstance
 {
 	//private static Logger _log = Logger.getLogger(L2TeleporterInstance.class.getName());
 
@@ -66,7 +66,13 @@ public final class L2ObservationInstance extends L2NpcInstance
 				player.sendMessage("You already participated in Olympiad!"); 
 				return;
 			}
-
+			
+			if(player._inEventTvT || player._inEventDM || player._inEventCTF)
+			{
+				player.sendMessage("You already participated in Event!");
+				return;
+			}
+			
 			if(player.isInCombat() || player.getPvpFlag() > 0)
 			{
 				player.sendMessage("You are in combat now!");
@@ -90,6 +96,12 @@ public final class L2ObservationInstance extends L2NpcInstance
 			if(Olympiad.getInstance().isRegistered(player) || player.isInOlympiadMode())
 			{
 				player.sendMessage("You already participated in Olympiad!"); 
+				return;
+			}
+			
+			if(player._inEventTvT || player._inEventDM || player._inEventCTF)
+			{
+				player.sendMessage("You already participated in Event!");
 				return;
 			}
 			

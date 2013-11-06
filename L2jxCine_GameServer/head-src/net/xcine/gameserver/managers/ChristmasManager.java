@@ -20,16 +20,17 @@ import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
+
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.model.L2Attackable;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
+import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.spawn.L2Spawn;
@@ -48,9 +49,10 @@ public class ChristmasManager
 {
 	private static final Logger _log = Logger.getLogger(ChristmasManager.class.getName());
 	
-	protected List<L2Npc> objectQueue = new FastList<>();
+	protected List<L2NpcInstance> objectQueue = new FastList<>();
 	protected Random rand = new Random();
 
+	// X-Mas message list
 	protected String[] message =
 	{
 			"Ho Ho Ho... Merry Christmas!",
@@ -124,6 +126,7 @@ public class ChristmasManager
 			"May you have the best of Christmas this year and all your dreams come true.",
 			"May the miracle of Christmas fill your heart with warmth and love. Merry Christmas!"
 	},
+
 			sender =
 			{
 					"Santa Claus",
@@ -393,7 +396,7 @@ public class ChristmasManager
 	}
 
 	/**
-	 * Delete all x-mas spawned trees from the world. Delete all x-mas trees spawns, and clears the L2Npc tree
+	 * Delete all x-mas spawned trees from the world. Delete all x-mas trees spawns, and clears the L2NpcInstance tree
 	 * queue.
 	 */
 
@@ -405,7 +408,7 @@ public class ChristmasManager
 			if(objectQueue == null || objectQueue.isEmpty())
 				return;
 
-			for(L2Npc deleted : objectQueue)
+			for(L2NpcInstance deleted : objectQueue)
 			{
 				if(deleted == null)
 				{
@@ -458,7 +461,7 @@ public class ChristmasManager
 			spawn.setLocy(y);
 			spawn.setLocz(z);
 
-			L2Npc tree = spawn.spawnOne();
+			L2NpcInstance tree = spawn.spawnOne();
 			L2World.getInstance().storeObject(tree);
 			objectQueue.add(tree);
 
@@ -690,7 +693,7 @@ public class ChristmasManager
 					}
 				}
 
-				if(rand.nextInt(100) < 80 && obj instanceof L2Npc)
+				if(rand.nextInt(100) < 80 && obj instanceof L2NpcInstance)
 				{
 					spawnOneTree(getSantaId(), obj.getX() + rand.nextInt(500) - 250, obj.getY() + rand.nextInt(500) - 250, obj.getZ());
 				}

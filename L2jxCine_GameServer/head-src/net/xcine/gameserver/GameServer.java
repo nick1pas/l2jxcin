@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import net.xcine.Config;
 import net.xcine.ServerType;
 import net.xcine.crypt.nProtect;
+import net.xcine.gameserver.ai.special.manager.AILoader;
 import net.xcine.gameserver.cache.CrestCache;
 import net.xcine.gameserver.cache.HtmCache;
 import net.xcine.gameserver.communitybbs.Manager.ForumsBBSManager;
@@ -44,6 +45,8 @@ import net.xcine.gameserver.datatables.NobleSkillTable;
 import net.xcine.gameserver.datatables.OfflineTradeTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.csv.ExtractableItemsData;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
+import net.xcine.gameserver.datatables.sql.ArmorSetsTable;
 import net.xcine.gameserver.datatables.sql.CharNameTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.CustomArmorSetsTable;
@@ -54,7 +57,6 @@ import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.AccessLevelsData;
 import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
-import net.xcine.gameserver.datatables.xml.ArmorSetsData;
 import net.xcine.gameserver.datatables.xml.AugmentationData;
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.datatables.xml.DoorData;
@@ -63,7 +65,6 @@ import net.xcine.gameserver.datatables.xml.FishTable;
 import net.xcine.gameserver.datatables.xml.HelperBuffData;
 import net.xcine.gameserver.datatables.xml.HennaData;
 import net.xcine.gameserver.datatables.xml.L2PetDataData;
-import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.datatables.xml.NpcWalkerRoutesData;
 import net.xcine.gameserver.datatables.xml.RecipeData;
 import net.xcine.gameserver.datatables.xml.SkillSpellbookData;
@@ -73,9 +74,6 @@ import net.xcine.gameserver.datatables.xml.SummonItemsData;
 import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.datatables.xml.TerritoryData;
 import net.xcine.gameserver.datatables.xml.ZoneData;
-import net.xcine.gameserver.event.EventBuffer;
-import net.xcine.gameserver.event.EventManager;
-import net.xcine.gameserver.event.EventStats;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.geo.geoeditorcon.GeoEditorListener;
 import net.xcine.gameserver.geo.pathfinding.PathFinding;
@@ -100,6 +98,8 @@ import net.xcine.gameserver.managers.CursedWeaponsManager;
 import net.xcine.gameserver.managers.DayNightSpawnManager;
 import net.xcine.gameserver.managers.DimensionalRiftManager;
 import net.xcine.gameserver.managers.DuelManager;
+import net.xcine.gameserver.managers.FortManager;
+import net.xcine.gameserver.managers.FortSiegeManager;
 import net.xcine.gameserver.managers.FourSepulchersManager;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.managers.ItemsOnGroundManager;
@@ -117,6 +117,7 @@ import net.xcine.gameserver.model.ipCatcher;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.entity.Hero;
 import net.xcine.gameserver.model.entity.MonsterRace;
+import net.xcine.gameserver.model.entity.event.manager.EventManager;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSigns;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSignsFestival;
@@ -218,7 +219,7 @@ public class GameServer
 		
 		Util.printSection("World");
 		L2World.getInstance();
-		MapRegionData.getInstance();
+		MapRegionTable.getInstance();
 		Announcements.getInstance();
 		AutoAnnouncementHandler.getInstance();
 		TerritoryData.getInstance();
@@ -264,7 +265,7 @@ public class GameServer
 			_log.info("Could not find the extraced files. Please Check Your Data.");
 			throw new Exception("Could not initialize the item table");
 		}
-		ArmorSetsData.getInstance();
+		ArmorSetsTable.getInstance();
 		if (Config.CUSTOM_ARMORSETS_TABLE)
 		{
 			CustomArmorSetsTable.getInstance();
@@ -376,6 +377,8 @@ public class GameServer
 		Util.printSection("Castles");
 		CastleManager.getInstance();
 		SiegeManager.getInstance();
+		FortManager.getInstance();
+		FortSiegeManager.getInstance();
 		CrownManager.getInstance();
 		
 		Util.printSection("Boat");
@@ -457,6 +460,15 @@ public class GameServer
 		else
 			_log.info("Quest: disable load.");
 		
+		Util.printSection("AI");
+		if (!Config.ALT_DEV_NO_AI)
+		{
+			AILoader.init();
+		}
+		else
+		{
+			_log.info("AI: disable load.");
+		}
 		
 		Util.printSection("Scripts");
 		if (!Config.ALT_DEV_NO_SCRIPT)
@@ -501,7 +513,22 @@ public class GameServer
 		}
 		else
 			_log.info("All custom mods are Disabled.");
-
+		
+		Util.printSection("EventManager");
+		EventManager.getInstance().startEventRegistration();
+		
+		if (EventManager.TVT_EVENT_ENABLED || EventManager.CTF_EVENT_ENABLED || EventManager.DM_EVENT_ENABLED)
+		{
+			if (EventManager.TVT_EVENT_ENABLED)
+				_log.info("TVT Event is Enabled.");
+			if (EventManager.CTF_EVENT_ENABLED)
+				_log.info("CTF Event is Enabled.");
+			if (EventManager.DM_EVENT_ENABLED)
+				_log.info("DM Event is Enabled.");
+		}
+		else
+			_log.info("All events are Disabled.");
+		
 		if ((Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) && Config.RESTORE_OFFLINERS)
 			OfflineTradeTable.restoreOfflineTraders();
 
@@ -513,11 +540,6 @@ public class GameServer
 		_log.info("Maximum Numbers of Connected Players: " + Config.MAXIMUM_ONLINE_USERS);
 		_log.info("GameServer Started, free memory " + Memory.getFreeMemory() + " Mb of " + Memory.getTotalMemory() + " Mb");
 		_log.info("Used memory: " + Memory.getUsedMemory() + " MB");
-				
-		EventManager.getInstance();
-		EventStats.getInstance();
-		if(EventManager.getInstance().getBoolean("eventBufferEnabled"))
-			EventBuffer.getInstance();
 		
 		Util.printSection("Java specific");
 		_log.info("JRE name: " + System.getProperty("java.vendor"));

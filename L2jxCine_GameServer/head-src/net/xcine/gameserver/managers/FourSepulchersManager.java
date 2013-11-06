@@ -25,13 +25,14 @@ import java.util.concurrent.ScheduledFuture;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
+
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.DoorData;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
+import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2SepulcherMonsterInstance;
 import net.xcine.gameserver.model.actor.instance.L2SepulcherNpcInstance;
@@ -170,7 +171,7 @@ public class FourSepulchersManager extends GrandBossManager
 	protected FastList<L2Spawn> _managers;
 	protected FastList<L2Spawn> _dukeFinalSpawns;
 	protected FastList<L2Spawn> _emperorsGraveSpawns;
-	protected FastList<L2Npc> _allMobs = new FastList<>();
+	protected FastList<L2NpcInstance> _allMobs = new FastList<>();
 
 	protected long _attackTimeEnd = 0;
 	protected long _coolDownTimeEnd = 0;
@@ -1006,7 +1007,7 @@ public class FourSepulchersManager extends GrandBossManager
 		return _inAttackTime;
 	}
 
-	public synchronized void tryEntry(L2Npc npc, L2PcInstance player)
+	public synchronized void tryEntry(L2NpcInstance npc, L2PcInstance player)
 	{
 		int npcId = npc.getNpcId();
 		switch(npcId)
@@ -1420,7 +1421,7 @@ public class FourSepulchersManager extends GrandBossManager
 		return true;
 	}
 
-	public void spawnKeyBox(L2Npc activeChar)
+	public void spawnKeyBox(L2NpcInstance activeChar)
 	{
 		if(!isAttackTime())
 			return;
@@ -1442,7 +1443,7 @@ public class FourSepulchersManager extends GrandBossManager
 		}
 	}
 
-	public void spawnExecutionerOfHalisha(L2Npc activeChar)
+	public void spawnExecutionerOfHalisha(L2NpcInstance activeChar)
 	{
 		if(!isAttackTime())
 			return;
@@ -1557,7 +1558,7 @@ public class FourSepulchersManager extends GrandBossManager
 
 	public void deleteAllMobs()
 	{
-		for(L2Npc mob : _allMobs)
+		for(L2NpcInstance mob : _allMobs)
 		{
 			try
 			{
@@ -1959,7 +1960,7 @@ public class FourSepulchersManager extends GrandBossManager
 		return _hallGateKeepers;
 	}
 
-	public void showHtmlFile(L2PcInstance player, String file, L2Npc npc, L2PcInstance member)
+	public void showHtmlFile(L2PcInstance player, String file, L2NpcInstance npc, L2PcInstance member)
 	{
 		NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 		html.setFile("data/html/SepulcherNpc/" + file);

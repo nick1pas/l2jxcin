@@ -18,7 +18,6 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.thread.ThreadPoolManager;
@@ -28,7 +27,7 @@ import net.xcine.gameserver.thread.ThreadPoolManager;
  *
  * @author Kerberos
  */
-public final class L2CastleTeleporterInstance extends L2Npc
+public final class L2CastleTeleporterInstance extends L2NpcInstance
 {
 	
 	/** The Constant _log. */

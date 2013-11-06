@@ -18,29 +18,35 @@
  */
 package net.xcine.gameserver.model.actor.knownlist;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastMap;
+
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Object;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2BoatInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.util.Util;
 
 public class ObjectKnownList
 {
+	// =========================================================
+	// Data Field
 	private L2Object _activeObject;
 	private Map<Integer, L2Object> _knownObjects;
+
+	// =========================================================
+	// Constructor
 	public ObjectKnownList(L2Object activeObject)
 	{
 		_activeObject = activeObject;
 	}
 
+	// =========================================================
+	// Method - Public
 	public boolean addKnownObject(L2Object object)
 	{
 		return addKnownObject(object, null);
@@ -81,20 +87,7 @@ public class ObjectKnownList
 	{
 		getKnownObjects().clear();
 	}
-	
-	@SuppressWarnings("unchecked")
-	public final <A> Collection<A> getKnownType(Class<A> type)
-	{
-		List<A> result = new ArrayList<>();
-		
-		for (L2Object obj : _knownObjects.values())
-		{
-			if (type.isAssignableFrom(obj.getClass()))
-				result.add((A) obj);
-		}
-		return result;
-	}
-	
+
 	public boolean removeKnownObject(L2Object object)
 	{
 		if(object == null)
@@ -128,7 +121,7 @@ public class ObjectKnownList
 	// Method - Private
 	private final void findCloseObjects()
 	{
-		boolean isActiveObjectPlayable = getActiveObject() instanceof L2Playable;
+		boolean isActiveObjectPlayable = getActiveObject() instanceof L2PlayableInstance;
 
 		if(isActiveObjectPlayable)
 		{
@@ -146,11 +139,11 @@ public class ObjectKnownList
 				}
 
 				// Try to add object to active object's known objects
-				// L2Playable sees everything
+				// L2PlayableInstance sees everything
 				addKnownObject(object);
 
 				// Try to add active object to object's known objects
-				// Only if object is a L2Character and active object is a L2Playable
+				// Only if object is a L2Character and active object is a L2PlayableInstance
 				if(object instanceof L2Character)
 				{
 					object.getKnownList().addKnownObject(getActiveObject());
@@ -161,7 +154,7 @@ public class ObjectKnownList
 		}
 		else
 		{
-			Collection<L2Playable> playables = L2World.getInstance().getVisiblePlayable(getActiveObject());
+			Collection<L2PlayableInstance> playables = L2World.getInstance().getVisiblePlayable(getActiveObject());
 
 			if(playables == null)
 				return;
@@ -175,7 +168,7 @@ public class ObjectKnownList
 				}
 
 				// Try to add object to active object's known objects
-				// L2Character only needs to see visible L2PcInstance and L2Playable,
+				// L2Character only needs to see visible L2PcInstance and L2PlayableInstance,
 				// when moving. Other l2characters are currently only known from initial spawn area.
 				// Possibly look into getDistanceToForgetObject values before modifying this approach...
 				addKnownObject(playable);

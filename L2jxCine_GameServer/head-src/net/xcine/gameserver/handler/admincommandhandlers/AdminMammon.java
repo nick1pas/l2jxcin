@@ -25,7 +25,7 @@ import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
-import net.xcine.gameserver.model.L2Npc;
+import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSigns;
 import net.xcine.gameserver.model.spawn.AutoSpawn;
@@ -99,7 +99,7 @@ public class AdminMammon implements IAdminCommandHandler
 
 			if(blackSpawnInst != null)
 			{
-				L2Npc[] blackInst = blackSpawnInst.getNPCInstanceList();
+				L2NpcInstance[] blackInst = blackSpawnInst.getNPCInstanceList();
 				if(blackInst.length > 0)
 				{
 					int x1 = blackInst[0].getX(), y1 = blackInst[0].getY(), z1 = blackInst[0].getZ();
@@ -120,7 +120,7 @@ public class AdminMammon implements IAdminCommandHandler
 
 			if(merchSpawnInst != null)
 			{
-				L2Npc[] merchInst = merchSpawnInst.getNPCInstanceList();
+				L2NpcInstance[] merchInst = merchSpawnInst.getNPCInstanceList();
 
 				if(merchInst.length > 0)
 				{

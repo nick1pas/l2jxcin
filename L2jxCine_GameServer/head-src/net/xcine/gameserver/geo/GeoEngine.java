@@ -33,7 +33,6 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.FenceTable;
 import net.xcine.gameserver.geo.pathfinding.Node;
 import net.xcine.gameserver.geo.pathfinding.cellnodes.CellPathFinding;
 import net.xcine.gameserver.geo.util.Door;
@@ -45,7 +44,6 @@ import net.xcine.gameserver.model.Location;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2SiegeGuardInstance;
-import net.xcine.gameserver.model.spawn.L2Spawn;
 import net.xcine.util.Point3D;
 
 public final class GeoEngine extends GeoData
@@ -87,9 +85,9 @@ public final class GeoEngine extends GeoData
 	}
 
 	@Override
-	public short getSpawnHeight(int x, int y, int zmin, int zmax, L2Spawn spawn)
+	public short getSpawnHeight(int x, int y, int zmin, int zmax, int spawnid)
 	{
-		return nGetSpawnHeight((x - L2World.MAP_MIN_X) >> 4, (y - L2World.MAP_MIN_Y) >> 4, zmin, zmax, spawn);
+		return nGetSpawnHeight((x - L2World.MAP_MIN_X) >> 4, (y - L2World.MAP_MIN_Y) >> 4, zmin, zmax, spawnid);
 	}
 
 	@Override
@@ -104,10 +102,7 @@ public final class GeoEngine extends GeoData
 	public boolean canSeeTarget(L2Object cha, Point3D target)
 	{
 		if(Door.getInstance().checkIfDoorsBetween(cha.getX(), cha.getY(), cha.getZ(), target.getX(), target.getY(), target.getZ()))
-			return false;		
-		if (!FenceTable.canSeeTarget(cha, target.getX(), target.getY()))
 			return false;
-		
 		if(cha.getZ() >= target.getZ())
 			return canSeeTarget(cha.getX(), cha.getY(), cha.getZ(), target.getX(), target.getY(), target.getZ());
 		return canSeeTarget(target.getX(), target.getY(), target.getZ(), cha.getX(), cha.getY(), cha.getZ());
@@ -143,9 +138,6 @@ public final class GeoEngine extends GeoData
 	@Override
 	public boolean canSeeTargetDebug(L2PcInstance gm, L2Object target)
 	{
-		if (!FenceTable.canSeeTarget(gm, target.getX(), target.getY()))
-			return false;
-					
 		// comments: see above
 		int z = gm.getZ() + 45;
 		int z2 = target.getZ() + 45;
@@ -179,10 +171,7 @@ public final class GeoEngine extends GeoData
 		Location startpoint = new Location(x, y, z);
 		if(Door.getInstance().checkIfDoorsBetween(x, y, z, tx, ty, tz))
 			return startpoint;
-				
-		if (!FenceTable.canSeeTarget(x,y, tx, ty))
-			return startpoint;
-		
+
 		Location destiny = new Location(tx, ty, tz);
 		return moveCheck(startpoint, destiny, (x - L2World.MAP_MIN_X) >> 4, (y - L2World.MAP_MIN_Y) >> 4, z, (tx - L2World.MAP_MIN_X) >> 4, (ty - L2World.MAP_MIN_Y) >> 4, tz);
 	}
@@ -983,10 +972,10 @@ public final class GeoEngine extends GeoData
 	 * @param geoy
 	 * @param zmin
 	 * @param zmax
-	 * @param spawn 
+	 * @param spawnid 
 	 * @return Z betwen zmin and zmax
 	 */
-	private short nGetSpawnHeight(int geox, int geoy, int zmin, int zmax, L2Spawn spawn)
+	private short nGetSpawnHeight(int geox, int geoy, int zmin, int zmax, int spawnid)
 	{
 		short region = getRegionOffset(geox, geoy);
 		int blockX = getBlock(geox);
@@ -1056,14 +1045,14 @@ public final class GeoEngine extends GeoData
 			if(temph > zmax + 200 || temph < zmin - 200)
 			{
 				if(Config.DEBUG)
-					_log.log(Level.WARNING,"SpawnHeight Error - Couldnt find correct layer to spawn NPC - GeoData or Spawnlist Bug!: zmin: " + zmin + " zmax: " + zmax + " value: " + temph + " SpawnId: " + spawn + " at: " + geox + " : " + geoy);
+					_log.log(Level.WARNING,"SpawnHeight Error - Couldnt find correct layer to spawn NPC - GeoData or Spawnlist Bug!: zmin: " + zmin + " zmax: " + zmax + " value: " + temph + " SpawnId: " + spawnid + " at: " + geox + " : " + geoy);
 				return (short) zmin;
 			}
 		}
 		if(temph > zmax + 1000 || temph < zmin - 1000)
 		{
 			if(Config.DEBUG)
-				_log.log(Level.WARNING,"SpawnHeight Error - Spawnlist z value is wrong or GeoData error: zmin: " + zmin + " zmax: " + zmax + " value: " + temph + " SpawnId: " + spawn + " at: " + geox + " : " + geoy);
+				_log.log(Level.WARNING,"SpawnHeight Error - Spawnlist z value is wrong or GeoData error: zmin: " + zmin + " zmax: " + zmax + " value: " + temph + " SpawnId: " + spawnid + " at: " + geox + " : " + geoy);
 			return (short) zmin;
 		}
 		return temph;

@@ -28,6 +28,9 @@ import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.managers.CursedWeaponsManager;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.entity.event.CTF;
+import net.xcine.gameserver.model.entity.event.DM;
+import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.Earthquake;
 import net.xcine.gameserver.network.serverpackets.ExRedSky;
@@ -399,6 +402,24 @@ public class CursedWeapon
 				player.sendMessage("You may not pick up this item while riding in this territory");
 				return;
 			}
+		}
+
+		if((player._inEventTvT && !Config.TVT_JOIN_CURSED))
+		{
+			if(player._inEventTvT)
+				TvT.removePlayer(player);
+		}
+
+		if((player._inEventCTF && !Config.CTF_JOIN_CURSED))
+		{
+			if(player._inEventCTF)
+				CTF.removePlayer(player);
+		}
+
+		if((player._inEventDM && !Config.DM_JOIN_CURSED))
+		{
+			if(player._inEventDM)
+				DM.removePlayer(player);
 		}
 
 		_isActivated = true;

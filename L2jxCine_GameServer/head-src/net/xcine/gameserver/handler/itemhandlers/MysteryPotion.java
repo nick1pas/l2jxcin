@@ -20,9 +20,9 @@ package net.xcine.gameserver.handler.itemhandlers;
 
 import net.xcine.Config;
 import net.xcine.gameserver.handler.IItemHandler;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.MagicSkillUser;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
@@ -45,7 +45,7 @@ public class MysteryPotion implements IItemHandler
 	private static final int EFFECT_DURATION = 1200000; // 20 mins
 
 	@Override
-	public void useItem(L2Playable playable, L2ItemInstance item)
+	public void useItem(L2PlayableInstance playable, L2ItemInstance item)
 	{
 		if(!(playable instanceof L2PcInstance))
 			return;
@@ -78,9 +78,9 @@ public class MysteryPotion implements IItemHandler
 
 	public class MysteryPotionStop implements Runnable
 	{
-		private L2Playable _playable;
+		private L2PlayableInstance _playable;
 
-		public MysteryPotionStop(L2Playable playable)
+		public MysteryPotionStop(L2PlayableInstance playable)
 		{
 			_playable = playable;
 		}

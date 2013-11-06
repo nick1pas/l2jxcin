@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
@@ -59,6 +60,7 @@ import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.datatables.HeroSkillTable;
 import net.xcine.gameserver.datatables.NobleSkillTable;
 import net.xcine.gameserver.datatables.SkillTable;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
@@ -68,10 +70,8 @@ import net.xcine.gameserver.datatables.xml.CharTemplateData;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
 import net.xcine.gameserver.datatables.xml.FishTable;
 import net.xcine.gameserver.datatables.xml.HennaData;
-import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.datatables.xml.RecipeData;
 import net.xcine.gameserver.datatables.xml.SkillTreeData;
-import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.handler.ItemHandler;
@@ -84,6 +84,7 @@ import net.xcine.gameserver.managers.CoupleManager;
 import net.xcine.gameserver.managers.CursedWeaponsManager;
 import net.xcine.gameserver.managers.DimensionalRiftManager;
 import net.xcine.gameserver.managers.DuelManager;
+import net.xcine.gameserver.managers.FortSiegeManager;
 import net.xcine.gameserver.managers.ItemsOnGroundManager;
 import net.xcine.gameserver.managers.QuestManager;
 import net.xcine.gameserver.managers.SiegeManager;
@@ -100,10 +101,8 @@ import net.xcine.gameserver.model.L2Effect;
 import net.xcine.gameserver.model.L2Fishing;
 import net.xcine.gameserver.model.L2Macro;
 import net.xcine.gameserver.model.L2ManufactureList;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2Party;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Radar;
 import net.xcine.gameserver.model.L2RecipeList;
 import net.xcine.gameserver.model.L2Request;
@@ -138,11 +137,16 @@ import net.xcine.gameserver.model.base.Race;
 import net.xcine.gameserver.model.base.SubClass;
 import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.entity.Duel;
+import net.xcine.gameserver.model.entity.event.CTF;
+import net.xcine.gameserver.model.entity.event.DM;
+import net.xcine.gameserver.model.entity.event.L2Event;
+import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSigns;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSignsFestival;
 import net.xcine.gameserver.model.entity.siege.Castle;
+import net.xcine.gameserver.model.entity.siege.FortSiege;
 import net.xcine.gameserver.model.entity.siege.Siege;
 import net.xcine.gameserver.model.entity.siege.clanhalls.DevastatedCastle;
 import net.xcine.gameserver.model.extender.BaseExtender.EventType;
@@ -179,6 +183,7 @@ import net.xcine.gameserver.network.serverpackets.ObservationMode;
 import net.xcine.gameserver.network.serverpackets.ObservationReturn;
 import net.xcine.gameserver.network.serverpackets.PartySmallWindowUpdate;
 import net.xcine.gameserver.network.serverpackets.PetInventoryUpdate;
+import net.xcine.gameserver.network.serverpackets.PlaySound;
 import net.xcine.gameserver.network.serverpackets.PledgeShowInfoUpdate;
 import net.xcine.gameserver.network.serverpackets.PledgeShowMemberListDelete;
 import net.xcine.gameserver.network.serverpackets.PledgeShowMemberListUpdate;
@@ -230,26 +235,61 @@ import net.xcine.util.Point3D;
 import net.xcine.util.database.L2DatabaseFactory;
 import net.xcine.util.random.Rnd;
 
-public final class L2PcInstance extends L2Playable
+/**
+ * This class represents all player characters in the world.<br>
+ * There is always a client-thread connected to this (except if a player-store is activated upon logout).
+ * @version $Revision: 1.6.4 $ $Date: 2009/05/12 19:46:09 $
+ * @author L2jxCine dev
+ */
+public final class L2PcInstance extends L2PlayableInstance
 {
+	/** The Constant RESTORE_SKILLS_FOR_CHAR. */
 	private static final String RESTORE_SKILLS_FOR_CHAR = "SELECT skill_id,skill_level FROM character_skills WHERE char_obj_id=? AND class_index=?";
+
+	/** The Constant ADD_NEW_SKILL. */
 	private static final String ADD_NEW_SKILL = "INSERT INTO character_skills (char_obj_id,skill_id,skill_level,skill_name,class_index) VALUES (?,?,?,?,?)";
+
+	/** The Constant UPDATE_CHARACTER_SKILL_LEVEL. */
 	private static final String UPDATE_CHARACTER_SKILL_LEVEL = "UPDATE character_skills SET skill_level=? WHERE skill_id=? AND char_obj_id=? AND class_index=?";
+
+	/** The Constant DELETE_SKILL_FROM_CHAR. */
 	private static final String DELETE_SKILL_FROM_CHAR = "DELETE FROM character_skills WHERE skill_id=? AND char_obj_id=? AND class_index=?";
+
+	/** The Constant DELETE_CHAR_SKILLS. */
 	private static final String DELETE_CHAR_SKILLS = "DELETE FROM character_skills WHERE char_obj_id=? AND class_index=?";
+
+	/** The Constant ADD_SKILL_SAVE. */
+	//private static final String ADD_SKILL_SAVE = "INSERT INTO character_skills_save (char_obj_id,skill_id,skill_level,effect_count,effect_cur_time,reuse_delay,restore_type,class_index,buff_index) VALUES (?,?,?,?,?,?,?,?,?)";
 	private static final String ADD_SKILL_SAVE = "INSERT INTO character_skills_save (char_obj_id,skill_id,skill_level,effect_count,effect_cur_time,reuse_delay,systime,restore_type,class_index,buff_index) VALUES (?,?,?,?,?,?,?,?,?,?)";
+
+	/** The Constant RESTORE_SKILL_SAVE. */
 	private static final String RESTORE_SKILL_SAVE = "SELECT skill_id,skill_level,effect_count,effect_cur_time, reuse_delay FROM character_skills_save WHERE char_obj_id=? AND class_index=? AND restore_type=? ORDER BY buff_index ASC";
+
+	/** The Constant DELETE_SKILL_SAVE. */
 	private static final String DELETE_SKILL_SAVE = "DELETE FROM character_skills_save WHERE char_obj_id=? AND class_index=?";
-	
-	
+
+	/** The _is the vip. */
 	public boolean _isVIP = false, _inEventVIP = false, _isNotVIP = false, _isTheVIP = false;
+
+	/** The _original karma vip. */
 	public int _originalNameColourVIP, _originalKarmaVIP;
+	
+	/** The _vote timestamp. */
 	private long _voteTimestamp = 0;
+
+	/** The _posticipate sit. */
 	private boolean _posticipateSit;
+	
+	/** The sitting task launched. */
 	protected boolean sittingTaskLaunched;
-	private boolean _sitdowntask;
+	
+	/** The saved_status. */
 	private PlayerStatus saved_status = null;
+	
+	/** The _instance login time. */
 	private final long _instanceLoginTime;
+	
+	/** The _last teleport action. */
 	private long _lastTeleportAction = 0;
 	
 	/**
@@ -561,7 +601,14 @@ public final class L2PcInstance extends L2Playable
 				// }
 				// }
 			}
-
+			
+			// during teleport phase, players cant do any attack
+			if ((TvT.is_teleport() && _inEventTvT) || (CTF.is_teleport() && _inEventCTF) || (DM.is_teleport() && _inEventDM))
+			{
+				sendPacket(ActionFailed.STATIC_PACKET);
+				return;
+			}
+			
 			super.doAttack(target);
 			
 			// cancel the recent fake-death protection instantly if the player attacks or casts spells
@@ -601,6 +648,13 @@ public final class L2PcInstance extends L2Playable
 				
 			}
 			
+			//during teleport phase, players cant do any attack
+			if((TvT.is_teleport() && _inEventTvT) 
+					|| (CTF.is_teleport() && _inEventCTF) 
+					|| (DM.is_teleport() && _inEventDM)){
+				sendPacket(ActionFailed.STATIC_PACKET);
+                return;
+			}
 			
 			super.doCast(skill);
 
@@ -781,6 +835,43 @@ public final class L2PcInstance extends L2Playable
 	
 	/** The at event. */
 	public boolean atEvent = false;
+	
+	/** TvT Engine parameters. */
+	public String  _teamNameTvT, _originalTitleTvT;
+	
+	/** The _original karma tv t. */
+	public int _originalNameColorTvT = 0, _countTvTkills, _countTvTdies, _originalKarmaTvT;
+	
+	/** The _in event tv t. */
+	public boolean _inEventTvT = false;
+
+	/** CTF Engine parameters. */
+	public String _teamNameCTF,
+	_teamNameHaveFlagCTF,
+	_originalTitleCTF;
+	
+	/** The _count ct fflags. */
+	public int _originalNameColorCTF = 0,
+	_originalKarmaCTF,
+	_countCTFflags;
+	
+	/** The _have flag ctf. */
+	public boolean _inEventCTF = false,
+	_haveFlagCTF = false;
+	
+	/** The _pos checker ctf. */
+	public Future<?> _posCheckerCTF = null;
+
+	/** DM Engine parameters. */
+	public String _originalTitleDM;
+	
+	/** The _original karma dm. */
+	public int _originalNameColorDM = 0,
+	_countDMkills,
+	_originalKarmaDM;
+	
+	/** The _in event dm. */
+	public boolean _inEventDM = false;
 
 	/** The _correct word. */
 	public int _correctWord = -1;
@@ -932,7 +1023,7 @@ public final class L2PcInstance extends L2Playable
 	private boolean _donator = false;
 
 	/** The L2FolkInstance corresponding to the last Folk wich one the player talked. */
-	private L2NpcInstance _lastFolkNpc = null;
+	private L2FolkInstance _lastFolkNpc = null;
 
 	/** Last NPC Id talked on a quest. */
 	private int _questNpcObject = 0;
@@ -1228,8 +1319,6 @@ private AccessLevel _accessLevel;
 	private SkillDat _currentSkill;
 	private SkillDat _currentPetSkill;
 
-	private long _notMoveUntil = 0;
-	
 	/** Skills queued because a skill is already in progress. */
 	private SkillDat _queuedSkill;
 
@@ -1698,7 +1787,7 @@ private int _reviveRequested = 0;
 	}
 
 	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.model.actor.instance.L2Playable#getKnownList()
+	 * @see net.xcine.gameserver.model.actor.instance.L2PlayableInstance#getKnownList()
 	 */
 	@Override
 	public final PcKnownList getKnownList()
@@ -1711,7 +1800,7 @@ private int _reviveRequested = 0;
 	}
 
 	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.model.actor.instance.L2Playable#getStat()
+	 * @see net.xcine.gameserver.model.actor.instance.L2PlayableInstance#getStat()
 	 */
 	@Override
 	public final PcStat getStat()
@@ -1724,7 +1813,7 @@ private int _reviveRequested = 0;
 	}
 
 	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.model.actor.instance.L2Playable#getStatus()
+	 * @see net.xcine.gameserver.model.actor.instance.L2PlayableInstance#getStatus()
 	 */
 	@Override
 	public final PcStatus getStatus()
@@ -2392,9 +2481,9 @@ private int _reviveRequested = 0;
 			if(getLastQuestNpcObject() > 0)
 			{
 				L2Object object = L2World.getInstance().findObject(getLastQuestNpcObject());
-				if(object instanceof L2NpcInstance && isInsideRadius(object, L2Npc.INTERACTION_DISTANCE, false, false))
+				if(object instanceof L2NpcInstance && isInsideRadius(object, L2NpcInstance.INTERACTION_DISTANCE, false, false))
 				{
-					L2Npc npc = (L2Npc) object;
+					L2NpcInstance npc = (L2NpcInstance) object;
 					QuestState[] states = getQuestsForTalk(npc.getNpcId());
 
 					if(states != null)
@@ -3226,8 +3315,7 @@ private int _reviveRequested = 0;
 	 * @param player the player
 	 * @return true, if successful
 	 */
-	@Override
-	public boolean canInteract(L2PcInstance player)
+	protected boolean canInteract(L2PcInstance player)
 	{
 		if(!isInsideRadius(player, 50, false, false))
 			return false;
@@ -4135,7 +4223,6 @@ private int _reviveRequested = 0;
 	 *
 	 * @return the inventory
 	 */
-	@Override
 	public PcInventory getInventory()
 	{
 		return _inventory;
@@ -4328,20 +4415,6 @@ private int _reviveRequested = 0;
     }
     
 
-    public void setSitdownTask(boolean act)
-    {
-        _sitdowntask = act;
-    }
-    
-    public boolean getSitdownTask()
-    {
-        return _sitdowntask;
-    }
-    
-	public boolean getSittingTask()
-	{
-		return this.sittingTaskLaunched;
-	}
 	/**
 	 * Sit down the L2PcInstance, set the AI Intention to AI_INTENTION_REST and send a Server->Client ChangeWaitType
 	 * packet (broadcast)<BR>
@@ -4470,9 +4543,13 @@ private int _reviveRequested = 0;
 			return;
 		}
 		
-		if (EventManager.getInstance().isRunning() && eventSitForced)
+		if(L2Event.active && eventSitForced)
 		{
 			sendMessage("A dark force beyond your mortal understanding makes your knees to shake when you try to stand up ...");
+		}
+		else if((TvT.is_sitForced() && _inEventTvT) || (CTF.is_sitForced() && _inEventCTF) || (DM.is_sitForced() && _inEventDM))
+		{
+			sendMessage("The Admin/GM handle if you sit or stand in this match!");
 		}
 		else if(VIP._sitForced && _inEventVIP)
 		{
@@ -4603,11 +4680,7 @@ private int _reviveRequested = 0;
 	{
 		return _inventory.getAncientAdena();
 	}
-	
-	public void sendChatMessage(int objectId, int messageType, String charName, String text)
-	{
-		sendPacket(new CreatureSay(objectId, messageType, charName, text));
-	}
+
 	/**
 	 * Add adena to Inventory of the L2PcInstance and send a Server->Client InventoryUpdate packet to the L2PcInstance.
 	 * @param process : String Identifier of process triggering this action
@@ -5832,15 +5905,6 @@ private int _reviveRequested = 0;
 		}
 	}
 
-	public boolean canTarget()
-	{
-		if (isOutOfControl())
-		{
-			sendPacket(ActionFailed.STATIC_PACKET);
-			return false;
-		}
-		return true;
-	}
 	/**
 	 * Manage actions when a player click on this L2PcInstance.<BR>
 	 * <BR>
@@ -5863,12 +5927,26 @@ private int _reviveRequested = 0;
 	@Override
 	public void onAction(L2PcInstance player)
 	{
-		if(!EventManager.getInstance().canTargetPlayer(this, player))
+		// if ((TvT._started && !Config.TVT_ALLOW_INTERFERENCE) || (CTF._started && !Config.CTF_ALLOW_INTERFERENCE) || (DM._started && !Config.DM_ALLOW_INTERFERENCE))
+		// no Interaction with not participant to events
+		if (((TvT.is_started() || TvT.is_teleport()) && !Config.TVT_ALLOW_INTERFERENCE) || ((CTF.is_started() || CTF.is_teleport()) && !Config.CTF_ALLOW_INTERFERENCE) || ((DM.is_started() || DM.is_teleport()) && !Config.DM_ALLOW_INTERFERENCE))
 		{
-			player.sendPacket(new ActionFailed());
-			return;
+			if ((_inEventTvT && !player._inEventTvT) || (!_inEventTvT && player._inEventTvT))
+			{
+				player.sendPacket(ActionFailed.STATIC_PACKET);
+				return;
+			}
+			else if ((_inEventCTF && !player._inEventCTF) || (!_inEventCTF && player._inEventCTF))
+			{
+				player.sendPacket(ActionFailed.STATIC_PACKET);
+				return;
+			}
+			else if ((_inEventDM && !player._inEventDM) || (!_inEventDM && player._inEventDM))
+			{
+				player.sendPacket(ActionFailed.STATIC_PACKET);
+				return;
+			}
 		}
-		
 		// Check if the L2PcInstance is confused
 		if (player.isOutOfControl())
 		{
@@ -6071,6 +6149,24 @@ private int _reviveRequested = 0;
 		else
 		// Like L2OFF set the target of the L2PcInstance player
 		{
+			if (((TvT.is_started() || TvT.is_teleport()) && !Config.TVT_ALLOW_INTERFERENCE) || ((CTF.is_started() || CTF.is_teleport()) && !Config.CTF_ALLOW_INTERFERENCE) || ((DM.is_started() || DM.is_teleport()) && !Config.DM_ALLOW_INTERFERENCE))
+			{
+				if ((_inEventTvT && !player._inEventTvT) || (!_inEventTvT && player._inEventTvT))
+				{
+					player.sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				else if ((_inEventCTF && !player._inEventCTF) || (!_inEventCTF && player._inEventCTF))
+				{
+					player.sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+				else if ((_inEventDM && !player._inEventDM) || (!_inEventDM && player._inEventDM))
+				{
+					player.sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+			}
 			// Check if the L2PcInstance is confused
 			if (player.isOutOfControl())
 			{
@@ -6290,14 +6386,38 @@ private int _reviveRequested = 0;
 	}
 
 	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.model.actor.instance.L2Playable#isInFunEvent()
+	 * @see net.xcine.gameserver.model.actor.instance.L2PlayableInstance#isInFunEvent()
 	 */
 	@Override
 	public boolean isInFunEvent()
 	{
-		return (atEvent || isInStartedVIPEvent());
+		return (atEvent || isInStartedTVTEvent() || isInStartedDMEvent() || isInStartedCTFEvent() || isInStartedVIPEvent());
 	}
-
+	
+	public boolean isInStartedTVTEvent(){
+		return (TvT.is_started() && _inEventTvT);
+	}
+	
+	public boolean isRegisteredInTVTEvent(){
+		return _inEventTvT;
+	}
+	
+	public boolean isInStartedDMEvent(){
+		return (DM.is_started() && _inEventDM);
+	}
+	
+	public boolean isRegisteredInDMEvent(){
+		return _inEventDM;
+	}
+	
+	public boolean isInStartedCTFEvent(){
+		return (CTF.is_started() && _inEventCTF);
+	}
+	
+	public boolean isRegisteredInCTFEvent(){
+		return _inEventCTF;
+	}
+	
 	public boolean isInStartedVIPEvent(){
 		return (VIP._started && _inEventVIP);
 	}
@@ -6312,7 +6432,7 @@ private int _reviveRequested = 0;
 	 * @return true, if is registered in fun event
 	 */
 	public boolean isRegisteredInFunEvent(){
-		return (atEvent || (_inEventVIP) || Olympiad.getInstance().isRegistered(this));
+		return (atEvent || (_inEventTvT) || (_inEventDM) || (_inEventCTF) || (_inEventVIP) || Olympiad.getInstance().isRegistered(this));
 	}
 	
 	//To Avoid Offensive skills when locked (during oly start or TODO other events start)
@@ -6857,6 +6977,10 @@ private int _reviveRequested = 0;
 			 * and the equipped Akamanah's level increases by 1. 
 			 * The same rules also apply in the opposite instance.
 			 */
+			addItem("Pickup", target, null, true);
+		}
+		else if (FortSiegeManager.getInstance().isCombat(target.getItemId()))
+		{
 			addItem("Pickup", target, null, true);
 		}
 		else
@@ -7436,23 +7560,126 @@ private int _reviveRequested = 0;
 				{
 					doPkInfo(pk);
 				}
-							
-				L2PcInstance ek = null;
-				
-				if (killer instanceof L2PcInstance)
-					ek = (L2PcInstance) killer;
-				if(killer instanceof L2Summon)
-					ek = ((L2Summon) killer).getOwner();
-				
-				if(ek != null && EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered(ek))
-				{
-					EventManager.getInstance().getCurrentEvent().onKill(this,ek);
-					EventManager.getInstance().getCurrentEvent().onDie(this,ek);
-				}
 				
 				if (atEvent)
 				{
 					pk.kills.add(getName());
+				}
+				
+				if (_inEventTvT && pk._inEventTvT)
+				{
+					if (TvT.is_teleport() || TvT.is_started())
+					{
+						if (!(pk._teamNameTvT.equals(_teamNameTvT)))
+						{
+							PlaySound ps = new PlaySound(0, "ItemSound.quest_itemget", 1, getObjectId(), getX(), getY(), getZ());
+							_countTvTdies++;
+							pk._countTvTkills++;
+							pk.setTitle("Kills: " + pk._countTvTkills);
+							pk.sendPacket(ps);
+							pk.broadcastUserInfo();
+							TvT.setTeamKillsCount(pk._teamNameTvT, TvT.teamKillsCount(pk._teamNameTvT) + 1);
+							pk.broadcastUserInfo();
+						}
+						else
+						{
+							pk.sendMessage("You are a teamkiller !!! Teamkills not counting.");
+						}
+						sendMessage("You will be revived and teleported to team spot in " + Config.TVT_REVIVE_DELAY / 1000 + " seconds!");
+						ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								teleToLocation(TvT._teamsX.get(TvT._teams.indexOf(_teamNameTvT)) + Rnd.get(201) - 100, TvT._teamsY.get(TvT._teams.indexOf(_teamNameTvT)) + Rnd.get(201) - 100, TvT._teamsZ.get(TvT._teams.indexOf(_teamNameTvT)), false);
+								doRevive();
+							}
+						}, Config.TVT_REVIVE_DELAY);
+					}
+				}
+				else if (_inEventTvT)
+				{
+					if (TvT.is_teleport() || TvT.is_started())
+					{
+						sendMessage("You will be revived and teleported to team spot in " + Config.TVT_REVIVE_DELAY / 1000 + " seconds!");
+						ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								teleToLocation(TvT._teamsX.get(TvT._teams.indexOf(_teamNameTvT)), TvT._teamsY.get(TvT._teams.indexOf(_teamNameTvT)), TvT._teamsZ.get(TvT._teams.indexOf(_teamNameTvT)), false);
+								doRevive();
+								broadcastPacket(new SocialAction(getObjectId(), 15));
+							}
+						}, Config.TVT_REVIVE_DELAY);
+					}
+				}
+				else if (_inEventCTF)
+				{
+					if (CTF.is_teleport() || CTF.is_started())
+					{
+						sendMessage("You will be revived and teleported to team flag in 20 seconds!");
+						if (_haveFlagCTF)
+							removeCTFFlagOnDie();
+						ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								teleToLocation(CTF._teamsX.get(CTF._teams.indexOf(_teamNameCTF)), CTF._teamsY.get(CTF._teams.indexOf(_teamNameCTF)), CTF._teamsZ.get(CTF._teams.indexOf(_teamNameCTF)), false);
+								doRevive();
+							}
+						}, 20000);
+					}
+				}
+				else if (_inEventDM && pk._inEventDM)
+				{
+					if (DM.is_teleport() || DM.is_started())
+					{
+						pk._countDMkills++;
+						PlaySound ps = new PlaySound(0, "ItemSound.quest_itemget", 1, getObjectId(), getX(), getY(), getZ());
+						pk.setTitle("Kills: " + pk._countDMkills);
+						pk.sendPacket(ps);
+						pk.broadcastUserInfo();
+						
+						if (Config.DM_ENABLE_KILL_REWARD)
+						{
+							
+							L2Item reward = ItemTable.getInstance().getTemplate(Config.DM_KILL_REWARD_ID);
+							pk.getInventory().addItem("DM Kill Reward", Config.DM_KILL_REWARD_ID, Config.DM_KILL_REWARD_AMOUNT, this, null);
+							pk.sendMessage("You have earned " + Config.DM_KILL_REWARD_AMOUNT + " item(s) of ID " + reward.getName() + ".");
+							
+						}
+						
+						sendMessage("You will be revived and teleported to spot in 20 seconds!");
+						ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								Location p_loc = DM.get_playersSpawnLocation();
+								teleToLocation(p_loc._x, p_loc._y, p_loc._z, false);
+								doRevive();
+							}
+						}, Config.DM_REVIVE_DELAY);
+					}
+				}
+				else if (_inEventDM)
+				{
+					if (DM.is_teleport() || DM.is_started())
+					{
+						sendMessage("You will be revived and teleported to spot in 20 seconds!");
+						ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								Location players_loc = DM.get_playersSpawnLocation();
+								teleToLocation(players_loc._x, players_loc._y, players_loc._z, false);
+								doRevive();
+							}
+						}, 20000);
+					}
 				}
 				else if (_inEventVIP && VIP._started)
 				{
@@ -7580,13 +7807,26 @@ private int _reviveRequested = 0;
 	}
 
 	/**
+	 * Removes the ctf flag on die.
+	 */
+	public void removeCTFFlagOnDie()
+	{
+		CTF._flagsTaken.set(CTF._teams.indexOf(_teamNameHaveFlagCTF), false);
+		CTF.spawnFlag(_teamNameHaveFlagCTF);
+		CTF.removeFlagFromPlayer(this);
+		broadcastUserInfo();
+		_haveFlagCTF = false;
+		Announcements.getInstance().gameAnnounceToAll(CTF.get_eventName() + "(CTF): " + _teamNameHaveFlagCTF + "'s flag returned.");
+	}
+
+	/**
 	 * On die drop item.
 	 *
 	 * @param killer the killer
 	 */
 	private void onDieDropItem(L2Character killer)
 	{
-		if((VIP._started && _inEventVIP) || killer == null)
+		if(atEvent || (TvT.is_started() && _inEventTvT) || (DM.is_started() && _inEventDM) || (CTF.is_started() && _inEventCTF) || (VIP._started && _inEventVIP) || killer == null)
 			return;
 
 		if(getKarma() <= 0 && killer instanceof L2PcInstance && ((L2PcInstance) killer).getClan() != null && getClan() != null && ((L2PcInstance) killer).getClan().isAtWarWith(getClanId()))
@@ -7714,10 +7954,10 @@ private int _reviveRequested = 0;
 		if (target == null)
 			return;
 		
-		if (!(target instanceof L2Playable))
+		if (!(target instanceof L2PlayableInstance))
 			return;
 		
-		if ((_inEventVIP && VIP._started))
+		if ((_inEventCTF && CTF.is_started()) || (_inEventTvT && TvT.is_started()) || (_inEventVIP && VIP._started) || (_inEventDM && DM.is_started()))
 			return;
 		
 		if (isCursedWeaponEquipped())
@@ -7761,9 +8001,6 @@ private int _reviveRequested = 0;
 		
 		// If in duel and you kill (only can kill l2summon), do nothing
 		if (isInDuel() && targetPlayer.isInDuel())
-			return;
-				
-		if (EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered(targetPlayer))
 			return;
 		
 		// If in Arena, do nothing
@@ -7811,7 +8048,7 @@ private int _reviveRequested = 0;
 			}
 			
 			// 'No war' or 'One way war' -> 'Normal PK'
-			if (!(_inEventVIP && VIP._started))
+			if (!(_inEventTvT && TvT.is_started()) || !(_inEventCTF && CTF.is_started()) || !(_inEventVIP && VIP._started) || !(_inEventDM && DM.is_started()))
 			{
 				if (targetPlayer.getKarma() > 0) // Target player has karma
 				{
@@ -7839,7 +8076,12 @@ private int _reviveRequested = 0;
 		{
 			Announcements.getInstance().announceToAll("Player " + getName() + " killed Player " + target.getName());
 		}
-
+		
+		if (_inEventDM && DM.is_started())
+		{
+			return;
+		}
+		
 		if (targetPlayer.getObjectId() == _lastKill)
 		{			
 			count += 1;			
@@ -8016,7 +8258,7 @@ private int _reviveRequested = 0;
 			}
 		}
 
-		if((VIP._started && _inEventVIP)) 
+		if((TvT.is_started() && _inEventTvT) || (DM.is_started() && _inEventDM) || (CTF.is_started() && _inEventCTF) || (VIP._started && _inEventVIP)) 
 			return;
 		
 		// Add karma to attacker and increase its PK counter
@@ -8282,7 +8524,7 @@ private int _reviveRequested = 0;
 	 */
 	public void increasePkKillsAndKarma(int targLVL)
 	{
-		if((VIP._started && _inEventVIP))
+		if((TvT.is_started() && _inEventTvT) || (DM.is_started() && _inEventDM) || (CTF.is_started() && _inEventCTF) || (VIP._started && _inEventVIP))
 			return;
 
 		int baseKarma = Config.KARMA_MIN_KARMA;
@@ -8432,16 +8674,13 @@ private int _reviveRequested = 0;
 	 */
 	public void updatePvPStatus()
 	{
-		if((VIP._started && _inEventVIP))
+		if((TvT.is_started() && _inEventTvT) || (CTF.is_started() && _inEventCTF) || (DM.is_started() && _inEventDM) || (VIP._started && _inEventVIP))
 			return;
 
 		if(isInsideZone(ZONE_PVP))
 			return;
 
 		setPvpFlagLasts(System.currentTimeMillis() + Config.PVP_NORMAL_TIME);
-
-		if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
-			return;
 
 		if(getPvpFlag() == 0)
 		{
@@ -8469,11 +8708,8 @@ private int _reviveRequested = 0;
 
 		if(player_target == null)
 			return;
-				
-		if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
-			return;
-		
-		if((VIP._started && _inEventVIP && player_target._inEventVIP))
+
+		if((TvT.is_started() && _inEventTvT && player_target._inEventTvT) || (DM.is_started() && _inEventDM && player_target._inEventDM) || (CTF.is_started() && _inEventCTF && player_target._inEventCTF) || (VIP._started && _inEventVIP && player_target._inEventVIP))
 			return;
 
 		if(isInDuel() && player_target.getDuelId() == getDuelId())
@@ -8562,7 +8798,7 @@ private int _reviveRequested = 0;
 
 		// Calculate the Experience loss
 		long lostExp = 0;
-		if(!atEvent && !(_inEventVIP && VIP._started))
+		if(!atEvent && !(_inEventTvT && TvT.is_started()) && !(_inEventDM && DM.is_started()) && !(_inEventCTF && CTF.is_started()) && !(_inEventVIP && VIP._started))
 		{
 			final byte maxLvl = ExperienceData.getInstance().getMaxLevel();
 		    if(lvl < maxLvl)
@@ -8590,10 +8826,7 @@ private int _reviveRequested = 0;
 		{
 			_log.fine(getName() + " died and lost " + lostExp + " experience.");
 		}
-		
-		if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
-			lostExp = 0;
-		
+
 		// Set the new Experience value of the L2PcInstance
 		getStat().addExp(-lostExp);
 	}
@@ -9543,13 +9776,11 @@ private int _reviveRequested = 0;
 		if(level == Config.MASTERACCESS_LEVEL)
 		{						
 			_log.warning("Admin Login at "+ fmt.format(new Date(System.currentTimeMillis())) +" " + getName() + " logs in game with AccessLevel "+ level +".");
-			AccessLevelsData.getInstance();
-			_accessLevel = AccessLevelsData._masterAccessLevel;
+			_accessLevel = AccessLevelsData.getInstance()._masterAccessLevel;
 		}
 		else if(level == Config.USERACCESS_LEVEL)
 		{
-			AccessLevelsData.getInstance();
-			_accessLevel = AccessLevelsData._userAccessLevel;
+			_accessLevel = AccessLevelsData.getInstance()._userAccessLevel;
 		}
 		else
 		{   if(level > 0){ 
@@ -9566,8 +9797,7 @@ private int _reviveRequested = 0;
 				else
 				{
 					_log.warning("Tried to set unregistered access level " + level + " to character " + getName() + ". Setting access level without privileges!");
-					AccessLevelsData.getInstance();
-					_accessLevel = AccessLevelsData._userAccessLevel;
+					_accessLevel = AccessLevelsData.getInstance()._userAccessLevel;
 				}
 			}
 			else
@@ -9578,8 +9808,7 @@ private int _reviveRequested = 0;
 			accessLevel = null;
 		}
 
-		AccessLevelsData.getInstance();
-		if(_accessLevel != AccessLevelsData._userAccessLevel)
+		if(_accessLevel != AccessLevelsData.getInstance()._userAccessLevel)
 		{
 			//L2EMU_EDIT
 			if(getAccessLevel().useNameColor())
@@ -9614,10 +9843,7 @@ private int _reviveRequested = 0;
 	public AccessLevel getAccessLevel()
 	{
 		if(Config.EVERYBODY_HAS_ADMIN_RIGHTS)
-		{
-			AccessLevelsData.getInstance();
-			return AccessLevelsData._masterAccessLevel;
-		}
+			return AccessLevelsData.getInstance()._masterAccessLevel;
 		else if(_accessLevel == null)
 		{
 			setAccessLevel(Config.USERACCESS_LEVEL);
@@ -11764,7 +11990,7 @@ private int _reviveRequested = 0;
 		if (getClan() != null && attacker != null && getClan().isMember(attacker.getName()) && !(getDuelState() == Duel.DUELSTATE_DUELLING && getDuelId() == ((L2PcInstance) attacker).getDuelId()))
 			return false;
 		
-		if (attacker instanceof L2Playable && isInFunEvent())
+		if (attacker instanceof L2PlayableInstance && isInFunEvent())
 		{
 			
 			L2PcInstance player = null;
@@ -11784,7 +12010,7 @@ private int _reviveRequested = 0;
 				{
 					
 					// checks for events
-					if ((_inEventVIP && player._inEventVIP && VIP._started))
+					if ((_inEventTvT && player._inEventTvT && TvT.is_started() && !_teamNameTvT.equals(player._teamNameTvT)) || (_inEventCTF && player._inEventCTF && CTF.is_started() && !_teamNameCTF.equals(player._teamNameCTF)) || (_inEventDM && player._inEventDM && DM.is_started()) || (_inEventVIP && player._inEventVIP && VIP._started))
 					{
 						return true;
 					}
@@ -11812,13 +12038,11 @@ private int _reviveRequested = 0;
 			// Check if the L2PcInstance is in an arena or a siege area
 			if (isInsideZone(ZONE_PVP) && ((L2PcInstance) attacker).isInsideZone(ZONE_PVP))
 				return true;
-						
-			if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered((L2PcInstance)attacker) && EventManager.getInstance().isRunning())
-				return true;
 			
 			if (getClan() != null)
 			{
 				Siege siege = SiegeManager.getInstance().getSiege(getX(), getY(), getZ());
+				FortSiege fortsiege = FortSiegeManager.getInstance().getSiege(getX(), getY(), getZ());
 				if (siege != null)
 				{
 					// Check if a siege is in progress and if attacker and the L2PcInstance aren't in the Defender clan
@@ -11835,6 +12059,22 @@ private int _reviveRequested = 0;
 						return false;
 					}
 				}
+				if (fortsiege != null)
+				{
+					// Check if a siege is in progress and if attacker and the L2PcInstance aren't in the Defender clan
+					if (fortsiege.checkIsDefender(((L2PcInstance) attacker).getClan()) && fortsiege.checkIsDefender(getClan()))
+					{
+						fortsiege = null;
+						return false;
+					}
+					
+					// Check if a siege is in progress and if attacker and the L2PcInstance aren't in the Attacker clan
+					if (fortsiege.checkIsAttacker(((L2PcInstance) attacker).getClan()) && fortsiege.checkIsAttacker(getClan()))
+					{
+						fortsiege = null;
+						return false;
+					}
+				}
 				
 				// Check if clan is at war
 				if (getClan() != null && ((L2PcInstance) attacker).getClan() != null && getClan().isAtWarWith(((L2PcInstance) attacker).getClanId()) && getWantsPeace() == 0 && ((L2PcInstance) attacker).getWantsPeace() == 0 && !isAcademyMember())
@@ -11848,6 +12088,14 @@ private int _reviveRequested = 0;
 			{
 				Siege siege = SiegeManager.getInstance().getSiege(this);
 				return siege != null && siege.checkIsAttacker(getClan()) || DevastatedCastle.getInstance().getIsInProgress();
+			}
+		}
+		else if (attacker instanceof L2FortSiegeGuardInstance)
+		{
+			if (getClan() != null)
+			{
+				FortSiege fortsiege = FortSiegeManager.getInstance().getSiege(this);
+				return fortsiege != null && fortsiege.checkIsAttacker(getClan());
 			}
 		}
 		
@@ -11879,17 +12127,6 @@ private int _reviveRequested = 0;
 	 */
 	public void useMagic(L2Skill skill, boolean forceUse, boolean dontMove)
 	{
-		if(EventManager.getInstance().isRegistered(this)) 
-			if(!EventManager.getInstance().getCurrentEvent().getBoolean("allowUseMagic")) 
-			{ 
-				sendPacket(new ActionFailed()); 
-				return; 
-			} 
-		
-		if(EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(this))
-			if(!EventManager.getInstance().getCurrentEvent().onUseMagic(skill))
-				return;
-			
 		if(isDead())
 		{
 			abortCast();
@@ -11988,7 +12225,7 @@ private int _reviveRequested = 0;
 
 		// Check if it's ok to summon
 		// siege golem (13), Wild Hog Cannon (299), Swoop Cannon (448)
-		if((skill_id == 13 || skill_id == 299 || skill_id == 448) && !SiegeManager.getInstance().checkIfOkToSummon(this, false))
+		if((skill_id == 13 || skill_id == 299 || skill_id == 448) && !SiegeManager.getInstance().checkIfOkToSummon(this, false) && !FortSiegeManager.getInstance().checkIfOkToSummon(this, false))
 			return;
 
 		//************************************* Check Casting in Progress *******************************************
@@ -12088,7 +12325,10 @@ private int _reviveRequested = 0;
 			boolean isCastle = (((L2DoorInstance) target).getCastle() != null
 					&& ((L2DoorInstance) target).getCastle().getCastleId() > 0
 					&& ((L2DoorInstance) target).getCastle().getSiege().getIsInProgress());
-			if ((!isCastle))
+			boolean isFort = (((L2DoorInstance) target).getFort() != null
+					&& ((L2DoorInstance) target).getFort().getFortId() > 0
+					&& ((L2DoorInstance) target).getFort().getSiege().getIsInProgress());
+			if ((!isCastle && !isFort))
 				return;
 		}
 		
@@ -12328,7 +12568,7 @@ private int _reviveRequested = 0;
 
 			// Check if a Forced ATTACK is in progress on non-attackable target
 			//if (!target.isAutoAttackable(this) && !forceUse && !(_inEventTvT && TvT._started) && !(_inEventDM && DM._started) && !(_inEventCTF && CTF._started) && !(_inEventVIP && VIP._started)
-			if (!target.isAutoAttackable(this) && (!forceUse && (skill.getId() != 3261 && skill.getId() != 3260 && skill.getId() != 3262)) && !(_inEventVIP && VIP._started)
+			if (!target.isAutoAttackable(this) && (!forceUse && (skill.getId() != 3261 && skill.getId() != 3260 && skill.getId() != 3262)) && !(_inEventTvT && TvT.is_started()) && !(_inEventDM && DM.is_started()) && !(_inEventCTF && CTF.is_started()) && !(_inEventVIP && VIP._started)
 					&& sklTargetType != SkillTargetType.TARGET_AURA
 					&& sklTargetType != SkillTargetType.TARGET_CLAN
 					&& sklTargetType != SkillTargetType.TARGET_ALLY
@@ -12348,7 +12588,7 @@ private int _reviveRequested = 0;
 				// Calculate the distance between the L2PcInstance and the target
 				if (sklTargetType == SkillTargetType.TARGET_GROUND)
 				{
-					if (!isInsideRadius(getCurrentSkillWorldPosition().getX(), getCurrentSkillWorldPosition().getY(), getCurrentSkillWorldPosition().getZ(), skill.getCastRange() + getTemplate().getCollisionRadius(), false, false))
+					if (!isInsideRadius(getCurrentSkillWorldPosition().getX(), getCurrentSkillWorldPosition().getY(), getCurrentSkillWorldPosition().getZ(), (int) (skill.getCastRange() + getTemplate().getCollisionRadius()), false, false))
 					{
 						// Send a System Message to the caster
 						sendPacket(SystemMessageId.TARGET_TOO_FAR);
@@ -12370,7 +12610,7 @@ private int _reviveRequested = 0;
 			}
 			else if (sklType == SkillType.SIGNET) // Check range for SIGNET skills
 			{
-				if (!isInsideRadius(getCurrentSkillWorldPosition().getX(), getCurrentSkillWorldPosition().getY(), getCurrentSkillWorldPosition().getZ(), skill.getCastRange() + getTemplate().getCollisionRadius(), false, false))
+				if (!isInsideRadius(getCurrentSkillWorldPosition().getX(), getCurrentSkillWorldPosition().getY(), getCurrentSkillWorldPosition().getZ(), (int) (skill.getCastRange() + getTemplate().getCollisionRadius()), false, false))
 				{
 					// Send a System Message to the caster
 					sendPacket(SystemMessageId.TARGET_TOO_FAR);
@@ -12536,8 +12776,8 @@ private int _reviveRequested = 0;
 		return false;
 	}
 
-	
-	/*public boolean checkPvpSkill(L2Object target, L2Skill skill)
+	/*
+	public boolean checkPvpSkill(L2Object target, L2Skill skill)
 	{
 		if(target != null && (target instanceof L2PcInstance || target instanceof L2Summon))
 		{
@@ -12604,9 +12844,6 @@ private int _reviveRequested = 0;
 	 */
 	public boolean checkPvpSkill(L2Object target, L2Skill skill)
 	{
-		if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered((L2PcInstance)target) && EventManager.getInstance().isRunning())
-			return true;
-							
 		return checkPvpSkill(target, skill, false);
 	}
 	
@@ -12619,7 +12856,7 @@ private int _reviveRequested = 0;
 	 */
 	public boolean checkPvpSkill(L2Object target, L2Skill skill, boolean srcIsSummon)
 	{
-		if ((_inEventVIP && VIP._started))
+		if ((_inEventTvT && TvT.is_started()) || (_inEventDM && DM.is_started()) || (_inEventCTF && CTF.is_started()) || (_inEventVIP && VIP._started))
 			return true;
 		
 		// check for PC->PC Pvp status
@@ -12651,9 +12888,6 @@ private int _reviveRequested = 0;
 			else if ((skilldat != null && !skilldat.isCtrlPressed() && skill.isOffensive() && !srcIsSummon)
 			/* || (skilldatpet != null && !skilldatpet.isCtrlPressed() && skill.isOffensive() && srcIsSummon) */)
 			{
-				if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered((L2PcInstance)target) && EventManager.getInstance().isRunning())
-					return true;
-									
 				if (getClan() != null && ((L2PcInstance) target).getClan() != null)
 				{
 					if (getClan().isAtWarWith(((L2PcInstance) target).getClan().getClanId()) && ((L2PcInstance) target).getClan().isAtWarWith(getClan().getClanId()))
@@ -12977,7 +13211,13 @@ private int _reviveRequested = 0;
 		return Math.min(127, wpn.getEnchantLevel());
 	}
 
-	public void setLastFolkNPC(L2NpcInstance folkNpc)
+	/**
+	 * Set the _lastFolkNpc of the L2PcInstance corresponding to the last Folk wich one the player talked.<BR>
+	 * <BR>
+	 *
+	 * @param folkNpc the new last folk npc
+	 */
+	public void setLastFolkNPC(L2FolkInstance folkNpc)
 	{
 		_lastFolkNpc = folkNpc;
 	}
@@ -12988,7 +13228,7 @@ private int _reviveRequested = 0;
 	 *
 	 * @return the last folk npc
 	 */
-	public L2NpcInstance getLastFolkNPC()
+	public L2FolkInstance getLastFolkNPC()
 	{
 		return _lastFolkNpc;
 	}
@@ -14821,9 +15061,6 @@ private int _reviveRequested = 0;
 	 */
 	public synchronized boolean setActiveClass(int classIndex)
 	{
-		if(EventManager.getInstance().players.contains(this)) 
-			return false;
-					
 		if(isInCombat() || this.getAI().getIntention() == CtrlIntention.AI_INTENTION_ATTACK){
 			sendMessage("Impossible switch class if in combat");
 			sendPacket( ActionFailed.STATIC_PACKET );
@@ -15088,7 +15325,7 @@ private int _reviveRequested = 0;
 			// if the rent of a wyvern expires while over a flying zone, tp to down before unmounting
 			if(checkLandingState() && getMountType() == 2)
 			{
-				teleToLocation(MapRegionData.TeleportWhereType.Town);
+				teleToLocation(MapRegionTable.TeleportWhereType.Town);
 			}
 
 			if(setMountType(0)) // this should always be true now, since we teleported already
@@ -15206,7 +15443,7 @@ private int _reviveRequested = 0;
 		{
 			if(!isGM() && isIn7sDungeon() && SevenSigns.getInstance().getPlayerCabal(this) != SevenSigns.getInstance().getCabalHighestScore())
 			{
-				teleToLocation(MapRegionData.TeleportWhereType.Town);
+				teleToLocation(MapRegionTable.TeleportWhereType.Town);
 				setIsIn7sDungeon(false);
 				sendMessage("You have been teleported to the nearest town due to the beginning of the Seal Validation period.");
 			}
@@ -15215,7 +15452,7 @@ private int _reviveRequested = 0;
 		{
 			if(!isGM() && isIn7sDungeon() && SevenSigns.getInstance().getPlayerCabal(this) == SevenSigns.CABAL_NULL)
 			{
-				teleToLocation(MapRegionData.TeleportWhereType.Town);
+				teleToLocation(MapRegionTable.TeleportWhereType.Town);
 				setIsIn7sDungeon(false);
 				sendMessage("You have been teleported to the nearest town because you have not signed for any cabal.");
 			}
@@ -15367,6 +15604,13 @@ private int _reviveRequested = 0;
 			{
 				getParty().getDimensionalRift().memberRessurected(this);
 			}
+		}
+
+		if((_inEventTvT && TvT.is_started() && Config.TVT_REVIVE_RECOVERY) || (_inEventCTF && CTF.is_started() && Config.CTF_REVIVE_RECOVERY) || (_inEventDM && DM.is_started() && Config.DM_REVIVE_RECOVERY))
+		{
+			getStatus().setCurrentHp(getMaxHp());
+			getStatus().setCurrentMp(getMaxMp());
+			getStatus().setCurrentCp(getMaxCp());
 		}
 	}
 
@@ -16299,10 +16543,6 @@ private int _reviveRequested = 0;
 		{
 			setXYZ(_obsX, _obsY, _obsZ);
 		}
- 		
-		EventManager.getInstance().onLogout(this);
-		if(EventManager.getInstance().isRegistered(this))
-			EventManager.getInstance().getCurrentEvent().onLogout(this);
 		
 	      if(isTeleporting())
 	        {
@@ -17626,10 +17866,7 @@ private int _reviveRequested = 0;
 	{
 		if(getDeathPenaltyBuffLevel() >= 15) //maximum level reached
 			return;
-				
-		if(EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
-			return;
-		
+
 		if(getDeathPenaltyBuffLevel() != 0)
 		{
 			L2Skill skill = SkillTable.getInstance().getInfo(5076, getDeathPenaltyBuffLevel());
@@ -19414,7 +19651,14 @@ public boolean dismount()
 	                _punishTask = ThreadPoolManager.getInstance().scheduleGeneral(new PunishTask(this), _punishTimer);
 	                sendMessage("You are in jail for "+delayInMilliseconds/60000+" minutes.");
 	            }
-	            else if(_inEventVIP){
+	            
+	            if(_inEventCTF){
+					CTF.onDisconnect(this);
+				}else if(_inEventDM){
+					DM.onDisconnect(this);
+				}else if(_inEventTvT){
+					TvT.onDisconnect(this);
+				}else if(_inEventVIP){
 					VIP.onDisconnect(this);
 				}
 	            if (Olympiad.getInstance().isRegisteredInComp(this))
@@ -19892,15 +20136,6 @@ public boolean dismount()
     	return _currentPetSkill;
     }
 
-	public long getNotMoveUntil() 
-	{ 
-		return _notMoveUntil; 
-	} 
-	
-	public void updateNotMoveUntil() 
-	{ 
-		_notMoveUntil = System.currentTimeMillis() + Config.PLAYER_MOVEMENT_BLOCK_TIME; 
-	}
     /**
      * Create a new SkillDat object and set the player _currentPetSkill.<br><br>
      * @param currentSkill 
@@ -19924,47 +20159,5 @@ public boolean dismount()
 
         _currentPetSkill = new SkillDat(currentSkill, ctrlPressed, shiftPressed);
     }
-	public void checkPlayerSkills()
-	{
-		for(int id : _skills.keySet())
-		{
-			int level = getSkillLevel(id);
-			if(level >= 100)
-			{
-				level = SkillTable.getInstance().getMaxLevel(id, id);
-			}
-
-			L2SkillLearn learn = SkillTreeData.getInstance().getSkillLearnBySkillIdLevel(getClassId(), id, level);
-			if(learn == null)
-			{
-				continue;
-			}
-			if(getLevel() < (learn.getMinLevel() - 9))
-			{
-				deacreaseSkillLevel(id);
-			}
-		}
-	}
-
-	private void deacreaseSkillLevel(int id)
-	{
-		int nextLevel = -1;
-		for(L2SkillLearn sl : SkillTreeData.getInstance().getAllowedSkills(getClassId()))
-		{
-			if(sl.getId() == id && nextLevel < sl.getLevel() && getLevel() >= (sl.getMinLevel() - 9))
-			{
-				nextLevel = sl.getLevel();
-			}
-		}
-
-		if(nextLevel == -1)
-		{
-			removeSkill(_skills.get(id), true);
-		}
-		else
-		{
-			addSkill(SkillTable.getInstance().getInfo(id, nextLevel), true);
-		}
-	}
     
 }

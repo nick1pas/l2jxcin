@@ -24,12 +24,12 @@ import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.xml.SkillSpellbookData;
 import net.xcine.gameserver.datatables.xml.SkillTreeData;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2PledgeSkillLearn;
 import net.xcine.gameserver.model.L2ShortCut;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2SkillLearn;
 import net.xcine.gameserver.model.actor.instance.L2FishermanInstance;
+import net.xcine.gameserver.model.actor.instance.L2FolkInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -70,14 +70,14 @@ public class RequestAquireSkill extends L2GameClientPacket
 		if(player == null)
 			return;
 
-		L2NpcInstance trainer = player.getLastFolkNPC();
+		L2FolkInstance trainer = player.getLastFolkNPC();
 
 		if(trainer == null)
 			return;
 
 		int npcid = trainer.getNpcId();
 
-		if(!player.isInsideRadius(trainer, L2Npc.INTERACTION_DISTANCE, false, false) && !player.isGM())
+		if(!player.isInsideRadius(trainer, L2NpcInstance.INTERACTION_DISTANCE, false, false) && !player.isGM())
 			return;
 
 		if(!Config.ALT_GAME_SKILL_LEARN)

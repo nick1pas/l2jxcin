@@ -1,5 +1,4 @@
-/*
- * This program is free software; you can redistribute it and/or modify
+/* This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
  * any later version.
@@ -21,6 +20,7 @@ package net.xcine.gameserver.model;
 import java.util.List;
 
 import javolution.util.FastList;
+
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.ai.L2ControllableMobAI;
 import net.xcine.gameserver.datatables.MobGroupTable;
@@ -31,6 +31,9 @@ import net.xcine.gameserver.model.spawn.L2GroupSpawn;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.util.random.Rnd;
 
+/**
+ * @author littlecrow
+ */
 public final class MobGroup
 {
 	private L2NpcTemplate _npcTemplate;
@@ -114,9 +117,7 @@ public final class MobGroup
 			}
 
 			if(groupMember.getObjectId() == mobInst.getObjectId())
-			{
 				return true;
-			}
 		}
 
 		return false;
@@ -124,10 +125,8 @@ public final class MobGroup
 
 	public void spawnGroup(int x, int y, int z)
 	{
-		if(getActiveMobCount() > 0)
-		{
+		if(getActiveMobCount() > 0) // can't spawn mob if already done
 			return;
-		}
 
 		try
 		{
@@ -152,9 +151,11 @@ public final class MobGroup
 		}
 		catch(ClassNotFoundException e)
 		{
+			//null
 		}
 		catch(NoSuchMethodException e2)
 		{
+			//null
 		}
 	}
 
@@ -192,9 +193,7 @@ public final class MobGroup
 		removeDead();
 
 		if(getActiveMobCount() == 0)
-		{
 			return null;
-		}
 
 		int choice = Rnd.nextInt(getActiveMobCount());
 
@@ -206,9 +205,7 @@ public final class MobGroup
 		removeDead();
 
 		if(getActiveMobCount() == 0)
-		{
 			return;
-		}
 
 		for(L2ControllableMobInstance mobInst : getMobs())
 		{
@@ -380,12 +377,10 @@ public final class MobGroup
 		List<L2ControllableMobInstance> deadMobs = new FastList<>();
 
 		for(L2ControllableMobInstance mobInst : getMobs())
-		{
 			if(mobInst != null && mobInst.isDead())
 			{
 				deadMobs.add(mobInst);
 			}
-		}
 
 		getMobs().removeAll(deadMobs);
 		deadMobs = null;
@@ -396,12 +391,10 @@ public final class MobGroup
 		removeDead();
 
 		for(L2ControllableMobInstance mobInst : getMobs())
-		{
 			if(mobInst != null)
 			{
 				mobInst.setInvul(invulState);
 			}
-		}
 	}
 
 	public void setAttackGroup(MobGroup otherGrp)
@@ -421,5 +414,4 @@ public final class MobGroup
 			ai = null;
 		}
 	}
-
 }

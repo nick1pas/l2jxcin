@@ -21,9 +21,9 @@ package net.xcine.gameserver.handler.itemhandlers;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.MercTicketManager;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.entity.siege.Castle;
 
 public class MercTicket implements IItemHandler
@@ -41,7 +41,7 @@ public class MercTicket implements IItemHandler
 	 * the MercTicketManager to add the item and spawn in the world 3) Remove the item from the person's inventory
 	 */
 	@Override
-	public void useItem(L2Playable playable, L2ItemInstance item)
+	public void useItem(L2PlayableInstance playable, L2ItemInstance item)
 	{
 		int itemId = item.getItemId();
 		L2PcInstance activeChar = (L2PcInstance) playable;

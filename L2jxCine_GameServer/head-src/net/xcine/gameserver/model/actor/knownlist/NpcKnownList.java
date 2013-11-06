@@ -1,5 +1,4 @@
-/*
- * This program is free software; you can redistribute it and/or modify
+/* This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
  * any later version.
@@ -19,24 +18,37 @@
 package net.xcine.gameserver.model.actor.knownlist;
 
 import net.xcine.gameserver.model.L2Character;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.actor.instance.L2CabaleBufferInstance;
 import net.xcine.gameserver.model.actor.instance.L2FestivalGuideInstance;
+import net.xcine.gameserver.model.actor.instance.L2FolkInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 
 public class NpcKnownList extends CharKnownList
 {
-	public NpcKnownList(L2Npc activeChar)
+	// =========================================================
+	// Data Field
+
+	// =========================================================
+	// Constructor
+	public NpcKnownList(L2NpcInstance activeChar)
 	{
 		super(activeChar);
 	}
 
+	// =========================================================
+	// Method - Public
+
+	// =========================================================
+	// Method - Private
+
+	// =========================================================
+	// Property - Public
 	@Override
-	public L2Npc getActiveChar()
+	public L2NpcInstance getActiveChar()
 	{
-		return (L2Npc) super.getActiveChar();
+		return (L2NpcInstance) super.getActiveChar();
 	}
 
 	@Override
@@ -49,26 +61,17 @@ public class NpcKnownList extends CharKnownList
 	public int getDistanceToWatchObject(L2Object object)
 	{
 		if(object instanceof L2FestivalGuideInstance)
-		{
 			return 10000;
-		}
 
-		if(object instanceof L2NpcInstance || !(object instanceof L2Character))
-		{
+		if(object instanceof L2FolkInstance || !(object instanceof L2Character))
 			return 0;
-		}
 
 		if(object instanceof L2CabaleBufferInstance)
-		{
 			return 900;
-		}
 
-		if(object instanceof L2Playable)
-		{
+		if(object instanceof L2PlayableInstance)
 			return 1500;
-		}
 
 		return 500;
 	}
-
 }

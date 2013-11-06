@@ -17,7 +17,7 @@
  */
 package net.xcine.gameserver.model.zone.type;
 
-import net.xcine.gameserver.datatables.xml.MapRegionData;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.zone.L2ZoneType;
@@ -117,7 +117,7 @@ public class L2ArenaZone extends L2ZoneType
 
 				if(player.isOnline() == 1)
 				{
-					player.teleToLocation(MapRegionData.TeleportWhereType.Town);
+					player.teleToLocation(MapRegionTable.TeleportWhereType.Town);
 				}
 
 				player = null;

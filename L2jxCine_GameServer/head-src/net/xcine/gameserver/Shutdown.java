@@ -25,8 +25,6 @@ import net.xcine.Config;
 import net.xcine.gameserver.controllers.GameTimeController;
 import net.xcine.gameserver.controllers.TradeController;
 import net.xcine.gameserver.datatables.OfflineTradeTable;
-import net.xcine.gameserver.event.EventBuffer;
-import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.managers.AutoSaveManager;
 import net.xcine.gameserver.managers.CastleManorManager;
 import net.xcine.gameserver.managers.CursedWeaponsManager;
@@ -660,10 +658,7 @@ public class Shutdown extends Thread
 		// Save all global (non-player specific) Quest data that needs to persist after reboot
 		if(!Config.ALT_DEV_NO_QUESTS)
 			QuestManager.getInstance().save();
- 		
-		if(EventManager.getInstance().getBoolean("eventBufferEnabled")) 
-			EventBuffer.getInstance().updateSQL();
-		
+
 		//Save items on ground before closing
 		if(Config.SAVE_DROPPED_ITEM)
 		{

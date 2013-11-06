@@ -15,7 +15,6 @@
 package net.xcine.gameserver.model.actor.instance;
 
 import net.xcine.gameserver.managers.CustomNpcInstanceManager;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.base.ClassId;
 import net.xcine.gameserver.model.base.Race;
 import net.xcine.gameserver.templates.L2WeaponType;
@@ -38,17 +37,17 @@ public final class L2CustomNpcInstance
 
 	private int _int[]; // PcInstance integer stats
 	private boolean _boolean[]; // PcInstance booolean stats
-	private L2Npc _NpcInstance; // Reference to Npc with this stats
+	private L2NpcInstance _NpcInstance; // Reference to Npc with this stats
 	private ClassId _classId; // ClassId of this (N)Pc
 
 	/**
 	 * A constructor
 	 * 
-	 * @param l2Npc - Receives the L2NpcInstance as a reference.
+	 * @param myNpc - Receives the L2NpcInstance as a reference.
 	 */
-	public L2CustomNpcInstance(L2Npc l2Npc)
+	public L2CustomNpcInstance(L2NpcInstance myNpc)
 	{
-		_NpcInstance = l2Npc;
+		_NpcInstance = myNpc;
 		if(_NpcInstance == null)
 			return;
 		else if(_NpcInstance.getSpawn() == null)

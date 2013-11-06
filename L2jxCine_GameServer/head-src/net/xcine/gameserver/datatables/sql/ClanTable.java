@@ -28,12 +28,17 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import javolution.util.FastMap;
+
 import net.xcine.Config;
 import net.xcine.gameserver.idfactory.IdFactory;
+import net.xcine.gameserver.managers.FortManager;
+import net.xcine.gameserver.managers.FortSiegeManager;
 import net.xcine.gameserver.managers.SiegeManager;
 import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.L2ClanMember;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.entity.siege.Fort;
+import net.xcine.gameserver.model.entity.siege.FortSiege;
 import net.xcine.gameserver.model.entity.siege.Siege;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.PledgeShowInfoUpdate;
@@ -112,8 +117,10 @@ public class ClanTable
 	{
 		_clans = new FastMap<>();
 		L2Clan clan;
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		Connection con = null;
+		try
 		{
+			con = L2DatabaseFactory.getInstance().getConnection(false);
 			final PreparedStatement statement = con.prepareStatement("SELECT clan_id FROM clan_data");
 			final ResultSet result = statement.executeQuery();
 
@@ -145,6 +152,10 @@ public class ClanTable
 		catch(Exception e)
 		{
 			_log.severe("data error on ClanTable"+" "+ e);
+		}
+		finally
+		{
+			CloseUtil.close(con);
 		}
 
 		restorewars();
@@ -314,6 +325,16 @@ public class ClanTable
 			}
 		}
 
+		int fortId = clan.getHasFort();
+
+		if(fortId == 0)
+		{
+			for(FortSiege siege : FortSiegeManager.getInstance().getSieges())
+			{
+				siege.removeSiegeClan(clanId);
+			}
+		}
+
 		L2ClanMember leaderMember = clan.getLeader();
 
 		if(leaderMember == null)
@@ -382,6 +403,19 @@ public class ClanTable
 				statement = con.prepareStatement("UPDATE castle SET taxPercent = 0 WHERE id = ?");
 				statement.setInt(1, castleId);
 				statement.execute();
+			}
+
+			if(fortId != 0)
+			{
+				Fort fort = FortManager.getInstance().getFortById(fortId);
+				if(fort != null)
+				{
+					L2Clan owner = fort.getOwnerClan();
+					if(clan == owner)
+					{
+						fort.removeOwner(clan);
+					}
+				}
 			}
 
 			_log.finest("clan removed in db: {}"+" "+ clanId);

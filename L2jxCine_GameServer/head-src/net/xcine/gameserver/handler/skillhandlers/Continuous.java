@@ -29,13 +29,13 @@ import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Effect;
 import net.xcine.gameserver.model.L2Object;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2Skill.SkillType;
 import net.xcine.gameserver.model.L2Summon;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.skills.Formulas;
@@ -113,7 +113,7 @@ public class Continuous implements ISkillHandler
 				continue;
 			}
 			
-			if(target instanceof L2PcInstance && activeChar instanceof L2Playable && skill.isOffensive())
+			if(target instanceof L2PcInstance && activeChar instanceof L2PlayableInstance && skill.isOffensive())
 			{
 				L2PcInstance _char = (activeChar instanceof L2PcInstance)?(L2PcInstance)activeChar:((L2Summon)activeChar).getOwner();
 				L2PcInstance _attacked = (L2PcInstance) target;
@@ -136,7 +136,7 @@ public class Continuous implements ISkillHandler
 				continue;
 
 			// Anti-Buff Protection prevents you from getting buffs by other players
-			if (activeChar instanceof L2Playable && target != activeChar && target.isBuffProtected() && !skill.isHeroSkill()
+			if (activeChar instanceof L2PlayableInstance && target != activeChar && target.isBuffProtected() && !skill.isHeroSkill()
 				    && (skill.getSkillType() == L2Skill.SkillType.BUFF
 				    || skill.getSkillType() == L2Skill.SkillType.HEAL_PERCENT
 					|| skill.getSkillType() == L2Skill.SkillType.FORCE_BUFF
@@ -269,7 +269,7 @@ public class Continuous implements ISkillHandler
 			{
 				if(target instanceof L2Attackable)
 					target.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, activeChar, (int) skill.getPower());
-				else if(target instanceof L2Playable)
+				else if(target instanceof L2PlayableInstance)
 				{
 					if(target.getTarget() == activeChar)
 						target.getAI().setIntention(CtrlIntention.AI_INTENTION_ATTACK, activeChar);

@@ -19,7 +19,7 @@
 package net.xcine.gameserver.skills.effects;
 
 import net.xcine.gameserver.model.L2Effect;
-import net.xcine.gameserver.model.L2Playable;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.skills.Env;
 
 /**
@@ -43,9 +43,9 @@ final class EffectNoblesseBless extends L2Effect
 	@Override
 	public void onStart()
 	{
-		if(getEffected() instanceof L2Playable)
+		if(getEffected() instanceof L2PlayableInstance)
 		{
-			((L2Playable) getEffected()).startNoblesseBlessing();
+			((L2PlayableInstance) getEffected()).startNoblesseBlessing(this);
 		}
 	}
 
@@ -53,9 +53,9 @@ final class EffectNoblesseBless extends L2Effect
 	@Override
 	public void onExit()
 	{
-		if(getEffected() instanceof L2Playable)
+		if(getEffected() instanceof L2PlayableInstance)
 		{
-			((L2Playable) getEffected()).stopNoblesseBlessing(this);
+			((L2PlayableInstance) getEffected()).stopNoblesseBlessing(this);
 		}
 	}
 

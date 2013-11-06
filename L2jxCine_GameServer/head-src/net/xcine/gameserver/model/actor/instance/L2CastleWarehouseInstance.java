@@ -15,7 +15,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  *
  * @author l3x
  */
-public class L2CastleWarehouseInstance extends L2NpcInstance
+public class L2CastleWarehouseInstance extends L2FolkInstance
 {
 	
 	/** The Constant COND_ALL_FALSE. */

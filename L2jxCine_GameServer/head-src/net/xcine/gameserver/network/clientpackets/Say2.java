@@ -26,9 +26,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.xml.MapRegionData;
-import net.xcine.gameserver.event.EventManager;
-import net.xcine.gameserver.event.LMS;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.handler.IVoicedCommandHandler;
 import net.xcine.gameserver.handler.VoicedCommandHandler;
 import net.xcine.gameserver.managers.PetitionManager;
@@ -63,8 +61,7 @@ public final class Say2 extends L2GameClientPacket
 	public final static int PARTYROOM_COMMANDER = 15; //(Yellow)
 	public final static int HERO_VOICE = 17; //%
 	public final static int CRITICAL_ANNOUNCE = 18;
-	private boolean _isInLMS;
-	 
+
 	private final static String[] CHAT_NAMES =
 	{
 			"ALL  ", "SHOUT", "TELL ", "PARTY", "CLAN ", "GM   ", "PETITION_PLAYER", "PETITION_GM", "TRADE", "ALLIANCE", "ANNOUNCEMENT", //10
@@ -239,18 +236,6 @@ public final class Say2 extends L2GameClientPacket
 		}
 		
 		CreatureSay cs = new CreatureSay(activeChar.getObjectId(), _type, activeChar.getName(), _text);
-
-		if(EventManager.getInstance().isRegistered(activeChar))
-				EventManager.getInstance().getCurrentEvent().onSay(_type, activeChar, _text);
-		
-		_isInLMS = EventManager.getInstance().isRegistered(activeChar) && EventManager.getInstance().getCurrentEvent() instanceof LMS;
-		
-		if(_isInLMS)
-		{
-			activeChar.sendMessage("You cannot talk while in LMS");
-			return;
-		}
-		
 		switch(_type)
 		{
 			case TELL:
@@ -317,10 +302,10 @@ public final class Say2 extends L2GameClientPacket
 
 		           if(Config.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("on") || Config.DEFAULT_GLOBAL_CHAT.equalsIgnoreCase("gm") && activeChar.isGM())
 		           {
-		              int region = MapRegionData.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
+		              int region = MapRegionTable.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
 		              for(L2PcInstance player : L2World.getInstance().getAllPlayers())
 		              {
-		                 if(region == MapRegionData.getInstance().getMapRegion(player.getX(), player.getY()))
+		                 if(region == MapRegionTable.getInstance().getMapRegion(player.getX(), player.getY()))
 		                 {
 							// Like L2OFF if player is blocked can't read the message
 							if(!player.getBlockList().isInBlockList(activeChar.getName()))               	 
@@ -393,10 +378,10 @@ public final class Say2 extends L2GameClientPacket
 							return;
 						}
 						
-						int region = MapRegionData.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
+						int region = MapRegionTable.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
 						for(L2PcInstance player : L2World.getInstance().getAllPlayers())
 						{
-							if(region == MapRegionData.getInstance().getMapRegion(player.getX(), player.getY()))
+							if(region == MapRegionTable.getInstance().getMapRegion(player.getX(), player.getY()))
 							{
 								// Like L2OFF if player is blocked can't read the message
 								if(!player.getBlockList().isInBlockList(activeChar.getName()))
@@ -407,10 +392,10 @@ public final class Say2 extends L2GameClientPacket
 					}
 					else
 					{
-						int region = MapRegionData.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
+						int region = MapRegionTable.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
 						for(L2PcInstance player : L2World.getInstance().getAllPlayers())
 						{
-							if(region == MapRegionData.getInstance().getMapRegion(player.getX(), player.getY()))
+							if(region == MapRegionTable.getInstance().getMapRegion(player.getX(), player.getY()))
 							{
 								// Like L2OFF if player is blocked can't read the message
 								if(!player.getBlockList().isInBlockList(activeChar.getName()))

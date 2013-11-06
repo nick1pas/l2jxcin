@@ -30,12 +30,11 @@ import net.xcine.gameserver.geo.GeoData;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Effect;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2Skill;
-import net.xcine.gameserver.model.L2Skill.SkillType;
 import net.xcine.gameserver.model.L2Summon;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
+import net.xcine.gameserver.model.actor.instance.L2FolkInstance;
 import net.xcine.gameserver.model.actor.instance.L2MonsterInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -43,26 +42,43 @@ import net.xcine.gameserver.model.actor.instance.L2SiegeGuardInstance;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.util.random.Rnd;
 
+/**
+ * This class manages AI of L2Attackable.<BR>
+ * <BR>
+ */
 public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 {
-	private static final int MAX_ATTACK_TIMEOUT = 300;
 
+	//protected static final Logger _log = Logger.getLogger(L2SiegeGuardAI.class.getName());
+
+	private static final int MAX_ATTACK_TIMEOUT = 300; // int ticks, i.e. 30 seconds
+
+	/** The L2Attackable AI task executed every 1s (call onEvtThink method) */
 	private Future<?> _aiTask;
 
+	/** The delay after wich the attacked is stopped */
 	private int _attackTimeout;
 
+	/** The L2Attackable aggro counter */
 	private int _globalAggro;
 
-	private boolean _thinking;
+	/** The flag used to indicate that a thinking action is in progress */
+	private boolean _thinking; // to prevent recursive thinking
 
 	private int _attackRange;
 
+	/**
+	 * Constructor of L2AttackableAI.<BR>
+	 * <BR>
+	 * 
+	 * @param accessor The AI accessor of the L2Character
+	 */
 	public L2SiegeGuardAI(L2Character.AIAccessor accessor)
 	{
 		super(accessor);
 
 		_attackTimeout = Integer.MAX_VALUE;
-		_globalAggro = -10;
+		_globalAggro = -10; // 10 seconds timeout of ATTACK after respawn
 
 		_attackRange = ((L2Attackable) _actor).getPhysicalAttackRange();
 	}
@@ -70,29 +86,49 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 	@Override
 	public void run()
 	{
+		// Launch actions corresponding to the Event Think
 		onEvtThink();
+
 	}
 
+	/**
+	 * Return True if the target is autoattackable (depends on the actor type).<BR>
+	 * <BR>
+	 * <B><U> Actor is a L2GuardInstance</U> :</B><BR>
+	 * <BR>
+	 * <li>The target isn't a Folk or a Door</li> <li>The target isn't dead, isn't invulnerable, isn't in silent moving
+	 * mode AND too far (>100)</li> <li>The target is in the actor Aggro range and is at the same height</li> <li>The
+	 * L2PcInstance target has karma (=PK)</li> <li>The L2MonsterInstance target is aggressive</li><BR>
+	 * <BR>
+	 * <B><U> Actor is a L2SiegeGuardInstance</U> :</B><BR>
+	 * <BR>
+	 * <li>The target isn't a Folk or a Door</li> <li>The target isn't dead, isn't invulnerable, isn't in silent moving
+	 * mode AND too far (>100)</li> <li>The target is in the actor Aggro range and is at the same height</li> <li>A
+	 * siege is in progress</li> <li>The L2PcInstance target isn't a Defender</li><BR>
+	 * <BR>
+	 * <B><U> Actor is a L2FriendlyMobInstance</U> :</B><BR>
+	 * <BR>
+	 * <li>The target isn't a Folk, a Door or another L2NpcInstance</li> <li>The target isn't dead, isn't invulnerable,
+	 * isn't in silent moving mode AND too far (>100)</li> <li>The target is in the actor Aggro range and is at the same
+	 * height</li> <li>The L2PcInstance target has karma (=PK)</li><BR>
+	 * <BR>
+	 * <B><U> Actor is a L2MonsterInstance</U> :</B><BR>
+	 * <BR>
+	 * <li>The target isn't a Folk, a Door or another L2NpcInstance</li> <li>The target isn't dead, isn't invulnerable,
+	 * isn't in silent moving mode AND too far (>100)</li> <li>The target is in the actor Aggro range and is at the same
+	 * height</li> <li>The actor is Aggressive</li><BR>
+	 * <BR>
+	 * 
+	 * @param target The targeted L2Object
+	 * @return 
+	 */
 	private boolean autoAttackCondition(L2Character target)
 	{
-		if(target == null || target instanceof L2SiegeGuardInstance || target instanceof L2NpcInstance || target instanceof L2DoorInstance || target.isAlikeDead())
-		{
+		// Check if the target isn't another guard, folk or a door
+		if(target == null || target instanceof L2SiegeGuardInstance || target instanceof L2FolkInstance || target instanceof L2DoorInstance || target.isAlikeDead() || target.isInvul())
 			return false;
-		}
 
-		if(target.isInvul())
-		{
-			if(target instanceof L2PcInstance && ((L2PcInstance) target).isGM())
-			{
-				return false;
-			}
-
-			if(target instanceof L2Summon && ((L2Summon) target).getOwner().isGM())
-			{
-				return false;
-			}
-		}
-
+		// Get the owner if the target is a summon
 		if(target instanceof L2Summon)
 		{
 			L2PcInstance owner = ((L2Summon) target).getOwner();
@@ -104,29 +140,48 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 			owner = null;
 		}
 
+		// Check if the target is a L2PcInstance
 		if(target instanceof L2PcInstance)
 		{
+			// Check if the target isn't in silent move mode AND too far (>100)
 			if(((L2PcInstance) target).isSilentMoving() && !_actor.isInsideRadius(target, 250, false, false))
-			{
 				return false;
-			}
 		}
+		// Los Check Here
 		return _actor.isAutoAttackable(target) && GeoData.getInstance().canSeeTarget(_actor, target);
 
 	}
 
+	/**
+	 * Set the Intention of this L2CharacterAI and create an AI Task executed every 1s (call onEvtThink method) for this
+	 * L2Attackable.<BR>
+	 * <BR>
+	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : If actor _knowPlayer isn't EMPTY, AI_INTENTION_IDLE will be change in
+	 * AI_INTENTION_ACTIVE</B></FONT><BR>
+	 * <BR>
+	 * 
+	 * @param intention The new Intention to set to the AI
+	 * @param arg0 The first parameter of the Intention
+	 * @param arg1 The second parameter of the Intention
+	 */
 	@Override
-	public
-	synchronized void changeIntention(CtrlIntention intention, Object arg0, Object arg1)
+	public void changeIntention(CtrlIntention intention, Object arg0, Object arg1)
 	{
+		if(Config.DEBUG)
+		{
+			_log.info("L2SiegeAI.changeIntention(" + intention + ", " + arg0 + ", " + arg1 + ")");
+		}
+
 		((L2Attackable) _actor).setisReturningToSpawnPoint(false);
 
-		if(intention == AI_INTENTION_IDLE)
+		if(intention == AI_INTENTION_IDLE /*|| intention == AI_INTENTION_ACTIVE*/) // active becomes idle if only a summon is present
 		{
+			// Check if actor is not dead
 			if(!_actor.isAlikeDead())
 			{
 				L2Attackable npc = (L2Attackable) _actor;
 
+				// If its _knownPlayer isn't empty set the Intention to AI_INTENTION_ACTIVE
 				if(npc.getKnownList().getKnownPlayers().size() > 0)
 				{
 					intention = AI_INTENTION_ACTIVE;
@@ -141,40 +196,65 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 
 			if(intention == AI_INTENTION_IDLE)
 			{
+				// Set the Intention of this L2AttackableAI to AI_INTENTION_IDLE
 				super.changeIntention(AI_INTENTION_IDLE, null, null);
 
+				// Stop AI task and detach AI from NPC
 				if(_aiTask != null)
 				{
 					_aiTask.cancel(true);
 					_aiTask = null;
 				}
 
+				// Cancel the AI
 				_accessor.detachAI();
 
 				return;
 			}
 		}
 
+		// Set the Intention of this L2AttackableAI to intention
 		super.changeIntention(intention, arg0, arg1);
 
+		// If not idle - create an AI task (schedule onEvtThink repeatedly)
 		if(_aiTask == null)
 		{
 			_aiTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(this, 1000, 1000);
 		}
 	}
 
+	/**
+	 * Manage the Attack Intention : Stop current Attack (if necessary), Calculate attack timeout, Start a new Attack
+	 * and Launch Think Event.<BR>
+	 * <BR>
+	 * 
+	 * @param target The L2Character to attack
+	 */
 	@Override
 	protected void onIntentionAttack(L2Character target)
 	{
+		// Calculate the attack timeout
 		_attackTimeout = MAX_ATTACK_TIMEOUT + GameTimeController.getGameTicks();
 
+		// Manage the Attack Intention : Stop current Attack (if necessary), Start a new Attack and Launch Think Event
+		//if (_actor.getTarget() != null)
 		super.onIntentionAttack(target);
 	}
 
+	/**
+	 * Manage AI standard thinks of a L2Attackable (called by onEvtThink).<BR>
+	 * <BR>
+	 * <B><U> Actions</U> :</B><BR>
+	 * <BR>
+	 * <li>Update every 1s the _globalAggro counter to come close to 0</li> <li>If the actor is Aggressive and can
+	 * attack, add all autoAttackable L2Character in its Aggro Range to its _aggroList, chose a target and order to
+	 * attack it</li> <li>If the actor can't attack, order to it to return to its home location</li>
+	 */
 	private void thinkActive()
 	{
 		L2Attackable npc = (L2Attackable) _actor;
 
+		// Update every 1s the _globalAggro counter to come close to 0
 		if(_globalAggro != 0)
 		{
 			if(_globalAggro < 0)
@@ -187,6 +267,8 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 			}
 		}
 
+		// Add all autoAttackable L2Character in L2Attackable Aggro Range to its _aggroList with 0 damage and 1 hate
+		// A L2Attackable isn't aggressive during 10s after its spawn because _globalAggro is set to -10
 		if(_globalAggro >= 0)
 		{
 			for(L2Character target : npc.getKnownList().getKnownCharactersInRadius(_attackRange))
@@ -196,10 +278,12 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 					continue;
 				}
 
-				if(autoAttackCondition(target))
+				if(autoAttackCondition(target)) // check aggression
 				{
+					// Get the hate level of the L2Attackable against this L2Character target contained in _aggroList
 					int hating = npc.getHating(target);
 
+					// Add the attacker to the L2Attackable _aggroList with 0 damage and 1 hate
 					if(hating == 0)
 					{
 						npc.addDamageHate(target, 0, 1);
@@ -207,39 +291,44 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 				}
 			}
 
+			// Chose a target from its aggroList
 			L2Character hated;
 
+			// Force mobs to attak anybody if confused
 			if(_actor.isConfused())
 			{
-				hated = _attackTarget;
+				hated = getAttackTarget();
 			}
 			else
 			{
 				hated = npc.getMostHated();
 			}
 
+			// Order to the L2Attackable to attack the target
 			if(hated != null)
 			{
+				// Get the hate level of the L2Attackable against this L2Character target contained in _aggroList
 				int aggro = npc.getHating(hated);
 
 				if(aggro + _globalAggro > 0)
 				{
+					// Set the L2Character movement type to run and send Server->Client packet ChangeMoveType to all others L2PcInstance
 					if(!_actor.isRunning())
 					{
 						_actor.setRunning();
 					}
 
+					// Set the AI Intention to AI_INTENTION_ATTACK
 					setIntention(CtrlIntention.AI_INTENTION_ATTACK, hated, null);
 				}
 
 				return;
 			}
-			hated = null;
-
 		}
 
 		npc = null;
 
+		// Order to the L2SiegeGuardInstance to return to its home location because there's no target to attack
 		((L2SiegeGuardInstance) _actor).returnHome();
 
 		return;
@@ -248,63 +337,74 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 
 	private void attackPrepare()
 	{
+		// Get all information needed to chose between physical or magical attack
 		L2Skill[] skills = null;
 		double dist_2 = 0;
 		int range = 0;
 		L2SiegeGuardInstance sGuard = (L2SiegeGuardInstance) _actor;
 
+		final L2Character attackTarget = getAttackTarget();
+		
 		try
 		{
-			_actor.setTarget(_attackTarget);
+			_actor.setTarget(attackTarget);
 			skills = _actor.getAllSkills();
-			dist_2 = _actor.getPlanDistanceSq(_attackTarget.getX(), _attackTarget.getY());
-			range = _actor.getPhysicalAttackRange() + _actor.getTemplate().collisionRadius + _attackTarget.getTemplate().collisionRadius;
+			dist_2 = _actor.getPlanDistanceSq(attackTarget.getX(), attackTarget.getY());
+			range = _actor.getPhysicalAttackRange() + _actor.getTemplate().collisionRadius + attackTarget.getTemplate().collisionRadius;
 		}
 		catch(NullPointerException e)
 		{
+			if(Config.ENABLE_ALL_EXCEPTIONS)
+				e.printStackTrace();
+			
+			//_log.warning("AttackableAI: Attack target is NULL.");
 			_actor.setTarget(null);
 			setIntention(AI_INTENTION_IDLE, null, null);
 			return;
 		}
 
-		if(_attackTarget instanceof L2PcInstance && sGuard.getCastle().getSiege().checkIsDefender(((L2PcInstance) _attackTarget).getClan()))
+		// never attack defenders
+		if(attackTarget instanceof L2PcInstance && sGuard.getCastle().getSiege().checkIsDefender(((L2PcInstance) attackTarget).getClan()))
 		{
-			sGuard.stopHating(_attackTarget);
+			// Cancel the target
+			sGuard.stopHating(attackTarget);
 			_actor.setTarget(null);
 			setIntention(AI_INTENTION_IDLE, null, null);
 			return;
 		}
 
-		if(!GeoData.getInstance().canSeeTarget(_actor, _attackTarget))
+		if(!GeoData.getInstance().canSeeTarget(_actor, attackTarget))
 		{
-			sGuard.stopHating(_attackTarget);
+			// Siege guards differ from normal mobs currently:
+			// If target cannot seen, don't attack any more
+			sGuard.stopHating(attackTarget);
 			_actor.setTarget(null);
 			setIntention(AI_INTENTION_IDLE, null, null);
 			return;
 		}
 
+		// Check if the actor isn't muted and if it is far from target
 		if(!_actor.isMuted() && dist_2 > (range + 20) * (range + 20))
 		{
-			if(_actor instanceof L2MonsterInstance && Rnd.nextInt(100) <= 5)
+			// check for long ranged skills and heal/buff skills
+			if(!Config.ALT_GAME_MOB_ATTACK_AI || _actor instanceof L2MonsterInstance && Rnd.nextInt(100) <= 5)
 			{
 				for(L2Skill sk : skills)
 				{
 					int castRange = sk.getCastRange();
 
-					if((sk.getSkillType() == SkillType.BUFF || sk.getSkillType() == SkillType.HEAL || dist_2 >= castRange * castRange / 9 && dist_2 <= castRange * castRange && castRange > 70) && !_actor.isSkillDisabled(sk.getId()) && _actor.getCurrentMp() >= _actor.getStat().getMpConsume(sk) && !sk.isPassive())
+					if((sk.getSkillType() == L2Skill.SkillType.BUFF || sk.getSkillType() == L2Skill.SkillType.HEAL || dist_2 >= castRange * castRange / 9 && dist_2 <= castRange * castRange && castRange > 70) && !_actor.isSkillDisabled(sk.getId()) && _actor.getCurrentMp() >= _actor.getStat().getMpConsume(sk) && !sk.isPassive())
 					{
-						L2Object OldTarget = _actor.getTarget();
-
-						if(sk.getSkillType() == SkillType.BUFF || sk.getSkillType() == SkillType.HEAL)
+						if(sk.getSkillType() == L2Skill.SkillType.BUFF || sk.getSkillType() == L2Skill.SkillType.HEAL)
 						{
 							boolean useSkillSelf = true;
 
-							if(sk.getSkillType() == SkillType.HEAL && _actor.getCurrentHp() > (int) (_actor.getMaxHp() / 1.5))
+							if(sk.getSkillType() == L2Skill.SkillType.HEAL && _actor.getCurrentHp() > (int) (_actor.getMaxHp() / 1.5))
 							{
 								useSkillSelf = false;
 								break;
 							}
-							if(sk.getSkillType() == SkillType.BUFF)
+							if(sk.getSkillType() == L2Skill.SkillType.BUFF)
 							{
 								L2Effect[] effects = _actor.getAllEffects();
 
@@ -327,6 +427,8 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 							}
 						}
 
+						L2Object OldTarget = _actor.getTarget();
+
 						clientStopMoving(null);
 						_accessor.doCast(sk);
 						_actor.setTarget(OldTarget);
@@ -338,31 +440,38 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 				}
 			}
 
-			if(!(_actor.isAttackingNow()) && (_actor.getRunSpeed() == 0) && (_actor.getKnownList().knowsObject(_attackTarget)))
+			// Check if the L2SiegeGuardInstance is attacking, knows the target and can't run
+			if(!_actor.isAttackingNow() && _actor.getRunSpeed() == 0 && _actor.getKnownList().knowsObject(attackTarget))
 			{
-				_actor.getKnownList().removeKnownObject(_attackTarget);
+				// Cancel the target
+				_actor.getKnownList().removeKnownObject(attackTarget);
 				_actor.setTarget(null);
 				setIntention(AI_INTENTION_IDLE, null, null);
 			}
 			else
 			{
-				double dx = _actor.getX() - _attackTarget.getX();
-				double dy = _actor.getY() - _attackTarget.getY();
-				double dz = _actor.getZ() - _attackTarget.getZ();
-				double homeX = _attackTarget.getX() - sGuard.getHomeX();
-				double homeY = _attackTarget.getY() - sGuard.getHomeY();
+				double dx = _actor.getX() - attackTarget.getX();
+				double dy = _actor.getY() - attackTarget.getY();
+				double dz = _actor.getZ() - attackTarget.getZ();
+				double homeX = attackTarget.getX() - sGuard.getHomeX();
+				double homeY = attackTarget.getY() - sGuard.getHomeY();
 
-				if(dx * dx + dy * dy > 10000 && homeX * homeX + homeY * homeY > 3240000)
+				// Check if the L2SiegeGuardInstance isn't too far from it's home location
+				if(dx * dx + dy * dy > 10000 && homeX * homeX + homeY * homeY > 3240000 && _actor.getKnownList().knowsObject(attackTarget))
 				{
-					_actor.getKnownList().removeKnownObject(_attackTarget);
+					// Cancel the target
+					_actor.getKnownList().removeKnownObject(attackTarget);
 					_actor.setTarget(null);
 					setIntention(AI_INTENTION_IDLE, null, null);
 				}
 				else
+				// Move the actor to Pawn server side AND client side by sending Server->Client packet MoveToPawn (broadcast)
 				{
+					// Temporary hack for preventing guards jumping off towers,
+					// before replacing this with effective geodata checks and AI modification
 					if(dz * dz < 170 * 170)
 					{
-						moveToPawn(_attackTarget, range);
+						moveToPawn(attackTarget, range);
 					}
 				}
 			}
@@ -370,24 +479,30 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 			return;
 
 		}
+		// Else, if the actor is muted and far from target, just "move to pawn"
 		else if(_actor.isMuted() && dist_2 > (range + 20) * (range + 20))
 		{
-			double dz = _actor.getZ() - _attackTarget.getZ();
+			// Temporary hack for preventing guards jumping off towers,
+			// before replacing this with effective geodata checks and AI modification
+			double dz = _actor.getZ() - attackTarget.getZ();
 
+			// normally 130 if guard z coordinates correct
 			if(dz * dz < 170 * 170)
 			{
-				moveToPawn(_attackTarget, range);
+				moveToPawn(attackTarget, range);
 			}
 
 			return;
 		}
+		// Else, if this is close enough to attack
 		else if(dist_2 <= (range + 20) * (range + 20))
 		{
+			// Force mobs to attak anybody if confused
 			L2Character hated = null;
 
 			if(_actor.isConfused())
 			{
-				hated = _attackTarget;
+				hated = attackTarget;
 			}
 			else
 			{
@@ -400,15 +515,14 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 				return;
 			}
 
-			if(hated != _attackTarget)
+			if(hated != attackTarget)
 			{
-				_attackTarget = hated;
+				setAttackTarget(hated);
 			}
-
-			hated = null;
 
 			_attackTimeout = MAX_ATTACK_TIMEOUT + GameTimeController.getGameTicks();
 
+			// check for close combat skills && heal/buff skills
 			if(!_actor.isMuted() && Rnd.nextInt(100) <= 5)
 			{
 				for(L2Skill sk : skills)
@@ -417,19 +531,17 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 
 					if(castRange * castRange >= dist_2 && castRange <= 70 && !sk.isPassive() && _actor.getCurrentMp() >= _actor.getStat().getMpConsume(sk) && !_actor.isSkillDisabled(sk.getId()))
 					{
-						L2Object OldTarget = _actor.getTarget();
-
-						if(sk.getSkillType() == SkillType.BUFF || sk.getSkillType() == SkillType.HEAL)
+						if(sk.getSkillType() == L2Skill.SkillType.BUFF || sk.getSkillType() == L2Skill.SkillType.HEAL)
 						{
 							boolean useSkillSelf = true;
 
-							if(sk.getSkillType() == SkillType.HEAL && _actor.getCurrentHp() > (int) (_actor.getMaxHp() / 1.5))
+							if(sk.getSkillType() == L2Skill.SkillType.HEAL && _actor.getCurrentHp() > (int) (_actor.getMaxHp() / 1.5))
 							{
 								useSkillSelf = false;
 								break;
 							}
 
-							if(sk.getSkillType() == SkillType.BUFF)
+							if(sk.getSkillType() == L2Skill.SkillType.BUFF)
 							{
 								L2Effect[] effects = _actor.getAllEffects();
 
@@ -450,6 +562,8 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 							}
 						}
 
+						L2Object OldTarget = _actor.getTarget();
+
 						clientStopMoving(null);
 						_accessor.doCast(sk);
 						_actor.setTarget(OldTarget);
@@ -460,39 +574,65 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 					}
 				}
 			}
-			_accessor.doAttack(_attackTarget);
+			// Finally, do the physical attack itself
+			_accessor.doAttack(getAttackTarget());
 
 			skills = null;
 			sGuard = null;
 		}
 	}
 
+	/**
+	 * Manage AI attack thinks of a L2Attackable (called by onEvtThink).<BR>
+	 * <BR>
+	 * <B><U> Actions</U> :</B><BR>
+	 * <BR>
+	 * <li>Update the attack timeout if actor is running</li> <li>If target is dead or timeout is expired, stop this
+	 * attack and set the Intention to AI_INTENTION_ACTIVE</li> <li>Call all L2Object of its Faction inside the Faction
+	 * Range</li> <li>Chose a target and order to attack it with magic skill or physical attack</li><BR>
+	 * <BR>
+	 * TODO: Manage casting rules to healer mobs (like Ant Nurses)
+	 */
 	private void thinkAttack()
 	{
+		if(Config.DEBUG)
+		{
+			_log.info("L2SiegeGuardAI.thinkAttack(); timeout=" + (_attackTimeout - GameTimeController.getGameTicks()));
+		}
+
 		if(_attackTimeout < GameTimeController.getGameTicks())
 		{
+			// Check if the actor is running
 			if(_actor.isRunning())
 			{
+				// Set the actor movement type to walk and send Server->Client packet ChangeMoveType to all others L2PcInstance
 				_actor.setWalking();
 
+				// Calculate a new attack timeout
 				_attackTimeout = MAX_ATTACK_TIMEOUT + GameTimeController.getGameTicks();
 			}
 		}
 
-		if(_attackTarget == null || _attackTarget.isAlikeDead() || _attackTimeout < GameTimeController.getGameTicks())
+		final L2Character attackTarget = getAttackTarget();
+		
+		// Check if target is dead or if timeout is expired to stop this attack
+		if(attackTarget == null || attackTarget.isAlikeDead() || _attackTimeout < GameTimeController.getGameTicks())
 		{
-			if(_attackTarget != null)
+			// Stop hating this target after the attack timeout or if target is dead
+			if(attackTarget != null)
 			{
 				L2Attackable npc = (L2Attackable) _actor;
 
-				npc.stopHating(_attackTarget);
+				npc.stopHating(attackTarget);
 
 				npc = null;
 			}
 
+			// Cancel target and timeout
 			_attackTimeout = Integer.MAX_VALUE;
-			_attackTarget = null;
-
+			setAttackTarget(null);
+			
+			// Set the AI Intention to AI_INTENTION_ACTIVE
 			setIntention(AI_INTENTION_ACTIVE, null, null);
 
 			_actor.setWalking();
@@ -505,61 +645,64 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 
 	private final void factionNotify()
 	{
-		if(((L2Npc) _actor).getFactionId() == null || _attackTarget == null || _actor == null)
-		{
+		final L2Character actor = getActor();
+		final L2Character target = getAttackTarget();
+		
+		// Call all L2Object of its Faction inside the Faction Range
+		if(actor == null || target == null || ((L2NpcInstance) actor).getFactionId() == null )
 			return;
-		}
 
-		if(_attackTarget.isInvul())
-		{
+		if(target.isInvul())
 			return;
-		}
 
-		for(L2Character cha : _actor.getKnownList().getKnownCharactersInRadius(1000))
+		// Go through all L2Object that belong to its faction
+		for(L2Character cha : actor.getKnownList().getKnownCharactersInRadius(1000))
 		{
 			if(cha == null)
 			{
 				continue;
 			}
 
-			if(!(cha instanceof L2Npc))
+			if(!(cha instanceof L2NpcInstance))
 			{
 				continue;
 			}
 
-			L2Npc npc = (L2Npc) cha;
+			L2NpcInstance npc = (L2NpcInstance) cha;
 
-			String faction_id = ((L2Npc) _actor).getFactionId();
+			String faction_id = ((L2NpcInstance) actor).getFactionId();
 
-			if(faction_id != npc.getFactionId())
+			if(!faction_id.equalsIgnoreCase(npc.getFactionId()))
 			{
 				continue;
 			}
 
 			faction_id = null;
 
-			if((npc.getAI().getIntention() == CtrlIntention.AI_INTENTION_IDLE || npc.getAI().getIntention() == CtrlIntention.AI_INTENTION_ACTIVE) && _actor.isInsideRadius(npc, npc.getFactionRange(), false, true) && npc.getTarget() == null && _attackTarget.isInsideRadius(npc, npc.getFactionRange(), false, true))
+			// Check if the L2Object is inside the Faction Range of the actor
+			if(npc.getAI() !=null && (npc.getAI().getIntention() == CtrlIntention.AI_INTENTION_IDLE 
+					|| npc.getAI().getIntention() == CtrlIntention.AI_INTENTION_ACTIVE) 
+					&& actor.isInsideRadius(npc, npc.getFactionRange(), false, true) 
+					&& target.isInsideRadius(npc, npc.getFactionRange(), false, true))
 			{
 				if(Config.GEODATA > 0)
 				{
-					if(GeoData.getInstance().canSeeTarget(npc, _attackTarget))
+					if(GeoData.getInstance().canSeeTarget(npc, target))
 					{
+						// Notify the L2Object AI with EVT_AGGRESSION
 						L2CharacterAI ai = npc.getAI();
-						if(ai != null)
-						{
-							ai.notifyEvent(CtrlEvent.EVT_AGGRESSION, _attackTarget, 1);
-						}
+						if(ai!=null)
+							ai.notifyEvent(CtrlEvent.EVT_AGGRESSION, target, 1);
 					}
 				}
 				else
 				{
-					if(!npc.isDead() && Math.abs(_attackTarget.getZ() - npc.getZ()) < 600)
+					if(!npc.isDead() && Math.abs(target.getZ() - npc.getZ()) < 600)
 					{
+						// Notify the L2Object AI with EVT_AGGRESSION
 						L2CharacterAI ai = npc.getAI();
-						if(ai != null)
-						{
-							ai.notifyEvent(CtrlEvent.EVT_AGGRESSION, _attackTarget, 1);
-						}
+						if(ai!=null)
+							ai.notifyEvent(CtrlEvent.EVT_AGGRESSION, target, 1);
 					}
 				}
 			}
@@ -567,18 +710,23 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 		}
 	}
 
+	/**
+	 * Manage AI thinking actions of a L2Attackable.<BR>
+	 * <BR>
+	 */
 	@Override
 	protected void onEvtThink()
 	{
-		if(_thinking)
-		{
+		// Check if the actor can't use skills and if a thinking action isn't already in progress
+		if(_thinking || _actor.isAllSkillsDisabled())
 			return;
-		}
 
+		// Start thinking action
 		_thinking = true;
 
 		try
 		{
+			// Manage AI thinks of a L2Attackable
 			if(getIntention() == AI_INTENTION_ACTIVE)
 			{
 				thinkActive();
@@ -590,27 +738,45 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 		}
 		finally
 		{
+			// Stop thinking action
 			_thinking = false;
 		}
 	}
 
+	/**
+	 * Launch actions corresponding to the Event Attacked.<BR>
+	 * <BR>
+	 * <B><U> Actions</U> :</B><BR>
+	 * <BR>
+	 * <li>Init the attack : Calculate the attack timeout, Set the _globalAggro to 0, Add the attacker to the actor
+	 * _aggroList</li> <li>Set the L2Character movement type to run and send Server->Client packet ChangeMoveType to all
+	 * others L2PcInstance</li> <li>Set the Intention to AI_INTENTION_ATTACK</li><BR>
+	 * <BR>
+	 * 
+	 * @param attacker The L2Character that attacks the actor
+	 */
 	@Override
 	protected void onEvtAttacked(L2Character attacker)
 	{
+		// Calculate the attack timeout
 		_attackTimeout = MAX_ATTACK_TIMEOUT + GameTimeController.getGameTicks();
 
+		// Set the _globalAggro to 0 to permit attack even just after spawn
 		if(_globalAggro < 0)
 		{
 			_globalAggro = 0;
 		}
 
+		// Add the attacker to the _aggroList of the actor
 		((L2Attackable) _actor).addDamageHate(attacker, 0, 1);
 
+		// Set the L2Character movement type to run and send Server->Client packet ChangeMoveType to all others L2PcInstance
 		if(!_actor.isRunning())
 		{
 			_actor.setRunning();
 		}
 
+		// Set the Intention to AI_INTENTION_ATTACK
 		if(getIntention() != AI_INTENTION_ATTACK)
 		{
 			setIntention(CtrlIntention.AI_INTENTION_ATTACK, attacker, null);
@@ -619,20 +785,32 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 		super.onEvtAttacked(attacker);
 	}
 
+	/**
+	 * Launch actions corresponding to the Event Aggression.<BR>
+	 * <BR>
+	 * <B><U> Actions</U> :</B><BR>
+	 * <BR>
+	 * <li>Add the target to the actor _aggroList or update hate if already present</li> <li>Set the actor Intention to
+	 * AI_INTENTION_ATTACK (if actor is L2GuardInstance check if it isn't too far from its home location)</li><BR>
+	 * <BR>
+	 * 
+	 * @param target The L2Character that attacks
+	 * @param aggro The value of hate to add to the actor against the target
+	 */
 	@Override
 	protected void onEvtAggression(L2Character target, int aggro)
 	{
 		if(_actor == null)
-		{
 			return;
-		}
 
 		L2Attackable me = (L2Attackable) _actor;
 
 		if(target != null)
 		{
+			// Add the target to the actor _aggroList or update hate if already present
 			me.addDamageHate(target, 0, aggro);
 
+			// Get the hate of the actor against the target
 			aggro = me.getHating(target);
 
 			if(aggro <= 0)
@@ -646,8 +824,10 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 				return;
 			}
 
+			// Set the actor AI Intention to AI_INTENTION_ATTACK
 			if(getIntention() != CtrlIntention.AI_INTENTION_ATTACK)
 			{
+				// Set the L2Character movement type to run and send Server->Client packet ChangeMoveType to all others L2PcInstance
 				if(!_actor.isRunning())
 				{
 					_actor.setRunning();
@@ -658,6 +838,7 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 				double homeX = target.getX() - sGuard.getHomeX();
 				double homeY = target.getY() - sGuard.getHomeY();
 
+				// Check if the L2SiegeGuardInstance is not too far from its home location
 				if(homeX * homeX + homeY * homeY < 3240000)
 				{
 					setIntention(CtrlIntention.AI_INTENTION_ATTACK, target, null);
@@ -668,10 +849,9 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 		}
 		else
 		{
+			// currently only for setting lower general aggro
 			if(aggro >= 0)
-			{
 				return;
-			}
 
 			L2Character mostHated = me.getMostHated();
 			if(mostHated == null)
@@ -679,6 +859,7 @@ public class L2SiegeGuardAI extends L2CharacterAI implements Runnable
 				_globalAggro = -25;
 				return;
 			}
+			
 			for(L2Character aggroed : me.getAggroListRP().keySet())
 			{
 				me.addDamageHate(aggroed, 0, aggro);

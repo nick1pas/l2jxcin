@@ -22,6 +22,7 @@ import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
+import net.xcine.gameserver.model.actor.instance.L2FortSiegeGuardInstance;
 import net.xcine.gameserver.model.actor.instance.L2SiegeGuardInstance;
 import net.xcine.gameserver.model.actor.position.L2CharPosition;
 import net.xcine.gameserver.thread.ThreadPoolManager;
@@ -199,6 +200,13 @@ public class L2DoorAI extends L2CharacterAI
 			_door.getKnownList().updateKnownObjects();
 
 			for(final L2SiegeGuardInstance guard : _door.getKnownSiegeGuards())
+			{
+				if(guard!=null && guard.getAI()!=null && _actor.isInsideRadius(guard, guard.getFactionRange(), false, true) && Math.abs(_attacker.getZ() - guard.getZ()) < 200)
+				{
+					guard.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, _attacker, 15);
+				}
+			}
+			for(final L2FortSiegeGuardInstance guard : _door.getKnownFortSiegeGuards())
 			{
 				if(guard!=null && guard.getAI()!=null && _actor.isInsideRadius(guard, guard.getFactionRange(), false, true) && Math.abs(_attacker.getZ() - guard.getZ()) < 200)
 				{

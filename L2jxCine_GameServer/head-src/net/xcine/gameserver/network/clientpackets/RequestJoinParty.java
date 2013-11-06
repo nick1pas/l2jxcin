@@ -21,11 +21,12 @@ package net.xcine.gameserver.network.clientpackets;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
-import net.xcine.gameserver.event.EventManager;
-import net.xcine.gameserver.event.LMS;
 import net.xcine.gameserver.model.L2Party;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.entity.event.CTF;
+import net.xcine.gameserver.model.entity.event.DM;
+import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.AskJoinParty;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
@@ -36,7 +37,6 @@ public final class RequestJoinParty extends L2GameClientPacket
 	
 	private String _name;
 	private int _itemDistribution;
-	private boolean _isInLMS;
 	
 	@Override
 	protected void readImpl()
@@ -50,7 +50,6 @@ public final class RequestJoinParty extends L2GameClientPacket
 	{
 		L2PcInstance requestor = getClient().getActiveChar();
 		L2PcInstance target = L2World.getInstance().getPlayer(_name);
-		_isInLMS = EventManager.getInstance().isRegistered(requestor) && EventManager.getInstance().getCurrentEvent() instanceof LMS;
 		
 		if (requestor == null)
 			return;
@@ -66,10 +65,16 @@ public final class RequestJoinParty extends L2GameClientPacket
 			requestor.sendPacket(new SystemMessage(SystemMessageId.TARGET_IS_INCORRECT));
 			return;
 		}
- 		
-		if(_isInLMS)
+		
+		if ((requestor._inEventDM && (DM.is_teleport() || DM.is_started())) || (target._inEventDM && (DM.is_teleport() || DM.is_started())))
 		{
-			requestor.sendMessage("You cannot make party in LMS");
+			requestor.sendMessage("You can't invite that player in party!");
+			return;
+		}
+		
+		if ((requestor._inEventTvT && !target._inEventTvT && (TvT.is_started() || TvT.is_teleport())) || (!requestor._inEventTvT && target._inEventTvT && (TvT.is_started() || TvT.is_teleport())) || (requestor._inEventCTF && !target._inEventCTF && (CTF.is_started() || CTF.is_teleport())) || (!requestor._inEventCTF && target._inEventCTF && (CTF.is_started() || CTF.is_teleport())))
+		{
+			requestor.sendMessage("You can't invite that player in party: you or your target are in Event");
 			return;
 		}
 		

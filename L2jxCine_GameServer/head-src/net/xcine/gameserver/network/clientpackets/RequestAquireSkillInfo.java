@@ -24,10 +24,10 @@ import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.xml.SkillSpellbookData;
 import net.xcine.gameserver.datatables.xml.SkillTreeData;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2PledgeSkillLearn;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2SkillLearn;
+import net.xcine.gameserver.model.actor.instance.L2FolkInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.serverpackets.AquireSkillInfo;
@@ -55,13 +55,13 @@ public class RequestAquireSkillInfo extends L2GameClientPacket
 		if(activeChar == null)
 			return;
 
-		L2NpcInstance trainer = activeChar.getLastFolkNPC();
+		L2FolkInstance trainer = activeChar.getLastFolkNPC();
 		if (trainer == null)
 		{
 			return;
 		}
 		
-		if (!activeChar.isGM() && !activeChar.isInsideRadius(trainer, L2Npc.INTERACTION_DISTANCE, false, false))
+		if (!activeChar.isGM() && !activeChar.isInsideRadius(trainer, L2NpcInstance.INTERACTION_DISTANCE, false, false))
 		{
 			return;
 		}

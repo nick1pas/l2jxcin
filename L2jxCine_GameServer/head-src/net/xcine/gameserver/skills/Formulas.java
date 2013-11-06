@@ -27,7 +27,6 @@ import net.xcine.gameserver.managers.SiegeManager;
 import net.xcine.gameserver.model.Inventory;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.L2Effect;
-import net.xcine.gameserver.model.L2Playable;
 import net.xcine.gameserver.model.L2SiegeClan;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2Skill.SkillType;
@@ -38,6 +37,7 @@ import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.entity.ClanHall;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSigns;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSignsFestival;
@@ -1908,7 +1908,7 @@ public final class Formulas
 			damage = damage * Config.ALT_NPC_MAGICAL_DAMAGE_MULTI;
 		}
 
-		if(target instanceof L2Playable)
+		if(target instanceof L2PlayableInstance)
 		{
 			damage *= skill.getPvpMulti();
 		}
@@ -3132,7 +3132,7 @@ public final class Formulas
 					return 0;
 		}
 		
-		final boolean isPvP = (attacker instanceof L2Playable) && (target instanceof L2Playable);
+		final boolean isPvP = (attacker instanceof L2PlayableInstance) && (target instanceof L2PlayableInstance);
 		double damage = attacker.getPAtk(target);
 		double defence = target.getPDef(attacker);
 		

@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 
-import net.xcine.gameserver.datatables.xml.MapRegionData;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.entity.siege.Castle;
 import net.xcine.gameserver.model.zone.type.L2TownZone;
@@ -69,7 +69,7 @@ public class TownManager
 
 	public final L2TownZone getClosestTown(L2Object activeObject)
 	{
-		switch(MapRegionData.getInstance().getMapRegion(activeObject.getPosition().getX(), activeObject.getPosition().getY()))
+		switch(MapRegionTable.getInstance().getMapRegion(activeObject.getPosition().getX(), activeObject.getPosition().getY()))
 		{
 			case 0:
 				return getTown(2); // TI
@@ -116,7 +116,7 @@ public class TownManager
 	
 	public final static int getClosestLocation(L2Object activeObject)
 	{
-		switch (MapRegionData.getInstance().getMapRegion(activeObject.getPosition().getX(), activeObject.getPosition().getY()))
+		switch (MapRegionTable.getInstance().getMapRegion(activeObject.getPosition().getX(), activeObject.getPosition().getY()))
 		{
 			case 0:	return 1; // TI
 			case 1: return 4; // Elven
@@ -159,7 +159,7 @@ public class TownManager
 
 	public final boolean townHasCastleInSiege(int x, int y)
 	{
-		int curtown = MapRegionData.getInstance().getMapRegion(x, y);
+		int curtown = MapRegionTable.getInstance().getMapRegion(x, y);
 		//int[] castleidarray = {0,0,0,0,0,1,0,2,3,4,5,0,0,6,0,0,0,0};
 		int[] castleidarray =
 		{

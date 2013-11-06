@@ -1,5 +1,4 @@
-/*
- * This program is free software; you can redistribute it and/or modify
+/* This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
  * any later version.
@@ -18,57 +17,45 @@
  */
 package net.xcine.gameserver.model.actor.stat;
 
-import net.xcine.Config;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
-import net.xcine.gameserver.model.L2Playable;
-import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 
 public class PlayableStat extends CharStat
 {
-	public PlayableStat(L2Playable activeChar)
+	public PlayableStat(L2PlayableInstance activeChar)
 	{
 		super(activeChar);
 	}
-
+	
 	public boolean addExp(long value)
 	{
-		if(getExp() + value < 0)
-		{
+		if ((getExp() + value) < 0 || (value > 0 && getExp() == getExpForLevel(ExperienceData.getInstance().getMaxLevel()) - 1))
 			return true;
-		}
-
-		if(Config.DISABLE_LOST_EXP)
+		
+		if (getExp() + value >= getExpForLevel(ExperienceData.getInstance().getMaxLevel()))
 		{
-			if(getExp() == getExpForLevel(ExperienceData.MAX_LEVEL) - 1)
-			{
-				return true;
-			}
+			value = getExpForLevel(ExperienceData.getInstance().getMaxLevel()) - 1 - getExp();
 		}
-
-		if(getExp() + value >= getExpForLevel(ExperienceData.MAX_LEVEL))
-		{
-			value = getExpForLevel(ExperienceData.MAX_LEVEL) - 1 - getExp();
-		}
-
+		
 		setExp(getExp() + value);
-
+		
 		byte level = 1;
-
-		for(level = 1; level <= ExperienceData.MAX_LEVEL; level++)
+		
+		for (level = 1; level <= ExperienceData.getInstance().getMaxLevel(); level++)
 		{
-			if(getExp() >= getExpForLevel(level))
+			if (getExp() >= getExpForLevel(level))
 			{
 				continue;
 			}
 			--level;
 			break;
 		}
-
-		if(level != getLevel())
+		
+		if (level != getLevel())
 		{
 			addLevel((byte) (level - getLevel()));
 		}
-
+		
 		return true;
 	}
 
@@ -83,7 +70,7 @@ public class PlayableStat extends CharStat
 
 		byte level = 0;
 
-		for(level = 1; level <= ExperienceData.MAX_LEVEL; level++)
+		for(level = 1; level <= ExperienceData.getInstance().getMaxLevel(); level++)
 		{
 			if(getExp() >= getExpForLevel(level))
 			{
@@ -140,11 +127,11 @@ public class PlayableStat extends CharStat
 
 	public boolean addLevel(byte value)
 	{
-		if(getLevel() + value > ExperienceData.MAX_LEVEL - 1)
+		if(getLevel() + value > ExperienceData.getInstance().getMaxLevel() - 1)
 		{
-			if(getLevel() < ExperienceData.MAX_LEVEL - 1)
+			if(getLevel() < ExperienceData.getInstance().getMaxLevel() - 1)
 			{
-				value = (byte) (ExperienceData.MAX_LEVEL - 1 - getLevel());
+				value = (byte) (ExperienceData.getInstance().getMaxLevel() - 1 - getLevel());
 			}
 			else
 				return false;
@@ -154,20 +141,14 @@ public class PlayableStat extends CharStat
 		value += getLevel();
 		setLevel(value);
 
+		// Sync up exp with current level
 		if(getExp() >= getExpForLevel(getLevel() + 1) || getExpForLevel(getLevel()) > getExp())
 		{
 			setExp(getExpForLevel(getLevel()));
 		}
 
-		if(!levelIncreased && getActiveChar() instanceof L2PcInstance && Config.CHECK_SKILLS_DELEVEL && !((L2PcInstance)(getActiveChar())).isGM())
-		{
-			((L2PcInstance)(getActiveChar())).checkPlayerSkills();
-		}
-
 		if(!levelIncreased)
-		{
 			return false;
-		}
 
 		getActiveChar().getStatus().setCurrentHp(getActiveChar().getStat().getMaxHp());
 		getActiveChar().getStatus().setCurrentMp(getActiveChar().getStat().getMaxMp());
@@ -186,9 +167,7 @@ public class PlayableStat extends CharStat
 		int currentSp = getSp();
 
 		if(currentSp == Integer.MAX_VALUE)
-		{
 			return false;
-		}
 
 		if(currentSp > Integer.MAX_VALUE - value)
 		{
@@ -218,11 +197,10 @@ public class PlayableStat extends CharStat
 	{
 		return level;
 	}
-
+	
 	@Override
-	public L2Playable getActiveChar()
+	public L2PlayableInstance getActiveChar()
 	{
-		return (L2Playable) super.getActiveChar();
+		return (L2PlayableInstance) super.getActiveChar();
 	}
-
 }

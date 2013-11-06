@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
-import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.handler.ItemHandler;
 import net.xcine.gameserver.managers.CastleManager;
@@ -141,10 +140,6 @@ public final class UseItem extends L2GameClientPacket
 			activeChar.sendMessage("Blessed Scroll of Escape: Castle cannot be used due to unsuitable terms.");
 			return;
 		}
- 		
-		if(EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(activeChar)) 
-			if(!EventManager.getInstance().getCurrentEvent().onUseItem(activeChar,item)) 
-				return;
 		
 		if (activeChar.isFishing() && (itemId < 6535 || itemId > 6540))
 		{
@@ -274,10 +269,17 @@ public final class UseItem extends L2GameClientPacket
 			int bodyPart = item.getItem().getBodyPart();
 			
 			// Like L2OFF you can't use equips while you are casting
-			if ((activeChar.isCastingNow() || activeChar.isCastingPotionNow() || activeChar.isMounted()))
+			if ((activeChar.isCastingNow() || activeChar.isCastingPotionNow() || activeChar.isMounted() || (activeChar._inEventCTF && activeChar._haveFlagCTF)))
 			{
+				if (activeChar._inEventCTF && activeChar._haveFlagCTF)
+				{
+					activeChar.sendMessage("This item can not be equipped when you have the flag.");
+				}
+				else
+				{
 					SystemMessage sm = new SystemMessage(SystemMessageId.CANNOT_USE_ITEM_WHILE_USING_MAGIC);
 				    activeChar.sendPacket(sm);
+				}
 				return;
 			}
 

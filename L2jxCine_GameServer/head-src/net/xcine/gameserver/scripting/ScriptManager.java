@@ -18,11 +18,13 @@
  */
 package net.xcine.gameserver.scripting;
 
+/**
+ * @author KenM
+ * @param <S> 
+ */
 public abstract class ScriptManager<S extends ManagedScript>
 {
 	public abstract Iterable<S> getAllManagedScripts();
-
-	public abstract String getScriptManagerName();
 
 	public boolean reload(S ms)
 	{
@@ -39,4 +41,5 @@ public abstract class ScriptManager<S extends ManagedScript>
 		ms.setActive(status);
 	}
 
+	public abstract String getScriptManagerName();
 }

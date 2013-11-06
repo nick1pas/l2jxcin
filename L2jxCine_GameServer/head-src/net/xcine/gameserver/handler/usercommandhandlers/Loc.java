@@ -18,7 +18,7 @@
  */
 package net.xcine.gameserver.handler.usercommandhandlers;
 
-import net.xcine.gameserver.datatables.xml.MapRegionData;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.handler.IUserCommandHandler;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.SystemMessageId;
@@ -41,7 +41,7 @@ public class Loc implements IUserCommandHandler
 	@Override
 	public boolean useUserCommand(int id, L2PcInstance activeChar)
 	{
-		int _nearestTown = MapRegionData.getInstance().getClosestTownNumber(activeChar);
+		int _nearestTown = MapRegionTable.getInstance().getClosestTownNumber(activeChar);
 		SystemMessageId msg;
 
 		switch(_nearestTown)

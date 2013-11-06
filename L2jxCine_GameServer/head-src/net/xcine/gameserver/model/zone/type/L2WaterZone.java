@@ -17,7 +17,6 @@ package net.xcine.gameserver.model.zone.type;
 import java.util.Collection;
 
 import net.xcine.gameserver.model.L2Character;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.zone.L2ZoneType;
@@ -46,7 +45,7 @@ public class L2WaterZone extends L2ZoneType
 			{
 				for(L2PcInstance player : plrs)
 				{
-					player.sendPacket(new NpcInfo((L2Npc) character, player));
+					player.sendPacket(new NpcInfo((L2NpcInstance) character, player));
 				}
 			}
 		}
@@ -81,7 +80,7 @@ public class L2WaterZone extends L2ZoneType
 			{
 				for(L2PcInstance player : plrs)
 				{
-					player.sendPacket(new NpcInfo((L2Npc) character, player));
+					player.sendPacket(new NpcInfo((L2NpcInstance) character, player));
 				}
 			}
 

@@ -26,8 +26,6 @@ import net.xcine.gameserver.GameServer;
 import net.xcine.gameserver.handler.skillhandlers.BalanceLife;
 import net.xcine.gameserver.handler.skillhandlers.BeastFeed;
 import net.xcine.gameserver.handler.skillhandlers.Blow;
-import net.xcine.gameserver.handler.skillhandlers.Bomb;
-import net.xcine.gameserver.handler.skillhandlers.Capture;
 import net.xcine.gameserver.handler.skillhandlers.Charge;
 import net.xcine.gameserver.handler.skillhandlers.ClanGate;
 import net.xcine.gameserver.handler.skillhandlers.CombatPointHeal;
@@ -121,8 +119,6 @@ public class SkillHandler
 		registerSkillHandler(new GetPlayer());
 		registerSkillHandler(new ZakenPlayer());
 		registerSkillHandler(new ZakenSelf());
-		registerSkillHandler(new Bomb());
-		registerSkillHandler(new Capture());
 		_log.config("SkillHandler: Loaded " + _datatable.size() + " handlers.");
 		
 	}

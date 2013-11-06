@@ -31,6 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import javolution.util.FastMap;
 import net.xcine.Config;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.model.actor.instance.L2DoorInstance;
@@ -176,7 +177,7 @@ public class DoorData
 								door.setRange(rangeXMin, rangeYMin, rangeZMin, rangeXMax, rangeYMax, rangeZMax);
 								try
 								{
-									door.setMapRegion(MapRegionData.getInstance().getMapRegion(x, y));
+									door.setMapRegion(MapRegionTable.getInstance().getMapRegion(x, y));
 								}
 								catch(Exception e)
 								{
@@ -323,7 +324,7 @@ public class DoorData
 		template = null;
 		try
 		{
-			door.setMapRegion(MapRegionData.getInstance().getMapRegion(x, y));
+			door.setMapRegion(MapRegionTable.getInstance().getMapRegion(x, y));
 		}
 		catch(Exception e)
 		{

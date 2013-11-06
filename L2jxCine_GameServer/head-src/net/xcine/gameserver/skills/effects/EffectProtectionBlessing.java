@@ -18,7 +18,7 @@
 package net.xcine.gameserver.skills.effects;
 
 import net.xcine.gameserver.model.L2Effect;
-import net.xcine.gameserver.model.L2Playable;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.skills.Env;
 
 /**
@@ -41,9 +41,9 @@ public class EffectProtectionBlessing extends L2Effect
 	@Override
 	public void onStart()
 	{
-		if(getEffected() instanceof L2Playable)
+		if(getEffected() instanceof L2PlayableInstance)
 		{
-			((L2Playable) getEffected()).startProtectionBlessing();
+			((L2PlayableInstance) getEffected()).startProtectionBlessing(this);
 		}
 	}
 
@@ -51,9 +51,9 @@ public class EffectProtectionBlessing extends L2Effect
 	@Override
 	public void onExit()
 	{
-		if(getEffected() instanceof L2Playable)
+		if(getEffected() instanceof L2PlayableInstance)
 		{
-			((L2Playable) getEffected()).stopProtectionBlessing(this);
+			((L2PlayableInstance) getEffected()).stopProtectionBlessing(this);
 		}
 	}
 

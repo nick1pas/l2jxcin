@@ -24,6 +24,7 @@ import net.xcine.gameserver.model.zone.type.L2ArenaZone;
 
 public class ArenaManager
 {
+	// =========================================================
 	private static ArenaManager _instance;
 
 	public static final ArenaManager getInstance()
@@ -36,10 +37,19 @@ public class ArenaManager
 		return _instance;
 	}
 
+	// =========================================================
+
+	// =========================================================
+	// Data Field
 	private FastList<L2ArenaZone> _arenas;
 
+	// =========================================================
+	// Constructor
 	public ArenaManager()
 	{}
+
+	// =========================================================
+	// Property - Public
 
 	public void addArena(L2ArenaZone arena)
 	{
@@ -59,6 +69,7 @@ public class ArenaManager
 				if(temp.isCharacterInZone(character))
 					return temp;
 		}
+
 		return null;
 	}
 
@@ -70,6 +81,7 @@ public class ArenaManager
 				if(temp.isInsideZone(x, y, z))
 					return temp;
 		}
+
 		return null;
 	}
 }

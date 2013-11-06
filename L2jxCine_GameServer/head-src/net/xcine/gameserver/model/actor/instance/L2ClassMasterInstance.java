@@ -41,7 +41,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  * 
  * @version $Revision: 1.4.2.1.2.7 $ $Date: 2005/03/27 15:29:32 $
  */
-public final class L2ClassMasterInstance extends L2NpcInstance
+public final class L2ClassMasterInstance extends L2FolkInstance
 {
 	
 	/** The _instance. */

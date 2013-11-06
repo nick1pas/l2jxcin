@@ -21,6 +21,7 @@ package net.xcine.gameserver.script;
 import net.xcine.gameserver.controllers.GameTimeController;
 import net.xcine.gameserver.controllers.RecipeController;
 import net.xcine.gameserver.datatables.SkillTable;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.sql.CharNameTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
@@ -28,7 +29,6 @@ import net.xcine.gameserver.datatables.sql.LevelUpData;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.CharTemplateData;
-import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.datatables.xml.SkillTreeData;
 import net.xcine.gameserver.datatables.xml.TeleportLocationData;
 import net.xcine.gameserver.idfactory.IdFactory;
@@ -62,7 +62,7 @@ public interface EngineInterface
 	public SpawnTable spawnTable = SpawnTable.getInstance();
 	public GameTimeController gameTimeController = GameTimeController.getInstance();
 	public Announcements announcements = Announcements.getInstance();
-	public MapRegionData mapRegions = MapRegionData.getInstance();
+	public MapRegionTable mapRegions = MapRegionTable.getInstance();
 
 	//public ArrayList getAllPlayers();
 	//public Player getPlayer(String characterName);

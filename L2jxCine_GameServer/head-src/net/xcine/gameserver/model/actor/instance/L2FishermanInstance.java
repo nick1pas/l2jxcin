@@ -21,6 +21,7 @@ package net.xcine.gameserver.model.actor.instance;
 import java.util.StringTokenizer;
 
 import javolution.text.TextBuilder;
+
 import net.xcine.Config;
 import net.xcine.gameserver.controllers.TradeController;
 import net.xcine.gameserver.datatables.SkillTable;
@@ -37,7 +38,7 @@ import net.xcine.gameserver.network.serverpackets.SellList;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 
-public class L2FishermanInstance extends L2NpcInstance
+public class L2FishermanInstance extends L2FolkInstance
 {
 	/**
 	 * @param objectId

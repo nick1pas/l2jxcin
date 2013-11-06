@@ -17,7 +17,7 @@
  */
 package net.xcine.gameserver.model.zone.type;
 
-import net.xcine.gameserver.datatables.xml.MapRegionData.TeleportWhereType;
+import net.xcine.gameserver.datatables.csv.MapRegionTable.TeleportWhereType;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.zone.L2ZoneType;

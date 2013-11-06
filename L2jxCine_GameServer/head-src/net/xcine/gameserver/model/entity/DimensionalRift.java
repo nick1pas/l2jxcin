@@ -22,14 +22,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javolution.util.FastList;
+
 import net.xcine.Config;
 import net.xcine.gameserver.managers.DimensionalRiftManager;
 import net.xcine.gameserver.managers.DimensionalRiftManager.DimensionalRiftRoom;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Party;
+import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.util.random.Rnd;
 
+/**
+ * Thanks to L2Fortress and balancer.ru - kombat
+ */
 public class DimensionalRift
 {
 	protected byte _type;
@@ -109,12 +113,10 @@ public class DimensionalRift
 					_choosenRoom = -1;
 
 					for(L2PcInstance p : _party.getPartyMembers())
-					{
 						if(!revivedInWaitingRoom.contains(p))
 						{
 							teleportToNextRoom(p);
 						}
-					}
 
 					createTeleporterTimer(true);
 					createSpawnTimer(_choosenRoom);
@@ -122,12 +124,10 @@ public class DimensionalRift
 				else
 				{
 					for(L2PcInstance p : _party.getPartyMembers())
-					{
 						if(!revivedInWaitingRoom.contains(p))
 						{
 							teleportToWaitingRoom(p);
 						}
-					}
 
 					killRift();
 					cancel();
@@ -137,11 +137,11 @@ public class DimensionalRift
 
 		if(reasonTP)
 		{
-			teleporterTimer.schedule(teleporterTimerTask, calcTimeToNextJump());
+			teleporterTimer.schedule(teleporterTimerTask, calcTimeToNextJump()); //Teleporter task, 8-10 minutes
 		}
 		else
 		{
-			teleporterTimer.schedule(teleporterTimerTask, seconds_5);
+			teleporterTimer.schedule(teleporterTimerTask, seconds_5); //incorrect party member invited.
 		}
 	}
 
@@ -203,24 +203,23 @@ public class DimensionalRift
 		}
 	}
 
-	public void manualTeleport(L2PcInstance player, L2Npc npc)
+	public void manualTeleport(L2PcInstance player, L2NpcInstance npc)
 	{
 		if(!player.isInParty() || !player.getParty().isInDimensionalRift())
-		{
 			return;
-		}
 
 		if(player.getObjectId() != player.getParty().getPartyLeaderOID())
 		{
-			DimensionalRiftManager.getInstance().showHtmlFile(player, "data/html/sevensigns/rift/NotPartyLeader.htm", npc);
+			DimensionalRiftManager.getInstance().showHtmlFile(player, "data/html/seven_signs/rift/NotPartyLeader.htm", npc);
 			return;
 		}
 
 		if(_hasJumped)
 		{
-			DimensionalRiftManager.getInstance().showHtmlFile(player, "data/html/sevensigns/rift/AlreadyTeleported.htm", npc);
+			DimensionalRiftManager.getInstance().showHtmlFile(player, "data/html/seven_signs/rift/AlreadyTeleported.htm", npc);
 			return;
 		}
+		
 		_hasJumped = true;
 
 		DimensionalRiftManager.getInstance().getRoom(_type, _choosenRoom).unspawn();
@@ -236,16 +235,14 @@ public class DimensionalRift
 		createTeleporterTimer(true);
 	}
 
-	public void manualExitRift(L2PcInstance player, L2Npc npc)
+	public void manualExitRift(L2PcInstance player, L2NpcInstance npc)
 	{
 		if(!player.isInParty() || !player.getParty().isInDimensionalRift())
-		{
 			return;
-		}
 
 		if(player.getObjectId() != player.getParty().getPartyLeaderOID())
 		{
-			DimensionalRiftManager.getInstance().showHtmlFile(player, "data/html/sevensigns/rift/NotPartyLeader.htm", npc);
+			DimensionalRiftManager.getInstance().showHtmlFile(player, "data/html/seven_signs/rift/NotPartyLeader.htm", npc);
 			return;
 		}
 
@@ -260,7 +257,7 @@ public class DimensionalRift
 	protected void teleportToNextRoom(L2PcInstance player)
 	{
 		if(_choosenRoom == -1)
-		{
+		{ //Do not tp in the same room a second time and do not tp in the busy room
 			do
 			{
 				_choosenRoom = (byte) Rnd.get(1, 9);
@@ -341,9 +338,7 @@ public class DimensionalRift
 		int time = Rnd.get(Config.RIFT_AUTO_JUMPS_TIME_MIN, Config.RIFT_AUTO_JUMPS_TIME_MAX) * 1000;
 
 		if(isBossRoom)
-		{
 			return (long) (time * Config.RIFT_BOSS_ROOM_TIME_MUTIPLY);
-		}
 		return time;
 	}
 
@@ -377,13 +372,15 @@ public class DimensionalRift
 
 		if(_party.getMemberCount() - revivedInWaitingRoom.size() < Config.RIFT_MIN_PARTY_SIZE)
 		{
+			//int pcm = _party.getMemberCount();
+			//int rev = revivedInWaitingRoom.size();
+			//int min = Config.RIFT_MIN_PARTY_SIZE;
+
 			for(L2PcInstance p : _party.getPartyMembers())
-			{
 				if(!revivedInWaitingRoom.contains(p))
 				{
 					teleportToWaitingRoom(p);
 				}
-			}
 
 			killRift();
 		}
@@ -412,10 +409,7 @@ public class DimensionalRift
 	public byte getMaxJumps()
 	{
 		if(Config.RIFT_MAX_JUMPS <= 8 && Config.RIFT_MAX_JUMPS >= 1)
-		{
 			return (byte) Config.RIFT_MAX_JUMPS;
-		}
 		return 4;
 	}
-
 }

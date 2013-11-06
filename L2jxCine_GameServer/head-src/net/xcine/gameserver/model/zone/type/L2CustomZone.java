@@ -64,7 +64,7 @@ public class L2CustomZone extends L2ZoneType
 			L2PcInstance player = (L2PcInstance) character;
 			if(!player.isGM() && player.isFlying() && !player.isInJail() && !_IsFlyingEnable)
 			{
-				player.teleToLocation(net.xcine.gameserver.datatables.xml.MapRegionData.TeleportWhereType.Town);
+				player.teleToLocation(net.xcine.gameserver.datatables.csv.MapRegionTable.TeleportWhereType.Town);
 			}
 
 			if(_zoneName.equalsIgnoreCase("tradeoff"))

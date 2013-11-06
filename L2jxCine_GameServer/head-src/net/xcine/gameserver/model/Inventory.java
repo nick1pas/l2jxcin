@@ -27,8 +27,8 @@ import javolution.util.FastList;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
+import net.xcine.gameserver.datatables.sql.ArmorSetsTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
-import net.xcine.gameserver.datatables.xml.ArmorSetsData;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance.ItemLocation;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -439,7 +439,7 @@ public abstract class Inventory extends ItemContainer
 				return;
 
 			// checks if there is armorset for chest item that player worns
-			L2ArmorSet armorSet = ArmorSetsData.getInstance().getSet(chestItem.getItemId());
+			L2ArmorSet armorSet = ArmorSetsTable.getInstance().getSet(chestItem.getItemId());
 			if(armorSet == null)
 				return;
 
@@ -538,7 +538,7 @@ public abstract class Inventory extends ItemContainer
 
 			if(slot == PAPERDOLL_CHEST)
 			{
-				L2ArmorSet armorSet = ArmorSetsData.getInstance().getSet(item.getItemId());
+				L2ArmorSet armorSet = ArmorSetsTable.getInstance().getSet(item.getItemId());
 				if(armorSet == null)
 					return;
 
@@ -555,7 +555,7 @@ public abstract class Inventory extends ItemContainer
 				if(chestItem == null)
 					return;
 
-				L2ArmorSet armorSet = ArmorSetsData.getInstance().getSet(chestItem.getItemId());
+				L2ArmorSet armorSet = ArmorSetsTable.getInstance().getSet(chestItem.getItemId());
 				if(armorSet == null)
 					return;
 

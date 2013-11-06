@@ -19,8 +19,10 @@
 package net.xcine.gameserver.network.clientpackets;
 
 import net.xcine.gameserver.managers.CastleManager;
+import net.xcine.gameserver.managers.FortManager;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.siege.Castle;
+import net.xcine.gameserver.model.entity.siege.Fort;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 
@@ -82,6 +84,37 @@ public final class RequestJoinSiege extends L2GameClientPacket
 			}
 
 			castle.getSiege().listRegisterClan(player);
+		}
+		else
+		{
+			final Fort fort = FortManager.getInstance().getFortById(_castleId);
+
+			if(fort == null)
+				return;
+
+			if(_isJoining == 1)
+			{
+				if(System.currentTimeMillis() < player.getClan().getDissolvingExpiryTime())
+				{
+					player.sendPacket(new SystemMessage(SystemMessageId.CANT_PARTICIPATE_IN_SIEGE_WHILE_DISSOLUTION_IN_PROGRESS));
+					return;
+				}
+
+				if(_isAttacker == 1)
+				{
+					fort.getSiege().registerAttacker(player);
+				}
+				else
+				{
+					fort.getSiege().registerDefender(player);
+				}
+			}
+			else
+			{
+				fort.getSiege().removeSiegeClan(player);
+			}
+
+			fort.getSiege().listRegisterClan(player);
 		}
 	}
 	

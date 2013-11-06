@@ -20,7 +20,6 @@ package net.xcine.gameserver.network.clientpackets;
 
 import net.xcine.Config;
 import net.xcine.gameserver.cache.HtmCache;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.actor.instance.L2FishermanInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
@@ -99,7 +98,7 @@ public final class RequestSellItem extends L2GameClientPacket
 		L2Object target = player.getTarget();
 		if(!player.isGM() && (target == null // No target (ie GM Shop)
 				|| !(target instanceof L2MerchantInstance) // Target not a merchant and not mercmanager
-		|| !player.isInsideRadius(target, L2Npc.INTERACTION_DISTANCE, false, false)))
+		|| !player.isInsideRadius(target, L2NpcInstance.INTERACTION_DISTANCE, false, false)))
 			return; // Distance is too far
 		
 		String htmlFolder = "";

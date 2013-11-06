@@ -19,7 +19,7 @@
 package net.xcine.gameserver.handler.skillhandlers;
 
 import net.xcine.Config;
-import net.xcine.gameserver.datatables.xml.MapRegionData;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.handler.ISkillHandler;
 import net.xcine.gameserver.managers.GrandBossManager;
 import net.xcine.gameserver.model.L2Character;
@@ -27,6 +27,9 @@ import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2Skill.SkillType;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.entity.event.CTF;
+import net.xcine.gameserver.model.entity.event.DM;
+import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
@@ -91,7 +94,7 @@ public class Recall implements ISkillHandler
 						continue;
 					}
 					
-					if ((targetChar._inEventVIP && VIP._started))
+					if ((targetChar._inEventCTF && CTF.is_started()) || (targetChar._inEventTvT && TvT.is_started()) || (targetChar._inEventDM && DM.is_started()) || (targetChar._inEventVIP && VIP._started))
 					{
 						targetChar.sendMessage("You can't use escape skill in Event.");
 						continue;
@@ -153,7 +156,7 @@ public class Recall implements ISkillHandler
 					}
 				}
 				
-				target.teleToLocation(MapRegionData.TeleportWhereType.Town);
+				target.teleToLocation(MapRegionTable.TeleportWhereType.Town);
 				target = null;
 			}
 		}

@@ -30,13 +30,14 @@ import net.xcine.gameserver.communitybbs.Manager.RegionBBSManager;
 import net.xcine.gameserver.controllers.GameTimeController;
 import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.datatables.SkillTable;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.xml.AdminCommandAccessRightsData;
-import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.ClanHallManager;
 import net.xcine.gameserver.managers.CoupleManager;
 import net.xcine.gameserver.managers.CrownManager;
 import net.xcine.gameserver.managers.DimensionalRiftManager;
+import net.xcine.gameserver.managers.FortSiegeManager;
 import net.xcine.gameserver.managers.PetitionManager;
 import net.xcine.gameserver.managers.SiegeManager;
 import net.xcine.gameserver.model.Inventory;
@@ -55,10 +56,14 @@ import net.xcine.gameserver.model.entity.Announcements;
 import net.xcine.gameserver.model.entity.ClanHall;
 import net.xcine.gameserver.model.entity.Hero;
 import net.xcine.gameserver.model.entity.Wedding;
+import net.xcine.gameserver.model.entity.event.CTF;
+import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.L2Event;
+import net.xcine.gameserver.model.entity.event.TvT;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSigns;
 import net.xcine.gameserver.model.entity.siege.Castle;
+import net.xcine.gameserver.model.entity.siege.FortSiege;
 import net.xcine.gameserver.model.entity.siege.Siege;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.quest.QuestState;
@@ -367,7 +372,7 @@ public class EnterWorld extends L2GameClientPacket
 
 		if (Olympiad.getInstance().playerInStadia(activeChar))
 		{
-			activeChar.teleToLocation(MapRegionData.TeleportWhereType.Town);
+			activeChar.teleToLocation(MapRegionTable.TeleportWhereType.Town);
 			activeChar.sendMessage("You have been teleported to the nearest town due to you being in an Olympiad Stadium");
 		}
 
@@ -398,6 +403,23 @@ public class EnterWorld extends L2GameClientPacket
 				}
 			}
 
+			for (FortSiege fortsiege : FortSiegeManager.getInstance().getSieges())
+			{
+				if (!fortsiege.getIsInProgress())
+					continue;
+
+				if (fortsiege.checkIsAttacker(activeChar.getClan()))
+				{
+					activeChar.setSiegeState((byte) 1);
+					break;
+				}
+				else if (fortsiege.checkIsDefender(activeChar.getClan()))
+				{
+					activeChar.setSiegeState((byte) 2);
+					break;
+				}
+			}
+
 			// Add message at connexion if clanHall not paid. Possibly this is custom...
 			ClanHall clanHall = ClanHallManager.getInstance().getClanHallByOwner(activeChar.getClan());
 
@@ -409,11 +431,20 @@ public class EnterWorld extends L2GameClientPacket
 		if (!activeChar.isGM() && activeChar.getSiegeState() < 2 && activeChar.isInsideZone(L2Character.ZONE_SIEGE))
 		{
 			// Attacker or spectator logging in to a siege zone. Actually should be checked for inside castle only?
-			activeChar.teleToLocation(MapRegionData.TeleportWhereType.Town);
+			activeChar.teleToLocation(MapRegionTable.TeleportWhereType.Town);
 			activeChar.sendMessage("You have been teleported to the nearest town due to you being in siege zone");
 		}
 
 		RegionBBSManager.getInstance().changeCommunityBoard();
+
+		if (TvT._savePlayers.contains(activeChar.getName()))
+			TvT.addDisconnectedPlayer(activeChar);
+
+		if (CTF._savePlayers.contains(activeChar.getName()))
+			CTF.addDisconnectedPlayer(activeChar);
+
+		if (DM._savePlayers.contains(activeChar.getName()))
+			DM.addDisconnectedPlayer(activeChar);
 
 		// Means that it's not ok multiBox situation, so logout
 		if (!activeChar.checkMultiBox())

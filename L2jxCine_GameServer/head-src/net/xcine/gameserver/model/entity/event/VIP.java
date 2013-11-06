@@ -901,7 +901,9 @@ public class VIP
 	}
 	
 	public static void onDisconnect(L2PcInstance player){
-
+		
+		if(player._inEventTvT){
+			
 			player.getAppearance().setNameColor(player._originalNameColourVIP);
 			player.setKarma(player._originalKarmaVIP);
 			player.broadcastUserInfo();
@@ -911,4 +913,5 @@ public class VIP
 			player._isVIP = false;
 			player.teleToLocation(_startX, _startY, _startZ);
 		}
+	}
 }

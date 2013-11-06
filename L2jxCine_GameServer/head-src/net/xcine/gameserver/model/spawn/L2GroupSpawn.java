@@ -1,5 +1,4 @@
-/*
- * This program is free software; you can redistribute it and/or modify
+/* This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
  * any later version.
@@ -19,18 +18,19 @@
 package net.xcine.gameserver.model.spawn;
 
 import java.lang.reflect.Constructor;
-import java.util.logging.Logger;
 
+import net.xcine.Config;
 import net.xcine.gameserver.datatables.xml.TerritoryData;
 import net.xcine.gameserver.idfactory.IdFactory;
-import net.xcine.gameserver.model.L2Npc;
+import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.util.random.Rnd;
 
+/**
+ * @author littlecrow A special spawn implementation to spawn controllable mob
+ */
 public class L2GroupSpawn extends L2Spawn
 {
-	private static final Logger _log = Logger.getLogger(L2GroupSpawn.class.getName());
-
 	private Constructor<?> _constructor;
 	private L2NpcTemplate _template;
 
@@ -43,16 +43,14 @@ public class L2GroupSpawn extends L2Spawn
 		setAmount(1);
 	}
 
-	public L2Npc doGroupSpawn()
+	public L2NpcInstance doGroupSpawn()
 	{
-		L2Npc mob = null;
+		L2NpcInstance mob = null;
 
 		try
 		{
 			if(_template.type.equalsIgnoreCase("L2Pet") || _template.type.equalsIgnoreCase("L2Minion"))
-			{
 				return null;
-			}
 
 			Object[] parameters =
 			{
@@ -60,21 +58,17 @@ public class L2GroupSpawn extends L2Spawn
 			};
 			Object tmp = _constructor.newInstance(parameters);
 
-			if(!(tmp instanceof L2Npc))
-			{
+			if(!(tmp instanceof L2NpcInstance))
 				return null;
-			}
 
-			mob = (L2Npc) tmp;
+			mob = (L2NpcInstance) tmp;
 
 			int newlocx, newlocy, newlocz;
 
 			if(getLocx() == 0 && getLocy() == 0)
 			{
 				if(getLocation() == 0)
-				{
 					return null;
-				}
 
 				int p[] = TerritoryData.getInstance().getRandomPoint(getLocation());
 				newlocx = p[0];
@@ -103,12 +97,23 @@ public class L2GroupSpawn extends L2Spawn
 			mob.spawnMe(newlocx, newlocy, newlocz);
 			mob.onSpawn();
 
+			if(Config.DEBUG)
+			{
+				_log.finest("spawned Mob ID: " + _template.npcId + " ,at: " + mob.getX() + " x, " + mob.getY() + " y, " + mob.getZ() + " z");
+			}
+
+			parameters = null;
+			tmp = null;
+
 			return mob;
 
 		}
 		catch(Exception e)
 		{
-			_log.warning("NPC class not found");
+			if(Config.ENABLE_ALL_EXCEPTIONS)
+				e.printStackTrace();
+			
+			_log.warning("NPC class not found: " + e);
 			return null;
 		}
 	}

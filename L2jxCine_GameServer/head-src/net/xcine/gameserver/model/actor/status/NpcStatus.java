@@ -1,5 +1,4 @@
-/*
- * This program is free software; you can redistribute it and/or modify
+/* This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
  * any later version.
@@ -19,15 +18,22 @@
 package net.xcine.gameserver.model.actor.status;
 
 import net.xcine.gameserver.model.L2Character;
-import net.xcine.gameserver.model.L2Npc;
+import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 
 public class NpcStatus extends CharStatus
 {
-	public NpcStatus(L2Npc activeChar)
+	// =========================================================
+	// Data Field
+
+	// =========================================================
+	// Constructor
+	public NpcStatus(L2NpcInstance activeChar)
 	{
 		super(activeChar);
 	}
 
+	// =========================================================
+	// Method - Public
 	@Override
 	public final void reduceHp(double value, L2Character attacker)
 	{
@@ -38,10 +44,9 @@ public class NpcStatus extends CharStatus
 	public final void reduceHp(double value, L2Character attacker, boolean awake)
 	{
 		if(getActiveChar().isDead())
-		{
 			return;
-		}
 
+		// Add attackers to npc's attacker list
 		if(attacker != null)
 		{
 			getActiveChar().addAttackerToAttackByList(attacker);
@@ -50,10 +55,14 @@ public class NpcStatus extends CharStatus
 		super.reduceHp(value, attacker, awake);
 	}
 
-	@Override
-	public L2Npc getActiveChar()
-	{
-		return (L2Npc) super.getActiveChar();
-	}
+	// =========================================================
+	// Method - Private
 
+	// =========================================================
+	// Property - Public
+	@Override
+	public L2NpcInstance getActiveChar()
+	{
+		return (L2NpcInstance) super.getActiveChar();
+	}
 }

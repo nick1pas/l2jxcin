@@ -27,6 +27,11 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import javolution.util.FastList;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+
 import net.xcine.Config;
 import net.xcine.gameserver.managers.ArenaManager;
 import net.xcine.gameserver.managers.FishingZoneManager;
@@ -50,6 +55,7 @@ import net.xcine.gameserver.model.zone.type.L2DamageZone;
 import net.xcine.gameserver.model.zone.type.L2DerbyTrackZone;
 import net.xcine.gameserver.model.zone.type.L2EffectZone;
 import net.xcine.gameserver.model.zone.type.L2FishingZone;
+import net.xcine.gameserver.model.zone.type.L2FortZone;
 import net.xcine.gameserver.model.zone.type.L2JailZone;
 import net.xcine.gameserver.model.zone.type.L2MotherTreeZone;
 import net.xcine.gameserver.model.zone.type.L2NoHqZone;
@@ -63,10 +69,6 @@ import net.xcine.gameserver.model.zone.type.L2TownZone;
 import net.xcine.gameserver.model.zone.type.L2WaterZone;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 
 /**
  * This class manages the augmentation data and can also create new augmentations.
@@ -198,6 +200,10 @@ public class ZoneData
 								else if(zoneType.equals("CastleZone"))
 								{
 									temp = new L2CastleZone(zoneId);
+								}
+								else if(zoneType.equals("FortZone"))
+								{
+									temp = new L2FortZone(zoneId);
 								}
 								else if(zoneType.equals("DamageZone"))
 								{

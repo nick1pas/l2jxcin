@@ -35,43 +35,72 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.network.serverpackets.ValidateLocation;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 
-public class L2DoormenInstance extends L2NpcInstance
+/**
+ * This class ...
+ * 
+ * @version $Revision$ $Date$
+ */
+public class L2DoormenInstance extends L2FolkInstance
 {
+	
+	/** The _clan hall. */
 	private ClanHall _clanHall;
+	
+	/** The CON d_ al l_ false. */
 	private static int COND_ALL_FALSE = 0;
+	
+	/** The CON d_ bus y_ becaus e_ o f_ siege. */
 	private static int COND_BUSY_BECAUSE_OF_SIEGE = 1;
+	
+	/** The CON d_ castl e_ owner. */
 	private static int COND_CASTLE_OWNER = 2;
+	
+	/** The CON d_ hal l_ owner. */
 	private static int COND_HALL_OWNER = 3;
+	
+	/** The CON d_ for t_ owner. */
+	private static int COND_FORT_OWNER = 4;
 
+	/**
+	 * Instantiates a new l2 doormen instance.
+	 *
+	 * @param objectID the object id
+	 * @param template the template
+	 */
 	public L2DoormenInstance(int objectID, L2NpcTemplate template)
 	{
 		super(objectID, template);
 	}
 
+	/**
+	 * Gets the clan hall.
+	 *
+	 * @return the clan hall
+	 */
 	public final ClanHall getClanHall()
 	{
+		//_log.warning(this.getName()+" searching ch");
 		if(_clanHall == null)
 		{
 			_clanHall = ClanHallManager.getInstance().getNearbyClanHall(getX(), getY(), 500);
 		}
-
+		//if (_ClanHall != null)
+		//    _log.warning(this.getName()+" found ch "+_ClanHall.getName());
 		return _clanHall;
 	}
 
+	/* (non-Javadoc)
+	 * @see net.xcine.gameserver.model.actor.instance.L2FolkInstance#onBypassFeedback(net.xcine.gameserver.model.actor.instance.L2PcInstance, java.lang.String)
+	 */
 	@Override
 	public void onBypassFeedback(L2PcInstance player, String command)
 	{
 		int condition = validateCondition(player);
 		if(condition <= COND_ALL_FALSE)
-		{
 			return;
-		}
-
 		if(condition == COND_BUSY_BECAUSE_OF_SIEGE)
-		{
 			return;
-		}
-		else if(condition == COND_CASTLE_OWNER || condition == COND_HALL_OWNER)
+		else if(condition == COND_CASTLE_OWNER || condition == COND_HALL_OWNER || condition == COND_FORT_OWNER)
 		{
 			if(command.startsWith("Chat"))
 			{
@@ -87,12 +116,26 @@ public class L2DoormenInstance extends L2NpcInstance
 				}
 				else if(condition == COND_CASTLE_OWNER)
 				{
+					//DoorTable doorTable = DoorTable.getInstance();
 					StringTokenizer st = new StringTokenizer(command.substring(10), ", ");
-					st.nextToken();
+					st.nextToken(); // Bypass first value since its castleid/hallid
 
 					while(st.hasMoreTokens())
 					{
 						getCastle().openDoor(player, Integer.parseInt(st.nextToken()));
+					}
+
+					st = null;
+					return;
+				}
+				else if(condition == COND_FORT_OWNER)
+				{
+					StringTokenizer st = new StringTokenizer(command.substring(10), ", ");
+					st.nextToken(); // Bypass first value since its castleid/hallid/fortid
+
+					while(st.hasMoreTokens())
+					{
+						getFort().openDoor(player, Integer.parseInt(st.nextToken()));
 					}
 
 					st = null;
@@ -112,10 +155,16 @@ public class L2DoormenInstance extends L2NpcInstance
 				{
 					if(player.isMounted())
 					{
-						player.sendPacket(new SystemMessage(SystemMessageId.S1_S2).addString("You Already Have a Pet or Are Mounted."));
-						return;
+						SystemMessage sm = new SystemMessage(SystemMessageId.S1_S2);
+						sm.addString("You Already Have a Pet or Are Mounted.");
+						player.sendPacket(sm);
 					}
-					player.sendPacket(new SystemMessage(SystemMessageId.S1_S2).addString("Summon your Strider first."));
+					else
+					{
+						SystemMessage sm = new SystemMessage(SystemMessageId.S1_S2);
+						sm.addString("Summon your Strider first.");
+						player.sendPacket(sm);
+					}
 					return;
 				}
 				else if(player.getPet().getNpcId() == 12526 || player.getPet().getNpcId() == 12527 || player.getPet().getNpcId() == 12528)
@@ -124,30 +173,40 @@ public class L2DoormenInstance extends L2NpcInstance
 					{
 						if(player.getPet().getLevel() < 55)
 						{
-							player.sendPacket(new SystemMessage(SystemMessageId.S1_S2).addString("Your Strider Has not reached the required level."));
-							return;
+							SystemMessage sm = new SystemMessage(SystemMessageId.S1_S2);
+							sm.addString("Your Strider Has not reached the required level.");
+							player.sendPacket(sm);
 						}
-						if(!player.disarmWeapons())
+						else
 						{
-							return;
+							if(!player.disarmWeapons())
+								return;
+							player.getPet().unSummon(player);
+							player.getInventory().destroyItemByItemId("Wyvern", 1460, 10, player, player.getTarget());
+							Ride mount = new Ride(player.getObjectId(), Ride.ACTION_MOUNT, 12621);
+							player.sendPacket(mount);
+							player.broadcastPacket(mount);
+							player.setMountType(mount.getMountType());
+							player.addSkill(SkillTable.getInstance().getInfo(4289, 1));
+							SystemMessage sm = new SystemMessage(SystemMessageId.S1_S2);
+							sm.addString("The Wyvern has been summoned successfully!");
+							player.sendPacket(sm);
 						}
-						player.getPet().unSummon(player);
-						player.getInventory().destroyItemByItemId("Wyvern", 1460, 10, player, player.getTarget());
-						Ride mount = new Ride(player.getObjectId(), Ride.ACTION_MOUNT, 12621);
-						player.sendPacket(mount);
-						player.broadcastPacket(mount);
-						player.setMountType(mount.getMountType());
-						player.addSkill(SkillTable.getInstance().getInfo(4289, 1));
-						player.sendPacket(new SystemMessage(SystemMessageId.S1_S2).addString("The Wyvern has been summoned successfully!"));
-						mount = null;
-						return;
 					}
-					player.sendPacket(new SystemMessage(SystemMessageId.S1_S2).addString("You need 10 Crystals: B Grade."));
+					else
+					{
+						SystemMessage sm = new SystemMessage(SystemMessageId.S1_S2);
+						sm.addString("You need 10 Crystals: B Grade.");
+						player.sendPacket(sm);
+					}
 					return;
 				}
 				else
 				{
-					player.sendPacket(new SystemMessage(SystemMessageId.S1_S2).addString("Unsummon your pet."));
+					SystemMessage sm = new SystemMessage(SystemMessageId.S1_S2);
+					sm.addString("Unsummon your pet.");
+					player.sendPacket(sm);
+					sm = null;
 					return;
 				}
 			}
@@ -160,12 +219,27 @@ public class L2DoormenInstance extends L2NpcInstance
 				}
 				else if(condition == COND_CASTLE_OWNER)
 				{
+					//DoorTable doorTable = DoorTable.getInstance();
 					StringTokenizer st = new StringTokenizer(command.substring(11), ", ");
-					st.nextToken();
+					st.nextToken(); // Bypass first value since its castleid/hallid
+					//L2Clan playersClan = player.getClan();
 
 					while(st.hasMoreTokens())
 					{
 						getCastle().closeDoor(player, Integer.parseInt(st.nextToken()));
+					}
+
+					st = null;
+					return;
+				}
+				else if(condition == COND_FORT_OWNER)
+				{
+					StringTokenizer st = new StringTokenizer(command.substring(10), ", ");
+					st.nextToken(); // Bypass first value since its castleid/hallid/fortid
+
+					while(st.hasMoreTokens())
+					{
+						getFort().closeDoor(player, Integer.parseInt(st.nextToken()));
 					}
 
 					st = null;
@@ -177,28 +251,37 @@ public class L2DoormenInstance extends L2NpcInstance
 		super.onBypassFeedback(player, command);
 	}
 
+	/**
+	 * this is called when a player interacts with this NPC.
+	 *
+	 * @param player the player
+	 */
 	@Override
 	public void onAction(L2PcInstance player)
 	{
 		if(!canTarget(player))
-		{
 			return;
-		}
 
+		// Check if the L2PcInstance already target the L2NpcInstance
 		if(this != player.getTarget())
 		{
+			// Set the target of the L2PcInstance player
 			player.setTarget(this);
 
+			// Send a Server->Client packet MyTargetSelected to the L2PcInstance player
 			MyTargetSelected my = new MyTargetSelected(getObjectId(), 0);
 			player.sendPacket(my);
 			my = null;
 
+			// Send a Server->Client packet ValidateLocation to correct the L2NpcInstance position and heading on the client
 			player.sendPacket(new ValidateLocation(this));
 		}
 		else
 		{
+			// Calculate the distance between the L2PcInstance and the L2NpcInstance
 			if(!canInteract(player))
 			{
+				// Notify the L2PcInstance AI with AI_INTENTION_INTERACT
 				player.getAI().setIntention(CtrlIntention.AI_INTENTION_INTERACT, this);
 			}
 			else
@@ -206,10 +289,15 @@ public class L2DoormenInstance extends L2NpcInstance
 				showMessageWindow(player);
 			}
 		}
-
+		// Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 
+	/**
+	 * Show message window.
+	 *
+	 * @param player the player
+	 */
 	public void showMessageWindow(L2PcInstance player)
 	{
 		player.sendPacket(ActionFailed.STATIC_PACKET);
@@ -218,13 +306,18 @@ public class L2DoormenInstance extends L2NpcInstance
 		int condition = validateCondition(player);
 		if(condition == COND_BUSY_BECAUSE_OF_SIEGE)
 		{
-			filename = "data/html/doormen/" + getTemplate().npcId + "-busy.htm";
+			filename = "data/html/doormen/" + getTemplate().npcId + "-busy.htm"; // Busy because of siege
 		}
 		else if(condition == COND_CASTLE_OWNER)
 		{
-			filename = "data/html/doormen/" + getTemplate().npcId + ".htm";
+			filename = "data/html/doormen/" + getTemplate().npcId + ".htm"; // Owner message window
+		}
+		else if(condition == COND_FORT_OWNER)
+		{
+			filename = "data/html/doormen/fortress/" + getTemplate().npcId + ".htm"; // Owner message window
 		}
 
+		// Prepare doormen for clan hall
 		NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		String str;
 		if(getClanHall() != null)
@@ -272,29 +365,37 @@ public class L2DoormenInstance extends L2NpcInstance
 		str = null;
 	}
 
+	/**
+	 * Validate condition.
+	 *
+	 * @param player the player
+	 * @return the int
+	 */
 	private int validateCondition(L2PcInstance player)
 	{
 		if(player.getClan() != null)
 		{
+			// Prepare doormen for clan hall
 			if(getClanHall() != null)
 			{
 				if(player.getClanId() == getClanHall().getOwnerId())
-				{
 					return COND_HALL_OWNER;
-				}
 				return COND_ALL_FALSE;
 			}
-
+			// Prepare doormen for Castle
 			if(getCastle() != null && getCastle().getCastleId() > 0)
 			{
-				if(getCastle().getOwnerId() == player.getClanId())
-				{
-					return COND_CASTLE_OWNER;
-				}
+				if(getCastle().getOwnerId() == player.getClanId()) // Clan owns castle
+					return COND_CASTLE_OWNER; // Owner
+			}
+			// Prepare doormen for Fortress
+			if(getFort() != null && getFort().getFortId() > 0)
+			{
+				if(getFort().getOwnerId() == player.getClanId()) // Clan owns fort
+					return COND_FORT_OWNER;
 			}
 		}
 
 		return COND_ALL_FALSE;
 	}
-
 }

@@ -34,7 +34,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  * 
  * @version $Revision$ $Date$
  */
-public class L2SymbolMakerInstance extends L2NpcInstance
+public class L2SymbolMakerInstance extends L2FolkInstance
 {
 	//private static Logger _log = Logger.getLogger(L2SymbolMakerInstance.class.getName());
 

@@ -28,19 +28,20 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
+
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
 import net.xcine.gameserver.datatables.xml.ExperienceData;
-import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.model.L2Clan;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.L2Party;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2FestivalMonsterInstance;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
+import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.position.L2CharPosition;
 import net.xcine.gameserver.model.spawn.L2Spawn;
@@ -1622,10 +1623,10 @@ public class SevenSignsFestival implements SpawnListener
 	protected List<Integer> _accumulatedBonuses; // The total bonus available (in Ancient Adena)
 
 	/** The _dawn chat guide. */
-	private L2Npc _dawnChatGuide;
+	private L2NpcInstance _dawnChatGuide;
 	
 	/** The _dusk chat guide. */
-	private L2Npc _duskChatGuide;
+	private L2NpcInstance _duskChatGuide;
 
 	/** The _dawn festival participants. */
 	protected Map<Integer, List<L2PcInstance>> _dawnFestivalParticipants;
@@ -2849,7 +2850,7 @@ public class SevenSignsFestival implements SpawnListener
 	 * @param npc the npc
 	 */
 	@Override
-	public void npcSpawned(L2Npc npc)
+	public void npcSpawned(L2NpcInstance npc)
 	{
 		if(npc == null)
 			return;
@@ -3183,7 +3184,7 @@ public class SevenSignsFestival implements SpawnListener
 		private FestivalSpawn _witchSpawn;
 
 		/** The _witch inst. */
-		private L2Npc _witchInst;
+		private L2NpcInstance _witchInst;
 		
 		/** The _npc insts. */
 		private List<L2FestivalMonsterInstance> _npcInsts;
@@ -3645,7 +3646,7 @@ public class SevenSignsFestival implements SpawnListener
 				// If an exception occurs, just move the player to the nearest town.
 				try
 				{
-					participant.teleToLocation(MapRegionData.TeleportWhereType.Town);
+					participant.teleToLocation(MapRegionTable.TeleportWhereType.Town);
 					participant.sendMessage("You have been removed from the festival arena.");
 				}
 				catch(NullPointerException e2)

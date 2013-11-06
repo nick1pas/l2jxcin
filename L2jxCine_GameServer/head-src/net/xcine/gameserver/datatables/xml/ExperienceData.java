@@ -35,7 +35,7 @@ public class ExperienceData
 {
 	private static Logger _log = Logger.getLogger(ExperienceData.class.getName());
 	
-	public static byte MAX_LEVEL;
+	private byte MAX_LEVEL;
 	private byte MAX_PET_LEVEL;
 	
 	private final Map<Integer, Long> _expTable = new HashMap<>();

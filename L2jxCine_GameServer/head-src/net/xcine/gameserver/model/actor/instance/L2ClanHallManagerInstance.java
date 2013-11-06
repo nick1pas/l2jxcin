@@ -48,7 +48,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 /**
  * The Class L2ClanHallManagerInstance.
  */
-public class L2ClanHallManagerInstance extends L2NpcInstance
+public class L2ClanHallManagerInstance extends L2FolkInstance
 {
 	
 	/** The Constant COND_OWNER_FALSE. */

@@ -30,6 +30,7 @@ public class DuelManager
 {
 	private static final Logger _log = Logger.getLogger(DuelManager.class.getName());
 
+	// =========================================================
 	private static DuelManager _instance;
 
 	public static final DuelManager getInstance()
@@ -41,18 +42,26 @@ public class DuelManager
 		return _instance;
 	}
 
+	// =========================================================
+	// Data Field
 	private FastList<Duel> _duels;
 	private int _currentDuelId = 0x90;
 
+	// =========================================================
+	// Constructor
 	private DuelManager()
 	{
 		_log.info("Initializing DuelManager");
 		_duels = new FastList<>();
 	}
 
+	// =========================================================
+	// Method - Private
+
 	private int getNextDuelId()
 	{
 		_currentDuelId++;
+		// In case someone wants to run the server forever :)
 		if(_currentDuelId >= 2147483640)
 		{
 			_currentDuelId = 1;
@@ -70,6 +79,9 @@ public class DuelManager
 		}
 		return null;
 	}
+
+	// =========================================================
+	// Method - Public
 
 	public void addDuel(L2PcInstance playerA, L2PcInstance playerB, int partyDuel)
 	{

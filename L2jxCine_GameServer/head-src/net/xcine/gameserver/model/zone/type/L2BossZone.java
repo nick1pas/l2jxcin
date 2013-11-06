@@ -18,12 +18,13 @@ import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastMap;
+
 import net.xcine.Config;
 import net.xcine.gameserver.GameServer;
-import net.xcine.gameserver.datatables.xml.MapRegionData;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.model.L2Character;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
+import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.zone.L2ZoneType;
 import net.xcine.util.L2FastList;
@@ -132,7 +133,7 @@ public class L2BossZone extends L2ZoneType
 				
 				if (!player.isGM() && player.isFlying() && !_IsFlyingEnable)
 				{
-					player.teleToLocation(MapRegionData.TeleportWhereType.Town);
+					player.teleToLocation(MapRegionTable.TeleportWhereType.Town);
 					return;
 				}
 				
@@ -163,7 +164,7 @@ public class L2BossZone extends L2ZoneType
 				}
 				
 				// teleport out all players who attempt "illegal" (re-)entry
-				player.teleToLocation(MapRegionData.TeleportWhereType.Town);
+				player.teleToLocation(MapRegionTable.TeleportWhereType.Town);
 				player = null;
 			}
 		}
@@ -265,7 +266,7 @@ public class L2BossZone extends L2ZoneType
 			return true;
 		else
 		{
-			player.teleToLocation(MapRegionData.TeleportWhereType.Town);
+			player.teleToLocation(MapRegionTable.TeleportWhereType.Town);
 			return false;
 		}
 	}
@@ -297,7 +298,7 @@ public class L2BossZone extends L2ZoneType
 
 				if(player.isOnline() == 1)
 				{
-					player.teleToLocation(MapRegionData.TeleportWhereType.Town);
+					player.teleToLocation(MapRegionTable.TeleportWhereType.Town);
 				}
 
 				player = null;
@@ -334,7 +335,7 @@ public class L2BossZone extends L2ZoneType
 	protected void onReviveInside(L2Character character)
 	{}
 	
-	public void updateKnownList(L2Npc npc)
+	public void updateKnownList(L2NpcInstance npc)
 	{
 		if (_characterList == null || _characterList.isEmpty())
 			return;

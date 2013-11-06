@@ -17,10 +17,10 @@ package net.xcine.gameserver.network.clientpackets;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
+
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.model.L2Augmentation;
-import net.xcine.gameserver.model.L2Npc;
 import net.xcine.gameserver.model.PcInventory;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
@@ -85,7 +85,7 @@ public class MultiSellChoose extends L2GameClientPacket
                 L2NpcInstance merchant = player.getTarget() instanceof L2NpcInstance ? (L2NpcInstance) player.getTarget() : null;
 
                 // Possible fix to Multisell Radius
-                if (merchant == null || !player.isInsideRadius(merchant, L2Npc.INTERACTION_DISTANCE, false, false))
+                if (merchant == null || !player.isInsideRadius(merchant, L2NpcInstance.INTERACTION_DISTANCE, false, false))
                 {
                         player.setMultiSellId(-1);
                         return;

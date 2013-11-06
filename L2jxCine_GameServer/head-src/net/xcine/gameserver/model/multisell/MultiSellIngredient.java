@@ -18,6 +18,9 @@
  */
 package net.xcine.gameserver.model.multisell;
 
+/**
+ * @author programmos
+ */
 public class MultiSellIngredient
 {
 	private int _itemId, _itemCount, _enchantmentLevel;
@@ -46,31 +49,49 @@ public class MultiSellIngredient
 		_mantainIngredient = e.getMantainIngredient();
 	}
 
+	/**
+	 * @param itemId The itemId to set.
+	 */
 	public void setItemId(int itemId)
 	{
 		_itemId = itemId;
 	}
 
+	/**
+	 * @return Returns the itemId.
+	 */
 	public int getItemId()
 	{
 		return _itemId;
 	}
 
+	/**
+	 * @param itemCount The itemCount to set.
+	 */
 	public void setItemCount(int itemCount)
 	{
 		_itemCount = itemCount;
 	}
 
+	/**
+	 * @return Returns the itemCount.
+	 */
 	public int getItemCount()
 	{
 		return _itemCount;
 	}
 
+	/**
+	 * @param enchantmentLevel 
+	 */
 	public void setEnchantmentLevel(int enchantmentLevel)
 	{
 		_enchantmentLevel = enchantmentLevel;
 	}
 
+	/**
+	 * @return Returns the itemCount.
+	 */
 	public int getEnchantmentLevel()
 	{
 		return _enchantmentLevel;

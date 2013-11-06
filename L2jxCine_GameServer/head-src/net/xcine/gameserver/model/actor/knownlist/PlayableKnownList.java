@@ -1,5 +1,4 @@
-/*
- * This program is free software; you can redistribute it and/or modify
+/* This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2, or (at your option)
  * any later version.
@@ -18,19 +17,31 @@
  */
 package net.xcine.gameserver.model.actor.knownlist;
 
-import net.xcine.gameserver.model.L2Playable;
+import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 
 public class PlayableKnownList extends CharKnownList
 {
-	public PlayableKnownList(L2Playable activeChar)
+	// =========================================================
+	// Data Field
+
+	// =========================================================
+	// Constructor
+	public PlayableKnownList(L2PlayableInstance activeChar)
 	{
 		super(activeChar);
 	}
 
-	@Override
-	public L2Playable getActiveChar()
-	{
-		return (L2Playable) super.getActiveChar();
-	}
+	// =========================================================
+	// Method - Public
 
+	// =========================================================
+	// Method - Private
+
+	// =========================================================
+	// Property - Public
+	@Override
+	public L2PlayableInstance getActiveChar()
+	{
+		return (L2PlayableInstance) super.getActiveChar();
+	}
 }

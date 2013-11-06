@@ -39,7 +39,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  * 
  * @author Tempy
  */
-public class L2SignsPriestInstance extends L2NpcInstance
+public class L2SignsPriestInstance extends L2FolkInstance
 {
 	//private static Logger _log = Logger.getLogger(L2SignsPriestInstance.class.getName());
 

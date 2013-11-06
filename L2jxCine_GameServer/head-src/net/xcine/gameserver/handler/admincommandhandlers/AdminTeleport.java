@@ -25,9 +25,9 @@ import javolution.text.TextBuilder;
 
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
+import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
-import net.xcine.gameserver.datatables.xml.MapRegionData;
 import net.xcine.gameserver.handler.IAdminCommandHandler;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2World;
@@ -126,7 +126,7 @@ public class AdminTeleport implements IAdminCommandHandler
 						               L2PcInstance player = L2World.getInstance().getPlayer(targetName);
 						               if (player != null)
 							               {
-							                   Location loc = MapRegionData.getInstance().getTeleToLocation(player, MapRegionData.TeleportWhereType.Town);
+							                   Location loc = MapRegionTable.getInstance().getTeleToLocation(player, MapRegionTable.TeleportWhereType.Town);
 						                   player.setInstanceId(0);
 							                   player.teleToLocation(loc, true);
 							               }

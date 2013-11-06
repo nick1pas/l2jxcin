@@ -51,4 +51,3 @@ CREATE TABLE `custom_npc`(
 INSERT ignore INTO custom_npc
 values
 ('31228', '31228', 'Roy the Cat', '1', 'Classes Trader', '1', 'Monster.cat_the_cat', '9.00', '16.00', '70', 'male', 'L2ClassMaster', '40', '3862', '1493', '11.85', '2.78', '40', '43', '30', '21', '20', '10', '490', '10', '1335', '470', '780', '382', '278', '0', '333', '0', '0', '0', '88', '132', null, '0', '0', '0', 'LAST_HIT');
-INSERT INTO `custom_npc` VALUES ('50001', '31822', 'Event Manager', '1', 'L2Warcraft', '1', 'LineageMonster5.br_wooldie', '10', '16', '80', 'male', 'L2EventManager', '40', '20000000', '40', '8.5', '3', '40', '43', '30', '21', '20', '20', '0', '0', '8', '40', '5', '30', '253', '0', '333', '0', '0', '0', '25', '120', 'Null', '0', '0', '0', 'LAST_HIT');

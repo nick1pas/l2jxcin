@@ -349,6 +349,8 @@ $MYG < ../sql/siege_clans.sql &> /dev/null
 $MYG < ../sql/skill_learn.sql &> /dev/null
 $MYG < ../sql/spawnlist.sql &> /dev/null
 $MYG < ../sql/topic.sql &> /dev/null
+$MYG < ../sql/tvt.sql &> /dev/null
+$MYG < ../sql/tvt_teams.sql &> /dev/null
 $MYG < ../sql/weapon.sql &> /dev/null
 $MYG < ../sql/zone_vertices.sql &> /dev/null
 $MYG < ../sql/custom_contestable_clanhalls.sql &> /dev/null
@@ -367,6 +369,9 @@ $MYG < ../sql/vanhalter_spawnlist.sql &> /dev/null
 $MYG < ../sql/clanhall_siege.sql &> /dev/null
 $MYG < ../sql/npc_to_pc_polymorph.sql &> /dev/null
 $MYG < ../sql/vip.sql &> /dev/null
+$MYG < ../sql/ctf.sql &> /dev/null
+$MYG < ../sql/ctf_teams.sql &> /dev/null
+$MYG < ../sql/dm.sql &> /dev/null
 newbie_helper
 }
 

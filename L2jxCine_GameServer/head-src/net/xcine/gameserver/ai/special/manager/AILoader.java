@@ -20,7 +20,6 @@ package net.xcine.gameserver.ai.special.manager;
 
 import java.util.logging.Logger;
 
-import net.xcine.gameserver.ai.special.Baium_l2j;
 import net.xcine.gameserver.ai.special.Barakiel;
 import net.xcine.gameserver.ai.special.Core;
 import net.xcine.gameserver.ai.special.FairyTrees;
@@ -32,7 +31,6 @@ import net.xcine.gameserver.ai.special.IceFairySirra;
 import net.xcine.gameserver.ai.special.Kernon;
 import net.xcine.gameserver.ai.special.Monastery_l2j;
 import net.xcine.gameserver.ai.special.Orfen;
-import net.xcine.gameserver.ai.special.QueenAnt;
 import net.xcine.gameserver.ai.special.SummonMinions;
 import net.xcine.gameserver.ai.special.Transform;
 import net.xcine.gameserver.ai.special.Valakas_l2j;
@@ -53,9 +51,7 @@ public class AILoader
 	public static void init()
 	{
 		_log.info("AI load:");
-		ThreadPoolManager.getInstance().scheduleAi(new Baium_l2j(-1, "baium", "ai"), 200);
 		ThreadPoolManager.getInstance().scheduleAi(new Core(-1, "core", "ai"), 300);
-		ThreadPoolManager.getInstance().scheduleAi(new QueenAnt(-1, "queen_ant", "ai"), 400);
 		ThreadPoolManager.getInstance().scheduleAi(new VanHalter(-1, "vanhalter", "ai"), 500);
 		ThreadPoolManager.getInstance().scheduleAi(new Gordon(-1, "Gordon", "ai"), 600);
 		ThreadPoolManager.getInstance().scheduleAi(new Monastery_l2j(-1, "monastery", "ai"), 700);

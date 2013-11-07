@@ -1,12 +1,13 @@
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
+import ai.L2AttackableAIScript;
 import net.xcine.gameserver.model.quest.Quest;
 
 /*
  * @author m095 (L2EmuRT)
  */
 
-public class Golkonda extends Quest implements Runnable
+public class Golkonda extends L2AttackableAIScript
 {
 	// Golkonda NpcID
 	private static final int GOLKONDA = 25126;
@@ -18,9 +19,9 @@ public class Golkonda extends Quest implements Runnable
 
 		addEventId(GOLKONDA, Quest.QuestEventType.ON_ATTACK);
 	}
-
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		// now call the constructor (starts up the ai)
+		new Golkonda(-1, "golkonda", "ai");
+	}
 }

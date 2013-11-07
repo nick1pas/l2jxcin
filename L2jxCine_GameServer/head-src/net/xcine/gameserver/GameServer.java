@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import net.xcine.Config;
 import net.xcine.ServerType;
 import net.xcine.crypt.nProtect;
-import net.xcine.gameserver.ai.special.manager.AILoader;
 import net.xcine.gameserver.cache.CrestCache;
 import net.xcine.gameserver.cache.HtmCache;
 import net.xcine.gameserver.communitybbs.Manager.ForumsBBSManager;
@@ -460,16 +459,6 @@ public class GameServer
 		else
 			_log.info("Quest: disable load.");
 		
-		Util.printSection("AI");
-		if (!Config.ALT_DEV_NO_AI)
-		{
-			AILoader.init();
-		}
-		else
-		{
-			_log.info("AI: disable load.");
-		}
-		
 		Util.printSection("Scripts");
 		if (!Config.ALT_DEV_NO_SCRIPT)
 		{
@@ -540,20 +529,6 @@ public class GameServer
 		_log.info("Maximum Numbers of Connected Players: " + Config.MAXIMUM_ONLINE_USERS);
 		_log.info("GameServer Started, free memory " + Memory.getFreeMemory() + " Mb of " + Memory.getTotalMemory() + " Mb");
 		_log.info("Used memory: " + Memory.getUsedMemory() + " MB");
-		
-		Util.printSection("Java specific");
-		_log.info("JRE name: " + System.getProperty("java.vendor"));
-		_log.info("JRE specification version: " + System.getProperty("java.specification.version"));
-		_log.info("JRE version: " + System.getProperty("java.version"));
-		_log.info("--- Detecting Java Virtual Machine (JVM)");
-		_log.info("JVM installation directory: " + System.getProperty("java.home"));
-		_log.info("JVM Avaible Memory(RAM): " + Runtime.getRuntime().maxMemory() / 1048576 + " MB");
-		_log.info("JVM specification version: " + System.getProperty("java.vm.specification.version"));
-		_log.info("JVM specification vendor: " + System.getProperty("java.vm.specification.vendor"));
-		_log.info("JVM specification name: " + System.getProperty("java.vm.specification.name"));
-		_log.info("JVM implementation version: " + System.getProperty("java.vm.version"));
-		_log.info("JVM implementation vendor: " + System.getProperty("java.vm.vendor"));
-		_log.info("JVM implementation name: " + System.getProperty("java.vm.name"));
 		
 		Util.printSection("Status");
 		System.gc();

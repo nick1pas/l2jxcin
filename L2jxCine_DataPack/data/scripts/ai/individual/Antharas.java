@@ -49,7 +49,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.templates.StatsSet;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.util.random.Rnd;
-import ai.AbstractNpcAI;
+import ai.L2AttackableAIScript;
 
 /**
  * This class ... control for sequence of fight against Antharas.
@@ -57,7 +57,7 @@ import ai.AbstractNpcAI;
  * @version $Revision: $ $Date: $
  * @author L2J_JP SANDMAN
  */
-public class Antharas extends AbstractNpcAI
+public class Antharas extends L2AttackableAIScript
 {
 	// config
 	private static final int FWA_ACTIVITYTIMEOFANTHARAS = 120;
@@ -120,9 +120,9 @@ public class Antharas extends AbstractNpcAI
 	
 
 	// Boss: Antharas
-	public Antharas(String name,String descr)
+	public Antharas(int questId,String name,String descr)
 	{
-		super(name,descr);
+		super(questId, name, descr);
 		int[] mob = {ANTHARASOLDID,ANTHARASWEAKID,ANTHARASNORMALID,ANTHARASSTRONGID,29069,29070,29071,29072,29073,29074,29075,29076};
 		this.registerMobs(mob);
 		init();
@@ -921,8 +921,9 @@ public class Antharas extends AbstractNpcAI
 		return super.onKill(npc,killer,isPet);
 	}
 
-    public static void main(String[] args)
-    {
-        new Antharas(Antharas.class.getSimpleName(), "ai/individual");
-    }
+	public static void main(String[] args)
+	{
+		// now call the constructor (starts up the ai)
+		new Antharas(-1, "antharas", "ai");
+	}
 }

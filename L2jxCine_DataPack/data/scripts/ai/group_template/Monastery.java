@@ -13,12 +13,11 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.group_template;
 
 import java.util.Collection;
 
 import javolution.util.FastList;
-
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.model.L2Attackable;
@@ -31,13 +30,13 @@ import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PetInstance;
 import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
-import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.CreatureSay;
 import net.xcine.gameserver.util.Util;
 import net.xcine.util.random.Rnd;
+import ai.L2AttackableAIScript;
 
 
-public class Monastery_l2j extends Quest implements Runnable
+public class Monastery extends L2AttackableAIScript
 {
 	static final int[] mobs1 = {22124, 22125, 22126, 22127, 22129};
 	static final int[] mobs2 = {22134, 22135};
@@ -47,7 +46,7 @@ public class Monastery_l2j extends Quest implements Runnable
 		"name, why would you choose the path of darkness?!",
 		"name! How dare you defy the will of Einhasad!"
 	};
-	public Monastery_l2j(int questId, String name, String descr)
+	public Monastery(int questId, String name, String descr)
 	{
 		super(questId, name, descr);
 		registerMobs(mobs1, QuestEventType.ON_AGGRO_RANGE_ENTER, QuestEventType.ON_SPAWN, QuestEventType.ON_SPELL_FINISHED);
@@ -168,10 +167,10 @@ public class Monastery_l2j extends Quest implements Runnable
 		
 		return super.onSpellFinished(npc, player, skill);
 	}
-	
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		// now call the constructor (starts up the ai)
+		new Monastery(-1, "Monastery", "ai");
+	}
 	
 }

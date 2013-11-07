@@ -1,12 +1,13 @@
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
+import ai.L2AttackableAIScript;
 import net.xcine.gameserver.model.quest.Quest;
 
 /*
  * @author m095 (L2EmuRT)
  */
 
-public class Barakiel extends Quest implements Runnable
+public class Barakiel extends L2AttackableAIScript
 {
 	// Barakiel NpcID
 	private static final int BARAKIEL = 25325;
@@ -17,8 +18,9 @@ public class Barakiel extends Quest implements Runnable
 
 		addEventId(BARAKIEL, Quest.QuestEventType.ON_ATTACK);
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		// now call the constructor (starts up the ai)
+		new Barakiel(-1, "barakiel", "ai");
+	}
 }

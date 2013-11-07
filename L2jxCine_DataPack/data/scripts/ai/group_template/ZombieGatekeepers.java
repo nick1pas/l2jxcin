@@ -12,20 +12,19 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.group_template;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.model.L2Attackable;
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.quest.Quest;
+import ai.L2AttackableAIScript;
 
-public class ZombieGatekeepers extends Quest implements Runnable
+public class ZombieGatekeepers extends L2AttackableAIScript
 {
 	public ZombieGatekeepers(int questId, String name, String descr)
 	{
@@ -104,9 +103,9 @@ public class ZombieGatekeepers extends Quest implements Runnable
 		
 		return super.onKill(npc, killer, isPet);
 	}
-	
-	@Override
-	public void run()
+	public static void main(String[] args)
 	{
+		// now call the constructor (starts up the ai)
+		new ZombieGatekeepers(-1, "ZombieGatekeepers", "ai");
 	}
 }

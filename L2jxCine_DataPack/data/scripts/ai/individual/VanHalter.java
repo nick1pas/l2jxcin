@@ -16,7 +16,7 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Logger;
+
+import ai.L2AttackableAIScript;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -61,7 +63,7 @@ import net.xcine.util.random.Rnd;
  * @author L2J_JP SANDMAN
  **/
 
-public class VanHalter extends Quest implements Runnable
+public class VanHalter extends L2AttackableAIScript
 {
 	private static final Logger _log = Logger.getLogger(VanHalter.class.getName());
 
@@ -1884,8 +1886,9 @@ public class VanHalter extends Quest implements Runnable
 			}
 		}
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		// now call the constructor (starts up the ai)
+		new VanHalter(-1, "van_halter", "ai");
+	}
 }

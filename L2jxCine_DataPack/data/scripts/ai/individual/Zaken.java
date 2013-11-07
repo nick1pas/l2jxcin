@@ -12,9 +12,11 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.logging.Logger;
+
+import ai.L2AttackableAIScript;
 
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
@@ -39,9 +41,9 @@ import net.xcine.util.random.Rnd;
 /**
  * Zaken AI
  */
-public class Zaken_l2j extends Quest implements Runnable
+public class Zaken extends L2AttackableAIScript
 {
-	protected static final Logger log = Logger.getLogger(Zaken_l2j.class.getName());
+	protected static final Logger log = Logger.getLogger(Zaken.class.getName());
 	
 	private int _1001 = 0; // used for first cancel of QuestTimer "1001"
 	private int _ai0 = 0; // used for zaken coords updater
@@ -123,7 +125,7 @@ public class Zaken_l2j extends Quest implements Runnable
 	
 	private static L2BossZone _Zone;
 	
-	public Zaken_l2j(int questId, String name, String descr)
+	public Zaken(int questId, String name, String descr)
 	{
 		super(questId, name, descr);
 		
@@ -946,9 +948,10 @@ public class Zaken_l2j extends Quest implements Runnable
 	{
 		return (GameTimeController.getInstance().getGameTime() / 60) % 24;
 	}
-	
-	@Override
-	public void run()
-	{
-	}	
+    public static void main(String[] args)
+    {
+    	// now call the constructor (starts up the ai)
+    	new Zaken(-1,"zaken","ai");
+    }
+    
 }

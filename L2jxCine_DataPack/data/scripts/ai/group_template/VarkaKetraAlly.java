@@ -12,8 +12,9 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.group_template;
 
+import ai.L2AttackableAIScript;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.actor.instance.L2ItemInstance;
@@ -23,7 +24,7 @@ import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.InventoryUpdate;
 import net.xcine.gameserver.util.Util;
 
-public class VarkaKetraAlly extends Quest implements Runnable
+public class VarkaKetraAlly extends L2AttackableAIScript
 {
 	public VarkaKetraAlly(int questId, String name, String descr)
 	{
@@ -229,8 +230,9 @@ public class VarkaKetraAlly extends Quest implements Runnable
 			player.sendPacket(u);
 		}
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		// now call the constructor (starts up the ai)
+		new VarkaKetraAlly(-1, "VarkaKetraAlly", "ai");
+	}
 }

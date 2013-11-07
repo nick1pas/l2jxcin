@@ -12,13 +12,12 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 
 import java.util.Collection;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
@@ -31,7 +30,6 @@ import net.xcine.gameserver.model.L2Summon;
 import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.quest.QuestTimer;
 import net.xcine.gameserver.model.zone.type.L2BossZone;
 import net.xcine.gameserver.network.serverpackets.PlaySound;
@@ -41,6 +39,7 @@ import net.xcine.gameserver.templates.StatsSet;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.util.Util;
 import net.xcine.util.random.Rnd;
+import ai.L2AttackableAIScript;
 
 
 /**
@@ -48,7 +47,7 @@ import net.xcine.util.random.Rnd;
  * 
  * @author Kerberos
  */
-public class Valakas_l2j extends Quest implements Runnable
+public class Valakas extends L2AttackableAIScript
 {
 	private int i_ai0 = 0;
 	private int i_ai1 = 0;
@@ -76,7 +75,7 @@ public class Valakas_l2j extends Quest implements Runnable
 	private static L2BossZone _Zone;
 	
 	// Boss: Valakas
-	public Valakas_l2j(int id, String name, String descr)
+	public Valakas(int id, String name, String descr)
 	{
 		super(id, name, descr);
 		int[] mob =
@@ -1547,9 +1546,9 @@ public class Valakas_l2j extends Quest implements Runnable
 		npc.setTarget(caster);
 		return super.onSkillUse(npc, caster, skill);
 	}
-
-	@Override
-	public void run()
-	{}
-	
+	public static void main(String[] args)
+	{
+		// now call the constructor (starts up the ai)
+		new Valakas(-1, "valakas", "ai");
+	}
 }

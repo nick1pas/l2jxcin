@@ -1,12 +1,13 @@
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
+import ai.L2AttackableAIScript;
 import net.xcine.gameserver.model.quest.Quest;
 
 /*
  * @author m095 (L2EmuRT)
  */
 
-public class Kernon extends Quest implements Runnable
+public class Kernon extends L2AttackableAIScript
 {
 	// Kernon NpcID
 	private static final int KERNON = 25054;
@@ -17,8 +18,9 @@ public class Kernon extends Quest implements Runnable
 
 		addEventId(KERNON, Quest.QuestEventType.ON_ATTACK);
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		// now call the constructor (starts up the ai)
+		new Kernon(-1, "kernon", "ai");
+	}
 }

@@ -12,12 +12,11 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.List;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
@@ -32,7 +31,6 @@ import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
 import net.xcine.gameserver.model.actor.instance.L2MonsterInstance;
 import net.xcine.gameserver.model.actor.instance.L2NpcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.zone.type.L2BossZone;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.CreatureSay;
@@ -47,6 +45,7 @@ import net.xcine.gameserver.network.serverpackets.SpecialCamera;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.templates.StatsSet;
 import net.xcine.util.random.Rnd;
+import ai.L2AttackableAIScript;
 
 
 /**
@@ -64,7 +63,7 @@ import net.xcine.util.random.Rnd;
  * Warn: be careful with adding new spawns {@link #getXFix(int)}
  * 
  */
-public class Frintezza_l2j extends Quest implements Runnable
+public class Frintezza extends L2AttackableAIScript
 {
 	private static final int[][] _invadeLoc =
 	{
@@ -271,7 +270,7 @@ public class Frintezza_l2j extends Quest implements Runnable
 	private List<L2Attackable> Minions = new FastList<>();
 	
 	// Boss: Frintezza
-	public Frintezza_l2j(int id, String name, String descr)
+	public Frintezza(int id, String name, String descr)
 	{
 		super(id,name,descr);
 		int[] mob = {SCARLET1, SCARLET2, FRINTEZZA, 18328, 18329, 18330, 18331, 18332, 18333, 18334, 18335, 18336, 18337, 18338, 18339, 29048, 29049, 29050, 29051};
@@ -1752,18 +1751,10 @@ public class Frintezza_l2j extends Quest implements Runnable
 	{
 		return z/* + 4065*/;
 	}
-	/*
+	
 	public static void main(String[] args)
 	{
 		// now call the constructor (starts up the ai)
-		new Frintezza(-1,"Frintezza","ai");
-	}
-	 */
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
-	@Override
-	public void run()
-	{
+		new Frintezza(-1,"frintezza","ai");
 	}
 }

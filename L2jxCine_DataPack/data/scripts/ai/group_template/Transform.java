@@ -16,9 +16,11 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package net.xcine.gameserver.ai.special;
+package ai.group_template;
 
 import java.util.ArrayList;
+
+import ai.L2AttackableAIScript;
 
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
@@ -30,7 +32,7 @@ import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.network.serverpackets.CreatureSay;
 import net.xcine.util.random.Rnd;
 
-public class Transform extends Quest implements Runnable
+public class Transform extends L2AttackableAIScript
 {
 	private ArrayList<Transformer> _mobs = new ArrayList<>();
 	
@@ -191,10 +193,11 @@ public class Transform extends Quest implements Runnable
 		}
 		return super.onKill(npc, killer, isPet);
 	}
-
-	@Override
-	public void run()
+	
+	public static void main(String[] args)
 	{
+		// now call the constructor (starts up the ai)
+		new Transform(-1, "Transform", "ai");
 	}
 	
 	private class NPCSpawnTask implements Runnable

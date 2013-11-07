@@ -12,10 +12,12 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.concurrent.Future;
 import java.util.logging.Level;
+
+import ai.L2AttackableAIScript;
 
 import javolution.util.FastList;
 
@@ -43,7 +45,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
  * @author Kerberos
  */
 
-public class IceFairySirra extends Quest implements Runnable
+public class IceFairySirra extends L2AttackableAIScript
 {
 	private static final int STEWARD = 32029;
 	private static final int SILVER_HEMOCYTE = 8057;
@@ -434,8 +436,9 @@ public class IceFairySirra extends Quest implements Runnable
 		player.sendPacket(html);
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		// now call the constructor (starts up the ai)
+		new IceFairySirra(-1, "icefairysirra", "ai");
+	}
 }

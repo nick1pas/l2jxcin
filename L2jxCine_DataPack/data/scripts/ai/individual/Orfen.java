@@ -16,8 +16,9 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
+import ai.L2AttackableAIScript;
 import net.xcine.Config;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
@@ -35,7 +36,7 @@ import net.xcine.util.random.Rnd;
  * @author Shyla
  * @author L2jxCine
  */
-public class Orfen extends Quest implements Runnable
+public class Orfen extends L2AttackableAIScript
 {
 	private static final int ORFEN = 29014;
 	private static final int LIVE = 0;
@@ -274,8 +275,9 @@ public class Orfen extends Quest implements Runnable
 		return super.onKill(npc, killer, isPet);
 	}
 	
-	@Override
-	public void run()
-	{
-	}	
+    public static void main(String[] args)
+    {
+    	// Quest class and state definition
+    	new Orfen(-1,"orfen","ai");
+    }	
 }

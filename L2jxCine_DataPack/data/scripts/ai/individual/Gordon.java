@@ -12,9 +12,11 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.xcine.gameserver.ai.special;
+package ai.individual;
 
 import java.util.Collection;
+
+import ai.L2AttackableAIScript;
 
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
@@ -31,7 +33,7 @@ import net.xcine.gameserver.model.spawn.L2Spawn;
  * @author TOFIZ
  * @version $Revision: 1.1 $ $Date: 2008/08/21 $
  */
-public class Gordon extends Quest implements Runnable
+public class Gordon extends L2AttackableAIScript
 {
 	private static final int GORDON = 29095;
 	private static int _npcMoveX = 0;
@@ -393,8 +395,9 @@ public class Gordon extends Quest implements Runnable
 		}
 		return npc;
 	}
-
-	@Override
-	public void run()
-	{}
+	public static void main(String[] args)
+	{
+		// now call the constructor (starts up the ai)
+		new Gordon(-1, "gordon", "ai");
+	}
 }

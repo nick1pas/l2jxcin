@@ -36,9 +36,9 @@ import net.xcine.gameserver.network.serverpackets.PlaySound;
 import net.xcine.gameserver.network.serverpackets.SocialAction;
 import net.xcine.gameserver.templates.StatsSet;
 import net.xcine.util.random.Rnd;
-import ai.AbstractNpcAI;
+import ai.L2AttackableAIScript;
 
-public class QueenAnt extends AbstractNpcAI
+public class QueenAnt extends L2AttackableAIScript
 {
 	private static final int QUEEN = 29001;
 	private static final int LARVA = 29002;
@@ -70,9 +70,9 @@ public class QueenAnt extends AbstractNpcAI
 		LARVA_DESPAWN
 	}
 	
-	public QueenAnt(String name, String descr)
+	public QueenAnt (int questId, String name, String descr)
 	{
-		super(name, descr);
+		super(questId, name, descr);
 		
 		int[] mobs =
 		{
@@ -401,8 +401,9 @@ public class QueenAnt extends AbstractNpcAI
 		}
 		return super.onKill(npc, killer, isPet);
 	}
-    public static void main(String[] args)
-    {
-        new QueenAnt(QueenAnt.class.getSimpleName(), "ai/individual");
-    }
+	public static void main(String[] args)
+	{
+		// now call the constructor (starts up the ai)
+		new QueenAnt(-1, "queen_ant", "ai");
+	}
 }

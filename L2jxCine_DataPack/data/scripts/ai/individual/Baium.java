@@ -48,7 +48,7 @@ import net.xcine.gameserver.templates.StatsSet;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.util.Util;
 import net.xcine.util.random.Rnd;
-import ai.AbstractNpcAI;
+import ai.L2AttackableAIScript;
 
 /**
  * Baium AI
@@ -80,7 +80,7 @@ import ai.AbstractNpcAI;
  * 
  * @author Fulminus version 0.1
  */
-public class Baium  extends AbstractNpcAI
+public class Baium  extends L2AttackableAIScript
 {
 	protected static final Logger _log = Logger.getLogger(Baium.class.getName());
 	
@@ -110,10 +110,10 @@ public class Baium  extends AbstractNpcAI
 	private List<L2NpcInstance> _Minions = new ArrayList<>(5);
 	protected L2BossZone _Zone;
 	
-	public Baium (String name, String descr)
+	public Baium (int questId, String name, String descr)
 	{
-		super(name, descr);
-		
+		super(questId, name, descr);
+
 		int[] mob = {LIVE_BAIUM};
 		this.registerMobs(mob);
 		
@@ -662,8 +662,9 @@ public class Baium  extends AbstractNpcAI
 		}
 		return dist;
 	}
-    public static void main(String[] args)
-    {
-        new Baium(Baium.class.getSimpleName(), "ai/individual");
-    }
+	public static void main(String[] args)
+	{
+		// Quest class and state definition
+		new Baium(-1, "baium", "ai");
+	}
 }

@@ -55,23 +55,6 @@ public class AdminGeodata implements IAdminCommandHandler
 	@Override
 	public boolean useAdminCommand(String command, L2PcInstance activeChar)
 	{
-		/*
-		if(!AdminCommandAccessRights.getInstance().hasAccess(command, activeChar.getAccessLevel())){
-			return false;
-		}
-		
-		if(Config.GMAUDIT)
-		{
-			Logger _logAudit = Logger.getLogger("gmaudit");
-			LogRecord record = new LogRecord(Level.INFO, command);
-			record.setParameters(new Object[]
-			{
-					"GM: " + activeChar.getName(), " to target [" + activeChar.getTarget() + "] "
-			});
-			_logAudit.log(record);
-		}
-		*/
-
 		String[] wordList = command.split(" ");
 		CommandEnum comm;
 
@@ -152,11 +135,11 @@ public class AdminGeodata implements IAdminCommandHandler
 				{
 					if(GeoData.getInstance().canSeeTargetDebug(activeChar, activeChar.getTarget()))
 					{
-						activeChar.sendMessage("GeoEngine: Р¦РµР»СЊ РІРёРґРЅР°");
+						activeChar.sendMessage("GeoEngine: Can See Target!");
 					}
 					else
 					{
-						activeChar.sendMessage("GeoEngine: Р¦РµР»СЊ РЅРµ РІРёРґРЅР°");
+						activeChar.sendMessage("GeoEngine: Can See Target!");
 					}
 				}
 				else
@@ -166,9 +149,9 @@ public class AdminGeodata implements IAdminCommandHandler
 				break;
 
 			case admin_geo_position:
-				activeChar.sendMessage("GeoEngine: Р’Р°С€Р° РїРѕР·РёС†РёСЏ: ");
-				activeChar.sendMessage(".... РјРёСЂРѕРІС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹: x: " + activeChar.getX() + " y: " + activeChar.getY() + " z: " + activeChar.getZ());
-				activeChar.sendMessage(".... geo РєРѕРѕСЂРґРёРЅР°С‚С‹: " + GeoData.getInstance().geoPosition(activeChar.getX(), activeChar.getY()));
+				activeChar.sendMessage("GeoEngine: Your current position: ");
+				activeChar.sendMessage(".... world coords: x:" + activeChar.getX() + " y: " + activeChar.getY() + " z: " + activeChar.getZ());
+				activeChar.sendMessage(".... geo position:" + GeoData.getInstance().geoPosition(activeChar.getX(), activeChar.getY()));
 				break;
 
 			case admin_geo_load:
@@ -176,7 +159,7 @@ public class AdminGeodata implements IAdminCommandHandler
 
 				if(v.length != 2)
 				{
-					activeChar.sendMessage("РџСЂРёРјРµСЂ: //admin_geo_load <СЂРµРіРёРѕРЅ_X> <СЂРµРіРёРѕРЅ_Y>");
+					activeChar.sendMessage("Usage: //admin_geo_load <regionX> <regionY>");
 				}
 				else
 				{
@@ -189,11 +172,11 @@ public class AdminGeodata implements IAdminCommandHandler
 
 						if(result2)
 						{
-							activeChar.sendMessage("GeoEngine: СЂРµРіРёРѕРЅ [" + rx + "," + ry + "] Р·Р°РіСЂСѓР¶РµРЅ.");
+							activeChar.sendMessage("GeoEngine: File for region [" + rx + "," + ry + "] loaded succesfuly.");
 						}
 						else
 						{
-							activeChar.sendMessage("GeoEngine: СЂРµРіРёРѕРЅ [" + rx + "," + ry + "] РЅРµ СЃРјРѕРі Р·Р°РіСЂСѓР·РёС‚СЃСЏ.");
+							activeChar.sendMessage("GeoEngine: File for region [" + rx + "," + ry + "] couldn't be loaded.");
 						}
 					}
 					catch(Exception e)
@@ -211,7 +194,7 @@ public class AdminGeodata implements IAdminCommandHandler
 
 				if(v2.length != 2)
 				{
-					activeChar.sendMessage("РџСЂРёРјРµСЂ: //admin_geo_unload <СЂРµРіРёРѕРЅ_X> <СЂРµРіРёРѕРЅ_Y>");
+					activeChar.sendMessage("Usage: //admin_geo_unload <regionX> <regionY>>");
 				}
 				else
 				{
@@ -221,7 +204,7 @@ public class AdminGeodata implements IAdminCommandHandler
 						byte ry = Byte.parseByte(v2[1]);
 
 						GeoData.getInstance().unloadGeodata(rx, ry);
-						activeChar.sendMessage("GeoEngine: СЂРµРіРёРѕРЅ [" + rx + "," + ry + "] РІС‹РіСЂСѓР¶РµРЅ.");
+						activeChar.sendMessage("GeoEngine: File for region [" + rx + "," + ry + "] unloaded.");
 					}
 					catch(Exception e)
 					{
@@ -244,7 +227,7 @@ public class AdminGeodata implements IAdminCommandHandler
 					if(Config.ENABLE_ALL_EXCEPTIONS)
 						e.printStackTrace();
 					
-					activeChar.sendMessage("РџСЂРёРјРµСЂ: //admin_geo_bug РІР°С€ РєРѕРјРјРµРЅС‚Р°СЂРёР№ С‚СѓС‚");
+					activeChar.sendMessage("Usage: //admin_geo_bug you coments here");
 				}
 				break;
 		}

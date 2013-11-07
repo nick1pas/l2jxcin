@@ -592,14 +592,14 @@ public class L2Spawn
 			// Set the calculated position of the L2NpcInstance
 			newlocx = p[0];
 			newlocy = p[1];
-			newlocz = GeoData.getInstance().getSpawnHeight(newlocx, newlocy, p[2], p[3], _id);
+			newlocz = GeoData.getInstance().getSpawnHeight(newlocx, newlocy, p[2], p[3], this);
 		}
 		else
 		{
 			// The L2NpcInstance is spawned at the exact position (Lox, Locy, Locz)
 			newlocx = getLocx();
 			newlocy = getLocy();
-			newlocz = doCorrect ? GeoData.getInstance().getSpawnHeight(newlocx, newlocy, getLocz(), getLocz(), _id) : getLocz();
+			newlocz = doCorrect ? GeoData.getInstance().getSpawnHeight(newlocx, newlocy, getLocz(), getLocz(), this) : getLocz();
 		}
 		
 		if (mob != null)

@@ -28,8 +28,6 @@ import java.nio.IntBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import net.xcine.Config;
 import net.xcine.gameserver.geo.GeoData;
@@ -40,29 +38,33 @@ import net.xcine.gameserver.geo.util.LookupTable;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.Location;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public final class GeoPathFinding extends PathFinding
 {
-	protected static final Logger _log = Logger.getLogger(GeoPathFinding.class.getName());
-	
+	private static final Log _log = LogFactory.getLog(GeoPathFinding.class);
+
 	private static final class SingletonHolder
 	{
-		protected static final GeoPathFinding INSTANCE = new GeoPathFinding();
+		public static final GeoPathFinding INSTANCE = new GeoPathFinding();
 	}
-	
+
 	public static GeoPathFinding getInstance()
 	{
 		return SingletonHolder.INSTANCE;
 	}
-	
+
 	private final LookupTable<ByteBuffer> _pathNodes = new LookupTable<>();
 	private final LookupTable<IntBuffer> _pathNodesIndex = new LookupTable<>();
-	
+
+	private short count;
+
 	private boolean pathNodesExist(short regionoffset)
 	{
 		return _pathNodesIndex.get(regionoffset) != null;
 	}
-	
+
 	@Override
 	public Node[] findPath(int x, int y, int z, int tx, int ty, int tz)
 	{
@@ -76,34 +78,42 @@ public final class GeoPathFinding extends PathFinding
 		Node start = readNode(gx, gy, gz);
 		Node end = readNode(gtx, gty, gtz);
 		if(start == null || end == null)
+		{
 			return null;
+		}
 		if(Math.abs(start.getZ() - z) > 55)
-			return null; // not correct layer
-		if(Math.abs(end.getZ() - tz) > 55)
-			return null; // not correct layer
-		if(start.equals(end))
+		{
 			return null;
-		// TODO: Find closest path node we CAN access. Now only checks if we can not reach the closest
+		}
+		if(Math.abs(end.getZ() - tz) > 55)
+		{
+			return null;
+		}
+		if(start.equals(end))
+		{
+			return null;
+		}
 		Location temp = GeoData.getInstance().moveCheck(x, y, z, start.getX(), start.getY(), start.getZ());
 		if(temp.getX() != start.getX() || temp.getY() != start.getY())
-			return null; //   cannot reach closest...
+		{
+			return null;
+		}
 
-		// TODO: Find closest path node around target, now only checks if final location can be reached
 		temp = GeoData.getInstance().moveCheck(tx, ty, tz, end.getX(), end.getY(), end.getZ());
 		if(temp.getX() != end.getX() || temp.getY() != end.getY())
-			return null; //   cannot reach closest...
+		{
+			return null;
+		}
 
-		//return searchAStar(start, end);
 		return searchByClosest2(start, end);
 	}
-	
+
 	@Override
 	public Node[] readNeighbors(Node n, int idx)
 	{
 		int node_x = n.getNodeX();
 		int node_y = n.getNodeY();
-		//short node_z = n.getZ();
-			
+
 		short regoffset = getRegionOffset(getRegionX(node_x), getRegionY(node_y));
 		ByteBuffer pn = _pathNodes.get(regoffset);
 
@@ -112,8 +122,7 @@ public final class GeoPathFinding extends PathFinding
 		Node newNode;
 		short new_node_x, new_node_y;
 
-		//Region for sure will change, we must read from correct file
-		byte neighbor = pn.get(idx++); //N
+		byte neighbor = pn.get(idx++);
 		if(neighbor > 0)
 		{
 			neighbor--;
@@ -125,7 +134,7 @@ public final class GeoPathFinding extends PathFinding
 				Neighbors[index++] = newNode;
 			}
 		}
-		neighbor = pn.get(idx++); //NE
+		neighbor = pn.get(idx++);
 		if(neighbor > 0)
 		{
 			neighbor--;
@@ -137,7 +146,7 @@ public final class GeoPathFinding extends PathFinding
 				Neighbors[index++] = newNode;
 			}
 		}
-		neighbor = pn.get(idx++); //E
+		neighbor = pn.get(idx++);
 		if(neighbor > 0)
 		{
 			neighbor--;
@@ -149,7 +158,7 @@ public final class GeoPathFinding extends PathFinding
 				Neighbors[index++] = newNode;
 			}
 		}
-		neighbor = pn.get(idx++); //SE
+		neighbor = pn.get(idx++);
 		if(neighbor > 0)
 		{
 			neighbor--;
@@ -161,7 +170,7 @@ public final class GeoPathFinding extends PathFinding
 				Neighbors[index++] = newNode;
 			}
 		}
-		neighbor = pn.get(idx++); //S
+		neighbor = pn.get(idx++);
 		if(neighbor > 0)
 		{
 			neighbor--;
@@ -173,7 +182,7 @@ public final class GeoPathFinding extends PathFinding
 				Neighbors[index++] = newNode;
 			}
 		}
-		neighbor = pn.get(idx++); //SW
+		neighbor = pn.get(idx++);
 		if(neighbor > 0)
 		{
 			neighbor--;
@@ -185,7 +194,7 @@ public final class GeoPathFinding extends PathFinding
 				Neighbors[index++] = newNode;
 			}
 		}
-		neighbor = pn.get(idx++); //W
+		neighbor = pn.get(idx++);
 		if(neighbor > 0)
 		{
 			neighbor--;
@@ -197,7 +206,7 @@ public final class GeoPathFinding extends PathFinding
 				Neighbors[index++] = newNode;
 			}
 		}
-		neighbor = pn.get(idx++); //NW
+		neighbor = pn.get(idx++);
 		if(neighbor > 0)
 		{
 			neighbor--;
@@ -212,23 +221,22 @@ public final class GeoPathFinding extends PathFinding
 		return L2Arrays.compact(Neighbors);
 	}
 
-	//Private
-
 	private Node readNode(short node_x, short node_y, byte layer)
 	{
 		short regoffset = getRegionOffset(getRegionX(node_x),getRegionY(node_y));
 		if(!pathNodesExist(regoffset))
+		{
 			return null;
+		}
 		short nbx = getNodeBlock(node_x);
 		short nby = getNodeBlock(node_y);
 		int idx = _pathNodesIndex.get(regoffset).get((nby << 8) + nbx);
 		ByteBuffer pn = _pathNodes.get(regoffset);
-		//reading
 		byte nodes = pn.get(idx);
-		idx += layer * 10 + 1;//byte + layer*10byte
+		idx += layer * 10 + 1;
 		if(nodes < layer)
 		{
-			_log.log(Level.WARNING, "SmthWrong!");
+			_log.warn("SmthWrong!");
 		}
 		short node_z = pn.getShort(idx);
 		idx += 2;
@@ -241,14 +249,15 @@ public final class GeoPathFinding extends PathFinding
 		short node_y = getNodePos(gy);
 		short regoffset = getRegionOffset(getRegionX(node_x), getRegionY(node_y));
 		if(!pathNodesExist(regoffset))
+		{
 			return null;
+		}
 		short nbx = getNodeBlock(node_x);
 		short nby = getNodeBlock(node_y);
 		int idx = _pathNodesIndex.get(regoffset).get((nby << 8) + nbx);
 		ByteBuffer pn = _pathNodes.get(regoffset);
-		//reading
 		byte nodes = pn.get(idx++);
-		int idx2 = 0; //create index to nearlest node by z
+		int idx2 = 0;
 		short last_z = Short.MIN_VALUE;
 		while(nodes > 0)
 		{
@@ -258,105 +267,92 @@ public final class GeoPathFinding extends PathFinding
 				last_z = node_z;
 				idx2 = idx + 2;
 			}
-			idx += 10; //short + 8 byte
+			idx += 10;
 			nodes--;
 		}
 		return new GeoNode(node_x, node_y, last_z, idx2);
 	}
 
-	protected GeoPathFinding()
+	public GeoPathFinding()
 	{
-		FileReader reader = null;
-		BufferedReader buff = null;
 		LineNumberReader lnr = null;
-		
 		try
 		{
 			_log.info("PathFinding Engine: - Loading Path Nodes...");
-			File Data = new File(Config.DATAPACK_ROOT+"/data/pathnode/pn_index.txt");
+			File Data = new File("./data/pathnode/pn_index.txt");
 			if(!Data.exists())
+			{
 				return;
+			}
 
-			reader = new FileReader(Data);
-			buff = new BufferedReader(reader);
-			lnr = new LineNumberReader(buff);
-
-			String line;
+			lnr = new LineNumberReader(new BufferedReader(new FileReader(Data)));
+		}
+		catch(Exception e)
+		{
+			throw new Error("Failed to Load pn_index File.", e);
+		}
+		String line;
+		try
+		{
 			while((line = lnr.readLine()) != null)
 			{
 				if(line.trim().length() == 0)
+				{
 					continue;
+				}
 				StringTokenizer st = new StringTokenizer(line, "_");
 				byte rx = Byte.parseByte(st.nextToken());
 				byte ry = Byte.parseByte(st.nextToken());
 				LoadPathNodeFile(rx, ry);
 			}
-			
-			
+			_log.info("Path Finding: Loaded " + count + " pathnodes files.");
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			throw new Error("Failed to Read pn_index File.", e);
 		}
 		finally
 		{
-			if(lnr != null)
-				try
-				{
-					lnr.close();
-				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			
-			if(buff != null)
-				try
-				{
-					buff.close();
-				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			
-			if(reader != null)
-				try
-				{
-					reader.close();
-				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			
+			try
+			{
+				lnr.close();
+			}
+			catch(Exception e)
+			{}
 		}
-		
 	}
 
+	@SuppressWarnings("resource")
 	private void LoadPathNodeFile(byte rx, byte ry)
 	{
-		String fname = Config.DATAPACK_ROOT+"/data/pathnode/" + rx + "_" + ry + ".pn";
+		if(rx < L2World.MAP_MIN_X || rx > L2World.MAP_MAX_X || ry < L2World.MAP_MIN_Y || ry > L2World.MAP_MAX_Y)
+		{
+			_log.warn("Failed to load pathnode file: invalid region " + rx +","+ ry + "\n");
+			return;
+		}
+
+		String fname = "./data/pathnode/" + rx + "_" + ry + ".pn";
 		short regionoffset = getRegionOffset(rx, ry);
-		_log.info("PathFinding Engine: - Loading: " + fname + " -> region offset: " + regionoffset + "X: " + rx + " Y: " + ry);
+
+		count++;
+
 		File Pn = new File(fname);
 		int node = 0,size, index = 0;
-		RandomAccessFile raf = null;
 		FileChannel roChannel = null;
 		try
 		{
-			// Create a read-only memory-mapped file
-			raf = new RandomAccessFile(Pn, "r");
-			roChannel = raf.getChannel();
+			roChannel = new RandomAccessFile(Pn, "r").getChannel();
 			size = (int)roChannel.size();
 			MappedByteBuffer nodes;
-			if(Config.FORCE_GEODATA) //Force O/S to Loads this buffer's content into physical memory.
-				//it is not guarantee, because the underlying operating system may have paged out some of the buffer's data
+			if(Config.FORCE_GEODATA)
+			{
 				nodes = roChannel.map(FileChannel.MapMode.READ_ONLY, 0, size).load();
+			}
 			else
+			{
 				nodes = roChannel.map(FileChannel.MapMode.READ_ONLY, 0, size);
+			}
 
-			// Indexing pathnode files, so we will know where each block starts
 			IntBuffer indexs = IntBuffer.allocate(65536);
 
 			while(node < 65536)
@@ -370,35 +366,20 @@ public final class GeoPathFinding extends PathFinding
 		}
 		catch(Exception e)
 		{
-			if(Config.ENABLE_ALL_EXCEPTIONS)
-				e.printStackTrace();
-			
-			_log.log(Level.WARNING, "Failed to Load PathNode File: "+fname+"\n", e);
+			_log.warn("Failed to Load PathNode File: "+fname+"\n", e);
 		}
 		finally
 		{
-			if(roChannel != null)
-				try
+			try
+			{
+				if(roChannel != null)
 				{
 					roChannel.close();
 				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			
-			if(raf != null)
-				try
-				{
-					raf.close();
-				}
-				catch(Exception e1)
-				{
-					e1.printStackTrace();
-				}
-			
-			
+			}
+			catch(Exception e)
+			{}
 		}
-
 	}
+
 }

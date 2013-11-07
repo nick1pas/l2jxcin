@@ -18,20 +18,22 @@
  */
 package net.xcine.gameserver.geo;
 
-import java.util.logging.Logger;
-
 import net.xcine.Config;
 import net.xcine.gameserver.geo.pathfinding.Node;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.Location;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.spawn.L2Spawn;
 import net.xcine.util.Point3D;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 public class GeoData
 {
-	protected static final Logger _log = Logger.getLogger(GeoData.class.getName());
-	
+	protected static final Log _log = LogFactory.getLog(GeoData.class);
+
 	private static final class SingletonHolder
 	{
 		static
@@ -39,121 +41,67 @@ public class GeoData
 			_log.info("Geodata Engine: Disabled.");
 		}
 
-		protected static final GeoData INSTANCE = new GeoData();
+		public static final GeoData INSTANCE = new GeoData();
 	}
-	
+
 	protected GeoData()
 	{
 	}
-	
+
 	public static GeoData getInstance()
 	{
 		if(Config.GEODATA > 0)
+		{
 			return GeoEngine.getInstance();
+		}
 		return SingletonHolder.INSTANCE;
 	}
 
-	// Public Methods
-	/**
-	 * @param x
-	 * @param y
-	 * @return Geo Block Type
-	 */
 	public short getType(int x, int y)
 	{
 		return 0;
 	}
 
-	/**
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return Nearles Z
-	 */
 	public short getHeight(int x, int y, int z)
 	{
 		return (short) z;
 	}
 
-	/**
-	 * @param x
-	 * @param y
-	 * @param zmin
-	 * @param zmax
-	 * @param spawnid
-	 * @return
-	 */
-	public short getSpawnHeight(int x, int y, int zmin, int zmax, int spawnid)
+	public short getSpawnHeight(int x, int y, int zmin, int zmax, L2Spawn spawn)
 	{
 		return (short) zmin;
 	}
 
-	/**
-	 * @param x
-	 * @param y
-	 * @return
-	 */
 	public String geoPosition(int x, int y)
 	{
 		return "";
 	}
 
-	/**
-	 * @param cha
-	 * @param target
-	 * @return True if cha can see target (LOS)
-	 */
 	public boolean canSeeTarget(L2Object cha, L2Object target)
 	{
-		//If geo is off do simple check :]
-		//Don't allow casting on players on different dungeon lvls etc
 		return Math.abs(target.getZ() - cha.getZ()) < 1000;
 	}
 
 	public boolean canSeeTarget(L2Object cha, Point3D worldPosition)
 	{
-		//If geo is off do simple check :]
-		//Don't allow casting on players on different dungeon lvls etc
 		return Math.abs(worldPosition.getZ() - cha.getZ()) < 1000;
 	}
 
 	public boolean canSeeTarget(int x, int y, int z, int tx, int ty, int tz)
 	{
-		// If geo is off do simple check :]
-		// Don't allow casting on players on different dungeon lvls etc
 		return (Math.abs(z - tz) < 1000);
 	}
 
-	/**
-	 * @param gm
-	 * @param target
-	 * @return True if cha can see target (LOS) and send usful info to PC
-	 */
 	public boolean canSeeTargetDebug(L2PcInstance gm, L2Object target)
 	{
 		return true;
 	}
 
-	/**
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return Geo NSWE (0-15)
-	 */
 	public short getNSWE(int x, int y, int z)
 	{
 		return 15;
 	}
 
-	/**
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param tx
-	 * @param ty
-	 * @param tz
-	 * @return Last Location (x,y,z) where player can walk - just before wall
-	 */
 	public Location moveCheck(int x, int y, int z, int tx, int ty, int tz)
 	{
 		return new Location(tx, ty, tz);
@@ -164,19 +112,14 @@ public class GeoData
 		return true;
 	}
 
-	/**
-	 * @param gm
-	 * @param comment
-	 */
 	public void addGeoDataBug(L2PcInstance gm, String comment)
 	{
-		//Do Nothing
 	}
 
 	public void unloadGeodata(byte rx, byte ry)
 	{
 	}
-	
+
 	public boolean loadGeodataFile(byte rx, byte ry)
 	{
 		return false;
@@ -191,4 +134,5 @@ public class GeoData
 	{
 		return null;
 	}
+
 }

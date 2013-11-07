@@ -24,16 +24,14 @@ import net.xcine.gameserver.geo.pathfinding.Node;
 import net.xcine.gameserver.geo.util.L2FastSet;
 import net.xcine.gameserver.geo.util.ObjectPool;
 
-
 public final class BinaryNodeHeap
 {
-	protected final Node[] _list = new Node[800 + 1];
-	protected final L2FastSet<Node> _set = new L2FastSet<>();
-	protected int _size = 0;
+	public final Node[] _list = new Node[800 + 1];
+	public final L2FastSet<Node> _set = new L2FastSet<>();
+	public int _size = 0;
 
-	protected BinaryNodeHeap()
+	public BinaryNodeHeap()
 	{
-		
 	}
 
 	public void add(Node n)
@@ -53,7 +51,9 @@ public final class BinaryNodeHeap
 				pos = p2;
 			}
 			else
+			{
 				break;
+			}
 		}
 	}
 
@@ -74,14 +74,20 @@ public final class BinaryNodeHeap
 			if((dblcpos + 1) <= _size)
 			{
 				if(_list[cpos].getCost() >= _list[dblcpos].getCost())
+				{
 					pos = dblcpos;
+				}
 				if(_list[pos].getCost() >= _list[dblcpos + 1].getCost())
+				{
 					pos = dblcpos + 1;
+				}
 			}
 			else if(dblcpos <= _size)
 			{
 				if(_list[cpos].getCost() >= _list[dblcpos].getCost())
+				{
 					pos = dblcpos;
+				}
 			}
 
 			if(cpos != pos)
@@ -91,7 +97,9 @@ public final class BinaryNodeHeap
 				_list[pos] = temp;
 			}
 			else
+			{
 				break;
+			}
 		}
 		_set.remove(first);
 		return first;
@@ -100,8 +108,10 @@ public final class BinaryNodeHeap
 	public boolean contains(Node n)
 	{
 		if(_size == 0)
+		{
 			return false;
-		
+		}
+
 		return _set.contains(n);
 	}
 
@@ -136,4 +146,5 @@ public final class BinaryNodeHeap
 			return new BinaryNodeHeap();
 		}
 	};
+
 }

@@ -25,73 +25,77 @@ public abstract class Node
 	private Node[] _neighbors;
 	private Node _parent;
 	private short _cost;
-	
+
 	protected Node(int neighborsIdx)
 	{
 		_neighborsIdx = neighborsIdx;
 	}
-	
+
 	public final void setParent(Node p)
 	{
 		_parent = p;
 	}
-	
+
 	public final void setCost(int cost)
 	{
 		_cost = (short)cost;
 	}
-	
+
 	public final void attachNeighbors()
 	{
 		_neighbors = PathFinding.getInstance().readNeighbors(this, _neighborsIdx);
 	}
-	
+
 	public final Node[] getNeighbors()
 	{
 		return _neighbors;
 	}
-	
+
 	public final Node getParent()
 	{
 		return _parent;
 	}
-	
+
 	public final short getCost()
 	{
 		return _cost;
 	}
-	
+
 	public abstract int getX();
-	
+
 	public abstract int getY();
-	
+
 	public abstract short getZ();
-	
+
 	public abstract void setZ(short z);
-	
+
 	public abstract int getNodeX();
-	
+
 	public abstract int getNodeY();
-	
+
 	@Override
 	public final int hashCode()
 	{
 		return hash((getNodeX() << 20) + (getNodeY() << 8) + getZ());
 	}
-	
+
 	@Override
-	public final boolean equals(Object obj) {
+	public final boolean equals(Object obj)
+	{
 		if(!(obj instanceof Node))
+		{
 			return false;
-		
+		}
+
 		Node n = (Node)obj;
-		
+
 		return getNodeX() == n.getNodeX() && getNodeY() == n.getNodeY() && getZ() == n.getZ();
 	}
-	
+
 	public final int hash(int h)
 	{
 		h ^= (h >>> 20) ^ (h >>> 12);
 		return h ^ (h >>> 7) ^ (h >>> 4);
 	}
+
 }

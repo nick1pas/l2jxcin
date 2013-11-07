@@ -11,6 +11,7 @@
     <classpathentry kind="lib" path="lib/jython-engine-2.2.1.jar"/>
     <classpathentry kind="lib" path="lib/jython.jar"/>
     <classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
     <classpathentry kind="lib" path="lib/mysql-connector-java-5.1.23-bin.jar"/>
     <classpathentry kind="lib" path="lib/c3p0-0.9.5-pre3.jar"/>
     <classpathentry kind="lib" path="lib/bonecp-0.7.1.RELEASE.jar"/>

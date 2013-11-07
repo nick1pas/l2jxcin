@@ -650,7 +650,7 @@ public final class Config
 	public static boolean OFFLINE_COMMAND2;
 	public static boolean OFFLINE_LOGOUT;
 	public static boolean OFFLINE_SLEEP_EFFECT;	
-	public static boolean RESTORE_OFFLINERS;
+	public static boolean RESTORE_OFFLINERS; 
 	public static int OFFLINE_MAX_DAYS;
 	public static boolean OFFLINE_DISCONNECT_FINISHED;	
 	public static boolean L2JMOD_ALLOW_WEDDING;

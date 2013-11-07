@@ -22,16 +22,12 @@ import net.xcine.gameserver.geo.pathfinding.Node;
 import net.xcine.gameserver.geo.util.L2FastSet;
 import net.xcine.gameserver.geo.util.ObjectPool;
 
-/**
- * @author Sami
- */
 public final class CellNodeMap
 {
-	protected final L2FastSet<Node> _cellIndex = new L2FastSet<>(4096);
+	public final L2FastSet<Node> _cellIndex = new L2FastSet<>(4096);
 
-	protected CellNodeMap()
+	public CellNodeMap()
 	{
-		
 	}
 
 	public void add(Node n)
@@ -54,7 +50,8 @@ public final class CellNodeMap
 		POOL.store(map);
 	}
 
-	private static final ObjectPool<CellNodeMap> POOL = new ObjectPool<CellNodeMap>() {
+	private static final ObjectPool<CellNodeMap> POOL = new ObjectPool<CellNodeMap>()
+	{
 		@Override
 		protected void reset(CellNodeMap map)
 		{
@@ -67,4 +64,5 @@ public final class CellNodeMap
 			return new CellNodeMap();
 		}
 	};
+
 }

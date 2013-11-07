@@ -23,51 +23,53 @@ import net.xcine.gameserver.geo.pathfinding.Node;
 import net.xcine.gameserver.geo.pathfinding.PathFinding;
 import net.xcine.gameserver.model.L2World;
 
-
 public final class CellPathFinding extends PathFinding
 {
-	private static final class SingletonHolder {
-		protected static final CellPathFinding INSTANCE = new CellPathFinding();
+	private static final class SingletonHolder
+	{
+		public static final CellPathFinding INSTANCE = new CellPathFinding();
 	}
-	
+
 	public static CellPathFinding getInstance()
 	{
 		return SingletonHolder.INSTANCE;
 	}
-	
+
 	@Override
 	public Node[] findPath(int x, int y, int z, int tx, int ty, int tz)
 	{
 		int gx = x - L2World.MAP_MIN_X >> 4;
 		int gy = y - L2World.MAP_MIN_Y >> 4;
 		if(!GeoData.getInstance().hasGeo(x, y))
+		{
 			return null;
+		}
 		short gz = GeoData.getInstance().getHeight(x, y, z);
 		int gtx = tx - L2World.MAP_MIN_X >> 4;
 		int gty = ty - L2World.MAP_MIN_Y >> 4;
 		if(!GeoData.getInstance().hasGeo(tx, ty))
+		{
 			return null;
+		}
 		short gtz = GeoData.getInstance().getHeight(tx, ty, tz);
 		Node start = readNode(gx, gy, gz);
 		Node end = readNode(gtx, gty, gtz);
 		return searchByClosest(start, end);
 	}
-	
+
 	@Override
 	public Node[] readNeighbors(Node n, int idx)
 	{
 		return GeoData.getInstance().getNeighbors(n);
 	}
 
-	//Private
-
 	public Node readNode(int gx, int gy, short z)
 	{
 		return new CellNode(gx, gy, z, 0);
 	}
 
-	protected CellPathFinding()
+	public CellPathFinding()
 	{
-		//
 	}
+
 }

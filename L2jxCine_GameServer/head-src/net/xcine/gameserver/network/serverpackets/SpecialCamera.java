@@ -21,12 +21,16 @@ package net.xcine.gameserver.network.serverpackets;
 public class SpecialCamera extends L2GameServerPacket
 {
 	private static final String _S__C7_SPECIALCAMERA = "[S] C7 SpecialCamera";
-	private int _id;
-	private int _dist;
-	private int _yaw;
-	private int _pitch;
-	private int _time;
-	private int _duration;
+	private final int _id;
+	private final int _dist;
+	private final int _yaw;
+	private final int _pitch;
+	private final int _time;
+	private final int _duration;
+	private final int _turn;
+	private final int _rise;
+	private final int _widescreen;
+	private final int _unknown;
 
 	public SpecialCamera(int id, int dist, int yaw, int pitch, int time, int duration)
 	{
@@ -36,6 +40,24 @@ public class SpecialCamera extends L2GameServerPacket
 		_pitch = pitch;
 		_time = time;
 		_duration = duration;
+		_turn = 0;
+		_rise = 0;
+		_widescreen = 0;
+		_unknown = 0;
+	}
+
+	public SpecialCamera(int id, int dist, int yaw, int pitch, int time, int duration, int turn, int rise, int widescreen, int unk)
+	{
+		_id = id;
+		_dist = dist;
+		_yaw = yaw;
+		_pitch = pitch;
+		_time = time;
+		_duration = duration;
+		_turn = turn;
+		_rise = rise;
+		_widescreen = widescreen;
+		_unknown = unk;
 	}
 
 	@Override
@@ -48,6 +70,10 @@ public class SpecialCamera extends L2GameServerPacket
 		writeD(_pitch);
 		writeD(_time);
 		writeD(_duration);
+		writeD(_turn);
+		writeD(_rise);
+		writeD(_widescreen);
+		writeD(_unknown);
 	}
 
 	@Override
@@ -55,4 +81,5 @@ public class SpecialCamera extends L2GameServerPacket
 	{
 		return _S__C7_SPECIALCAMERA;
 	}
+
 }

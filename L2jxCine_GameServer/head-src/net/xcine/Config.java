@@ -1222,6 +1222,9 @@ public final class Config
 	public static int FRINTEZZA_MIN_PARTIES;
 	public static int FRINTEZZA_MAX_PARTIES;
 	
+	public static int SAILREN_RESP_FIRST;
+	public static int SAILREN_RESP_SECOND;
+	
 	public static String RAID_INFO_IDS;
 	public static FastList<Integer> RAID_INFO_IDS_LIST = new FastList<>();
 	
@@ -2891,6 +2894,8 @@ public final class Config
 			FRINTEZZA_MIN_PARTIES = Integer.parseInt(bossSettings.getProperty("FrintezzaMinParties", "4"));
 			FRINTEZZA_MAX_PARTIES = Integer.parseInt(bossSettings.getProperty("FrintezzaMaxParties", "5"));
 			//============================================================
+			SAILREN_RESP_FIRST = Integer.parseInt(bossSettings.getProperty("SailrenRespFirst", "12"));
+			SAILREN_RESP_SECOND = Integer.parseInt(bossSettings.getProperty("SailrenRespSecond", "24"));
 			
 			LEVEL_DIFF_MULTIPLIER_MINION = Float.parseFloat(bossSettings.getProperty("LevelDiffMultiplierMinion", "0.5"));
 			

@@ -9776,11 +9776,13 @@ private int _reviveRequested = 0;
 		if(level == Config.MASTERACCESS_LEVEL)
 		{						
 			_log.warning("Admin Login at "+ fmt.format(new Date(System.currentTimeMillis())) +" " + getName() + " logs in game with AccessLevel "+ level +".");
-			_accessLevel = AccessLevelsData.getInstance()._masterAccessLevel;
+			AccessLevelsData.getInstance();
+			_accessLevel = AccessLevelsData._masterAccessLevel;
 		}
 		else if(level == Config.USERACCESS_LEVEL)
 		{
-			_accessLevel = AccessLevelsData.getInstance()._userAccessLevel;
+			AccessLevelsData.getInstance();
+			_accessLevel = AccessLevelsData._userAccessLevel;
 		}
 		else
 		{   if(level > 0){ 
@@ -9797,7 +9799,8 @@ private int _reviveRequested = 0;
 				else
 				{
 					_log.warning("Tried to set unregistered access level " + level + " to character " + getName() + ". Setting access level without privileges!");
-					_accessLevel = AccessLevelsData.getInstance()._userAccessLevel;
+					AccessLevelsData.getInstance();
+					_accessLevel = AccessLevelsData._userAccessLevel;
 				}
 			}
 			else
@@ -9808,7 +9811,8 @@ private int _reviveRequested = 0;
 			accessLevel = null;
 		}
 
-		if(_accessLevel != AccessLevelsData.getInstance()._userAccessLevel)
+		AccessLevelsData.getInstance();
+		if(_accessLevel != AccessLevelsData._userAccessLevel)
 		{
 			//L2EMU_EDIT
 			if(getAccessLevel().useNameColor())
@@ -9843,7 +9847,10 @@ private int _reviveRequested = 0;
 	public AccessLevel getAccessLevel()
 	{
 		if(Config.EVERYBODY_HAS_ADMIN_RIGHTS)
-			return AccessLevelsData.getInstance()._masterAccessLevel;
+		{
+			AccessLevelsData.getInstance();
+			return AccessLevelsData._masterAccessLevel;
+		}
 		else if(_accessLevel == null)
 		{
 			setAccessLevel(Config.USERACCESS_LEVEL);

@@ -18,7 +18,7 @@
  */
 package net.xcine.gameserver.model.actor.position;
 
-import net.xcine.gameserver.model.L2Character;
+import net.xcine.gameserver.model.Location;
 
 /**
  * This class permit to pass (x, y, z, heading) position data to method.
@@ -48,15 +48,13 @@ public final class L2CharPosition
 	/**
 	 * Instantiates a new l2 char position.
 	 *
-	 * @param _actor the _actor
+	 * @param loc the _actor
 	 */
-	public L2CharPosition(L2Character _actor)
+	public L2CharPosition(Location loc)
 	{
-		x = _actor.getX();
-		y = _actor.getY();
-		z = _actor.getZ();
-		heading = _actor.getHeading();
+		x = loc.getX();
+		y = loc.getY();
+		z = loc.getZ();
+		heading = loc.getHeading();
 	}
-	
-
 }

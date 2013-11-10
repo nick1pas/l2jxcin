@@ -221,6 +221,15 @@ public class Announcements
 				}
 		}
 	}
+	
+	public void announceToPlayers(String message)
+	{
+		for (L2PcInstance player : L2World.getInstance().getAllPlayers())
+		{
+			player.sendMessage(message);
+		}
+	}
+	
 
 	private void saveToDisk()
 	{

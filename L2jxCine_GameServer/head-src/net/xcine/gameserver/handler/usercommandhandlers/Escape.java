@@ -36,10 +36,7 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.util.Broadcast;
 
-/**
- *
- *
- */
+
 public class Escape implements IUserCommandHandler
 {
 	private static final int[] COMMAND_IDS =
@@ -47,86 +44,72 @@ public class Escape implements IUserCommandHandler
 		52
 	};
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#useUserCommand(int, net.xcine.gameserver.model.L2PcInstance)
-	 */
 	@Override
 	public boolean useUserCommand(int id, L2PcInstance activeChar)
 	{
 
 		int unstuckTimer = activeChar.getAccessLevel().isGm() ? 1000 : Config.UNSTUCK_INTERVAL * 1000;
 
-		// Check to see if the current player is in Festival.
 		if(activeChar.isFestivalParticipant())
 		{
 			activeChar.sendMessage("You may not use an escape command in a festival.");
 			return false;
 		}
 
-		// Check to see if the current player is in TVT Event.
 		if(activeChar._inEventTvT && TvT.is_started())
 		{
 			activeChar.sendMessage("You may not use an escape skill in TvT.");
 			return false;
 		}
 
-		// Check to see if the current player is in CTF Event.
 		if(activeChar._inEventCTF && CTF.is_started())
 		{
 			activeChar.sendMessage("You may not use an escape skill in CTF.");
 			return false;
 		}
 
-		// Check to see if the current player is in DM Event.
 		if(activeChar._inEventDM && DM.is_started())
 		{
 			activeChar.sendMessage("You may not use an escape skill in DM.");
 			return false;
 		}
 
-		// Check to see if the current player is in Vip Event.
 		if(activeChar._inEventVIP && VIP._started)
 		{
 			activeChar.sendMessage("You may not use an escape skill in VIP.");
 			return false;
 		}
 
-		// Check to see if the current player is in Grandboss zone.
 		if(GrandBossManager.getInstance().getZone(activeChar) != null && !activeChar.isGM())
 		{
 			activeChar.sendMessage("You may not use an escape command in Grand boss zone.");
 			return false;
 		}
 
-		// Check to see if the current player is in jail.
 		if(activeChar.isInJail())
 		{
 			activeChar.sendMessage("You can not escape from jail.");
 			return false;
 		}
 
-		// Check to see if the current player is in fun event.
 		if(activeChar.isInFunEvent())
 		{
 			activeChar.sendMessage("You may not escape from an Event.");
 			return false;
 		}
 		
-		// Check to see if the current player is in Observer Mode.
 		if(activeChar.inObserverMode())
 		{
 			activeChar.sendMessage("You may not escape during Observer mode.");
 			return false;
 		}
-		
-		// Check to see if the current player is sitting.
+
 		if(activeChar.isSitting())
 		{
 		    activeChar.sendMessage("You may not escape when you sitting.");
 		    return false;
 		}
-		
-		// Check player status.
+
 		if(activeChar.isCastingNow() || activeChar.isMovementDisabled() || activeChar.isMuted() || activeChar.isAlikeDead() || activeChar.isInOlympiadMode() || activeChar.isAwaying())
 			return false;
 
@@ -141,20 +124,17 @@ public class Escape implements IUserCommandHandler
 		sm = null;
 
 		activeChar.getAI().setIntention(CtrlIntention.AI_INTENTION_IDLE);
-		//SoE Animation section
 		activeChar.setTarget(activeChar);
 		activeChar.disableAllSkills();
 
 		MagicSkillUser msk = new MagicSkillUser(activeChar, 1050, 1, unstuckTimer, 0);
-		activeChar.setTarget(null); // Like retail we haven't self target
+		activeChar.setTarget(null);
 		Broadcast.toSelfAndKnownPlayersInRadius(activeChar, msk, 810000/*900*/);
 		SetupGauge sg = new SetupGauge(0, unstuckTimer);
 		activeChar.sendPacket(sg);
 		msk = null;
 		sg = null;
-		//End SoE Animation section
 		EscapeFinalizer ef = new EscapeFinalizer(activeChar);
-		// continue execution later
 		activeChar.setSkillCast(ThreadPoolManager.getInstance().scheduleGeneral(ef, unstuckTimer));
 		activeChar.setSkillCastEndTime(10 + GameTimeController.getGameTicks() + unstuckTimer / GameTimeController.MILLIS_IN_TICK);
 
@@ -198,9 +178,6 @@ public class Escape implements IUserCommandHandler
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#getUserCommandList()
-	 */
 	@Override
 	public int[] getUserCommandList()
 	{

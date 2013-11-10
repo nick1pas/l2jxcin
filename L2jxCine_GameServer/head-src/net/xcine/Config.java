@@ -796,8 +796,6 @@ public final class Config
 	public static boolean KEEP_SUBCLASS_SKILLS;
 	public static boolean CHAR_TITLE;
 	public static String ADD_CHAR_TITLE;
-	public static boolean NOBLE_CUSTOM_ITEMS;
-	public static boolean HERO_CUSTOM_ITEMS;
 	public static boolean ALLOW_CREATE_LVL;
 	public static int CHAR_CREATE_LVL;
 	public static boolean SPAWN_CHAR;
@@ -830,10 +828,6 @@ public final class Config
 	public static boolean DISABLE_WEIGHT_PENALTY;
 	public static int DIFFERENT_Z_CHANGE_OBJECT;
 	public static int DIFFERENT_Z_NEW_MOVIE;
-
-	public static int HERO_CUSTOM_ITEM_ID;
-	public static int NOOBLE_CUSTOM_ITEM_ID;
-	public static int HERO_CUSTOM_DAY;
 	
 	// PvP Settings
 	public static int KARMA_MIN_KARMA;
@@ -2607,12 +2601,6 @@ public final class Config
 			CASTLE_CIRCLETS = Boolean.parseBoolean(L2jxCineSettings.getProperty("CastleCircletsRestriction", "true"));
 			CHAR_TITLE = Boolean.parseBoolean(L2jxCineSettings.getProperty("CharTitle", "false"));
 			ADD_CHAR_TITLE = L2jxCineSettings.getProperty("CharAddTitle", "Welcome");
-
-			NOBLE_CUSTOM_ITEMS = Boolean.parseBoolean(L2jxCineSettings.getProperty("EnableNobleCustomItem", "true"));
-			NOOBLE_CUSTOM_ITEM_ID = Integer.parseInt(L2jxCineSettings.getProperty("NoobleCustomItemId", "6673"));
-			HERO_CUSTOM_ITEMS = Boolean.parseBoolean(L2jxCineSettings.getProperty("EnableHeroCustomItem", "true"));
-			HERO_CUSTOM_ITEM_ID = Integer.parseInt(L2jxCineSettings.getProperty("HeroCustomItemId", "3481"));
-			HERO_CUSTOM_DAY = Integer.parseInt(L2jxCineSettings.getProperty("HeroCustomDay", "0"));
 
 			ALLOW_CREATE_LVL = Boolean.parseBoolean(L2jxCineSettings.getProperty("CustomStartingLvl", "False"));
 			CHAR_CREATE_LVL = Integer.parseInt(L2jxCineSettings.getProperty("CharLvl", "80"));

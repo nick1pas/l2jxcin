@@ -51,12 +51,7 @@ import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.util.random.Rnd;
 import ai.L2AttackableAIScript;
 
-/**
- * This class ... control for sequence of fight against Antharas.
- *
- * @version $Revision: $ $Date: $
- * @author L2J_JP SANDMAN
- */
+
 public class Antharas extends L2AttackableAIScript
 {
 	// config
@@ -118,8 +113,6 @@ public class Antharas extends L2AttackableAIScript
 	
 	protected static L2BossZone _Zone;
 	
-
-	// Boss: Antharas
 	public Antharas(int questId,String name,String descr)
 	{
 		super(questId, name, descr);
@@ -127,18 +120,15 @@ public class Antharas extends L2AttackableAIScript
 		this.registerMobs(mob);
 		init();
 	}
-	
-	// Initialize
+
 	private void init()
 	{
-		// Setting spawn data of monsters.
 		try
 		{
 			_Zone = GrandBossManager.getInstance().getZone(179700,113800,-7709);
 			L2NpcTemplate template1;
 			L2Spawn tempSpawn;
 			
-			// Old Antharas
 			template1 = NpcTable.getInstance().getTemplate(ANTHARASOLDID);
 			tempSpawn = new L2Spawn(template1);
 			tempSpawn.setLocx(181323);
@@ -150,7 +140,6 @@ public class Antharas extends L2AttackableAIScript
 			SpawnTable.getInstance().addNewSpawn(tempSpawn, false);
 			_monsterSpawn.put(29019, tempSpawn);
 			
-			// Weak Antharas
 			template1 = NpcTable.getInstance().getTemplate(ANTHARASWEAKID);
 			tempSpawn = new L2Spawn(template1);
 			tempSpawn.setLocx(181323);
@@ -162,7 +151,6 @@ public class Antharas extends L2AttackableAIScript
 			SpawnTable.getInstance().addNewSpawn(tempSpawn, false);
 			_monsterSpawn.put(29066, tempSpawn);
 			
-			// Normal Antharas
 			template1 = NpcTable.getInstance().getTemplate(ANTHARASNORMALID);
 			tempSpawn = new L2Spawn(template1);
 			tempSpawn.setLocx(181323);
@@ -174,7 +162,6 @@ public class Antharas extends L2AttackableAIScript
 			SpawnTable.getInstance().addNewSpawn(tempSpawn, false);
 			_monsterSpawn.put(29067, tempSpawn);
 			
-			// Strong Antharas
 			template1 = NpcTable.getInstance().getTemplate(ANTHARASSTRONGID);
 			tempSpawn = new L2Spawn(template1);
 			tempSpawn.setLocx(181323);
@@ -191,7 +178,6 @@ public class Antharas extends L2AttackableAIScript
 			_log.warning(e.getMessage());
 		}
 		
-		// Setting spawn data of teleport cube.
 		try
 		{
 			L2NpcTemplate Cube = NpcTable.getInstance().getTemplate(_teleportCubeId);
@@ -223,8 +209,6 @@ public class Antharas extends L2AttackableAIScript
 			Long respawnTime = info.getLong("respawn_time");
 			if (status == DEAD && respawnTime <= System.currentTimeMillis())
 			{
-				// the time has already expired while the server was offline. Immediately spawn antharas in his cave.
-				// also, the status needs to be changed to DORMANT
 				GrandBossManager.getInstance().setBossStatus(ANTHARASOLDID,DORMANT);
 				status = DORMANT;
 			}
@@ -240,7 +224,6 @@ public class Antharas extends L2AttackableAIScript
 				GrandBossManager.getInstance().addBoss(_antharas);
 				_antharas.setCurrentHpMp(hp,mp);
 				_LastAction = System.currentTimeMillis();
-				// Start repeating timer to check for inactivity
 				_activityCheckTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new CheckActivity(), 60000, 60000);
 			}
 			else if (status == DEAD)
@@ -254,12 +237,8 @@ public class Antharas extends L2AttackableAIScript
 		}
 		else
 		{
-			Integer statusWeak = GrandBossManager.getInstance().getBossStatus(ANTHARASWEAKID);
-			
-			
+			Integer statusWeak = GrandBossManager.getInstance().getBossStatus(ANTHARASWEAKID);		
 			Integer statusNormal = GrandBossManager.getInstance().getBossStatus(ANTHARASNORMALID);
-			
-			
 			Integer statusStrong = GrandBossManager.getInstance().getBossStatus(ANTHARASSTRONGID);
 			
 			int antharasId = 0;
@@ -313,7 +292,6 @@ public class Antharas extends L2AttackableAIScript
 		}
 	}
 	
-	// Do spawn teleport cube.
 	public void spawnCube()
 	{
 		if (_mobsSpawnTask != null)

@@ -92,13 +92,12 @@ public class Disablers implements ISkillHandler
 	
 		for(int index = 0; index < targets.length; index++)
 		{
-			// Get a target
 			if(!(targets[index] instanceof L2Character))
 				continue;
 
 			L2Character target = (L2Character) targets[index];
 
-			if(target == null || target.isDead()) //bypass if target is null or dead
+			if(target == null || target.isDead())
 				continue;
 
 			switch(type)
@@ -119,18 +118,15 @@ public class Disablers implements ISkillHandler
 				}
 				case FAKE_DEATH:
 				{
-					// stun/fakedeath is not mdef dependant, it depends on lvl difference, target CON and power of stun
 					skill.getEffects(activeChar, target, ss, sps, bss);
 					break;
 				}
 				case STUN:
-					// Calculate skill evasion
 					if(Formulas.calcPhysicalSkillEvasion(target, skill))
 					{
 						activeChar.sendPacket(new SystemMessage(SystemMessageId.ATTACK_FAILED));
 						break;
 					}
-					// Calculate vengeance
 					if(target.vengeanceSkill(skill))
 					{
 						target = activeChar;
@@ -156,7 +152,7 @@ public class Disablers implements ISkillHandler
 					break;
 				}
 				case SLEEP:
-				case PARALYZE: //use same as root for now
+				case PARALYZE:
 				{
 					if(target.reflectSkill(skill))
 						target = activeChar;
@@ -201,7 +197,6 @@ public class Disablers implements ISkillHandler
 				}
 				case CONFUSE_MOB_ONLY:
 				{
-					// do nothing if not on mob
 					if(Formulas.getInstance().calcSkillSuccess(activeChar, target, skill, ss, sps, bss))
 					{
 						L2Effect[] effects = target.getAllEffects();
@@ -226,13 +221,11 @@ public class Disablers implements ISkillHandler
 				{
 					if(target instanceof L2Attackable)
 						target.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, activeChar, (int) ((150 * skill.getPower()) / (target.getLevel() + 7)));
-					//TODO [Nemesiss] should this have 100% chance?
 					skill.getEffects(activeChar, target, ss, sps, bss);
 					break;
 				}
 				case AGGREDUCE:
 				{
-					// these skills needs to be rechecked
 					if(target instanceof L2Attackable)
 					{
 						skill.getEffects(activeChar, target, ss, sps, bss);
@@ -248,7 +241,6 @@ public class Disablers implements ISkillHandler
 				}
 				case AGGREDUCE_CHAR:
 				{
-					// these skills needs to be rechecked
 					if(Formulas.getInstance().calcSkillSuccess(activeChar, target, skill, ss, sps, bss))
 					{
 						if(target instanceof L2Attackable)
@@ -281,7 +273,6 @@ public class Disablers implements ISkillHandler
 				}
 				case AGGREMOVE:
 				{
-					// these skills needs to be rechecked
 					if(target instanceof L2Attackable && !target.isRaid())
 					{
 						if(Formulas.getInstance().calcSkillSuccess(activeChar, target, skill, ss, sps, bss))
@@ -321,7 +312,6 @@ public class Disablers implements ISkillHandler
 				case ERASE:
 				{
 					if(Formulas.getInstance().calcSkillSuccess(activeChar, target, skill, ss, sps, bss)
-					// Doesn't affect siege golem, wild hog cannon and Pets
 					&& !(target instanceof L2SiegeSummonInstance) && !(target instanceof L2PetInstance))
 					{
 						L2PcInstance summonOwner = null;
@@ -410,7 +400,6 @@ public class Disablers implements ISkillHandler
 
 					if(skill.getId() == 1056)
 					{
-						// If target isInvul (for example Celestial shield) CANCEL doesn't work
 						if(target.isInvul())
                         {
                             if(activeChar instanceof L2PcInstance)
@@ -459,7 +448,6 @@ public class Disablers implements ISkillHandler
 								}
 
 								if(e.getSkill().getId() != 4082 && e.getSkill().getId() != 4215 && e.getSkill().getId() != 5182 && e.getSkill().getId() != 4515 && e.getSkill().getId() != 110 && e.getSkill().getId() != 111 && e.getSkill().getId() != 1323 && e.getSkill().getId() != 1325)
-								// Cannot cancel skills 4082, 4215, 4515, 110, 111, 1323, 1325
 								{
 									if(e.getSkill().getSkillType() != SkillType.BUFF) //sleep, slow, surrenders etc
 										e.exit(true);
@@ -542,7 +530,6 @@ public class Disablers implements ISkillHandler
 								}
 							}
 						}
-						//effects = null;
 					}
 					else
 					{
@@ -559,31 +546,18 @@ public class Disablers implements ISkillHandler
 				}
 				case NEGATE:
 				{
-					if(skill.getId() == 2275) // fishing potion
+					if(skill.getId() == 2275)
 					{
 						_negatePower = skill.getNegatePower();
 						_negateId = skill.getNegateId();
 						negateEffect(target, SkillType.BUFF, _negatePower, _negateId);
 					}
 					else
-					// all others negate type skills
 					{
 						_negateSkillTypes = skill.getNegateSkillTypes();
 						_negateEffectTypes = skill.getNegateEffectTypes();
 						_negatePower = skill.getNegatePower();
 
-						/* 
-						 * Negate log
-						 * 
-						System.out.println("EFFECT-TYPES: ");
-						 
-						for(String effect: _negateEffectTypes)
-							System.out.println("	"+effect);
-						System.out.println("SKILL-TYPES: ");
-						for(String skillt: _negateSkillTypes)
-							System.out.println("	"+skillt);
-						*/
-						
 						for(String stat : _negateSkillTypes)
 						{
 							stat = stat.toLowerCase().intern();
@@ -661,7 +635,7 @@ public class Disablers implements ISkillHandler
 								}
 								Healhandler = null;
 							}
-						}//end for
+						}
 						
 						for(String stat : _negateEffectTypes)
 						{
@@ -704,12 +678,12 @@ public class Disablers implements ISkillHandler
 								
 							}
 							
-						}//end for
-					}//end else
-				}// end case
-			}//end switch
+						}
+					}
+				}
+			}
 			target = null;
-		}//end for
+		}
 
 		if (skill.isMagic())
 		{
@@ -725,17 +699,15 @@ public class Disablers implements ISkillHandler
 			
 		}
 		
-		// self Effect :]
 		L2Effect effect = activeChar.getFirstEffect(skill.getId());
 		if(effect != null && effect.isSelfEffect())
 		{
-			//Replace old effect with new one.
 			effect.exit(false);
 		}
 		effect = null;
 		skill.getEffectsSelf(activeChar);
 
-	} //end void
+	}
 
 	private void negateEffect(L2Character target, SkillType type, double power)
 	{
@@ -747,8 +719,8 @@ public class Disablers implements ISkillHandler
 		L2Effect[] effects = target.getAllEffects();
 		for(L2Effect e : effects)
 			if(e.getSkill()!=null && e.getSkill().getId() == 4215 || e.getSkill().getId() == 4515){
-				continue; //skills cannot be removed
-			}else if(power == -1) // if power is -1 the effect is always removed without power/lvl check ^^
+				continue; 
+			}else if(power == -1) 
 			{
 				if(e.getSkill().getSkillType() == type || (e.getSkill().getEffectType() != null && e.getSkill().getEffectType() == type))
 				{

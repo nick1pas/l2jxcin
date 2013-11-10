@@ -37,9 +37,6 @@ public class DisMount implements IUserCommandHandler
 		62
 	};
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#useUserCommand(int, net.xcine.gameserver.model.L2PcInstance)
-	 */
 	@Override
 	public synchronized boolean useUserCommand(int id, L2PcInstance activeChar)
 	{
@@ -70,9 +67,6 @@ public class DisMount implements IUserCommandHandler
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#getUserCommandList()
-	 */
 	@Override
 	public int[] getUserCommandList()
 	{

@@ -20,9 +20,7 @@ import java.sql.ResultSet;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import net.xcine.Config;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 import net.xcine.util.random.Rnd;
 
@@ -39,11 +37,6 @@ public final class CustomNpcInstanceManager
 	private FastMap<Integer, customInfo> spawns; // <Object id , info>
 	private FastMap<Integer, customInfo> templates; // <Npc Template Id , info>
 
-	/**
-	 * Small class to keep the npc poly data... Pretty code =)
-	 * 
-	 * @author Darki699
-	 */
 	public final class customInfo
 	{
 		public String stringData[] = new String[2];
@@ -51,10 +44,8 @@ public final class CustomNpcInstanceManager
 		public boolean booleanData[] = new boolean[8];
 	}
 
-	/**
-	 * Constructor Calls to load the data
-	 */
-	CustomNpcInstanceManager()
+
+	public CustomNpcInstanceManager()
 	{
 		load();
 	}
@@ -73,9 +64,6 @@ public final class CustomNpcInstanceManager
 		return _instance;
 	}
 
-	/**
-	 * Flush the old data, and load new data
-	 */
 	public final void reload()
 	{
 		if(spawns != null)
@@ -92,9 +80,6 @@ public final class CustomNpcInstanceManager
 		load();
 	}
 
-	/**
-	 * Just load the data for mysql...
-	 */
 	private final void load()
 	{
 		if(spawns == null || templates == null)
@@ -107,12 +92,9 @@ public final class CustomNpcInstanceManager
 		{
 			"SELECT" + " spawn,template,name,title,class_id,female,hair_style,hair_color,face,name_color,title_color," + " noble,hero,pvp,karma,wpn_enchant,right_hand,left_hand,gloves,chest,legs,feet,hair,hair2," + " pledge,cw_level,clan_id,ally_id,clan_crest,ally_crest,rnd_class,rnd_appearance,rnd_weapon,rnd_armor,max_rnd_enchant" + " FROM npc_to_pc_polymorph",
 		};
-
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			int count = 0;
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			for(String selectQuery : SQL_ITEM_SELECTS)
 			{
 				PreparedStatement statement = con.prepareStatement(selectQuery);
@@ -173,7 +155,6 @@ public final class CustomNpcInstanceManager
 						ci.booleanData[6] = rset.getInt("rnd_weapon") > 0 ? true : false;
 						ci.booleanData[7] = rset.getInt("rnd_armor") > 0 ? true : false;
 						ci.integerData[24] = rset.getInt("max_rnd_enchant");
-						// Same object goes in twice:
 						if(ci.integerData[25] != 0 && !templates.containsKey(ci.integerData[25]))
 						{
 							templates.put(ci.integerData[25], ci);
@@ -203,12 +184,6 @@ public final class CustomNpcInstanceManager
 		{
 			if(Config.ENABLE_ALL_EXCEPTIONS)
 				e.printStackTrace();
-			/** _log.warning( "CustomNpcInstanceManager: Passed "); **/
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
 		}
 	}
 
@@ -279,18 +254,14 @@ public final class CustomNpcInstanceManager
 	 */
 	public final void updateRemoveInDB(customInfo ciToRemove)
 	{
-	//
 	}
 
 	public final void AddInDB(customInfo ciToAdd)
 	{
 		String Query = "REPLACE INTO npc_to_pc_polymorph VALUES" + " spawn,template,name,title,class_id,female,hair_style,hair_color,face,name_color,title_color," + " noble,hero,pvp,karma,wpn_enchant,right_hand,left_hand,gloves,chest,legs,feet,hair,hair2," + " pledge,cw_level,clan_id,ally_id,clan_crest,ally_crest,rnd_class,rnd_appearance,rnd_weapon,rnd_armor,max_rnd_enchant" + " FROM npc_to_pc_polymorph";
 
-		Connection con = null;
-
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement(Query);
 			ResultSet rset = statement.executeQuery();
 
@@ -314,11 +285,6 @@ public final class CustomNpcInstanceManager
 				t.printStackTrace();
 			
 			_log.warning("Could not add Npc Morph info into the DB: ");
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
 		}
 	}
 }

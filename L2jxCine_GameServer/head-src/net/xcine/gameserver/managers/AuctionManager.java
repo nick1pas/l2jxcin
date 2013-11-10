@@ -25,7 +25,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.model.entity.Auction;
 import net.xcine.util.CloseUtil;

@@ -28,7 +28,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
@@ -41,7 +40,6 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.templates.StatsSet;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.logs.Log;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 import net.xcine.util.random.Rnd;
 
@@ -81,11 +79,8 @@ public class RaidBossSpawnManager
 		_storedInfo.clear();
 		_spawns.clear();
 
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-
 			PreparedStatement statement = con.prepareStatement("SELECT * from raidboss_spawnlist ORDER BY boss_id");
 			ResultSet rset = statement.executeQuery();
 
@@ -140,11 +135,6 @@ public class RaidBossSpawnManager
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
 		}
 	}
 
@@ -319,11 +309,8 @@ public class RaidBossSpawnManager
 
 		if(storeInDb)
 		{
-			Connection con = null;
-
-			try
+			try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 			{
-				con = L2DatabaseFactory.getInstance().getConnection(false);
 				PreparedStatement statement = con.prepareStatement("INSERT INTO raidboss_spawnlist (boss_id,amount,loc_x,loc_y,loc_z,heading,respawn_time,currentHp,currentMp) values(?,?,?,?,?,?,?,?,?)");
 				statement.setInt(1, spawnDat.getNpcid());
 				statement.setInt(2, spawnDat.getAmount());
@@ -345,11 +332,6 @@ public class RaidBossSpawnManager
 				
 				// problem with storing spawn
 				_log.warning("RaidBossSpawnManager: Could not store raidboss #" + bossId + " in the DB:" + e);
-			}
-			finally
-			{
-				CloseUtil.close(con);
-				con = null;
 			}
 		}
 	}
@@ -386,11 +368,8 @@ public class RaidBossSpawnManager
 
 		if(updateDb)
 		{
-			Connection con = null;
-
-			try
+			try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 			{
-				con = L2DatabaseFactory.getInstance().getConnection(false);
 				PreparedStatement statement = con.prepareStatement("DELETE FROM raidboss_spawnlist WHERE boss_id=?");
 				statement.setInt(1, bossId);
 				statement.execute();
@@ -405,11 +384,6 @@ public class RaidBossSpawnManager
 				// problem with deleting spawn
 				_log.warning("RaidBossSpawnManager: Could not remove raidboss #" + bossId + " from DB: " + e);
 			}
-			finally
-			{
-				CloseUtil.close(con);
-				con = null;
-			}
 		}
 	}
 
@@ -417,12 +391,8 @@ public class RaidBossSpawnManager
 	{
 		for(Integer bossId : _storedInfo.keySet())
 		{
-			Connection con = null;
-
-			try
+			try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 			{
-				con = L2DatabaseFactory.getInstance().getConnection(false);
-
 				L2RaidBossInstance boss = _bosses.get(bossId);
 				if(boss != null)
 				{
@@ -456,11 +426,6 @@ public class RaidBossSpawnManager
 					e.printStackTrace();
 				
 				_log.warning("RaidBossSpawnManager: Couldnt update raidboss_spawnlist table");
-			}
-			finally
-			{
-				CloseUtil.close(con);
-				con = null;
 			}
 		}
 	}
@@ -569,10 +534,6 @@ public class RaidBossSpawnManager
 	{
 		init();
 	}
-
-	/**
-	 * Saves all raidboss status and then clears all info from memory, including all schedules.
-	 */
 
 	public void cleanUp()
 	{

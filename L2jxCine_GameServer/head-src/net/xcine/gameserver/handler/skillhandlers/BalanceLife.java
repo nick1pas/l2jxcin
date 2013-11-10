@@ -43,8 +43,6 @@ public class BalanceLife implements ISkillHandler
 	@Override
 	public void useSkill(L2Character activeChar, L2Skill skill, L2Object[] targets)
 	{
-		// L2Character activeChar = activeChar;
-		// check for other effects
 		try
 		{
 			ISkillHandler handler = SkillHandler.getInstance().getSkillHandler(SkillType.BUFF);
@@ -71,11 +69,9 @@ public class BalanceLife implements ISkillHandler
 		{
 			target = (L2Character) target2;
 
-			// We should not heal if char is dead
 			if(target == null || target.isDead())
 				continue;
 
-			// Player holding a cursed weapon can't be healed and can't heal
 			if(target != activeChar)
 			{
 				if(target instanceof L2PcInstance && ((L2PcInstance) target).isCursedWeaponEquiped())

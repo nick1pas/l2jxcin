@@ -18,8 +18,6 @@
  */
 package net.xcine.gameserver.handler.skillhandlers;
 
-//import java.util.logging.Logger;
-
 import net.xcine.gameserver.ai.CtrlEvent;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable;
@@ -41,11 +39,6 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.skills.Formulas;
 import net.xcine.util.random.Rnd;
 
-/**
- * This class ...
- * 
- * @version $Revision: 1.1.2.2.2.9 $ $Date: 2005/04/03 15:55:04 $
- */
 public class Continuous implements ISkillHandler
 {
 	private static final SkillType[] SKILL_IDS = {
@@ -131,11 +124,9 @@ public class Continuous implements ISkillHandler
 					target = activeChar;
 			}
 
-			// Walls and Door should not be buffed
 			if(target instanceof L2DoorInstance && (skill.getSkillType() == L2Skill.SkillType.BUFF || skill.getSkillType() == L2Skill.SkillType.HOT))
 				continue;
 
-			// Anti-Buff Protection prevents you from getting buffs by other players
 			if (activeChar instanceof L2PlayableInstance && target != activeChar && target.isBuffProtected() && !skill.isHeroSkill()
 				    && (skill.getSkillType() == L2Skill.SkillType.BUFF
 				    || skill.getSkillType() == L2Skill.SkillType.HEAL_PERCENT
@@ -144,8 +135,7 @@ public class Continuous implements ISkillHandler
 					|| skill.getSkillType() == L2Skill.SkillType.COMBATPOINTHEAL
 					|| skill.getSkillType() == L2Skill.SkillType.REFLECT))
 					continue;
-			
-			// Player holding a cursed weapon can't be buffed and can't buff
+
 			if(skill.getSkillType() == L2Skill.SkillType.BUFF)
 			{
 				if(target != activeChar)
@@ -157,7 +147,6 @@ public class Continuous implements ISkillHandler
 				}
 			}
 
-			//Possibility of a lethal strike
 			if(!target.isRaid() && !(target instanceof L2NpcInstance && ((L2NpcInstance) target).getNpcId() == 35062))
 			{
 				int chance = Rnd.get(100);
@@ -211,8 +200,6 @@ public class Continuous implements ISkillHandler
 				}
 			}
 			
-
-
 			if(skill.isToggle()){
 
 				boolean stopped = false;

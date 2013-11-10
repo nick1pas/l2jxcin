@@ -33,35 +33,7 @@ import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
-/**
- * This class implements a L2Box instance which is used like a warehouse but<br>
- * without limits on item numbers. It can be thought of a box with six drawers.<br>
- * Depositing and withdrawing is done through a HTML dialog to circumvent the<br>
- * package size limit of the warehouse dialog.<br>
- * <br>
- * Access to a box has to be set by an admin and uses the players' names for<br>
- * easier handling (s. admin command admin_box_access).<br>
- * <br>
- * To spawn an L2BoxInstance change the type in npc to L2Box.<br>
- * example: update npc set type='L2Box' where id=1042;<br>
- * It uses two tables: boxes and boxaccess. Create these with:<br>
- * <code>
-  CREATE TABLE boxes (<br>
-  id int(11) NOT NULL auto_increment,<br>
-  spawn decimal(11,0) default NULL,<br>
-  npcid decimal(11,0) default NULL,<br>
-  drawer varchar(32) default NULL,<br>
-  itemid decimal(11,0) default NULL,<br>
-  name varchar(32) default '',<br>
-  count decimal(11,0) default NULL,<br>
-  enchant decimal(2,0) default NULL,<br>
-  PRIMARY KEY  (id)<br>
-  ) TYPE=MyISAM;<br>
-  CREATE TABLE boxaccess (<br>
-  spawn decimal(11,0) default NULL,<br>
-  charname varchar(32) default NULL<br>
-  ) TYPE=MyISAM;<br></code>
- */
+
 public class L2BoxInstance extends L2NpcInstance
 {
 

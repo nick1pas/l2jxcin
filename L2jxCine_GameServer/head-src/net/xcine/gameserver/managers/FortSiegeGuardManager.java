@@ -21,14 +21,12 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.siege.Fort;
 import net.xcine.gameserver.model.spawn.L2Spawn;
 import net.xcine.gameserver.templates.L2NpcTemplate;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -39,23 +37,15 @@ public class FortSiegeGuardManager
 {
 	private static final Logger _log = Logger.getLogger(FortSiegeGuardManager.class.getName());
 
-	// =========================================================
-	// Data Field
 	private Fort _fort;
 	private List<L2Spawn> _siegeGuardSpawn = new FastList<>();
 
-	// =========================================================
-	// Constructor
 	public FortSiegeGuardManager(Fort fort)
 	{
 		_fort = fort;
 	}
 
-	// =========================================================
-	// Method - Public
 	/**
-	 * Add guard.<BR>
-	 * <BR>
 	 * @param activeChar 
 	 * @param npcId 
 	 */
@@ -68,8 +58,6 @@ public class FortSiegeGuardManager
 	}
 
 	/**
-	 * Add guard.<BR>
-	 * <BR>
 	 * @param x 
 	 * @param y 
 	 * @param z 
@@ -82,8 +70,6 @@ public class FortSiegeGuardManager
 	}
 
 	/**
-	 * Hire merc.<BR>
-	 * <BR>
 	 * @param activeChar 
 	 * @param npcId 
 	 */
@@ -96,8 +82,6 @@ public class FortSiegeGuardManager
 	}
 
 	/**
-	 * Hire merc.<BR>
-	 * <BR>
 	 * @param x 
 	 * @param y 
 	 * @param z 
@@ -110,8 +94,6 @@ public class FortSiegeGuardManager
 	}
 
 	/**
-	 * Remove a single mercenary, identified by the npcId and location. Presumably, this is used when a fort lord picks
-	 * up a previously dropped ticket
 	 * @param npcId 
 	 * @param x 
 	 * @param y 
@@ -119,10 +101,8 @@ public class FortSiegeGuardManager
 	 */
 	public void removeMerc(int npcId, int x, int y, int z)
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("Delete From fort_siege_guards Where npcId = ? And x = ? AND y = ? AND z = ? AND isHired = 1");
 			statement.setInt(1, npcId);
 			statement.setInt(2, x);
@@ -139,11 +119,6 @@ public class FortSiegeGuardManager
 			
 			_log.warning("Error deleting hired siege guard at " + x + ',' + y + ',' + z + ":" + e1);
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
 	/**
@@ -152,10 +127,8 @@ public class FortSiegeGuardManager
 	 */
 	public void removeMercs()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("Delete From fort_siege_guards Where fortId = ? And isHired = 1");
 			statement.setInt(1, getFort().getFortId());
 			statement.execute();
@@ -167,11 +140,6 @@ public class FortSiegeGuardManager
 			if(Config.ENABLE_ALL_EXCEPTIONS)
 				e1.printStackTrace();
 			_log.warning("Error deleting hired siege guard for fort " + getFort().getName() + ":" + e1);
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
 		}
 	}
 
@@ -213,10 +181,6 @@ public class FortSiegeGuardManager
 		}
 	}
 
-	/**
-	 * Unspawn guards.<BR>
-	 * <BR>
-	 */
 	public void unspawnSiegeGuard()
 	{
 		for(L2Spawn spawn : getSiegeGuardSpawn())
@@ -233,18 +197,10 @@ public class FortSiegeGuardManager
 		getSiegeGuardSpawn().clear();
 	}
 
-	// =========================================================
-	// Method - Private
-	/**
-	 * Load guards.<BR>
-	 * <BR>
-	 */
 	private void loadSiegeGuard()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("SELECT * FROM fort_siege_guards Where fortId = ? ");
 			statement.setInt(1, getFort().getFortId());
 			ResultSet rs = statement.executeQuery();
@@ -288,16 +244,9 @@ public class FortSiegeGuardManager
 			
 			_log.warning("Error loading siege guard for fort " + getFort().getName() + ":" + e1);
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
 	/**
-	 * Save guards.<BR>
-	 * <BR>
 	 * @param x 
 	 * @param y 
 	 * @param z 
@@ -307,10 +256,8 @@ public class FortSiegeGuardManager
 	 */
 	private void saveSiegeGuard(int x, int y, int z, int heading, int npcId, int isHire)
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("Insert Into fort_siege_guards (fortId, npcId, x, y, z, heading, respawnDelay, isHired) Values (?, ?, ?, ?, ?, ?, ?, ?)");
 			statement.setInt(1, getFort().getFortId());
 			statement.setInt(2, npcId);
@@ -338,15 +285,7 @@ public class FortSiegeGuardManager
 			
 			_log.warning("Error adding siege guard for fort " + getFort().getName() + ":" + e1);
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
-
-	// =========================================================
-	// Proeprty
 
 	public final Fort getFort()
 	{

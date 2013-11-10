@@ -20,7 +20,6 @@ package net.xcine.gameserver.managers;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.gameserver.model.L2Character;
 import net.xcine.gameserver.model.zone.type.L2OlympiadStadiumZone;
 
@@ -28,7 +27,6 @@ public class OlympiadStadiaManager
 {
     protected static Logger _log = Logger.getLogger(OlympiadStadiaManager.class.getName());
 
-    // =========================================================
     private static OlympiadStadiaManager _instance;
     public static final OlympiadStadiaManager getInstance()
     {
@@ -39,21 +37,12 @@ public class OlympiadStadiaManager
         }
         return _instance;
     }
-    // =========================================================
 
-    
-    // =========================================================
-    // Data Field
     private FastList<L2OlympiadStadiumZone> _olympiadStadias;
     
-    // =========================================================
-    // Constructor
     public OlympiadStadiaManager()
     {
     }
-
-    // =========================================================
-    // Property - Public
     
     public void addStadium(L2OlympiadStadiumZone arena)
     {

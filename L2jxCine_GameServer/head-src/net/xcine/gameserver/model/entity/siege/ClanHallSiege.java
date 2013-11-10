@@ -23,7 +23,6 @@ import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.logging.Logger;
 
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -39,10 +38,8 @@ public abstract class ClanHallSiege
 	public long restoreSiegeDate(int ClanHallId)
 	{
 		long res = 0;
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("SELECT siege_data FROM clanhall_siege WHERE id=?");
 			statement.setInt(1, ClanHallId);
 			ResultSet rs = statement.executeQuery();
@@ -60,11 +57,6 @@ public abstract class ClanHallSiege
 			_log.warning("Exception: can't get clanhall siege date: ");
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 		return res;
 	}
 
@@ -81,10 +73,8 @@ public abstract class ClanHallSiege
 			tmpDate.set(Calendar.SECOND, 0);
 
 			setSiegeDate(tmpDate);
-			Connection con = null;
-			try
+			try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 			{
-				con = L2DatabaseFactory.getInstance().getConnection(false);
 				PreparedStatement statement = con.prepareStatement("UPDATE clanhall_siege SET siege_data=? WHERE id = ?");
 				statement.setLong(1, getSiegeDate().getTimeInMillis());
 				statement.setInt(2, ClanHallId);
@@ -95,11 +85,6 @@ public abstract class ClanHallSiege
 			{
 				_log.warning("Exception: can't save clanhall siege date: ");
 				e.printStackTrace();
-			}
-			finally
-			{
-				CloseUtil.close(con);
-				con = null;
 			}
 		}
 	}

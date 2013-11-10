@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import net.xcine.gameserver.controllers.GameTimeController;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.model.L2Skill;
@@ -36,8 +35,6 @@ import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 
 /**
- * This class ...
- * 
  * @version $Revision: $ $Date: $
  * @author godson
  */
@@ -92,29 +89,16 @@ public class DayNightSpawnManager
 		_nightCreatures.put(spawnDat, null);
 	}
 
-	/*
-	 * Spawn Day Creatures, and Unspawn Night Creatures
-	 */
 	public void spawnDayCreatures()
 	{
 		spawnCreatures(_nightCreatures, _dayCreatures, "night", "day");
 	}
 
-	/*
-	 * Spawn Night Creatures, and Unspawn Day Creatures
-	 */
 	public void spawnNightCreatures()
 	{
 		spawnCreatures(_dayCreatures, _nightCreatures, "day", "night");
 	}
 
-	/*
-	 * Manage Spawn/Respawn
-	 * Arg 1 : Map with L2NpcInstance must be unspawned
-	 * Arg 2 : Map with L2NpcInstance must be spawned
-	 * Arg 3 : String for log info for unspawned L2NpcInstance
-	 * Arg 4 : String for log info for spawned L2NpcInstance
-	 */
 	private void spawnCreatures(Map<L2Spawn, L2NpcInstance> UnSpawnCreatures, Map<L2Spawn, L2NpcInstance> SpawnCreatures, String UnspawnLogInfo, String SpawnLogInfo)
 	{
 		try

@@ -20,7 +20,6 @@ package net.xcine.gameserver.managers;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.gameserver.datatables.csv.MapRegionTable;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.entity.siege.Castle;
@@ -30,7 +29,6 @@ public class TownManager
 {
 	private static final Logger _log = Logger.getLogger(TownManager.class.getName());
 
-	// =========================================================
 	private static TownManager _instance;
 
 	public static final TownManager getInstance()
@@ -43,19 +41,11 @@ public class TownManager
 		return _instance;
 	}
 
-	// =========================================================
-
-	// =========================================================
-	// Data Field
 	private FastList<L2TownZone> _towns;
 
-	// =========================================================
-	// Constructor
+
 	public TownManager()
 	{}
-
-	// =========================================================
-	// Property - Public
 
 	public void addTown(L2TownZone arena)
 	{
@@ -186,8 +176,6 @@ public class TownManager
 	}
 
 	/**
-	 * Returns the town at that position (if any)
-	 * 
 	 * @param x
 	 * @param y
 	 * @param z

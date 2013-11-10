@@ -42,7 +42,6 @@ import net.xcine.gameserver.model.entity.siege.Castle;
 import net.xcine.gameserver.model.entity.siege.Siege;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 public class SiegeManager
@@ -54,14 +53,11 @@ public class SiegeManager
 		return SingletonHolder._instance;
 	}
 
-	// =========================================================
-	// Data Field
 	private int _attackerMaxClans = 500; // Max number of clans
 	private int _attackerRespawnDelay = 20000; // Time in ms. Changeable in siege.config
 	private int _defenderMaxClans = 500; // Max number of clans
 	private int _defenderRespawnDelay = 10000; // Time in ms. Changeable in siege.config
 
-	// Siege settings
 	private FastMap<Integer, FastList<SiegeSpawn>> _artefactSpawnList;
 	private FastMap<Integer, FastList<SiegeSpawn>> _controlTowerSpawnList;
 
@@ -74,15 +70,11 @@ public class SiegeManager
 	private boolean _teleport_to_siege_town = false;
 	//private List<Siege> _sieges;
 
-	// =========================================================
-	// Constructor
 	private SiegeManager()
 	{
 		load();
 	}
 
-	// =========================================================
-	// Method - Public
 	public final void addSiegeSkills(L2PcInstance character)
 	{
 		character.addSkill(SkillTable.getInstance().getInfo(246, 1), false);
@@ -90,9 +82,6 @@ public class SiegeManager
 	}
 
 	/**
-	 * Return true if character summon<BR>
-	 * <BR>
-	 * 
 	 * @param activeChar The L2Character of the character can summon
 	 * @param isCheckOnly 
 	 * @return 
@@ -145,9 +134,6 @@ public class SiegeManager
 	}
 	
 	/**
-	 * Return true if the clan is registered or owner of a castle<BR>
-	 * <BR>
-	 * 
 	 * @param clan The L2Clan of the player
 	 * @param castleid 
 	 * @return 
@@ -160,12 +146,10 @@ public class SiegeManager
 		if(clan.getHasCastle() > 0)
 			return true;
 
-		Connection con = null;
 		boolean register = false;
 
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("SELECT clan_id FROM siege_clans where clan_id=? and castle_id=?");
 			statement.setInt(1, clan.getClanId());
 			statement.setInt(2, castleid);
@@ -187,11 +171,6 @@ public class SiegeManager
 			System.out.println("Exception: checkIsRegistered(): " + e.getMessage());
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 		return register;
 	}
 
@@ -201,8 +180,6 @@ public class SiegeManager
 		character.removeSkill(SkillTable.getInstance().getInfo(247, 1));
 	}
 
-	// =========================================================
-	// Method - Private
 	private final void load()
 	{
 		_log.info("Initializing SiegeManager");
@@ -333,8 +310,6 @@ public class SiegeManager
 		}
 	}
 
-	// =========================================================
-	// Property - Public
 	public final FastList<SiegeSpawn> getArtefactSpawnList(int _castleId)
 	{
 		if(_artefactSpawnList.containsKey(_castleId))

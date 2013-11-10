@@ -54,13 +54,11 @@ public class FishingSkill implements ISkillHandler
 		{
 			if(skill.getSkillType()==SkillType.PUMPING)
 			{
-				//Pumping skill is available only while fishing
-				//player.sendPacket(new SystemMessage(SystemMessageId.CAN_USE_PUMPING_ONLY_WHILE_FISHING));
+				player.sendPacket(new SystemMessage(SystemMessageId.CAN_USE_PUMPING_ONLY_WHILE_FISHING));
 			}
 			else if(skill.getSkillType()==SkillType.REELING)
 			{
-				//Reeling skill is available only while fishing
-				//player.sendPacket(new SystemMessage(SystemMessageId.CAN_USE_REELING_ONLY_WHILE_FISHING));
+				player.sendPacket(new SystemMessage(SystemMessageId.CAN_USE_REELING_ONLY_WHILE_FISHING));
 			}
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
@@ -85,8 +83,8 @@ public class FishingSkill implements ISkillHandler
 		double gradebonus = 1 + weaponItem.getCrystalType() * 0.1;
 		int dmg = (int)(skill.getPower()*gradebonus*SS);
 		weaponItem = null;
-		if(player.getSkillLevel(1315) <= skill.getLevel()-2) //1315 - Fish Expertise
-		{//Penalty
+		if(player.getSkillLevel(1315) <= skill.getLevel()-2)
+		{
 			player.sendPacket(new SystemMessage(SystemMessageId.REELING_PUMPING_3_LEVELS_HIGHER_THAN_FISHING_PENALTY));
 			pen = 50;
 			int penatlydmg = dmg - pen;
@@ -102,11 +100,11 @@ public class FishingSkill implements ISkillHandler
 		}
 		weaponInst = null;
 
-		if(skill.getSkillType() == SkillType.REELING)//Realing
+		if(skill.getSkillType() == SkillType.REELING)
 		{
 			fish.useRealing(dmg, pen);
 		}
-		else//Pumping
+		else
 		{
 			fish.usePomping(dmg, pen);
 		}

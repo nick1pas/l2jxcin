@@ -48,9 +48,6 @@ public class DeluxeKey implements ISkillHandler
 		targetList = null;
 
 		_log.fine("Delux key casting succeded.");
-
-		// This is just a dummy skill handler for the golden food and crystal food skills,
-		// since the AI responce onSkillUse handles the rest.
 	}
 
 	@Override

@@ -20,7 +20,6 @@ import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.ItemTable;
 import net.xcine.gameserver.datatables.sql.NpcTable;
@@ -209,14 +208,8 @@ public class ChristmasManager
 
 	private final int first = 25000, last = 73099;
 
-	/************************************** Initial Functions **************************************/
-
-	/**
-	 * Empty constructor Does nothing
-	 */
 	public ChristmasManager()
 	{
-		//
 	}
 
 	/**
@@ -233,7 +226,6 @@ public class ChristmasManager
 	 */
 	public void init(L2PcInstance activeChar)
 	{
-
 		if(isManagerInit > 0)
 		{
 			activeChar.sendMessage("Christmas Manager has already begun or is processing. Please be patient....");
@@ -241,8 +233,6 @@ public class ChristmasManager
 		}
 
 		activeChar.sendMessage("Started!!!! This will take a 2-3 hours (in order to reduce system lags to a minimum), please be patient... The process is working in the background and will spawn npcs, give presents and messages at a fixed rate.");
-
-		//Tasks:
 
 		spawnTrees();
 
@@ -262,14 +252,12 @@ public class ChristmasManager
 	 */
 	public void end(L2PcInstance activeChar)
 	{
-
 		if(isManagerInit < 4)
 		{
 			if(activeChar != null)
 			{
 				activeChar.sendMessage("Christmas Manager is not activated yet. Already Ended or is now processing....");
 			}
-
 			return;
 		}
 
@@ -277,8 +265,6 @@ public class ChristmasManager
 		{
 			activeChar.sendMessage("Terminating! This may take a while, please be patient...");
 		}
-
-		//Tasks:
 
 		ThreadPoolManager.getInstance().executeTask(new DeleteSpawns());
 
@@ -292,11 +278,6 @@ public class ChristmasManager
 
 	}
 
-	/************************************ - Tree management - *************************************/
-
-	/**
-	 * Main function - spawns all trees.
-	 */
 	public void spawnTrees()
 	{
 		GetTreePos gtp = new GetTreePos(first);
@@ -318,9 +299,6 @@ public class ChristmasManager
 		return ids[rand.nextInt(ids.length)];
 	}
 
-	/**
-	 * gets random world positions according to spawned world objects and spawns x-mas trees around them...
-	 */
 	public class GetTreePos implements Runnable
 	{
 		private int _iterator;
@@ -394,11 +372,6 @@ public class ChristmasManager
 			gtp = null;
 		}
 	}
-
-	/**
-	 * Delete all x-mas spawned trees from the world. Delete all x-mas trees spawns, and clears the L2NpcInstance tree
-	 * queue.
-	 */
 
 	public class DeleteSpawns implements Runnable
 	{
@@ -475,12 +448,6 @@ public class ChristmasManager
 		}
 	}
 
-	/**************************** - send players festive messages - *****************************/
-
-	/**
-	 * Ends X-Mas messages sent to players, and terminates the thread.
-	 */
-
 	private void endFestiveMessagesAtFixedRate()
 	{
 		if(_XMasMessageTask != null)
@@ -490,22 +457,12 @@ public class ChristmasManager
 		}
 	}
 
-	/**
-	 * Starts X-Mas messages sent to all players, and initialize the thread.
-	 */
-
 	private void startFestiveMessagesAtFixedRate()
 	{
 		SendXMasMessage XMasMessage = new SendXMasMessage();
 		_XMasMessageTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(XMasMessage, 60000, _IntervalOfChristmas);
 		XMasMessage = null;
 	}
-
-	/**
-	 * Sends X-Mas messages to all world players.
-	 * 
-	 * @author Darki699
-	 */
 
 	class SendXMasMessage implements Runnable
 	{
@@ -568,13 +525,6 @@ public class ChristmasManager
 	{
 		return message[rand.nextInt(message.length)];
 	}
-
-	/******************************* - give special items trees - ********************************/
-	//Trees , Carols , Tokens of love, Fireworks, Santa Hats.
-
-	/**
-	 * Starts X-Mas Santa presents sent to all players, and initialize the thread.
-	 */
 
 	private void givePresentsAtFixedRate()
 	{
@@ -639,9 +589,6 @@ public class ChristmasManager
 		return presents[rand.nextInt(presents.length)];
 	}
 
-	/**
-	 * Ends X-Mas present giving to players, and terminates the thread.
-	 */
 	private void endPresentGivingAtFixedRate()
 	{
 		if(_XMasPresentsTask != null)
@@ -651,9 +598,6 @@ public class ChristmasManager
 		}
 	}
 
-	/************************************ - spawn NPCs in towns - ***************************************/
-
-	//NPC Ids: 31863 , 31864
 	public class SpawnSantaNPCs implements Runnable
 	{
 

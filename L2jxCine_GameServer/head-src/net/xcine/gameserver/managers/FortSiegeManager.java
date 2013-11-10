@@ -39,7 +39,6 @@ import net.xcine.gameserver.model.entity.siege.Fort;
 import net.xcine.gameserver.model.entity.siege.FortSiege;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 public class FortSiegeManager
@@ -55,9 +54,7 @@ public class FortSiegeManager
 	{
 		load();
 	}
-	
-	// =========================================================
-	// Data Field
+
 	private int _attackerMaxClans = 500; // Max number of clans
 	private int _attackerRespawnDelay = 20000; // Time in ms. Changeable in siege.config
 	private int _defenderMaxClans = 500; // Max number of clans
@@ -80,9 +77,6 @@ public class FortSiegeManager
 	}
 
 	/**
-	 * Return true if character summon<BR>
-	 * <BR>
-	 * 
 	 * @param activeChar The L2Character of the character can summon
 	 * @param isCheckOnly 
 	 * @return 
@@ -124,9 +118,6 @@ public class FortSiegeManager
 	}
 
 	/**
-	 * Return true if the clan is registered or owner of a fort<BR>
-	 * <BR>
-	 * 
 	 * @param clan The L2Clan of the player
 	 * @param fortid 
 	 * @return 
@@ -139,11 +130,9 @@ public class FortSiegeManager
 		if(clan.getHasFort() > 0)
 			return true;
 
-		Connection con = null;
 		boolean register = false;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("SELECT clan_id FROM fortsiege_clans where clan_id=? and fort_id=?");
 			statement.setInt(1, clan.getClanId());
 			statement.setInt(2, fortid);
@@ -165,11 +154,6 @@ public class FortSiegeManager
 			_log.warning("Exception: checkIsRegistered(): " + e.getMessage());
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 		return register;
 	}
 
@@ -179,8 +163,6 @@ public class FortSiegeManager
 		character.removeSkill(SkillTable.getInstance().getInfo(247, 1));
 	}
 
-	// =========================================================
-	// Method - Private
 	private final void load()
 	{
 		_log.info("Initializing FortSiegeManager");
@@ -295,8 +277,6 @@ public class FortSiegeManager
 		}
 	}
 
-	// =========================================================
-	// Property - Public
 	public final FastList<SiegeSpawn> getCommanderSpawnList(int _fortId)
 	{
 		if(_commanderSpawnList.containsKey(_fortId))

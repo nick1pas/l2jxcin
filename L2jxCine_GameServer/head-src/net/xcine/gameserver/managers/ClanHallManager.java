@@ -24,11 +24,9 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.entity.ClanHall;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -70,8 +68,7 @@ public class ClanHallManager
 	private final void load()
 	{
 		_log.info("Initializing ClanHallManager");
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			int id, ownerId, lease, grade;
 			String Name, Desc, Location;
@@ -80,7 +77,6 @@ public class ClanHallManager
 
 			PreparedStatement statement;
 			ResultSet rs;
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			statement = con.prepareStatement("SELECT * FROM clanhall ORDER BY id");
 			rs = statement.executeQuery();
 			while(rs.next())
@@ -126,10 +122,6 @@ public class ClanHallManager
 		catch(Exception e)
 		{
 			_log.warning("Exception: ClanHallManager.load(): " + e.getMessage());
-		}
-		finally
-		{
-			CloseUtil.close(con);
 		}
 	}
 

@@ -44,10 +44,6 @@ public class OfflineShop implements IUserCommandHandler
 		114
 	};
 	
-	/*
-	 * (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#useUserCommand(int, net.xcine.gameserver.model.L2PcInstance)
-	 */
 	@SuppressWarnings("null")
 	@Override
 	public synchronized boolean useUserCommand(int id, L2PcInstance player)
@@ -55,7 +51,6 @@ public class OfflineShop implements IUserCommandHandler
 		if (player == null)
 			return false;
 		
-		// Message like L2OFF
 		if ((!player.isInStoreMode() && (!player.isInCraftMode())) || !player.isSitting())
 		{
 			player.sendMessage("You are not running a private store or private work shop.");
@@ -95,15 +90,13 @@ public class OfflineShop implements IUserCommandHandler
 			return false;
 		}
 		
-		// Dont allow leaving if player is in combat
 		if (player.isInCombat() && !player.isGM())
 		{
 			player.sendMessage("You cannot Logout while is in Combat mode.");
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
 		}
-		
-		// Dont allow leaving if player is teleporting
+
 		if (player.isTeleporting() && !player.isGM())
 		{
 			player.sendMessage("You cannot Logout while is Teleporting.");
@@ -122,9 +115,7 @@ public class OfflineShop implements IUserCommandHandler
 			player.sendMessage("You can't Logout in Olympiad mode.");
 			return false;
 		}
-		
-		// Prevent player from logging out if they are a festival participant nd it is in progress,
-		// otherwise notify party members that the player is not longer a participant.
+
 		if (player.isFestivalParticipant())
 		{
 			if (SevenSignsFestival.getInstance().isFestivalInitialized())
@@ -143,7 +134,6 @@ public class OfflineShop implements IUserCommandHandler
 		
 		if ((player.isInStoreMode() && Config.OFFLINE_TRADE_ENABLE) || (player.isInCraftMode() && Config.OFFLINE_CRAFT_ENABLE))
 		{
-			// Sleep effect, not official feature but however L2OFF features (like offline trade)
 			player.startAbnormalEffect(L2Character.ABNORMAL_EFFECT_SLEEP);
 			
 			player.sendMessage("Your private store has succesfully been flagged as an offline shop and will remain active for ever.");
@@ -153,11 +143,7 @@ public class OfflineShop implements IUserCommandHandler
 		}
 		return false;
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#getUserCommandList()
-	 */
+
 	@Override
 	public int[] getUserCommandList()
 	{

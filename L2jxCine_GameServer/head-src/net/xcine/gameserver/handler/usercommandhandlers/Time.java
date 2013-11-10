@@ -23,20 +23,13 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 
-/**
- *
- *
- */
 public class Time implements IUserCommandHandler
 {
 	private static final int[] COMMAND_IDS =
 	{
 		77
 	};
-
-	/* (non-Javadoc)
-	 *
-	 */
+	
 	@Override
 	public boolean useUserCommand(int id, L2PcInstance activeChar)
 	{

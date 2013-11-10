@@ -41,16 +41,9 @@ public class CombatFlag
 
 	private int _itemId;
 
-//	private int _heading;
-//	private int _fortId;
-
-	// =========================================================
-	// Constructor
-	public CombatFlag(/*int fort_id,*/ int x, int y, int z, int heading, int item_id)
+	public CombatFlag( int x, int y, int z, int heading, int item_id)
 	{
-//		_fortId = fort_id;
 		_location = new Location(x, y, z, heading);
-//		_heading = heading;
 		_itemId = item_id;
 	}
 
@@ -58,7 +51,6 @@ public class CombatFlag
 	{
 		L2ItemInstance i;
 
-		// Init the dropped L2ItemInstance and add it in the world as a visible object at the position where mob was last
 		i = ItemTable.getInstance().createItem("Combat", _itemId, 1, null, null);
 		i.spawnMe(_location.getX(), _location.getY(), _location.getZ());
 		itemInstance = i;
@@ -80,28 +72,20 @@ public class CombatFlag
 
 	public void activate(L2PcInstance player, L2ItemInstance item)
 	{
-		// if the player is mounted, attempt to unmount first.  Only allow picking up 
-		// the comabt flag if unmounting is successful.
 		if(player.isMounted())
 		{
-			//TODO: dismount
 			if(!player.dismount())
 			{
-				// TODO: correct this custom message.
 				player.sendMessage("You may not pick up this item while riding in this territory");
 				return;
 			}
 		}
-
-		// Player holding it data
 		_player = player;
 		playerId = _player.getObjectId();
 		itemInstance = null;
 
-		// Add skill
 		giveSkill();
 
-		// Equip with the weapon
 		_item = item;
 		_player.getInventory().equipItemAndRecord(_item);
 
@@ -110,7 +94,6 @@ public class CombatFlag
 		_player.sendPacket(sm);
 		sm = null;
 
-		// Refresh inventory
 		if(!Config.FORCE_INVENTORY_UPDATE)
 		{
 			InventoryUpdate iu = new InventoryUpdate();
@@ -122,17 +105,12 @@ public class CombatFlag
 		{
 			_player.sendPacket(new ItemList(_player, false));
 		}
-
-		// Refresh player stats
 		_player.broadcastUserInfo();
-//		_player.setCombatFlagEquipped(true);
 
 	}
 
 	public void dropIt()
 	{
-		// Reset player stats
-//		_player.setCombatFlagEquipped(false);
 		removeSkill();
 		_player.destroyItem("DieDrop", _item, null, false);
 		_item = null;

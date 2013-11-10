@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.handler.AutoChatHandler;
 import net.xcine.gameserver.idfactory.IdFactory;
@@ -35,7 +34,6 @@ import net.xcine.gameserver.model.actor.instance.L2SiegeGuardInstance;
 import net.xcine.gameserver.model.entity.siege.Castle;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.thread.ThreadPoolManager;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -51,13 +49,8 @@ public class MercTicketManager
 {
 	protected static Logger _log = Logger.getLogger(MercTicketManager.class.getName());
 
-	// =========================================================
-
-	// =========================================================
-	// Data Field
 	private List<L2ItemInstance> _droppedTickets = new FastList<>(); 
 
-		
 	public static final MercTicketManager getInstance()
 	{
 		return SingletonHolder._instance;
@@ -69,9 +62,6 @@ public class MercTicketManager
 		load();
 	}
 
-	//TODO move all these values into siege.properties
-	// max tickets per merc type = 10 + (castleid * 2)?
-	// max ticker per castle = 40 + (castleid * 20)?
 	private static final int[] MAX_MERC_PER_TYPE =
 	{
 			10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, // Gludio
@@ -583,9 +573,6 @@ public class MercTicketManager
 	// Schuttgart
 	};
 
-	// =========================================================
-	// Method - Public
-	// returns the castleId for the passed ticket item id
 	public int getTicketCastleId(int itemId)
 	{
 		if(itemId >= ITEM_IDS[0] && itemId <= ITEM_IDS[9] || itemId >= ITEM_IDS[10] && itemId <= ITEM_IDS[19])
@@ -615,18 +602,12 @@ public class MercTicketManager
 		load();
 	}
 
-	// =========================================================
-	// Method - Private
 	private final void load()
 	{
-		Connection con = null;
-		// load merc tickets into the world
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			PreparedStatement statement;
 			ResultSet rs;
-
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			statement = con.prepareStatement("SELECT * FROM castle_siege_guards Where isHired = 1");
 			rs = statement.executeQuery();
 
@@ -685,14 +666,8 @@ public class MercTicketManager
 			_log.info("Exception: loadMercenaryData(): " + e.getMessage());
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-		}
 	}
 
-	// =========================================================
-	// Property - Public
 	/**
 	 * Checks if the passed item has reached the limit of number of dropped tickets that this SPECIFIC item may have in
 	 * its castle
@@ -702,7 +677,6 @@ public class MercTicketManager
 	public boolean isAtTypeLimit(int itemId)
 	{
 		int limit = -1;
-		// find the max value for this item
 		for(int i = 0; i < ITEM_IDS.length; i++)
 			if(ITEM_IDS[i] == itemId) // Find the index of the item used
 			{
@@ -731,7 +705,6 @@ public class MercTicketManager
 	}
 
 	/**
-	 * Checks if the passed item belongs to a castle which has reached its limit of number of dropped tickets.
 	 * @param itemId 
 	 * @return 
 	 */
@@ -763,9 +736,6 @@ public class MercTicketManager
 	}
 
 	/**
-	 * addTicket actions 1) find the npc that needs to be saved in the mercenary spawns, given this item 2) Use the
-	 * passed character's location info to add the spawn 3) create a copy of the item to drop in the world returns the
-	 * id of the mercenary npc that was added to the spawn returns -1 if this fails.
 	 * @param itemId 
 	 * @param activeChar 
 	 * @param messages 
@@ -779,26 +749,22 @@ public class MercTicketManager
 		int heading = activeChar.getHeading();
 
 		Castle castle = CastleManager.getInstance().getCastle(activeChar);
-		if(castle == null) //this should never happen at this point
+		if(castle == null) 
 			return -1;
 
-		//check if this item can be added here
 		for(int i = 0; i < ITEM_IDS.length; i++)
 		{
-			if(ITEM_IDS[i] == itemId) // Find the index of the item used
+			if(ITEM_IDS[i] == itemId) 
 			{
 				spawnMercenary(NPC_IDS[i], x, y, z, 3000, messages, 0);
 
-				// Hire merc for this caslte.  NpcId is at the same index as the item used.
 				castle.getSiege().getSiegeGuardManager().hireMerc(x, y, z, heading, NPC_IDS[i]);
 
-				// create the ticket in the gameworld
 				L2ItemInstance dropticket = new L2ItemInstance(IdFactory.getInstance().getNextId(), itemId);
 				dropticket.setLocation(L2ItemInstance.ItemLocation.INVENTORY);
 				dropticket.dropMe(null, x, y, z);
-				dropticket.setDropTime(0); //avoids it from beeing removed by the auto item destroyer
-				L2World.getInstance().storeObject(dropticket); //add to the world
-				// and keep track of this ticket in the list
+				dropticket.setDropTime(0); 
+				L2World.getInstance().storeObject(dropticket); 
 				_droppedTickets.add(dropticket);
 
 				dropticket = null;
@@ -840,7 +806,6 @@ public class MercTicketManager
 	}
 
 	/**
-	 * Delete all tickets from a castle; remove the items from the world and remove references to them from this class
 	 * @param castleId 
 	 */
 	public void deleteTickets(int castleId)
@@ -867,8 +832,6 @@ public class MercTicketManager
 	}
 
 	/**
-	 * remove a single ticket and its associated spawn from the world (used when the castle lord picks up a ticket, for
-	 * example)
 	 * @param item 
 	 */
 	public void removeTicket(L2ItemInstance item)
@@ -876,14 +839,12 @@ public class MercTicketManager
 		int itemId = item.getItemId();
 		int npcId = -1;
 
-		// find the FIRST ticket itemId with spawns the saved NPC in the saved location
 		for(int i = 0; i < ITEM_IDS.length; i++)
-			if(ITEM_IDS[i] == itemId) // Find the index of the item used
+			if(ITEM_IDS[i] == itemId) 
 			{
 				npcId = NPC_IDS[i];
 				break;
 			}
-		// find the castle where this item is
 		Castle castle = CastleManager.getInstance().getCastleById(getTicketCastleId(itemId));
 
 		if(npcId > 0 && castle != null)

@@ -20,7 +20,6 @@ package net.xcine.gameserver.managers;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.gameserver.model.L2Effect;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.Duel;
@@ -30,7 +29,6 @@ public class DuelManager
 {
 	private static final Logger _log = Logger.getLogger(DuelManager.class.getName());
 
-	// =========================================================
 	private static DuelManager _instance;
 
 	public static final DuelManager getInstance()
@@ -42,26 +40,18 @@ public class DuelManager
 		return _instance;
 	}
 
-	// =========================================================
-	// Data Field
 	private FastList<Duel> _duels;
 	private int _currentDuelId = 0x90;
 
-	// =========================================================
-	// Constructor
 	private DuelManager()
 	{
 		_log.info("Initializing DuelManager");
 		_duels = new FastList<>();
 	}
 
-	// =========================================================
-	// Method - Private
-
 	private int getNextDuelId()
 	{
 		_currentDuelId++;
-		// In case someone wants to run the server forever :)
 		if(_currentDuelId >= 2147483640)
 		{
 			_currentDuelId = 1;
@@ -80,15 +70,11 @@ public class DuelManager
 		return null;
 	}
 
-	// =========================================================
-	// Method - Public
-
 	public void addDuel(L2PcInstance playerA, L2PcInstance playerB, int partyDuel)
 	{
 		if(playerA == null || playerB == null)
 			return;
 
-		// return if a player has PvPFlag
 		String engagedInPvP = "The duel was canceled because a duelist engaged in PvP combat.";
 		if(partyDuel == 1)
 		{
@@ -112,7 +98,6 @@ public class DuelManager
 					}
 				}
 			}
-			// A player has PvP flag
 			if(playerInPvP)
 			{
 				for(L2PcInstance temp : playerA.getParty().getPartyMembers())
@@ -159,8 +144,6 @@ public class DuelManager
 	}
 
 	/**
-	 * Updates player states.
-	 * 
 	 * @param player - the dieing player
 	 */
 	public void onPlayerDefeat(L2PcInstance player)
@@ -176,8 +159,6 @@ public class DuelManager
 	}
 
 	/**
-	 * Registers a debuff which will be removed if the duel ends
-	 * 
 	 * @param player
 	 * @param buff 
 	 */
@@ -194,8 +175,6 @@ public class DuelManager
 	}
 
 	/**
-	 * Removes player from duel.
-	 * 
 	 * @param player - the removed player
 	 */
 	public void onRemoveFromParty(L2PcInstance player)
@@ -211,8 +190,6 @@ public class DuelManager
 	}
 
 	/**
-	 * Broadcasts a packet to the team opposing the given player.
-	 * 
 	 * @param player
 	 * @param packet
 	 */

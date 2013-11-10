@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 import javolution.text.TextBuilder;
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.GmListTable;
 import net.xcine.gameserver.idfactory.IdFactory;
@@ -141,7 +140,6 @@ public final class PetitionManager
 				}
 				else
 				{
-					// Ending petition consultation with <Player>.
 					SystemMessage sm = new SystemMessage(SystemMessageId.PETITION_ENDED_WITH_S1);
 					sm.addString(getPetitioner().getName());
 					getResponder().sendPacket(sm);
@@ -149,7 +147,6 @@ public final class PetitionManager
 
 					if(endState == PetitionState.Petitioner_Cancel)
 					{
-						// Receipt No. <ID> petition cancelled.
 						sm = new SystemMessage(SystemMessageId.RECENT_NO_S1_CANCELED);
 						sm.addNumber(getId());
 						getResponder().sendPacket(sm);
@@ -157,8 +154,6 @@ public final class PetitionManager
 					}
 				}
 			}
-
-			// End petition consultation and inform them, if they are still online.
 			if(getPetitioner() != null && getPetitioner().isOnline() == 1)
 			{
 				getPetitioner().sendPacket(new SystemMessage(SystemMessageId.THIS_END_THE_PETITION_PLEASE_PROVIDE_FEEDBACK));
@@ -578,14 +573,12 @@ public final class PetitionManager
 	}
 
 	public int submitPetition(L2PcInstance petitioner, String petitionText, int petitionType)
-	{
-		// Create a new petition instance and add it to the list of pending petitions.
+	{ 
 		Petition newPetition = new Petition(petitioner, petitionText, petitionType);
 		int newPetitionId = newPetition.getId();
 		getPendingPetitions().put(newPetitionId, newPetition);
 		newPetition = null;
 
-		// Notify all GMs that a new petition has been submitted.
 		String msgContent = petitioner.getName() + " has submitted a new petition."; //(ID: " + newPetitionId + ").";
 		GmListTable.broadcastToGMs(new CreatureSay(petitioner.getObjectId(), 17, "Petition System", msgContent));
 		msgContent = null;

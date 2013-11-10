@@ -42,9 +42,6 @@ public class Mount implements IUserCommandHandler
 		61
 	};
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#useUserCommand(int, net.xcine.gameserver.model.L2PcInstance)
-	 */
 	@Override
 	public synchronized boolean useUserCommand(int id, L2PcInstance activeChar)
 	{
@@ -57,28 +54,24 @@ public class Mount implements IUserCommandHandler
 		{
 			if(activeChar.isDead())
 			{
-				// A strider cannot be ridden when player is dead.
 				SystemMessage msg = new SystemMessage(SystemMessageId.STRIDER_CANT_BE_RIDDEN_WHILE_DEAD);
 				activeChar.sendPacket(msg);
 				msg = null;
 			}
 			else if(pet.isDead())
 			{
-				// A dead strider cannot be ridden.
 				SystemMessage msg = new SystemMessage(SystemMessageId.DEAD_STRIDER_CANT_BE_RIDDEN);
 				activeChar.sendPacket(msg);
 				msg = null;
 			}
 			else if(pet.isInCombat())
 			{
-				// A strider in battle cannot be ridden.
 				SystemMessage msg = new SystemMessage(SystemMessageId.STRIDER_IN_BATLLE_CANT_BE_RIDDEN);
 				activeChar.sendPacket(msg);
 				msg = null;
 			}
 			else if(activeChar.isInCombat())
 			{
-				// A pet cannot be ridden while player is in battle.
 				SystemMessage msg = new SystemMessage(SystemMessageId.STRIDER_CANT_BE_RIDDEN_WHILE_IN_BATTLE);
 				activeChar.sendPacket(msg);
 				msg = null;
@@ -96,7 +89,6 @@ public class Mount implements IUserCommandHandler
 			}
 			else if(activeChar.isSitting() || activeChar.isMoving())
 			{
-				// A strider can be ridden only when player is standing.
 				SystemMessage msg = new SystemMessage(SystemMessageId.STRIDER_CAN_BE_RIDDEN_ONLY_WHILE_STANDING);
 				activeChar.sendPacket(msg);
 				msg = null;
@@ -136,7 +128,6 @@ public class Mount implements IUserCommandHandler
 		}
 		else if(activeChar.isMounted())
 		{
-			// Dismount
 			if(activeChar.setMountType(0))
 			{
 				if(activeChar.isFlying())
@@ -155,9 +146,6 @@ public class Mount implements IUserCommandHandler
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#getUserCommandList()
-	 */
 	@Override
 	public int[] getUserCommandList()
 	{

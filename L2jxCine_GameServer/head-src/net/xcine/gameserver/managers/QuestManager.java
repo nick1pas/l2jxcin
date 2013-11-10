@@ -73,7 +73,6 @@ public class QuestManager extends ScriptManager<Quest>
 	public final void reloadAllQuests()
 	{
 		_log.info("Reloading Server Scripts");
-		// unload all scripts
 		for(Quest quest : _quests.values())
 		{
 			if(quest != null)
@@ -81,7 +80,6 @@ public class QuestManager extends ScriptManager<Quest>
 				quest.unload();
 			}
 		}
-		// now load all scripts
 		File scripts = new File(Config.DATAPACK_ROOT + "/data/scripts.cfg");
 		L2ScriptEngineManager.getInstance().executeScriptsList(scripts);
 		QuestManager.getInstance().report();
@@ -100,8 +98,6 @@ public class QuestManager extends ScriptManager<Quest>
 		}
 	}
 
-	// =========================================================
-	// Property - Public
 	public final Quest getQuest(String name)
 	{
 		return getQuests().get(name);
@@ -123,9 +119,6 @@ public class QuestManager extends ScriptManager<Quest>
 		{
 			_log.info("Replaced: " + newQuest.getName() + " with a new version");
 		}
-
-		// Note: FastMap will replace the old value if the key already exists
-		// so there is no need to explicitly try to remove the old reference.
 		getQuests().put(newQuest.getName(), newQuest);
 	}
 
@@ -139,9 +132,6 @@ public class QuestManager extends ScriptManager<Quest>
 		return (FastMap<String, Quest>) _quests;
 	}
 
-	/**
-	 * This will reload quests
-	 */
 	public static void reload()
 	{
 		_instance = new QuestManager();

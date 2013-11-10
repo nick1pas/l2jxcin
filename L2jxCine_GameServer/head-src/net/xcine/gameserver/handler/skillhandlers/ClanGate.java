@@ -27,7 +27,6 @@ public class ClanGate implements ISkillHandler
 			player = (L2PcInstance) activeChar;
 		else
 			return;
-		//need more checking...
 		if(player.isInFunEvent() || player.isInsideZone(L2Character.ZONE_NOLANDING)
 			|| player.isInOlympiadMode() || player.isInsideZone(L2Character.ZONE_PVP)
 			|| GrandBossManager.getInstance().getZone(player) != null)
@@ -44,7 +43,6 @@ public class ClanGate implements ISkillHandler
 				Castle castle = CastleManager.getInstance().getCastleByOwner(clan);
 				if(player.isCastleLord(castle.getCastleId()))
 				{
-					//please note clan gate expires in two minutes WHATEVER happens to the clan leader.
 					ThreadPoolManager.getInstance().scheduleGeneral(new RemoveClanGate(castle.getCastleId(), player), skill.getTotalLifeTime());
 					castle.createClanGate(player.getX(), player.getY(), player.getZ() + 20);
 					player.getClan().broadcastToOnlineMembers(new SystemMessage(SystemMessageId.THE_PORTAL_HAS_BEEN_CREATED));

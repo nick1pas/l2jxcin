@@ -128,7 +128,6 @@ import net.xcine.gameserver.model.spawn.AutoSpawn;
 import net.xcine.gameserver.network.L2GameClient;
 import net.xcine.gameserver.network.L2GamePacketHandler;
 import net.xcine.gameserver.script.EventDroplist;
-import net.xcine.gameserver.script.faenor.FaenorScriptEngine;
 import net.xcine.gameserver.scripting.CompiledScriptCache;
 import net.xcine.gameserver.scripting.L2ScriptEngineManager;
 import net.xcine.gameserver.taskmanager.TaskManager;
@@ -479,7 +478,6 @@ public class GameServer
 				else
 					_log.info("Compiled Scripts Cache is up-to-date.");
 			}
-			FaenorScriptEngine.getInstance();
 		}
 		else
 		{

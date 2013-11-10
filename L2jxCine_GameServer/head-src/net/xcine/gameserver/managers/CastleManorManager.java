@@ -24,7 +24,6 @@ import java.util.Calendar;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.model.ClanWarehouse;
@@ -38,7 +37,6 @@ import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.logs.Log;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 import net.xcine.util.random.Rnd;
 
@@ -199,13 +197,10 @@ public class CastleManorManager
 
 	private void load()
 	{
-		Connection con = null;
 		ResultSet rs = null;
 		PreparedStatement statement = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			// Get Connection
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			for(Castle castle : CastleManager.getInstance().getCastles())
 			{
 				FastList<SeedProduction> production = new FastList<>();
@@ -282,11 +277,6 @@ public class CastleManorManager
 				e.printStackTrace();
 			
 			_log.info("Error restoring manor data: " + e.getMessage());
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
 		}
 	}
 

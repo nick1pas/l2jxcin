@@ -29,7 +29,6 @@ import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -44,9 +43,6 @@ public class ClanWarsList implements IUserCommandHandler
 			88, 89, 90
 	};
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#useUserCommand(int, net.xcine.gameserver.model.L2PcInstance)
-	 */
 	@Override
 	public boolean useUserCommand(int id, L2PcInstance activeChar)
 	{
@@ -62,16 +58,12 @@ public class ClanWarsList implements IUserCommandHandler
 		}
 
 		SystemMessage sm;
-		Connection con = null;
-
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement;
 
 			if(id == 88)
 			{
-				// Attack List
 				activeChar.sendPacket(new SystemMessage(SystemMessageId.CLANS_YOU_DECLARED_WAR_ON));
 				statement = con.prepareStatement("select clan_name,clan_id,ally_id,ally_name from clan_data,clan_wars where clan1=? and clan_id=clan2 and clan2 not in (select clan1 from clan_wars where clan2=?)");
 				statement.setInt(1, clan.getClanId());
@@ -79,16 +71,13 @@ public class ClanWarsList implements IUserCommandHandler
 			}
 			else if(id == 89)
 			{
-				// Under Attack List
 				activeChar.sendPacket(new SystemMessage(SystemMessageId.CLANS_THAT_HAVE_DECLARED_WAR_ON_YOU));
 				statement = con.prepareStatement("select clan_name,clan_id,ally_id,ally_name from clan_data,clan_wars where clan2=? and clan_id=clan1 and clan1 not in (select clan2 from clan_wars where clan1=?)");
 				statement.setInt(1, clan.getClanId());
 				statement.setInt(2, clan.getClanId());
 			}
 			else
-			// ID = 90
 			{
-				// War List
 				activeChar.sendPacket(new SystemMessage(SystemMessageId.WAR_LIST));
 				statement = con.prepareStatement("select clan_name,clan_id,ally_id,ally_name from clan_data,clan_wars where clan1=? and clan_id=clan2 and clan2 in (select clan1 from clan_wars where clan2=?)");
 				statement.setInt(1, clan.getClanId());
@@ -103,14 +92,12 @@ public class ClanWarsList implements IUserCommandHandler
 
 				if(ally_id > 0)
 				{
-					// Target With Ally
 					sm = new SystemMessage(SystemMessageId.S1_S2_ALLIANCE);
 					sm.addString(clanName);
 					sm.addString(rset.getString("ally_name"));
 				}
 				else
 				{
-					// Target Without Ally
 					sm = new SystemMessage(SystemMessageId.S1_NO_ALLI_EXISTS);
 					sm.addString(clanName);
 				}
@@ -130,21 +117,12 @@ public class ClanWarsList implements IUserCommandHandler
 			if(Config.ENABLE_ALL_EXCEPTIONS)
 				e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
-
 		sm = null;
 		clan = null;
 
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#getUserCommandList()
-	 */
 	@Override
 	public int[] getUserCommandList()
 	{

@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.gameserver.datatables.sql.ClanTable;
 import net.xcine.gameserver.datatables.xml.DoorData;
 import net.xcine.gameserver.model.L2Clan;
@@ -35,7 +34,6 @@ import net.xcine.gameserver.model.zone.type.L2FortZone;
 import net.xcine.gameserver.network.serverpackets.PlaySound;
 import net.xcine.gameserver.network.serverpackets.PledgeShowInfoUpdate;
 import net.xcine.gameserver.thread.ThreadPoolManager;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -46,8 +44,6 @@ public class Fort
 {
 	protected static final Logger _log = Logger.getLogger(Fort.class.getName());
 
-	// =========================================================
-	// Data Field
 	private int _fortId = 0;
 	private List<L2DoorInstance> _doors = new FastList<>();
 	private List<String> _doorDefault = new FastList<>();
@@ -61,17 +57,12 @@ public class Fort
 	private L2FortZone _zone;
 	private L2Clan _formerOwner = null;
 
-	// =========================================================
-	// Constructor
 	public Fort(int fortId)
 	{
 		_fortId = fortId;
 		load();
 		loadDoor();
 	}
-
-	// =========================================================
-	// Method - Public
 
 	public void EndOfSiege(L2Clan clan)
 	{
@@ -85,18 +76,14 @@ public class Fort
 		setOwner(clan);
 	}
 
-	// This method add to the treasury
 	/**
-	 * Add amount to fort instance's treasury (warehouse). 
 	 * @param amount
 	 */
 	public void addToTreasury(int amount)
 	{
-		// TODO: Implement?
 	}
 
 	/**
-	 * Add amount to fort instance's treasury (warehouse), no tax paying. 
 	 * @param amount 
 	 * @return
 	 */
@@ -104,11 +91,6 @@ public class Fort
 	{
 		return true;
 	}
-
-	/**
-	 * Move non clan members off fort area and to nearest town.<BR>
-	 * <BR>
-	 */
 	public void banishForeigners()
 	{
 		_zone.banishForeigners(getOwnerId());
@@ -124,10 +106,7 @@ public class Fort
 	{
 		return _zone.isInsideZone(x, y, z);
 	}
-
 	/**
-	 * Sets this forts zone
-	 * 
 	 * @param zone
 	 */
 	public void setZone(L2FortZone zone)
@@ -141,8 +120,6 @@ public class Fort
 	}
 
 	/**
-	 * Get the objects distance to this fort
-	 * 
 	 * @param obj
 	 * @return
 	 */
@@ -183,19 +160,15 @@ public class Fort
 		door = null;
 	}
 
-	// This method is used to begin removing all fort upgrades
 	public void removeUpgrade()
 	{
 		removeDoorUpgrade();
 	}
 
-	// This method updates the fort tax rate
 	public void setOwner(L2Clan clan)
 	{
-		// Remove old owner
 		if(getOwnerId() > 0 && (clan == null || clan.getClanId() != getOwnerId()))
 		{
-			// Try to find clan instance
 			L2Clan oldOwner = ClanTable.getInstance().getClan(getOwnerId());
 
 			if(oldOwner != null)
@@ -205,7 +178,6 @@ public class Fort
 					_formerOwner = oldOwner;
 				}
 
-				// Unset has fort flag for old owner
 				oldOwner.setHasFort(0);
 				Announcements.getInstance().announceToAll(oldOwner.getName() + " has lost " + getName() + " fortress!");
 			}
@@ -213,11 +185,11 @@ public class Fort
 			oldOwner = null;
 		}
 
-		updateOwnerInDB(clan); // Update in database
+		updateOwnerInDB(clan); 
 
 		if(getSiege().getIsInProgress())
 		{
-			getSiege().midVictory(); // Mid victory phase of siege
+			getSiege().midVictory(); 
 		}
 
 		updateClansReputation();
@@ -248,7 +220,6 @@ public class Fort
 		_fortOwner = null;
 	}
 
-	// This method updates the fort tax rate
 	public void setTaxPercent(L2PcInstance activeChar, int taxPercent)
 	{
 		int maxTax;
@@ -261,7 +232,7 @@ public class Fort
 			case SevenSigns.CABAL_DUSK:
 				maxTax = 5;
 				break;
-			default: // no owner
+			default: 
 				maxTax = 15;
 		}
 
@@ -274,17 +245,12 @@ public class Fort
 		activeChar.sendMessage(getName() + " fort tax changed to " + taxPercent + "%.");
 	}
 
-	/**
-	 * Respawn all doors on fort grounds<BR>
-	 * <BR>
-	 */
 	public void spawnDoor()
 	{
 		spawnDoor(false);
 	}
 
 	/**
-	 * Respawn all doors on fort grounds
 	 * @param isDoorWeak 
 	 */
 	public void spawnDoor(boolean isDoorWeak)
@@ -295,7 +261,7 @@ public class Fort
 
 			if(door.getCurrentHp() >= 0)
 			{
-				door.decayMe(); // Kill current if not killed already
+				door.decayMe(); 
 				door = DoorData.parseList(_doorDefault.get(i));
 
 				if(isDoorWeak)
@@ -317,10 +283,9 @@ public class Fort
 			door = null;
 		}
 
-		loadDoorUpgrade(); // Check for any upgrade the doors may have
+		loadDoorUpgrade(); 
 	}
 
-	// This method upgrade door
 	public void upgradeDoor(int doorId, int hp, int pDef, int mDef)
 	{
 		L2DoorInstance door = getDoor(doorId);
@@ -337,19 +302,13 @@ public class Fort
 		}
 	}
 
-	// =========================================================
-	// Method - Private
-	// This method loads fort
 	private void load()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			PreparedStatement statement;
 			ResultSet rs;
-
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-
+			
 			statement = con.prepareStatement("Select * from fort where id = ?");
 			statement.setInt(1, getFortId());
 			rs = statement.executeQuery();
@@ -403,27 +362,18 @@ public class Fort
 			_log.warning("Exception: loadFortData(): " + e.getMessage());
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
-	// This method loads fort door data from database
 	private void loadDoor()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("Select * from fort_door where fortId = ?");
 			statement.setInt(1, getFortId());
 			ResultSet rs = statement.executeQuery();
 
 			while(rs.next())
 			{
-				// Create list of the door default for use when respawning dead doors
 				_doorDefault.add(rs.getString("name") + ";" + rs.getInt("id") + ";" + rs.getInt("x") + ";" + rs.getInt("y") + ";" + rs.getInt("z") + ";" + rs.getInt("range_xmin") + ";" + rs.getInt("range_ymin") + ";" + rs.getInt("range_zmin") + ";" + rs.getInt("range_xmax") + ";" + rs.getInt("range_ymax") + ";" + rs.getInt("range_zmax") + ";" + rs.getInt("hp") + ";" + rs.getInt("pDef") + ";" + rs.getInt("mDef"));
 
 				L2DoorInstance door = DoorData.parseList(_doorDefault.get(_doorDefault.size() - 1));
@@ -445,20 +395,12 @@ public class Fort
 			_log.warning("Exception: loadFortDoor(): " + e.getMessage());
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
-	// This method loads fort door upgrade data from database
 	private void loadDoorUpgrade()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("Select * from fort_doorupgrade where doorId in (Select Id from fort_door where fortId = ?)");
 			statement.setInt(1, getFortId());
 			ResultSet rs = statement.executeQuery();
@@ -477,19 +419,12 @@ public class Fort
 			_log.warning("Exception: loadFortDoorUpgrade(): " + e.getMessage());
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
 	private void removeDoorUpgrade()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("delete from fort_doorupgrade where doorId in (select id from fort_door where fortId=?)");
 			statement.setInt(1, getFortId());
 			statement.execute();
@@ -501,19 +436,12 @@ public class Fort
 			_log.warning("Exception: removeDoorUpgrade(): " + e.getMessage());
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
 	private void saveDoorUpgrade(int doorId, int hp, int pDef, int mDef)
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("INSERT INTO fort_doorupgrade (doorId, hp, pDef, mDef) values (?,?,?,?)");
 			statement.setInt(1, doorId);
 			statement.setInt(2, hp);
@@ -528,28 +456,21 @@ public class Fort
 			_log.warning("Exception: saveDoorUpgrade(int doorId, int hp, int pDef, int mDef): " + e.getMessage());
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
 	private void updateOwnerInDB(L2Clan clan)
 	{
 		if(clan != null)
 		{
-			_ownerId = clan.getClanId(); // Update owner id property
+			_ownerId = clan.getClanId(); 
 		}
 		else
 		{
-			_ownerId = 0; // Remove owner
+			_ownerId = 0; 
 		}
 
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement;
 
 			statement = con.prepareStatement("UPDATE fort SET owner=? where id = ?");
@@ -559,16 +480,12 @@ public class Fort
 			statement.close();
 			statement = null;
 
-			// ============================================================================
-
-			// Announce to clan memebers
 			if(clan != null)
 			{
-				clan.setHasFort(getFortId()); // Set has fort flag for new owner
+				clan.setHasFort(getFortId()); 
 				Announcements.getInstance().announceToAll(clan.getName() + " has taken " + getName() + " fort!");
 				clan.broadcastToOnlineMembers(new PledgeShowInfoUpdate(clan));
 				clan.broadcastToOnlineMembers(new PlaySound(1, "Siege_Victory", 0, 0, 0, 0, 0));
-				//ThreadPoolManager.getInstance().scheduleGeneral(new FortUpdater(clan, 1), 3600000);   // Schedule owner tasks to start running
 			}
 		}
 		catch(Exception e)
@@ -576,15 +493,8 @@ public class Fort
 			_log.warning("Exception: updateOwnerInDB(L2Clan clan): " + e.getMessage());
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
-	// =========================================================
-	// Property
 	public final int getFortId()
 	{
 		return _fortId;

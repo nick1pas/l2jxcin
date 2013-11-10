@@ -21,14 +21,12 @@ package net.xcine.gameserver.script;
 import java.util.Hashtable;
 
 import net.xcine.Config;
-import net.xcine.gameserver.script.faenor.FaenorInterface;
 
 /**
  * @author Luis Arias
  */
 public class ScriptEngine
 {
-	protected EngineInterface _utils = FaenorInterface.getInstance();
 	public static final Hashtable<String, ParserFactory> parserFactories = new Hashtable<>();
 
 	protected static Parser createParser(String name) throws ParserNotCreatedException

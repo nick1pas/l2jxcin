@@ -35,42 +35,17 @@ import net.xcine.Config;
  */
 public class Base64
 {
-
-	/* ********  P U B L I C   F I E L D S  ******** */
-
-	/** No options specified. Value is zero. */
 	public final static int NO_OPTIONS = 0;
-
-	/** Specify encoding. */
 	public final static int ENCODE = 1;
-
-	/** Specify decoding. */
 	public final static int DECODE = 0;
-
-	/** Specify that data should be gzip-compressed. */
 	public final static int GZIP = 2;
-
-	/** Don't break lines when encoding (violates strict Base64 specification) */
 	public final static int DONT_BREAK_LINES = 8;
-
-	/* ********  P R I V A T E   F I E L D S  ******** */
-
-	/** Maximum line length (76) of Base64 output. */
 	private final static int MAX_LINE_LENGTH = 76;
-
-	/** The equals sign (=) as a byte. */
 	private final static byte EQUALS_SIGN = (byte) '=';
-
-	/** The new line character (\n) as a byte. */
 	private final static byte NEW_LINE = (byte) '\n';
-
-	/** Preferred encoding. */
 	private final static String PREFERRED_ENCODING = "UTF-8";
-
-	/** The 64 valid Base64 values. */
 	private final static byte[] ALPHABET;
 	private final static byte[] _NATIVE_ALPHABET =
-	/* May be something funny like EBCDIC */
 	{
 			(byte) 'A',
 			(byte) 'B',
@@ -138,20 +113,19 @@ public class Base64
 			(byte) '/'
 	};
 
-	/** Determine which ALPHABET to use. */
 	static
 	{
 		byte[] __bytes;
 		try
 		{
 			__bytes = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".getBytes(PREFERRED_ENCODING);
-		} // end try
+		} 
 		catch(java.io.UnsupportedEncodingException use)
 		{
-			__bytes = _NATIVE_ALPHABET; // Fall back to native encoding
-		} // end catch
+			__bytes = _NATIVE_ALPHABET; 
+		} 
 		ALPHABET = __bytes;
-	} // end static
+	} 
 
 	/**
 	 * Translates a Base64 value to either its 6-bit reconstruction value or a negative number indicating some other

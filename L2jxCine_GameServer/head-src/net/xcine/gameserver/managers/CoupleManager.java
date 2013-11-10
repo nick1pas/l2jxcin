@@ -25,12 +25,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.Config;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.Wedding;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -40,11 +38,8 @@ public class CoupleManager
 {
 	protected static final Logger _log = Logger.getLogger(CoupleManager.class.getName());
 	
-	// =========================================================
-	// Data Field
 	private FastList<Wedding> _couples = new FastList<>();
-
-		
+	
 	public static final CoupleManager getInstance()
 	{
 		return SingletonHolder._instance;
@@ -55,25 +50,20 @@ public class CoupleManager
 		_couples.clear();
 		load();
 	}
-	// =========================================================
-	// Method - Public
+
 	public void reload()
 	{
 		_couples.clear();
 		load();
 	}
 
-	// =========================================================
-	// Method - Private
+
 	private final void load()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			PreparedStatement statement;
 			ResultSet rs;
-
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 
 			statement = con.prepareStatement("Select id from mods_wedding order by id");
 			rs = statement.executeQuery();
@@ -97,15 +87,8 @@ public class CoupleManager
 			
 			_log.log(Level.SEVERE, "Exception: CoupleManager.load(): " + e.getMessage(), e);
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
-	// =========================================================
-	// Property - Public
 	public final Wedding getCouple(int coupleId)
 	{
 		int index = getCoupleIndex(coupleId);

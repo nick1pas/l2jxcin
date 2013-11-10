@@ -31,11 +31,6 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import javolution.util.FastMap;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import net.xcine.Config;
 import net.xcine.gameserver.model.CursedWeapon;
 import net.xcine.gameserver.model.L2Attackable;
@@ -51,8 +46,11 @@ import net.xcine.gameserver.model.actor.instance.L2RiftInvaderInstance;
 import net.xcine.gameserver.model.actor.instance.L2SiegeGuardInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * @author Micht
@@ -80,8 +78,6 @@ public class CursedWeaponsManager
 		_log.info("Loaded: " + _cursedWeapons.size() + " cursed weapon(s).");
 	}
 
-	// =========================================================
-	// Method - Private
 	public final void reload()
 	{
 		if(!Config.ALLOW_CURSED_WEAPONS)
@@ -174,7 +170,6 @@ public class CursedWeaponsManager
 								}
 							}
 
-							// Store cursed weapon
 							_cursedWeapons.put(id, cw);
 
 							attrs = null;
@@ -196,12 +191,8 @@ public class CursedWeaponsManager
 
 	private final void restore()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			// Retrieve the L2PcInstance from the characters table of the database
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-
 			PreparedStatement statement = con.prepareStatement("SELECT itemId, playerId, playerKarma, playerPkKills, nbKills, endTime FROM cursed_weapons");
 			ResultSet rset = statement.executeQuery();
 
@@ -241,38 +232,20 @@ public class CursedWeaponsManager
 			if(Config.ENABLE_ALL_EXCEPTIONS)
 				e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
-		
-		
 	}
 
 	private final void controlPlayers()
 	{
-		
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			// Retrieve the L2PcInstance from the characters table of the database
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = null;
 			ResultSet rset = null;
 
-			// TODO: See comments below...
-			// This entire for loop should NOT be necessary, since it is already handled by
-			// CursedWeapon.endOfLife().  However, if we indeed *need* to duplicate it for safety,
-			// then we'd better make sure that it FULLY cleans up inactive cursed weapons!
-			// Undesired effects result otherwise, such as player with no zariche but with karma
-			// or a lost-child entry in the cursed weapons table, without a corresponding one in items...
 			for(CursedWeapon cw : _cursedWeapons.values())
 			{
 				if(cw.isActivated())
 					continue;
 
-				// Do an item check to be sure that the cursed weapon isn't hold by someone
 				int itemId = cw.getItemId();
 				try
 				{
@@ -282,11 +255,9 @@ public class CursedWeaponsManager
 
 					if(rset.next())
 					{
-						// A player has the cursed weapon in his inventory ...
 						int playerId = rset.getInt("owner_id");
 						_log.info("PROBLEM : Player " + playerId + " owns the cursed weapon " + itemId + " but he shouldn't.");
 
-						// Delete the item
 						statement = con.prepareStatement("DELETE FROM items WHERE owner_id=? AND item_id=?");
 						statement.setInt(1, playerId);
 						statement.setInt(2, itemId);
@@ -296,7 +267,6 @@ public class CursedWeaponsManager
 						}
 						statement.close();
 
-						// Restore the player's old karma and pk count
 						statement = con.prepareStatement("UPDATE characters SET karma=?, pkkills=? WHERE obj_id=?");
 						statement.setInt(1, cw.getPlayerKarma());
 						statement.setInt(2, cw.getPlayerPkKills());
@@ -324,17 +294,9 @@ public class CursedWeaponsManager
 		{
 			_log.warning("Could not check CursedWeapons data: ");
 			e.printStackTrace();			
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
-		
+		}		
 	}
 
-	// =========================================================
-	// Properties - Public
 	public synchronized void checkDrop(L2Attackable attackable, L2PcInstance player)
 	{
 		if(attackable instanceof L2SiegeGuardInstance 
@@ -368,30 +330,19 @@ public class CursedWeaponsManager
 		if(player.isCursedWeaponEquiped()) // cannot own 2 cursed swords
 		{
 			CursedWeapon cw2 = _cursedWeapons.get(player.getCursedWeaponEquipedId());
-			/* TODO: give the bonus level in a more appropriate manner.
-			 *  The following code adds "_stageKills" levels.  This will also show in the char status.
-			 * I do not have enough info to know if the bonus should be shown in the pk count, or if it
-			 * should be a full "_stageKills" bonus or just the remaining from the current count till the
-			 * of the current stage...
-			 * This code is a TEMP fix, so that the cursed weapon's bonus level can be observed with as
-			 * little change in the code as possible, until proper info arises.
-			 */
+
 			cw2.setNbKills(cw2.getStageKills() - 1);
 			cw2.increaseKills();
 
-			// erase the newly obtained cursed weapon
-			cw.setPlayer(player); // NECESSARY in order to find which inventory the weapon is in!
-			cw.endOfLife(); // expire the weapon and clean up.
-			
+			cw.setPlayer(player); 
+			cw.endOfLife(); 
 		}
 		else
 		{
 			cw.activate(player, item);
 		}
-
 		cw = null;
 	}
-
 	
 	public void drop(int itemId, L2Character killer)
 	{
@@ -462,12 +413,8 @@ public class CursedWeaponsManager
 
 	public static void removeFromDb(int itemId)
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-
-			// Delete datas
 			PreparedStatement statement = con.prepareStatement("DELETE FROM cursed_weapons WHERE itemId = ?");
 			statement.setInt(1, itemId);
 			statement.executeUpdate();
@@ -481,11 +428,6 @@ public class CursedWeaponsManager
 				e.printStackTrace();
 			
 			_log.severe("CursedWeaponsManager: Failed to remove data: " + e);
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
 		}
 	}
 

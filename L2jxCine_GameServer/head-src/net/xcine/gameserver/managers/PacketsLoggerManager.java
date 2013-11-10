@@ -70,15 +70,12 @@ public class PacketsLoggerManager
 		
 		List<String> blocked_packets = _character_blocked_packets.get(character);
 		if(blocked_packets!=null){
-			
 			if(blocked_packets.contains(packet)){
 				blocked_packets.remove(packet);
 			}
 			
 			_character_blocked_packets.put(character, blocked_packets);
-			
 		}
-		
 	}
 	
 	public boolean isCharacterMonitored(String character){
@@ -95,9 +92,7 @@ public class PacketsLoggerManager
 			}
 			
 		}
-		
-		return false;
-		
+		return false;	
 	}
 
 	public void logCharacterPacket(String character, String packet){

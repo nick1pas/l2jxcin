@@ -77,7 +77,7 @@ public class RecipeData extends RecipeController
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
         factory.setIgnoringComments(true);
-        File file = new File(Config.DATAPACK_ROOT + "/data/xml/recipes.xml");
+        File file = new File(Config.DATAPACK_ROOT + "/data/stats/recipes.xml");
         if (file.exists())
         {
             Document doc = factory.newDocumentBuilder().parse(file);

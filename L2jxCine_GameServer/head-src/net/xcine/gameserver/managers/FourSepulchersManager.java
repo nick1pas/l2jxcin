@@ -25,7 +25,6 @@ import java.util.concurrent.ScheduledFuture;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.sql.NpcTable;
 import net.xcine.gameserver.datatables.sql.SpawnTable;
@@ -45,22 +44,10 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.util.Util;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 import net.xcine.util.random.Rnd;
 
-/**
- * This class ...
- * 
- * @version $Revision: $ $Date: $
- * @author sandman TODO: Gatekeepers shouting some text when doors get opened..so far unknown in leaked C4 is this text:
- *         1000502 [brushes hinders competitor's monster.] which is really ugly translation TODO: Victim should attack
- *         one npc, when u save this NPC debuff zones will not be activated and NPC will polymorph into some kind of
- *         Tammed Beast xD and shout: 1000503 [many thanks rescue.] which is again really ugly translation. When Victim
- *         kill this NPC, debuff zones will get activated with current core its impossible to make attack npc * npc i
- *         will try to search where is this prevented but still is unknown which npc u need to save to survive in next
- *         room without debuffs
- */
+
 public class FourSepulchersManager extends GrandBossManager
 {
 	private static final String QUEST_ID = "620_FourGoblets";
@@ -233,47 +220,35 @@ public class FourSepulchersManager extends GrandBossManager
 		timeSelector();
 	}
 
-	// phase select on server launch
 	protected void timeSelector()
 	{
 		timeCalculator();
 		long currentTime = Calendar.getInstance().getTimeInMillis();
-		// if current time >= time of entry beginning and if current time < time
-		// of entry beginning + time of entry end
 		if(currentTime >= _coolDownTimeEnd && currentTime < _entryTimeEnd) // entry
-		// time
-		// check
 		{
 			clean();
 			_changeEntryTimeTask = ThreadPoolManager.getInstance().scheduleGeneral(new ChangeEntryTime(), 0);
 			_log.info("FourSepulchersManager: Beginning in Entry time");
 		}
 		else if(currentTime >= _entryTimeEnd && currentTime < _warmUpTimeEnd) // warmup
-		// time
-		// check
 		{
 			clean();
 			_changeWarmUpTimeTask = ThreadPoolManager.getInstance().scheduleGeneral(new ChangeWarmUpTime(), 0);
 			_log.info("FourSepulchersManager: Beginning in WarmUp time");
 		}
 		else if(currentTime >= _warmUpTimeEnd && currentTime < _attackTimeEnd) // attack
-		// time
-		// check
 		{
 			clean();
 			_changeAttackTimeTask = ThreadPoolManager.getInstance().scheduleGeneral(new ChangeAttackTime(), 0);
 			_log.info("FourSepulchersManager: Beginning in Attack time");
 		}
 		else
-		// else cooldown time and without cleanup because it's already
-		// implemented
 		{
 			_changeCoolDownTimeTask = ThreadPoolManager.getInstance().scheduleGeneral(new ChangeCoolDownTime(), 0);
 			_log.info("FourSepulchersManager: Beginning in Cooldown time");
 		}
 	}
 
-	// phase end times calculator
 	protected void timeCalculator()
 	{
 		Calendar tmp = Calendar.getInstance();
@@ -481,13 +456,10 @@ public class FourSepulchersManager extends GrandBossManager
 
 	private void loadMysteriousBox()
 	{
-		Connection con = null;
-
 		_mysteriousBoxSpawns.clear();
 
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("SELECT id, count, npc_templateid, locx, locy, locz, heading, respawn_delay, key_npc_id FROM four_sepulchers_spawnlist Where spawntype = ? ORDER BY id");
 			statement.setInt(1, 0);
 			ResultSet rset = statement.executeQuery();
@@ -538,11 +510,6 @@ public class FourSepulchersManager extends GrandBossManager
 			// problem with initializing spawn, go to next one
 			_log.warning("FourSepulchersManager.LoadMysteriousBox: Spawn could not be initialized: " + e);
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
 	private void initKeyBoxSpawns()
@@ -590,12 +557,8 @@ public class FourSepulchersManager extends GrandBossManager
 		_physicalMonsters.clear();
 
 		int loaded = 0;
-		Connection con = null;
-
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-
 			PreparedStatement statement1 = con.prepareStatement("SELECT Distinct key_npc_id FROM four_sepulchers_spawnlist Where spawntype = ? ORDER BY key_npc_id");
 			statement1.setInt(1, 1);
 			ResultSet rset1 = statement1.executeQuery();
@@ -659,11 +622,6 @@ public class FourSepulchersManager extends GrandBossManager
 			// problem with initializing spawn, go to next one
 			_log.warning("FourSepulchersManager.LoadPhysicalMonsters: Spawn could not be initialized: " + e);
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
 	private void loadMagicalMonsters()
@@ -671,12 +629,8 @@ public class FourSepulchersManager extends GrandBossManager
 		_magicalMonsters.clear();
 
 		int loaded = 0;
-		Connection con = null;
-
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-
 			PreparedStatement statement1 = con.prepareStatement("SELECT Distinct key_npc_id FROM four_sepulchers_spawnlist Where spawntype = ? ORDER BY key_npc_id");
 			statement1.setInt(1, 2);
 			ResultSet rset1 = statement1.executeQuery();
@@ -741,25 +695,15 @@ public class FourSepulchersManager extends GrandBossManager
 			// problem with initializing spawn, go to next one
 			_log.warning("FourSepulchersManager.LoadMagicalMonsters: Spawn could not be initialized: " + e);
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
-
 	private void loadDukeMonsters()
 	{
 		_dukeFinalMobs.clear();
 		_archonSpawned.clear();
 
 		int loaded = 0;
-		Connection con = null;
-
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-
 			PreparedStatement statement1 = con.prepareStatement("SELECT Distinct key_npc_id FROM four_sepulchers_spawnlist Where spawntype = ? ORDER BY key_npc_id");
 			statement1.setInt(1, 5);
 			ResultSet rset1 = statement1.executeQuery();
@@ -825,11 +769,6 @@ public class FourSepulchersManager extends GrandBossManager
 			// problem with initializing spawn, go to next one
 			_log.warning("FourSepulchersManager.LoadDukeMonsters: Spawn could not be initialized: " + e);
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
 	private void loadEmperorsGraveMonsters()
@@ -837,12 +776,8 @@ public class FourSepulchersManager extends GrandBossManager
 		_emperorsGraveNpcs.clear();
 
 		int loaded = 0;
-		Connection con = null;
-
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-
 			PreparedStatement statement1 = con.prepareStatement("SELECT Distinct key_npc_id FROM four_sepulchers_spawnlist Where spawntype = ? ORDER BY key_npc_id");
 			statement1.setInt(1, 6);
 			ResultSet rset1 = statement1.executeQuery();
@@ -906,11 +841,6 @@ public class FourSepulchersManager extends GrandBossManager
 			
 			// problem with initializing spawn, go to next one
 			_log.warning("FourSepulchersManager.LoadEmperorsGraveMonsters: Spawn could not be initialized: " + e);
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
 		}
 	}
 
@@ -1852,7 +1782,6 @@ public class FourSepulchersManager extends GrandBossManager
 		@Override
 		public void run()
 		{
-			// _log.info("FourSepulchersManager:In Attack Time");
 			_inEntryTime = false;
 			_inWarmUpTime = false;
 			_inAttackTime = true;
@@ -1871,17 +1800,12 @@ public class FourSepulchersManager extends GrandBossManager
 			}
 
 			long interval = 0;
-			// say task
 			if(_firstTimeRun)
 			{
 				for(double min = Calendar.getInstance().get(Calendar.MINUTE); min < _newCycleMin; min++)
 				{
-					// looking for next shout time....
-					if(min % 5 == 0)// check if min can be divided by 5
+					if(min % 5 == 0)
 					{
-						//_log.info(Calendar.getInstance().getTime()
-						//        + " Atk announce scheduled to " + min
-						//        + " minute of this hour.");
 						Calendar inter = Calendar.getInstance();
 						inter.set(Calendar.MINUTE, (int) min);
 						ThreadPoolManager.getInstance().scheduleGeneral(new ManagerSay(), inter.getTimeInMillis() - Calendar.getInstance().getTimeInMillis());
@@ -1893,10 +1817,6 @@ public class FourSepulchersManager extends GrandBossManager
 			{
 				ThreadPoolManager.getInstance().scheduleGeneral(new ManagerSay(), 5 * 60400);
 			}
-			// searching time when attack time will be ended:
-			// counting difference between time when attack time ends and
-			// current time
-			// and then launching change time task
 			if(_firstTimeRun)
 			{
 				interval = _attackTimeEnd - Calendar.getInstance().getTimeInMillis();
@@ -1920,7 +1840,6 @@ public class FourSepulchersManager extends GrandBossManager
 		@Override
 		public void run()
 		{
-			// _log.info("FourSepulchersManager:In Cool-Down Time");
 			_inEntryTime = false;
 			_inWarmUpTime = false;
 			_inAttackTime = false;
@@ -1929,18 +1848,14 @@ public class FourSepulchersManager extends GrandBossManager
 			clean();
 
 			Calendar time = Calendar.getInstance();
-			// one hour = 55th min to 55 min of next hour, so we check for this,
-			// also check for first launch
 			if(Calendar.getInstance().get(Calendar.MINUTE) > _newCycleMin && !_firstTimeRun)
 			{
 				time.set(Calendar.HOUR, Calendar.getInstance().get(Calendar.HOUR) + 1);
 			}
 			time.set(Calendar.MINUTE, _newCycleMin);
-			//_log.info("FourSepulchersManager: Entry time: " + time.getTime());
 			if(_firstTimeRun)
 			{
-				_firstTimeRun = false; // cooldown phase ends event hour, so it
-				// will be not first run
+				_firstTimeRun = false; 
 			}
 
 			long interval = time.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();

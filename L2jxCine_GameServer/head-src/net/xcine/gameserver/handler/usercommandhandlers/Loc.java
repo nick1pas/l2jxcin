@@ -24,10 +24,6 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 
-/**
- *
- *
- */
 public class Loc implements IUserCommandHandler
 {
 	private static final int[] COMMAND_IDS =
@@ -35,9 +31,6 @@ public class Loc implements IUserCommandHandler
 		0
 	};
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#useUserCommand(int, net.xcine.gameserver.model.L2PcInstance)
-	 */
 	@Override
 	public boolean useUserCommand(int id, L2PcInstance activeChar)
 	{
@@ -118,9 +111,6 @@ public class Loc implements IUserCommandHandler
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IUserCommandHandler#getUserCommandList()
-	 */
 	@Override
 	public int[] getUserCommandList()
 	{

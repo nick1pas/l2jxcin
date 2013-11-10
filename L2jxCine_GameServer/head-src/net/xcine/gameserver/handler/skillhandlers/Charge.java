@@ -28,46 +28,33 @@ import net.xcine.gameserver.model.L2Skill;
 import net.xcine.gameserver.model.L2Skill.SkillType;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 
-/**
- * This class ...
- * 
- * @version $Revision: 1.1.2.2.2.9 $ $Date: 2005/04/04 19:08:01 $
- */
-
 public class Charge implements ISkillHandler
 {
 	static Logger _log = Logger.getLogger(Charge.class.getName());
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IItemHandler#useItem(net.xcine.gameserver.model.L2PcInstance, net.xcine.gameserver.model.L2ItemInstance)
-	 */
-	private static final SkillType[] SKILL_IDS = {
-	/*SkillType.CHARGE*/
-	};
+	private static final SkillType[] SKILL_IDS = { };
 
 	@Override
 	public void useSkill(L2Character activeChar, L2Skill skill, L2Object[] targets)
 	{
-
 		for(int index = 0; index < targets.length; index++)
 		{
 			if(!(targets[index] instanceof L2PcInstance))
+			{
 				continue;
+			}
+
 			L2PcInstance target = (L2PcInstance) targets[index];
-			skill.getEffects(activeChar, target,false,false,false);
-			target = null;
+			skill.getEffects(activeChar, target);
 		}
-		// self Effect :]
 
 		L2Effect effect = activeChar.getFirstEffect(skill.getId());
 		if(effect != null && effect.isSelfEffect())
 		{
-			//Replace old effect with new one.
-			effect.exit(false);
+			effect.exit();
 		}
-		skill.getEffectsSelf(activeChar);
 
-		effect = null;
+		skill.getEffectsSelf(activeChar);
 	}
 
 	@Override

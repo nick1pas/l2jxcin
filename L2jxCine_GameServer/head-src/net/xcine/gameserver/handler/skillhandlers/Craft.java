@@ -28,22 +28,11 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 
-/**
- * This class ...
- * 
- * @version $Revision: 1.1.2.2.2.4 $ $Date: 2005/04/06 16:13:48 $
- */
 
 public class Craft implements ISkillHandler
 {
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IItemHandler#useItem(net.xcine.gameserver.model.L2PcInstance, net.xcine.gameserver.model.L2ItemInstance)
-	 */
 	private static final SkillType[] SKILL_IDS = { SkillType.COMMON_CRAFT, SkillType.DWARVEN_CRAFT };
-
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IItemHandler#useItem(net.xcine.gameserver.model.L2PcInstance, net.xcine.gameserver.model.L2ItemInstance)
-	 */
+	
 	@Override
 	public void useSkill(L2Character activeChar, L2Skill skill, L2Object[] targets)
 	{

@@ -78,13 +78,11 @@ public class BanditStrongholdSiege extends ClanHallSiege
 		tmpDate.setTimeInMillis(siegeDate);
 		setSiegeDate(tmpDate);
 		setNewSiegeDate(siegeDate, 35, 22);
-		// Schedule siege auto start
 		_startSiegeTask.schedule(1000);
 	}
 
 	public void startSiege()
 	{
-		//if (GameServer._instanceOk)
 		{
 			setRegistrationPeriod(false);
 			if(_clansInfo.size() == 0)
@@ -523,7 +521,7 @@ public class BanditStrongholdSiege extends ClanHallSiege
 			Calendar siegeStart = Calendar.getInstance();
 			siegeStart.setTimeInMillis(getSiegeDate().getTimeInMillis());
 			final long registerTimeRemaining = siegeStart.getTimeInMillis() - System.currentTimeMillis();
-			siegeStart.add(Calendar.MINUTE, 60);//////////////////////HOUR
+			siegeStart.add(Calendar.MINUTE, 60);
 			final long siegeTimeRemaining = siegeStart.getTimeInMillis() - System.currentTimeMillis();
 			long remaining = registerTimeRemaining;
 			if(registerTimeRemaining <= 0)
@@ -574,11 +572,9 @@ public class BanditStrongholdSiege extends ClanHallSiege
 		else
 		{
 			CreatureSay cs = new CreatureSay(0, 1, "Journal", text);
-			//L2MapRegion region = MapRegionManager.getInstance().getRegion(88404, -21821, -2276);
 			for(L2PcInstance player : L2World.getInstance().getAllPlayers())
 			{
-				if /*(region == MapRegionManager.getInstance().getRegion(player.getX(), player.getY(), player.getZ())
-						&& */(player.getInstanceId() == 0/*)*/)
+				if (player.getInstanceId() == 0)
 				{
 					player.sendPacket(cs);
 				}

@@ -1,20 +1,5 @@
 package net.xcine.gameserver.handler.voicedcommandhandlers;
 
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,27 +11,8 @@ import net.xcine.gameserver.handler.ICustomByPassHandler;
 import net.xcine.gameserver.handler.IVoicedCommandHandler;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.serverpackets.NpcHtmlMessage;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
-
-
-/**
- * <B><U>User Character .repair voicecommand - SL2 L2JEmu</U></B><BR><BR>
- *
- * 
- * <U>NOTICE:</U> Voice command .repair that when used, allows player to
- * try to repair any of characters on his account, by setting spawn
- * to Floran, removing all shortcuts and moving everything equipped to
- * that char warehouse.<BR><BR>
- *
- *
- * (solving client crashes on character entering world)<BR><BR>
- *
- *
- * @author szponiasty
- * @version $Revision: 0.17.2.95.2.9 $ $Date: 2010/03/03 9:07:11 $
- */
 public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 {
 	static final Logger _log = Logger.getLogger(Repair.class.getName());
@@ -82,10 +48,8 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 	{
 		String result="";
 		String repCharAcc=activeChar.getAccountName();
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("SELECT char_name FROM characters WHERE account_name=?");
 			statement.setString(1, repCharAcc);
 			ResultSet rset = statement.executeQuery();
@@ -103,11 +67,6 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 			e.printStackTrace();
 			//return result;
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 		return result;	
 	}
 	
@@ -115,10 +74,8 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 	{
 		boolean result=false;
 		String repCharAcc="";
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("SELECT account_name FROM characters WHERE char_name=?");
 			statement.setString(1, repairChar);
 			ResultSet rset = statement.executeQuery();
@@ -134,11 +91,6 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 		if (activeChar.getAccountName().compareTo(repCharAcc)==0)
 			result=true;
 		return result;
@@ -149,11 +101,8 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 		boolean result=false;
 		int accessLevel = 0;
 		int repCharJail = 0;
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-			
 			PreparedStatement statement = con.prepareStatement("SELECT accesslevel,punish_level FROM characters WHERE char_name=?");
 			statement.setString(1, repairChar);
 			ResultSet rset = statement.executeQuery();
@@ -170,11 +119,6 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 		if (repCharJail == 1 || accessLevel<0) // 0 norm, 1 chat ban, 2 jail, 3....
 			result=true;
 		return result;
@@ -184,10 +128,8 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 	{
 		boolean result=false;
 		int repCharKarma = 0;
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("SELECT karma FROM characters WHERE char_name=?");
 			statement.setString(1, repairChar);
 			ResultSet rset = statement.executeQuery();
@@ -201,11 +143,6 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
 		}
 		if (repCharKarma > 0) 
 			result=true;
@@ -222,11 +159,8 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 
 	private void repairBadCharacter(String charName)
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-
 			PreparedStatement statement;
 			statement = con.prepareStatement("SELECT obj_Id FROM characters WHERE char_name=?");
 			statement.setString(1, charName);
@@ -241,8 +175,6 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 			statement.close();
 			if (objId == 0)
 			{
-				CloseUtil.close(con);
-				con = null;
 				return;
 			}
 			statement = con.prepareStatement("UPDATE characters SET x=17867, y=170259, z=-3503 WHERE obj_Id=?");
@@ -261,12 +193,6 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 		catch (Exception e)
 		{
 			_log.warning("GameServer: could not repair character:" + e);
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-			
 		}
 	}
 
@@ -291,9 +217,6 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 		return _BYPASSCMD;
 	}
 
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.ICustomByPassHandler#handleCommand(java.lang.String, net.xcine.gameserver.model.actor.instance.L2PcInstance, java.lang.String)
-	 */
 	@Override
 	public void handleCommand(String command, L2PcInstance activeChar, String repairChar)
 	{
@@ -359,4 +282,3 @@ public class Repair implements IVoicedCommandHandler, ICustomByPassHandler
 
 	}
 }
-

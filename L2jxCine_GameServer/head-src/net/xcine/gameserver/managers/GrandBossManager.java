@@ -33,7 +33,6 @@ import net.xcine.gameserver.model.actor.instance.L2GrandBossInstance;
 import net.xcine.gameserver.model.zone.type.L2BossZone;
 import net.xcine.gameserver.templates.L2NpcTemplate;
 import net.xcine.gameserver.templates.StatsSet;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -96,17 +95,12 @@ public class GrandBossManager
 		_bosses = new ConcurrentHashMap<>();
 		_storedInfo = new ConcurrentHashMap<>();
 		_bossStatus = new ConcurrentHashMap<>();
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-
 			PreparedStatement statement = con.prepareStatement("SELECT * from grandboss_data ORDER BY boss_id");
 			ResultSet rset = statement.executeQuery();
 			while(rset.next())
 			{
-				//Read all info from DB, and store it for AI to read and decide what to do
-				//faster than accessing DB in real time
 				StatsSet info = new StatsSet();
 				int bossId = rset.getInt("boss_id");
 				info.set("loc_x", rset.getInt("loc_x"));
@@ -142,10 +136,6 @@ public class GrandBossManager
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-		}
 	}
 	
 	public void initZones()
@@ -166,10 +156,8 @@ public class GrandBossManager
 			zones.put(zone.getId(), new CopyOnWriteArrayList<Integer>());
 		}
 		
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("SELECT * from grandboss_list ORDER BY player_id");
 			ResultSet rset = statement.executeQuery();
 			while(rset.next())
@@ -191,11 +179,7 @@ public class GrandBossManager
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			CloseUtil.close(con);
-		}
-
+		
 		for(L2BossZone zone : _zones)
 		{
 			if(zone == null)
@@ -249,22 +233,11 @@ public class GrandBossManager
 		return temp.getZoneName().equalsIgnoreCase(zoneType);
 	}
 
-	/*
-	 * The rest
-	 */
-
 	public Integer getBossStatus(int bossId)
 	{
 		return _bossStatus.get(bossId);
 	}
 
-	/*
-	public void setBossStatus(int bossId, int status)
-	{
-		_bossStatus.remove(bossId);
-		_bossStatus.put(bossId, status);
-	}
-	*/
 	public void setBossStatus(int bossId, int status)
 	{
 		_bossStatus.put(bossId, status);
@@ -302,16 +275,13 @@ public class GrandBossManager
 			_storedInfo.remove(bossId);
 		}
 		_storedInfo.put(bossId, info);
-		//Update immediately status in Database.
 		fastStoreToDb();
 	}
 
 	private void fastStoreToDb()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			for(Integer bossId : _storedInfo.keySet())
 			{
 				L2GrandBossInstance boss = _bosses.get(bossId);
@@ -354,19 +324,12 @@ public class GrandBossManager
 				e.printStackTrace();
 			_log.warning("GrandBossManager[fastStoreToDb]: Couldn't store grandbosses to database:" + e);
 		}
-		finally
-		{
-			CloseUtil.close(con);
-		}
 	}
 
 	private void storeToDb()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
-
 			PreparedStatement delete = con.prepareStatement(DELETE_GRAND_BOSS_LIST);
 			delete.executeUpdate();
 			delete.close();
@@ -436,19 +399,13 @@ public class GrandBossManager
 			
 			_log.warning("GrandBossManager: Couldn't store grandbosses to database:" + e);
 		}
-		finally
-		{
-			CloseUtil.close(con);
-		}
 	}
 	
 	private void updateDb(int bossId, boolean statusOnly)
 	{
-		Connection con = null;
 		PreparedStatement statement = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection();
 			L2GrandBossInstance boss = _bosses.get(bossId);
 			StatsSet info = _storedInfo.get(bossId);
 			
@@ -485,16 +442,8 @@ public class GrandBossManager
 		{
 			_log.log(Level.WARNING, "GrandBossManager: Couldn't update grandbosses to database:" + e.getMessage(), e);
 		}
-		finally
-		{
-			L2DatabaseFactory.close(con);
-		}
 	}
-	
 
-	/**
-	 * Saves all Grand Boss info and then clears all info from memory, including all schedules.
-	 */
 	public void cleanUp()
 	{
 		storeToDb();
@@ -517,7 +466,7 @@ public class GrandBossManager
 		return template;
 	}
 	
-	public boolean isDefined(int bossId) //into database
+	public boolean isDefined(int bossId)
 	{
 		return _bossStatus.get(bossId)!=null;
 	}

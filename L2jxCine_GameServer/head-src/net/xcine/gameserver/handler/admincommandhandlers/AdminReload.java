@@ -35,7 +35,6 @@ import net.xcine.gameserver.managers.Manager;
 import net.xcine.gameserver.managers.QuestManager;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.multisell.L2Multisell;
-import net.xcine.gameserver.script.faenor.FaenorScriptEngine;
 import net.xcine.gameserver.scripting.L2ScriptEngineManager;
 
 /**
@@ -164,20 +163,6 @@ public class AdminReload implements IAdminCommandHandler
 					catch (Exception ioe)
 					{
 						activeChar.sendMessage("Failed loading " + Config.DATAPACK_ROOT + "/data/scripts/custom scripts, no script going to be loaded");
-						ioe.printStackTrace();
-					}
-					
-				}
-				else if (type.startsWith("scripts_faenor"))
-				{
-					try
-					{
-						FaenorScriptEngine.getInstance().reloadPackages();
-						
-					}
-					catch (Exception ioe)
-					{
-						activeChar.sendMessage("Failed loading faenor scripts, no script going to be loaded");
 						ioe.printStackTrace();
 					}
 					

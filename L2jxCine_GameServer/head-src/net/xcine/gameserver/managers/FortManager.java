@@ -21,11 +21,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javolution.util.FastList;
-
 import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.entity.siege.Fort;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -41,21 +39,14 @@ public class FortManager
 		return SingletonHolder._instance;
 	}
 
-	// =========================================================
-	// Data Field
 	private List<Fort> _forts = new FastList<>();
 
-	// =========================================================
-	// Constructor
 	public FortManager()
 	{
 		_log.info("Initializing FortManager");
 		_forts.clear();
 		load();
 	}
-
-	// =========================================================
-	// Method - Public
 
 	public final int findNearestFortIndex(L2Object obj)
 	{
@@ -84,17 +75,12 @@ public class FortManager
 		return index;
 	}
 
-	// =========================================================
-	// Method - Private
 	private final void load()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			PreparedStatement statement;
 			ResultSet rs;
-
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 
 			statement = con.prepareStatement("Select id from fort order by id");
 			rs = statement.executeQuery();
@@ -114,16 +100,8 @@ public class FortManager
 			_log.warning("Exception: loadFortData(): " + e.getMessage());
 			e.printStackTrace();
 		}
-
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
-	// =========================================================
-	// Property - Public
 	public final Fort getFortById(int fortId)
 	{
 		for(Fort f : getForts())

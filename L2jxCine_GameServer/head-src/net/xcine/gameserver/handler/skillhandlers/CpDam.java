@@ -27,79 +27,21 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.skills.Formulas;
 
-/*
- * Just a quick draft to support Wrath skill. Missing angle based calculation etc.
- */
 
 public class CpDam implements ISkillHandler
 {
-	//private static Logger _log = Logger.getLogger(Mdam.class.getName());
-
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IItemHandler#useItem(net.xcine.gameserver.model.L2PcInstance, net.xcine.gameserver.model.L2ItemInstance)
-	 */
 	private static final SkillType[] SKILL_IDS = { SkillType.CPDAM };
-
-	/* (non-Javadoc)
-	 * @see net.xcine.gameserver.handler.IItemHandler#useItem(net.xcine.gameserver.model.L2PcInstance, net.xcine.gameserver.model.L2ItemInstance)
-	 */
+	
 	@Override
 	public void useSkill(L2Character activeChar, L2Skill skill, L2Object[] targets)
 	{
 		if(!(activeChar instanceof L2PlayableInstance)){
-			//no cp damages for not playable instances
 			return;
 		}
 		
 		if(activeChar.isAlikeDead())
 			return;
 
-		/*
-		boolean ss = false;
-		boolean sps = false;
-		boolean bss = false;
-
-		L2ItemInstance weaponInst = activeChar.getActiveWeaponInstance();
-
-		if(weaponInst != null)
-		{
-			if(skill.isMagic())
-			{
-				if(weaponInst.getChargedSpiritshot() == L2ItemInstance.CHARGED_BLESSED_SPIRITSHOT)
-				{
-					bss = true;
-				}
-				else if(weaponInst.getChargedSpiritshot() == L2ItemInstance.CHARGED_SPIRITSHOT)
-				{
-					sps = true;
-				}
-			}
-			else if(weaponInst.getChargedSoulshot() == L2ItemInstance.CHARGED_SOULSHOT)
-			{
-				ss = true;
-			}
-		}
-		// If there is no weapon equipped, check for an active summon.
-		else if(activeChar instanceof L2Summon)
-		{
-			L2Summon activeSummon = (L2Summon) activeChar;
-
-			if(activeSummon.getChargedSpiritShot() == L2ItemInstance.CHARGED_BLESSED_SPIRITSHOT)
-			{
-				bss = true;
-				activeSummon.setChargedSpiritShot(L2ItemInstance.CHARGED_NONE);
-			}
-			else if(activeSummon.getChargedSpiritShot() == L2ItemInstance.CHARGED_SPIRITSHOT)
-			{
-				ss = true;
-				activeSummon.setChargedSpiritShot(L2ItemInstance.CHARGED_NONE);
-			}
-
-			activeSummon = null;
-		}
-
-		weaponInst = null;
-		*/
 		boolean bss = activeChar.checkBss();
 		boolean sps = activeChar.checkSps();
 		boolean ss = activeChar.checkSs();
@@ -126,7 +68,6 @@ public class CpDam implements ISkillHandler
 
 			int damage = (int) (target.getCurrentCp() * (1 - skill.getPower()));
 
-			// Manage attack or cast break of the target (calculating rate, sending message...)
 			if(!target.isRaid() && Formulas.calcAtkBreak(target, damage))
 			{
 				target.breakAttack();
@@ -146,11 +87,9 @@ public class CpDam implements ISkillHandler
 			}else if(sps){
 				activeChar.removeSps();
 			}
-			
 		}else{
 			
 			activeChar.removeSs();
-			
 		}
 		
 	}

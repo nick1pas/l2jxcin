@@ -32,10 +32,8 @@ import java.util.logging.Logger;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
-import net.xcine.util.CloseUtil;
 import net.xcine.util.database.L2DatabaseFactory;
 
 /**
@@ -60,10 +58,8 @@ public class RaidBossPointsManager
 	{
 		_list = new FastMap<>();
 		FastList<Integer> _chars = new FastList<>();
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement = con.prepareStatement("SELECT * FROM `character_raid_points`");
 			ResultSet rset = statement.executeQuery();
 			while(rset.next())
@@ -102,19 +98,12 @@ public class RaidBossPointsManager
 			
 			_log.warning(e.getMessage());
 		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
-		}
 	}
 
 	public final static void updatePointsInDB(L2PcInstance player, int raidId, int points)
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement;
 			statement = con.prepareStatement("REPLACE INTO character_raid_points (`charId`,`boss_id`,`points`) VALUES (?,?,?)");
 			statement.setInt(1, player.getObjectId());
@@ -129,11 +118,6 @@ public class RaidBossPointsManager
 				e.printStackTrace();
 			
 			_log.log(Level.WARNING, "could not update char raid points:", e);
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
 		}
 	}
 
@@ -186,10 +170,8 @@ public class RaidBossPointsManager
 
 	public final static void cleanUp()
 	{
-		Connection con = null;
-		try
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			con = L2DatabaseFactory.getInstance().getConnection(false);
 			PreparedStatement statement;
 			statement = con.prepareStatement("DELETE from character_raid_points WHERE charId > 0");
 			statement.executeUpdate();
@@ -203,11 +185,6 @@ public class RaidBossPointsManager
 				e.printStackTrace();
 			
 			_log.log(Level.WARNING, "could not clean raid points: ", e);
-		}
-		finally
-		{
-			CloseUtil.close(con);
-			con = null;
 		}
 	}
 

@@ -22,7 +22,6 @@ import java.util.logging.Logger;
 
 import net.xcine.Config;
 import net.xcine.gameserver.managers.ClanHallManager;
-import net.xcine.gameserver.managers.ClassDamageManager;
 import net.xcine.gameserver.managers.SiegeManager;
 import net.xcine.gameserver.model.Inventory;
 import net.xcine.gameserver.model.L2Character;
@@ -860,6 +859,8 @@ public final class Formulas
 	}
 
 	private static final Formulas _instance = new Formulas();
+	private static final String ClassDamageManager = null;
+	private static double damage;
 
 	public static Formulas getInstance()
 	{
@@ -1440,17 +1441,28 @@ public final class Formulas
 			if(((L2PcInstance) attacker).isInOlympiadMode() && ((L2PcInstance) target).isInOlympiadMode()){
 				
 				if(Config.ENABLE_CLASS_DAMAGES_IN_OLY){
-					damage = damage*ClassDamageManager.getDamageMultiplier((L2PcInstance) attacker, (L2PcInstance) target);
+					damage = damage((L2PcInstance) attacker, (L2PcInstance) target);
 				}
 				
 			}else{
 				
-				damage = damage*ClassDamageManager.getDamageMultiplier((L2PcInstance) attacker, (L2PcInstance) target);
+				damage = damage((L2PcInstance) attacker, (L2PcInstance) target);
 			
 			}
 		}
 		
 		return damage < 1 ? 1. : damage;
+	}
+
+	/**
+	 * @param attacker
+	 * @param target
+	 * @return
+	 */
+	private static double damage(L2PcInstance attacker, L2PcInstance target)
+	{
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	/**
@@ -1756,12 +1768,12 @@ public final class Formulas
 			if(((L2PcInstance) attacker).isInOlympiadMode() && ((L2PcInstance) target).isInOlympiadMode()){
 				
 				if(Config.ENABLE_CLASS_DAMAGES_IN_OLY){
-					damage = damage*ClassDamageManager.getDamageMultiplier((L2PcInstance) attacker, (L2PcInstance) target);
+					damage = damage((L2PcInstance) attacker, (L2PcInstance) target);
 				}
 				
 			}else{
 				
-				damage = damage*ClassDamageManager.getDamageMultiplier((L2PcInstance) attacker, (L2PcInstance) target);
+				damage = damage((L2PcInstance) attacker, (L2PcInstance) target);
 			
 			}
 		}
@@ -1923,13 +1935,8 @@ public final class Formulas
 			if(((L2PcInstance) attacker).isInOlympiadMode() && ((L2PcInstance) target).isInOlympiadMode()){
 				
 				if(Config.ENABLE_CLASS_DAMAGES_IN_OLY){
-					damage = damage*ClassDamageManager.getDamageMultiplier((L2PcInstance) attacker, (L2PcInstance) target);
-				}
-				
-			}else{
-				
-				damage = damage*ClassDamageManager.getDamageMultiplier((L2PcInstance) attacker, (L2PcInstance) target);
-			
+					damage = damage((L2PcInstance) attacker, (L2PcInstance) target);
+				}							
 			}
 		}
 		
@@ -3353,12 +3360,12 @@ public final class Formulas
 			if(((L2PcInstance) attacker).isInOlympiadMode() && ((L2PcInstance) target).isInOlympiadMode()){
 				
 				if(Config.ENABLE_CLASS_DAMAGES_IN_OLY){
-					damage = damage*ClassDamageManager.getDamageMultiplier((L2PcInstance) attacker, (L2PcInstance) target);
+					damage((L2PcInstance) attacker, (L2PcInstance) target);
 				}
 				
 			}else{
 				
-				damage = damage*ClassDamageManager.getDamageMultiplier((L2PcInstance) attacker, (L2PcInstance) target);
+				damage((L2PcInstance) attacker, (L2PcInstance) target);
 			
 			}
 		}

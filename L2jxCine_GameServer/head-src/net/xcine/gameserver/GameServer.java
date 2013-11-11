@@ -90,7 +90,6 @@ import net.xcine.gameserver.managers.BoatManager;
 import net.xcine.gameserver.managers.CastleManager;
 import net.xcine.gameserver.managers.CastleManorManager;
 import net.xcine.gameserver.managers.ClanHallManager;
-import net.xcine.gameserver.managers.ClassDamageManager;
 import net.xcine.gameserver.managers.CoupleManager;
 import net.xcine.gameserver.managers.CrownManager;
 import net.xcine.gameserver.managers.CursedWeaponsManager;
@@ -235,10 +234,7 @@ public class GameServer
 		CharNameTable.getInstance();
 		ExperienceData.getInstance();
 		DuelManager.getInstance();
-		
-		if (Config.ENABLE_CLASS_DAMAGES)
-			ClassDamageManager.loadConfig();
-		
+
 		if (Config.AUTOSAVE_DELAY_TIME > 0)
 		{
 			AutoSaveManager.getInstance().startAutoSaveManager();

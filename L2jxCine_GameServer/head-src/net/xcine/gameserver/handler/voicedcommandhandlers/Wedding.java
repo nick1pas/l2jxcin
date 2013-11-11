@@ -19,7 +19,6 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.event.CTF;
 import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.TvT;
-import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ConfirmDlg;
 import net.xcine.gameserver.network.serverpackets.MagicSkillUser;
@@ -363,11 +362,6 @@ public class Wedding implements IVoicedCommandHandler
 		if(activeChar._inEventDM && DM.is_started())
 		{
 			activeChar.sendMessage("You may not use go to love in DM.");
-			return false;
-		}
-		if(activeChar._inEventVIP && VIP._started)
-		{
-			activeChar.sendMessage("You may not use go to love in VIP.");
 			return false;
 		}
 		else if(activeChar.isInDuel())

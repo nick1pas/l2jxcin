@@ -87,7 +87,6 @@ import net.xcine.gameserver.handler.admincommandhandlers.AdminTest;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminTownWar;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminTvTEngine;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminUnblockIp;
-import net.xcine.gameserver.handler.admincommandhandlers.AdminVIPEngine;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminVip;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminWho;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminZone;
@@ -123,7 +122,6 @@ public class AdminCommandHandler
 		registerAdminCommandHandler(new AdminTarget());
 		registerAdminCommandHandler(new AdminShop());
 		registerAdminCommandHandler(new AdminCTFEngine());
-		registerAdminCommandHandler(new AdminVIPEngine());
 		registerAdminCommandHandler(new AdminDMEngine());
 		registerAdminCommandHandler(new AdminAnnouncements());
 		registerAdminCommandHandler(new AdminCreateItem());

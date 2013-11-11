@@ -141,7 +141,6 @@ import net.xcine.gameserver.model.entity.event.CTF;
 import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.L2Event;
 import net.xcine.gameserver.model.entity.event.TvT;
-import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSigns;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSignsFestival;
@@ -268,12 +267,7 @@ public final class L2PcInstance extends L2PlayableInstance
 	/** The Constant DELETE_SKILL_SAVE. */
 	private static final String DELETE_SKILL_SAVE = "DELETE FROM character_skills_save WHERE char_obj_id=? AND class_index=?";
 
-	/** The _is the vip. */
-	public boolean _isVIP = false, _inEventVIP = false, _isNotVIP = false, _isTheVIP = false;
 
-	/** The _original karma vip. */
-	public int _originalNameColourVIP, _originalKarmaVIP;
-	
 	/** The _vote timestamp. */
 	private long _voteTimestamp = 0;
 
@@ -4551,10 +4545,6 @@ private int _reviveRequested = 0;
 		{
 			sendMessage("The Admin/GM handle if you sit or stand in this match!");
 		}
-		else if(VIP._sitForced && _inEventVIP)
-		{
-			sendMessage("The Admin/GM handle if you sit or stand in this match!");
-		}
 		else if(_waitTypeSitting && !isInStoreMode() && !isAlikeDead())
 		{
 			if(_relax)
@@ -6391,7 +6381,7 @@ private int _reviveRequested = 0;
 	@Override
 	public boolean isInFunEvent()
 	{
-		return (atEvent || isInStartedTVTEvent() || isInStartedDMEvent() || isInStartedCTFEvent() || isInStartedVIPEvent());
+		return (atEvent || isInStartedTVTEvent() || isInStartedDMEvent() || isInStartedCTFEvent());
 	}
 	
 	public boolean isInStartedTVTEvent(){
@@ -6417,14 +6407,6 @@ private int _reviveRequested = 0;
 	public boolean isRegisteredInCTFEvent(){
 		return _inEventCTF;
 	}
-	
-	public boolean isInStartedVIPEvent(){
-		return (VIP._started && _inEventVIP);
-	}
-	
-	public boolean isRegisteredInVIPEvent(){
-		return _inEventVIP;
-	}
 
 	/**
 	 * Checks if is registered in fun event.
@@ -6432,7 +6414,7 @@ private int _reviveRequested = 0;
 	 * @return true, if is registered in fun event
 	 */
 	public boolean isRegisteredInFunEvent(){
-		return (atEvent || (_inEventTvT) || (_inEventDM) || (_inEventCTF) || (_inEventVIP) || Olympiad.getInstance().isRegistered(this));
+		return (atEvent || (_inEventTvT) || (_inEventDM) || (_inEventCTF) || Olympiad.getInstance().isRegistered(this));
 	}
 	
 	//To Avoid Offensive skills when locked (during oly start or TODO other events start)
@@ -7651,6 +7633,7 @@ private int _reviveRequested = 0;
 							
 						}
 						
+						
 						sendMessage("You will be revived and teleported to spot in 20 seconds!");
 						ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
 						{
@@ -7681,41 +7664,7 @@ private int _reviveRequested = 0;
 						}, 20000);
 					}
 				}
-				else if (_inEventVIP && VIP._started)
-				{
-					if (_isTheVIP && !pk._inEventVIP)
-					{
-						Announcements.getInstance().announceToAll("VIP Killed by non-event character. VIP going back to initial spawn.");
-						doRevive();
-						teleToLocation(VIP._startX, VIP._startY, VIP._startZ);
-						
-					}
-					else
-					{
-						if (_isTheVIP && pk._inEventVIP)
-						{
-							VIP.vipDied();
-						}
-						else
-						{
-							sendMessage("You will be revived and teleported to team spot in 20 seconds!");
-							ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
-							{
-								@Override
-								public void run()
-								{
-									doRevive();
-									if (_isVIP)
-										teleToLocation(VIP._startX, VIP._startY, VIP._startZ);
-									else
-										teleToLocation(VIP._endX, VIP._endY, VIP._endZ);
-								}
-							}, 20000);
-						}
-						
-					}
 					broadcastUserInfo();
-				}
 			}
 			
 			// Clear resurrect xp calculation
@@ -7826,7 +7775,7 @@ private int _reviveRequested = 0;
 	 */
 	private void onDieDropItem(L2Character killer)
 	{
-		if(atEvent || (TvT.is_started() && _inEventTvT) || (DM.is_started() && _inEventDM) || (CTF.is_started() && _inEventCTF) || (VIP._started && _inEventVIP) || killer == null)
+		if(atEvent || (TvT.is_started() && _inEventTvT) || (DM.is_started() && _inEventDM) || (CTF.is_started() && _inEventCTF) || killer == null)
 			return;
 
 		if(getKarma() <= 0 && killer instanceof L2PcInstance && ((L2PcInstance) killer).getClan() != null && getClan() != null && ((L2PcInstance) killer).getClan().isAtWarWith(getClanId()))
@@ -7957,7 +7906,7 @@ private int _reviveRequested = 0;
 		if (!(target instanceof L2PlayableInstance))
 			return;
 		
-		if ((_inEventCTF && CTF.is_started()) || (_inEventTvT && TvT.is_started()) || (_inEventVIP && VIP._started) || (_inEventDM && DM.is_started()))
+		if ((_inEventCTF && CTF.is_started()) || (_inEventTvT && TvT.is_started()) || (_inEventDM && DM.is_started()))
 			return;
 		
 		if (isCursedWeaponEquipped())
@@ -8049,7 +7998,7 @@ private int _reviveRequested = 0;
 			}
 			
 			// 'No war' or 'One way war' -> 'Normal PK'
-			if (!(_inEventTvT && TvT.is_started()) || !(_inEventCTF && CTF.is_started()) || !(_inEventVIP && VIP._started) || !(_inEventDM && DM.is_started()))
+			if (!(_inEventTvT && TvT.is_started()) || !(_inEventCTF && CTF.is_started()) || !(_inEventDM && DM.is_started()))
 			{
 				if (targetPlayer.getKarma() > 0) // Target player has karma
 				{
@@ -8255,7 +8204,7 @@ private int _reviveRequested = 0;
 			}
 		}
 
-		if((TvT.is_started() && _inEventTvT) || (DM.is_started() && _inEventDM) || (CTF.is_started() && _inEventCTF) || (VIP._started && _inEventVIP)) 
+		if((TvT.is_started() && _inEventTvT) || (DM.is_started() && _inEventDM) || (CTF.is_started() && _inEventCTF)) 
 			return;
 		
 		// Add karma to attacker and increase its PK counter
@@ -8521,7 +8470,7 @@ private int _reviveRequested = 0;
 	 */
 	public void increasePkKillsAndKarma(int targLVL)
 	{
-		if((TvT.is_started() && _inEventTvT) || (DM.is_started() && _inEventDM) || (CTF.is_started() && _inEventCTF) || (VIP._started && _inEventVIP))
+		if((TvT.is_started() && _inEventTvT) || (DM.is_started() && _inEventDM) || (CTF.is_started() && _inEventCTF))
 			return;
 
 		int baseKarma = Config.KARMA_MIN_KARMA;
@@ -8671,7 +8620,7 @@ private int _reviveRequested = 0;
 	 */
 	public void updatePvPStatus()
 	{
-		if((TvT.is_started() && _inEventTvT) || (CTF.is_started() && _inEventCTF) || (DM.is_started() && _inEventDM) || (VIP._started && _inEventVIP))
+		if((TvT.is_started() && _inEventTvT) || (CTF.is_started() && _inEventCTF) || (DM.is_started() && _inEventDM))
 			return;
 
 		if(isInsideZone(ZONE_PVP))
@@ -8706,7 +8655,7 @@ private int _reviveRequested = 0;
 		if(player_target == null)
 			return;
 
-		if((TvT.is_started() && _inEventTvT && player_target._inEventTvT) || (DM.is_started() && _inEventDM && player_target._inEventDM) || (CTF.is_started() && _inEventCTF && player_target._inEventCTF) || (VIP._started && _inEventVIP && player_target._inEventVIP))
+		if((TvT.is_started() && _inEventTvT && player_target._inEventTvT) || (DM.is_started() && _inEventDM && player_target._inEventDM) || (CTF.is_started() && _inEventCTF && player_target._inEventCTF))
 			return;
 
 		if(isInDuel() && player_target.getDuelId() == getDuelId())
@@ -8795,7 +8744,7 @@ private int _reviveRequested = 0;
 
 		// Calculate the Experience loss
 		long lostExp = 0;
-		if(!atEvent && !(_inEventTvT && TvT.is_started()) && !(_inEventDM && DM.is_started()) && !(_inEventCTF && CTF.is_started()) && !(_inEventVIP && VIP._started))
+		if(!atEvent && !(_inEventTvT && TvT.is_started()) && !(_inEventDM && DM.is_started()) && !(_inEventCTF && CTF.is_started()))
 		{
 			final byte maxLvl = ExperienceData.getInstance().getMaxLevel();
 		    if(lvl < maxLvl)
@@ -12014,7 +11963,7 @@ private int _reviveRequested = 0;
 				{
 					
 					// checks for events
-					if ((_inEventTvT && player._inEventTvT && TvT.is_started() && !_teamNameTvT.equals(player._teamNameTvT)) || (_inEventCTF && player._inEventCTF && CTF.is_started() && !_teamNameCTF.equals(player._teamNameCTF)) || (_inEventDM && player._inEventDM && DM.is_started()) || (_inEventVIP && player._inEventVIP && VIP._started))
+					if ((_inEventTvT && player._inEventTvT && TvT.is_started() && !_teamNameTvT.equals(player._teamNameTvT)) || (_inEventCTF && player._inEventCTF && CTF.is_started() && !_teamNameCTF.equals(player._teamNameCTF)) || (_inEventDM && player._inEventDM && DM.is_started()))
 					{
 						return true;
 					}
@@ -12572,7 +12521,7 @@ private int _reviveRequested = 0;
 
 			// Check if a Forced ATTACK is in progress on non-attackable target
 			//if (!target.isAutoAttackable(this) && !forceUse && !(_inEventTvT && TvT._started) && !(_inEventDM && DM._started) && !(_inEventCTF && CTF._started) && !(_inEventVIP && VIP._started)
-			if (!target.isAutoAttackable(this) && (!forceUse && (skill.getId() != 3261 && skill.getId() != 3260 && skill.getId() != 3262)) && !(_inEventTvT && TvT.is_started()) && !(_inEventDM && DM.is_started()) && !(_inEventCTF && CTF.is_started()) && !(_inEventVIP && VIP._started)
+			if (!target.isAutoAttackable(this) && (!forceUse && (skill.getId() != 3261 && skill.getId() != 3260 && skill.getId() != 3262)) && !(_inEventTvT && TvT.is_started()) && !(_inEventDM && DM.is_started()) && !(_inEventCTF && CTF.is_started())
 					&& sklTargetType != SkillTargetType.TARGET_AURA
 					&& sklTargetType != SkillTargetType.TARGET_CLAN
 					&& sklTargetType != SkillTargetType.TARGET_ALLY
@@ -12860,7 +12809,7 @@ private int _reviveRequested = 0;
 	 */
 	public boolean checkPvpSkill(L2Object target, L2Skill skill, boolean srcIsSummon)
 	{
-		if ((_inEventTvT && TvT.is_started()) || (_inEventDM && DM.is_started()) || (_inEventCTF && CTF.is_started()) || (_inEventVIP && VIP._started))
+		if ((_inEventTvT && TvT.is_started()) || (_inEventDM && DM.is_started()) || (_inEventCTF && CTF.is_started()))
 			return true;
 		
 		// check for PC->PC Pvp status
@@ -19662,8 +19611,6 @@ public boolean dismount()
 					DM.onDisconnect(this);
 				}else if(_inEventTvT){
 					TvT.onDisconnect(this);
-				}else if(_inEventVIP){
-					VIP.onDisconnect(this);
 				}
 	            if (Olympiad.getInstance().isRegisteredInComp(this))
 	                Olympiad.getInstance().removeDisconnectedCompetitor(this);

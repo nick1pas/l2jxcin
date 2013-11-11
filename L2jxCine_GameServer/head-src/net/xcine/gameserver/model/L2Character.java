@@ -7911,10 +7911,6 @@ public abstract class L2Character extends L2Object implements ISkillsHolder
 					return false;
 				else if (src.isInStartedCTFEvent() && dst.isInStartedCTFEvent())
 					return false;
-				else if (src.isInStartedVIPEvent() && dst.isInStartedVIPEvent())
-					return false;
-				else if (src.isInStartedVIPEvent() && dst.isInStartedVIPEvent())
-					return false;
 				// else
 				// different events in same location --> already checked				
 			}		

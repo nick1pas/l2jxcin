@@ -29,7 +29,6 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.event.CTF;
 import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.TvT;
-import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ConfirmDlg;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
@@ -73,10 +72,6 @@ public class SummonFriend implements ISkillHandler
 			return;			
 		}
 		if (activePlayer._inEventTvT && TvT.is_started()) {
-			activePlayer.sendMessage("You cannot use this skill in Event.");
-			return;			
-		}
-		if (activePlayer._inEventVIP && VIP._started) {
 			activePlayer.sendMessage("You cannot use this skill in Event.");
 			return;			
 		}
@@ -144,11 +139,6 @@ public class SummonFriend implements ISkillHandler
 						return;
 					}
 					if (targetChar._inEventTvT)
-					{
-						targetChar.sendMessage("You cannot use this skill in a Event.");
-						return;
-					}
-					if (targetChar._inEventVIP)
 					{
 						targetChar.sendMessage("You cannot use this skill in a Event.");
 						return;

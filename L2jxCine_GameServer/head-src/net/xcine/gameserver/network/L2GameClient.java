@@ -46,7 +46,6 @@ import net.xcine.gameserver.model.entity.event.CTF;
 import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.L2Event;
 import net.xcine.gameserver.model.entity.event.TvT;
-import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
 import net.xcine.gameserver.network.serverpackets.L2GameServerPacket;
@@ -851,10 +850,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 							DM.onDisconnect(player);
 						}else if(player._inEventTvT){
 							TvT.onDisconnect(player);
-						}else if(player._inEventVIP){
-							VIP.onDisconnect(player);
-						}
-						
+						}	
 					}
 
 					if(player.isFlying())
@@ -943,10 +939,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 							DM.onDisconnect(player);
 						}else if(player._inEventTvT){
 							TvT.onDisconnect(player);
-						}else if(player._inEventVIP){
-							VIP.onDisconnect(player);
 						}
-						
 					}
 
 					if(player.isFlying())

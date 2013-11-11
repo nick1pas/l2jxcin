@@ -39,7 +39,6 @@ import net.xcine.gameserver.model.entity.event.CTF;
 import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.L2Event;
 import net.xcine.gameserver.model.entity.event.TvT;
-import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
 import net.xcine.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -207,21 +206,6 @@ public final class RequestBypassToServer extends L2GameClientPacket
 							CTF.removePlayer(activeChar);
 						else
 							activeChar.sendMessage("The event is already started. You can't leave now!");
-					}
-
-					if(_command.substring(endOfId+1).startsWith("vip_joinVIPTeam"))
-					{
-							VIP.addPlayerVIP(activeChar);
-					}
-
-					if(_command.substring(endOfId+1).startsWith("vip_joinNotVIPTeam"))
-					{
-							VIP.addPlayerNotVIP(activeChar);
-					}
-
-					if(_command.substring(endOfId+1).startsWith("vip_finishVIP"))
-					{
-							VIP.vipWin(activeChar);
 					}
 
 					if(_command.substring(endOfId+1).startsWith("event_participate"))

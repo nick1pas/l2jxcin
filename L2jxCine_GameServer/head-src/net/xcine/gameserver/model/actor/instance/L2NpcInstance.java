@@ -59,7 +59,6 @@ import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.L2Event;
 import net.xcine.gameserver.model.entity.event.Lottery;
 import net.xcine.gameserver.model.entity.event.TvT;
-import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.model.entity.olympiad.Olympiad;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSigns;
 import net.xcine.gameserver.model.entity.sevensigns.SevenSignsFestival;
@@ -855,14 +854,6 @@ public class L2NpcInstance extends L2Character
 					{
 						CTF.checkRestoreFlags();
 					}
-					else if (this._isEventVIPNPC)
-					{
-						VIP.showJoinHTML(player, String.valueOf(this.getObjectId()));
-					}
-					else if (this._isEventVIPNPCEnd)
-					{
-						VIP.showEndHTML(player, String.valueOf(this.getObjectId()));
-					}
 					else
 					{
 						// Open a chat window on client with the text of the L2NpcInstance
@@ -1196,14 +1187,6 @@ public class L2NpcInstance extends L2Character
 						else if (_isCTF_throneSpawn)
 						{
 							CTF.checkRestoreFlags();
-						}
-						else if (this._isEventVIPNPC)
-						{
-							VIP.showJoinHTML(player, String.valueOf(this.getObjectId()));
-						}
-						else if (this._isEventVIPNPCEnd)
-						{
-							VIP.showEndHTML(player, String.valueOf(this.getObjectId()));
 						}
 						else
 						{

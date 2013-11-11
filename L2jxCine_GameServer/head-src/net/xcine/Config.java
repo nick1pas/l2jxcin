@@ -732,7 +732,6 @@ public final class Config
 	public static int CTF_SPAWN_OFFSET;
 	
 	// L2JCine
-	public static boolean ONLINE_PLAYERS_ON_LOGIN;
 	public static boolean SHOW_SERVER_VERSION;
 	public static boolean SHOW_NPC_CREST;
 	public static boolean GM_TRADE_RESTRICTED_ITEMS;
@@ -763,7 +762,6 @@ public final class Config
 	public static boolean CUSTOM_MERCHANT_TABLES = true;
 	public static boolean ALLOW_SIMPLE_STATS_VIEW;
 	public static boolean ALLOW_DETAILED_STATS_VIEW;
-	public static boolean ALLOW_ONLINE_VIEW;
 	public static boolean WELCOME_HTM;	
 	public static String ALLOWED_SKILLS;
 	public static FastList<Integer> ALLOWED_SKILLS_LIST = new FastList<>();
@@ -2506,7 +2504,6 @@ public final class Config
 			SAVE_GMSPAWN_ON_CUSTOM = Boolean.valueOf(L2jxCineSettings.getProperty("SaveGmSpawnOnCustom", "True"));
 			DELETE_GMSPAWN_ON_CUSTOM = Boolean.valueOf(L2jxCineSettings.getProperty("DeleteGmSpawnOnCustom", "True"));
 
-			ONLINE_PLAYERS_ON_LOGIN = Boolean.valueOf(L2jxCineSettings.getProperty("OnlineOnLogin", "False"));
 			SHOW_SERVER_VERSION = Boolean.valueOf(L2jxCineSettings.getProperty("ShowServerVersion", "False"));
 			SHOW_NPC_CREST = Boolean.parseBoolean(L2jxCineSettings.getProperty("ShowNpcCrest", "False"));
 			GM_TRADE_RESTRICTED_ITEMS = Boolean.parseBoolean(L2jxCineSettings.getProperty("GMTradeRestrictedItems", "False"));
@@ -2546,7 +2543,6 @@ public final class Config
 
 			ALLOW_SIMPLE_STATS_VIEW = Boolean.valueOf(L2jxCineSettings.getProperty("AllowSimpleStatsView", "True"));
 			ALLOW_DETAILED_STATS_VIEW = Boolean.valueOf(L2jxCineSettings.getProperty("AllowDetailedStatsView", "False"));
-			ALLOW_ONLINE_VIEW = Boolean.valueOf(L2jxCineSettings.getProperty("AllowOnlineView", "False"));
 
 			KEEP_SUBCLASS_SKILLS = Boolean.parseBoolean(L2jxCineSettings.getProperty("KeepSubClassSkills", "False"));
 

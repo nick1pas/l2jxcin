@@ -24,7 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javolution.util.FastMap;
-
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.sql.ItemTable;
@@ -40,7 +39,6 @@ import net.xcine.gameserver.model.actor.instance.L2PlayableInstance;
 import net.xcine.gameserver.model.entity.event.CTF;
 import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.TvT;
-import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.ActionFailed;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
@@ -239,13 +237,6 @@ public class Potions implements IItemHandler
 			
 			// if(activeChar._inEventCTF && CTF._started && !Config.CTF_ALLOW_POTIONS)
 			if (activeChar._inEventCTF && CTF.is_started() && !Config.CTF_ALLOW_POTIONS)
-			{
-				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
-				return;
-			}
-			
-			// if(activeChar._inEventVIP && VIP._started)
-			if (activeChar._inEventVIP && VIP._started)
 			{
 				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 				return;

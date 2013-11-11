@@ -26,10 +26,8 @@ import net.xcine.Config;
 import net.xcine.gameserver.GameServer;
 import net.xcine.gameserver.handler.voicedcommandhandlers.CTFCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.DMCmd;
-import net.xcine.gameserver.handler.voicedcommandhandlers.Online;
 import net.xcine.gameserver.handler.voicedcommandhandlers.StatsCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.TvTCmd;
-import net.xcine.gameserver.handler.voicedcommandhandlers.Voting;
 import net.xcine.gameserver.handler.voicedcommandhandlers.Wedding;
 
 /**
@@ -57,8 +55,6 @@ public class VoicedCommandHandler
 	private VoicedCommandHandler()
 	{
 		_datatable = new FastMap<>();
-		
-		registerVoicedCommandHandler(new Voting());
 
 		if (Config.CTF_COMMAND)
 		{
@@ -82,10 +78,6 @@ public class VoicedCommandHandler
 		
 		registerVoicedCommandHandler(new StatsCmd());
 
-		if (Config.ALLOW_ONLINE_VIEW)
-		{
-			registerVoicedCommandHandler(new Online());
-		}
 
 		_log.config("VoicedCommandHandler: Loaded " + _datatable.size() + " handlers.");
 		

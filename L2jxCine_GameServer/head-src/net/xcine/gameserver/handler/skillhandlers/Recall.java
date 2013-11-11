@@ -30,7 +30,6 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.entity.event.CTF;
 import net.xcine.gameserver.model.entity.event.DM;
 import net.xcine.gameserver.model.entity.event.TvT;
-import net.xcine.gameserver.model.entity.event.VIP;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.SystemMessage;
 
@@ -94,7 +93,7 @@ public class Recall implements ISkillHandler
 						continue;
 					}
 					
-					if ((targetChar._inEventCTF && CTF.is_started()) || (targetChar._inEventTvT && TvT.is_started()) || (targetChar._inEventDM && DM.is_started()) || (targetChar._inEventVIP && VIP._started))
+					if ((targetChar._inEventCTF && CTF.is_started()) || (targetChar._inEventTvT && TvT.is_started()) || (targetChar._inEventDM && DM.is_started()))
 					{
 						targetChar.sendMessage("You can't use escape skill in Event.");
 						continue;

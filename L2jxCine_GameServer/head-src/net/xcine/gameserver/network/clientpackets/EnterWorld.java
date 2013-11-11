@@ -584,9 +584,6 @@ public class EnterWorld extends L2GameClientPacket
 		if (Config.ALT_SERVER_NAME_ENABLED)
 			sendPacket(new SystemMessage(SystemMessageId.S1_S2).addString("Welcome to " + Config.ALT_Server_Name));
 
-		if (Config.ONLINE_PLAYERS_ON_LOGIN)
-			sendPacket(new SystemMessage(SystemMessageId.S1_S2).addString("There are " + L2World.getInstance().getAllPlayers().size() + " players online."));
-
 		if (activeChar.getFirstLog() && Config.NEW_PLAYER_EFFECT)
 		{
 			L2Skill skill = SkillTable.getInstance().getInfo(2025,1);

@@ -24,10 +24,8 @@ import java.util.logging.Logger;
 import javolution.util.FastMap;
 import net.xcine.Config;
 import net.xcine.gameserver.GameServer;
-import net.xcine.gameserver.handler.voicedcommandhandlers.BankingCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.CTFCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.DMCmd;
-import net.xcine.gameserver.handler.voicedcommandhandlers.OfflineShop;
 import net.xcine.gameserver.handler.voicedcommandhandlers.Online;
 import net.xcine.gameserver.handler.voicedcommandhandlers.StatsCmd;
 import net.xcine.gameserver.handler.voicedcommandhandlers.TvTCmd;
@@ -61,12 +59,7 @@ public class VoicedCommandHandler
 		_datatable = new FastMap<>();
 		
 		registerVoicedCommandHandler(new Voting());
-		
-		if (Config.BANKING_SYSTEM_ENABLED)
-		{
-			registerVoicedCommandHandler(new BankingCmd());
-		}
-		
+
 		if (Config.CTF_COMMAND)
 		{
 			registerVoicedCommandHandler(new CTFCmd());
@@ -93,12 +86,7 @@ public class VoicedCommandHandler
 		{
 			registerVoicedCommandHandler(new Online());
 		}
-		
-		if (Config.OFFLINE_TRADE_ENABLE && Config.OFFLINE_COMMAND2)
-		{
-			registerVoicedCommandHandler(new OfflineShop());
-		}
-		
+
 		_log.config("VoicedCommandHandler: Loaded " + _datatable.size() + " handlers.");
 		
 	}

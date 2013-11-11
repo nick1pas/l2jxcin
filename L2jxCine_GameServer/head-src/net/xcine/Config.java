@@ -497,9 +497,6 @@ public final class Config
 	public static byte BASE_SUBCLASS_LEVEL;
 	public static byte MAX_SUBCLASS_LEVEL;
 	
-	public static String DISABLE_BOW_CLASSES_STRING;
-	public static FastList<Integer> DISABLE_BOW_CLASSES = new FastList<>();
-	
 	public static boolean ALT_MOBS_STATS_BONUS;
 	public static boolean ALT_PETS_STATS_BONUS;
 	
@@ -623,9 +620,6 @@ public final class Config
 	public static boolean TW_RESS_ON_DIE;
 	
 	//L2jxCine
-	public static boolean BANKING_SYSTEM_ENABLED;
-	public static int BANKING_SYSTEM_GOLDBARS;
-	public static int BANKING_SYSTEM_ADENA;
 	public static boolean IS_CRAFTING_ENABLED;
 	public static int DWARF_RECIPE_LIMIT;
 	public static int COMMON_RECIPE_LIMIT;
@@ -635,19 +629,12 @@ public final class Config
 	public static double ALT_GAME_CREATION_SP_RATE;
 	public static boolean ALT_BLACKSMITH_USE_RECIPES;
 	
-	// PC Bang Points	
-	public static boolean PCB_ENABLE;
-	public static int PCB_MIN_LEVEL;
-	public static int PCB_POINT_MIN;
-	public static int PCB_POINT_MAX;
-	public static int PCB_CHANCE_DUAL_POINT;
-	public static int PCB_INTERVAL;	
+	// OFFLINE	
 	public static boolean OFFLINE_TRADE_ENABLE;
 	public static boolean OFFLINE_CRAFT_ENABLE;
 	public static boolean OFFLINE_SET_NAME_COLOR;
 	public static int OFFLINE_NAME_COLOR;	
 	public static boolean OFFLINE_COMMAND1;
-	public static boolean OFFLINE_COMMAND2;
 	public static boolean OFFLINE_LOGOUT;
 	public static boolean OFFLINE_SLEEP_EFFECT;	
 	public static boolean RESTORE_OFFLINERS; 
@@ -1329,9 +1316,6 @@ public final class Config
 			MASTERACCESS_TITLE_COLOR = Integer.decode("0x" + AccessSettings.getProperty("MasterTitleColor", "00FF00"));
 			USERACCESS_LEVEL = Integer.parseInt(AccessSettings.getProperty("UserAccessLevel", "0"));
 
-			BANKING_SYSTEM_ENABLED = Boolean.parseBoolean(AccessSettings.getProperty("BankingEnabled", "false"));
-			BANKING_SYSTEM_GOLDBARS = Integer.parseInt(AccessSettings.getProperty("BankingGoldbarCount", "1"));
-			BANKING_SYSTEM_ADENA = Integer.parseInt(AccessSettings.getProperty("BankingAdenaCount", "500000000"));
 			DWARF_RECIPE_LIMIT = Integer.parseInt(AccessSettings.getProperty("DwarfRecipeLimit", "50"));
 			COMMON_RECIPE_LIMIT = Integer.parseInt(AccessSettings.getProperty("CommonRecipeLimit", "50"));
 			IS_CRAFTING_ENABLED = Boolean.parseBoolean(AccessSettings.getProperty("CraftingEnabled", "True"));
@@ -1347,7 +1331,6 @@ public final class Config
 			OFFLINE_NAME_COLOR = Integer.decode("0x" + AccessSettings.getProperty("OfflineNameColor", "ff00ff"));
 			
 			OFFLINE_COMMAND1 = Boolean.parseBoolean(AccessSettings.getProperty("OfflineCommand1", "True"));
-			OFFLINE_COMMAND2 = Boolean.parseBoolean(AccessSettings.getProperty("OfflineCommand2", "False"));
 			OFFLINE_LOGOUT = Boolean.parseBoolean(AccessSettings.getProperty("OfflineLogout", "False"));
 			OFFLINE_SLEEP_EFFECT = Boolean.parseBoolean(AccessSettings.getProperty("OfflineSleepEffect", "True"));
 
@@ -1447,14 +1430,7 @@ public final class Config
 			REMOVE_WEAPON_SUBCLASS = Boolean.parseBoolean(optionsSettings.getProperty("RemoveWeaponSubclass", "False"));
 			REMOVE_CHEST_SUBCLASS = Boolean.parseBoolean(optionsSettings.getProperty("RemoveChestSubclass", "False"));
 			REMOVE_LEG_SUBCLASS = Boolean.parseBoolean(optionsSettings.getProperty("RemoveLegSubclass", "False"));
-			
-			DISABLE_BOW_CLASSES_STRING = optionsSettings.getProperty("DisableBowForClasses", "");
-			DISABLE_BOW_CLASSES = new FastList<>();
-			for (String class_id : DISABLE_BOW_CLASSES_STRING.split(",")){
-				if(!class_id.equals(""))
-					DISABLE_BOW_CLASSES.add(Integer.parseInt(class_id));
-			}
-				
+	
 			LEAVE_BUFFS_ON_DIE = Boolean.parseBoolean(optionsSettings.getProperty("LeaveBuffsOnDie", "True"));
 			
 			AUTODESTROY_ITEM_AFTER = Integer.parseInt(optionsSettings.getProperty("AutoDestroyDroppedItemAfter", "0"));
@@ -2516,18 +2492,6 @@ public final class Config
 			CTF_AURA = Boolean.parseBoolean(EventsSettings.getProperty("CTFAura", "True"));
 			CTF_STATS_LOGGER = Boolean.parseBoolean(EventsSettings.getProperty("CTFStatsLogger", "true"));
 			CTF_SPAWN_OFFSET = Integer.parseInt(EventsSettings.getProperty("CTFSpawnOffset", "100"));
-			PCB_ENABLE = Boolean.parseBoolean(EventsSettings.getProperty("PcBangPointEnable", "true"));
-			PCB_MIN_LEVEL = Integer.parseInt(EventsSettings.getProperty("PcBangPointMinLevel", "20"));
-			PCB_POINT_MIN = Integer.parseInt(EventsSettings.getProperty("PcBangPointMinCount", "20"));
-			PCB_POINT_MAX = Integer.parseInt(EventsSettings.getProperty("PcBangPointMaxCount", "1000000"));
-			
-			if(PCB_POINT_MAX < 1)
-			{
-				PCB_POINT_MAX = Integer.MAX_VALUE;
-			}
-
-			PCB_CHANCE_DUAL_POINT = Integer.parseInt(EventsSettings.getProperty("PcBangPointDualChance", "20"));
-			PCB_INTERVAL = Integer.parseInt(EventsSettings.getProperty("PcBangPointTimeStamp", "900"));
 
 			ExProperties L2jxCineSettings = load(L2JCINE_CONFIG_FILE);
 

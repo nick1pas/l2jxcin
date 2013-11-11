@@ -135,7 +135,6 @@ import net.xcine.gameserver.thread.LoginServerThread;
 import net.xcine.gameserver.thread.ThreadPoolManager;
 import net.xcine.gameserver.thread.daemons.DeadlockDetector;
 import net.xcine.gameserver.thread.daemons.ItemsAutoDestroy;
-import net.xcine.gameserver.thread.daemons.PcPoint;
 import net.xcine.gameserver.util.sql.SQLQueue;
 import net.xcine.netcore.SelectorConfig;
 import net.xcine.netcore.SelectorThread;
@@ -490,13 +489,9 @@ public class GameServer
 		
 		Util.printSection("Custom Mods");
 		
-		if (Config.L2JMOD_ALLOW_WEDDING || Config.PCB_ENABLE)
-		{
 			if (Config.L2JMOD_ALLOW_WEDDING)
+		{		
 				CoupleManager.getInstance();
-
-			if (Config.PCB_ENABLE)
-				ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(PcPoint.getInstance(), Config.PCB_INTERVAL * 1000, Config.PCB_INTERVAL * 1000);
 		}
 		else
 			_log.info("All custom mods are Disabled.");

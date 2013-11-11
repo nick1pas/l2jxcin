@@ -340,9 +340,6 @@ public class EnterWorld extends L2GameClientPacket
 		
 		activeChar.onPlayerEnter();
 
-		if (Config.PCB_ENABLE)
-			activeChar.showPcBangWindow();
-
 		if (Config.ANNOUNCE_CASTLE_LORDS)
 				notifyCastleOwner(activeChar);
 

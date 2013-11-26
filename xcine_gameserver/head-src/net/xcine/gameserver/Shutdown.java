@@ -24,7 +24,6 @@ import net.xcine.gameserver.instancemanager.CastleManorManager;
 import net.xcine.gameserver.instancemanager.FourSepulchersManager;
 import net.xcine.gameserver.instancemanager.GrandBossManager;
 import net.xcine.gameserver.instancemanager.ItemsOnGroundManager;
-import net.xcine.gameserver.instancemanager.QuestManager;
 import net.xcine.gameserver.instancemanager.RaidBossSpawnManager;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -187,10 +186,6 @@ public class Shutdown extends Thread
 			// Save all manor data
 			CastleManorManager.getInstance().save();
 			_log.info("Manors data has been saved.");
-			
-			// Save all global (non-player specific) Quest data that needs to persist after reboot
-			QuestManager.getInstance().save();
-			_log.info("Global quests have been saved.");
 			
 			// Save items on ground before closing
 			if (Config.SAVE_DROPPED_ITEM)

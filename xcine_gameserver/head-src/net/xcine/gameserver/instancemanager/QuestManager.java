@@ -161,7 +161,7 @@ public class QuestManager extends ScriptManager<Quest>
     }
 
     /**
-     * @see net.xline.gameserver.scripting.ScriptManager#getAllManagedScripts()
+     * @see net.xcine.gameserver.scripting.ScriptManager#getAllManagedScripts()
      */
     @Override
     public List<Quest> getAllManagedScripts()
@@ -170,7 +170,7 @@ public class QuestManager extends ScriptManager<Quest>
     }
 
     /**
-     * @see net.xline.gameserver.scripting.ScriptManager#unload(net.xline.gameserver.scripting.ManagedScript)
+     * @see net.xcine.gameserver.scripting.ScriptManager#unload(net.xcine.gameserver.scripting.ManagedScript)
      */
     @Override
     public boolean unload(Quest quest)
@@ -179,7 +179,7 @@ public class QuestManager extends ScriptManager<Quest>
     }
 
     /**
-     * @see net.xline.gameserver.scripting.ScriptManager#getScriptManagerName()
+     * @see net.xcine.gameserver.scripting.ScriptManager#getScriptManagerName()
      */
     @Override
     public String getScriptManagerName()

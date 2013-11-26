@@ -37,11 +37,9 @@ public class Q375_WhisperOfDreams_Part2 extends Quest
 	// Rewards : A grade robe recipes
 	private static final int[] REWARDS =
 	{
-		5346,
 		5348,
 		5350,
-		5352,
-		5354
+		5352
 	};
 	
 	public Q375_WhisperOfDreams_Part2(int questId, String name, String descr)
@@ -118,7 +116,7 @@ public class Q375_WhisperOfDreams_Part2 extends Quest
 					htmltext = "30515-05.htm";
 					st.takeItems(KARIK_HORN, 100);
 					st.takeItems(CAVE_HOWLER_SKULL, 100);
-					st.giveItems(REWARDS[Rnd.get(5)], 1);
+					st.giveItems(REWARDS[Rnd.get(REWARDS.length)], 1);
 					st.playSound(QuestState.SOUND_MIDDLE);
 				}
 				else
@@ -141,11 +139,11 @@ public class Q375_WhisperOfDreams_Part2 extends Quest
 		switch (npc.getNpcId())
 		{
 			case KARIK:
-				st.dropItems(KARIK_HORN, 1, 100, 500000);
+				st.dropItemsAlways(KARIK_HORN, 1, 100);
 				break;
 			
 			case CAVE_HOWLER:
-				st.dropItems(CAVE_HOWLER_SKULL, 1, 100, 800000);
+				st.dropItems(CAVE_HOWLER_SKULL, 1, 100, 900000);
 				break;
 		}
 		

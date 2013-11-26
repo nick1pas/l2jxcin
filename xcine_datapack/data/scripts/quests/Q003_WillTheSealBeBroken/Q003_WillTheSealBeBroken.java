@@ -22,25 +22,17 @@ public class Q003_WillTheSealBeBroken extends Quest
 {
 	private static final String qn = "Q003_WillTheSealBeBroken";
 	
-	private final static int TALLOTH = 30141;
-	private final static int[] MONSTERS =
-	{
-		20031,
-		20041,
-		20046,
-		20048,
-		20052,
-		20057
-	};
+	// Items
+	private static final int ONYX_BEAST_EYE = 1081;
+	private static final int TAINT_STONE = 1082;
+	private static final int SUCCUBUS_BLOOD = 1083;
 	
-	private final static int ONYX_BEAST_EYE = 1081;
-	private final static int TAINT_STONE = 1082;
-	private final static int SUCCUBUS_BLOOD = 1083;
-	private final static int SCROLL_ENCHANT_ARMOR_D = 956;
+	// Reward
+	private static final int SCROLL_ENCHANT_ARMOR_D = 956;
 	
-	public Q003_WillTheSealBeBroken(int questId, String name, String descr)
+	public Q003_WillTheSealBeBroken()
 	{
-		super(questId, name, descr);
+		super(3, qn, "Will the Seal be Broken?");
 		
 		questItemIds = new int[]
 		{
@@ -48,11 +40,11 @@ public class Q003_WillTheSealBeBroken extends Quest
 			TAINT_STONE,
 			SUCCUBUS_BLOOD
 		};
-		addStartNpc(TALLOTH);
-		addTalkId(TALLOTH);
 		
-		for (int monster : MONSTERS)
-			addKillId(monster);
+		addStartNpc(30141); // Talloth
+		addTalkId(30141);
+		
+		addKillId(20031, 20041, 20046, 20048, 20052, 20057);
 	}
 	
 	@Override
@@ -65,8 +57,8 @@ public class Q003_WillTheSealBeBroken extends Quest
 		
 		if (event.equalsIgnoreCase("30141-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		
@@ -85,32 +77,27 @@ public class Q003_WillTheSealBeBroken extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.DarkElf)
-				{
 					htmltext = "30141-00.htm";
-					st.exitQuest(true);
-				}
-				else if (player.getLevel() >= 16)
-					htmltext = "30141-02.htm";
-				else
-				{
+				else if (player.getLevel() < 16)
 					htmltext = "30141-01.htm";
-					st.exitQuest(true);
-				}
+				else
+					htmltext = "30141-02.htm";
 				break;
 			
 			case STATE_STARTED:
-				if (st.getQuestItemsCount(ONYX_BEAST_EYE) > 0 && st.getQuestItemsCount(TAINT_STONE) > 0 && st.getQuestItemsCount(SUCCUBUS_BLOOD) > 0)
+				int cond = st.getInt("cond");
+				if (cond == 1)
+					htmltext = "30141-04.htm";
+				else if (cond == 2)
 				{
 					htmltext = "30141-06.htm";
 					st.takeItems(ONYX_BEAST_EYE, 1);
-					st.takeItems(TAINT_STONE, 1);
 					st.takeItems(SUCCUBUS_BLOOD, 1);
+					st.takeItems(TAINT_STONE, 1);
 					st.giveItems(SCROLL_ENCHANT_ARMOR_D, 1);
 					st.playSound(QuestState.SOUND_FINISH);
 					st.exitQuest(false);
 				}
-				else
-					htmltext = "30141-04.htm";
 				break;
 			
 			case STATE_COMPLETED:
@@ -131,51 +118,24 @@ public class Q003_WillTheSealBeBroken extends Quest
 		switch (npc.getNpcId())
 		{
 			case 20031:
-				if (!st.hasQuestItems(ONYX_BEAST_EYE))
-				{
-					st.giveItems(ONYX_BEAST_EYE, 1);
-					
+				if (st.dropItemsAlways(ONYX_BEAST_EYE, 1, 1))
 					if (st.hasQuestItems(TAINT_STONE) && st.hasQuestItems(SUCCUBUS_BLOOD))
-					{
 						st.set("cond", "2");
-						st.playSound(QuestState.SOUND_MIDDLE);
-					}
-					else
-						st.playSound(QuestState.SOUND_ITEMGET);
-				}
 				break;
 			
 			case 20041:
 			case 20046:
-				if (!st.hasQuestItems(TAINT_STONE))
-				{
-					st.giveItems(TAINT_STONE, 1);
-					
+				if (st.dropItemsAlways(TAINT_STONE, 1, 1))
 					if (st.hasQuestItems(ONYX_BEAST_EYE) && st.hasQuestItems(SUCCUBUS_BLOOD))
-					{
 						st.set("cond", "2");
-						st.playSound(QuestState.SOUND_MIDDLE);
-					}
-					else
-						st.playSound(QuestState.SOUND_ITEMGET);
-				}
 				break;
 			
 			case 20048:
 			case 20052:
 			case 20057:
-				if (!st.hasQuestItems(SUCCUBUS_BLOOD))
-				{
-					st.giveItems(SUCCUBUS_BLOOD, 1);
-					
+				if (st.dropItemsAlways(SUCCUBUS_BLOOD, 1, 1))
 					if (st.hasQuestItems(ONYX_BEAST_EYE) && st.hasQuestItems(TAINT_STONE))
-					{
 						st.set("cond", "2");
-						st.playSound(QuestState.SOUND_MIDDLE);
-					}
-					else
-						st.playSound(QuestState.SOUND_ITEMGET);
-				}
 				break;
 		}
 		
@@ -184,6 +144,6 @@ public class Q003_WillTheSealBeBroken extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q003_WillTheSealBeBroken(3, qn, "Will the Seal be Broken?");
+		new Q003_WillTheSealBeBroken();
 	}
 }

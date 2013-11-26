@@ -22,22 +22,22 @@ public class Q001_LettersOfLove extends Quest
 	private static final String qn = "Q001_LettersOfLove";
 	
 	// Npcs
-	private final static int DARIN = 30048;
-	private final static int ROXXY = 30006;
-	private final static int BAULRO = 30033;
+	private static final int DARIN = 30048;
+	private static final int ROXXY = 30006;
+	private static final int BAULRO = 30033;
 	
 	// Items
-	private final static int DARINGS_LETTER = 687;
-	private final static int RAPUNZELS_KERCHIEF = 688;
-	private final static int DARINGS_RECEIPT = 1079;
-	private final static int BAULROS_POTION = 1080;
+	private static final int DARINGS_LETTER = 687;
+	private static final int RAPUNZELS_KERCHIEF = 688;
+	private static final int DARINGS_RECEIPT = 1079;
+	private static final int BAULROS_POTION = 1080;
 	
 	// Reward
-	private final static int NECKLACE = 906;
+	private static final int NECKLACE = 906;
 	
-	public Q001_LettersOfLove(int questId, String name, String descr)
+	public Q001_LettersOfLove()
 	{
-		super(questId, name, descr);
+		super(1, qn, "Letters of Love");
 		
 		questItemIds = new int[]
 		{
@@ -61,10 +61,10 @@ public class Q001_LettersOfLove extends Quest
 		
 		if (event.equalsIgnoreCase("30048-06.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
-			st.giveItems(DARINGS_LETTER, 1);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
+			st.giveItems(DARINGS_LETTER, 1);
 		}
 		
 		return htmltext;
@@ -81,13 +81,7 @@ public class Q001_LettersOfLove extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 2)
-					htmltext = "30048-02.htm";
-				else
-				{
-					htmltext = "30048-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 2) ? "30048-01.htm" : "30048-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -97,17 +91,17 @@ public class Q001_LettersOfLove extends Quest
 					case DARIN:
 						if (cond == 1)
 							htmltext = "30048-07.htm";
-						else if (cond == 2 && st.getQuestItemsCount(RAPUNZELS_KERCHIEF) == 1)
+						else if (cond == 2)
 						{
 							htmltext = "30048-08.htm";
-							st.takeItems(RAPUNZELS_KERCHIEF, 1);
-							st.giveItems(DARINGS_RECEIPT, 1);
 							st.set("cond", "3");
 							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(RAPUNZELS_KERCHIEF, 1);
+							st.giveItems(DARINGS_RECEIPT, 1);
 						}
 						else if (cond == 3)
 							htmltext = "30048-09.htm";
-						else if (cond == 4 && st.getQuestItemsCount(BAULROS_POTION) == 1)
+						else if (cond == 4)
 						{
 							htmltext = "30048-10.htm";
 							st.takeItems(BAULROS_POTION, 1);
@@ -118,28 +112,28 @@ public class Q001_LettersOfLove extends Quest
 						break;
 					
 					case ROXXY:
-						if (cond == 1 && st.getQuestItemsCount(RAPUNZELS_KERCHIEF) == 0 && st.getQuestItemsCount(DARINGS_LETTER) > 0)
+						if (cond == 1)
 						{
 							htmltext = "30006-01.htm";
-							st.takeItems(DARINGS_LETTER, 1);
-							st.giveItems(RAPUNZELS_KERCHIEF, 1);
 							st.set("cond", "2");
 							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(DARINGS_LETTER, 1);
+							st.giveItems(RAPUNZELS_KERCHIEF, 1);
 						}
-						else if (cond == 2 && st.getQuestItemsCount(RAPUNZELS_KERCHIEF) > 0)
+						else if (cond == 2)
 							htmltext = "30006-02.htm";
-						else if (cond > 2 && (st.getQuestItemsCount(BAULROS_POTION) > 0 || st.getQuestItemsCount(DARINGS_RECEIPT) > 0))
+						else if (cond > 2)
 							htmltext = "30006-03.htm";
 						break;
 					
 					case BAULRO:
-						if (cond == 3 && st.getQuestItemsCount(DARINGS_RECEIPT) == 1)
+						if (cond == 3)
 						{
 							htmltext = "30033-01.htm";
-							st.takeItems(DARINGS_RECEIPT, 1);
-							st.giveItems(BAULROS_POTION, 1);
 							st.set("cond", "4");
 							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(DARINGS_RECEIPT, 1);
+							st.giveItems(BAULROS_POTION, 1);
 						}
 						else if (cond == 4)
 							htmltext = "30033-02.htm";
@@ -157,6 +151,6 @@ public class Q001_LettersOfLove extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q001_LettersOfLove(1, qn, "Letters of Love");
+		new Q001_LettersOfLove();
 	}
 }

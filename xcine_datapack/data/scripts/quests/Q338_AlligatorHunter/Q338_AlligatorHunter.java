@@ -20,7 +20,7 @@ import net.xcine.util.Rnd;
 
 public class Q338_AlligatorHunter extends Quest
 {
-	private final static String qn = "Q338_AlligatorHunter";
+	private static final String qn = "Q338_AlligatorHunter";
 	
 	// Mob
 	private static final int ALLIGATOR = 20135;

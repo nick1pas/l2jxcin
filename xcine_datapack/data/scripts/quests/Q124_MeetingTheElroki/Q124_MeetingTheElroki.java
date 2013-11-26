@@ -28,9 +28,9 @@ public class Q124_MeetingTheElroki extends Quest
 	private static final int KARAKAWEI = 32117;
 	private static final int MANTARASA = 32118;
 	
-	public Q124_MeetingTheElroki(int questId, String name, String descr)
+	public Q124_MeetingTheElroki()
 	{
-		super(questId, name, descr);
+		super(124, qn, "Meeting the Elroki");
 		
 		addStartNpc(MARQUEZ);
 		addTalkId(MARQUEZ, MUSHIKA, ASAMAH, KARAKAWEI, MANTARASA);
@@ -46,8 +46,8 @@ public class Q124_MeetingTheElroki extends Quest
 		
 		if (event.equalsIgnoreCase("32113-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("32113-04.htm"))
@@ -77,9 +77,9 @@ public class Q124_MeetingTheElroki extends Quest
 		}
 		else if (event.equalsIgnoreCase("32118-02.htm"))
 		{
-			st.giveItems(8778, 1); // Egg
 			st.set("cond", "6");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(8778, 1); // Egg
 		}
 		
 		return htmltext;
@@ -96,13 +96,7 @@ public class Q124_MeetingTheElroki extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 75)
-					htmltext = "32113-01.htm";
-				else
-				{
-					htmltext = "32113-01a.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 75) ? "32113-01a.htm" : "32113-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -112,14 +106,14 @@ public class Q124_MeetingTheElroki extends Quest
 					case MARQUEZ:
 						if (cond == 1)
 							htmltext = "32113-03.htm";
-						else if (cond >= 2)
+						else if (cond > 1)
 							htmltext = "32113-04a.htm";
 						break;
 					
 					case MUSHIKA:
 						if (cond == 2)
 							htmltext = "32114-01.htm";
-						else if (cond >= 3)
+						else if (cond > 2)
 							htmltext = "32114-03.htm";
 						break;
 					
@@ -131,8 +125,8 @@ public class Q124_MeetingTheElroki extends Quest
 							htmltext = "32115-05.htm";
 							st.takeItems(8778, -1);
 							st.rewardItems(57, 71318);
-							st.exitQuest(false);
 							st.playSound(QuestState.SOUND_FINISH);
+							st.exitQuest(false);
 						}
 						break;
 					
@@ -143,14 +137,14 @@ public class Q124_MeetingTheElroki extends Quest
 							if (st.getInt("progress") == 1)
 								htmltext = "32117-02.htm";
 						}
-						else if (cond >= 5)
+						else if (cond > 4)
 							htmltext = "32117-04.htm";
 						break;
 					
 					case MANTARASA:
 						if (cond == 5)
 							htmltext = "32118-01.htm";
-						else if (cond >= 6)
+						else if (cond > 5)
 							htmltext = "32118-03.htm";
 						break;
 				}
@@ -169,6 +163,6 @@ public class Q124_MeetingTheElroki extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q124_MeetingTheElroki(124, qn, "Meeting the Elroki");
+		new Q124_MeetingTheElroki();
 	}
 }

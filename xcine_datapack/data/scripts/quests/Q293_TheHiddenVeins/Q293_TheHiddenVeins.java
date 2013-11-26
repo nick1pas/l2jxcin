@@ -20,7 +20,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q293_TheHiddenVeins extends Quest
 {
-	private final static String qn = "Q293_TheHiddenVeins";
+	private static final String qn = "Q293_TheHiddenVeins";
 	
 	// Items
 	private static final int CHRYSOLITE_ORE = 1488;
@@ -92,7 +92,7 @@ public class Q293_TheHiddenVeins extends Quest
 	@Override
 	public String onTalk(L2Npc npc, L2PcInstance player)
 	{
-		String htmltext = Quest.getNoQuestMsg();
+		String htmltext = getNoQuestMsg();
 		QuestState st = player.getQuestState(qn);
 		if (st == null)
 			return htmltext;
@@ -101,15 +101,9 @@ public class Q293_TheHiddenVeins extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.Dwarf)
-				{
 					htmltext = "30535-00.htm";
-					st.exitQuest(true);
-				}
 				else if (player.getLevel() < 6)
-				{
 					htmltext = "30535-01.htm";
-					st.exitQuest(true);
-				}
 				else
 					htmltext = "30535-02.htm";
 				break;

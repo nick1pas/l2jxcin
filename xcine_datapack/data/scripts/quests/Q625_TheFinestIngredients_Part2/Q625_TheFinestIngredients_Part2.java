@@ -115,7 +115,7 @@ public class Q625_TheFinestIngredients_Part2 extends Quest
 				st.set("cond", "1");
 				st.takeItems(SOY_SAUCE_JAR, 1);
 				st.giveItems(FOOD_FOR_BUMBALUMP, 1);
-				st.setState(Quest.STATE_STARTED);
+				st.setState(STATE_STARTED);
 				st.playSound(QuestState.SOUND_ACCEPT);
 			}
 			else
@@ -167,7 +167,7 @@ public class Q625_TheFinestIngredients_Part2 extends Quest
 		
 		switch (st.getState())
 		{
-			case Quest.STATE_CREATED:
+			case STATE_CREATED:
 				if (player.getLevel() < 73)
 				{
 					htmltext = "31521-02.htm";
@@ -177,7 +177,7 @@ public class Q625_TheFinestIngredients_Part2 extends Quest
 					htmltext = "31521-01.htm";
 				break;
 			
-			case Quest.STATE_STARTED:
+			case STATE_STARTED:
 				int cond = st.getInt("cond");
 				switch (npc.getNpcId())
 				{

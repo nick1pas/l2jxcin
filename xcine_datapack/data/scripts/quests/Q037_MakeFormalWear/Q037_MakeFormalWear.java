@@ -39,9 +39,9 @@ public class Q037_MakeFormalWear extends Quest
 	// Reward
 	private static final int FORMAL_WEAR = 6408;
 	
-	public Q037_MakeFormalWear(int questId, String name, String descr)
+	public Q037_MakeFormalWear()
 	{
-		super(questId, name, descr);
+		super(37, qn, "Make Formal Wear");
 		
 		questItemIds = new int[]
 		{
@@ -64,50 +64,50 @@ public class Q037_MakeFormalWear extends Quest
 		
 		if (event.equalsIgnoreCase("30842-1.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("31520-1.htm"))
 		{
-			st.giveItems(SIGNET_RING, 1);
 			st.set("cond", "2");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(SIGNET_RING, 1);
 		}
 		else if (event.equalsIgnoreCase("31521-1.htm"))
 		{
-			st.takeItems(SIGNET_RING, 1);
-			st.giveItems(ICE_WINE, 1);
 			st.set("cond", "3");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(SIGNET_RING, 1);
+			st.giveItems(ICE_WINE, 1);
 		}
 		else if (event.equalsIgnoreCase("31627-1.htm"))
 		{
-			st.takeItems(ICE_WINE, 1);
 			st.set("cond", "4");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(ICE_WINE, 1);
 		}
-		else if (event.equals("31521-3.htm"))
+		else if (event.equalsIgnoreCase("31521-3.htm"))
 		{
-			st.giveItems(BOX_OF_COOKIES, 1);
 			st.set("cond", "5");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(BOX_OF_COOKIES, 1);
 		}
-		else if (event.equals("31520-3.htm"))
+		else if (event.equalsIgnoreCase("31520-3.htm"))
 		{
-			st.takeItems(BOX_OF_COOKIES, 1);
 			st.set("cond", "6");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(BOX_OF_COOKIES, 1);
 		}
-		else if (event.equals("31520-5.htm"))
+		else if (event.equalsIgnoreCase("31520-5.htm"))
 		{
-			st.takeItems(MYSTERIOUS_CLOTH, 1);
-			st.takeItems(JEWEL_BOX, 1);
-			st.takeItems(SEWING_KIT, 1);
 			st.set("cond", "7");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(JEWEL_BOX, 1);
+			st.takeItems(MYSTERIOUS_CLOTH, 1);
+			st.takeItems(SEWING_KIT, 1);
 		}
-		else if (event.equals("31520-7.htm"))
+		else if (event.equalsIgnoreCase("31520-7.htm"))
 		{
 			st.takeItems(DRESS_SHOES_BOX, 1);
 			st.giveItems(FORMAL_WEAR, 1);
@@ -129,13 +129,7 @@ public class Q037_MakeFormalWear extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 60)
-					htmltext = "30842-0.htm";
-				else
-				{
-					htmltext = "30842-0a.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 60) ? "30842-0a.htm" : "30842-0.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -154,37 +148,32 @@ public class Q037_MakeFormalWear extends Quest
 							htmltext = "31520-1a.htm";
 						else if (cond == 5 || cond == 6)
 						{
-							if (st.getQuestItemsCount(MYSTERIOUS_CLOTH) > 0 && st.getQuestItemsCount(JEWEL_BOX) > 0 && st.getQuestItemsCount(SEWING_KIT) > 0)
+							if (st.hasQuestItems(MYSTERIOUS_CLOTH) && st.hasQuestItems(JEWEL_BOX) && st.hasQuestItems(SEWING_KIT))
 								htmltext = "31520-4.htm";
-							else if (st.getQuestItemsCount(BOX_OF_COOKIES) > 0)
+							else if (st.hasQuestItems(BOX_OF_COOKIES))
 								htmltext = "31520-2.htm";
 							else
 								htmltext = "31520-3a.htm";
 						}
 						else if (cond == 7)
-						{
-							if (st.getQuestItemsCount(DRESS_SHOES_BOX) > 0)
-								htmltext = "31520-6.htm";
-							else
-								htmltext = "31520-5a.htm";
-						}
+							htmltext = (st.hasQuestItems(DRESS_SHOES_BOX)) ? "31520-6.htm" : "31520-5a.htm";
 						break;
 					
 					case JEREMY:
-						if (st.getQuestItemsCount(SIGNET_RING) > 0)
+						if (st.hasQuestItems(SIGNET_RING))
 							htmltext = "31521-0.htm";
 						else if (cond == 3)
 							htmltext = "31521-1a.htm";
 						else if (cond == 4)
 							htmltext = "31521-2.htm";
-						else if (cond >= 5)
+						else if (cond > 4)
 							htmltext = "31521-3a.htm";
 						break;
 					
 					case MIST:
 						if (cond == 3)
 							htmltext = "31627-0.htm";
-						else if (cond >= 4)
+						else if (cond > 3)
 							htmltext = "31627-2.htm";
 						break;
 				}
@@ -200,6 +189,6 @@ public class Q037_MakeFormalWear extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q037_MakeFormalWear(37, qn, "Make Formal Wear");
+		new Q037_MakeFormalWear();
 	}
 }

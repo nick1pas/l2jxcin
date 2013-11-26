@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q634_InSearchOfFragmentsOfDimension extends Quest
 {
-	private final static String qn = "Q634_InSearchOfFragmentsOfDimension";
+	private static final String qn = "Q634_InSearchOfFragmentsOfDimension";
 	
 	// Items
 	private static final int DIMENSION_FRAGMENT = 7079;

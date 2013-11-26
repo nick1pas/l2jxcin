@@ -19,33 +19,30 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q031_SecretBuriedInTheSwamp extends Quest
 {
-	private final static String qn = "Q031_SecretBuriedInTheSwamp";
+	private static final String qn = "Q031_SecretBuriedInTheSwamp";
 	
 	// Item
-	private static final int KrorinsJournal = 7252;
-	
-	// Reward
-	private static final int Adena = 57;
+	private static final int KRORIN_JOURNAL = 7252;
 	
 	// NPCs
-	private static final int Abercrombie = 31555;
-	private static final int ForgottenMonument1 = 31661;
-	private static final int ForgottenMonument2 = 31662;
-	private static final int ForgottenMonument3 = 31663;
-	private static final int ForgottenMonument4 = 31664;
-	private static final int CorpseOfDwarf = 31665;
+	private static final int ABERCROMBIE = 31555;
+	private static final int FORGOTTEN_MONUMENT_1 = 31661;
+	private static final int FORGOTTEN_MONUMENT_2 = 31662;
+	private static final int FORGOTTEN_MONUMENT_3 = 31663;
+	private static final int FORGOTTEN_MONUMENT_4 = 31664;
+	private static final int CORPSE_OF_DWARF = 31665;
 	
-	public Q031_SecretBuriedInTheSwamp(int questId, String name, String descr)
+	public Q031_SecretBuriedInTheSwamp()
 	{
-		super(questId, name, descr);
+		super(31, qn, "Secret Buried in the Swamp");
 		
 		questItemIds = new int[]
 		{
-			KrorinsJournal
+			KRORIN_JOURNAL
 		};
 		
-		addStartNpc(Abercrombie);
-		addTalkId(Abercrombie, CorpseOfDwarf, ForgottenMonument1, ForgottenMonument2, ForgottenMonument3, ForgottenMonument4);
+		addStartNpc(ABERCROMBIE);
+		addTalkId(ABERCROMBIE, CORPSE_OF_DWARF, FORGOTTEN_MONUMENT_1, FORGOTTEN_MONUMENT_2, FORGOTTEN_MONUMENT_3, FORGOTTEN_MONUMENT_4);
 	}
 	
 	@Override
@@ -58,15 +55,15 @@ public class Q031_SecretBuriedInTheSwamp extends Quest
 		
 		if (event.equalsIgnoreCase("31555-01.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("31665-01.htm"))
 		{
 			st.set("cond", "2");
-			st.giveItems(KrorinsJournal, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(KRORIN_JOURNAL, 1);
 		}
 		else if (event.equalsIgnoreCase("31555-04.htm"))
 		{
@@ -95,8 +92,8 @@ public class Q031_SecretBuriedInTheSwamp extends Quest
 		}
 		else if (event.equalsIgnoreCase("31555-07.htm"))
 		{
-			st.takeItems(KrorinsJournal, 1);
-			st.rewardItems(Adena, 40000);
+			st.takeItems(KRORIN_JOURNAL, 1);
+			st.rewardItems(57, 40000);
 			st.rewardExpAndSp(130000, 0);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
@@ -116,59 +113,56 @@ public class Q031_SecretBuriedInTheSwamp extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 66)
-					htmltext = "31555-00.htm";
-				else
-					htmltext = "31555-00a.htm";
+				htmltext = (player.getLevel() < 66) ? "31555-00a.htm" : "31555-00.htm";
 				break;
 			
 			case STATE_STARTED:
 				int cond = st.getInt("cond");
 				switch (npc.getNpcId())
 				{
-					case Abercrombie:
+					case ABERCROMBIE:
 						if (cond == 1)
 							htmltext = "31555-02.htm";
 						else if (cond == 2)
 							htmltext = "31555-03.htm";
-						else if (cond >= 3 && cond <= 6)
+						else if (cond > 2 && cond < 7)
 							htmltext = "31555-05.htm";
 						else if (cond == 7)
 							htmltext = "31555-06.htm";
 						break;
 					
-					case CorpseOfDwarf:
+					case CORPSE_OF_DWARF:
 						if (cond == 1)
 							htmltext = "31665-00.htm";
-						else if (cond >= 2)
+						else if (cond > 1)
 							htmltext = "31665-02.htm";
 						break;
 					
-					case ForgottenMonument1:
+					case FORGOTTEN_MONUMENT_1:
 						if (cond == 3)
 							htmltext = "31661-00.htm";
-						else if (cond >= 4)
+						else if (cond > 3)
 							htmltext = "31661-02.htm";
 						break;
 					
-					case ForgottenMonument2:
+					case FORGOTTEN_MONUMENT_2:
 						if (cond == 4)
 							htmltext = "31662-00.htm";
-						else if (cond >= 5)
+						else if (cond > 4)
 							htmltext = "31662-02.htm";
 						break;
 					
-					case ForgottenMonument3:
+					case FORGOTTEN_MONUMENT_3:
 						if (cond == 5)
 							htmltext = "31663-00.htm";
-						else if (cond >= 6)
+						else if (cond > 5)
 							htmltext = "31663-02.htm";
 						break;
 					
-					case ForgottenMonument4:
+					case FORGOTTEN_MONUMENT_4:
 						if (cond == 6)
 							htmltext = "31664-00.htm";
-						else if (cond >= 7)
+						else if (cond > 6)
 							htmltext = "31664-02.htm";
 						break;
 				}
@@ -184,6 +178,6 @@ public class Q031_SecretBuriedInTheSwamp extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q031_SecretBuriedInTheSwamp(31, qn, "Secret Buried in the Swamp");
+		new Q031_SecretBuriedInTheSwamp();
 	}
 }

@@ -12,21 +12,24 @@
  */
 package quests.Q636_TruthBeyondTheGate;
 
+import net.xcine.gameserver.model.actor.L2Character;
 import net.xcine.gameserver.model.actor.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.quest.QuestState;
+import net.xcine.gameserver.model.zone.L2ZoneType;
 
 public class Q636_TruthBeyondTheGate extends Quest
 {
-	private final static String qn = "Q636_TruthBeyondTheGate";
+	private static final String qn = "Q636_TruthBeyondTheGate";
 	
 	// NPCs
 	private static final int ELIYAH = 31329;
 	private static final int FLAURON = 32010;
 	
 	// Reward
-	private static final int MARK = 8064;
+	private static final int VISITOR_MARK = 8064;
+	private static final int FADED_VISITOR_MARK = 8065;
 	
 	public Q636_TruthBeyondTheGate(int questId, String name, String descr)
 	{
@@ -34,6 +37,7 @@ public class Q636_TruthBeyondTheGate extends Quest
 		
 		addStartNpc(ELIYAH);
 		addTalkId(ELIYAH, FLAURON);
+		addEnterZoneId(100000);
 	}
 	
 	@Override
@@ -52,9 +56,9 @@ public class Q636_TruthBeyondTheGate extends Quest
 		}
 		else if (event.equalsIgnoreCase("32010-02.htm"))
 		{
-			st.giveItems(MARK, 1);
-			st.exitQuest(false);
+			st.giveItems(VISITOR_MARK, 1);
 			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(false);
 		}
 		
 		return htmltext;
@@ -88,7 +92,7 @@ public class Q636_TruthBeyondTheGate extends Quest
 						break;
 					
 					case FLAURON:
-						if (st.hasQuestItems(MARK))
+						if (st.hasQuestItems(VISITOR_MARK))
 							htmltext = "32010-03.htm";
 						else
 							htmltext = "32010-01.htm";
@@ -102,6 +106,18 @@ public class Q636_TruthBeyondTheGate extends Quest
 		}
 		
 		return htmltext;
+	}
+	
+	@Override
+	public final String onEnterZone(L2Character character, L2ZoneType zone)
+	{
+		// QuestState already null on enter because quest is finished
+		if (character instanceof L2PcInstance)
+		{
+			if (character.getActingPlayer().destroyItemByItemId("Mark", VISITOR_MARK, 1, character, false))
+				character.getActingPlayer().addItem("Mark", FADED_VISITOR_MARK, 1, character, true);
+		}
+		return null;
 	}
 	
 	public static void main(String[] args)

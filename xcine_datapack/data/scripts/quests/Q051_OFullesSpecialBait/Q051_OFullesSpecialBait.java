@@ -21,31 +21,25 @@ public class Q051_OFullesSpecialBait extends Quest
 {
 	private static final String qn = "Q051_OFullesSpecialBait";
 	
-	// NPC
-	private final static int OFULLE = 31572;
-	
 	// Item
-	private final static int LOST_BAIT = 7622;
+	private static final int LOST_BAIT = 7622;
 	
 	// Reward
-	private final static int ICY_AIR_LURE = 7611;
+	private static final int ICY_AIR_LURE = 7611;
 	
-	// Monster
-	private final static int FETTERED_SOUL = 20552;
-	
-	public Q051_OFullesSpecialBait(int questId, String name, String descr)
+	public Q051_OFullesSpecialBait()
 	{
-		super(questId, name, descr);
+		super(51, qn, "O'Fulle's Special Bait");
 		
 		questItemIds = new int[]
 		{
 			LOST_BAIT
 		};
 		
-		addStartNpc(OFULLE);
-		addTalkId(OFULLE);
+		addStartNpc(31572); // O'Fulle
+		addTalkId(31572);
 		
-		addKillId(FETTERED_SOUL);
+		addKillId(20552); // Fettered Soul
 	}
 	
 	@Override
@@ -58,15 +52,15 @@ public class Q051_OFullesSpecialBait extends Quest
 		
 		if (event.equalsIgnoreCase("31572-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
-		else if (event.equalsIgnoreCase("31572-07.htm") && st.getQuestItemsCount(LOST_BAIT) == 100)
+		else if (event.equalsIgnoreCase("31572-07.htm"))
 		{
 			htmltext = "31572-06.htm";
+			st.takeItems(LOST_BAIT, -1);
 			st.rewardItems(ICY_AIR_LURE, 4);
-			st.takeItems(LOST_BAIT, 100);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
@@ -85,20 +79,11 @@ public class Q051_OFullesSpecialBait extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 36)
-					htmltext = "31572-01.htm";
-				else
-				{
-					htmltext = "31572-02.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 36) ? "31572-02.htm" : "31572-01.htm";
 				break;
 			
 			case STATE_STARTED:
-				if (st.getQuestItemsCount(LOST_BAIT) == 100)
-					htmltext = "31572-04.htm";
-				else
-					htmltext = "31572-05.htm";
+				htmltext = (st.getQuestItemsCount(LOST_BAIT) == 100) ? "31572-04.htm" : "31572-05.htm";
 				break;
 			
 			case STATE_COMPLETED:
@@ -124,6 +109,6 @@ public class Q051_OFullesSpecialBait extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q051_OFullesSpecialBait(51, qn, "O'Fulle's Special Bait");
+		new Q051_OFullesSpecialBait();
 	}
 }

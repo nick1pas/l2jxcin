@@ -12,8 +12,6 @@
  */
 package quests.Q620_FourGoblets;
 
-import java.util.Arrays;
-
 import net.xcine.gameserver.instancemanager.FourSepulchersManager;
 import net.xcine.gameserver.model.actor.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -27,34 +25,32 @@ public class Q620_FourGoblets extends Quest
 	private static final String qn = "Q620_FourGoblets";
 	
 	// NPCs
-	private static int NAMELESS_SPIRIT = 31453;
+	private static final int GHOST_OF_WIGOTH_1 = 31452;
+	private static final int NAMELESS_SPIRIT = 31453;
+	private static final int GHOST_OF_WIGOTH_2 = 31454;
 	
-	private static int GHOST_OF_WIGOTH_1 = 31452;
-	private static int GHOST_OF_WIGOTH_2 = 31454;
+	private static final int GHOST_CHAMBERLAIN_1 = 31919;
+	private static final int GHOST_CHAMBERLAIN_2 = 31920;
 	
-	private static int CONQ_SM = 31921;
-	private static int EMPER_SM = 31922;
-	private static int SAGES_SM = 31923;
-	private static int JUDGE_SM = 31924;
-	
-	private static int GHOST_CHAMBERLAIN_1 = 31919;
-	private static int GHOST_CHAMBERLAIN_2 = 31920;
+	private static final int CONQ_SM = 31921;
+	private static final int EMPER_SM = 31922;
+	private static final int SAGES_SM = 31923;
+	private static final int JUDGE_SM = 31924;
 	
 	// Items
-	private static int GRAVE_PASS = 7261;
-	private static int[] GOBLETS = new int[]
-	{
-		7256,
-		7257,
-		7258,
-		7259
-	};
-	private static int RELIC = 7254;
-	public final static int SEALED_BOX = 7255;
+	private static final int RELIC = 7254;
+	private static final int SEALED_BOX = 7255;
+	
+	private static final int GOBLET_1 = 7256;
+	private static final int GOBLET_2 = 7257;
+	private static final int GOBLET_3 = 7258;
+	private static final int GOBLET_4 = 7259;
+	
+	private static final int USED_PASS = 7261;
 	
 	// Rewards
-	private static int ANTIQUE_BROOCH = 7262;
-	private static int[] RCP_REWARDS = new int[]
+	private static final int ANTIQUE_BROOCH = 7262;
+	private static final int[] RCP_REWARDS = new int[]
 	{
 		6881,
 		6883,
@@ -75,30 +71,15 @@ public class Q620_FourGoblets extends Quest
 		questItemIds = new int[]
 		{
 			SEALED_BOX,
-			GRAVE_PASS,
-			7256,
-			7257,
-			7258,
-			7259
+			USED_PASS,
+			GOBLET_1,
+			GOBLET_2,
+			GOBLET_3,
+			GOBLET_4
 		};
 		
-		addStartNpc(NAMELESS_SPIRIT);
-		addStartNpc(CONQ_SM);
-		addStartNpc(EMPER_SM);
-		addStartNpc(SAGES_SM);
-		addStartNpc(JUDGE_SM);
-		addStartNpc(GHOST_CHAMBERLAIN_1);
-		addStartNpc(GHOST_CHAMBERLAIN_2);
-		
-		addTalkId(NAMELESS_SPIRIT);
-		addTalkId(CONQ_SM);
-		addTalkId(EMPER_SM);
-		addTalkId(SAGES_SM);
-		addTalkId(JUDGE_SM);
-		addTalkId(GHOST_CHAMBERLAIN_1);
-		addTalkId(GHOST_CHAMBERLAIN_2);
-		addTalkId(GHOST_OF_WIGOTH_1);
-		addTalkId(GHOST_OF_WIGOTH_2);
+		addStartNpc(NAMELESS_SPIRIT, CONQ_SM, EMPER_SM, SAGES_SM, JUDGE_SM, GHOST_CHAMBERLAIN_1, GHOST_CHAMBERLAIN_2);
+		addTalkId(NAMELESS_SPIRIT, CONQ_SM, EMPER_SM, SAGES_SM, JUDGE_SM, GHOST_CHAMBERLAIN_1, GHOST_CHAMBERLAIN_2, GHOST_OF_WIGOTH_1, GHOST_OF_WIGOTH_2);
 		
 		for (int id = 18120; id <= 18256; id++)
 			addKillId(id);
@@ -112,159 +93,119 @@ public class Q620_FourGoblets extends Quest
 		if (st == null)
 			return htmltext;
 		
-		int cond = st.getInt("cond");
-		if (event.equalsIgnoreCase("Enter"))
+		if (event.equalsIgnoreCase("31452-05.htm"))
 		{
-			FourSepulchersManager.getInstance().tryEntry(npc, player);
-			return null;
+			if (Rnd.nextBoolean())
+				htmltext = (Rnd.nextBoolean()) ? "31452-03.htm" : "31452-04.htm";
 		}
-		else if (event.equalsIgnoreCase("accept"))
+		else if (event.equalsIgnoreCase("31452-06.htm"))
 		{
-			if (cond == 0)
-			{
-				if (st.getPlayer().getLevel() >= 74)
-				{
-					st.setState(STATE_STARTED);
-					st.playSound(QuestState.SOUND_ACCEPT);
-					htmltext = "31453-13.htm";
-					st.set("cond", "1");
-				}
-				else
-				{
-					htmltext = "31453-12.htm";
-					st.exitQuest(true);
-				}
-			}
+			player.teleToLocation(169590, -90218, -2914, 0); // Wigoth : Teleport back to Pilgrim's Temple
 		}
-		else if (event.equalsIgnoreCase("11"))
+		else if (event.equalsIgnoreCase("31453-13.htm"))
 		{
-			if (st.getQuestItemsCount(SEALED_BOX) >= 1)
-			{
-				htmltext = "31454-13.htm";
-				st.takeItems(SEALED_BOX, 1);
-				
-				if (!calculateBoxReward(st))
-				{
-					if (Rnd.get(2) == 0)
-						htmltext = "31454-14.htm";
-					else
-						htmltext = "31454-15.htm";
-				}
-			}
+			st.set("cond", "1");
+			st.setState(STATE_STARTED);
+			st.playSound(QuestState.SOUND_ACCEPT);
 		}
-		else if (event.equalsIgnoreCase("12"))
+		else if (event.equalsIgnoreCase("31453-16.htm"))
 		{
-			if (st.getQuestItemsCount(GOBLETS[0]) >= 1 && st.getQuestItemsCount(GOBLETS[1]) >= 1 && st.getQuestItemsCount(GOBLETS[2]) >= 1 && st.getQuestItemsCount(GOBLETS[3]) >= 1)
+			if (st.hasQuestItems(GOBLET_1) && st.hasQuestItems(GOBLET_2) && st.hasQuestItems(GOBLET_3) && st.hasQuestItems(GOBLET_4))
 			{
-				st.takeItems(GOBLETS[0], -1);
-				st.takeItems(GOBLETS[1], -1);
-				st.takeItems(GOBLETS[2], -1);
-				st.takeItems(GOBLETS[3], -1);
+				st.takeItems(GOBLET_1, -1);
+				st.takeItems(GOBLET_2, -1);
+				st.takeItems(GOBLET_3, -1);
+				st.takeItems(GOBLET_4, -1);
 				st.giveItems(ANTIQUE_BROOCH, 1);
 				st.set("cond", "2");
-				st.playSound(QuestState.SOUND_FINISH);
-				htmltext = "31453-16.htm";
+				st.playSound(QuestState.SOUND_MIDDLE);
 			}
 			else
 				htmltext = "31453-14.htm";
 		}
-		else if (event.equalsIgnoreCase("31453-18.htm"))
+		else if (event.equalsIgnoreCase("31453-13.htm"))
 		{
-			st.playSound(QuestState.SOUND_FINISH);
-			st.exitQuest(true);
-		}
-		else if (event.equalsIgnoreCase("14"))
-		{
-			htmltext = "31453-13.htm";
-			
-			if (cond == 2)
+			if (st.getInt("cond") == 2)
 				htmltext = "31453-19.htm";
 		}
-		// Ghost Chamberlain of Elmoreden: Teleport to 4th sepulcher
-		else if (event.equalsIgnoreCase("15"))
+		else if (event.equalsIgnoreCase("31453-18.htm"))
 		{
-			if (st.getQuestItemsCount(ANTIQUE_BROOCH) >= 1)
-			{
-				st.getPlayer().teleToLocation(178298, -84574, -7216, 0);
-				htmltext = null;
-			}
-			else if (st.getQuestItemsCount(GRAVE_PASS) >= 1)
-			{
-				st.takeItems(GRAVE_PASS, 1);
-				st.getPlayer().teleToLocation(178298, -84574, -7216, 0);
-				htmltext = null;
-			}
-			else
-				htmltext = npc.getNpcId() + "-0.htm";
+			st.playSound(QuestState.SOUND_GIVEUP);
+			st.exitQuest(true);
 		}
-		// Ghost Chamberlain of Elmoreden: Teleport to Imperial Tomb entrance
-		else if (event.equalsIgnoreCase("16"))
+		else if (event.equalsIgnoreCase("boxes"))
 		{
-			if (st.getQuestItemsCount(ANTIQUE_BROOCH) >= 1)
+			if (st.hasQuestItems(SEALED_BOX))
 			{
-				st.getPlayer().teleToLocation(186942, -75602, -2834, 0);
-				htmltext = null;
-			}
-			else if (st.getQuestItemsCount(GRAVE_PASS) >= 1)
-			{
-				st.takeItems(GRAVE_PASS, 1);
-				st.getPlayer().teleToLocation(186942, -75602, -2834, 0);
-				htmltext = null;
-			}
-			else
-				htmltext = npc.getNpcId() + "-0.htm";
-		}
-		// Teleport to Pilgrims Temple
-		else if (event.equalsIgnoreCase("17"))
-		{
-			if (st.getQuestItemsCount(ANTIQUE_BROOCH) >= 1)
-				st.getPlayer().teleToLocation(169590, -90218, -2914, 0);
-			else
-			{
-				st.takeItems(GRAVE_PASS, 1);
-				st.getPlayer().teleToLocation(169590, -90218, -2914, 0);
-			}
-			htmltext = "31452-6.htm";
-		}
-		else if (event.equalsIgnoreCase("18"))
-		{
-			if (st.getQuestItemsCount(GOBLETS[0]) + st.getQuestItemsCount(GOBLETS[1]) + st.getQuestItemsCount(GOBLETS[2]) + st.getQuestItemsCount(GOBLETS[3]) < 3)
-				htmltext = "31452-3.htm";
-			else if (st.getQuestItemsCount(GOBLETS[0]) + st.getQuestItemsCount(GOBLETS[1]) + st.getQuestItemsCount(GOBLETS[2]) + st.getQuestItemsCount(GOBLETS[3]) == 3)
-				htmltext = "31452-4.htm";
-			else if (st.getQuestItemsCount(GOBLETS[0]) + st.getQuestItemsCount(GOBLETS[1]) + st.getQuestItemsCount(GOBLETS[2]) + st.getQuestItemsCount(GOBLETS[3]) >= 4)
-				htmltext = "31452-5.htm";
-		}
-		else if (event.equalsIgnoreCase("19"))
-		{
-			if (st.getQuestItemsCount(SEALED_BOX) >= 1)
-			{
-				htmltext = "31919-3.htm";
 				st.takeItems(SEALED_BOX, 1);
 				
 				if (!calculateBoxReward(st))
-				{
-					if (Rnd.get(2) == 0)
-						htmltext = "31919-4.htm";
-					else
-						htmltext = "31919-5.htm";
-				}
+					htmltext = (Rnd.nextBoolean()) ? "31454-09.htm" : "31454-10.htm";
+				else
+					htmltext = "31454-08.htm";
 			}
-			else
-				htmltext = "31919-6.htm";
+		}
+		// Ghost Chamberlain of Elmoreden: Teleport to 4th sepulcher
+		else if (event.equalsIgnoreCase("tele_4sep"))
+		{
+			if (st.hasQuestItems(ANTIQUE_BROOCH))
+			{
+				player.teleToLocation(178298, -84574, -7216, 0);
+				return null;
+			}
+			
+			if (st.hasQuestItems(USED_PASS))
+			{
+				st.takeItems(USED_PASS, 1);
+				player.teleToLocation(178298, -84574, -7216, 0);
+				return null;
+			}
+			htmltext = npc.getNpcId() + "-00.htm";
+		}
+		// Ghost Chamberlain of Elmoreden: Teleport to Imperial Tomb entrance
+		else if (event.equalsIgnoreCase("tele_it"))
+		{
+			if (st.hasQuestItems(ANTIQUE_BROOCH))
+			{
+				player.teleToLocation(186942, -75602, -2834, 0);
+				return null;
+			}
+			
+			if (st.hasQuestItems(USED_PASS))
+			{
+				st.takeItems(USED_PASS, 1);
+				player.teleToLocation(186942, -75602, -2834, 0);
+				return null;
+			}
+			htmltext = npc.getNpcId() + "-00.htm";
+		}
+		else if (event.equalsIgnoreCase("31919-06.htm"))
+		{
+			if (st.hasQuestItems(SEALED_BOX))
+			{
+				st.takeItems(SEALED_BOX, 1);
+				
+				if (!calculateBoxReward(st))
+					htmltext = (Rnd.nextBoolean()) ? "31919-04.htm" : "31919-05.htm";
+				else
+					htmltext = "31919-03.htm";
+			}
 		}
 		// If event is a simple digit, parse it to get an integer form, then test the reward list
 		else if (Util.isDigit(event))
 		{
-			int id = Integer.parseInt(event);
-			Arrays.sort(RCP_REWARDS);
-			
-			if (Arrays.binarySearch(RCP_REWARDS, id) > 0)
+			final int id = Integer.parseInt(event);
+			if (Util.contains(RCP_REWARDS, id) && st.getQuestItemsCount(RELIC) >= 1000)
 			{
 				st.takeItems(RELIC, 1000);
 				st.giveItems(id, 1);
-				return "31454-17.htm";
 			}
+			htmltext = "31454-12.htm";
+		}
+		else if (event.equalsIgnoreCase("Enter"))
+		{
+			FourSepulchersManager.getInstance().tryEntry(npc, player);
+			return null;
 		}
 		return htmltext;
 	}
@@ -284,78 +225,44 @@ public class Q620_FourGoblets extends Quest
 		if (id == STATE_CREATED)
 			st.set("cond", "0");
 		
-		if (npcId == NAMELESS_SPIRIT)
+		if (npcId == GHOST_OF_WIGOTH_1)
+		{
+			if (cond == 1)
+				htmltext = "31452-01.htm";
+			else if (cond == 2)
+				htmltext = "31452-02.htm";
+		}
+		else if (npcId == NAMELESS_SPIRIT)
 		{
 			if (cond == 0)
-			{
-				if (player.getLevel() >= 74)
-					htmltext = "31453-1.htm";
-				else
-				{
-					htmltext = "31453-12.htm";
-					st.exitQuest(true);
-				}
-			}
+				htmltext = (player.getLevel() >= 74) ? "31453-01.htm" : "31453-12.htm";
 			else if (cond == 1)
-			{
-				if (st.getQuestItemsCount(GOBLETS[0]) >= 1 && st.getQuestItemsCount(GOBLETS[1]) >= 1 && st.getQuestItemsCount(GOBLETS[2]) >= 1 && st.getQuestItemsCount(GOBLETS[3]) >= 1)
-					htmltext = "31453-15.htm";
-				else
-					htmltext = "31453-14.htm";
-			}
+				htmltext = (st.hasQuestItems(GOBLET_1) && st.hasQuestItems(GOBLET_2) && st.hasQuestItems(GOBLET_3) && st.hasQuestItems(GOBLET_4)) ? "31453-15.htm" : "31453-14.htm";
 			else if (cond == 2)
 				htmltext = "31453-17.htm";
 		}
-		else if (npcId == GHOST_OF_WIGOTH_1)
-		{
-			if (cond == 2)
-				htmltext = "31452-2.htm";
-			else if (cond == 1)
-				if (st.getQuestItemsCount(GOBLETS[0]) + st.getQuestItemsCount(GOBLETS[1]) + st.getQuestItemsCount(GOBLETS[2]) + st.getQuestItemsCount(GOBLETS[3]) == 1)
-					htmltext = "31452-1.htm";
-				else if (st.getQuestItemsCount(GOBLETS[0]) + st.getQuestItemsCount(GOBLETS[1]) + st.getQuestItemsCount(GOBLETS[2]) + st.getQuestItemsCount(GOBLETS[3]) > 1)
-					htmltext = "31452-2.htm";
-		}
 		else if (npcId == GHOST_OF_WIGOTH_2)
 		{
-			if (st.getQuestItemsCount(RELIC) >= 1000)
-				if (st.getQuestItemsCount(SEALED_BOX) >= 1)
-					if (st.getQuestItemsCount(GOBLETS[0]) >= 1 && st.getQuestItemsCount(GOBLETS[1]) >= 1 && st.getQuestItemsCount(GOBLETS[2]) >= 1 && st.getQuestItemsCount(GOBLETS[3]) >= 1)
-						htmltext = "31454-4.htm";
-					else if (st.getQuestItemsCount(GOBLETS[0]) + st.getQuestItemsCount(GOBLETS[1]) + st.getQuestItemsCount(GOBLETS[2]) + st.getQuestItemsCount(GOBLETS[3]) > 1)
-						htmltext = "31454-8.htm";
-					else
-						htmltext = "31454-12.htm";
-				else if (st.getQuestItemsCount(GOBLETS[0]) >= 1 && st.getQuestItemsCount(GOBLETS[1]) >= 1 && st.getQuestItemsCount(GOBLETS[2]) >= 1 && st.getQuestItemsCount(GOBLETS[3]) >= 1)
-					htmltext = "31454-3.htm";
-				else if (st.getQuestItemsCount(GOBLETS[0]) + st.getQuestItemsCount(GOBLETS[1]) + st.getQuestItemsCount(GOBLETS[2]) + st.getQuestItemsCount(GOBLETS[3]) > 1)
-					htmltext = "31454-7.htm";
-				else
-					htmltext = "31454-11.htm";
-			else if (st.getQuestItemsCount(SEALED_BOX) >= 1)
-				if (st.getQuestItemsCount(GOBLETS[0]) >= 1 && st.getQuestItemsCount(GOBLETS[1]) >= 1 && st.getQuestItemsCount(GOBLETS[2]) >= 1 && st.getQuestItemsCount(GOBLETS[3]) >= 1)
-					htmltext = "31454-2.htm";
-				else if (st.getQuestItemsCount(GOBLETS[0]) + st.getQuestItemsCount(GOBLETS[1]) + st.getQuestItemsCount(GOBLETS[2]) + st.getQuestItemsCount(GOBLETS[3]) > 1)
-					htmltext = "31454-6.htm";
-				else
-					htmltext = "31454-10.htm";
-			else if (st.getQuestItemsCount(GOBLETS[0]) >= 1 && st.getQuestItemsCount(GOBLETS[1]) >= 1 && st.getQuestItemsCount(GOBLETS[2]) >= 1 && st.getQuestItemsCount(GOBLETS[3]) >= 1)
-				htmltext = "31454-1.htm";
-			else if (st.getQuestItemsCount(GOBLETS[0]) + st.getQuestItemsCount(GOBLETS[1]) + st.getQuestItemsCount(GOBLETS[2]) + st.getQuestItemsCount(GOBLETS[3]) > 1)
-				htmltext = "31454-5.htm";
-			else
-				htmltext = "31454-9.htm";
+			// Possibilities : 0 = nothing, 1 = seal boxes only, 2 = relics only, 3 = both, 4/5/6/7 = "4 goblets" versions of 0/1/2/3.
+			int index = 0;
+			
+			if (st.hasQuestItems(GOBLET_1) && st.hasQuestItems(GOBLET_2) && st.hasQuestItems(GOBLET_3) && st.hasQuestItems(GOBLET_4))
+				index = 4;
+			
+			final boolean gotSealBoxes = st.hasQuestItems(SEALED_BOX);
+			final boolean gotEnoughRelics = st.getQuestItemsCount(RELIC) >= 1000;
+			
+			if (gotSealBoxes && gotEnoughRelics)
+				index += 3;
+			else if (!gotSealBoxes && gotEnoughRelics)
+				index += 2;
+			else if (gotSealBoxes)
+				index += 1;
+			
+			htmltext = "31454-0" + index + ".htm";
 		}
-		else if (npcId == CONQ_SM)
-			htmltext = "31921-E.htm";
-		else if (npcId == EMPER_SM)
-			htmltext = "31922-E.htm";
-		else if (npcId == SAGES_SM)
-			htmltext = "31923-E.htm";
-		else if (npcId == JUDGE_SM)
-			htmltext = "31924-E.htm";
-		else if (npcId == GHOST_CHAMBERLAIN_1)
-			htmltext = "31919-1.htm";
+		else
+			htmltext = npcId + "-01.htm";
 		
 		return htmltext;
 	}
@@ -367,10 +274,7 @@ public class Q620_FourGoblets extends Quest
 		if (partyMember == null)
 			return null;
 		
-		QuestState st = partyMember.getQuestState(qn);
-		
-		st.dropItems(SEALED_BOX, 1, -1, 300000);
-		
+		partyMember.getQuestState(qn).dropItems(SEALED_BOX, 1, -1, 300000);
 		return null;
 	}
 	

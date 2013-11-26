@@ -20,31 +20,31 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q010_IntoTheWorld extends Quest
 {
-	private final static String qn = "Q010_IntoTheWorld";
+	private static final String qn = "Q010_IntoTheWorld";
 	
 	// Items
-	private final static int VeryExpensiveNecklace = 7574;
+	private static final int VERY_EXPENSIVE_NECKLACE = 7574;
 	
 	// Rewards
-	private final static int ScrollOfEscapeGiran = 7559;
-	private final static int MarkOfTraveler = 7570;
+	private static final int SOE_GIRAN = 7559;
+	private static final int MARK_OF_TRAVELER = 7570;
 	
 	// NPCs
-	private final static int Reed = 30520;
-	private final static int Balanki = 30533;
-	private final static int Gerald = 30650;
+	private static final int REED = 30520;
+	private static final int BALANKI = 30533;
+	private static final int GERALD = 30650;
 	
-	public Q010_IntoTheWorld(int questId, String name, String descr)
+	public Q010_IntoTheWorld()
 	{
-		super(questId, name, descr);
+		super(10, qn, "Into the World");
 		
 		questItemIds = new int[]
 		{
-			VeryExpensiveNecklace
+			VERY_EXPENSIVE_NECKLACE
 		};
 		
-		addStartNpc(Balanki);
-		addTalkId(Balanki, Reed, Gerald);
+		addStartNpc(BALANKI);
+		addTalkId(BALANKI, REED, GERALD);
 	}
 	
 	@Override
@@ -57,21 +57,21 @@ public class Q010_IntoTheWorld extends Quest
 		
 		if (event.equalsIgnoreCase("30533-02.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("30520-02.htm"))
 		{
 			st.set("cond", "2");
-			st.giveItems(VeryExpensiveNecklace, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(VERY_EXPENSIVE_NECKLACE, 1);
 		}
 		else if (event.equalsIgnoreCase("30650-02.htm"))
 		{
 			st.set("cond", "3");
-			st.takeItems(VeryExpensiveNecklace, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(VERY_EXPENSIVE_NECKLACE, 1);
 		}
 		else if (event.equalsIgnoreCase("30520-04.htm"))
 		{
@@ -80,8 +80,8 @@ public class Q010_IntoTheWorld extends Quest
 		}
 		else if (event.equalsIgnoreCase("30533-05.htm"))
 		{
-			st.giveItems(ScrollOfEscapeGiran, 1);
-			st.rewardItems(MarkOfTraveler, 1);
+			st.giveItems(SOE_GIRAN, 1);
+			st.rewardItems(MARK_OF_TRAVELER, 1);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
@@ -110,14 +110,14 @@ public class Q010_IntoTheWorld extends Quest
 				int cond = st.getInt("cond");
 				switch (npc.getNpcId())
 				{
-					case Balanki:
-						if (cond >= 1 && cond <= 3)
+					case BALANKI:
+						if (cond < 4)
 							htmltext = "30533-03.htm";
 						else if (cond == 4)
 							htmltext = "30533-04.htm";
 						break;
 					
-					case Reed:
+					case REED:
 						if (cond == 1)
 							htmltext = "30520-01.htm";
 						else if (cond == 2)
@@ -128,10 +128,10 @@ public class Q010_IntoTheWorld extends Quest
 							htmltext = "30520-04a.htm";
 						break;
 					
-					case Gerald:
+					case GERALD:
 						if (cond == 2)
 							htmltext = "30650-01.htm";
-						else if (cond >= 3)
+						else if (cond > 2)
 							htmltext = "30650-04.htm";
 						break;
 				}
@@ -147,6 +147,6 @@ public class Q010_IntoTheWorld extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q010_IntoTheWorld(10, qn, "Into the World");
+		new Q010_IntoTheWorld();
 	}
 }

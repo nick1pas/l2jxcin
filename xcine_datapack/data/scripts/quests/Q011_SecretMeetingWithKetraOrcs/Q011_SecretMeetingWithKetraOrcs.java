@@ -22,16 +22,16 @@ public class Q011_SecretMeetingWithKetraOrcs extends Quest
 	private static final String qn = "Q011_SecretMeetingWithKetraOrcs";
 	
 	// Npcs
-	private final static int CADMON = 31296;
-	private final static int LEON = 31256;
-	private final static int WAHKAN = 31371;
+	private static final int CADMON = 31296;
+	private static final int LEON = 31256;
+	private static final int WAHKAN = 31371;
 	
 	// Items
-	private final static int MUNITIONS_BOX = 7231;
+	private static final int MUNITIONS_BOX = 7231;
 	
-	public Q011_SecretMeetingWithKetraOrcs(int questId, String name, String descr)
+	public Q011_SecretMeetingWithKetraOrcs()
 	{
-		super(questId, name, descr);
+		super(11, qn, "Secret Meeting With Ketra Orcs");
 		
 		questItemIds = new int[]
 		{
@@ -52,8 +52,8 @@ public class Q011_SecretMeetingWithKetraOrcs extends Quest
 		
 		if (event.equalsIgnoreCase("31296-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("31256-02.htm"))
@@ -84,13 +84,7 @@ public class Q011_SecretMeetingWithKetraOrcs extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 74)
-					htmltext = "31296-01.htm";
-				else
-				{
-					htmltext = "31296-02.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 74) ? "31296-02.htm" : "31296-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -110,7 +104,7 @@ public class Q011_SecretMeetingWithKetraOrcs extends Quest
 						break;
 					
 					case WAHKAN:
-						if (cond == 2 && st.getQuestItemsCount(MUNITIONS_BOX) > 0)
+						if (cond == 2)
 							htmltext = "31371-01.htm";
 						break;
 				}
@@ -126,6 +120,6 @@ public class Q011_SecretMeetingWithKetraOrcs extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q011_SecretMeetingWithKetraOrcs(11, qn, "Secret Meeting With Ketra Orcs");
+		new Q011_SecretMeetingWithKetraOrcs();
 	}
 }

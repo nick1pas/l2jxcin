@@ -21,7 +21,7 @@ import net.xcine.util.Rnd;
 
 public class Q271_ProofOfValor extends Quest
 {
-	private final static String qn = "Q271_ProofOfValor";
+	private static final String qn = "Q271_ProofOfValor";
 	
 	// Items
 	private static final int KASHA_WOLF_FANG = 1473;
@@ -63,7 +63,7 @@ public class Q271_ProofOfValor extends Quest
 			st.setState(STATE_STARTED);
 			st.playSound(QuestState.SOUND_ACCEPT);
 			
-			if (st.getQuestItemsCount(NECKLACE_OF_COURAGE) >= 1 || st.getQuestItemsCount(NECKLACE_OF_VALOR) >= 1)
+			if (st.hasQuestItems(NECKLACE_OF_COURAGE) || st.hasQuestItems(NECKLACE_OF_VALOR))
 				htmltext = "30577-07.htm";
 		}
 		
@@ -81,26 +81,17 @@ public class Q271_ProofOfValor extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() == Race.Orc)
-				{
-					if (player.getLevel() >= 4)
-					{
-						// Different HTM if you are repeating the quest.
-						if (st.getQuestItemsCount(NECKLACE_OF_COURAGE) >= 1 || st.getQuestItemsCount(NECKLACE_OF_VALOR) >= 1)
-							htmltext = "30577-06.htm";
-						else
-							htmltext = "30577-02.htm";
-					}
-					else
-					{
-						htmltext = "30577-01.htm";
-						st.exitQuest(true);
-					}
-				}
+				if (player.getRace() != Race.Orc)
+					htmltext = "30577-00.htm";
+				else if (player.getLevel() < 4)
+					htmltext = "30577-01.htm";
 				else
 				{
-					htmltext = "30577-00.htm";
-					st.exitQuest(true);
+					// Different HTM if you are repeating the quest.
+					if (st.hasQuestItems(NECKLACE_OF_COURAGE) || st.hasQuestItems(NECKLACE_OF_VALOR))
+						htmltext = "30577-06.htm";
+					else
+						htmltext = "30577-02.htm";
 				}
 				break;
 			
@@ -108,7 +99,7 @@ public class Q271_ProofOfValor extends Quest
 				int cond = st.getInt("cond");
 				if (cond == 1)
 				{
-					if (st.getQuestItemsCount(NECKLACE_OF_COURAGE) >= 1 || st.getQuestItemsCount(NECKLACE_OF_VALOR) >= 1)
+					if (st.hasQuestItems(NECKLACE_OF_COURAGE) || st.hasQuestItems(NECKLACE_OF_VALOR))
 						htmltext = "30577-07.htm";
 					else
 						htmltext = "30577-04.htm";

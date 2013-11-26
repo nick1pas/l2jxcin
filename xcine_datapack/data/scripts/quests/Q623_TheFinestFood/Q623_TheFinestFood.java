@@ -20,7 +20,7 @@ import net.xcine.util.Rnd;
 
 public class Q623_TheFinestFood extends Quest
 {
-	private final static String qn = "Q623_TheFinestFood";
+	private static final String qn = "Q623_TheFinestFood";
 	
 	// Items
 	private static final int LEAF = 7199;

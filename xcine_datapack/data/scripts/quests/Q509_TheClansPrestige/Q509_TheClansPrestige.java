@@ -25,7 +25,7 @@ import net.xcine.util.Rnd;
 
 public class Q509_TheClansPrestige extends Quest
 {
-	private final static String qn = "Q509_TheClansPrestige";
+	private static final String qn = "Q509_TheClansPrestige";
 	
 	// NPCs
 	private static final int VALDIS = 31331;

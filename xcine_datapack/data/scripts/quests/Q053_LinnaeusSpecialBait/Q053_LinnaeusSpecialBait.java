@@ -21,31 +21,25 @@ public class Q053_LinnaeusSpecialBait extends Quest
 {
 	private static final String qn = "Q053_LinnaeusSpecialBait";
 	
-	// NPC
-	private final static int LINNAEUS = 31577;
-	
 	// Item
-	private final static int CRIMSON_DRAKE_HEART = 7624;
+	private static final int CRIMSON_DRAKE_HEART = 7624;
 	
 	// Reward
-	private final static int FLAMING_FISHING_LURE = 7613;
+	private static final int FLAMING_FISHING_LURE = 7613;
 	
-	// Monster
-	private final static int CRIMSON_DRAKE = 20670;
-	
-	public Q053_LinnaeusSpecialBait(int questId, String name, String descr)
+	public Q053_LinnaeusSpecialBait()
 	{
-		super(questId, name, descr);
+		super(53, qn, "Linnaues' Special Bait");
 		
 		questItemIds = new int[]
 		{
 			CRIMSON_DRAKE_HEART
 		};
 		
-		addStartNpc(LINNAEUS);
-		addTalkId(LINNAEUS);
+		addStartNpc(31577); // Linnaeus
+		addTalkId(31577);
 		
-		addKillId(CRIMSON_DRAKE);
+		addKillId(20670); // Crimson Drake
 	}
 	
 	@Override
@@ -58,15 +52,15 @@ public class Q053_LinnaeusSpecialBait extends Quest
 		
 		if (event.equalsIgnoreCase("31577-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
-		else if (event.equalsIgnoreCase("31577-07.htm") && st.getQuestItemsCount(CRIMSON_DRAKE_HEART) == 100)
+		else if (event.equalsIgnoreCase("31577-07.htm"))
 		{
 			htmltext = "31577-06.htm";
+			st.takeItems(CRIMSON_DRAKE_HEART, -1);
 			st.rewardItems(FLAMING_FISHING_LURE, 4);
-			st.takeItems(CRIMSON_DRAKE_HEART, 100);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
@@ -85,20 +79,11 @@ public class Q053_LinnaeusSpecialBait extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 60)
-					htmltext = "31577-01.htm";
-				else
-				{
-					htmltext = "31577-02.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 60) ? "31577-02.htm" : "31577-01.htm";
 				break;
 			
 			case STATE_STARTED:
-				if (st.getQuestItemsCount(CRIMSON_DRAKE_HEART) == 100)
-					htmltext = "31577-04.htm";
-				else
-					htmltext = "31577-05.htm";
+				htmltext = (st.getQuestItemsCount(CRIMSON_DRAKE_HEART) == 100) ? "31577-04.htm" : "31577-05.htm";
 				break;
 			
 			case STATE_COMPLETED:
@@ -124,6 +109,6 @@ public class Q053_LinnaeusSpecialBait extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q053_LinnaeusSpecialBait(53, qn, "Linnaues' Special Bait");
+		new Q053_LinnaeusSpecialBait();
 	}
 }

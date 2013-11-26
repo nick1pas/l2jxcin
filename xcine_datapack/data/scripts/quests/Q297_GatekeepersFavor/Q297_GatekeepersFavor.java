@@ -76,13 +76,7 @@ public class Q297_GatekeepersFavor extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 15)
-					htmltext = "30540-02.htm";
-				else
-				{
-					htmltext = "30540-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 15) ? "30540-01.htm" : "30540-02.htm";
 				break;
 			
 			case STATE_STARTED:

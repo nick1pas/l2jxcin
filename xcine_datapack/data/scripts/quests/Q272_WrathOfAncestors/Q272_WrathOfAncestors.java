@@ -79,21 +79,12 @@ public class Q272_WrathOfAncestors extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() == Race.Orc)
-				{
-					if (player.getLevel() >= 5)
-						htmltext = "30572-02.htm";
-					else
-					{
-						htmltext = "30572-01.htm";
-						st.exitQuest(true);
-					}
-				}
-				else
-				{
+				if (player.getRace() != Race.Orc)
 					htmltext = "30572-00.htm";
-					st.exitQuest(true);
-				}
+				else if (player.getLevel() < 5)
+					htmltext = "30572-01.htm";
+				else
+					htmltext = "30572-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -104,8 +95,8 @@ public class Q272_WrathOfAncestors extends Quest
 					htmltext = "30572-05.htm";
 					st.takeItems(GRAVE_ROBBERS_HEAD, -1);
 					st.rewardItems(ADENA, 1500);
-					st.exitQuest(true);
 					st.playSound(QuestState.SOUND_FINISH);
+					st.exitQuest(true);
 				}
 				break;
 			

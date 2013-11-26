@@ -36,223 +36,223 @@ public class Q126_TheNameOfEvil_2 extends Quest
 	private static final int BONEPOWDER = 8783;
 	private static final int EWA = 729;
 	
-	public Q126_TheNameOfEvil_2(int questId, String name, String descr)
+	public Q126_TheNameOfEvil_2()
 	{
-		super(questId, name, descr);
+		super(126, qn, "The Name of Evil - 2");
 		
 		addStartNpc(ASAMANAH);
 		addTalkId(ASAMANAH, MUSHIKA, ULU_KAIMU, BALU_KAIMU, CHUTA_KAIMU, WARRIOR_GRAVE, SHILEN_STONE_STATUE);
 	}
 	
 	@Override
-	public final String onEvent(String event, QuestState st)
+	public final String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		String htmltext = event;
-		switch (event)
+		QuestState st = player.getQuestState(qn);
+		if (st == null)
+			return htmltext;
+		
+		if (event.equalsIgnoreCase("32115-05.htm"))
 		{
-			case "32115-05.htm":
-				st.setState(STATE_STARTED);
-				st.set("cond", "1");
-				st.playSound(QuestState.SOUND_ACCEPT);
-				break;
-			
-			case "32115-10.htm":
-				st.set("cond", "2");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32119-02.htm":
-				st.set("cond", "3");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32119-09.htm":
-				st.set("cond", "4");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32119-11.htm":
-				st.set("cond", "5");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32120-07.htm":
-				st.set("cond", "6");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32120-09.htm":
-				st.set("cond", "7");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32120-11.htm":
-				st.set("cond", "8");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32121-07.htm":
-				st.set("cond", "9");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32121-10.htm":
-				st.set("cond", "10");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32121-15.htm":
-				st.set("cond", "11");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32122-03.htm":
-				st.set("cond", "12");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32122-15.htm":
-				st.set("cond", "13");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32122-18.htm":
-				st.set("cond", "14");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32122-87.htm":
-				htmltext = "32122-87.htm";
-				st.giveItems(BONEPOWDER, 1);
-				break;
-			
-			case "32122-90.htm":
-				st.set("cond", "18");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32109-02.htm":
-				st.set("cond", "19");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32109-19.htm":
-				st.set("cond", "20");
-				st.takeItems(BONEPOWDER, 1);
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32115-21.htm":
-				st.set("cond", "21");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32115-28.htm":
-				st.set("cond", "22");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32114-08.htm":
-				st.set("cond", "23");
-				st.playSound(QuestState.SOUND_MIDDLE);
-				break;
-			
-			case "32114-09.htm":
-				st.giveItems(EWA, 1);
-				st.playSound(QuestState.SOUND_FINISH);
-				st.exitQuest(false);
-				break;
-			
-			case "DOOne":
-				htmltext = "32122-26.htm";
-				if (st.getInt("DO") < 1)
-					st.set("DO", "1");
-				break;
-			
-			case "MIOne":
-				htmltext = "32122-30.htm";
-				if (st.getInt("MI") < 1)
-					st.set("MI", "1");
-				break;
-			
-			case "FAOne":
-				htmltext = "32122-34.htm";
-				if (st.getInt("FA") < 1)
-					st.set("FA", "1");
-				break;
-			
-			case "SOLOne":
-				htmltext = "32122-38.htm";
-				if (st.getInt("SOL") < 1)
-					st.set("SOL", "1");
-				break;
-			
-			case "FA_2One":
-				if (st.getInt("FA_2") < 1)
-					st.set("FA_2", "1");
-				htmltext = getSongOne(st);
-				break;
-			
-			case "FATwo":
-				htmltext = "32122-47.htm";
-				if (st.getInt("FA") < 1)
-					st.set("FA", "1");
-				break;
-			
-			case "SOLTwo":
-				htmltext = "32122-51.htm";
-				if (st.getInt("SOL") < 1)
-					st.set("SOL", "1");
-				break;
-			
-			case "TITwo":
-				htmltext = "32122-55.htm";
-				if (st.getInt("TI") < 1)
-					st.set("TI", "1");
-				break;
-			
-			case "SOL_2Two":
-				htmltext = "32122-59.htm";
-				if (st.getInt("SOL_2") < 1)
-					st.set("SOL_2", "1");
-				break;
-			
-			case "FA_2Two":
-				if (st.getInt("FA_2") < 1)
-					st.set("FA_2", "1");
-				htmltext = getSongTwo(st);
-				break;
-			
-			case "SOLTri":
-				htmltext = "32122-68.htm";
-				if (st.getInt("SOL") < 1)
-					st.set("SOL", "1");
-				break;
-			
-			case "FATri":
-				htmltext = "32122-72.htm";
-				if (st.getInt("FA") < 1)
-					st.set("FA", "1");
-				break;
-			
-			case "MITri":
-				htmltext = "32122-76.htm";
-				if (st.getInt("MI") < 1)
-					st.set("MI", "1");
-				break;
-			
-			case "FA_2Tri":
-				htmltext = "32122-80.htm";
-				if (st.getInt("FA_2") < 1)
-					st.set("FA_2", "1");
-				break;
-			
-			case "MI_2Tri":
-				if (st.getInt("MI_2") < 1)
-					st.set("MI_2", "1");
-				htmltext = getSongTri(st);
-				break;
+			st.setState(STATE_STARTED);
+			st.set("cond", "1");
+			st.playSound(QuestState.SOUND_ACCEPT);
 		}
+		else if (event.equalsIgnoreCase("32115-10.htm"))
+		{
+			st.set("cond", "2");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32119-02.htm"))
+		{
+			st.set("cond", "3");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32119-09.htm"))
+		{
+			st.set("cond", "4");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32119-11.htm"))
+		{
+			st.set("cond", "5");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32120-07.htm"))
+		{
+			st.set("cond", "6");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32120-09.htm"))
+		{
+			st.set("cond", "7");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32120-11.htm"))
+		{
+			st.set("cond", "8");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32121-07.htm"))
+		{
+			st.set("cond", "9");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32121-10.htm"))
+		{
+			st.set("cond", "10");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32121-15.htm"))
+		{
+			st.set("cond", "11");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32122-03.htm"))
+		{
+			st.set("cond", "12");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32122-15.htm"))
+		{
+			st.set("cond", "13");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32122-18.htm"))
+		{
+			st.set("cond", "14");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32122-87.htm"))
+			st.giveItems(BONEPOWDER, 1);
+		else if (event.equalsIgnoreCase("32122-90.htm"))
+		{
+			st.set("cond", "18");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32109-02.htm"))
+		{
+			st.set("cond", "19");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32109-19.htm"))
+		{
+			st.set("cond", "20");
+			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(BONEPOWDER, 1);
+		}
+		else if (event.equalsIgnoreCase("32115-21.htm"))
+		{
+			st.set("cond", "21");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32115-28.htm"))
+		{
+			st.set("cond", "22");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32114-08.htm"))
+		{
+			st.set("cond", "23");
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("32114-09.htm"))
+		{
+			st.giveItems(EWA, 1);
+			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(false);
+		}
+		else if (event.equalsIgnoreCase("DOOne"))
+		{
+			htmltext = "32122-26.htm";
+			if (st.getInt("DO") < 1)
+				st.set("DO", "1");
+		}
+		else if (event.equalsIgnoreCase("MIOne"))
+		{
+			htmltext = "32122-30.htm";
+			if (st.getInt("MI") < 1)
+				st.set("MI", "1");
+		}
+		else if (event.equalsIgnoreCase("FAOne"))
+		{
+			htmltext = "32122-34.htm";
+			if (st.getInt("FA") < 1)
+				st.set("FA", "1");
+		}
+		else if (event.equalsIgnoreCase("SOLOne"))
+		{
+			htmltext = "32122-38.htm";
+			if (st.getInt("SOL") < 1)
+				st.set("SOL", "1");
+		}
+		else if (event.equalsIgnoreCase("FA_2One"))
+		{
+			if (st.getInt("FA_2") < 1)
+				st.set("FA_2", "1");
+			htmltext = getSongOne(st);
+		}
+		else if (event.equalsIgnoreCase("FATwo"))
+		{
+			htmltext = "32122-47.htm";
+			if (st.getInt("FA") < 1)
+				st.set("FA", "1");
+		}
+		else if (event.equalsIgnoreCase("SOLTwo"))
+		{
+			htmltext = "32122-51.htm";
+			if (st.getInt("SOL") < 1)
+				st.set("SOL", "1");
+		}
+		else if (event.equalsIgnoreCase("TITwo"))
+		{
+			htmltext = "32122-55.htm";
+			if (st.getInt("TI") < 1)
+				st.set("TI", "1");
+		}
+		else if (event.equalsIgnoreCase("SOL_2Two"))
+		{
+			htmltext = "32122-59.htm";
+			if (st.getInt("SOL_2") < 1)
+				st.set("SOL_2", "1");
+		}
+		else if (event.equalsIgnoreCase("FA_2Two"))
+		{
+			if (st.getInt("FA_2") < 1)
+				st.set("FA_2", "1");
+			htmltext = getSongTwo(st);
+		}
+		else if (event.equalsIgnoreCase("SOLTri"))
+		{
+			htmltext = "32122-68.htm";
+			if (st.getInt("SOL") < 1)
+				st.set("SOL", "1");
+		}
+		else if (event.equalsIgnoreCase("FATri"))
+		{
+			htmltext = "32122-72.htm";
+			if (st.getInt("FA") < 1)
+				st.set("FA", "1");
+		}
+		else if (event.equalsIgnoreCase("MITri"))
+		{
+			htmltext = "32122-76.htm";
+			if (st.getInt("MI") < 1)
+				st.set("MI", "1");
+		}
+		else if (event.equalsIgnoreCase("FA_2Tri"))
+		{
+			htmltext = "32122-80.htm";
+			if (st.getInt("FA_2") < 1)
+				st.set("FA_2", "1");
+		}
+		else if (event.equalsIgnoreCase("MI_2Tri"))
+		{
+			if (st.getInt("MI_2") < 1)
+				st.set("MI_2", "1");
+			htmltext = getSongTri(st);
+		}
+		
 		return htmltext;
 	}
 	
@@ -268,20 +268,14 @@ public class Q126_TheNameOfEvil_2 extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getLevel() < 77)
-				{
 					htmltext = "32115-02.htm";
-					st.exitQuest(true);
-				}
 				else
 				{
 					QuestState st2 = player.getQuestState(Q125_TheNameOfEvil_1.qn);
 					if (st2 != null && st2.isCompleted())
 						htmltext = "32115-01.htm";
 					else
-					{
 						htmltext = "32115-04.htm";
-						st.exitQuest(true);
-					}
 				}
 				break;
 			
@@ -315,7 +309,7 @@ public class Q126_TheNameOfEvil_2 extends Quest
 							htmltext = "32119-08.htm";
 						else if (cond == 4)
 							htmltext = "32119-09.htm";
-						else if (cond >= 5)
+						else if (cond > 4)
 							htmltext = "32119-12.htm";
 						break;
 					
@@ -328,7 +322,7 @@ public class Q126_TheNameOfEvil_2 extends Quest
 							htmltext = "32120-03.htm";
 						else if (cond == 7)
 							htmltext = "32120-08.htm";
-						else if (cond >= 8)
+						else if (cond > 7)
 							htmltext = "32120-12.htm";
 						break;
 					
@@ -341,7 +335,7 @@ public class Q126_TheNameOfEvil_2 extends Quest
 							htmltext = "32121-03.htm";
 						else if (cond == 10)
 							htmltext = "32121-10.htm";
-						else if (cond >= 11)
+						else if (cond > 10)
 							htmltext = "32121-16.htm";
 						break;
 					
@@ -449,6 +443,6 @@ public class Q126_TheNameOfEvil_2 extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q126_TheNameOfEvil_2(126, qn, "The Name of Evil - 2");
+		new Q126_TheNameOfEvil_2();
 	}
 }

@@ -16,11 +16,10 @@ import net.xcine.gameserver.model.actor.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.quest.QuestState;
-import net.xcine.util.Rnd;
 
 public class Q151_CureForFeverDisease extends Quest
 {
-	private final static String qn = "Q151_CureForFeverDisease";
+	private static final String qn = "Q151_CureForFeverDisease";
 	
 	// Items
 	private static final int POISON_SAC = 703;
@@ -30,9 +29,9 @@ public class Q151_CureForFeverDisease extends Quest
 	private static final int ELIAS = 30050;
 	private static final int YOHANES = 30032;
 	
-	public Q151_CureForFeverDisease(int questId, String name, String descr)
+	public Q151_CureForFeverDisease()
 	{
-		super(questId, name, descr);
+		super(151, qn, "Cure for Fever Disease");
 		
 		questItemIds = new int[]
 		{
@@ -56,8 +55,8 @@ public class Q151_CureForFeverDisease extends Quest
 		
 		if (event.equalsIgnoreCase("30050-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		
@@ -75,13 +74,7 @@ public class Q151_CureForFeverDisease extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 15)
-					htmltext = "30050-02.htm";
-				else
-				{
-					htmltext = "30050-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 15) ? "30050-01.htm" : "30050-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -98,8 +91,8 @@ public class Q151_CureForFeverDisease extends Quest
 							htmltext = "30050-06.htm";
 							st.takeItems(FEVER_MEDICINE, 1);
 							st.giveItems(102, 1);
-							st.exitQuest(false);
 							st.playSound(QuestState.SOUND_FINISH);
+							st.exitQuest(false);
 						}
 						break;
 					
@@ -108,9 +101,9 @@ public class Q151_CureForFeverDisease extends Quest
 						{
 							htmltext = "30032-01.htm";
 							st.set("cond", "3");
+							st.playSound(QuestState.SOUND_MIDDLE);
 							st.takeItems(POISON_SAC, 1);
 							st.giveItems(FEVER_MEDICINE, 1);
-							st.playSound(QuestState.SOUND_MIDDLE);
 						}
 						else if (cond == 3)
 							htmltext = "30032-02.htm";
@@ -133,18 +126,14 @@ public class Q151_CureForFeverDisease extends Quest
 		if (st == null)
 			return null;
 		
-		if (Rnd.get(100) < 20)
-		{
+		if (st.dropItems(POISON_SAC, 1, 1, 200000))
 			st.set("cond", "2");
-			st.giveItems(POISON_SAC, 1);
-			st.playSound(QuestState.SOUND_ITEMGET);
-		}
 		
 		return null;
 	}
 	
 	public static void main(String[] args)
 	{
-		new Q151_CureForFeverDisease(151, qn, "Cure for Fever Disease");
+		new Q151_CureForFeverDisease();
 	}
 }

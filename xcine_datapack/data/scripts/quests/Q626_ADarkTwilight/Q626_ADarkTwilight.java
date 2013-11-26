@@ -19,13 +19,13 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q626_ADarkTwilight extends Quest
 {
-	private final static String qn = "Q626_ADarkTwilight";
+	private static final String qn = "Q626_ADarkTwilight";
 	
 	// Items
-	private final static int BLOOD_OF_SAINT = 7169;
+	private static final int BLOOD_OF_SAINT = 7169;
 	
 	// NPC
-	private final static int HIERARCH = 31517;
+	private static final int HIERARCH = 31517;
 	
 	public Q626_ADarkTwilight(int questId, String name, String descr)
 	{

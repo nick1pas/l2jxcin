@@ -22,22 +22,22 @@ public class Q042_HelpTheUncle extends Quest
 	private static final String qn = "Q042_HelpTheUncle";
 	
 	// NPCs
-	private final static int WATERS = 30828;
-	private final static int SOPHYA = 30735;
+	private static final int WATERS = 30828;
+	private static final int SOPHYA = 30735;
 	
 	// Items
-	private final static int TRIDENT = 291;
-	private final static int MAP_PIECE = 7548;
-	private final static int MAP = 7549;
-	private final static int PET_TICKET = 7583;
+	private static final int TRIDENT = 291;
+	private static final int MAP_PIECE = 7548;
+	private static final int MAP = 7549;
+	private static final int PET_TICKET = 7583;
 	
 	// Monsters
-	private final static int MONSTER_EYE_DESTROYER = 20068;
-	private final static int MONSTER_EYE_GAZER = 20266;
+	private static final int MONSTER_EYE_DESTROYER = 20068;
+	private static final int MONSTER_EYE_GAZER = 20266;
 	
-	public Q042_HelpTheUncle(int questId, String name, String descr)
+	public Q042_HelpTheUncle()
 	{
-		super(questId, name, descr);
+		super(42, qn, "Help the Uncle!");
 		
 		questItemIds = new int[]
 		{
@@ -61,28 +61,28 @@ public class Q042_HelpTheUncle extends Quest
 		
 		if (event.equalsIgnoreCase("30828-01.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
-		else if (event.equalsIgnoreCase("30828-03.htm") && st.getQuestItemsCount(TRIDENT) >= 1)
+		else if (event.equalsIgnoreCase("30828-03.htm") && st.hasQuestItems(TRIDENT))
 		{
 			st.set("cond", "2");
-			st.takeItems(TRIDENT, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(TRIDENT, 1);
 		}
-		else if (event.equalsIgnoreCase("30828-05.htm") && st.getQuestItemsCount(MAP_PIECE) >= 30)
+		else if (event.equalsIgnoreCase("30828-05.htm"))
 		{
-			st.takeItems(MAP_PIECE, 30);
-			st.giveItems(MAP, 1);
 			st.set("cond", "4");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(MAP_PIECE, 30);
+			st.giveItems(MAP, 1);
 		}
-		else if (event.equalsIgnoreCase("30735-06.htm") && st.getQuestItemsCount(MAP) == 1)
+		else if (event.equalsIgnoreCase("30735-06.htm"))
 		{
-			st.takeItems(MAP, 1);
 			st.set("cond", "5");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(MAP, 1);
 		}
 		else if (event.equalsIgnoreCase("30828-07.htm"))
 		{
@@ -105,13 +105,7 @@ public class Q042_HelpTheUncle extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 25)
-					htmltext = "30828-00.htm";
-				else
-				{
-					htmltext = "30828-00a.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 25) ? "30828-00a.htm" : "30828-00.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -120,10 +114,7 @@ public class Q042_HelpTheUncle extends Quest
 				{
 					case WATERS:
 						if (cond == 1)
-							if (st.getQuestItemsCount(TRIDENT) == 0)
-								htmltext = "30828-01a.htm";
-							else
-								htmltext = "30828-02.htm";
+							htmltext = (!st.hasQuestItems(TRIDENT)) ? "30828-01a.htm" : "30828-02.htm";
 						else if (cond == 2)
 							htmltext = "30828-03a.htm";
 						else if (cond == 3)
@@ -135,7 +126,7 @@ public class Q042_HelpTheUncle extends Quest
 						break;
 					
 					case SOPHYA:
-						if (cond == 4 && st.getQuestItemsCount(MAP) >= 1)
+						if (cond == 4)
 							htmltext = "30735-05.htm";
 						else if (cond == 5)
 							htmltext = "30735-06a.htm";
@@ -166,6 +157,6 @@ public class Q042_HelpTheUncle extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q042_HelpTheUncle(42, qn, "Help the Uncle!");
+		new Q042_HelpTheUncle();
 	}
 }

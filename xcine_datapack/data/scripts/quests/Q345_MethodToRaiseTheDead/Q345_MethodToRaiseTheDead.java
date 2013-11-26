@@ -20,7 +20,7 @@ import net.xcine.util.Rnd;
 
 public class Q345_MethodToRaiseTheDead extends Quest
 {
-	private final static String qn = "Q345_MethodToRaiseTheDead";
+	private static final String qn = "Q345_MethodToRaiseTheDead";
 	
 	// Items
 	private static final int VICTIMS_ARM_BONE = 4274;
@@ -30,15 +30,6 @@ public class Q345_MethodToRaiseTheDead extends Quest
 	private static final int VICTIMS_SPINE = 4278;
 	private static final int USELESS_BONE_PIECES = 4280;
 	private static final int POWDER_TO_SUMMON_DEAD_SOULS = 4281;
-	
-	private static final int[] CORPSE_PARTS =
-	{
-		VICTIMS_ARM_BONE,
-		VICTIMS_THIGH_BONE,
-		VICTIMS_SKULL,
-		VICTIMS_RIB_BONE,
-		VICTIMS_SPINE
-	};
 	
 	// NPCs
 	private static final int Xenovia = 30912;
@@ -266,7 +257,7 @@ public class Q345_MethodToRaiseTheDead extends Quest
 		}
 		else
 		{
-			int randomPart = CORPSE_PARTS[Rnd.get(CORPSE_PARTS.length)];
+			final int randomPart = Rnd.get(VICTIMS_ARM_BONE, VICTIMS_SPINE);
 			if (!st.hasQuestItems(randomPart))
 			{
 				st.giveItems(randomPart, 1);

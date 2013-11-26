@@ -22,18 +22,18 @@ public class Q123_TheLeaderAndTheFollower extends Quest
 {
 	private static final String qn = "Q123_TheLeaderAndTheFollower";
 	
-	// ITEMS
+	// Items
 	private static final int BLOOD = 8549;
 	private static final int LEG = 8550;
 	
 	// NPC
 	private static final int NEWYEAR = 31961;
 	
-	// MOBS
-	private static final int Bruin_Lizardman = 27321;
-	private static final int Picot_Araneid = 27322;
+	// Mobs
+	private static final int BRUIN_LIZARDMAN = 27321;
+	private static final int PICOT_ARENEID = 27322;
 	
-	// REWARDS
+	// Rewards
 	private static final int CLAN_OATH_HELM = 7850;
 	private static final int CLAN_OATH_ARMOR = 7851;
 	private static final int CLAN_OATH_GAUNTLETS = 7852;
@@ -45,9 +45,9 @@ public class Q123_TheLeaderAndTheFollower extends Quest
 	private static final int CLAN_OATH_PADDED_GLOVES = 7858;
 	private static final int CLAN_OATH_SANDALS = 7859;
 	
-	public Q123_TheLeaderAndTheFollower(int questId, String name, String descr)
+	public Q123_TheLeaderAndTheFollower()
 	{
-		super(questId, name, descr);
+		super(123, qn, "The Leader and the Follower");
 		
 		questItemIds = new int[]
 		{
@@ -57,7 +57,8 @@ public class Q123_TheLeaderAndTheFollower extends Quest
 		
 		addStartNpc(NEWYEAR);
 		addTalkId(NEWYEAR);
-		addKillId(Bruin_Lizardman, Picot_Araneid);
+		
+		addKillId(BRUIN_LIZARDMAN, PICOT_ARENEID);
 	}
 	
 	@Override
@@ -70,18 +71,18 @@ public class Q123_TheLeaderAndTheFollower extends Quest
 		
 		if (event.equalsIgnoreCase("31961-02.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("31961-05a.htm"))
 		{
 			if (st.getQuestItemsCount(BLOOD) >= 10)
 			{
-				st.takeItems(BLOOD, -1);
 				st.set("cond", "3");
 				st.set("settype", "1");
 				st.playSound(QuestState.SOUND_MIDDLE);
+				st.takeItems(BLOOD, -1);
 			}
 			else
 				htmltext = "Incorrect item count";
@@ -90,10 +91,10 @@ public class Q123_TheLeaderAndTheFollower extends Quest
 		{
 			if (st.getQuestItemsCount(BLOOD) >= 10)
 			{
-				st.takeItems(BLOOD, -1);
 				st.set("cond", "4");
 				st.set("settype", "2");
 				st.playSound(QuestState.SOUND_MIDDLE);
+				st.takeItems(BLOOD, -1);
 			}
 			else
 				htmltext = "Incorrect item count";
@@ -102,10 +103,10 @@ public class Q123_TheLeaderAndTheFollower extends Quest
 		{
 			if (st.getQuestItemsCount(BLOOD) >= 10)
 			{
-				st.takeItems(BLOOD, -1);
 				st.set("cond", "5");
 				st.set("settype", "3");
 				st.playSound(QuestState.SOUND_MIDDLE);
+				st.takeItems(BLOOD, -1);
 			}
 			else
 				htmltext = "Incorrect item count";
@@ -186,7 +187,6 @@ public class Q123_TheLeaderAndTheFollower extends Quest
 				}
 				
 				htmltext = "31961-00.htm";
-				st.exitQuest(true);
 				break;
 			
 			case STATE_STARTED:
@@ -273,12 +273,12 @@ public class Q123_TheLeaderAndTheFollower extends Quest
 		
 		switch (npc.getNpcId())
 		{
-			case Bruin_Lizardman:
+			case BRUIN_LIZARDMAN:
 				if (st.getInt("cond") == 1 && st.dropItems(BLOOD, 1, 10, 600000))
 					st.set("cond", "2");
 				break;
 			
-			case Picot_Araneid:
+			case PICOT_ARENEID:
 				L2ClanMember cmSponsor = player.getClan().getClanMember(sponsor);
 				if (cmSponsor != null && cmSponsor.isOnline())
 				{
@@ -291,11 +291,12 @@ public class Q123_TheLeaderAndTheFollower extends Quest
 				}
 				break;
 		}
+		
 		return null;
 	}
 	
 	public static void main(String[] args)
 	{
-		new Q123_TheLeaderAndTheFollower(123, qn, "The Leader and the Follower");
+		new Q123_TheLeaderAndTheFollower();
 	}
 }

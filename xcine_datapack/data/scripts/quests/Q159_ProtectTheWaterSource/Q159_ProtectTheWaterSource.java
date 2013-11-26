@@ -20,37 +20,28 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q159_ProtectTheWaterSource extends Quest
 {
-	private final static String qn = "Q159_ProtectTheWaterSource";
+	private static final String qn = "Q159_ProtectTheWaterSource";
 	
 	// Items
 	private static final int PLAGUE_DUST = 1035;
-	private static final int HYACINTH_CHARM1 = 1071;
-	private static final int HYACINTH_CHARM2 = 1072;
+	private static final int HYACINTH_CHARM_1 = 1071;
+	private static final int HYACINTH_CHARM_2 = 1072;
 	
-	// NPC
-	private static final int ASTERIOS = 30154;
-	
-	// Mob
-	private static final int PLAGUE_ZOMBIE = 27017;
-	
-	// Reward
-	private static final int ADENA = 57;
-	
-	public Q159_ProtectTheWaterSource(int questId, String name, String descr)
+	public Q159_ProtectTheWaterSource()
 	{
-		super(questId, name, descr);
+		super(159, qn, "Protect the Water Source");
 		
 		questItemIds = new int[]
 		{
 			PLAGUE_DUST,
-			HYACINTH_CHARM1,
-			HYACINTH_CHARM2
+			HYACINTH_CHARM_1,
+			HYACINTH_CHARM_2
 		};
 		
-		addStartNpc(ASTERIOS);
-		addTalkId(ASTERIOS);
+		addStartNpc(30154); // Asterios
+		addTalkId(30154);
 		
-		addKillId(PLAGUE_ZOMBIE);
+		addKillId(27017); // Plague Zombie
 	}
 	
 	@Override
@@ -63,10 +54,10 @@ public class Q159_ProtectTheWaterSource extends Quest
 		
 		if (event.equalsIgnoreCase("30154-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
-			st.giveItems(HYACINTH_CHARM1, 1);
+			st.giveItems(HYACINTH_CHARM_1, 1);
 		}
 		
 		return htmltext;
@@ -83,21 +74,12 @@ public class Q159_ProtectTheWaterSource extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() == Race.Elf)
-				{
-					if (player.getLevel() >= 12)
-						htmltext = "30154-03.htm";
-					else
-					{
-						htmltext = "30154-02.htm";
-						st.exitQuest(true);
-					}
-				}
-				else
-				{
+				if (player.getRace() != Race.Elf)
 					htmltext = "30154-00.htm";
-					st.exitQuest(true);
-				}
+				else if (player.getLevel() < 12)
+					htmltext = "30154-02.htm";
+				else
+					htmltext = "30154-03.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -106,21 +88,21 @@ public class Q159_ProtectTheWaterSource extends Quest
 					htmltext = "30154-05.htm";
 				else if (cond == 2)
 				{
-					st.set("cond", "3");
 					htmltext = "30154-06.htm";
-					st.takeItems(PLAGUE_DUST, -1);
-					st.takeItems(HYACINTH_CHARM1, -1);
-					st.giveItems(HYACINTH_CHARM2, 1);
+					st.set("cond", "3");
 					st.playSound(QuestState.SOUND_MIDDLE);
+					st.takeItems(PLAGUE_DUST, -1);
+					st.takeItems(HYACINTH_CHARM_1, 1);
+					st.giveItems(HYACINTH_CHARM_2, 1);
 				}
 				else if (cond == 3)
 					htmltext = "30154-07.htm";
 				else if (cond == 4)
 				{
 					htmltext = "30154-08.htm";
+					st.takeItems(HYACINTH_CHARM_2, 1);
 					st.takeItems(PLAGUE_DUST, -1);
-					st.takeItems(HYACINTH_CHARM2, -1);
-					st.rewardItems(ADENA, 18250);
+					st.rewardItems(57, 18250);
 					st.playSound(QuestState.SOUND_FINISH);
 					st.exitQuest(false);
 				}
@@ -141,24 +123,16 @@ public class Q159_ProtectTheWaterSource extends Quest
 		if (st == null)
 			return null;
 		
-		switch (st.getInt("cond"))
-		{
-			case 1:
-				if (st.dropItems(PLAGUE_DUST, 1, 1, 400000, QuestState.DROP_FIXED_COUNT))
-					st.set("cond", "2");
-				break;
-			
-			case 3:
-				if (st.dropItems(PLAGUE_DUST, 1, 5, 400000))
-					st.set("cond", "4");
-				break;
-		}
+		if (st.getInt("cond") == 1 && st.dropItems(PLAGUE_DUST, 1, 1, 400000))
+			st.set("cond", "2");
+		else if (st.getInt("cond") == 3 && st.dropItems(PLAGUE_DUST, 1, 5, 400000))
+			st.set("cond", "4");
 		
 		return null;
 	}
 	
 	public static void main(String[] args)
 	{
-		new Q159_ProtectTheWaterSource(159, qn, "Protect the Water Source");
+		new Q159_ProtectTheWaterSource();
 	}
 }

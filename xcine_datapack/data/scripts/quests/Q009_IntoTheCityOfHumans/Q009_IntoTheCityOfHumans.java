@@ -29,11 +29,11 @@ public class Q009_IntoTheCityOfHumans extends Quest
 	
 	// Rewards
 	public final int MARK_OF_TRAVELER = 7570;
-	public final int SCROLL_OF_ESCAPE_GIRAN = 7126;
+	public final int SOE_GIRAN = 7126;
 	
-	public Q009_IntoTheCityOfHumans(int questId, String name, String descr)
+	public Q009_IntoTheCityOfHumans()
 	{
-		super(questId, name, descr);
+		super(9, qn, "Into the City of Humans");
 		
 		addStartNpc(PETUKAI);
 		addTalkId(PETUKAI, TANAPI, TAMIL);
@@ -49,8 +49,8 @@ public class Q009_IntoTheCityOfHumans extends Quest
 		
 		if (event.equalsIgnoreCase("30583-01.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("30571-01.htm"))
@@ -61,7 +61,7 @@ public class Q009_IntoTheCityOfHumans extends Quest
 		else if (event.equalsIgnoreCase("30576-01.htm"))
 		{
 			st.giveItems(MARK_OF_TRAVELER, 1);
-			st.rewardItems(SCROLL_OF_ESCAPE_GIRAN, 1);
+			st.rewardItems(SOE_GIRAN, 1);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
@@ -119,6 +119,6 @@ public class Q009_IntoTheCityOfHumans extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q009_IntoTheCityOfHumans(9, qn, "Into the City of Humans");
+		new Q009_IntoTheCityOfHumans();
 	}
 }

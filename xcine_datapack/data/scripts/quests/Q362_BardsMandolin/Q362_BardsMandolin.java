@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q362_BardsMandolin extends Quest
 {
-	private final static String qn = "Q362_BardsMandolin";
+	private static final String qn = "Q362_BardsMandolin";
 	
 	// Items
 	private static final int SWAN_FLUTE = 4316;

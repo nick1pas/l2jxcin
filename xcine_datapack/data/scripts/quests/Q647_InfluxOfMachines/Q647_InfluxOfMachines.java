@@ -20,7 +20,7 @@ import net.xcine.util.Rnd;
 
 public class Q647_InfluxOfMachines extends Quest
 {
-	private final static String qn = "Q647_InfluxOfMachines";
+	private static final String qn = "Q647_InfluxOfMachines";
 	
 	// Item
 	private static final int DESTROYED_GOLEM_SHARD = 8100;

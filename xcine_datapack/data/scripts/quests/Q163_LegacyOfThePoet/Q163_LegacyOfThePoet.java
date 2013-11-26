@@ -21,31 +21,25 @@ import net.xcine.util.Rnd;
 
 public class Q163_LegacyOfThePoet extends Quest
 {
-	private final static String qn = "Q163_LegacyOfThePoet";
+	private static final String qn = "Q163_LegacyOfThePoet";
 	
 	// NPC
 	private static final int STARDEN = 30220;
 	
 	// Items
-	private static final int RUMIELS_POEM_1 = 1038;
-	private static final int RUMIELS_POEM_2 = 1039;
-	private static final int RUMIELS_POEM_3 = 1040;
-	private static final int RUMIELS_POEM_4 = 1041;
-	
-	// Reward
-	private static final int ADENA = 57;
-	
-	public Q163_LegacyOfThePoet(int questId, String name, String descr)
+	private static final int[] RUMIELS_POEMS =
 	{
-		super(questId, name, descr);
+		1038,
+		1039,
+		1040,
+		1041
+	};
+	
+	public Q163_LegacyOfThePoet()
+	{
+		super(163, qn, "Legacy of the Poet");
 		
-		questItemIds = new int[]
-		{
-			RUMIELS_POEM_1,
-			RUMIELS_POEM_2,
-			RUMIELS_POEM_3,
-			RUMIELS_POEM_4
-		};
+		questItemIds = RUMIELS_POEMS;
 		
 		addStartNpc(STARDEN);
 		addTalkId(STARDEN);
@@ -63,8 +57,8 @@ public class Q163_LegacyOfThePoet extends Quest
 		
 		if (event.equalsIgnoreCase("30220-07.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		
@@ -83,30 +77,24 @@ public class Q163_LegacyOfThePoet extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() == Race.DarkElf)
-				{
 					htmltext = "30220-00.htm";
-					st.exitQuest(true);
-				}
-				else if (player.getLevel() >= 11)
-					htmltext = "30220-03.htm";
-				else
-				{
+				else if (player.getLevel() < 11)
 					htmltext = "30220-02.htm";
-					st.exitQuest(true);
-				}
+				else
+					htmltext = "30220-03.htm";
 				break;
 			
 			case STATE_STARTED:
-				if (st.getQuestItemsCount(RUMIELS_POEM_1) == 1 && st.getQuestItemsCount(RUMIELS_POEM_2) == 1 && st.getQuestItemsCount(RUMIELS_POEM_3) == 1 && st.getQuestItemsCount(RUMIELS_POEM_4) == 1)
+				if (st.getInt("cond") == 2)
 				{
 					htmltext = "30220-09.htm";
-					st.takeItems(RUMIELS_POEM_1, 1);
-					st.takeItems(RUMIELS_POEM_2, 1);
-					st.takeItems(RUMIELS_POEM_3, 1);
-					st.takeItems(RUMIELS_POEM_4, 1);
-					st.rewardItems(ADENA, 13890);
-					st.exitQuest(false);
+					
+					for (int poem : RUMIELS_POEMS)
+						st.takeItems(poem, -1);
+					
+					st.rewardItems(57, 13890);
 					st.playSound(QuestState.SOUND_FINISH);
+					st.exitQuest(false);
 				}
 				else
 					htmltext = "30220-08.htm";
@@ -127,60 +115,37 @@ public class Q163_LegacyOfThePoet extends Quest
 		if (st == null)
 			return null;
 		
-		if (!st.hasQuestItems(RUMIELS_POEM_1) && Rnd.get(100) < 10)
+		if (Rnd.get(100) < 33)
 		{
-			st.giveItems(RUMIELS_POEM_1, 1);
-			
-			if (st.hasQuestItems(RUMIELS_POEM_2) && st.hasQuestItems(RUMIELS_POEM_3) && st.hasQuestItems(RUMIELS_POEM_4))
+			final int randomItemId = Rnd.get(1038, 1041);
+			if (!st.hasQuestItems(randomItemId))
 			{
-				st.set("cond", "2");
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.giveItems(randomItemId, 1);
+				if (gotAllPoems(st))
+				{
+					st.set("cond", "2");
+					st.playSound(QuestState.SOUND_MIDDLE);
+				}
+				else
+					st.playSound(QuestState.SOUND_ITEMGET);
 			}
-			else
-				st.playSound(QuestState.SOUND_ITEMGET);
-		}
-		else if (!st.hasQuestItems(RUMIELS_POEM_2) && Rnd.get(100) < 20)
-		{
-			st.giveItems(RUMIELS_POEM_2, 1);
-			
-			if (st.hasQuestItems(RUMIELS_POEM_1) && st.hasQuestItems(RUMIELS_POEM_3) && st.hasQuestItems(RUMIELS_POEM_4))
-			{
-				st.set("cond", "2");
-				st.playSound(QuestState.SOUND_MIDDLE);
-			}
-			else
-				st.playSound(QuestState.SOUND_ITEMGET);
-		}
-		else if (!st.hasQuestItems(RUMIELS_POEM_3) && Rnd.get(100) < 20)
-		{
-			st.giveItems(RUMIELS_POEM_3, 1);
-			
-			if (st.hasQuestItems(RUMIELS_POEM_1) && st.hasQuestItems(RUMIELS_POEM_2) && st.hasQuestItems(RUMIELS_POEM_4))
-			{
-				st.set("cond", "2");
-				st.playSound(QuestState.SOUND_MIDDLE);
-			}
-			else
-				st.playSound(QuestState.SOUND_ITEMGET);
-		}
-		else if (!st.hasQuestItems(RUMIELS_POEM_4) && Rnd.get(100) < 60)
-		{
-			st.giveItems(RUMIELS_POEM_4, 1);
-			
-			if (st.hasQuestItems(RUMIELS_POEM_1) && st.hasQuestItems(RUMIELS_POEM_2) && st.hasQuestItems(RUMIELS_POEM_3))
-			{
-				st.set("cond", "2");
-				st.playSound(QuestState.SOUND_MIDDLE);
-			}
-			else
-				st.playSound(QuestState.SOUND_ITEMGET);
 		}
 		
 		return null;
 	}
 	
+	private static boolean gotAllPoems(QuestState st)
+	{
+		for (int itemId : RUMIELS_POEMS)
+		{
+			if (!st.hasQuestItems(itemId))
+				return false;
+		}
+		return true;
+	}
+	
 	public static void main(String[] args)
 	{
-		new Q163_LegacyOfThePoet(163, qn, "Legacy of the Poet");
+		new Q163_LegacyOfThePoet();
 	}
 }

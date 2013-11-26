@@ -22,18 +22,15 @@ public class Q110_ToThePrimevalIsle extends Quest
 	private static final String qn = "Q110_ToThePrimevalIsle";
 	
 	// NPCs
-	private final static int ANTON = 31338;
-	private final static int MARQUEZ = 32113;
+	private static final int ANTON = 31338;
+	private static final int MARQUEZ = 32113;
 	
 	// Item
-	private final static int ANCIENT_BOOK = 8777;
+	private static final int ANCIENT_BOOK = 8777;
 	
-	// Reward
-	private final static int ADENA = 57;
-	
-	public Q110_ToThePrimevalIsle(int questId, String name, String descr)
+	public Q110_ToThePrimevalIsle()
 	{
-		super(questId, name, descr);
+		super(110, qn, "To the Primeval Isle");
 		
 		questItemIds = new int[]
 		{
@@ -52,20 +49,20 @@ public class Q110_ToThePrimevalIsle extends Quest
 		if (st == null)
 			return htmltext;
 		
-		if (event.equalsIgnoreCase("31338-02.htm"))
-		{
-			st.set("cond", "1");
+ 		if (event.equalsIgnoreCase("31338-02.htm"))
+ 		{
 			st.setState(STATE_STARTED);
-			st.giveItems(ANCIENT_BOOK, 1);
+ 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
-		}
-		else if (event.equalsIgnoreCase("32113-03.htm") && st.getQuestItemsCount(ANCIENT_BOOK) == 1)
-		{
-			st.playSound(QuestState.SOUND_FINISH);
-			st.rewardItems(ADENA, 169380);
+ 			st.giveItems(ANCIENT_BOOK, 1);
+ 		}
+		else if (event.equalsIgnoreCase("32113-03.htm") && st.hasQuestItems(ANCIENT_BOOK))
+ 		{
 			st.takeItems(ANCIENT_BOOK, 1);
-			st.exitQuest(false);
-		}
+			st.rewardItems(57, 169380);
+ 			st.playSound(QuestState.SOUND_FINISH);
+ 			st.exitQuest(false);
+ 		}
 		
 		return htmltext;
 	}
@@ -81,13 +78,7 @@ public class Q110_ToThePrimevalIsle extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 75)
-					htmltext = "31338-01.htm";
-				else
-				{
-					htmltext = "31338-00.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 75) ? "31338-00.htm" : "31338-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -113,6 +104,6 @@ public class Q110_ToThePrimevalIsle extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q110_ToThePrimevalIsle(110, qn, "To the Primeval Isle");
+		new Q110_ToThePrimevalIsle();
 	}
 }

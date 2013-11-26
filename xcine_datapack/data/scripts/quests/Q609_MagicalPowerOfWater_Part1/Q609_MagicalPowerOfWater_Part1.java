@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q609_MagicalPowerOfWater_Part1 extends Quest
 {
-	private final static String qn = "Q609_MagicalPowerOfWater_Part1";
+	private static final String qn = "Q609_MagicalPowerOfWater_Part1";
 	
 	// NPCs
 	private static final int WAHKAN = 31371;

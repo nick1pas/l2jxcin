@@ -21,31 +21,25 @@ public class Q052_WilliesSpecialBait extends Quest
 {
 	private static final String qn = "Q052_WilliesSpecialBait";
 	
-	// NPC
-	private final static int WILLIE = 31574;
-	
 	// Item
-	private final static int TARLK_EYE = 7623;
+	private static final int TARLK_EYE = 7623;
 	
 	// Reward
-	private final static int EARTH_FISHING_LURE = 7612;
+	private static final int EARTH_FISHING_LURE = 7612;
 	
-	// Monster
-	private final static int TARLK_BASILISK = 20573;
-	
-	public Q052_WilliesSpecialBait(int questId, String name, String descr)
+	public Q052_WilliesSpecialBait()
 	{
-		super(questId, name, descr);
+		super(52, qn, "Willie's Special Bait");
 		
 		questItemIds = new int[]
 		{
 			TARLK_EYE
 		};
 		
-		addStartNpc(WILLIE);
-		addTalkId(WILLIE);
-		
-		addKillId(TARLK_BASILISK);
+		addStartNpc(31574); // Willie
+		addTalkId(31574);
+ 		
+		addKillId(20573); // Tarlk Basilik
 	}
 	
 	@Override
@@ -58,15 +52,15 @@ public class Q052_WilliesSpecialBait extends Quest
 		
 		if (event.equalsIgnoreCase("31574-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
-		else if (event.equalsIgnoreCase("31574-07.htm") && st.getQuestItemsCount(TARLK_EYE) == 100)
+		else if (event.equalsIgnoreCase("31574-07.htm"))
 		{
 			htmltext = "31574-06.htm";
+			st.takeItems(TARLK_EYE, -1);
 			st.rewardItems(EARTH_FISHING_LURE, 4);
-			st.takeItems(TARLK_EYE, 100);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
@@ -85,20 +79,11 @@ public class Q052_WilliesSpecialBait extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 48)
-					htmltext = "31574-01.htm";
-				else
-				{
-					htmltext = "31574-02.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 48) ? "31574-02.htm" : "31574-01.htm";
 				break;
 			
 			case STATE_STARTED:
-				if (st.getQuestItemsCount(TARLK_EYE) == 100)
-					htmltext = "31574-04.htm";
-				else
-					htmltext = "31574-05.htm";
+				htmltext = (st.getQuestItemsCount(TARLK_EYE) == 100) ? "31574-04.htm" : "31574-05.htm";
 				break;
 			
 			case STATE_COMPLETED:
@@ -124,6 +109,6 @@ public class Q052_WilliesSpecialBait extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q052_WilliesSpecialBait(52, qn, "Willie's Special Bait");
+		new Q052_WilliesSpecialBait();
 	}
 }

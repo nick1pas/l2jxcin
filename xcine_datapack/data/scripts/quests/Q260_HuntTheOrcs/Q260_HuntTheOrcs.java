@@ -70,8 +70,8 @@ public class Q260_HuntTheOrcs extends Quest
 		}
 		else if (event.equalsIgnoreCase("30221-06.htm"))
 		{
-			st.exitQuest(true);
 			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(true);
 		}
 		
 		return htmltext;
@@ -88,21 +88,12 @@ public class Q260_HuntTheOrcs extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() == Race.Elf)
-				{
-					if (player.getLevel() >= 6)
-						htmltext = "30221-02.htm";
-					else
-					{
-						htmltext = "30221-01.htm";
-						st.exitQuest(true);
-					}
-				}
-				else
-				{
+				if (player.getRace() != Race.Elf)
 					htmltext = "30221-00.htm";
-					st.exitQuest(true);
-				}
+				else if (player.getLevel() < 6)
+					htmltext = "30221-01.htm";
+				else
+					htmltext = "30221-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -116,7 +107,7 @@ public class Q260_HuntTheOrcs extends Quest
 					htmltext = "30221-05.htm";
 					st.takeItems(ORC_AMULET, -1);
 					st.takeItems(ORCS_NECKLACE, -1);
-					st.giveItems(57, amulet * 5 + necklace * 15);
+					st.rewardItems(57, amulet * 5 + necklace * 15);
 				}
 				break;
 		}

@@ -20,17 +20,17 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q103_SpiritOfCraftsman extends Quest
 {
-	private final static String qn = "Q103_SpiritOfCraftsman";
+	private static final String qn = "Q103_SpiritOfCraftsman";
 	
 	// Items
-	private static final int KAROYDS_LETTER = 968;
-	private static final int CECKTINONS_VOUCHER1 = 969;
-	private static final int CECKTINONS_VOUCHER2 = 970;
-	private static final int BONE_FRAGMENT1 = 1107;
+	private static final int KARROD_LETTER = 968;
+	private static final int CECKTINON_VOUCHER_1 = 969;
+	private static final int CECKTINON_VOUCHER_2 = 970;
 	private static final int SOUL_CATCHER = 971;
-	private static final int PRESERVE_OIL = 972;
+	private static final int PRESERVING_OIL = 972;
 	private static final int ZOMBIE_HEAD = 973;
-	private static final int STEELBENDERS_HEAD = 974;
+	private static final int STEELBENDER_HEAD = 974;
+	private static final int BONE_FRAGMENT = 1107;
 	
 	// Rewards
 	private static final int SPIRITSHOT_NO_GRADE = 2509;
@@ -50,20 +50,20 @@ public class Q103_SpiritOfCraftsman extends Quest
 	private static final int CECKTINON = 30132;
 	private static final int HARNE = 30144;
 	
-	public Q103_SpiritOfCraftsman(int questId, String name, String descr)
+	public Q103_SpiritOfCraftsman()
 	{
-		super(questId, name, descr);
+		super(103, qn, "Spirit of Craftsman");
 		
 		questItemIds = new int[]
 		{
-			KAROYDS_LETTER,
-			CECKTINONS_VOUCHER1,
-			CECKTINONS_VOUCHER2,
-			BONE_FRAGMENT1,
+			KARROD_LETTER,
+			CECKTINON_VOUCHER_1,
+			CECKTINON_VOUCHER_2,
+			BONE_FRAGMENT,
 			SOUL_CATCHER,
-			PRESERVE_OIL,
+			PRESERVING_OIL,
 			ZOMBIE_HEAD,
-			STEELBENDERS_HEAD
+			STEELBENDER_HEAD
 		};
 		
 		addStartNpc(KARROD);
@@ -82,10 +82,10 @@ public class Q103_SpiritOfCraftsman extends Quest
 		
 		if (event.equalsIgnoreCase("30307-05.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
-			st.giveItems(KAROYDS_LETTER, 1);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
+			st.giveItems(KARROD_LETTER, 1);
 		}
 		
 		return htmltext;
@@ -103,15 +103,9 @@ public class Q103_SpiritOfCraftsman extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.DarkElf)
-				{
 					htmltext = "30307-00.htm";
-					st.exitQuest(true);
-				}
 				else if (player.getLevel() < 11)
-				{
 					htmltext = "30307-02.htm";
-					st.exitQuest(true);
-				}
 				else
 					htmltext = "30307-03.htm";
 				break;
@@ -121,12 +115,12 @@ public class Q103_SpiritOfCraftsman extends Quest
 				switch (npc.getNpcId())
 				{
 					case KARROD:
-						if (cond >= 1 && cond < 8)
+						if (cond < 8)
 							htmltext = "30307-06.htm";
 						else if (cond == 8)
 						{
 							htmltext = "30307-07.htm";
-							st.takeItems(STEELBENDERS_HEAD, 1);
+							st.takeItems(STEELBENDER_HEAD, 1);
 							st.giveItems(BLOODSABER, 1);
 							st.rewardItems(LESSER_HEALING_POT, 100);
 							
@@ -166,8 +160,8 @@ public class Q103_SpiritOfCraftsman extends Quest
 							htmltext = "30132-01.htm";
 							st.set("cond", "2");
 							st.playSound(QuestState.SOUND_MIDDLE);
-							st.takeItems(KAROYDS_LETTER, 1);
-							st.giveItems(CECKTINONS_VOUCHER1, 1);
+							st.takeItems(KARROD_LETTER, 1);
+							st.giveItems(CECKTINON_VOUCHER_1, 1);
 						}
 						else if (cond > 1 && cond < 5)
 							htmltext = "30132-02.htm";
@@ -177,7 +171,7 @@ public class Q103_SpiritOfCraftsman extends Quest
 							st.set("cond", "6");
 							st.playSound(QuestState.SOUND_MIDDLE);
 							st.takeItems(SOUL_CATCHER, 1);
-							st.giveItems(PRESERVE_OIL, 1);
+							st.giveItems(PRESERVING_OIL, 1);
 						}
 						else if (cond == 6)
 							htmltext = "30132-04.htm";
@@ -187,7 +181,7 @@ public class Q103_SpiritOfCraftsman extends Quest
 							st.set("cond", "8");
 							st.playSound(QuestState.SOUND_MIDDLE);
 							st.takeItems(ZOMBIE_HEAD, 1);
-							st.giveItems(STEELBENDERS_HEAD, 1);
+							st.giveItems(STEELBENDER_HEAD, 1);
 						}
 						else if (cond == 8)
 							htmltext = "30132-06.htm";
@@ -199,8 +193,8 @@ public class Q103_SpiritOfCraftsman extends Quest
 							htmltext = "30144-01.htm";
 							st.set("cond", "3");
 							st.playSound(QuestState.SOUND_MIDDLE);
-							st.takeItems(CECKTINONS_VOUCHER1, 1);
-							st.giveItems(CECKTINONS_VOUCHER2, 1);
+							st.takeItems(CECKTINON_VOUCHER_1, 1);
+							st.giveItems(CECKTINON_VOUCHER_2, 1);
 						}
 						else if (cond == 3)
 							htmltext = "30144-02.htm";
@@ -209,8 +203,8 @@ public class Q103_SpiritOfCraftsman extends Quest
 							htmltext = "30144-03.htm";
 							st.set("cond", "5");
 							st.playSound(QuestState.SOUND_MIDDLE);
-							st.takeItems(CECKTINONS_VOUCHER2, 1);
-							st.takeItems(BONE_FRAGMENT1, 10);
+							st.takeItems(CECKTINON_VOUCHER_2, 1);
+							st.takeItems(BONE_FRAGMENT, 10);
 							st.giveItems(SOUL_CATCHER, 1);
 						}
 						else if (cond == 5)
@@ -239,7 +233,7 @@ public class Q103_SpiritOfCraftsman extends Quest
 			case 20517:
 			case 20518:
 			case 20455:
-				if (st.getInt("cond") == 3 && st.dropItems(BONE_FRAGMENT1, 1, 10, 300000))
+				if (st.getInt("cond") == 3 && st.dropItems(BONE_FRAGMENT, 1, 10, 300000))
 					st.set("cond", "4");
 				break;
 			
@@ -248,7 +242,7 @@ public class Q103_SpiritOfCraftsman extends Quest
 				if (st.getInt("cond") == 6 && st.dropItems(ZOMBIE_HEAD, 1, 1, 300000))
 				{
 					st.set("cond", "7");
-					st.takeItems(PRESERVE_OIL, 1);
+					st.takeItems(PRESERVING_OIL, 1);
 				}
 				break;
 		}
@@ -258,6 +252,6 @@ public class Q103_SpiritOfCraftsman extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q103_SpiritOfCraftsman(103, qn, "Spirit of Craftsman");
+		new Q103_SpiritOfCraftsman();
 	}
 }

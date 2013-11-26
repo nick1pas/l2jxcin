@@ -24,8 +24,8 @@ public class Q117_TheOceanOfDistantStars extends Quest
 	
 	// NPCs
 	private static final int ABEY = 32053;
-	private static final int GHOST = 32055;
-	private static final int GHOST_F = 32054;
+	private static final int GHOST = 32054;
+	private static final int ANCIENT_GHOST = 32055;
 	private static final int OBI = 32052;
 	private static final int BOX = 32076;
 	
@@ -37,9 +37,9 @@ public class Q117_TheOceanOfDistantStars extends Quest
 	private static final int BANDIT_WARRIOR = 22023;
 	private static final int BANDIT_INSPECTOR = 22024;
 	
-	public Q117_TheOceanOfDistantStars(int questId, String name, String descr)
+	public Q117_TheOceanOfDistantStars()
 	{
-		super(questId, name, descr);
+		super(117, qn, "The Ocean of Distant Stars");
 		
 		questItemIds = new int[]
 		{
@@ -48,7 +48,7 @@ public class Q117_TheOceanOfDistantStars extends Quest
 		};
 		
 		addStartNpc(ABEY);
-		addTalkId(ABEY, GHOST, GHOST_F, OBI, BOX);
+		addTalkId(ABEY, ANCIENT_GHOST, GHOST, OBI, BOX);
 		addKillId(BANDIT_WARRIOR, BANDIT_INSPECTOR);
 	}
 	
@@ -62,8 +62,8 @@ public class Q117_TheOceanOfDistantStars extends Quest
 		
 		if (event.equalsIgnoreCase("32053-02.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("32055-02.htm"))
@@ -84,20 +84,20 @@ public class Q117_TheOceanOfDistantStars extends Quest
 		else if (event.equalsIgnoreCase("32076-02.htm"))
 		{
 			st.set("cond", "5");
-			st.giveItems(ENGRAVED_HAMMER, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(ENGRAVED_HAMMER, 1);
 		}
-		else if (event.equalsIgnoreCase("32053-06.htm") && st.getQuestItemsCount(ENGRAVED_HAMMER) == 1)
+		else if (event.equalsIgnoreCase("32053-06.htm"))
 		{
 			st.set("cond", "6");
 			st.playSound(QuestState.SOUND_MIDDLE);
 		}
-		else if (event.equalsIgnoreCase("32052-04.htm") && st.getQuestItemsCount(ENGRAVED_HAMMER) == 1)
+		else if (event.equalsIgnoreCase("32052-04.htm"))
 		{
 			st.set("cond", "7");
 			st.playSound(QuestState.SOUND_MIDDLE);
 		}
-		else if (event.equalsIgnoreCase("32052-06.htm") && st.getQuestItemsCount(GREY_STAR) == 1)
+		else if (event.equalsIgnoreCase("32052-06.htm"))
 		{
 			st.set("cond", "9");
 			st.takeItems(GREY_STAR, 1);
@@ -106,8 +106,8 @@ public class Q117_TheOceanOfDistantStars extends Quest
 		else if (event.equalsIgnoreCase("32055-04.htm") && st.getQuestItemsCount(ENGRAVED_HAMMER) == 1)
 		{
 			st.set("cond", "10");
-			st.takeItems(ENGRAVED_HAMMER, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(ENGRAVED_HAMMER, 1);
 		}
 		else if (event.equalsIgnoreCase("32054-03.htm"))
 		{
@@ -130,42 +130,36 @@ public class Q117_TheOceanOfDistantStars extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 39)
-					htmltext = "32053-01.htm";
-				else
-				{
-					htmltext = "32053-00.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 39) ? "32053-00.htm" : "32053-01.htm";
 				break;
 			
 			case STATE_STARTED:
 				int cond = st.getInt("cond");
 				switch (npc.getNpcId())
 				{
-					case GHOST:
+					case ANCIENT_GHOST:
 						if (cond == 1)
 							htmltext = "32055-01.htm";
-						else if (cond >= 2 && cond <= 8)
+						else if (cond > 1 && cond < 9)
 							htmltext = "32055-02.htm";
-						else if (cond == 9 && st.getQuestItemsCount(ENGRAVED_HAMMER) == 1)
+						else if (cond == 9)
 							htmltext = "32055-03.htm";
-						else if (cond >= 10)
+						else if (cond > 9)
 							htmltext = "32055-05.htm";
 						break;
 					
 					case OBI:
 						if (cond == 2)
 							htmltext = "32052-01.htm";
-						else if (cond >= 2 && cond <= 5)
+						else if (cond > 2 && cond < 6)
 							htmltext = "32052-02.htm";
-						else if (cond == 6 && st.getQuestItemsCount(ENGRAVED_HAMMER) == 1)
+						else if (cond == 6)
 							htmltext = "32052-03.htm";
-						else if (cond == 7 && st.getQuestItemsCount(ENGRAVED_HAMMER) == 1)
+						else if (cond == 7)
 							htmltext = "32052-04.htm";
-						else if (cond == 8 && st.getQuestItemsCount(GREY_STAR) == 1)
+						else if (cond == 8)
 							htmltext = "32052-05.htm";
-						else if (cond >= 9)
+						else if (cond > 8)
 							htmltext = "32052-06.htm";
 						break;
 					
@@ -176,20 +170,20 @@ public class Q117_TheOceanOfDistantStars extends Quest
 							htmltext = "32053-03.htm";
 						else if (cond == 4)
 							htmltext = "32053-04.htm";
-						else if (cond == 5 && st.getQuestItemsCount(ENGRAVED_HAMMER) == 1)
+						else if (cond == 5)
 							htmltext = "32053-05.htm";
-						else if (cond >= 6 && st.getQuestItemsCount(ENGRAVED_HAMMER) == 1)
+						else if (cond > 5)
 							htmltext = "32053-06.htm";
 						break;
 					
 					case BOX:
 						if (cond == 4)
 							htmltext = "32076-01.htm";
-						else if (cond >= 5)
+						else if (cond > 4)
 							htmltext = "32076-03.htm";
 						break;
 					
-					case GHOST_F:
+					case GHOST:
 						if (cond == 10)
 							htmltext = "32054-01.htm";
 						break;
@@ -214,8 +208,8 @@ public class Q117_TheOceanOfDistantStars extends Quest
 		if (Rnd.get(100) < 20)
 		{
 			st.set("cond", "8");
+			st.playSound(QuestState.SOUND_MIDDLE);
 			st.giveItems(GREY_STAR, 1);
-			st.playSound(QuestState.SOUND_ITEMGET);
 		}
 		
 		return null;
@@ -223,6 +217,6 @@ public class Q117_TheOceanOfDistantStars extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q117_TheOceanOfDistantStars(117, qn, "The Ocean of Distant Stars");
+		new Q117_TheOceanOfDistantStars();
 	}
 }

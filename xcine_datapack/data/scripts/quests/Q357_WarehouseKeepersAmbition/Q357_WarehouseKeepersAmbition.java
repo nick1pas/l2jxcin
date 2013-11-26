@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q357_WarehouseKeepersAmbition extends Quest
 {
-	private final static String qn = "Q357_WarehouseKeepersAmbition";
+	private static final String qn = "Q357_WarehouseKeepersAmbition";
 	
 	// NPC
 	private static final int SILVA = 30686;

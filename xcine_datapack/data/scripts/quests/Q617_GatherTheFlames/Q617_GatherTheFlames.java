@@ -24,7 +24,7 @@ import net.xcine.util.Rnd;
 
 public class Q617_GatherTheFlames extends Quest
 {
-	private final static String qn = "Q617_GatherTheFlames";
+	private static final String qn = "Q617_GatherTheFlames";
 	
 	// NPCs
 	private static final int HILDA = 31271;

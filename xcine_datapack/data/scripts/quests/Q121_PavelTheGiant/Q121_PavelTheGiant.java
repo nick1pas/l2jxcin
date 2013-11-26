@@ -22,12 +22,12 @@ public class Q121_PavelTheGiant extends Quest
 	private static final String qn = "Q121_PavelTheGiant";
 	
 	// NPCs
-	private final static int NEWYEAR = 31961;
-	private final static int YUMI = 32041;
+	private static final int NEWYEAR = 31961;
+	private static final int YUMI = 32041;
 	
-	public Q121_PavelTheGiant(int questId, String name, String descr)
+	public Q121_PavelTheGiant()
 	{
-		super(questId, name, descr);
+		super(121, qn, "Pavel the Giant");
 		
 		addStartNpc(NEWYEAR);
 		addTalkId(NEWYEAR, YUMI);
@@ -49,9 +49,9 @@ public class Q121_PavelTheGiant extends Quest
 		}
 		else if (event.equalsIgnoreCase("32041-2.htm"))
 		{
-			st.playSound(QuestState.SOUND_FINISH);
 			st.rewardExpAndSp(10000, 0);
-			st.setState(STATE_COMPLETED);
+			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(false);
 		}
 		
 		return htmltext;
@@ -68,13 +68,7 @@ public class Q121_PavelTheGiant extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 46)
-					htmltext = "31961-1.htm";
-				else
-				{
-					htmltext = "31961-1a.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 46) ? "31961-1a.htm" : "31961-1.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -100,6 +94,6 @@ public class Q121_PavelTheGiant extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q121_PavelTheGiant(121, qn, "Pavel the Giant");
+		new Q121_PavelTheGiant();
 	}
 }

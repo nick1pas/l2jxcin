@@ -23,20 +23,20 @@ public class Q006_StepIntoTheFuture extends Quest
 	private static final String qn = "Q006_StepIntoTheFuture";
 	
 	// NPCs
-	private final static int ROXXY = 30006;
-	private final static int BAULRO = 30033;
-	private final static int SIR_COLLIN = 30311;
+	private static final int ROXXY = 30006;
+	private static final int BAULRO = 30033;
+	private static final int SIR_COLLIN = 30311;
 	
 	// Items
-	private final static int BAULRO_LETTER = 7571;
+	private static final int BAULRO_LETTER = 7571;
 	
 	// Rewards
-	private final static int MARK_TRAVELER = 7570;
-	private final static int SCROLL_GIRAN = 7559;
+	private static final int MARK_TRAVELER = 7570;
+	private static final int SOE_GIRAN = 7559;
 	
-	public Q006_StepIntoTheFuture(int questId, String name, String descr)
+	public Q006_StepIntoTheFuture()
 	{
-		super(questId, name, descr);
+		super(6, qn, "Step into the Future");
 		
 		questItemIds = new int[]
 		{
@@ -57,26 +57,31 @@ public class Q006_StepIntoTheFuture extends Quest
 		
 		if (event.equalsIgnoreCase("30006-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("30033-02.htm"))
 		{
 			st.set("cond", "2");
-			st.giveItems(BAULRO_LETTER, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(BAULRO_LETTER, 1);
 		}
 		else if (event.equalsIgnoreCase("30311-02.htm"))
 		{
-			st.set("cond", "3");
-			st.takeItems(BAULRO_LETTER, 1);
-			st.playSound(QuestState.SOUND_MIDDLE);
+			if (st.hasQuestItems(BAULRO_LETTER))
+			{
+				st.set("cond", "3");
+				st.playSound(QuestState.SOUND_MIDDLE);
+				st.takeItems(BAULRO_LETTER, 1);
+			}
+			else
+				htmltext = "30311-03.htm";
 		}
 		else if (event.equalsIgnoreCase("30006-06.htm"))
 		{
 			st.giveItems(MARK_TRAVELER, 1);
-			st.rewardItems(SCROLL_GIRAN, 1);
+			st.rewardItems(SOE_GIRAN, 1);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
@@ -95,18 +100,10 @@ public class Q006_StepIntoTheFuture extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() != Race.Human)
-				{
+				if (player.getRace() != Race.Human || player.getLevel() < 3)
 					htmltext = "30006-01.htm";
-					st.exitQuest(true);
-				}
-				else if (player.getLevel() >= 3)
-					htmltext = "30006-02.htm";
 				else
-				{
-					htmltext = "30006-01.htm";
-					st.exitQuest(true);
-				}
+					htmltext = "30006-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -123,18 +120,16 @@ public class Q006_StepIntoTheFuture extends Quest
 					case BAULRO:
 						if (cond == 1)
 							htmltext = "30033-01.htm";
-						else if (cond == 2 && st.getQuestItemsCount(BAULRO_LETTER) == 1)
+						else if (cond == 2)
 							htmltext = "30033-03.htm";
 						else
 							htmltext = "30033-04.htm";
 						break;
 					
 					case SIR_COLLIN:
-						if (cond < 3 && st.getQuestItemsCount(BAULRO_LETTER) == 0)
-							htmltext = "30311-03.htm";
-						if (cond == 2 && st.getQuestItemsCount(BAULRO_LETTER) == 1)
+						if (cond == 2)
 							htmltext = "30311-01.htm";
-						else
+						else if (cond == 3)
 							htmltext = "30311-03a.htm";
 						break;
 				}
@@ -150,6 +145,6 @@ public class Q006_StepIntoTheFuture extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q006_StepIntoTheFuture(6, qn, "Step into the Future");
+		new Q006_StepIntoTheFuture();
 	}
 }

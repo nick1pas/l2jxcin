@@ -19,24 +19,24 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q156_MillenniumLove extends Quest
 {
-	private final static String qn = "Q156_MillenniumLove";
+	private static final String qn = "Q156_MillenniumLove";
 	
 	// Items
-	private static final int RYLITHS_LETTER = 1022;
-	private static final int THEONS_DIARY = 1023;
+	private static final int LILITH_LETTER = 1022;
+	private static final int THEON_DIARY = 1023;
 	
 	// NPCs
 	private static final int LILITH = 30368;
 	private static final int BAENEDES = 30369;
 	
-	public Q156_MillenniumLove(int questId, String name, String descr)
+	public Q156_MillenniumLove()
 	{
-		super(questId, name, descr);
+		super(156, qn, "Millennium Love");
 		
 		questItemIds = new int[]
 		{
-			RYLITHS_LETTER,
-			THEONS_DIARY
+			LILITH_LETTER,
+			THEON_DIARY
 		};
 		
 		addStartNpc(LILITH);
@@ -53,21 +53,21 @@ public class Q156_MillenniumLove extends Quest
 		
 		if (event.equalsIgnoreCase("30368-04.htm"))
 		{
-			st.set("cond", "1");
-			st.giveItems(RYLITHS_LETTER, 1);
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
+			st.giveItems(LILITH_LETTER, 1);
 		}
 		else if (event.equalsIgnoreCase("30369-02.htm"))
 		{
 			st.set("cond", "2");
-			st.takeItems(RYLITHS_LETTER, -1);
-			st.giveItems(THEONS_DIARY, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(LILITH_LETTER, 1);
+			st.giveItems(THEON_DIARY, 1);
 		}
 		else if (event.equalsIgnoreCase("30369-03.htm"))
 		{
-			st.takeItems(RYLITHS_LETTER, -1);
+			st.takeItems(LILITH_LETTER, 1);
 			st.rewardExpAndSp(3000, 0);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
@@ -87,25 +87,19 @@ public class Q156_MillenniumLove extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 15)
-					htmltext = "30368-01.htm";
-				else
-				{
-					htmltext = "30368-00.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 15) ? "30368-00.htm" : "30368-01.htm";
 				break;
 			
 			case STATE_STARTED:
 				switch (npc.getNpcId())
 				{
 					case LILITH:
-						if (st.getQuestItemsCount(RYLITHS_LETTER) == 1)
+						if (st.hasQuestItems(LILITH_LETTER))
 							htmltext = "30368-05.htm";
-						else if (st.getQuestItemsCount(THEONS_DIARY) == 1)
+						else if (st.hasQuestItems(THEON_DIARY))
 						{
 							htmltext = "30368-06.htm";
-							st.takeItems(THEONS_DIARY, -1);
+							st.takeItems(THEON_DIARY, 1);
 							st.giveItems(5250, 1);
 							st.rewardExpAndSp(3000, 0);
 							st.playSound(QuestState.SOUND_FINISH);
@@ -114,9 +108,9 @@ public class Q156_MillenniumLove extends Quest
 						break;
 					
 					case BAENEDES:
-						if (st.getQuestItemsCount(RYLITHS_LETTER) == 1)
+						if (st.hasQuestItems(LILITH_LETTER))
 							htmltext = "30369-01.htm";
-						else if (st.getQuestItemsCount(THEONS_DIARY) == 1)
+						else if (st.hasQuestItems(THEON_DIARY))
 							htmltext = "30369-04.htm";
 						break;
 				}
@@ -132,6 +126,6 @@ public class Q156_MillenniumLove extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q156_MillenniumLove(156, qn, "Millennium Love");
+		new Q156_MillenniumLove();
 	}
 }

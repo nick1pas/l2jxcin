@@ -63,28 +63,32 @@ public class Q296_TarantulasSpiderSilk extends Quest
 		
 		if (event.equalsIgnoreCase("30519-03.htm"))
 		{
-			st.set("cond", "1");
-			st.setState(STATE_STARTED);
-			st.playSound(QuestState.SOUND_ACCEPT);
+			if (st.hasQuestItems(RING_OF_RACCOON) || st.hasQuestItems(RING_OF_FIREFLY))
+			{
+				st.set("cond", "1");
+				st.setState(STATE_STARTED);
+				st.playSound(QuestState.SOUND_ACCEPT);
+			}
+			else
+				htmltext = "30519-03a.htm";
 		}
 		else if (event.equalsIgnoreCase("30519-06.htm"))
 		{
 			st.takeItems(TARANTULA_SPIDER_SILK, -1);
 			st.takeItems(TARANTULA_SPINNERETTE, -1);
-			st.exitQuest(true);
 			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(true);
 		}
 		else if (event.equalsIgnoreCase("30548-02.htm"))
 		{
-			if (st.getQuestItemsCount(TARANTULA_SPINNERETTE) >= 1)
+			int count = st.getQuestItemsCount(TARANTULA_SPINNERETTE);
+			if (count > 0)
 			{
 				htmltext = "30548-03.htm";
-				st.takeItems(TARANTULA_SPINNERETTE, 1);
-				st.giveItems(TARANTULA_SPIDER_SILK, 15 + Rnd.get(10));
+				st.takeItems(TARANTULA_SPINNERETTE, -1);
+				st.giveItems(TARANTULA_SPIDER_SILK, count * (15 + Rnd.get(10)));
 			}
 		}
-		else if (event.equalsIgnoreCase("30519-09.htm"))
-			st.exitQuest(true);
 		
 		return htmltext;
 	}
@@ -100,32 +104,21 @@ public class Q296_TarantulasSpiderSilk extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 15)
-				{
-					if (st.getQuestItemsCount(RING_OF_RACCOON) == 1 || st.getQuestItemsCount(RING_OF_FIREFLY) == 1)
-						htmltext = "30519-02.htm";
-					else
-						htmltext = "30519-08.htm";
-				}
-				else
-				{
-					htmltext = "30519-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 15) ? "30519-01.htm" : "30519-02.htm";
 				break;
 			
 			case STATE_STARTED:
-				int count = st.getQuestItemsCount(TARANTULA_SPIDER_SILK);
 				switch (npc.getNpcId())
 				{
 					case MION:
+						int count = st.getQuestItemsCount(TARANTULA_SPIDER_SILK);
 						if (count == 0)
 							htmltext = "30519-04.htm";
 						else
 						{
 							htmltext = "30519-05.htm";
-							st.takeItems(TARANTULA_SPIDER_SILK, count);
-							st.rewardItems(57, count * 30);
+							st.takeItems(TARANTULA_SPIDER_SILK, -1);
+							st.rewardItems(57, ((count >= 10) ? 2000 : 0) + count * 30);
 						}
 						break;
 					
@@ -148,13 +141,8 @@ public class Q296_TarantulasSpiderSilk extends Quest
 		int chance = Rnd.get(100);
 		if (chance < 50)
 		{
-			st.giveItems(TARANTULA_SPIDER_SILK, 1);
+			st.giveItems((chance < 5) ? TARANTULA_SPINNERETTE : TARANTULA_SPIDER_SILK, 1);
 			st.playSound(QuestState.SOUND_ITEMGET);
-		}
-		else if (chance < 55)
-		{
-			st.giveItems(TARANTULA_SPINNERETTE, 1);
-			st.playSound(QuestState.SOUND_MIDDLE);
 		}
 		
 		return null;

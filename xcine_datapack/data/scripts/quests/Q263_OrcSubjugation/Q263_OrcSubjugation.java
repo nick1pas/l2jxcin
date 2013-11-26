@@ -21,7 +21,7 @@ import net.xcine.util.Rnd;
 
 public class Q263_OrcSubjugation extends Quest
 {
-	private final static String qn = "Q263_OrcSubjugation";
+	private static final String qn = "Q263_OrcSubjugation";
 	
 	// Items
 	private static final int ORC_AMULET = 1116;
@@ -77,21 +77,12 @@ public class Q263_OrcSubjugation extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() == Race.DarkElf)
-				{
-					if (player.getLevel() >= 8)
-						htmltext = "30346-02.htm";
-					else
-					{
-						htmltext = "30346-01.htm";
-						st.exitQuest(true);
-					}
-				}
-				else
-				{
+				if (player.getRace() != Race.DarkElf)
 					htmltext = "30346-00.htm";
-					st.exitQuest(true);
-				}
+				else if (player.getLevel() < 8)
+					htmltext = "30346-01.htm";
+				else
+					htmltext = "30346-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -103,9 +94,9 @@ public class Q263_OrcSubjugation extends Quest
 				else
 				{
 					htmltext = "30346-05.htm";
-					st.rewardItems(57, amulet * 20 + necklace * 30);
 					st.takeItems(ORC_AMULET, -1);
 					st.takeItems(ORC_NECKLACE, -1);
+					st.rewardItems(57, amulet * 20 + necklace * 30);
 				}
 				break;
 		}

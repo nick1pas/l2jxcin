@@ -20,7 +20,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q320_BonesTellTheFuture extends Quest
 {
-	private final static String qn = "Q320_BonesTellTheFuture";
+	private static final String qn = "Q320_BonesTellTheFuture";
 	
 	// Quest item
 	private final int BONE_FRAGMENT = 809;
@@ -69,18 +69,12 @@ public class Q320_BonesTellTheFuture extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (st.getPlayer().getRace() != Race.DarkElf)
-				{
+				if (player.getRace() != Race.DarkElf)
 					htmltext = "30359-00.htm";
-					st.exitQuest(true);
-				}
-				else if (player.getLevel() >= 10)
-					htmltext = "30359-03.htm";
-				else
-				{
+				else if (player.getLevel() < 10)
 					htmltext = "30359-02.htm";
-					st.exitQuest(true);
-				}
+				else
+					htmltext = "30359-03.htm";
 				break;
 			
 			case STATE_STARTED:

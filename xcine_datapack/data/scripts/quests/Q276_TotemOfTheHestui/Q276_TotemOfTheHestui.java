@@ -21,7 +21,7 @@ import net.xcine.util.Rnd;
 
 public class Q276_TotemOfTheHestui extends Quest
 {
-	private final static String qn = "Q276_TotemOfTheHestui";
+	private static final String qn = "Q276_TotemOfTheHestui";
 	
 	// NPC
 	private static final int TANAPI = 30571;
@@ -77,25 +77,16 @@ public class Q276_TotemOfTheHestui extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() == Race.Orc)
-				{
-					if (player.getLevel() >= 15)
-						htmltext = "30571-02.htm";
-					else
-					{
-						htmltext = "30571-01.htm";
-						st.exitQuest(true);
-					}
-				}
-				else
-				{
+				if (player.getRace() != Race.Orc)
 					htmltext = "30571-00.htm";
-					st.exitQuest(true);
-				}
+				else if (player.getLevel() < 15)
+					htmltext = "30571-01.htm";
+				else
+					htmltext = "30571-02.htm";
 				break;
 			
 			case STATE_STARTED:
-				if (st.getQuestItemsCount(KASHA_CRYSTAL) == 0)
+				if (!st.hasQuestItems(KASHA_CRYSTAL))
 					htmltext = "30571-04.htm";
 				else
 				{
@@ -104,8 +95,8 @@ public class Q276_TotemOfTheHestui extends Quest
 					st.takeItems(KASHA_PARASITE, -1);
 					st.giveItems(HESTUIS_TOTEM, 1);
 					st.giveItems(LEATHER_PANTS, 1);
-					st.exitQuest(true);
 					st.playSound(QuestState.SOUND_FINISH);
+					st.exitQuest(true);
 				}
 				break;
 		}

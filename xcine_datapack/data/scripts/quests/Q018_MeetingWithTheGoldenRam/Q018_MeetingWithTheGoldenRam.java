@@ -19,28 +19,27 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q018_MeetingWithTheGoldenRam extends Quest
 {
-	private final static String qn = "Q018_MeetingWithTheGoldenRam";
+	private static final String qn = "Q018_MeetingWithTheGoldenRam";
 	
 	// Items
-	private final static int Adena = 57;
-	private final static int SupplyBox = 7245;
+	private static final int SUPPLY_BOX = 7245;
 	
 	// NPCs
-	private final static int Donal = 31314;
-	private final static int Daisy = 31315;
-	private final static int Abercrombie = 31555;
+	private static final int DONAL = 31314;
+	private static final int DAISY = 31315;
+	private static final int ABERCROMBIE = 31555;
 	
-	public Q018_MeetingWithTheGoldenRam(int questId, String name, String descr)
+	public Q018_MeetingWithTheGoldenRam()
 	{
-		super(questId, name, descr);
+		super(18, qn, "Meeting with the Golden Ram");
 		
 		questItemIds = new int[]
 		{
-			SupplyBox
+			SUPPLY_BOX
 		};
 		
-		addStartNpc(Donal);
-		addTalkId(Donal, Daisy, Abercrombie);
+		addStartNpc(DONAL);
+		addTalkId(DONAL, DAISY, ABERCROMBIE);
 	}
 	
 	@Override
@@ -60,17 +59,18 @@ public class Q018_MeetingWithTheGoldenRam extends Quest
 		else if (event.equalsIgnoreCase("31315-02.htm"))
 		{
 			st.set("cond", "2");
-			st.giveItems(SupplyBox, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(SUPPLY_BOX, 1);
 		}
 		else if (event.equalsIgnoreCase("31555-02.htm"))
 		{
-			st.takeItems(SupplyBox, 1);
-			st.rewardItems(Adena, 15000);
+			st.takeItems(SUPPLY_BOX, 1);
+			st.rewardItems(57, 15000);
 			st.rewardExpAndSp(50000, 0);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
+		
 		return htmltext;
 	}
 	
@@ -85,31 +85,25 @@ public class Q018_MeetingWithTheGoldenRam extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 66)
-					htmltext = "31314-01.htm";
-				else
-				{
-					htmltext = "31314-02.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 66) ? "31314-02.htm" : "31314-01.htm";
 				break;
 			
 			case STATE_STARTED:
 				int cond = st.getInt("cond");
 				switch (npc.getNpcId())
 				{
-					case Donal:
+					case DONAL:
 						htmltext = "31314-04.htm";
 						break;
 					
-					case Daisy:
+					case DAISY:
 						if (cond == 1)
 							htmltext = "31315-01.htm";
 						else if (cond == 2)
 							htmltext = "31315-03.htm";
 						break;
 					
-					case Abercrombie:
+					case ABERCROMBIE:
 						if (cond == 2)
 							htmltext = "31555-01.htm";
 						break;
@@ -126,6 +120,6 @@ public class Q018_MeetingWithTheGoldenRam extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q018_MeetingWithTheGoldenRam(18, qn, "Meeting with the Golden Ram");
+		new Q018_MeetingWithTheGoldenRam();
 	}
 }

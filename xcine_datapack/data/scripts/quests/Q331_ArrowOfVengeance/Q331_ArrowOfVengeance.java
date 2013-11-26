@@ -20,7 +20,7 @@ import net.xcine.util.Rnd;
 
 public class Q331_ArrowOfVengeance extends Quest
 {
-	private final static String qn = "Q331_ArrowOfVengeance";
+	private static final String qn = "Q331_ArrowOfVengeance";
 	
 	// Npc
 	private static final int BELTON = 30125;

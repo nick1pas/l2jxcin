@@ -20,7 +20,7 @@ import net.xcine.util.Rnd;
 
 public class Q621_EggDelivery extends Quest
 {
-	private final static String qn = "Q621_EggDelivery";
+	private static final String qn = "Q621_EggDelivery";
 	
 	// Items
 	private static final int EGG = 7195;

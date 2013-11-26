@@ -16,6 +16,7 @@ package quests.Q403_PathToARogue;
 
 import net.xcine.gameserver.model.actor.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.base.ClassId;
 import net.xcine.gameserver.model.itemcontainer.Inventory;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.quest.QuestState;
@@ -76,30 +77,23 @@ public class Q403_PathToARogue extends Quest
 		
 		if (event.equalsIgnoreCase("30379-05.htm"))
 		{
-			if (player.getClassId().getId() == 0x00)
+			if (player.getClassId() != ClassId.fighter)
 			{
-				if (player.getLevel() >= 19)
-				{
-					if (st.getQuestItemsCount(Recommendation) == 1)
-					{
-						htmltext = "30379-04.htm";
-						st.exitQuest(true);
-					}
-				}
+				if (player.getClassId() == ClassId.rogue)
+					htmltext = "30379-02a.htm";
 				else
-				{
 					htmltext = "30379-02.htm";
-					st.exitQuest(true);
-				}
-			}
-			else if (player.getClassId().getId() == 0x07)
-			{
-				htmltext = "30379-02a.htm";
+				
 				st.exitQuest(true);
 			}
-			else
+			else if (player.getLevel() < 19)
 			{
 				htmltext = "30379-02.htm";
+				st.exitQuest(true);
+			}
+			else if (st.hasQuestItems(Recommendation))
+			{
+				htmltext = "30379-04.htm";
 				st.exitQuest(true);
 			}
 		}
@@ -166,9 +160,8 @@ public class Q403_PathToARogue extends Quest
 							st.giveItems(Recommendation, 1);
 							st.rewardExpAndSp(3200, 1500);
 							player.broadcastPacket(new SocialAction(player, 3));
-							
 							st.playSound(QuestState.SOUND_FINISH);
-							st.exitQuest(false);
+							st.exitQuest(true);
 						}
 						break;
 					

@@ -81,13 +81,12 @@ public class Q294_CovertBusiness extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() == Race.Dwarf && player.getLevel() >= 10)
-					htmltext = "30534-02.htm";
-				else
-				{
+				if (player.getRace() != Race.Dwarf)
+					htmltext = "30534-00.htm";
+				else if (player.getLevel() < 10)
 					htmltext = "30534-01.htm";
-					st.exitQuest(true);
-				}
+				else
+					htmltext = "30534-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -100,8 +99,8 @@ public class Q294_CovertBusiness extends Quest
 					st.takeItems(BatFang, -1);
 					st.giveItems(RingOfRaccoon, 1);
 					st.rewardExpAndSp(0, 600);
-					st.exitQuest(true);
 					st.playSound(QuestState.SOUND_FINISH);
+					st.exitQuest(true);
 				}
 				break;
 		}

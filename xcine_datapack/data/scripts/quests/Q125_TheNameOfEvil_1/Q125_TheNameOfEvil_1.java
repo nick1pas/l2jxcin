@@ -61,9 +61,9 @@ public final class Q125_TheNameOfEvil_1 extends Quest
 		22745
 	};
 	
-	public Q125_TheNameOfEvil_1(int questId, String name, String descr)
+	public Q125_TheNameOfEvil_1()
 	{
-		super(questId, name, descr);
+		super(125, qn, "The Name of Evil - 1");
 		
 		questItemIds = new int[]
 		{
@@ -100,8 +100,8 @@ public final class Q125_TheNameOfEvil_1 extends Quest
 		else if (event.equalsIgnoreCase("32114-09.htm"))
 		{
 			st.set("cond", "2");
-			st.giveItems(GAZKH_FRAGMENT, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(GAZKH_FRAGMENT, 1);
 		}
 		else if (event.equalsIgnoreCase("32117-08.htm"))
 		{
@@ -126,10 +126,11 @@ public final class Q125_TheNameOfEvil_1 extends Quest
 		else if (event.equalsIgnoreCase("32121-16.htm"))
 		{
 			st.set("cond", "8");
+			st.playSound(QuestState.SOUND_MIDDLE);
 			st.takeItems(GAZKH_FRAGMENT, -1);
 			st.giveItems(EPITAPH_OF_WISDOM, 1);
-			st.playSound(QuestState.SOUND_MIDDLE);
 		}
+		
 		return htmltext;
 	}
 	
@@ -148,10 +149,7 @@ public final class Q125_TheNameOfEvil_1 extends Quest
 				if (first != null && first.isCompleted() && player.getLevel() >= 76)
 					htmltext = "32114-01.htm";
 				else
-				{
 					htmltext = "32114-00.htm";
-					st.exitQuest(true);
-				}
 				break;
 			
 			case STATE_STARTED:
@@ -163,7 +161,7 @@ public final class Q125_TheNameOfEvil_1 extends Quest
 							htmltext = "32114-07.htm";
 						else if (cond == 2)
 							htmltext = "32114-10.htm";
-						else if (cond >= 3 && cond <= 7)
+						else if (cond > 2 && cond < 8)
 							htmltext = "32114-11.htm";
 						else if (cond == 8)
 						{
@@ -267,6 +265,6 @@ public final class Q125_TheNameOfEvil_1 extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q125_TheNameOfEvil_1(125, qn, "The Name of Evil - 1");
+		new Q125_TheNameOfEvil_1();
 	}
 }

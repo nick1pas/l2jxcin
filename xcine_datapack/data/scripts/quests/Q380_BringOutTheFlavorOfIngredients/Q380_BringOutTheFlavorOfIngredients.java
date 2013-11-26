@@ -23,22 +23,22 @@ public class Q380_BringOutTheFlavorOfIngredients extends Quest
 	private static final String qn = "Q380_BringOutTheFlavorOfIngredients";
 	
 	// Monsters
-	private final static int DIRE_WOLF = 20205;
-	private final static int KADIF_WEREWOLF = 20206;
-	private final static int GIANT_MIST_LEECH = 20225;
+	private static final int DIRE_WOLF = 20205;
+	private static final int KADIF_WEREWOLF = 20206;
+	private static final int GIANT_MIST_LEECH = 20225;
 	
 	// Items
-	private final static int RITRONS_FRUIT = 5895;
-	private final static int MOON_FACE_FLOWER = 5896;
-	private final static int LEECH_FLUIDS = 5897;
-	private final static int ANTIDOTE = 1831;
+	private static final int RITRONS_FRUIT = 5895;
+	private static final int MOON_FACE_FLOWER = 5896;
+	private static final int LEECH_FLUIDS = 5897;
+	private static final int ANTIDOTE = 1831;
 	
 	// Rewards
-	private final static int RITRON_JELLY = 5960;
-	private final static int JELLY_RECIPE = 5959;
+	private static final int RITRON_JELLY = 5960;
+	private static final int JELLY_RECIPE = 5959;
 	
 	// Chance
-	private final static int REC_CHANCE = 55;
+	private static final int REC_CHANCE = 55;
 	
 	public Q380_BringOutTheFlavorOfIngredients(int questId, String name, String descr)
 	{

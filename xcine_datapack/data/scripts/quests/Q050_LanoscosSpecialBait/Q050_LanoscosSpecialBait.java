@@ -21,31 +21,25 @@ public class Q050_LanoscosSpecialBait extends Quest
 {
 	private static final String qn = "Q050_LanoscosSpecialBait";
 	
-	// NPC
-	private final static int LANOSCO = 31570;
-	
 	// Item
-	private final static int ESSENCE_OF_WIND = 7621;
+	private static final int ESSENCE_OF_WIND = 7621;
 	
 	// Reward
-	private final static int WIND_FISHING_LURE = 7610;
+	private static final int WIND_FISHING_LURE = 7610;
 	
-	// Monster
-	private final static int SINGING_WIND = 21026;
-	
-	public Q050_LanoscosSpecialBait(int questId, String name, String descr)
+	public Q050_LanoscosSpecialBait()
 	{
-		super(questId, name, descr);
+		super(50, qn, "Lanosco's Special Bait");
 		
 		questItemIds = new int[]
 		{
 			ESSENCE_OF_WIND
 		};
 		
-		addStartNpc(LANOSCO);
-		addTalkId(LANOSCO);
+		addStartNpc(31570); // Lanosco
+		addTalkId(31570);
 		
-		addKillId(SINGING_WIND);
+		addKillId(21026); // Singing wind
 	}
 	
 	@Override
@@ -58,18 +52,19 @@ public class Q050_LanoscosSpecialBait extends Quest
 		
 		if (event.equalsIgnoreCase("31570-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
-		else if (event.equalsIgnoreCase("31570-07.htm") && st.getQuestItemsCount(ESSENCE_OF_WIND) == 100)
+		else if (event.equalsIgnoreCase("31570-07.htm"))
 		{
 			htmltext = "31570-06.htm";
+			st.takeItems(ESSENCE_OF_WIND, -1);
 			st.rewardItems(WIND_FISHING_LURE, 4);
-			st.takeItems(ESSENCE_OF_WIND, 100);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
+		
 		return htmltext;
 	}
 	
@@ -84,26 +79,18 @@ public class Q050_LanoscosSpecialBait extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 27)
-					htmltext = "31570-01.htm";
-				else
-				{
-					htmltext = "31570-02.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 27) ? "31570-02.htm" : "31570-01.htm";
 				break;
 			
 			case STATE_STARTED:
-				if (st.getQuestItemsCount(ESSENCE_OF_WIND) == 100)
-					htmltext = "31570-04.htm";
-				else
-					htmltext = "31570-05.htm";
+				htmltext = (st.getQuestItemsCount(ESSENCE_OF_WIND) == 100) ? "31570-04.htm" : "31570-05.htm";
 				break;
 			
 			case STATE_COMPLETED:
 				htmltext = getAlreadyCompletedMsg();
 				break;
 		}
+		
 		return htmltext;
 	}
 	
@@ -122,6 +109,6 @@ public class Q050_LanoscosSpecialBait extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q050_LanoscosSpecialBait(50, qn, "Lanosco's Special Bait");
+		new Q050_LanoscosSpecialBait();
 	}
 }

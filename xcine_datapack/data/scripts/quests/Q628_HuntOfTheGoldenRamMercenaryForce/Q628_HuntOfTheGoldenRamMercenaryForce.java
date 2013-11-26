@@ -22,7 +22,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q628_HuntOfTheGoldenRamMercenaryForce extends Quest
 {
-	private final static String qn = "Q628_HuntOfTheGoldenRamMercenaryForce";
+	private static final String qn = "Q628_HuntOfTheGoldenRamMercenaryForce";
 	
 	// NPCs
 	private static final int KAHMAN = 31554;

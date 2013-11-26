@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q241_PossessorOfAPreciousSoul extends Quest
 {
-	private final static String qn = "Q241_PossessorOfAPreciousSoul";
+	private static final String qn = "Q241_PossessorOfAPreciousSoul";
 	
 	// NPCs
 	private static final int TALIEN = 31739;
@@ -222,13 +222,7 @@ public class Q241_PossessorOfAPreciousSoul extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (!player.isSubClassActive() || player.getLevel() < 50)
-				{
-					htmltext = "31739-02.htm";
-					st.exitQuest(true);
-				}
-				else
-					htmltext = "31739-01.htm";
+				htmltext = (!player.isSubClassActive() || player.getLevel() < 50) ? "31739-02.htm" : "31739-01.htm";
 				break;
 			
 			case STATE_STARTED:

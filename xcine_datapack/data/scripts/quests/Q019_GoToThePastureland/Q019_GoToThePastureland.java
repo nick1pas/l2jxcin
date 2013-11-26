@@ -19,27 +19,26 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q019_GoToThePastureland extends Quest
 {
-	private final static String qn = "Q019_GoToThePastureland";
+	private static final String qn = "Q019_GoToThePastureland";
 	
 	// Items
-	private final static int YoungWildBeastMeat = 7547;
-	private final static int Adena = 57;
+	private static final int YOUNG_WILD_BEAST_MEAT = 7547;
 	
 	// NPCs
-	private final static int Vladimir = 31302;
-	private final static int Tunatun = 31537;
+	private static final int VLADIMIR = 31302;
+	private static final int TUNATUN = 31537;
 	
-	public Q019_GoToThePastureland(int questId, String name, String descr)
+	public Q019_GoToThePastureland()
 	{
-		super(questId, name, descr);
+		super(19, qn, "Go to the Pastureland!");
 		
 		questItemIds = new int[]
 		{
-			YoungWildBeastMeat
+			YOUNG_WILD_BEAST_MEAT
 		};
 		
-		addStartNpc(Vladimir);
-		addTalkId(Vladimir, Tunatun);
+		addStartNpc(VLADIMIR);
+		addTalkId(VLADIMIR, TUNATUN);
 	}
 	
 	@Override
@@ -54,16 +53,16 @@ public class Q019_GoToThePastureland extends Quest
 		{
 			st.setState(STATE_STARTED);
 			st.set("cond", "1");
-			st.giveItems(YoungWildBeastMeat, 1);
 			st.playSound(QuestState.SOUND_ACCEPT);
+			st.giveItems(YOUNG_WILD_BEAST_MEAT, 1);
 		}
 		else if (event.equalsIgnoreCase("019_finish"))
 		{
-			if (st.getQuestItemsCount(YoungWildBeastMeat) == 1)
+			if (st.hasQuestItems(YOUNG_WILD_BEAST_MEAT))
 			{
 				htmltext = "31537-01.htm";
-				st.takeItems(YoungWildBeastMeat, 1);
-				st.rewardItems(Adena, 30000);
+				st.takeItems(YOUNG_WILD_BEAST_MEAT, 1);
+				st.rewardItems(57, 30000);
 				st.playSound(QuestState.SOUND_FINISH);
 				st.exitQuest(false);
 			}
@@ -84,20 +83,17 @@ public class Q019_GoToThePastureland extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 63)
-					htmltext = "31302-00.htm";
-				else
-					htmltext = "31302-03.htm";
+				htmltext = (player.getLevel() < 63) ? "31302-03.htm" : "31302-00.htm";
 				break;
 			
 			case STATE_STARTED:
 				switch (npc.getNpcId())
 				{
-					case Vladimir:
+					case VLADIMIR:
 						htmltext = "31302-02.htm";
 						break;
 					
-					case Tunatun:
+					case TUNATUN:
 						htmltext = "31537-00.htm";
 						break;
 				}
@@ -113,6 +109,6 @@ public class Q019_GoToThePastureland extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q019_GoToThePastureland(19, qn, "Go to the Pastureland!");
+		new Q019_GoToThePastureland();
 	}
 }

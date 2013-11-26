@@ -22,7 +22,7 @@ import net.xcine.gameserver.model.quest.QuestState;
  */
 public class Q606_WarWithVarkaSilenos extends Quest
 {
-	private final static String qn = "Q606_WarWithVarkaSilenos";
+	private static final String qn = "Q606_WarWithVarkaSilenos";
 	
 	// Items
 	private static final int Horn = 7186;

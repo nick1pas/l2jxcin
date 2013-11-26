@@ -27,9 +27,9 @@ public class Q107_MercilessPunishment extends Quest
 	private static final int PARUGON = 30580;
 	
 	// Items
-	private static final int HATOSS_ORDER1 = 1553;
-	private static final int HATOSS_ORDER2 = 1554;
-	private static final int HATOSS_ORDER3 = 1555;
+	private static final int HATOS_ORDER_1 = 1553;
+	private static final int HATOS_ORDER_2 = 1554;
+	private static final int HATOS_ORDER_3 = 1555;
 	private static final int LETTER_TO_HUMAN = 1557;
 	private static final int LETTER_TO_DARKELF = 1556;
 	private static final int LETTER_TO_ELF = 1558;
@@ -45,15 +45,15 @@ public class Q107_MercilessPunishment extends Quest
 	private static final int ECHO_CELEBRATION = 4416;
 	private static final int LESSER_HEALING_POTION = 1060;
 	
-	public Q107_MercilessPunishment(int questId, String name, String descr)
+	public Q107_MercilessPunishment()
 	{
-		super(questId, name, descr);
+		super(107, qn, "Merciless Punishment");
 		
 		questItemIds = new int[]
 		{
-			HATOSS_ORDER1,
-			HATOSS_ORDER2,
-			HATOSS_ORDER3,
+			HATOS_ORDER_1,
+			HATOS_ORDER_2,
+			HATOS_ORDER_3,
 			LETTER_TO_HUMAN,
 			LETTER_TO_DARKELF,
 			LETTER_TO_ELF
@@ -75,10 +75,10 @@ public class Q107_MercilessPunishment extends Quest
 		
 		if (event.equalsIgnoreCase("30568-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
-			st.giveItems(HATOSS_ORDER1, 1);
+			st.giveItems(HATOS_ORDER_1, 1);
 		}
 		else if (event.equalsIgnoreCase("30568-06.htm"))
 		{
@@ -89,16 +89,17 @@ public class Q107_MercilessPunishment extends Quest
 		{
 			st.set("cond", "4");
 			st.playSound(QuestState.SOUND_MIDDLE);
-			st.takeItems(HATOSS_ORDER1, 1);
-			st.giveItems(HATOSS_ORDER2, 1);
+			st.takeItems(HATOS_ORDER_1, 1);
+			st.giveItems(HATOS_ORDER_2, 1);
 		}
 		else if (event.equalsIgnoreCase("30568-09.htm"))
 		{
 			st.set("cond", "6");
 			st.playSound(QuestState.SOUND_MIDDLE);
-			st.takeItems(HATOSS_ORDER2, 1);
-			st.giveItems(HATOSS_ORDER3, 1);
+			st.takeItems(HATOS_ORDER_2, 1);
+			st.giveItems(HATOS_ORDER_3, 1);
 		}
+		
 		return htmltext;
 	}
 	
@@ -114,15 +115,9 @@ public class Q107_MercilessPunishment extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.Orc)
-				{
 					htmltext = "30568-00.htm";
-					st.exitQuest(true);
-				}
 				else if (player.getLevel() < 12)
-				{
 					htmltext = "30568-01.htm";
-					st.exitQuest(true);
-				}
 				else
 					htmltext = "30568-02.htm";
 				break;
@@ -143,7 +138,7 @@ public class Q107_MercilessPunishment extends Quest
 						else if (cond == 7)
 						{
 							htmltext = "30568-10.htm";
-							st.takeItems(HATOSS_ORDER3, -1);
+							st.takeItems(HATOS_ORDER_3, -1);
 							st.takeItems(LETTER_TO_DARKELF, -1);
 							st.takeItems(LETTER_TO_HUMAN, -1);
 							st.takeItems(LETTER_TO_ELF, -1);
@@ -181,14 +176,13 @@ public class Q107_MercilessPunishment extends Quest
 						if (cond == 1)
 						{
 							st.set("cond", "2");
-							st.playSound(QuestState.SOUND_MIDDLE);
 						}
 						break;
 				}
 				break;
 			
 			case STATE_COMPLETED:
-				htmltext = Quest.getAlreadyCompletedMsg();
+				htmltext = getAlreadyCompletedMsg();
 				break;
 		}
 		
@@ -207,20 +201,20 @@ public class Q107_MercilessPunishment extends Quest
 		if (cond == 2)
 		{
 			st.set("cond", "3");
-			st.giveItems(LETTER_TO_HUMAN, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(LETTER_TO_HUMAN, 1);
 		}
 		else if (cond == 4)
 		{
 			st.set("cond", "5");
-			st.giveItems(LETTER_TO_DARKELF, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(LETTER_TO_DARKELF, 1);
 		}
 		else if (cond == 6)
 		{
 			st.set("cond", "7");
-			st.giveItems(LETTER_TO_ELF, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(LETTER_TO_ELF, 1);
 		}
 		
 		return null;
@@ -228,6 +222,6 @@ public class Q107_MercilessPunishment extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q107_MercilessPunishment(107, qn, "Merciless Punishment");
+		new Q107_MercilessPunishment();
 	}
 }

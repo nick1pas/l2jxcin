@@ -180,10 +180,7 @@ public class Q242_PossessorOfAPreciousSoul extends Quest
 				if (st.hasQuestItems(VIRGILS_LETTER))
 				{
 					if (!player.isSubClassActive() || player.getLevel() < 60)
-					{
 						htmltext = "31742-02.htm";
-						st.exitQuest(true);
-					}
 					else
 					{
 						htmltext = "31742-03.htm";

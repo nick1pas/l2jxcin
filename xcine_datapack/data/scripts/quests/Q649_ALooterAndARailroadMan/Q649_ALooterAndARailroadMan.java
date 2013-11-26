@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q649_ALooterAndARailroadMan extends Quest
 {
-	private final static String qn = "Q649_ALooterAndARailroadMan";
+	private static final String qn = "Q649_ALooterAndARailroadMan";
 	
 	// Item
 	private static final int THIEF_GUILD_MARK = 8099;

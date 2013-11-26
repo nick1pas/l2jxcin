@@ -19,33 +19,27 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q158_SeedOfEvil extends Quest
 {
-	private final static String qn = "Q158_SeedOfEvil";
+	private static final String qn = "Q158_SeedOfEvil";
 	
 	// Item
 	private static final int CLAY_TABLET = 1025;
 	
-	// NPC
-	private static final int BIOTIN = 30031;
-	
-	// Mob
-	private static final int NERKAS = 27016;
-	
 	// Reward
 	private static final int ENCHANT_ARMOR_D = 956;
 	
-	public Q158_SeedOfEvil(int questId, String name, String descr)
+	public Q158_SeedOfEvil()
 	{
-		super(questId, name, descr);
+		super(158, qn, "Seed of Evil");
 		
 		questItemIds = new int[]
 		{
 			CLAY_TABLET
 		};
 		
-		addStartNpc(BIOTIN);
-		addTalkId(BIOTIN);
+		addStartNpc(30031); // Biotin
+		addTalkId(30031);
 		
-		addKillId(NERKAS);
+		addKillId(27016); // Nerkas
 	}
 	
 	@Override
@@ -58,8 +52,8 @@ public class Q158_SeedOfEvil extends Quest
 		
 		if (event.equalsIgnoreCase("30031-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		
@@ -77,24 +71,18 @@ public class Q158_SeedOfEvil extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 21)
-					htmltext = "30031-03.htm";
-				else
-				{
-					htmltext = "30031-02.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 21) ? "30031-02.htm" : "30031-03.htm";
 				break;
 			
 			case STATE_STARTED:
-				if (st.getQuestItemsCount(CLAY_TABLET) == 0)
+				if (!st.hasQuestItems(CLAY_TABLET))
 					htmltext = "30031-05.htm";
 				else
 				{
 					htmltext = "30031-06.htm";
-					st.playSound(QuestState.SOUND_FINISH);
-					st.takeItems(CLAY_TABLET, -1);
+					st.takeItems(CLAY_TABLET, 1);
 					st.giveItems(ENCHANT_ARMOR_D, 1);
+					st.playSound(QuestState.SOUND_FINISH);
 					st.exitQuest(false);
 				}
 				break;
@@ -115,14 +103,14 @@ public class Q158_SeedOfEvil extends Quest
 			return null;
 		
 		st.set("cond", "2");
-		st.giveItems(CLAY_TABLET, 1);
 		st.playSound(QuestState.SOUND_MIDDLE);
+		st.giveItems(CLAY_TABLET, 1);
 		
 		return null;
 	}
 	
 	public static void main(String[] args)
 	{
-		new Q158_SeedOfEvil(158, qn, "Seed of Evil");
+		new Q158_SeedOfEvil();
 	}
 }

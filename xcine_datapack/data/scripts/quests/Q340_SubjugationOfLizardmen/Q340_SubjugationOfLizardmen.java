@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q340_SubjugationOfLizardmen extends Quest
 {
-	private final static String qn = "Q340_SubjugationOfLizardmen";
+	private static final String qn = "Q340_SubjugationOfLizardmen";
 	
 	// NPCs
 	private static final int WEISZ = 30385;
@@ -105,7 +105,7 @@ public class Q340_SubjugationOfLizardmen extends Quest
 	@Override
 	public String onTalk(L2Npc npc, L2PcInstance player)
 	{
-		String htmltext = Quest.getNoQuestMsg();
+		String htmltext = getNoQuestMsg();
 		QuestState st = player.getQuestState(qn);
 		if (st == null)
 			return htmltext;

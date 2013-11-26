@@ -20,10 +20,10 @@ import net.xcine.gameserver.util.Util;
 
 public class Q644_GraveRobberAnnihilation extends Quest
 {
-	private final static String qn = "Q644_GraveRobberAnnihilation";
+	private static final String qn = "Q644_GraveRobberAnnihilation";
 	
 	// Item
-	private final static int GOODS = 8088;
+	private static final int GOODS = 8088;
 	
 	// Rewards
 	private static final int[][] rewards =
@@ -55,7 +55,7 @@ public class Q644_GraveRobberAnnihilation extends Quest
 	};
 	
 	// NPC
-	private final static int KARUDA = 32017;
+	private static final int KARUDA = 32017;
 	
 	public Q644_GraveRobberAnnihilation(int questId, String name, String descr)
 	{

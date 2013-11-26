@@ -23,20 +23,20 @@ public class Q008_AnAdventureBegins extends Quest
 	private static final String qn = "Q008_AnAdventureBegins";
 	
 	// NPCs
-	private final static int JASMINE = 30134;
-	private final static int ROSELYN = 30355;
-	private final static int HARNE = 30144;
+	private static final int JASMINE = 30134;
+	private static final int ROSELYN = 30355;
+	private static final int HARNE = 30144;
 	
 	// Items
-	private final static int ROSELYN_NOTE = 7573;
+	private static final int ROSELYN_NOTE = 7573;
 	
 	// Rewards
-	private final static int SCROLL_ESCAPE = 7559;
-	private final static int MARK_TRAVELER = 7570;
+	private static final int SOE_GIRAN = 7559;
+	private static final int MARK_TRAVELER = 7570;
 	
-	public Q008_AnAdventureBegins(int questId, String name, String descr)
+	public Q008_AnAdventureBegins()
 	{
-		super(questId, name, descr);
+		super(8, qn, "An Adventure Begins");
 		
 		questItemIds = new int[]
 		{
@@ -57,26 +57,26 @@ public class Q008_AnAdventureBegins extends Quest
 		
 		if (event.equalsIgnoreCase("30134-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("30355-02.htm"))
 		{
 			st.set("cond", "2");
-			st.giveItems(ROSELYN_NOTE, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(ROSELYN_NOTE, 1);
 		}
 		else if (event.equalsIgnoreCase("30144-02.htm"))
 		{
 			st.set("cond", "3");
-			st.takeItems(ROSELYN_NOTE, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(ROSELYN_NOTE, 1);
 		}
 		else if (event.equalsIgnoreCase("30134-06.htm"))
 		{
 			st.giveItems(MARK_TRAVELER, 1);
-			st.rewardItems(SCROLL_ESCAPE, 1);
+			st.rewardItems(SOE_GIRAN, 1);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
@@ -98,10 +98,7 @@ public class Q008_AnAdventureBegins extends Quest
 				if (player.getLevel() >= 3 && player.getRace() == Race.DarkElf)
 					htmltext = "30134-02.htm";
 				else
-				{
 					htmltext = "30134-01.htm";
-					st.exitQuest(true);
-				}
 				break;
 			
 			case STATE_STARTED:
@@ -116,14 +113,14 @@ public class Q008_AnAdventureBegins extends Quest
 						break;
 					
 					case ROSELYN:
-						if (st.getQuestItemsCount(ROSELYN_NOTE) == 0)
+						if (cond == 1)
 							htmltext = "30355-01.htm";
-						else
+						else if (cond == 2)
 							htmltext = "30355-03.htm";
 						break;
 					
 					case HARNE:
-						if (cond == 2 && st.getQuestItemsCount(ROSELYN_NOTE) == 1)
+						if (cond == 2)
 							htmltext = "30144-01.htm";
 						else if (cond == 3)
 							htmltext = "30144-03.htm";
@@ -141,6 +138,6 @@ public class Q008_AnAdventureBegins extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q008_AnAdventureBegins(8, qn, "An Adventure Begins");
+		new Q008_AnAdventureBegins();
 	}
 }

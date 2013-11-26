@@ -23,7 +23,7 @@ import net.xcine.util.Rnd;
 
 public class Q235_MimirsElixir extends Quest
 {
-	private final static String qn = "Q235_MimirsElixir";
+	private static final String qn = "Q235_MimirsElixir";
 	
 	// Items
 	private static final int STAR_OF_DESTINY = 5011;
@@ -90,20 +90,20 @@ public class Q235_MimirsElixir extends Quest
 			case LADD:
 				if (event.equalsIgnoreCase("30721-06.htm"))
 				{
-					st.setState(STATE_STARTED);
 					st.set("cond", "1");
+					st.setState(STATE_STARTED);
 					st.playSound(QuestState.SOUND_ACCEPT);
 				}
-				else if (event.equalsIgnoreCase("30721-12.htm") && st.getQuestItemsCount(TRUE_GOLD) >= 1)
+				else if (event.equalsIgnoreCase("30721-12.htm") && st.hasQuestItems(TRUE_GOLD))
 				{
 					st.set("cond", "6");
 					st.playSound(QuestState.SOUND_MIDDLE);
 					st.giveItems(MAGISTER_MIXING_STONE, 1);
 				}
-				else if (event.equalsIgnoreCase("30721-16.htm") && st.getQuestItemsCount(MIMIRS_ELIXIR) >= 1)
+				else if (event.equalsIgnoreCase("30721-16.htm") && st.hasQuestItems(MIMIRS_ELIXIR))
 				{
-					st.giveItems(SCROLL_ENCHANT_WEAPON_A, 1);
 					st.takeItems(STAR_OF_DESTINY, -1);
+					st.giveItems(SCROLL_ENCHANT_WEAPON_A, 1);
 					st.playSound(QuestState.SOUND_FINISH);
 					st.exitQuest(false);
 				}
@@ -121,27 +121,27 @@ public class Q235_MimirsElixir extends Quest
 				// Urn's events ; if HTM is closed, nothing is stored. This is a "pyramidal" serie of checks.
 				if (event.equalsIgnoreCase("31149-02.htm"))
 				{
-					if (st.getQuestItemsCount(MAGISTER_MIXING_STONE) == 0)
+					if (!st.hasQuestItems(MAGISTER_MIXING_STONE))
 						htmltext = "31149-havent.htm";
 				}
 				else if (event.equalsIgnoreCase("31149-03.htm"))
 				{
-					if (st.getQuestItemsCount(MAGISTER_MIXING_STONE) == 0 || st.getQuestItemsCount(PURE_SILVER) == 0)
+					if (!st.hasQuestItems(MAGISTER_MIXING_STONE) || !st.hasQuestItems(PURE_SILVER))
 						htmltext = "31149-havent.htm";
 				}
 				else if (event.equalsIgnoreCase("31149-05.htm"))
 				{
-					if (st.getQuestItemsCount(MAGISTER_MIXING_STONE) == 0 || st.getQuestItemsCount(PURE_SILVER) == 0 || st.getQuestItemsCount(TRUE_GOLD) == 0)
+					if (!st.hasQuestItems(MAGISTER_MIXING_STONE) || !st.hasQuestItems(PURE_SILVER) || !st.hasQuestItems(TRUE_GOLD))
 						htmltext = "31149-havent.htm";
 				}
 				else if (event.equalsIgnoreCase("31149-07.htm"))
 				{
-					if (st.getQuestItemsCount(MAGISTER_MIXING_STONE) == 0 || st.getQuestItemsCount(PURE_SILVER) == 0 || st.getQuestItemsCount(TRUE_GOLD) == 0 || st.getQuestItemsCount(BLOOD_FIRE) == 0)
+					if (!st.hasQuestItems(MAGISTER_MIXING_STONE) || !st.hasQuestItems(PURE_SILVER) || !st.hasQuestItems(TRUE_GOLD) || !st.hasQuestItems(BLOOD_FIRE))
 						htmltext = "31149-havent.htm";
 				}
 				else if (event.equalsIgnoreCase("31149-success.htm"))
 				{
-					if (st.getQuestItemsCount(MAGISTER_MIXING_STONE) == 0 || st.getQuestItemsCount(PURE_SILVER) == 0 || st.getQuestItemsCount(TRUE_GOLD) == 0 || st.getQuestItemsCount(BLOOD_FIRE) == 0)
+					if (!st.hasQuestItems(MAGISTER_MIXING_STONE) || !st.hasQuestItems(PURE_SILVER) || !st.hasQuestItems(TRUE_GOLD) || !st.hasQuestItems(BLOOD_FIRE))
 						htmltext = "31149-havent.htm";
 					// If all quest items are still in inventory, destroy them and reward player with elixir.
 					else
@@ -173,15 +173,9 @@ public class Q235_MimirsElixir extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getLevel() < 75)
-				{
 					htmltext = "30721-01b.htm";
-					st.exitQuest(true);
-				}
-				else if (st.getQuestItemsCount(STAR_OF_DESTINY) == 0)
-				{
+				else if (!st.hasQuestItems(STAR_OF_DESTINY))
 					htmltext = "30721-01a.htm";
-					st.exitQuest(true);
-				}
 				else
 					htmltext = "30721-01.htm";
 				break;
@@ -193,7 +187,7 @@ public class Q235_MimirsElixir extends Quest
 					case LADD:
 						if (cond == 1)
 						{
-							if (st.getQuestItemsCount(PURE_SILVER) >= 1)
+							if (st.hasQuestItems(PURE_SILVER))
 							{
 								st.set("cond", "2");
 								htmltext = "30721-08.htm";
@@ -204,11 +198,11 @@ public class Q235_MimirsElixir extends Quest
 						}
 						else if (cond > 1 && cond < 5)
 							htmltext = "30721-10.htm";
-						else if (cond == 5 && st.getQuestItemsCount(TRUE_GOLD) >= 1)
+						else if (cond == 5 && st.hasQuestItems(TRUE_GOLD))
 							htmltext = "30721-11.htm";
 						else if (cond == 6 || cond == 7)
 							htmltext = "30721-13.htm";
-						else if (cond == 8 && st.getQuestItemsCount(MIMIRS_ELIXIR) >= 1)
+						else if (cond == 8 && st.hasQuestItems(MIMIRS_ELIXIR))
 							htmltext = "30721-14.htm";
 						break;
 					
@@ -217,13 +211,13 @@ public class Q235_MimirsElixir extends Quest
 							htmltext = "30718-01.htm";
 						else if (cond == 3)
 							htmltext = "30718-04.htm";
-						else if (cond == 4 && st.getQuestItemsCount(SAGES_STONE) >= 1)
+						else if (cond == 4 && st.hasQuestItems(SAGES_STONE))
 						{
 							htmltext = "30718-05.htm";
-							st.takeItems(SAGES_STONE, -1);
-							st.giveItems(TRUE_GOLD, 1);
 							st.set("cond", "5");
 							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(SAGES_STONE, -1);
+							st.giveItems(TRUE_GOLD, 1);
 						}
 						else if (cond >= 5)
 							htmltext = "30718-06.htm";
@@ -261,11 +255,12 @@ public class Q235_MimirsElixir extends Quest
 				if (!st.hasQuestItems(item))
 				{
 					st.giveItems(item, 1);
-					st.playSound(QuestState.SOUND_ITEMGET);
 					st.set("cond", String.valueOf(cond + 1));
+					st.playSound(QuestState.SOUND_MIDDLE);
 				}
 			}
 		}
+		
 		return null;
 	}
 	

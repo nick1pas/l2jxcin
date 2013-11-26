@@ -22,7 +22,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q627_HeartInSearchOfPower extends Quest
 {
-	private final static String qn = "Q627_HeartInSearchOfPower";
+	private static final String qn = "Q627_HeartInSearchOfPower";
 	
 	// NPCs
 	private static final int NECROMANCER = 31518;

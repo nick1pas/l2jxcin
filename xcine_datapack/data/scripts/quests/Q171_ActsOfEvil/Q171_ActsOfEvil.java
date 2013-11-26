@@ -23,28 +23,28 @@ public class Q171_ActsOfEvil extends Quest
 	private static final String qn = "Q171_ActsOfEvil";
 	
 	// Items
-	private final static int BLADE_MOLD = 4239;
-	private final static int TYRAS_BILL = 4240;
-	private final static int RANGERS_REPORT1 = 4241;
-	private final static int RANGERS_REPORT2 = 4242;
-	private final static int RANGERS_REPORT3 = 4243;
-	private final static int RANGERS_REPORT4 = 4244;
-	private final static int WEAPON_TRADE_CONTRACT = 4245;
-	private final static int ATTACK_DIRECTIVES = 4246;
-	private final static int CERTIFICATE = 4247;
-	private final static int CARGOBOX = 4248;
-	private final static int OL_MAHUM_HEAD = 4249;
+	private static final int BLADE_MOLD = 4239;
+	private static final int TYRAS_BILL = 4240;
+	private static final int RANGERS_REPORT1 = 4241;
+	private static final int RANGERS_REPORT2 = 4242;
+	private static final int RANGERS_REPORT3 = 4243;
+	private static final int RANGERS_REPORT4 = 4244;
+	private static final int WEAPON_TRADE_CONTRACT = 4245;
+	private static final int ATTACK_DIRECTIVES = 4246;
+	private static final int CERTIFICATE = 4247;
+	private static final int CARGOBOX = 4248;
+	private static final int OL_MAHUM_HEAD = 4249;
 	
 	// Reward
-	private final static int ADENA = 57;
+	private static final int ADENA = 57;
 	
 	// NPCs
-	private final static int ALVAH = 30381;
-	private final static int ARODIN = 30207;
-	private final static int TYRA = 30420;
-	private final static int ROLENTO = 30437;
-	private final static int NETI = 30425;
-	private final static int BURAI = 30617;
+	private static final int ALVAH = 30381;
+	private static final int ARODIN = 30207;
+	private static final int TYRA = 30420;
+	private static final int ROLENTO = 30437;
+	private static final int NETI = 30425;
+	private static final int BURAI = 30617;
 	
 	public Q171_ActsOfEvil(int questId, String name, String descr)
 	{
@@ -78,35 +78,42 @@ public class Q171_ActsOfEvil extends Quest
 		if (st == null)
 			return htmltext;
 		
-		int cond = st.getInt("cond");
 		if (event.equalsIgnoreCase("30381-02.htm"))
 		{
 			st.setState(STATE_STARTED);
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
-		else if (event.equalsIgnoreCase("30207-02.htm") && cond == 1)
+		else if (event.equalsIgnoreCase("30207-02.htm"))
+		{
 			st.set("cond", "2");
-		else if (event.equalsIgnoreCase("30381-04.htm") && cond == 4)
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("30381-04.htm"))
+		{
 			st.set("cond", "5");
-		else if (event.equalsIgnoreCase("30381-07.htm") && cond == 6)
+			st.playSound(QuestState.SOUND_MIDDLE);
+		}
+		else if (event.equalsIgnoreCase("30381-07.htm"))
 		{
 			st.set("cond", "7");
 			st.takeItems(WEAPON_TRADE_CONTRACT, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
 		}
-		else if (event.equalsIgnoreCase("30437-03.htm") && cond == 8)
+		else if (event.equalsIgnoreCase("30437-03.htm"))
 		{
 			st.giveItems(CARGOBOX, 1);
 			st.giveItems(CERTIFICATE, 1);
 			st.set("cond", "9");
+			st.playSound(QuestState.SOUND_MIDDLE);
 		}
-		else if (event.equalsIgnoreCase("30617-04.htm") && cond == 9)
+		else if (event.equalsIgnoreCase("30617-04.htm"))
 		{
 			st.takeItems(CERTIFICATE, 1);
 			st.takeItems(ATTACK_DIRECTIVES, 1);
 			st.takeItems(CARGOBOX, 1);
 			st.set("cond", "10");
+			st.playSound(QuestState.SOUND_MIDDLE);
 		}
 		
 		return htmltext;
@@ -123,13 +130,7 @@ public class Q171_ActsOfEvil extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 27)
-					htmltext = "30381-01.htm";
-				else
-				{
-					htmltext = "30381-01a.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 27) ? "30381-01a.htm" : "30381-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -143,7 +144,7 @@ public class Q171_ActsOfEvil extends Quest
 							htmltext = "30381-03.htm";
 						else if (cond == 5)
 						{
-							if (st.getQuestItemsCount(RANGERS_REPORT1) == 1 && st.getQuestItemsCount(RANGERS_REPORT2) == 1 && st.getQuestItemsCount(RANGERS_REPORT3) == 1 && st.getQuestItemsCount(RANGERS_REPORT4) == 1)
+							if (st.hasQuestItems(RANGERS_REPORT1) && st.hasQuestItems(RANGERS_REPORT2) && st.hasQuestItems(RANGERS_REPORT3) && st.hasQuestItems(RANGERS_REPORT4))
 							{
 								htmltext = "30381-05.htm";
 								st.takeItems(RANGERS_REPORT1, 1);
@@ -151,13 +152,14 @@ public class Q171_ActsOfEvil extends Quest
 								st.takeItems(RANGERS_REPORT3, 1);
 								st.takeItems(RANGERS_REPORT4, 1);
 								st.set("cond", "6");
+								st.playSound(QuestState.SOUND_MIDDLE);
 							}
 							else
 								htmltext = "30381-04a.htm";
 						}
 						else if (cond == 6)
 						{
-							if (st.getQuestItemsCount(WEAPON_TRADE_CONTRACT) == 1 && st.getQuestItemsCount(ATTACK_DIRECTIVES) == 1)
+							if (st.hasQuestItems(WEAPON_TRADE_CONTRACT) && st.hasQuestItems(ATTACK_DIRECTIVES))
 								htmltext = "30381-06.htm";
 							else
 								htmltext = "30381-05a.htm";
@@ -180,11 +182,12 @@ public class Q171_ActsOfEvil extends Quest
 							htmltext = "30207-01a.htm";
 						else if (cond == 3)
 						{
-							if (st.getQuestItemsCount(TYRAS_BILL) == 1)
+							if (st.hasQuestItems(TYRAS_BILL))
 							{
 								st.takeItems(TYRAS_BILL, 1);
 								htmltext = "30207-03.htm";
 								st.set("cond", "4");
+								st.playSound(QuestState.SOUND_MIDDLE);
 							}
 							else
 								htmltext = "30207-01a.htm";
@@ -202,6 +205,7 @@ public class Q171_ActsOfEvil extends Quest
 								st.giveItems(TYRAS_BILL, 1);
 								htmltext = "30420-01.htm";
 								st.set("cond", "3");
+								st.playSound(QuestState.SOUND_MIDDLE);
 							}
 							else
 								htmltext = "30420-01b.htm";
@@ -217,6 +221,7 @@ public class Q171_ActsOfEvil extends Quest
 						{
 							htmltext = "30425-01.htm";
 							st.set("cond", "8");
+							st.playSound(QuestState.SOUND_MIDDLE);
 						}
 						else if (cond >= 8)
 							htmltext = "30425-02.htm";
@@ -230,7 +235,7 @@ public class Q171_ActsOfEvil extends Quest
 						break;
 					
 					case BURAI:
-						if (cond == 9 && st.getQuestItemsCount(CERTIFICATE) == 1 && st.getQuestItemsCount(CARGOBOX) == 1 && st.getQuestItemsCount(ATTACK_DIRECTIVES) == 1)
+						if (cond == 9 && st.hasQuestItems(CERTIFICATE) && st.hasQuestItems(CARGOBOX) && st.hasQuestItems(ATTACK_DIRECTIVES))
 							htmltext = "30617-01.htm";
 						else if (cond == 10)
 						{
@@ -240,7 +245,7 @@ public class Q171_ActsOfEvil extends Quest
 								st.giveItems(ADENA, 8000);
 								st.takeItems(OL_MAHUM_HEAD, -1);
 								st.set("cond", "11");
-								st.playSound(QuestState.SOUND_ITEMGET);
+								st.playSound(QuestState.SOUND_MIDDLE);
 							}
 							else
 								htmltext = "30617-04a.htm";

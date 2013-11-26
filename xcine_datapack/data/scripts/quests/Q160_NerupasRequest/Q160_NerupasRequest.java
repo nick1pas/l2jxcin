@@ -20,12 +20,12 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q160_NerupasRequest extends Quest
 {
-	private final static String qn = "Q160_NerupasRequest";
+	private static final String qn = "Q160_NerupasRequest";
 	
 	// Items
 	private static final int SILVERY_SPIDERSILK = 1026;
-	private static final int UNOS_RECEIPT = 1027;
-	private static final int CELS_TICKET = 1028;
+	private static final int UNOREN_RECEIPT = 1027;
+	private static final int CREAMEES_TICKET = 1028;
 	private static final int NIGHTSHADE_LEAF = 1029;
 	
 	// Reward
@@ -37,15 +37,15 @@ public class Q160_NerupasRequest extends Quest
 	private static final int CREAMEES = 30149;
 	private static final int JULIA = 30152;
 	
-	public Q160_NerupasRequest(int questId, String name, String descr)
+	public Q160_NerupasRequest()
 	{
-		super(questId, name, descr);
+		super(160, qn, "Nerupa's Request");
 		
 		questItemIds = new int[]
 		{
 			SILVERY_SPIDERSILK,
-			UNOS_RECEIPT,
-			CELS_TICKET,
+			UNOREN_RECEIPT,
+			CREAMEES_TICKET,
 			NIGHTSHADE_LEAF
 		};
 		
@@ -63,8 +63,8 @@ public class Q160_NerupasRequest extends Quest
 		
 		if (event.equalsIgnoreCase("30370-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(SILVERY_SPIDERSILK, 1);
 		}
@@ -83,21 +83,12 @@ public class Q160_NerupasRequest extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() == Race.Elf)
-				{
-					if (player.getLevel() >= 3)
-						htmltext = "30370-03.htm";
-					else
-					{
-						htmltext = "30370-02.htm";
-						st.exitQuest(true);
-					}
-				}
-				else
-				{
+				if (player.getRace() != Race.Elf)
 					htmltext = "30370-00.htm";
-					st.exitQuest(true);
-				}
+				else if (player.getLevel() < 3)
+					htmltext = "30370-02.htm";
+				else
+					htmltext = "30370-03.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -105,30 +96,27 @@ public class Q160_NerupasRequest extends Quest
 				switch (npc.getNpcId())
 				{
 					case NERUPA:
-						if (cond >= 1 && cond <= 3)
+						if (cond < 4)
 							htmltext = "30370-05.htm";
 						else if (cond == 4)
 						{
-							if (st.getQuestItemsCount(NIGHTSHADE_LEAF) == 1)
-							{
-								htmltext = "30370-06.htm";
-								st.playSound(QuestState.SOUND_FINISH);
-								st.takeItems(NIGHTSHADE_LEAF, 1);
-								st.rewardItems(LESSER_HEALING_POTION, 5);
-								st.rewardExpAndSp(1000, 0);
-								st.exitQuest(false);
-							}
+							htmltext = "30370-06.htm";
+							st.takeItems(NIGHTSHADE_LEAF, 1);
+							st.rewardItems(LESSER_HEALING_POTION, 5);
+							st.rewardExpAndSp(1000, 0);
+							st.playSound(QuestState.SOUND_FINISH);
+							st.exitQuest(false);
 						}
 						break;
 					
 					case UNOREN:
 						if (cond == 1)
 						{
-							st.set("cond", "2");
 							htmltext = "30147-01.htm";
+							st.set("cond", "2");
 							st.playSound(QuestState.SOUND_MIDDLE);
 							st.takeItems(SILVERY_SPIDERSILK, 1);
-							st.giveItems(UNOS_RECEIPT, 1);
+							st.giveItems(UNOREN_RECEIPT, 1);
 						}
 						else if (cond == 2)
 							htmltext = "30147-02.htm";
@@ -139,11 +127,11 @@ public class Q160_NerupasRequest extends Quest
 					case CREAMEES:
 						if (cond == 2)
 						{
-							st.set("cond", "3");
 							htmltext = "30149-01.htm";
-							st.takeItems(UNOS_RECEIPT, 1);
-							st.giveItems(CELS_TICKET, 1);
+							st.set("cond", "3");
 							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(UNOREN_RECEIPT, 1);
+							st.giveItems(CREAMEES_TICKET, 1);
 						}
 						else if (cond == 3)
 							htmltext = "30149-02.htm";
@@ -154,11 +142,11 @@ public class Q160_NerupasRequest extends Quest
 					case JULIA:
 						if (cond == 3)
 						{
-							st.set("cond", "4");
 							htmltext = "30152-01.htm";
-							st.takeItems(CELS_TICKET, -1);
-							st.giveItems(NIGHTSHADE_LEAF, 1);
+							st.set("cond", "4");
 							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(CREAMEES_TICKET, 1);
+							st.giveItems(NIGHTSHADE_LEAF, 1);
 						}
 						else if (cond == 4)
 							htmltext = "30152-02.htm";
@@ -176,6 +164,6 @@ public class Q160_NerupasRequest extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q160_NerupasRequest(160, qn, "Nerupa's Request");
+		new Q160_NerupasRequest();
 	}
 }

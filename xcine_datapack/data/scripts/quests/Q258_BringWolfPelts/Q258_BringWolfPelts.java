@@ -20,7 +20,7 @@ import net.xcine.util.Rnd;
 
 public class Q258_BringWolfPelts extends Quest
 {
-	private final static String qn = "Q258_BringWolfPelts";
+	private static final String qn = "Q258_BringWolfPelts";
 	
 	// NPC
 	private static final int LECTOR = 30001;
@@ -83,13 +83,7 @@ public class Q258_BringWolfPelts extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 3)
-					htmltext = "30001-02.htm";
-				else
-				{
-					htmltext = "30001-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 3) ? "30001-01.htm" : "30001-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -97,7 +91,7 @@ public class Q258_BringWolfPelts extends Quest
 					htmltext = "30001-05.htm";
 				else
 				{
-					st.takeItems(WOLF_PELT, 40);
+					st.takeItems(WOLF_PELT, -1);
 					int randomNumber = Rnd.get(16);
 					
 					// Reward is based on a random number (1D16).

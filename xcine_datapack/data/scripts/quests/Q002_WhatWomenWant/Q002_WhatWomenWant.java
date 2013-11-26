@@ -23,31 +23,30 @@ public class Q002_WhatWomenWant extends Quest
 	private static final String qn = "Q002_WhatWomenWant";
 	
 	// NPCs
-	private final static int ARUJIEN = 30223;
-	private final static int MIRABEL = 30146;
-	private final static int HERBIEL = 30150;
-	private final static int GREENIS = 30157;
+	private static final int ARUJIEN = 30223;
+	private static final int MIRABEL = 30146;
+	private static final int HERBIEL = 30150;
+	private static final int GREENIS = 30157;
 	
 	// Items
-	private final static int ARUJIENS_LETTER1 = 1092;
-	private final static int ARUJIENS_LETTER2 = 1093;
-	private final static int ARUJIENS_LETTER3 = 1094;
-	private final static int POETRY_BOOK = 689;
-	private final static int GREENIS_LETTER = 693;
+	private static final int ARUJIEN_LETTER_1 = 1092;
+	private static final int ARUJIEN_LETTER_2 = 1093;
+	private static final int ARUJIEN_LETTER_3 = 1094;
+	private static final int POETRY_BOOK = 689;
+	private static final int GREENIS_LETTER = 693;
 	
 	// Rewards
-	private final static int ADENA = 57;
-	private final static int MYSTICS_EARRING = 113;
+	private static final int MYSTICS_EARRING = 113;
 	
-	public Q002_WhatWomenWant(int questId, String name, String descr)
+	public Q002_WhatWomenWant()
 	{
-		super(questId, name, descr);
+		super(2, qn, "What Women Want");
 		
 		questItemIds = new int[]
 		{
-			ARUJIENS_LETTER1,
-			ARUJIENS_LETTER2,
-			ARUJIENS_LETTER3,
+			ARUJIEN_LETTER_1,
+			ARUJIEN_LETTER_2,
+			ARUJIEN_LETTER_3,
 			POETRY_BOOK,
 			GREENIS_LETTER
 		};
@@ -66,24 +65,24 @@ public class Q002_WhatWomenWant extends Quest
 		
 		if (event.equalsIgnoreCase("30223-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
-			st.giveItems(ARUJIENS_LETTER1, 1);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
+			st.giveItems(ARUJIEN_LETTER_1, 1);
 		}
 		else if (event.equalsIgnoreCase("30223-08.htm"))
 		{
-			st.takeItems(ARUJIENS_LETTER3, -1);
-			st.giveItems(POETRY_BOOK, 1);
 			st.set("cond", "4");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(ARUJIEN_LETTER_3, 1);
+			st.giveItems(POETRY_BOOK, 1);
 		}
 		else if (event.equalsIgnoreCase("30223-09.htm"))
 		{
-			st.takeItems(ARUJIENS_LETTER3, -1);
-			st.rewardItems(ADENA, 450);
-			st.exitQuest(false);
+			st.takeItems(ARUJIEN_LETTER_3, 1);
+			st.rewardItems(57, 450);
 			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(false);
 		}
 		
 		return htmltext;
@@ -101,17 +100,11 @@ public class Q002_WhatWomenWant extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.Elf && player.getRace() != Race.Human)
-				{
 					htmltext = "30223-00.htm";
-					st.exitQuest(true);
-				}
-				else if (player.getLevel() >= 2)
-					htmltext = "30223-02.htm";
-				else
-				{
+				else if (player.getLevel() < 2)
 					htmltext = "30223-01.htm";
-					st.exitQuest(true);
-				}
+				else
+					htmltext = "30223-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -119,69 +112,63 @@ public class Q002_WhatWomenWant extends Quest
 				switch (npc.getNpcId())
 				{
 					case ARUJIEN:
-						if (st.getQuestItemsCount(ARUJIENS_LETTER1) > 0)
+						if (st.hasQuestItems(ARUJIEN_LETTER_1))
 							htmltext = "30223-05.htm";
-						else if (st.getQuestItemsCount(ARUJIENS_LETTER3) > 0)
+						else if (st.hasQuestItems(ARUJIEN_LETTER_3))
 							htmltext = "30223-07.htm";
-						else if (st.getQuestItemsCount(ARUJIENS_LETTER2) > 0)
+						else if (st.hasQuestItems(ARUJIEN_LETTER_2))
 							htmltext = "30223-06.htm";
-						else if (st.getQuestItemsCount(POETRY_BOOK) > 0)
+						else if (st.hasQuestItems(POETRY_BOOK))
 							htmltext = "30223-11.htm";
-						else if (st.getQuestItemsCount(GREENIS_LETTER) > 0)
+						else if (st.hasQuestItems(GREENIS_LETTER))
 						{
 							htmltext = "30223-10.htm";
 							st.takeItems(GREENIS_LETTER, 1);
 							st.giveItems(MYSTICS_EARRING, 1);
-							st.exitQuest(false);
 							st.playSound(QuestState.SOUND_FINISH);
+							st.exitQuest(false);
 						}
 						break;
 					
 					case MIRABEL:
 						if (cond == 1)
 						{
-							if (st.getQuestItemsCount(ARUJIENS_LETTER1) > 0)
-							{
-								htmltext = "30146-01.htm";
-								st.takeItems(ARUJIENS_LETTER1, 1);
-								st.giveItems(ARUJIENS_LETTER2, 1);
-								st.set("cond", "2");
-								st.playSound(QuestState.SOUND_MIDDLE);
-							}
+							htmltext = "30146-01.htm";
+							st.set("cond", "2");
+							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(ARUJIEN_LETTER_1, 1);
+							st.giveItems(ARUJIEN_LETTER_2, 1);
 						}
-						else if (st.getQuestItemsCount(ARUJIENS_LETTER2) > 0 || st.getQuestItemsCount(ARUJIENS_LETTER3) > 0 || st.getQuestItemsCount(POETRY_BOOK) > 0 || st.getQuestItemsCount(GREENIS_LETTER) > 0)
+						else if (cond > 1)
 							htmltext = "30146-02.htm";
 						break;
 					
 					case HERBIEL:
-						if (cond == 2 && st.getQuestItemsCount(ARUJIENS_LETTER1) == 0)
+						if (cond == 2)
 						{
-							if (st.getQuestItemsCount(ARUJIENS_LETTER2) > 0)
-							{
-								htmltext = "30150-01.htm";
-								st.takeItems(ARUJIENS_LETTER2, 1);
-								st.giveItems(ARUJIENS_LETTER3, 1);
-								st.set("cond", "3");
-								st.playSound(QuestState.SOUND_MIDDLE);
-							}
+							htmltext = "30150-01.htm";
+							st.set("cond", "3");
+							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(ARUJIEN_LETTER_2, 1);
+							st.giveItems(ARUJIEN_LETTER_3, 1);
 						}
-						else if (st.getQuestItemsCount(ARUJIENS_LETTER3) > 0 || st.getQuestItemsCount(POETRY_BOOK) > 0 || st.getQuestItemsCount(GREENIS_LETTER) > 0)
+						else if (cond > 2)
 							htmltext = "30150-02.htm";
 						break;
 					
 					case GREENIS:
-						if (st.getQuestItemsCount(POETRY_BOOK) > 0 && cond == 4)
+						if (cond > 0 && cond < 4)
+							htmltext = "30157-01.htm";
+						else if (cond == 4)
 						{
 							htmltext = "30157-02.htm";
-							st.takeItems(POETRY_BOOK, -1);
-							st.giveItems(GREENIS_LETTER, 1);
 							st.set("cond", "5");
 							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(POETRY_BOOK, 1);
+							st.giveItems(GREENIS_LETTER, 1);
 						}
-						else if (st.getQuestItemsCount(GREENIS_LETTER) > 0)
+						else if (cond == 5)
 							htmltext = "30157-03.htm";
-						else if (st.getQuestItemsCount(ARUJIENS_LETTER1) > 0 || st.getQuestItemsCount(ARUJIENS_LETTER2) > 0 || st.getQuestItemsCount(ARUJIENS_LETTER3) > 0)
-							htmltext = "30157-01.htm";
 						break;
 				}
 				break;
@@ -196,6 +183,6 @@ public class Q002_WhatWomenWant extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q002_WhatWomenWant(2, qn, "What Women Want");
+		new Q002_WhatWomenWant();
 	}
 }

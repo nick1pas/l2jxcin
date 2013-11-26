@@ -22,25 +22,25 @@ public class Q027_ChestCaughtWithABaitOfWind extends Quest
 	private static final String qn = "Q027_ChestCaughtWithABaitOfWind";
 	
 	// NPCs
-	private final static int Lanosco = 31570;
-	private final static int Shaling = 31442;
+	private static final int LANOSCO = 31570;
+	private static final int SHALING = 31442;
 	
 	// Items
-	private final static int LargeBlueTreasureChest = 6500;
-	private final static int StrangeBlueprint = 7625;
-	private final static int BlackPearlRing = 880;
+	private static final int LARGE_BLUE_TREASURE_CHEST = 6500;
+	private static final int STRANGE_BLUEPRINT = 7625;
+	private static final int BLACK_PEARL_RING = 880;
 	
-	public Q027_ChestCaughtWithABaitOfWind(int questId, String name, String descr)
+	public Q027_ChestCaughtWithABaitOfWind()
 	{
-		super(questId, name, descr);
+		super(27, qn, "Chest caught with a bait of wind");
 		
 		questItemIds = new int[]
 		{
-			StrangeBlueprint
+			STRANGE_BLUEPRINT
 		};
 		
-		addStartNpc(Lanosco);
-		addTalkId(Lanosco, Shaling);
+		addStartNpc(LANOSCO);
+		addTalkId(LANOSCO, SHALING);
 	}
 	
 	@Override
@@ -53,33 +53,33 @@ public class Q027_ChestCaughtWithABaitOfWind extends Quest
 		
 		if (event.equalsIgnoreCase("31570-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("31570-07.htm"))
 		{
-			if (st.getQuestItemsCount(LargeBlueTreasureChest) == 1)
+			if (st.hasQuestItems(LARGE_BLUE_TREASURE_CHEST))
 			{
 				st.set("cond", "2");
-				st.takeItems(LargeBlueTreasureChest, 1);
-				st.giveItems(StrangeBlueprint, 1);
+				st.takeItems(LARGE_BLUE_TREASURE_CHEST, 1);
+				st.giveItems(STRANGE_BLUEPRINT, 1);
 			}
 			else
 				htmltext = "31570-08.htm";
 		}
 		else if (event.equalsIgnoreCase("31434-02.htm"))
 		{
-			if (st.getQuestItemsCount(StrangeBlueprint) == 1)
+			if (st.hasQuestItems(STRANGE_BLUEPRINT))
 			{
 				htmltext = "31434-02.htm";
-				st.takeItems(StrangeBlueprint, 1);
-				st.giveItems(BlackPearlRing, 1);
+				st.takeItems(STRANGE_BLUEPRINT, 1);
+				st.giveItems(BLACK_PEARL_RING, 1);
 				st.playSound(QuestState.SOUND_FINISH);
 				st.exitQuest(false);
 			}
 			else
-				htmltext = ("31434-03.htm");
+				htmltext = "31434-03.htm";
 		}
 		
 		return htmltext;
@@ -97,20 +97,14 @@ public class Q027_ChestCaughtWithABaitOfWind extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getLevel() < 27)
-				{
 					htmltext = "31570-02.htm";
-					st.exitQuest(true);
-				}
 				else
 				{
 					QuestState st2 = player.getQuestState("Q050_LanoscosSpecialBait");
 					if (st2 != null && st2.isCompleted())
 						htmltext = "31570-01.htm";
 					else
-					{
 						htmltext = "31570-03.htm";
-						st.exitQuest(true);
-					}
 				}
 				break;
 			
@@ -118,20 +112,16 @@ public class Q027_ChestCaughtWithABaitOfWind extends Quest
 				int cond = st.getInt("cond");
 				switch (npc.getNpcId())
 				{
-					case Lanosco:
+					case LANOSCO:
 						if (cond == 1)
-						{
-							htmltext = ("31570-05.htm");
-							if (st.getQuestItemsCount(LargeBlueTreasureChest) == 0)
-								htmltext = ("31570-06.htm");
-						}
+							htmltext = (!st.hasQuestItems(LARGE_BLUE_TREASURE_CHEST)) ? "31570-06.htm" : "31570-05.htm";
 						else if (cond == 2)
-							htmltext = ("31570-09.htm");
+							htmltext = "31570-09.htm";
 						break;
 					
-					case Shaling:
+					case SHALING:
 						if (cond == 2)
-							htmltext = ("31434-01.htm");
+							htmltext = "31434-01.htm";
 						break;
 				}
 				break;
@@ -146,6 +136,6 @@ public class Q027_ChestCaughtWithABaitOfWind extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q027_ChestCaughtWithABaitOfWind(27, qn, "Chest caught with a bait of wind");
+		new Q027_ChestCaughtWithABaitOfWind();
 	}
 }

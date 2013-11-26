@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q154_SacrificeToTheSea extends Quest
 {
-	private final static String qn = "Q154_SacrificeToTheSea";
+	private static final String qn = "Q154_SacrificeToTheSea";
 	
 	// NPCs
 	private static final int ROCKSWELL = 30312;
@@ -34,9 +34,9 @@ public class Q154_SacrificeToTheSea extends Quest
 	// Reward
 	private static final int EARING = 113;
 	
-	public Q154_SacrificeToTheSea(int questId, String name, String descr)
+	public Q154_SacrificeToTheSea()
 	{
-		super(questId, name, descr);
+		super(154, qn, "Sacrifice to the Sea");
 		
 		questItemIds = new int[]
 		{
@@ -48,8 +48,7 @@ public class Q154_SacrificeToTheSea extends Quest
 		addStartNpc(ROCKSWELL);
 		addTalkId(ROCKSWELL, CRISTEL, ROLFE);
 		
-		// Following Keltirs can be found near Talking Island.
-		addKillId(20481, 20544, 20545);
+		addKillId(20481, 20544, 20545); // Following Keltirs can be found near Talking Island.
 	}
 	
 	@Override
@@ -62,10 +61,11 @@ public class Q154_SacrificeToTheSea extends Quest
 		
 		if (event.equalsIgnoreCase("30312-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
+		
 		return htmltext;
 	}
 	
@@ -80,13 +80,7 @@ public class Q154_SacrificeToTheSea extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 2)
-					htmltext = "30312-03.htm";
-				else
-				{
-					htmltext = "30312-02.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 2) ? "30312-02.htm" : "30312-03.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -96,15 +90,15 @@ public class Q154_SacrificeToTheSea extends Quest
 					case ROCKSWELL:
 						if (cond == 1)
 							htmltext = "30312-05.htm";
-						else if (cond == 2 && st.getQuestItemsCount(FOX_FUR) >= 10)
+						else if (cond == 2)
 							htmltext = "30312-08.htm";
-						else if (cond == 3 && st.getQuestItemsCount(FOX_FUR_YARN) >= 1)
+						else if (cond == 3)
 							htmltext = "30312-06.htm";
-						else if (cond == 4 && st.getQuestItemsCount(MAIDEN_DOLL) >= 1)
+						else if (cond == 4)
 						{
 							htmltext = "30312-07.htm";
-							st.giveItems(EARING, 1);
 							st.takeItems(MAIDEN_DOLL, -1);
+							st.giveItems(EARING, 1);
 							st.rewardExpAndSp(100, 0);
 							st.playSound(QuestState.SOUND_FINISH);
 							st.exitQuest(false);
@@ -113,39 +107,34 @@ public class Q154_SacrificeToTheSea extends Quest
 					
 					case CRISTEL:
 						if (cond == 1)
-						{
-							if (st.getQuestItemsCount(FOX_FUR) > 0)
-								htmltext = "30051-01.htm";
-							else
-								htmltext = "30051-01a.htm";
-						}
-						else if (cond == 2 && st.getQuestItemsCount(FOX_FUR) >= 10)
+							htmltext = (st.hasQuestItems(FOX_FUR)) ? "30051-01.htm" : "30051-01a.htm";
+						else if (cond == 2)
 						{
 							htmltext = "30051-02.htm";
-							st.giveItems(FOX_FUR_YARN, 1);
-							st.takeItems(FOX_FUR, -1);
 							st.set("cond", "3");
 							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(FOX_FUR, -1);
+							st.giveItems(FOX_FUR_YARN, 1);
 						}
-						else if (cond == 3 && st.getQuestItemsCount(FOX_FUR_YARN) >= 1)
+						else if (cond == 3)
 							htmltext = "30051-03.htm";
-						else if (cond == 4 && st.getQuestItemsCount(MAIDEN_DOLL) >= 1)
+						else if (cond == 4)
 							htmltext = "30051-04.htm";
 						break;
 					
 					case ROLFE:
-						if (cond == 3 && st.getQuestItemsCount(FOX_FUR_YARN) >= 1)
+						if (cond < 3)
+							htmltext = "30055-03.htm";
+						else if (cond == 3)
 						{
 							htmltext = "30055-01.htm";
-							st.giveItems(MAIDEN_DOLL, 1);
-							st.takeItems(FOX_FUR_YARN, -1);
 							st.set("cond", "4");
 							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(FOX_FUR_YARN, 1);
+							st.giveItems(MAIDEN_DOLL, 1);
 						}
-						else if (cond == 4 && st.getQuestItemsCount(MAIDEN_DOLL) >= 1)
+						else if (cond == 4)
 							htmltext = "30055-02.htm";
-						else if (cond >= 1 && cond <= 2)
-							htmltext = "30055-03.htm";
 						break;
 				}
 				break;
@@ -173,6 +162,6 @@ public class Q154_SacrificeToTheSea extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q154_SacrificeToTheSea(154, qn, "Sacrifice to the Sea");
+		new Q154_SacrificeToTheSea();
 	}
 }

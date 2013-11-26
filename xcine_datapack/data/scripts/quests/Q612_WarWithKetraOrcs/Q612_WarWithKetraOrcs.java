@@ -22,7 +22,7 @@ import net.xcine.gameserver.model.quest.QuestState;
  */
 public class Q612_WarWithKetraOrcs extends Quest
 {
-	private final static String qn = "Q612_WarWithKetraOrcs";
+	private static final String qn = "Q612_WarWithKetraOrcs";
 	
 	// Items
 	private static final int Seed = 7187;

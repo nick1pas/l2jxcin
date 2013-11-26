@@ -21,31 +21,25 @@ public class Q157_RecoverSmuggledGoods extends Quest
 {
 	private static final String qn = "Q157_RecoverSmuggledGoods";
 	
-	// NPC
-	private final static int WILFORD = 30005;
-	
-	// Monster
-	private final static int TOAD = 20121;
-	
 	// Item
-	private final static int ADAMANTITE_ORE = 1024;
+	private static final int ADAMANTITE_ORE = 1024;
 	
 	// Reward
-	private final static int BUCKLER = 20;
+	private static final int BUCKLER = 20;
 	
-	public Q157_RecoverSmuggledGoods(int questId, String name, String descr)
+	public Q157_RecoverSmuggledGoods()
 	{
-		super(questId, name, descr);
+		super(157, qn, "Recover Smuggled Goods");
 		
 		questItemIds = new int[]
 		{
 			ADAMANTITE_ORE
 		};
 		
-		addStartNpc(WILFORD);
-		addTalkId(WILFORD);
+		addStartNpc(30005); // Wilford
+		addTalkId(30005);
 		
-		addKillId(TOAD);
+		addKillId(20121); // Toad
 	}
 	
 	@Override
@@ -58,8 +52,8 @@ public class Q157_RecoverSmuggledGoods extends Quest
 		
 		if (event.equalsIgnoreCase("30005-05.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		
@@ -77,26 +71,20 @@ public class Q157_RecoverSmuggledGoods extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 5)
-					htmltext = "30005-03.htm";
-				else
-				{
-					htmltext = "30005-02.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 5) ? "30005-02.htm" : "30005-03.htm";
 				break;
 			
 			case STATE_STARTED:
 				int cond = st.getInt("cond");
-				if (cond == 1 && st.getQuestItemsCount(ADAMANTITE_ORE) < 20)
+				if (cond == 1)
 					htmltext = "30005-06.htm";
-				else if (cond == 2 && st.getQuestItemsCount(ADAMANTITE_ORE) >= 20)
+				else if (cond == 2)
 				{
 					htmltext = "30005-07.htm";
-					st.takeItems(ADAMANTITE_ORE, 20);
+					st.takeItems(ADAMANTITE_ORE, -1);
 					st.giveItems(BUCKLER, 1);
-					st.exitQuest(false);
 					st.playSound(QuestState.SOUND_FINISH);
+					st.exitQuest(false);
 				}
 				break;
 			
@@ -122,6 +110,6 @@ public class Q157_RecoverSmuggledGoods extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q157_RecoverSmuggledGoods(157, qn, "Recover Smuggled Goods");
+		new Q157_RecoverSmuggledGoods();
 	}
 }

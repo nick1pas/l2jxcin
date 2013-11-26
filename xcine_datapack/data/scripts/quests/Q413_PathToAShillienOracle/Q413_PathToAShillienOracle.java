@@ -16,6 +16,7 @@ package quests.Q413_PathToAShillienOracle;
 
 import net.xcine.gameserver.model.actor.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.base.ClassId;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.quest.QuestState;
 import net.xcine.gameserver.network.serverpackets.SocialAction;
@@ -72,30 +73,23 @@ public class Q413_PathToAShillienOracle extends Quest
 		
 		if (event.equalsIgnoreCase("30330-05.htm"))
 		{
-			if (player.getClassId().getId() == 0x26)
+			if (player.getClassId() != ClassId.darkMage)
 			{
-				if (player.getLevel() >= 19)
-				{
-					if (st.hasQuestItems(OrbofAbyss))
-					{
-						htmltext = "30330-04.htm";
-						st.exitQuest(true);
-					}
-				}
+				if (player.getClassId() == ClassId.shillienOracle)
+					htmltext = "30330-02a.htm";
 				else
-				{
-					htmltext = "30330-02.htm";
-					st.exitQuest(true);
-				}
-			}
-			else if (player.getClassId().getId() == 0x2a)
-			{
-				htmltext = "30330-02a.htm";
+					htmltext = "30330-03.htm";
+				
 				st.exitQuest(true);
 			}
-			else
+			else if (player.getLevel() < 19)
 			{
-				htmltext = "30330-03.htm";
+				htmltext = "30330-02.htm";
+				st.exitQuest(true);
+			}
+			else if (st.hasQuestItems(OrbofAbyss))
+			{
+				htmltext = "30330-04.htm";
 				st.exitQuest(true);
 			}
 		}
@@ -157,9 +151,8 @@ public class Q413_PathToAShillienOracle extends Quest
 							st.giveItems(OrbofAbyss, 1);
 							st.rewardExpAndSp(3200, 3120);
 							player.broadcastPacket(new SocialAction(player, 3));
-							
 							st.playSound(QuestState.SOUND_FINISH);
-							st.exitQuest(false);
+							st.exitQuest(true);
 						}
 						break;
 					

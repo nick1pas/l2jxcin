@@ -23,7 +23,7 @@ import net.xcine.util.Rnd;
 
 public class Q369_CollectorOfJewels extends Quest
 {
-	private final static String qn = "Q369_CollectorOfJewels";
+	private static final String qn = "Q369_CollectorOfJewels";
 	
 	// NPC
 	private static final int NELL = 30376;

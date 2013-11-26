@@ -22,22 +22,22 @@ public class Q044_HelpTheSon extends Quest
 	private static final String qn = "Q044_HelpTheSon";
 	
 	// Npcs
-	private final static int LUNDY = 30827;
-	private final static int DRIKUS = 30505;
+	private static final int LUNDY = 30827;
+	private static final int DRIKUS = 30505;
 	
 	// Items
-	private final static int WORK_HAMMER = 168;
-	private final static int GEMSTONE_FRAGMENT = 7552;
-	private final static int GEMSTONE = 7553;
-	private final static int PET_TICKET = 7585;
+	private static final int WORK_HAMMER = 168;
+	private static final int GEMSTONE_FRAGMENT = 7552;
+	private static final int GEMSTONE = 7553;
+	private static final int PET_TICKET = 7585;
 	
 	// Monsters
-	private final static int MAILLE_GUARD = 20921;
-	private final static int MAILLE_SCOUT = 20920;
+	private static final int MAILLE_GUARD = 20921;
+	private static final int MAILLE_SCOUT = 20920;
 	
-	public Q044_HelpTheSon(int questId, String name, String descr)
+	public Q044_HelpTheSon()
 	{
-		super(questId, name, descr);
+		super(44, qn, "Help the Son!");
 		
 		questItemIds = new int[]
 		{
@@ -61,28 +61,28 @@ public class Q044_HelpTheSon extends Quest
 		
 		if (event.equalsIgnoreCase("30827-01.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
-		else if (event.equalsIgnoreCase("30827-03.htm") && st.getQuestItemsCount(WORK_HAMMER) >= 1)
+		else if (event.equalsIgnoreCase("30827-03.htm") && st.hasQuestItems(WORK_HAMMER))
 		{
 			st.set("cond", "2");
-			st.takeItems(WORK_HAMMER, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(WORK_HAMMER, 1);
 		}
-		else if (event.equalsIgnoreCase("30827-05.htm") && st.getQuestItemsCount(GEMSTONE_FRAGMENT) >= 30)
+		else if (event.equalsIgnoreCase("30827-05.htm"))
 		{
-			st.takeItems(GEMSTONE_FRAGMENT, 30);
-			st.giveItems(GEMSTONE, 1);
 			st.set("cond", "4");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(GEMSTONE_FRAGMENT, 30);
+			st.giveItems(GEMSTONE, 1);
 		}
-		else if (event.equalsIgnoreCase("30505-06.htm") && st.getQuestItemsCount(GEMSTONE) == 1)
+		else if (event.equalsIgnoreCase("30505-06.htm"))
 		{
-			st.takeItems(GEMSTONE, 1);
 			st.set("cond", "5");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(GEMSTONE, 1);
 		}
 		else if (event.equalsIgnoreCase("30827-07.htm"))
 		{
@@ -105,13 +105,7 @@ public class Q044_HelpTheSon extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 24)
-					htmltext = "30827-00.htm";
-				else
-				{
-					htmltext = "30827-00a.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 24) ? "30827-00a.htm" : "30827-00.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -120,10 +114,7 @@ public class Q044_HelpTheSon extends Quest
 				{
 					case LUNDY:
 						if (cond == 1)
-							if (st.getQuestItemsCount(WORK_HAMMER) == 0)
-								htmltext = "30827-01a.htm";
-							else
-								htmltext = "30827-02.htm";
+							htmltext = (!st.hasQuestItems(WORK_HAMMER)) ? "30827-01a.htm" : "30827-02.htm";
 						else if (cond == 2)
 							htmltext = "30827-03a.htm";
 						else if (cond == 3)
@@ -135,7 +126,7 @@ public class Q044_HelpTheSon extends Quest
 						break;
 					
 					case DRIKUS:
-						if (cond == 4 && st.getQuestItemsCount(GEMSTONE) >= 1)
+						if (cond == 4)
 							htmltext = "30505-05.htm";
 						else if (cond == 5)
 							htmltext = "30505-06a.htm";
@@ -166,6 +157,6 @@ public class Q044_HelpTheSon extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q044_HelpTheSon(44, qn, "Help the Son!");
+		new Q044_HelpTheSon();
 	}
 }

@@ -72,27 +72,20 @@ public class Q277_GatekeepersOffering extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 15)
-					htmltext = "30576-02.htm";
-				else
-				{
-					htmltext = "30576-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 15) ? "30576-01.htm" : "30576-02.htm";
 				break;
 			
 			case STATE_STARTED:
-				int cond = st.getInt("cond");
-				if (cond == 1 && st.getQuestItemsCount(STARSTONE) < 20)
-					htmltext = "30576-04.htm";
-				else if (cond == 2 && st.getQuestItemsCount(STARSTONE) >= 20)
+				if (st.getInt("cond") == 2)
 				{
 					htmltext = "30576-05.htm";
 					st.takeItems(STARSTONE, -1);
 					st.rewardItems(GATEKEEPER_CHARM, 2);
-					st.exitQuest(true);
 					st.playSound(QuestState.SOUND_FINISH);
+					st.exitQuest(true);
 				}
+				else
+					htmltext = "30576-04.htm";
 				break;
 		}
 		

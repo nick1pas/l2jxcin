@@ -77,19 +77,13 @@ public class Q295_DreamingOfTheSkies extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 11)
-					htmltext = "30536-02.htm";
-				else
-				{
-					htmltext = "30536-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 11) ? "30536-01.htm" : "30536-02.htm";
 				break;
 			
 			case STATE_STARTED:
 				if (st.getQuestItemsCount(FLOATING_STONE) < 50)
 					htmltext = "30536-04.htm";
-				else if (st.getQuestItemsCount(RING_OF_FIREFLY) == 0)
+				else if (!st.hasQuestItems(RING_OF_FIREFLY))
 				{
 					htmltext = "30536-05.htm";
 					st.takeItems(FLOATING_STONE, -1);

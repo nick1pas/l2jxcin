@@ -28,9 +28,9 @@ public class Q113_StatusOfTheBeaconTower extends Quest
 	// Item
 	private static final int BOX = 8086;
 	
-	public Q113_StatusOfTheBeaconTower(int questId, String name, String descr)
+	public Q113_StatusOfTheBeaconTower()
 	{
-		super(questId, name, descr);
+		super(113, qn, "Status of the Beacon Tower");
 		
 		questItemIds = new int[]
 		{
@@ -51,10 +51,10 @@ public class Q113_StatusOfTheBeaconTower extends Quest
 		
 		if (event.equalsIgnoreCase("31979-02.htm"))
 		{
-			st.set("cond", "1");
-			st.giveItems(BOX, 1);
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
+			st.giveItems(BOX, 1);
 		}
 		else if (event.equalsIgnoreCase("32016-02.htm"))
 		{
@@ -78,13 +78,7 @@ public class Q113_StatusOfTheBeaconTower extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 40)
-					htmltext = "31979-01.htm";
-				else
-				{
-					htmltext = "31979-00.htm";
-					st.exitQuest(false);
-				}
+				htmltext = (player.getLevel() < 40) ? "31979-00.htm" : "31979-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -95,8 +89,7 @@ public class Q113_StatusOfTheBeaconTower extends Quest
 						break;
 					
 					case TORRANT:
-						if (st.getQuestItemsCount(BOX) == 1)
-							htmltext = "32016-01.htm";
+						htmltext = "32016-01.htm";
 						break;
 				}
 				break;
@@ -111,6 +104,6 @@ public class Q113_StatusOfTheBeaconTower extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q113_StatusOfTheBeaconTower(113, qn, "Status of the Beacon Tower");
+		new Q113_StatusOfTheBeaconTower();
 	}
 }

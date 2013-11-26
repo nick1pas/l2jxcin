@@ -66,7 +66,7 @@ public class Q274_SkirmishWithTheWerewolves extends Quest
 	@Override
 	public String onTalk(L2Npc npc, L2PcInstance player)
 	{
-		String htmltext = Quest.getNoQuestMsg();
+		String htmltext = getNoQuestMsg();
 		QuestState st = player.getQuestState(qn);
 		if (st == null)
 			return htmltext;
@@ -75,23 +75,13 @@ public class Q274_SkirmishWithTheWerewolves extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.Orc)
-				{
 					htmltext = "30569-00.htm";
-					st.exitQuest(true);
-				}
 				else if (player.getLevel() < 9)
-				{
 					htmltext = "30569-01.htm";
-					st.exitQuest(true);
-				}
 				else if (st.hasQuestItems(NECKLACE_OF_COURAGE) || st.hasQuestItems(NECKLACE_OF_VALOR))
 					htmltext = "30569-02.htm";
 				else
-				{
 					htmltext = "30569-07.htm";
-					st.exitQuest(true);
-				}
-				
 				break;
 			
 			case STATE_STARTED:

@@ -22,21 +22,18 @@ public class Q109_InSearchOfTheNest extends Quest
 	private static final String qn = "Q109_InSearchOfTheNest";
 	
 	// NPCs
-	private final static int PIERCE = 31553;
-	private final static int KAHMAN = 31554;
-	private final static int SCOUT_CORPSE = 32015;
+	private static final int PIERCE = 31553;
+	private static final int KAHMAN = 31554;
+	private static final int SCOUT_CORPSE = 32015;
 	
 	// Items
-	private final static int SCOUT_MEMO = 8083;
-	private final static int RECRUIT_BADGE = 7246;
-	private final static int SOLDIER_BADGE = 7247;
+	private static final int SCOUT_MEMO = 8083;
+	private static final int RECRUIT_BADGE = 7246;
+	private static final int SOLDIER_BADGE = 7247;
 	
-	// Reward
-	private final static int ADENA = 57;
-	
-	public Q109_InSearchOfTheNest(int questId, String name, String descr)
+	public Q109_InSearchOfTheNest()
 	{
-		super(questId, name, descr);
+		super(109, qn, "In Search of the Nest");
 		
 		questItemIds = new int[]
 		{
@@ -57,25 +54,25 @@ public class Q109_InSearchOfTheNest extends Quest
 		
 		if (event.equalsIgnoreCase("31553-01.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("32015-02.htm"))
 		{
-			st.giveItems(SCOUT_MEMO, 1);
 			st.set("cond", "2");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(SCOUT_MEMO, 1);
 		}
 		else if (event.equalsIgnoreCase("31553-03.htm"))
 		{
-			st.takeItems(SCOUT_MEMO, 1);
 			st.set("cond", "3");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(SCOUT_MEMO, 1);
 		}
 		else if (event.equalsIgnoreCase("31554-02.htm"))
 		{
-			st.rewardItems(ADENA, 5168);
+			st.rewardItems(57, 5168);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
@@ -95,13 +92,10 @@ public class Q109_InSearchOfTheNest extends Quest
 		{
 			case STATE_CREATED:
 				// Must worn one or other Golden Ram Badge in order to be accepted.
-				if (player.getLevel() >= 66 && (st.getQuestItemsCount(RECRUIT_BADGE) > 0 || st.getQuestItemsCount(SOLDIER_BADGE) > 0))
+				if (player.getLevel() >= 66 && (st.hasQuestItems(RECRUIT_BADGE) || st.hasQuestItems(SOLDIER_BADGE)))
 					htmltext = "31553-00.htm";
 				else
-				{
 					htmltext = "31553-00a.htm";
-					st.exitQuest(true);
-				}
 				break;
 			
 			case STATE_STARTED:
@@ -141,6 +135,6 @@ public class Q109_InSearchOfTheNest extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q109_InSearchOfTheNest(109, qn, "In Search of the Nest");
+		new Q109_InSearchOfTheNest();
 	}
 }

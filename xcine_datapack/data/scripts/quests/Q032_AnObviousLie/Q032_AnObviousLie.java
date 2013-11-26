@@ -19,42 +19,39 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q032_AnObviousLie extends Quest
 {
-	private final static String qn = "Q032_AnObviousLie";
+	private static final String qn = "Q032_AnObviousLie";
 	
 	// Items
-	private static final int Suede = 1866;
-	private static final int Thread = 1868;
-	private static final int SpiritOre = 3031;
-	private static final int Map = 7165;
-	private static final int MedicinalHerb = 7166;
+	private static final int SUEDE = 1866;
+	private static final int THREAD = 1868;
+	private static final int SPIRIT_ORE = 3031;
+	private static final int MAP = 7165;
+	private static final int MEDICINAL_HERB = 7166;
 	
 	// Rewards
-	private static final int CatsEar = 6843;
-	private static final int RacoonsEar = 7680;
-	private static final int RabbitsEar = 7683;
+	private static final int CAT_EARS = 6843;
+	private static final int RACOON_EARS = 7680;
+	private static final int RABBIT_EARS = 7683;
 	
 	// NPCs
-	private static final int Gentler = 30094;
-	private static final int Maximilian = 30120;
-	private static final int MikiTheCat = 31706;
+	private static final int GENTLER = 30094;
+	private static final int MAXIMILIAN = 30120;
+	private static final int MIKI_THE_CAT = 31706;
 	
-	// Monster
-	private static final int Alligator = 20135;
-	
-	public Q032_AnObviousLie(int questId, String name, String descr)
+	public Q032_AnObviousLie()
 	{
-		super(questId, name, descr);
+		super(32, qn, "An Obvious Lie");
 		
 		questItemIds = new int[]
 		{
-			Map,
-			MedicinalHerb
+			MAP,
+			MEDICINAL_HERB
 		};
 		
-		addStartNpc(Maximilian);
-		addTalkId(Maximilian, Gentler, MikiTheCat);
+		addStartNpc(MAXIMILIAN);
+		addTalkId(MAXIMILIAN, GENTLER, MIKI_THE_CAT);
 		
-		addKillId(Alligator);
+		addKillId(20135); // Alligator
 	}
 	
 	@Override
@@ -67,37 +64,37 @@ public class Q032_AnObviousLie extends Quest
 		
 		if (event.equalsIgnoreCase("30120-1.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("30094-1.htm"))
 		{
 			st.set("cond", "2");
-			st.giveItems(Map, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(MAP, 1);
 		}
 		else if (event.equalsIgnoreCase("31706-1.htm"))
 		{
 			st.set("cond", "3");
-			st.takeItems(Map, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(MAP, 1);
 		}
 		else if (event.equalsIgnoreCase("30094-4.htm"))
 		{
 			st.set("cond", "5");
-			st.takeItems(MedicinalHerb, 20);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(MEDICINAL_HERB, 20);
 		}
 		else if (event.equalsIgnoreCase("30094-7.htm"))
 		{
-			if (st.getQuestItemsCount(SpiritOre) < 500)
+			if (st.getQuestItemsCount(SPIRIT_ORE) < 500)
 				htmltext = "30094-5.htm";
 			else
 			{
 				st.set("cond", "6");
-				st.takeItems(SpiritOre, 500);
 				st.playSound(QuestState.SOUND_MIDDLE);
+				st.takeItems(SPIRIT_ORE, 500);
 			}
 		}
 		else if (event.equalsIgnoreCase("31706-4.htm"))
@@ -114,42 +111,42 @@ public class Q032_AnObviousLie extends Quest
 			st.playSound(QuestState.SOUND_MIDDLE);
 		else if (event.equalsIgnoreCase("cat"))
 		{
-			if (st.getQuestItemsCount(Thread) < 1000 || st.getQuestItemsCount(Suede) < 500)
+			if (st.getQuestItemsCount(THREAD) < 1000 || st.getQuestItemsCount(SUEDE) < 500)
 				htmltext = "30094-11.htm";
 			else
 			{
 				htmltext = "30094-14.htm";
-				st.takeItems(Suede, 500);
-				st.takeItems(Thread, 1000);
-				st.giveItems(CatsEar, 1);
+				st.takeItems(SUEDE, 500);
+				st.takeItems(THREAD, 1000);
+				st.giveItems(CAT_EARS, 1);
 				st.playSound(QuestState.SOUND_FINISH);
 				st.exitQuest(false);
 			}
 		}
 		else if (event.equalsIgnoreCase("racoon"))
 		{
-			if (st.getQuestItemsCount(Thread) < 1000 || st.getQuestItemsCount(Suede) < 500)
+			if (st.getQuestItemsCount(THREAD) < 1000 || st.getQuestItemsCount(SUEDE) < 500)
 				htmltext = "30094-11.htm";
 			else
 			{
 				htmltext = "30094-14.htm";
-				st.takeItems(Suede, 500);
-				st.takeItems(Thread, 1000);
-				st.giveItems(RacoonsEar, 1);
+				st.takeItems(SUEDE, 500);
+				st.takeItems(THREAD, 1000);
+				st.giveItems(RACOON_EARS, 1);
 				st.playSound(QuestState.SOUND_FINISH);
 				st.exitQuest(false);
 			}
 		}
 		else if (event.equalsIgnoreCase("rabbit"))
 		{
-			if (st.getQuestItemsCount(Thread) < 1000 || st.getQuestItemsCount(Suede) < 500)
+			if (st.getQuestItemsCount(THREAD) < 1000 || st.getQuestItemsCount(SUEDE) < 500)
 				htmltext = "30094-11.htm";
 			else
 			{
 				htmltext = "30094-14.htm";
-				st.takeItems(Suede, 500);
-				st.takeItems(Thread, 1000);
-				st.giveItems(RabbitsEar, 1);
+				st.takeItems(SUEDE, 500);
+				st.takeItems(THREAD, 1000);
+				st.giveItems(RABBIT_EARS, 1);
 				st.playSound(QuestState.SOUND_FINISH);
 				st.exitQuest(false);
 			}
@@ -169,25 +166,18 @@ public class Q032_AnObviousLie extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() < 45)
-				{
-					htmltext = "30120-0a.htm";
-					st.exitQuest(true);
-				}
-				else
-					htmltext = "30120-0.htm";
+				htmltext = (player.getLevel() < 45) ? "30120-0a.htm" : "30120-0.htm";
 				break;
 			
 			case STATE_STARTED:
 				int cond = st.getInt("cond");
 				switch (npc.getNpcId())
 				{
-					case Maximilian:
-						if (cond >= 1)
-							htmltext = "30120-2.htm";
+					case MAXIMILIAN:
+						htmltext = "30120-2.htm";
 						break;
 					
-					case Gentler:
+					case GENTLER:
 						if (cond == 1)
 							htmltext = "30094-0.htm";
 						else if (cond == 2 || cond == 3)
@@ -195,33 +185,23 @@ public class Q032_AnObviousLie extends Quest
 						else if (cond == 4)
 							htmltext = "30094-3.htm";
 						else if (cond == 5)
-						{
-							if (st.getQuestItemsCount(SpiritOre) < 500)
-								htmltext = "30094-5.htm";
-							else
-								htmltext = "30094-6.htm";
-						}
+							htmltext = (st.getQuestItemsCount(SPIRIT_ORE) < 500) ? "30094-5.htm" : "30094-6.htm";
 						else if (cond == 6)
 							htmltext = "30094-8.htm";
 						else if (cond == 7)
 							htmltext = "30094-9.htm";
 						else if (cond == 8)
-						{
-							if (st.getQuestItemsCount(Thread) < 1000 || st.getQuestItemsCount(Suede) < 500)
-								htmltext = "30094-11.htm";
-							else
-								htmltext = "30094-12.htm";
-						}
+							htmltext = (st.getQuestItemsCount(THREAD) < 1000 || st.getQuestItemsCount(SUEDE) < 500) ? "30094-11.htm" : "30094-12.htm";
 						break;
 					
-					case MikiTheCat:
+					case MIKI_THE_CAT:
 						if (cond == 2)
 							htmltext = "31706-0.htm";
-						else if (cond >= 3 && cond <= 5)
+						else if (cond > 2 && cond < 6)
 							htmltext = "31706-2.htm";
 						else if (cond == 6)
 							htmltext = "31706-3.htm";
-						else if (cond >= 7)
+						else if (cond > 6)
 							htmltext = "31706-5.htm";
 						break;
 				}
@@ -242,7 +222,7 @@ public class Q032_AnObviousLie extends Quest
 		if (st == null)
 			return null;
 		
-		if (st.dropItems(MedicinalHerb, 1, 20, 300000))
+		if (st.dropItems(MEDICINAL_HERB, 1, 20, 300000))
 			st.set("cond", "4");
 		
 		return null;
@@ -250,6 +230,6 @@ public class Q032_AnObviousLie extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q032_AnObviousLie(32, qn, "An Obvious Lie");
+		new Q032_AnObviousLie();
 	}
 }

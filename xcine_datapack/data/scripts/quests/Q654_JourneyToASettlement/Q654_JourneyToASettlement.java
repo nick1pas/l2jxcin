@@ -7,13 +7,13 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q654_JourneyToASettlement extends Quest
 {
-	private final static String qn = "Q654_JourneyToASettlement";
+	private static final String qn = "Q654_JourneyToASettlement";
 	
 	// Item
-	private final static int ANTELOPE_SKIN = 8072;
+	private static final int ANTELOPE_SKIN = 8072;
 	
 	// Reward
-	private final static int FORCE_FIELD_REMOVAL_SCROLL = 8073;
+	private static final int FORCE_FIELD_REMOVAL_SCROLL = 8073;
 	
 	public Q654_JourneyToASettlement(int questId, String name, String descr)
 	{

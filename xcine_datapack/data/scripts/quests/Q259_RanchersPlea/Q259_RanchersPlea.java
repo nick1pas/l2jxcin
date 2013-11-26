@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q259_RanchersPlea extends Quest
 {
-	private final static String qn = "Q259_RanchersPlea";
+	private static final String qn = "Q259_RanchersPlea";
 	
 	// NPCs
 	private static final int EDMOND = 30497;
@@ -61,8 +61,6 @@ public class Q259_RanchersPlea extends Quest
 		if (st == null)
 			return htmltext;
 		
-		int count = st.getQuestItemsCount(GIANT_SPIDER_SKIN);
-		
 		if (event.equalsIgnoreCase("30497-03.htm"))
 		{
 			st.set("cond", "1");
@@ -71,31 +69,34 @@ public class Q259_RanchersPlea extends Quest
 		}
 		else if (event.equalsIgnoreCase("30497-06.htm"))
 		{
-			st.exitQuest(true);
 			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(true);
 		}
 		else if (event.equalsIgnoreCase("30405-04.htm"))
 		{
+			final int count = st.getQuestItemsCount(GIANT_SPIDER_SKIN);
 			if (count >= 10)
 			{
-				st.rewardItems(HEALING_POTION, 1);
 				st.takeItems(GIANT_SPIDER_SKIN, 10);
+				st.rewardItems(HEALING_POTION, 1);
 			}
 			else
 				htmltext = "<html><body>Incorrect item count</body></html>";
 		}
 		else if (event.equalsIgnoreCase("30405-05.htm"))
 		{
+			final int count = st.getQuestItemsCount(GIANT_SPIDER_SKIN);
 			if (count >= 10)
 			{
-				st.rewardItems(WOODEN_ARROW, 50);
 				st.takeItems(GIANT_SPIDER_SKIN, 10);
+				st.rewardItems(WOODEN_ARROW, 50);
 			}
 			else
 				htmltext = "<html><body>Incorrect item count</body></html>";
 		}
 		else if (event.equalsIgnoreCase("30405-07.htm"))
 		{
+			final int count = st.getQuestItemsCount(GIANT_SPIDER_SKIN);
 			if (count >= 10)
 				htmltext = "30405-06.htm";
 		}
@@ -113,38 +114,26 @@ public class Q259_RanchersPlea extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 15)
-					htmltext = "30497-02.htm";
-				else
-				{
-					htmltext = "30497-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 15) ? "30497-01.htm" : "30497-02.htm";
 				break;
 			
 			case STATE_STARTED:
+				int count = st.getQuestItemsCount(GIANT_SPIDER_SKIN);
 				switch (npc.getNpcId())
 				{
 					case EDMOND:
-						int count = st.getQuestItemsCount(GIANT_SPIDER_SKIN);
-						
 						if (count == 0)
 							htmltext = "30497-04.htm";
 						else
 						{
 							htmltext = "30497-05.htm";
-							int amount = count * 25;
-							
-							if (count > 9)
-								amount += 250;
-							
-							st.rewardItems(ADENA, amount);
 							st.takeItems(GIANT_SPIDER_SKIN, -1);
+							st.rewardItems(ADENA, ((count >= 10) ? 250 : 0) + count * 25);
 						}
 						break;
 					
 					case MARIUS:
-						if (st.getQuestItemsCount(GIANT_SPIDER_SKIN) < 10)
+						if (count < 10)
 							htmltext = "30405-01.htm";
 						else
 							htmltext = "30405-02.htm";

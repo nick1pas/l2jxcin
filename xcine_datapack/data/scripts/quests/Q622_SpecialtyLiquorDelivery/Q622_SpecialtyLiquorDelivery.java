@@ -20,7 +20,7 @@ import net.xcine.util.Rnd;
 
 public class Q622_SpecialtyLiquorDelivery extends Quest
 {
-	private final static String qn = "Q622_SpecialtyLiquorDelivery";
+	private static final String qn = "Q622_SpecialtyLiquorDelivery";
 	
 	// Items
 	private static final int DRINK = 7197;
@@ -134,7 +134,7 @@ public class Q622_SpecialtyLiquorDelivery extends Quest
 	@Override
 	public String onTalk(L2Npc npc, L2PcInstance player)
 	{
-		String htmltext = Quest.getNoQuestMsg();
+		String htmltext = getNoQuestMsg();
 		QuestState st = player.getQuestState(qn);
 		if (st == null)
 			return htmltext;

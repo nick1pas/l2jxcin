@@ -16,6 +16,7 @@ package quests.Q406_PathToAnElvenKnight;
 
 import net.xcine.gameserver.model.actor.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.base.ClassId;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.quest.QuestState;
 import net.xcine.gameserver.network.serverpackets.SocialAction;
@@ -66,30 +67,23 @@ public class Q406_PathToAnElvenKnight extends Quest
 		
 		if (event.equalsIgnoreCase("30327-05.htm"))
 		{
-			if (player.getClassId().getId() == 0x12)
+			if (player.getClassId() != ClassId.elvenFighter)
 			{
-				if (player.getLevel() >= 19)
-				{
-					if (st.getQuestItemsCount(ElvenKnightBrooch) == 1)
-					{
-						htmltext = "30327-04.htm";
-						st.exitQuest(true);
-					}
-				}
+				if (player.getClassId() == ClassId.elvenKnight)
+					htmltext = "30327-02a.htm";
 				else
-				{
-					htmltext = "30327-03.htm";
-					st.exitQuest(true);
-				}
-			}
-			else if (player.getClassId().getId() == 0x13)
-			{
-				htmltext = "30327-02a.htm";
+					htmltext = "30327-02.htm";
+				
 				st.exitQuest(true);
 			}
-			else
+			else if (player.getLevel() < 19)
 			{
-				htmltext = "30327-02.htm";
+				htmltext = "30327-03.htm";
+				st.exitQuest(true);
+			}
+			else if (st.hasQuestItems(ElvenKnightBrooch))
+			{
+				htmltext = "30327-04.htm";
 				st.exitQuest(true);
 			}
 		}
@@ -153,9 +147,8 @@ public class Q406_PathToAnElvenKnight extends Quest
 							st.giveItems(ElvenKnightBrooch, 1);
 							st.rewardExpAndSp(3200, 2280);
 							player.broadcastPacket(new SocialAction(player, 3));
-							
 							st.playSound(QuestState.SOUND_FINISH);
-							st.exitQuest(false);
+							st.exitQuest(true);
 						}
 						break;
 					

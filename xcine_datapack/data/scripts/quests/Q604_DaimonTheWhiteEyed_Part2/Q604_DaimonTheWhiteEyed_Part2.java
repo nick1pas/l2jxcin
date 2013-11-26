@@ -113,7 +113,7 @@ public class Q604_DaimonTheWhiteEyed_Part2 extends Quest
 			if (st.hasQuestItems(UNFINISHED_SUMMON_CRYSTAL))
 			{
 				st.set("cond", "1");
-				st.setState(Quest.STATE_STARTED);
+				st.setState(STATE_STARTED);
 				st.playSound(QuestState.SOUND_ACCEPT);
 				st.takeItems(UNFINISHED_SUMMON_CRYSTAL, 1);
 				st.giveItems(SUMMON_CRYSTAL, 1);
@@ -167,7 +167,7 @@ public class Q604_DaimonTheWhiteEyed_Part2 extends Quest
 		
 		switch (st.getState())
 		{
-			case Quest.STATE_CREATED:
+			case STATE_CREATED:
 				if (player.getLevel() < 73)
 				{
 					htmltext = "31683-02.htm";
@@ -177,7 +177,7 @@ public class Q604_DaimonTheWhiteEyed_Part2 extends Quest
 					htmltext = "31683-01.htm";
 				break;
 			
-			case Quest.STATE_STARTED:
+			case STATE_STARTED:
 				int cond = st.getInt("cond");
 				switch (npc.getNpcId())
 				{

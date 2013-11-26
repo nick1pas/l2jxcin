@@ -25,17 +25,17 @@ public class Q378_MagnificentFeast extends Quest
 	private static final String qn = "Q378_MagnificentFeast";
 	
 	// NPC
-	private final static int RANSPO = 30594;
+	private static final int RANSPO = 30594;
 	
 	// Items
-	private final static int WINE_15 = 5956;
-	private final static int WINE_30 = 5957;
-	private final static int WINE_60 = 5958;
-	private final static int MUSICALS_SCORE = 4421;
-	private final static int JSALAD_RECIPE = 1455;
-	private final static int JSAUCE_RECIPE = 1456;
-	private final static int JSTEAK_RECIPE = 1457;
-	private final static int RITRON_DESSERT = 5959;
+	private static final int WINE_15 = 5956;
+	private static final int WINE_30 = 5957;
+	private static final int WINE_60 = 5958;
+	private static final int MUSICALS_SCORE = 4421;
+	private static final int JSALAD_RECIPE = 1455;
+	private static final int JSAUCE_RECIPE = 1456;
+	private static final int JSTEAK_RECIPE = 1457;
+	private static final int RITRON_DESSERT = 5959;
 	
 	// Rewards
 	private static final Map<String, int[]> Reward_list = new HashMap<>();

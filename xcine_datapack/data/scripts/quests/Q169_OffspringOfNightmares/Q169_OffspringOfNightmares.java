@@ -21,19 +21,16 @@ import net.xcine.util.Rnd;
 
 public class Q169_OffspringOfNightmares extends Quest
 {
-	private final static String qn = "Q169_OffspringOfNightmares";
+	private static final String qn = "Q169_OffspringOfNightmares";
 	
 	// Items
 	private static final int CRACKED_SKULL = 1030;
 	private static final int PERFECT_SKULL = 1031;
 	private static final int BONE_GAITERS = 31;
 	
-	// NPC
-	private static final int VLASTY = 30145;
-	
-	public Q169_OffspringOfNightmares(int questId, String name, String descr)
+	public Q169_OffspringOfNightmares()
 	{
-		super(questId, name, descr);
+		super(169, qn, "Offspring of Nightmares");
 		
 		questItemIds = new int[]
 		{
@@ -41,8 +38,8 @@ public class Q169_OffspringOfNightmares extends Quest
 			PERFECT_SKULL
 		};
 		
-		addStartNpc(VLASTY);
-		addTalkId(VLASTY);
+		addStartNpc(30145); // Vlasty
+		addTalkId(30145);
 		
 		addKillId(20105, 20025);
 	}
@@ -57,8 +54,8 @@ public class Q169_OffspringOfNightmares extends Quest
 		
 		if (event.equalsIgnoreCase("30145-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("30145-08.htm"))
@@ -68,8 +65,8 @@ public class Q169_OffspringOfNightmares extends Quest
 			st.takeItems(CRACKED_SKULL, -1);
 			st.giveItems(BONE_GAITERS, 1);
 			st.rewardItems(57, reward);
-			st.exitQuest(false);
 			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(false);
 		}
 		
 		return htmltext;
@@ -86,21 +83,12 @@ public class Q169_OffspringOfNightmares extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() == Race.DarkElf)
-				{
-					if (player.getLevel() >= 15)
-						htmltext = "30145-03.htm";
-					else
-					{
-						htmltext = "30145-02.htm";
-						st.exitQuest(true);
-					}
-				}
-				else
-				{
+				if (player.getRace() != Race.DarkElf)
 					htmltext = "30145-00.htm";
-					st.exitQuest(true);
-				}
+				else if (player.getLevel() < 15)
+					htmltext = "30145-02.htm";
+				else
+					htmltext = "30145-03.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -135,13 +123,13 @@ public class Q169_OffspringOfNightmares extends Quest
 		if (st.getInt("cond") == 1 && chance < 10)
 		{
 			st.set("cond", "2");
-			st.giveItems(PERFECT_SKULL, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(PERFECT_SKULL, 1);
 		}
 		else if (chance > 60)
 		{
-			st.giveItems(CRACKED_SKULL, 1);
 			st.playSound(QuestState.SOUND_ITEMGET);
+			st.giveItems(CRACKED_SKULL, 1);
 		}
 		
 		return null;
@@ -149,6 +137,6 @@ public class Q169_OffspringOfNightmares extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q169_OffspringOfNightmares(169, qn, "Offspring of Nightmares");
+		new Q169_OffspringOfNightmares();
 	}
 }

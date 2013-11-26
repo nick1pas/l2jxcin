@@ -210,11 +210,11 @@ public class Q374_WhisperOfDreams_Part1 extends Quest
 		switch (npc.getNpcId())
 		{
 			case CAVE_BEAST:
-				st.dropItems(CAVE_BEAST_TOOTH, 1, 65, 200000);
+				st.dropItems(CAVE_BEAST_TOOTH, 1, 65, 500000);
 				break;
 			
 			case DEATH_WAVE:
-				st.dropItems(DEATH_WAVE_LIGHT, 1, 65, 200000);
+				st.dropItems(DEATH_WAVE_LIGHT, 1, 65, 500000);
 				break;
 		}
 		
@@ -225,7 +225,7 @@ public class Q374_WhisperOfDreams_Part1 extends Quest
 		
 		st = partyMember.getQuestState(qn);
 		
-		if (st.dropItems(MYSTERIOUS_STONE, 1, 1, 4000))
+		if (st.dropItems(SEALED_MYSTERIOUS_STONE, 1, 1, 1000))
 			st.unset(condition);
 		
 		return null;

@@ -23,7 +23,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q234_FatesWhisper extends Quest
 {
-	private final static String qn = "Q234_FatesWhisper";
+	private static final String qn = "Q234_FatesWhisper";
 	
 	// Items
 	private static final int REIRIAS_SOUL_ORB = 4666;
@@ -171,13 +171,7 @@ public class Q234_FatesWhisper extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 75)
-					htmltext = "31002-02.htm";
-				else
-				{
-					htmltext = "31002-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 75) ? "31002-01.htm" : "31002-02.htm";
 				break;
 			
 			case STATE_STARTED:

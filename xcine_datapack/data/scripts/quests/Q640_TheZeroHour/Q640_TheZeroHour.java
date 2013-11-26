@@ -23,10 +23,10 @@ public class Q640_TheZeroHour extends Quest
 	private static final String qn = "Q640_TheZeroHour";
 	
 	// NPC
-	private final static int KAHMAN = 31554;
+	private static final int KAHMAN = 31554;
 	
 	// Item
-	private final static int FANG = 8085;
+	private static final int FANG = 8085;
 	
 	private static final int[][] rewards =
 	{

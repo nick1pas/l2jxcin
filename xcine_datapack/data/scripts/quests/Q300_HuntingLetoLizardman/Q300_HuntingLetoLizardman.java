@@ -92,13 +92,7 @@ public class Q300_HuntingLetoLizardman extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 34)
-					htmltext = "30126-02.htm";
-				else
-				{
-					htmltext = "30126-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 34) ? "30126-01.htm" : "30126-02.htm";
 				break;
 			
 			case STATE_STARTED:

@@ -22,22 +22,22 @@ public class Q043_HelpTheSister extends Quest
 	private static final String qn = "Q043_HelpTheSister";
 	
 	// NPCs
-	private final static int COOPER = 30829;
-	private final static int GALLADUCCI = 30097;
+	private static final int COOPER = 30829;
+	private static final int GALLADUCCI = 30097;
 	
 	// Items
-	private final static int CRAFTED_DAGGER = 220;
-	private final static int MAP_PIECE = 7550;
-	private final static int MAP = 7551;
-	private final static int PET_TICKET = 7584;
+	private static final int CRAFTED_DAGGER = 220;
+	private static final int MAP_PIECE = 7550;
+	private static final int MAP = 7551;
+	private static final int PET_TICKET = 7584;
 	
 	// Monsters
-	private final static int SPECTER = 20171;
-	private final static int SORROW_MAIDEN = 20197;
+	private static final int SPECTER = 20171;
+	private static final int SORROW_MAIDEN = 20197;
 	
-	public Q043_HelpTheSister(int questId, String name, String descr)
+	public Q043_HelpTheSister()
 	{
-		super(questId, name, descr);
+		super(43, qn, "Help the Sister!");
 		
 		questItemIds = new int[]
 		{
@@ -61,28 +61,28 @@ public class Q043_HelpTheSister extends Quest
 		
 		if (event.equalsIgnoreCase("30829-01.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
-		else if (event.equalsIgnoreCase("30829-03.htm") && st.getQuestItemsCount(CRAFTED_DAGGER) >= 1)
+		else if (event.equalsIgnoreCase("30829-03.htm") && st.hasQuestItems(CRAFTED_DAGGER))
 		{
 			st.set("cond", "2");
-			st.takeItems(CRAFTED_DAGGER, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(CRAFTED_DAGGER, 1);
 		}
-		else if (event.equalsIgnoreCase("30829-05.htm") && st.getQuestItemsCount(MAP_PIECE) >= 30)
+		else if (event.equalsIgnoreCase("30829-05.htm"))
 		{
-			st.takeItems(MAP_PIECE, 30);
-			st.giveItems(MAP, 1);
 			st.set("cond", "4");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(MAP_PIECE, 30);
+			st.giveItems(MAP, 1);
 		}
-		else if (event.equalsIgnoreCase("30097-06.htm") && st.getQuestItemsCount(MAP) == 1)
+		else if (event.equalsIgnoreCase("30097-06.htm"))
 		{
-			st.takeItems(MAP, 1);
 			st.set("cond", "5");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(MAP, 1);
 		}
 		else if (event.equalsIgnoreCase("30829-07.htm"))
 		{
@@ -105,13 +105,7 @@ public class Q043_HelpTheSister extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 26)
-					htmltext = "30829-00.htm";
-				else
-				{
-					htmltext = "30829-00a.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 26) ? "30829-00a.htm" : "30829-00.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -120,10 +114,7 @@ public class Q043_HelpTheSister extends Quest
 				{
 					case COOPER:
 						if (cond == 1)
-							if (st.getQuestItemsCount(CRAFTED_DAGGER) == 0)
-								htmltext = "30829-01a.htm";
-							else
-								htmltext = "30829-02.htm";
+							htmltext = (!st.hasQuestItems(CRAFTED_DAGGER)) ? "30829-01a.htm" : "30829-02.htm";
 						else if (cond == 2)
 							htmltext = "30829-03a.htm";
 						else if (cond == 3)
@@ -135,7 +126,7 @@ public class Q043_HelpTheSister extends Quest
 						break;
 					
 					case GALLADUCCI:
-						if (cond == 4 && st.getQuestItemsCount(MAP) >= 1)
+						if (cond == 4)
 							htmltext = "30097-05.htm";
 						else if (cond == 5)
 							htmltext = "30097-06a.htm";
@@ -166,6 +157,6 @@ public class Q043_HelpTheSister extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q043_HelpTheSister(43, qn, "Help the Sister!");
+		new Q043_HelpTheSister();
 	}
 }

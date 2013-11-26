@@ -16,6 +16,7 @@ package quests.Q401_PathToAWarrior;
 
 import net.xcine.gameserver.model.actor.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.base.ClassId;
 import net.xcine.gameserver.model.itemcontainer.Inventory;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.quest.QuestState;
@@ -70,30 +71,23 @@ public class Q401_PathToAWarrior extends Quest
 		
 		if (event.equalsIgnoreCase("30010-05.htm"))
 		{
-			if (player.getClassId().getId() == 0x00)
+			if (player.getClassId() != ClassId.fighter)
 			{
-				if (player.getLevel() >= 19)
-				{
-					if (st.getQuestItemsCount(MedallionOfWarrior) == 1)
-					{
-						htmltext = "30010-04.htm";
-						st.exitQuest(true);
-					}
-				}
+				if (player.getClassId() == ClassId.warrior)
+					htmltext = "30010-03.htm";
 				else
-				{
-					htmltext = "30010-02.htm";
-					st.exitQuest(true);
-				}
-			}
-			else if (player.getClassId().getId() == 0x01)
-			{
-				htmltext = "30010-03.htm";
+					htmltext = "30010-02b.htm";
+				
 				st.exitQuest(true);
 			}
-			else
+			else if (player.getLevel() < 19)
 			{
-				htmltext = "30010-02b.htm";
+				htmltext = "30010-02.htm";
+				st.exitQuest(true);
+			}
+			else if (st.hasQuestItems(MedallionOfWarrior))
+			{
+				htmltext = "30010-04.htm";
 				st.exitQuest(true);
 			}
 		}
@@ -160,7 +154,7 @@ public class Q401_PathToAWarrior extends Quest
 							player.broadcastPacket(new SocialAction(player, 3));
 							
 							st.playSound(QuestState.SOUND_FINISH);
-							st.exitQuest(false);
+							st.exitQuest(true);
 						}
 						break;
 					

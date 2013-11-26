@@ -19,26 +19,25 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q167_DwarvenKinship extends Quest
 {
-	private final static String qn = "Q167_DwarvenKinship";
+	private static final String qn = "Q167_DwarvenKinship";
 	
 	// Items
 	private static final int CARLON_LETTER = 1076;
-	private static final int NORMANS_LETTER = 1106;
-	private static final int ADENA = 57;
+	private static final int NORMAN_LETTER = 1106;
 	
 	// NPCs
 	private static final int CARLON = 30350;
 	private static final int NORMAN = 30210;
 	private static final int HAPROCK = 30255;
 	
-	public Q167_DwarvenKinship(int questId, String name, String descr)
+	public Q167_DwarvenKinship()
 	{
-		super(questId, name, descr);
+		super(167, qn, "Dwarven Kinship");
 		
 		questItemIds = new int[]
 		{
 			CARLON_LETTER,
-			NORMANS_LETTER
+			NORMAN_LETTER
 		};
 		
 		addStartNpc(CARLON);
@@ -55,29 +54,29 @@ public class Q167_DwarvenKinship extends Quest
 		
 		if (event.equalsIgnoreCase("30350-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
-			st.giveItems(CARLON_LETTER, 1);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
+			st.giveItems(CARLON_LETTER, 1);
 		}
 		else if (event.equalsIgnoreCase("30255-03.htm"))
 		{
 			st.set("cond", "2");
 			st.takeItems(CARLON_LETTER, 1);
-			st.giveItems(NORMANS_LETTER, 1);
-			st.rewardItems(ADENA, 2000);
+			st.giveItems(NORMAN_LETTER, 1);
+			st.rewardItems(57, 2000);
 		}
 		else if (event.equalsIgnoreCase("30255-04.htm"))
 		{
 			st.takeItems(CARLON_LETTER, 1);
-			st.rewardItems(ADENA, 3000);
+			st.rewardItems(57, 3000);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
 		else if (event.equalsIgnoreCase("30210-02.htm"))
 		{
-			st.takeItems(NORMANS_LETTER, 1);
-			st.rewardItems(ADENA, 20000);
+			st.takeItems(NORMAN_LETTER, 1);
+			st.rewardItems(57, 20000);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
@@ -96,13 +95,7 @@ public class Q167_DwarvenKinship extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 15)
-					htmltext = "30350-03.htm";
-				else
-				{
-					htmltext = "30350-02.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 15) ? "30350-02.htm" : "30350-03.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -138,6 +131,6 @@ public class Q167_DwarvenKinship extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q167_DwarvenKinship(167, qn, "Dwarven Kinship");
+		new Q167_DwarvenKinship();
 	}
 }

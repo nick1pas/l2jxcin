@@ -22,28 +22,28 @@ import net.xcine.gameserver.network.serverpackets.ExShowSlideshowKamael;
 
 public class Q127_KamaelAWindowToTheFuture extends Quest
 {
-	private final static String qn = "Q127_KamaelAWindowToTheFuture";
+	private static final String qn = "Q127_KamaelAWindowToTheFuture";
 	
-	// Npcs
-	private final static int DOMINIC = 31350;
-	private final static int KLAUS = 30187;
-	private final static int ALDER = 32092;
-	private final static int AKLAN = 31288;
-	private final static int OLTLIN = 30862;
-	private final static int JURIS = 30113;
-	private final static int RODEMAI = 30756;
+	// NPCs
+	private static final int DOMINIC = 31350;
+	private static final int KLAUS = 30187;
+	private static final int ALDER = 32092;
+	private static final int AKLAN = 31288;
+	private static final int OLTLIN = 30862;
+	private static final int JURIS = 30113;
+	private static final int RODEMAI = 30756;
 	
 	// Items
-	private final static int MARK_DOMINIC = 8939;
-	private final static int MARK_HUMAN = 8940;
-	private final static int MARK_DWARF = 8941;
-	private final static int MARK_ORC = 8944;
-	private final static int MARK_DELF = 8943;
-	private final static int MARK_ELF = 8942;
+	private static final int MARK_DOMINIC = 8939;
+	private static final int MARK_HUMAN = 8940;
+	private static final int MARK_DWARF = 8941;
+	private static final int MARK_ORC = 8944;
+	private static final int MARK_DELF = 8943;
+	private static final int MARK_ELF = 8942;
 	
-	public Q127_KamaelAWindowToTheFuture(int questId, String name, String descr)
+	public Q127_KamaelAWindowToTheFuture()
 	{
-		super(questId, name, descr);
+		super(127, qn, "Kamael: A Window to the Future");
 		
 		questItemIds = new int[]
 		{
@@ -69,10 +69,10 @@ public class Q127_KamaelAWindowToTheFuture extends Quest
 		
 		if (event.equalsIgnoreCase("31350-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
-			st.giveItems(MARK_DOMINIC, 1);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
+			st.giveItems(MARK_DOMINIC, 1);
 		}
 		else if (event.equalsIgnoreCase("31350-06.htm"))
 		{
@@ -91,32 +91,32 @@ public class Q127_KamaelAWindowToTheFuture extends Quest
 		else if (event.equalsIgnoreCase("30187-08.htm"))
 		{
 			st.set("cond", "3");
-			st.giveItems(MARK_HUMAN, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(MARK_HUMAN, 1);
 		}
 		else if (event.equalsIgnoreCase("32092-05.htm"))
 		{
 			st.set("cond", "4");
-			st.giveItems(MARK_DWARF, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(MARK_DWARF, 1);
 		}
 		else if (event.equalsIgnoreCase("31288-04.htm"))
 		{
 			st.set("cond", "5");
-			st.giveItems(MARK_ORC, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(MARK_ORC, 1);
 		}
 		else if (event.equalsIgnoreCase("30862-04.htm"))
 		{
 			st.set("cond", "6");
-			st.giveItems(MARK_DELF, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(MARK_DELF, 1);
 		}
 		else if (event.equalsIgnoreCase("30113-04.htm"))
 		{
 			st.set("cond", "7");
-			st.giveItems(MARK_ELF, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(MARK_ELF, 1);
 		}
 		else if (event.equalsIgnoreCase("kamaelstory"))
 		{
@@ -205,6 +205,6 @@ public class Q127_KamaelAWindowToTheFuture extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q127_KamaelAWindowToTheFuture(127, qn, "Kamael: A Window to the Future");
+		new Q127_KamaelAWindowToTheFuture();
 	}
 }

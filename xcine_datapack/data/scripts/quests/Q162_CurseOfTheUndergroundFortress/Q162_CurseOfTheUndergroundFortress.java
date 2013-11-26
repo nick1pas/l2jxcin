@@ -17,34 +17,29 @@ import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.model.base.Race;
 import net.xcine.gameserver.model.quest.Quest;
 import net.xcine.gameserver.model.quest.QuestState;
-import net.xcine.util.Rnd;
 
 public class Q162_CurseOfTheUndergroundFortress extends Quest
 {
 	private static final String qn = "Q162_CurseOfTheUndergroundFortress";
 	
-	// NPC
-	private final static int Unoren = 30147;
-	
 	// Monsters
-	private final static int Shade_Horror = 20033;
-	private final static int Dark_Terror = 20345;
-	private final static int Mist_Terror = 20371;
-	private final static int Dungeon_Skeleton_Archer = 20463;
-	private final static int Dungeon_Skeleton = 20464;
-	private final static int Dread_Soldier = 20504;
+	private static final int SHADE_HORROR = 20033;
+	private static final int DARK_TERROR = 20345;
+	private static final int MIST_TERROR = 20371;
+	private static final int DUNGEON_SKELETON_ARCHER = 20463;
+	private static final int DUNGEON_SKELETON = 20464;
+	private static final int DREAD_SOLDIER = 20504;
 	
 	// Items
-	private final static int BONE_FRAGMENT = 1158;
-	private final static int ELF_SKULL = 1159;
+	private static final int BONE_FRAGMENT = 1158;
+	private static final int ELF_SKULL = 1159;
 	
 	// Rewards
-	private final static int ADENA = 57;
-	private final static int BONE_SHIELD = 625;
+	private static final int BONE_SHIELD = 625;
 	
-	public Q162_CurseOfTheUndergroundFortress(int questId, String name, String descr)
+	public Q162_CurseOfTheUndergroundFortress()
 	{
-		super(questId, name, descr);
+		super(162, qn, "Curse of the Underground Fortress");
 		
 		questItemIds = new int[]
 		{
@@ -52,10 +47,10 @@ public class Q162_CurseOfTheUndergroundFortress extends Quest
 			ELF_SKULL
 		};
 		
-		addStartNpc(Unoren);
-		addTalkId(Unoren);
+		addStartNpc(30147); // Unoren
+		addTalkId(30147);
 		
-		addKillId(Shade_Horror, Dark_Terror, Mist_Terror, Dungeon_Skeleton_Archer, Dungeon_Skeleton, Dread_Soldier);
+		addKillId(SHADE_HORROR, DARK_TERROR, MIST_TERROR, DUNGEON_SKELETON_ARCHER, DUNGEON_SKELETON, DREAD_SOLDIER);
 	}
 	
 	@Override
@@ -68,8 +63,8 @@ public class Q162_CurseOfTheUndergroundFortress extends Quest
 		
 		if (event.equalsIgnoreCase("30147-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		
@@ -88,32 +83,26 @@ public class Q162_CurseOfTheUndergroundFortress extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() == Race.DarkElf)
-				{
 					htmltext = "30147-00.htm";
-					st.exitQuest(true);
-				}
-				else if (player.getLevel() >= 12)
-					htmltext = "30147-02.htm";
-				else
-				{
+				else if (player.getLevel() < 12)
 					htmltext = "30147-01.htm";
-					st.exitQuest(true);
-				}
+				else
+					htmltext = "30147-02.htm";
 				break;
 			
 			case STATE_STARTED:
 				int cond = st.getInt("cond");
 				if (cond == 1)
 					htmltext = "30147-05.htm";
-				else if (cond == 2 && st.getQuestItemsCount(ELF_SKULL) >= 3 && st.getQuestItemsCount(BONE_FRAGMENT) >= 10)
+				else if (cond == 2)
 				{
 					htmltext = "30147-06.htm";
 					st.takeItems(ELF_SKULL, -1);
 					st.takeItems(BONE_FRAGMENT, -1);
-					st.rewardItems(ADENA, 24000);
 					st.giveItems(BONE_SHIELD, 1);
-					st.exitQuest(false);
+					st.rewardItems(57, 24000);
 					st.playSound(QuestState.SOUND_FINISH);
+					st.exitQuest(false);
 				}
 				break;
 			
@@ -121,6 +110,7 @@ public class Q162_CurseOfTheUndergroundFortress extends Quest
 				htmltext = getAlreadyCompletedMsg();
 				break;
 		}
+		
 		return htmltext;
 	}
 	
@@ -131,50 +121,30 @@ public class Q162_CurseOfTheUndergroundFortress extends Quest
 		if (st == null)
 			return null;
 		
-		if (Rnd.get(100) < 25)
+		switch (npc.getNpcId())
 		{
-			switch (npc.getNpcId())
-			{
-				case Dungeon_Skeleton:
-				case Dungeon_Skeleton_Archer:
-				case Dread_Soldier:
-					if (st.getQuestItemsCount(BONE_FRAGMENT) < 10)
-					{
-						st.giveItems(BONE_FRAGMENT, 1);
-						
-						if (st.getQuestItemsCount(BONE_FRAGMENT) >= 10 && st.getQuestItemsCount(ELF_SKULL) >= 3)
-						{
-							st.playSound(QuestState.SOUND_MIDDLE);
-							st.set("cond", "2");
-						}
-						else
-							st.playSound(QuestState.SOUND_ITEMGET);
-					}
-					break;
-				
-				case Shade_Horror:
-				case Dark_Terror:
-				case Mist_Terror:
-					if (st.getQuestItemsCount(ELF_SKULL) < 3)
-					{
-						st.giveItems(ELF_SKULL, 1);
-						
-						if (st.getQuestItemsCount(BONE_FRAGMENT) >= 10 && st.getQuestItemsCount(ELF_SKULL) >= 3)
-						{
-							st.playSound(QuestState.SOUND_MIDDLE);
-							st.set("cond", "2");
-						}
-						else
-							st.playSound(QuestState.SOUND_ITEMGET);
-					}
-					break;
-			}
+			case DUNGEON_SKELETON:
+			case DUNGEON_SKELETON_ARCHER:
+			case DREAD_SOLDIER:
+				if (st.dropItems(BONE_FRAGMENT, 1, 10, 250000))
+					if (st.getQuestItemsCount(ELF_SKULL) >= 3)
+						st.set("cond", "2");
+				break;
+			
+			case SHADE_HORROR:
+			case DARK_TERROR:
+			case MIST_TERROR:
+				if (st.dropItems(ELF_SKULL, 1, 3, 250000))
+					if (st.getQuestItemsCount(BONE_FRAGMENT) >= 10)
+						st.set("cond", "2");
+				break;
 		}
+		
 		return null;
 	}
 	
 	public static void main(String[] args)
 	{
-		new Q162_CurseOfTheUndergroundFortress(162, qn, "Curse of the Underground Fortress");
+		new Q162_CurseOfTheUndergroundFortress();
 	}
 }

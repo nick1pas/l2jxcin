@@ -20,7 +20,7 @@ import net.xcine.util.Rnd;
 
 public class Q351_BlackSwan extends Quest
 {
-	private final static String qn = "Q351_BlackSwan";
+	private static final String qn = "Q351_BlackSwan";
 	
 	// NPCs
 	private static final int GOSTA = 30916;

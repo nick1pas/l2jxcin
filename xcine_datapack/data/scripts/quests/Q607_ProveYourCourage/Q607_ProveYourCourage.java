@@ -124,9 +124,6 @@ public class Q607_ProveYourCourage extends Quest
 	{
 		for (L2PcInstance partyMember : getPartyMembers(player, npc, "cond", "1"))
 		{
-			if (partyMember == null)
-				continue;
-			
 			if (partyMember.getAllianceWithVarkaKetra() >= 3)
 			{
 				QuestState st = partyMember.getQuestState(qn);

@@ -22,16 +22,15 @@ public class Q112_WalkOfFate extends Quest
 	private static final String qn = "Q112_WalkOfFate";
 	
 	// NPCs
-	private final static int LIVINA = 30572;
-	private final static int KARUDA = 32017;
+	private static final int LIVINA = 30572;
+	private static final int KARUDA = 32017;
 	
 	// Rewards
-	private final static int ADENA = 57;
-	private final static int ENCHANT_D = 956;
+	private static final int ENCHANT_D = 956;
 	
-	public Q112_WalkOfFate(int questId, String name, String descr)
+	public Q112_WalkOfFate()
 	{
-		super(questId, name, descr);
+		super(112, qn, "Walk of Fate");
 		
 		addStartNpc(LIVINA);
 		addTalkId(LIVINA, KARUDA);
@@ -47,16 +46,16 @@ public class Q112_WalkOfFate extends Quest
 		
 		if (event.equalsIgnoreCase("30572-02.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("32017-02.htm"))
 		{
-			st.rewardItems(ADENA, 4665);
 			st.giveItems(ENCHANT_D, 1);
-			st.exitQuest(false);
+			st.rewardItems(57, 4665);
 			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(false);
 		}
 		
 		return htmltext;
@@ -73,13 +72,7 @@ public class Q112_WalkOfFate extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 20)
-					htmltext = "30572-01.htm";
-				else
-				{
-					htmltext = "30572-00.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 20) ? "30572-00.htm" : "30572-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -105,6 +98,6 @@ public class Q112_WalkOfFate extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q112_WalkOfFate(112, qn, "Walk of Fate");
+		new Q112_WalkOfFate();
 	}
 }

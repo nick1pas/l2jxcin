@@ -20,30 +20,24 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q170_DangerousSeduction extends Quest
 {
-	private final static String qn = "Q170_DangerousSeduction";
+	private static final String qn = "Q170_DangerousSeduction";
 	
 	// Item
 	private static final int NIGHTMARE_CRYSTAL = 1046;
 	
-	// NPC
-	private static final int VELLIOR = 30305;
-	
-	// Mob
-	private static final int MERKENIS = 27022;
-	
-	public Q170_DangerousSeduction(int questId, String name, String descr)
+	public Q170_DangerousSeduction()
 	{
-		super(questId, name, descr);
+		super(170, qn, "Dangerous Seduction");
 		
 		questItemIds = new int[]
 		{
 			NIGHTMARE_CRYSTAL
 		};
 		
-		addStartNpc(VELLIOR);
-		addTalkId(VELLIOR);
+		addStartNpc(30305); // Vellior
+		addTalkId(30305);
 		
-		addKillId(MERKENIS);
+		addKillId(27022); // Merkenis
 	}
 	
 	@Override
@@ -56,8 +50,8 @@ public class Q170_DangerousSeduction extends Quest
 		
 		if (event.equalsIgnoreCase("30305-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		
@@ -75,25 +69,16 @@ public class Q170_DangerousSeduction extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() == Race.DarkElf)
-				{
-					if (player.getLevel() >= 21)
-						htmltext = "30305-03.htm";
-					else
-					{
-						htmltext = "30305-02.htm";
-						st.exitQuest(true);
-					}
-				}
-				else
-				{
+				if (player.getRace() != Race.DarkElf)
 					htmltext = "30305-00.htm";
-					st.exitQuest(true);
-				}
+				else if (player.getLevel() < 21)
+					htmltext = "30305-02.htm";
+				else
+					htmltext = "30305-03.htm";
 				break;
 			
 			case STATE_STARTED:
-				if (st.getQuestItemsCount(NIGHTMARE_CRYSTAL) > 0)
+				if (st.hasQuestItems(NIGHTMARE_CRYSTAL))
 				{
 					htmltext = "30305-06.htm";
 					st.takeItems(NIGHTMARE_CRYSTAL, -1);
@@ -121,14 +106,14 @@ public class Q170_DangerousSeduction extends Quest
 			return null;
 		
 		st.set("cond", "2");
-		st.giveItems(NIGHTMARE_CRYSTAL, 1);
 		st.playSound(QuestState.SOUND_MIDDLE);
+		st.giveItems(NIGHTMARE_CRYSTAL, 1);
 		
 		return null;
 	}
 	
 	public static void main(String[] args)
 	{
-		new Q170_DangerousSeduction(170, qn, "Dangerous Seduction");
+		new Q170_DangerousSeduction();
 	}
 }

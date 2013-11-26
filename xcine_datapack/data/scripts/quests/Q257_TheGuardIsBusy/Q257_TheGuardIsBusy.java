@@ -20,7 +20,7 @@ import net.xcine.util.Rnd;
 
 public class Q257_TheGuardIsBusy extends Quest
 {
-	private final static String qn = "Q257_TheGuardIsBusy";
+	private static final String qn = "Q257_TheGuardIsBusy";
 	
 	// NPC
 	private static final int GILBERT = 30039;
@@ -71,8 +71,8 @@ public class Q257_TheGuardIsBusy extends Quest
 		else if (event.equalsIgnoreCase("30039-05.htm"))
 		{
 			st.takeItems(GLUDIO_LORDS_MARK, 1);
-			st.exitQuest(true);
 			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(true);
 		}
 		
 		return htmltext;
@@ -89,13 +89,7 @@ public class Q257_TheGuardIsBusy extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 6)
-					htmltext = "30039-02.htm";
-				else
-				{
-					htmltext = "30039-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 6) ? "30039-01.htm" : "30039-02.htm";
 				break;
 			
 			case STATE_STARTED:

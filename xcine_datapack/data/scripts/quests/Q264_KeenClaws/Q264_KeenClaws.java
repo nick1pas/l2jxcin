@@ -20,7 +20,7 @@ import net.xcine.util.Rnd;
 
 public class Q264_KeenClaws extends Quest
 {
-	private final static String qn = "Q264_KeenClaws";
+	private static final String qn = "Q264_KeenClaws";
 	
 	// Item
 	private static final int WOLF_CLAW = 1367;
@@ -84,13 +84,7 @@ public class Q264_KeenClaws extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 3)
-					htmltext = "30136-02.htm";
-				else
-				{
-					htmltext = "30136-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 3) ? "30136-01.htm" : "30136-02.htm";
 				break;
 			
 			case STATE_STARTED:

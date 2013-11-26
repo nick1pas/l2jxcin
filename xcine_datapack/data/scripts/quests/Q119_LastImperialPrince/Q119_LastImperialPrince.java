@@ -19,18 +19,18 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q119_LastImperialPrince extends Quest
 {
-	private final static String qn = "Q119_LastImperialPrince";
+	private static final String qn = "Q119_LastImperialPrince";
 	
 	// NPCs
-	private final static int NAMELESS_SPIRIT = 31453;
-	private final static int DEVORIN = 32009;
+	private static final int NAMELESS_SPIRIT = 31453;
+	private static final int DEVORIN = 32009;
 	
 	// Item
-	private final static int ANTIQUE_BROOCH = 7262;
+	private static final int ANTIQUE_BROOCH = 7262;
 	
-	public Q119_LastImperialPrince(int questId, String name, String descr)
+	public Q119_LastImperialPrince()
 	{
-		super(questId, name, descr);
+		super(119, qn, "Last Imperial Prince");
 		
 		questItemIds = new int[]
 		{
@@ -53,8 +53,8 @@ public class Q119_LastImperialPrince extends Quest
 		{
 			if (st.hasQuestItems(ANTIQUE_BROOCH))
 			{
-				st.set("cond", "1");
 				st.setState(STATE_STARTED);
+				st.set("cond", "1");
 				st.playSound(QuestState.SOUND_ACCEPT);
 			}
 			else
@@ -96,13 +96,7 @@ public class Q119_LastImperialPrince extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (!st.hasQuestItems(ANTIQUE_BROOCH) || player.getLevel() < 74)
-				{
-					htmltext = "31453-00a.htm";
-					st.exitQuest(true);
-				}
-				else
-					htmltext = "31453-01.htm";
+				htmltext = (!st.hasQuestItems(ANTIQUE_BROOCH) || player.getLevel() < 74) ? "31453-00a.htm" : "31453-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -135,6 +129,6 @@ public class Q119_LastImperialPrince extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q119_LastImperialPrince(119, qn, "Last Imperial Prince");
+		new Q119_LastImperialPrince();
 	}
 }

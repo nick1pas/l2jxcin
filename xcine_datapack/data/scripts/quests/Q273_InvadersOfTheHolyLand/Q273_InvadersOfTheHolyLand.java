@@ -21,7 +21,7 @@ import net.xcine.util.Rnd;
 
 public class Q273_InvadersOfTheHolyLand extends Quest
 {
-	private final static String qn = "Q273_InvadersOfTheHolyLand";
+	private static final String qn = "Q273_InvadersOfTheHolyLand";
 	
 	// Items
 	private static final int BLACK_SOULSTONE = 1475;
@@ -72,7 +72,7 @@ public class Q273_InvadersOfTheHolyLand extends Quest
 	@Override
 	public String onTalk(L2Npc npc, L2PcInstance player)
 	{
-		String htmltext = Quest.getNoQuestMsg();
+		String htmltext = getNoQuestMsg();
 		QuestState st = player.getQuestState(qn);
 		if (st == null)
 			return htmltext;
@@ -81,15 +81,9 @@ public class Q273_InvadersOfTheHolyLand extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.Orc)
-				{
 					htmltext = "30566-00.htm";
-					st.exitQuest(true);
-				}
 				else if (player.getLevel() < 6)
-				{
 					htmltext = "30566-01.htm";
-					st.exitQuest(true);
-				}
 				else
 					htmltext = "30566-02.htm";
 				break;

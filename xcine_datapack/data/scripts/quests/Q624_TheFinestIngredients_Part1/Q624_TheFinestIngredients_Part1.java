@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q624_TheFinestIngredients_Part1 extends Quest
 {
-	private final static String qn = "Q624_TheFinestIngredients_Part1";
+	private static final String qn = "Q624_TheFinestIngredients_Part1";
 	
 	// Mobs
 	private static final int NEPENTHES = 21319;

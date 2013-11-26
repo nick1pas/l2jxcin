@@ -20,18 +20,18 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q102_SeaOfSporesFever extends Quest
 {
-	private final static String qn = "Q102_SeaOfSporesFever";
+	private static final String qn = "Q102_SeaOfSporesFever";
 	
 	// Items
 	private static final int ALBERIUS_LETTER = 964;
 	private static final int EVERGREEN_AMULET = 965;
 	private static final int DRYAD_TEARS = 966;
 	private static final int ALBERIUS_LIST = 746;
-	private static final int COBS_MEDICINE1 = 1130;
-	private static final int COBS_MEDICINE2 = 1131;
-	private static final int COBS_MEDICINE3 = 1132;
-	private static final int COBS_MEDICINE4 = 1133;
-	private static final int COBS_MEDICINE5 = 1134;
+	private static final int COBENDELL_MEDICINE_1 = 1130;
+	private static final int COBENDELL_MEDICINE_2 = 1131;
+	private static final int COBENDELL_MEDICINE_3 = 1132;
+	private static final int COBENDELL_MEDICINE_4 = 1133;
+	private static final int COBENDELL_MEDICINE_5 = 1134;
 	
 	// Rewards
 	private static final int SPIRITSHOT_NO_GRADE = 2509;
@@ -53,20 +53,20 @@ public class Q102_SeaOfSporesFever extends Quest
 	private static final int RAYEN = 30221;
 	private static final int GARTRANDELL = 30285;
 	
-	public Q102_SeaOfSporesFever(int questId, String name, String descr)
+	public Q102_SeaOfSporesFever()
 	{
-		super(questId, name, descr);
+		super(102, qn, "Sea of Spores Fever");
 		
 		questItemIds = new int[]
 		{
 			ALBERIUS_LETTER,
 			EVERGREEN_AMULET,
 			DRYAD_TEARS,
-			COBS_MEDICINE1,
-			COBS_MEDICINE2,
-			COBS_MEDICINE3,
-			COBS_MEDICINE4,
-			COBS_MEDICINE5,
+			COBENDELL_MEDICINE_1,
+			COBENDELL_MEDICINE_2,
+			COBENDELL_MEDICINE_3,
+			COBENDELL_MEDICINE_4,
+			COBENDELL_MEDICINE_5,
 			ALBERIUS_LIST
 		};
 		
@@ -86,10 +86,10 @@ public class Q102_SeaOfSporesFever extends Quest
 		
 		if (event.equalsIgnoreCase("30284-02.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
-			st.giveItems(ALBERIUS_LETTER, 1);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
+			st.giveItems(ALBERIUS_LETTER, 1);
 		}
 		
 		return htmltext;
@@ -107,15 +107,9 @@ public class Q102_SeaOfSporesFever extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.Elf)
-				{
 					htmltext = "30284-00.htm";
-					st.exitQuest(true);
-				}
 				else if (player.getLevel() < 12)
-				{
 					htmltext = "30284-08.htm";
-					st.exitQuest(true);
-				}
 				else
 					htmltext = "30284-07.htm";
 				break;
@@ -138,7 +132,7 @@ public class Q102_SeaOfSporesFever extends Quest
 							st.set("cond", "5");
 							st.set("medicines", "4");
 							st.playSound(QuestState.SOUND_MIDDLE);
-							st.takeItems(COBS_MEDICINE1, 1);
+							st.takeItems(COBENDELL_MEDICINE_1, 1);
 							st.giveItems(ALBERIUS_LIST, 1);
 						}
 						else if (cond == 5)
@@ -175,9 +169,9 @@ public class Q102_SeaOfSporesFever extends Quest
 						{
 							htmltext = "30156-03.htm";
 							st.set("cond", "2");
-							st.giveItems(EVERGREEN_AMULET, 1);
-							st.takeItems(ALBERIUS_LETTER, 1);
 							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(ALBERIUS_LETTER, 1);
+							st.giveItems(EVERGREEN_AMULET, 1);
 						}
 						else if (cond == 2)
 							htmltext = "30156-04.htm";
@@ -187,14 +181,14 @@ public class Q102_SeaOfSporesFever extends Quest
 						{
 							htmltext = "30156-05.htm";
 							st.set("cond", "4");
-							st.takeItems(EVERGREEN_AMULET, 1);
-							st.takeItems(DRYAD_TEARS, -1);
-							st.giveItems(COBS_MEDICINE1, 1);
-							st.giveItems(COBS_MEDICINE2, 1);
-							st.giveItems(COBS_MEDICINE3, 1);
-							st.giveItems(COBS_MEDICINE4, 1);
-							st.giveItems(COBS_MEDICINE5, 1);
 							st.playSound(QuestState.SOUND_MIDDLE);
+							st.takeItems(DRYAD_TEARS, -1);
+							st.takeItems(EVERGREEN_AMULET, 1);
+							st.giveItems(COBENDELL_MEDICINE_1, 1);
+							st.giveItems(COBENDELL_MEDICINE_2, 1);
+							st.giveItems(COBENDELL_MEDICINE_3, 1);
+							st.giveItems(COBENDELL_MEDICINE_4, 1);
+							st.giveItems(COBENDELL_MEDICINE_5, 1);
 						}
 						else if (cond == 4)
 							htmltext = "30156-06.htm";
@@ -204,7 +198,7 @@ public class Q102_SeaOfSporesFever extends Quest
 						if (cond == 5)
 						{
 							htmltext = "30217-01.htm";
-							checkItem(st, COBS_MEDICINE2);
+							checkItem(st, COBENDELL_MEDICINE_2);
 						}
 						break;
 					
@@ -212,7 +206,7 @@ public class Q102_SeaOfSporesFever extends Quest
 						if (cond == 5)
 						{
 							htmltext = "30219-01.htm";
-							checkItem(st, COBS_MEDICINE3);
+							checkItem(st, COBENDELL_MEDICINE_3);
 						}
 						break;
 					
@@ -220,7 +214,7 @@ public class Q102_SeaOfSporesFever extends Quest
 						if (cond == 5)
 						{
 							htmltext = "30221-01.htm";
-							checkItem(st, COBS_MEDICINE4);
+							checkItem(st, COBENDELL_MEDICINE_4);
 						}
 						break;
 					
@@ -228,7 +222,7 @@ public class Q102_SeaOfSporesFever extends Quest
 						if (cond == 5)
 						{
 							htmltext = "30285-01.htm";
-							checkItem(st, COBS_MEDICINE5);
+							checkItem(st, COBENDELL_MEDICINE_5);
 						}
 						break;
 				}
@@ -275,6 +269,6 @@ public class Q102_SeaOfSporesFever extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q102_SeaOfSporesFever(102, qn, "Sea of Spores Fever");
+		new Q102_SeaOfSporesFever();
 	}
 }

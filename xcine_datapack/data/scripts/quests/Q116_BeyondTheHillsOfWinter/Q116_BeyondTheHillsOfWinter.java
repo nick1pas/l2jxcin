@@ -35,9 +35,9 @@ public class Q116_BeyondTheHillsOfWinter extends Quest
 	// Reward
 	private static final int SSD = 1463;
 	
-	public Q116_BeyondTheHillsOfWinter(int questId, String name, String descr)
+	public Q116_BeyondTheHillsOfWinter()
 	{
-		super(questId, name, descr);
+		super(116, qn, "Beyond the Hills of Winter");
 		
 		questItemIds = new int[]
 		{
@@ -58,15 +58,15 @@ public class Q116_BeyondTheHillsOfWinter extends Quest
 		
 		if (event.equalsIgnoreCase("30535-02.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("30535-05.htm"))
 		{
 			st.set("cond", "2");
-			st.giveItems(GOODS, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(GOODS, 1);
 		}
 		else if (event.equalsIgnoreCase("materials"))
 		{
@@ -99,13 +99,7 @@ public class Q116_BeyondTheHillsOfWinter extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 30 && player.getRace() == Race.Dwarf)
-					htmltext = "30535-01.htm";
-				else
-				{
-					htmltext = "30535-00.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 30 || player.getRace() != Race.Dwarf) ? "30535-00.htm" : "30535-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -130,7 +124,7 @@ public class Q116_BeyondTheHillsOfWinter extends Quest
 						break;
 					
 					case OBI:
-						if (cond == 2 && st.getQuestItemsCount(GOODS) == 1)
+						if (cond == 2)
 							htmltext = "32052-00.htm";
 						break;
 				}
@@ -145,6 +139,6 @@ public class Q116_BeyondTheHillsOfWinter extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q116_BeyondTheHillsOfWinter(116, qn, "Beyond the Hills of Winter");
+		new Q116_BeyondTheHillsOfWinter();
 	}
 }

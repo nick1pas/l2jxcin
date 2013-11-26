@@ -28,9 +28,9 @@ public class Q013_ParcelDelivery extends Quest
 	// Item
 	private static final int PACKAGE = 7263;
 	
-	public Q013_ParcelDelivery(int questId, String name, String descr)
+	public Q013_ParcelDelivery()
 	{
-		super(questId, name, descr);
+		super(13, qn, "Parcel Delivery");
 		
 		questItemIds = new int[]
 		{
@@ -51,29 +51,19 @@ public class Q013_ParcelDelivery extends Quest
 		
 		if (event.equalsIgnoreCase("31274-2.htm"))
 		{
-			if (st.getInt("cond") == 0)
-			{
-				st.set("cond", "1");
-				st.setState(STATE_STARTED);
-				st.giveItems(PACKAGE, 1);
-				st.playSound(QuestState.SOUND_ACCEPT);
-			}
+			st.setState(STATE_STARTED);
+			st.set("cond", "1");
+			st.playSound(QuestState.SOUND_ACCEPT);
+			st.giveItems(PACKAGE, 1);
 		}
 		else if (event.equalsIgnoreCase("31539-1.htm"))
 		{
-			if (st.getInt("cond") == 1)
-			{
-				if (st.getQuestItemsCount(PACKAGE) >= 1)
-				{
-					st.takeItems(PACKAGE, 1);
-					st.rewardItems(57, 82656);
-					st.exitQuest(false);
-					st.playSound(QuestState.SOUND_FINISH);
-				}
-				else
-					htmltext = "<html><body>Flame Blacksmith Vulcan:<br>You don't have the required items.</body></html>";
-			}
+			st.takeItems(PACKAGE, 1);
+			st.rewardItems(57, 82656);
+			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(false);
 		}
+		
 		return htmltext;
 	}
 	
@@ -88,13 +78,7 @@ public class Q013_ParcelDelivery extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() < 74)
-				{
-					htmltext = "31274-1.htm";
-					st.exitQuest(true);
-				}
-				else
-					htmltext = "31274-0.htm";
+				htmltext = (player.getLevel() < 74) ? "31274-1.htm" : "31274-0.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -120,6 +104,6 @@ public class Q013_ParcelDelivery extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q013_ParcelDelivery(13, qn, "Parcel Delivery");
+		new Q013_ParcelDelivery();
 	}
 }

@@ -22,7 +22,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q306_CrystalsOfFireAndIce extends Quest
 {
-	private final static String qn = "Q306_CrystalsOfFireAndIce";
+	private static final String qn = "Q306_CrystalsOfFireAndIce";
 	
 	// Items
 	private static final int FLAME_SHARD = 1020;
@@ -109,7 +109,7 @@ public class Q306_CrystalsOfFireAndIce extends Quest
 	@Override
 	public String onTalk(L2Npc npc, L2PcInstance player)
 	{
-		String htmltext = Quest.getNoQuestMsg();
+		String htmltext = getNoQuestMsg();
 		QuestState st = player.getQuestState(qn);
 		if (st == null)
 			return htmltext;

@@ -77,17 +77,11 @@ public class Q266_PleasOfPixies extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.Elf)
-				{
 					htmltext = "31852-00.htm";
-					st.exitQuest(true);
-				}
-				else if (player.getLevel() >= 3)
-					htmltext = "31852-02.htm";
-				else
-				{
+				else if (player.getLevel() < 3)
 					htmltext = "31852-01.htm";
-					st.exitQuest(true);
-				}
+				else
+					htmltext = "31852-02.htm";
 				break;
 			
 			case STATE_STARTED:

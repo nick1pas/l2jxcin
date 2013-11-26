@@ -20,17 +20,14 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q164_BloodFiend extends Quest
 {
-	private final static String qn = "Q164_BloodFiend";
+	private static final String qn = "Q164_BloodFiend";
 	
 	// Item
 	private static final int KIRUNAK_SKULL = 1044;
 	
-	// Reward
-	private static final int ADENA = 57;
-	
-	public Q164_BloodFiend(int questId, String name, String descr)
+	public Q164_BloodFiend()
 	{
-		super(questId, name, descr);
+		super(164, qn, "Blood Fiend");
 		
 		questItemIds = new int[]
 		{
@@ -53,8 +50,8 @@ public class Q164_BloodFiend extends Quest
 		
 		if (event.equalsIgnoreCase("30149-04.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		
@@ -73,25 +70,19 @@ public class Q164_BloodFiend extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() == Race.DarkElf)
-				{
 					htmltext = "30149-00.htm";
-					st.exitQuest(true);
-				}
-				else if (player.getLevel() >= 21)
-					htmltext = "30149-03.htm";
-				else
-				{
+				else if (player.getLevel() < 21)
 					htmltext = "30149-02.htm";
-					st.exitQuest(true);
-				}
+				else
+					htmltext = "30149-03.htm";
 				break;
 			
 			case STATE_STARTED:
-				if (st.getQuestItemsCount(KIRUNAK_SKULL) == 1)
+				if (st.hasQuestItems(KIRUNAK_SKULL))
 				{
 					htmltext = "30149-06.htm";
 					st.takeItems(KIRUNAK_SKULL, 1);
-					st.rewardItems(ADENA, 42130);
+					st.rewardItems(57, 42130);
 					st.playSound(QuestState.SOUND_FINISH);
 					st.exitQuest(false);
 				}
@@ -117,8 +108,8 @@ public class Q164_BloodFiend extends Quest
 		if (!st.hasQuestItems(KIRUNAK_SKULL))
 		{
 			st.set("cond", "2");
-			st.giveItems(KIRUNAK_SKULL, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(KIRUNAK_SKULL, 1);
 		}
 		
 		return null;
@@ -126,6 +117,6 @@ public class Q164_BloodFiend extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q164_BloodFiend(164, qn, "Blood Fiend");
+		new Q164_BloodFiend();
 	}
 }

@@ -21,13 +21,13 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q104_SpiritOfMirrors extends Quest
 {
-	private final static String qn = "Q104_SpiritOfMirrors";
+	private static final String qn = "Q104_SpiritOfMirrors";
 	
 	// Items
 	private static final int GALLINS_OAK_WAND = 748;
-	private static final int WAND_SPIRITBOUND1 = 1135;
-	private static final int WAND_SPIRITBOUND2 = 1136;
-	private static final int WAND_SPIRITBOUND3 = 1137;
+	private static final int WAND_SPIRITBOUND_1 = 1135;
+	private static final int WAND_SPIRITBOUND_2 = 1136;
+	private static final int WAND_SPIRITBOUND_3 = 1137;
 	
 	// Rewards
 	private static final int SPIRITSHOT_NO_GRADE = 2509;
@@ -48,16 +48,16 @@ public class Q104_SpiritOfMirrors extends Quest
 	private static final int JOHNSTONE = 30043;
 	private static final int KENYOS = 30045;
 	
-	public Q104_SpiritOfMirrors(int questId, String name, String descr)
+	public Q104_SpiritOfMirrors()
 	{
-		super(questId, name, descr);
+		super(104, qn, "Spirit of Mirrors");
 		
 		questItemIds = new int[]
 		{
 			GALLINS_OAK_WAND,
-			WAND_SPIRITBOUND1,
-			WAND_SPIRITBOUND2,
-			WAND_SPIRITBOUND3
+			WAND_SPIRITBOUND_1,
+			WAND_SPIRITBOUND_2,
+			WAND_SPIRITBOUND_3
 		};
 		
 		addStartNpc(GALLINT);
@@ -76,8 +76,8 @@ public class Q104_SpiritOfMirrors extends Quest
 		
 		if (event.equalsIgnoreCase("30017-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(GALLINS_OAK_WAND, 1);
 			st.giveItems(GALLINS_OAK_WAND, 1);
@@ -99,15 +99,9 @@ public class Q104_SpiritOfMirrors extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.Human)
-				{
 					htmltext = "30017-00.htm";
-					st.exitQuest(true);
-				}
 				else if (player.getLevel() < 10)
-				{
 					htmltext = "30017-01.htm";
-					st.exitQuest(true);
-				}
 				else
 					htmltext = "30017-02.htm";
 				break;
@@ -123,9 +117,9 @@ public class Q104_SpiritOfMirrors extends Quest
 						{
 							htmltext = "30017-05.htm";
 							
-							st.takeItems(WAND_SPIRITBOUND1, -1);
-							st.takeItems(WAND_SPIRITBOUND2, -1);
-							st.takeItems(WAND_SPIRITBOUND3, -1);
+							st.takeItems(WAND_SPIRITBOUND_1, -1);
+							st.takeItems(WAND_SPIRITBOUND_2, -1);
+							st.takeItems(WAND_SPIRITBOUND_3, -1);
 							
 							st.giveItems(WAND_OF_ADEPT, 1);
 							st.rewardItems(LESSER_HEALING_POT, 100);
@@ -161,25 +155,9 @@ public class Q104_SpiritOfMirrors extends Quest
 						break;
 					
 					case KENYOS:
-						htmltext = "30045-01.htm";
-						if (cond == 1)
-						{
-							st.set("cond", "2");
-							st.playSound(QuestState.SOUND_MIDDLE);
-						}
-						break;
-					
 					case JOHNSTONE:
-						htmltext = "30043-01.htm";
-						if (cond == 1)
-						{
-							st.set("cond", "2");
-							st.playSound(QuestState.SOUND_MIDDLE);
-						}
-						break;
-					
 					case ARNOLD:
-						htmltext = "30041-01.htm";
+						htmltext = npc.getNpcId() + "-01.htm";
 						if (cond == 1)
 						{
 							st.set("cond", "2");
@@ -209,12 +187,12 @@ public class Q104_SpiritOfMirrors extends Quest
 			switch (npc.getNpcId())
 			{
 				case 27003:
-					if (!st.hasQuestItems(WAND_SPIRITBOUND1))
+					if (!st.hasQuestItems(WAND_SPIRITBOUND_1))
 					{
 						st.takeItems(GALLINS_OAK_WAND, 1);
-						st.giveItems(WAND_SPIRITBOUND1, 1);
+						st.giveItems(WAND_SPIRITBOUND_1, 1);
 						
-						if (st.hasQuestItems(WAND_SPIRITBOUND2) && st.hasQuestItems(WAND_SPIRITBOUND3))
+						if (st.hasQuestItems(WAND_SPIRITBOUND_2) && st.hasQuestItems(WAND_SPIRITBOUND_3))
 						{
 							st.set("cond", "3");
 							st.playSound(QuestState.SOUND_MIDDLE);
@@ -225,12 +203,12 @@ public class Q104_SpiritOfMirrors extends Quest
 					break;
 				
 				case 27004:
-					if (!st.hasQuestItems(WAND_SPIRITBOUND2))
+					if (!st.hasQuestItems(WAND_SPIRITBOUND_2))
 					{
 						st.takeItems(GALLINS_OAK_WAND, 1);
-						st.giveItems(WAND_SPIRITBOUND2, 1);
+						st.giveItems(WAND_SPIRITBOUND_2, 1);
 						
-						if (st.hasQuestItems(WAND_SPIRITBOUND1) && st.hasQuestItems(WAND_SPIRITBOUND3))
+						if (st.hasQuestItems(WAND_SPIRITBOUND_1) && st.hasQuestItems(WAND_SPIRITBOUND_3))
 						{
 							st.set("cond", "3");
 							st.playSound(QuestState.SOUND_MIDDLE);
@@ -241,12 +219,12 @@ public class Q104_SpiritOfMirrors extends Quest
 					break;
 				
 				case 27005:
-					if (!st.hasQuestItems(WAND_SPIRITBOUND3))
+					if (!st.hasQuestItems(WAND_SPIRITBOUND_3))
 					{
 						st.takeItems(GALLINS_OAK_WAND, 1);
-						st.giveItems(WAND_SPIRITBOUND3, 1);
+						st.giveItems(WAND_SPIRITBOUND_3, 1);
 						
-						if (st.hasQuestItems(WAND_SPIRITBOUND1) && st.hasQuestItems(WAND_SPIRITBOUND2))
+						if (st.hasQuestItems(WAND_SPIRITBOUND_1) && st.hasQuestItems(WAND_SPIRITBOUND_2))
 						{
 							st.set("cond", "3");
 							st.playSound(QuestState.SOUND_MIDDLE);
@@ -263,6 +241,6 @@ public class Q104_SpiritOfMirrors extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q104_SpiritOfMirrors(104, qn, "Spirit of Mirrors");
+		new Q104_SpiritOfMirrors();
 	}
 }

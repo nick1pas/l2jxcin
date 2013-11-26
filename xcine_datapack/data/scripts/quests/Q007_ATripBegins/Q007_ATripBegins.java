@@ -23,20 +23,20 @@ public class Q007_ATripBegins extends Quest
 	private static final String qn = "Q007_ATripBegins";
 	
 	// NPCs
-	private final static int MIRABEL = 30146;
-	private final static int ARIEL = 30148;
-	private final static int ASTERIOS = 30154;
+	private static final int MIRABEL = 30146;
+	private static final int ARIEL = 30148;
+	private static final int ASTERIOS = 30154;
 	
 	// Items
-	private final static int ARIEL_RECO = 7572;
+	private static final int ARIEL_RECO = 7572;
 	
 	// Rewards
-	private final static int MARK_TRAVELER = 7570;
-	private final static int SCROLL_GIRAN = 7559;
+	private static final int MARK_TRAVELER = 7570;
+	private static final int SOE_GIRAN = 7559;
 	
-	public Q007_ATripBegins(int questId, String name, String descr)
+	public Q007_ATripBegins()
 	{
-		super(questId, name, descr);
+		super(7, qn, "A Trip Begins");
 		
 		questItemIds = new int[]
 		{
@@ -57,26 +57,26 @@ public class Q007_ATripBegins extends Quest
 		
 		if (event.equalsIgnoreCase("30146-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("30148-02.htm"))
 		{
 			st.set("cond", "2");
-			st.giveItems(ARIEL_RECO, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(ARIEL_RECO, 1);
 		}
 		else if (event.equalsIgnoreCase("30154-02.htm"))
 		{
 			st.set("cond", "3");
-			st.takeItems(ARIEL_RECO, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(ARIEL_RECO, 1);
 		}
 		else if (event.equalsIgnoreCase("30146-06.htm"))
 		{
 			st.giveItems(MARK_TRAVELER, 1);
-			st.rewardItems(SCROLL_GIRAN, 1);
+			st.rewardItems(SOE_GIRAN, 1);
 			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 		}
@@ -96,17 +96,11 @@ public class Q007_ATripBegins extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.Elf)
-				{
 					htmltext = "30146-01.htm";
-					st.exitQuest(true);
-				}
-				else if (player.getLevel() >= 3)
-					htmltext = "30146-02.htm";
-				else
-				{
+				else if (player.getLevel() < 3)
 					htmltext = "30146-01a.htm";
-					st.exitQuest(true);
-				}
+				else
+					htmltext = "30146-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -123,14 +117,14 @@ public class Q007_ATripBegins extends Quest
 					case ARIEL:
 						if (cond == 1)
 							htmltext = "30148-01.htm";
-						else if (cond == 2 && st.getQuestItemsCount(ARIEL_RECO) == 1)
+						else if (cond == 2)
 							htmltext = "30148-03.htm";
 						break;
 					
 					case ASTERIOS:
-						if (cond == 2 && st.getQuestItemsCount(ARIEL_RECO) == 1)
+						if (cond == 2)
 							htmltext = "30154-01.htm";
-						else
+						else if (cond == 3)
 							htmltext = "30154-03.htm";
 						break;
 				}
@@ -146,6 +140,6 @@ public class Q007_ATripBegins extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q007_ATripBegins(7, qn, "A Trip Begins");
+		new Q007_ATripBegins();
 	}
 }

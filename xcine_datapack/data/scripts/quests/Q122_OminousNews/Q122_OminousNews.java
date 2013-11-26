@@ -25,9 +25,9 @@ public class Q122_OminousNews extends Quest
 	private static final int MOIRA = 31979;
 	private static final int KARUDA = 32017;
 	
-	public Q122_OminousNews(int questId, String name, String descr)
+	public Q122_OminousNews()
 	{
-		super(questId, name, descr);
+		super(122, qn, "Ominous News");
 		
 		addStartNpc(MOIRA);
 		addTalkId(MOIRA, KARUDA);
@@ -43,15 +43,15 @@ public class Q122_OminousNews extends Quest
 		
 		if (event.equalsIgnoreCase("31979-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("32017-02.htm"))
 		{
 			st.rewardItems(57, 1695);
-			st.exitQuest(false);
 			st.playSound(QuestState.SOUND_FINISH);
+			st.exitQuest(false);
 		}
 		
 		return htmltext;
@@ -68,13 +68,7 @@ public class Q122_OminousNews extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 20)
-					htmltext = "31979-02.htm";
-				else
-				{
-					htmltext = "31979-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 20) ? "31979-01.htm" : "31979-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -100,6 +94,6 @@ public class Q122_OminousNews extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q122_OminousNews(122, qn, "Ominous News");
+		new Q122_OminousNews();
 	}
 }

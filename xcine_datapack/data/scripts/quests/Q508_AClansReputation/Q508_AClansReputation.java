@@ -25,7 +25,7 @@ import net.xcine.util.Rnd;
 
 public class Q508_AClansReputation extends Quest
 {
-	private final static String qn = "Q508_AClansReputation";
+	private static final String qn = "Q508_AClansReputation";
 	
 	// NPC
 	private static final int SIR_ERIC_RODEMAI = 30868;

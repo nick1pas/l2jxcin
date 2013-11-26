@@ -23,15 +23,15 @@ public class Q379_FantasyWine extends Quest
 	private static final String qn = "Q379_FantasyWine";
 	
 	// NPCs
-	private final static int HARLAN = 30074;
+	private static final int HARLAN = 30074;
 	
 	// Monsters
-	private final static int ENKU_CHAMPION = 20291;
-	private final static int ENKU_SHAMAN = 20292;
+	private static final int ENKU_CHAMPION = 20291;
+	private static final int ENKU_SHAMAN = 20292;
 	
 	// Items
-	private final static int LEAF = 5893;
-	private final static int STONE = 5894;
+	private static final int LEAF = 5893;
+	private static final int STONE = 5894;
 	
 	public Q379_FantasyWine(int questId, String name, String descr)
 	{

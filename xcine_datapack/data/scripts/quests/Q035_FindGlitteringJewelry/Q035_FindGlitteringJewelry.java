@@ -25,9 +25,6 @@ public class Q035_FindGlitteringJewelry extends Quest
 	private static final int ELLIE = 30091;
 	private static final int FELTON = 30879;
 	
-	// Monster
-	private static final int ALLIGATOR = 20135;
-	
 	// Items
 	private static final int ROUGH_JEWEL = 7162;
 	private static final int ORIHARUKON = 1893;
@@ -37,9 +34,10 @@ public class Q035_FindGlitteringJewelry extends Quest
 	// Reward
 	private static final int JEWEL_BOX = 7077;
 	
-	public Q035_FindGlitteringJewelry(int id, String name, String descr)
+	public Q035_FindGlitteringJewelry()
 	{
-		super(id, name, descr);
+		super(35, qn, "Find Glittering Jewelry");
+		
 		questItemIds = new int[]
 		{
 			ROUGH_JEWEL
@@ -48,7 +46,7 @@ public class Q035_FindGlitteringJewelry extends Quest
 		addStartNpc(ELLIE);
 		addTalkId(ELLIE, FELTON);
 		
-		addKillId(ALLIGATOR);
+		addKillId(20135); // Alligator
 	}
 	
 	@Override
@@ -59,24 +57,24 @@ public class Q035_FindGlitteringJewelry extends Quest
 		if (st == null)
 			return htmltext;
 		
-		if (event.equals("30091-1.htm"))
+		if (event.equalsIgnoreCase("30091-1.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
-		else if (event.equals("30879-1.htm"))
+		else if (event.equalsIgnoreCase("30879-1.htm"))
 		{
 			st.set("cond", "2");
 			st.playSound(QuestState.SOUND_MIDDLE);
 		}
-		else if (event.equals("30091-3.htm"))
+		else if (event.equalsIgnoreCase("30091-3.htm"))
 		{
-			st.takeItems(ROUGH_JEWEL, 10);
 			st.set("cond", "4");
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.takeItems(ROUGH_JEWEL, 10);
 		}
-		else if (event.equals("30091-5.htm"))
+		else if (event.equalsIgnoreCase("30091-5.htm"))
 		{
 			if (st.getQuestItemsCount(ORIHARUKON) >= 5 && st.getQuestItemsCount(SILVER_NUGGET) >= 500 && st.getQuestItemsCount(THONS) >= 150)
 			{
@@ -111,16 +109,10 @@ public class Q035_FindGlitteringJewelry extends Quest
 					if (fwear != null && fwear.getInt("cond") == 6)
 						htmltext = "30091-0.htm";
 					else
-					{
 						htmltext = "30091-0a.htm";
-						st.exitQuest(true);
-					}
 				}
 				else
-				{
 					htmltext = "30091-0b.htm";
-					st.exitQuest(true);
-				}
 				break;
 			
 			case STATE_STARTED:
@@ -133,18 +125,13 @@ public class Q035_FindGlitteringJewelry extends Quest
 						else if (cond == 3)
 							htmltext = "30091-2.htm";
 						else if (cond == 4)
-						{
-							if (st.getQuestItemsCount(ORIHARUKON) >= 5 && st.getQuestItemsCount(SILVER_NUGGET) >= 500 && st.getQuestItemsCount(THONS) >= 150)
-								htmltext = "30091-4.htm";
-							else
-								htmltext = "30091-4a.htm";
-						}
+							htmltext = (st.getQuestItemsCount(ORIHARUKON) >= 5 && st.getQuestItemsCount(SILVER_NUGGET) >= 500 && st.getQuestItemsCount(THONS) >= 150) ? "30091-4.htm" : "30091-4a.htm";
 						break;
 					
 					case FELTON:
 						if (cond == 1)
 							htmltext = "30879-0.htm";
-						else if (cond >= 2)
+						else if (cond > 1)
 							htmltext = "30879-1a.htm";
 						break;
 				}
@@ -173,6 +160,6 @@ public class Q035_FindGlitteringJewelry extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q035_FindGlitteringJewelry(35, qn, "Find Glittering Jewelry");
+		new Q035_FindGlitteringJewelry();
 	}
 }

@@ -24,7 +24,7 @@ import net.xcine.util.Rnd;
 
 public class Q422_RepentYourSins extends Quest
 {
-	private final static String qn = "Q422_RepentYourSins";
+	private static final String qn = "Q422_RepentYourSins";
 	
 	// Items
 	private static final int SCAVENGER_WERERAT_SKULL = 4326;

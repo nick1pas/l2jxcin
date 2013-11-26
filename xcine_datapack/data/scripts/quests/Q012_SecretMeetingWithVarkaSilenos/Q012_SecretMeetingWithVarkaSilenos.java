@@ -22,16 +22,16 @@ public class Q012_SecretMeetingWithVarkaSilenos extends Quest
 	private static final String qn = "Q012_SecretMeetingWithVarkaSilenos";
 	
 	// NPCs
-	private final static int CADMON = 31296;
-	private final static int HELMUT = 31258;
-	private final static int NARAN_ASHANUK = 31378;
+	private static final int CADMON = 31296;
+	private static final int HELMUT = 31258;
+	private static final int NARAN_ASHANUK = 31378;
 	
 	// Items
-	private final static int MUNITIONS_BOX = 7232;
+	private static final int MUNITIONS_BOX = 7232;
 	
-	public Q012_SecretMeetingWithVarkaSilenos(int questId, String name, String descr)
+	public Q012_SecretMeetingWithVarkaSilenos()
 	{
-		super(questId, name, descr);
+		super(12, qn, "Secret Meeting With Varka Silenos");
 		
 		questItemIds = new int[]
 		{
@@ -52,8 +52,8 @@ public class Q012_SecretMeetingWithVarkaSilenos extends Quest
 		
 		if (event.equalsIgnoreCase("31296-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("31258-02.htm"))
@@ -84,13 +84,7 @@ public class Q012_SecretMeetingWithVarkaSilenos extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 74)
-					htmltext = "31296-01.htm";
-				else
-				{
-					htmltext = "31296-02.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 74) ? "31296-02.htm" : "31296-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -110,7 +104,7 @@ public class Q012_SecretMeetingWithVarkaSilenos extends Quest
 						break;
 					
 					case NARAN_ASHANUK:
-						if (cond == 2 && st.getQuestItemsCount(MUNITIONS_BOX) > 0)
+						if (cond == 2)
 							htmltext = "31378-01.htm";
 						break;
 				}
@@ -126,6 +120,6 @@ public class Q012_SecretMeetingWithVarkaSilenos extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q012_SecretMeetingWithVarkaSilenos(12, qn, "Secret Meeting With Varka Silenos");
+		new Q012_SecretMeetingWithVarkaSilenos();
 	}
 }

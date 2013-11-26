@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q431_WeddingMarch extends Quest
 {
-	private final static String qn = "Q431_WeddingMarch";
+	private static final String qn = "Q431_WeddingMarch";
 	
 	// NPC
 	private static final int KANTABILON = 31042;

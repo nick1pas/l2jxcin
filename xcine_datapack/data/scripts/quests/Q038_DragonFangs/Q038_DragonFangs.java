@@ -23,7 +23,7 @@ import net.xcine.util.Rnd;
 
 public class Q038_DragonFangs extends Quest
 {
-	private final static String qn = "Q038_DragonFangs";
+	private static final String qn = "Q038_DragonFangs";
 	
 	// Items
 	private static final int FEATHER_ORNAMENT = 7173;
@@ -38,7 +38,7 @@ public class Q038_DragonFangs extends Quest
 	private static final int ROHMER = 30344;
 	
 	// Reward { item, adena }
-	private static final int reward[][] =
+	private static final int REWARD[][] =
 	{
 		{
 			45,
@@ -59,30 +59,30 @@ public class Q038_DragonFangs extends Quest
 	};
 	
 	// Droplist
-	private static final Map<Integer, int[]> DROPLISTS = new HashMap<>();
+	private static final Map<Integer, int[]> DROPLIST = new HashMap<>();
 	{
-		DROPLISTS.put(21100, new int[]
+		DROPLIST.put(21100, new int[]
 		{
 			1,
 			FEATHER_ORNAMENT,
 			100,
 			1000000
 		});
-		DROPLISTS.put(20357, new int[]
+		DROPLIST.put(20357, new int[]
 		{
 			1,
 			FEATHER_ORNAMENT,
 			100,
 			1000000
 		});
-		DROPLISTS.put(21101, new int[]
+		DROPLIST.put(21101, new int[]
 		{
 			6,
 			TOOTH_OF_DRAGON,
 			50,
 			500000
 		});
-		DROPLISTS.put(20356, new int[]
+		DROPLIST.put(20356, new int[]
 		{
 			6,
 			TOOTH_OF_DRAGON,
@@ -91,9 +91,9 @@ public class Q038_DragonFangs extends Quest
 		});
 	}
 	
-	public Q038_DragonFangs(int questId, String name, String descr)
+	public Q038_DragonFangs()
 	{
-		super(questId, name, descr);
+		super(38, qn, "Dragon Fangs");
 		
 		questItemIds = new int[]
 		{
@@ -107,7 +107,7 @@ public class Q038_DragonFangs extends Quest
 		addStartNpc(LUIS);
 		addTalkId(LUIS, IRIS, ROHMER);
 		
-		for (int mob : DROPLISTS.keySet())
+		for (int mob : DROPLIST.keySet())
 			addKillId(mob);
 	}
 	
@@ -121,63 +121,64 @@ public class Q038_DragonFangs extends Quest
 		
 		if (event.equalsIgnoreCase("30386-02.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("30386-04.htm"))
 		{
 			st.set("cond", "3");
+			st.playSound(QuestState.SOUND_MIDDLE);
 			st.takeItems(FEATHER_ORNAMENT, 100);
 			st.giveItems(TOOTH_OF_TOTEM, 1);
-			st.playSound(QuestState.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("30034-02a.htm"))
 		{
-			if (st.getQuestItemsCount(TOOTH_OF_TOTEM) == 1)
+			if (st.hasQuestItems(TOOTH_OF_TOTEM))
 			{
 				htmltext = "30034-02.htm";
 				st.set("cond", "4");
+				st.playSound(QuestState.SOUND_MIDDLE);
 				st.takeItems(TOOTH_OF_TOTEM, 1);
 				st.giveItems(LETTER_OF_IRIS, 1);
-				st.playSound(QuestState.SOUND_MIDDLE);
 			}
 		}
 		else if (event.equalsIgnoreCase("30344-02a.htm"))
 		{
-			if (st.getQuestItemsCount(LETTER_OF_IRIS) == 1)
+			if (st.hasQuestItems(LETTER_OF_IRIS))
 			{
 				htmltext = "30344-02.htm";
 				st.set("cond", "5");
+				st.playSound(QuestState.SOUND_MIDDLE);
 				st.takeItems(LETTER_OF_IRIS, 1);
 				st.giveItems(LETTER_OF_ROHMER, 1);
-				st.playSound(QuestState.SOUND_MIDDLE);
 			}
 		}
 		else if (event.equalsIgnoreCase("30034-04a.htm"))
 		{
-			if (st.getQuestItemsCount(LETTER_OF_ROHMER) == 1)
+			if (st.hasQuestItems(LETTER_OF_ROHMER))
 			{
-				st.takeItems(LETTER_OF_ROHMER, 1);
 				htmltext = "30034-04.htm";
 				st.set("cond", "6");
 				st.playSound(QuestState.SOUND_MIDDLE);
+				st.takeItems(LETTER_OF_ROHMER, 1);
 			}
 		}
 		else if (event.equalsIgnoreCase("30034-06a.htm"))
 		{
-			if (st.getQuestItemsCount(TOOTH_OF_DRAGON) == 50)
+			if (st.getQuestItemsCount(TOOTH_OF_DRAGON) >= 50)
 			{
-				int position = Rnd.get(reward.length);
+				int position = Rnd.get(REWARD.length);
 				
 				htmltext = "30034-06.htm";
 				st.takeItems(TOOTH_OF_DRAGON, 50);
-				st.giveItems(reward[position][0], 1);
-				st.giveItems(57, reward[position][1]);
+				st.giveItems(REWARD[position][0], 1);
+				st.rewardItems(57, REWARD[position][1]);
 				st.playSound(QuestState.SOUND_FINISH);
 				st.exitQuest(false);
 			}
 		}
+		
 		return htmltext;
 	}
 	
@@ -192,13 +193,7 @@ public class Q038_DragonFangs extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 19)
-					htmltext = "30386-01.htm";
-				else
-				{
-					st.exitQuest(true);
-					htmltext = "30386-01a.htm";
-				}
+				htmltext = (player.getLevel() < 19) ? "30386-01a.htm" : "30386-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -210,7 +205,7 @@ public class Q038_DragonFangs extends Quest
 							htmltext = "30386-02a.htm";
 						else if (cond == 2)
 							htmltext = "30386-03.htm";
-						else if (cond >= 3)
+						else if (cond > 2)
 							htmltext = "30386-03a.htm";
 						break;
 					
@@ -230,7 +225,7 @@ public class Q038_DragonFangs extends Quest
 					case ROHMER:
 						if (cond == 4)
 							htmltext = "30344-01.htm";
-						else if (cond >= 5)
+						else if (cond > 4)
 							htmltext = "30344-03.htm";
 						break;
 				}
@@ -251,22 +246,16 @@ public class Q038_DragonFangs extends Quest
 		if (st == null)
 			return null;
 		
-		int npcId = npc.getNpcId();
+		final int droplist[] = DROPLIST.get(npc.getNpcId());
 		
-		if (DROPLISTS.containsKey(npcId))
-		{
-			int droplist[] = DROPLISTS.get(npcId);
-			
-			if (st.getInt("cond") == droplist[0])
-				if (st.dropItems(droplist[1], 1, droplist[2], droplist[3]))
-					st.set("cond", String.valueOf(droplist[0] + 1));
-		}
+		if (st.getInt("cond") == droplist[0] && st.dropItems(droplist[1], 1, droplist[2], droplist[3]))
+			st.set("cond", String.valueOf(droplist[0] + 1));
 		
 		return null;
 	}
 	
 	public static void main(String[] args)
 	{
-		new Q038_DragonFangs(38, qn, "Dragon Fangs");
+		new Q038_DragonFangs();
 	}
 }

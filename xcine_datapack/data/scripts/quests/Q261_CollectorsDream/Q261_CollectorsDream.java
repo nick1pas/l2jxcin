@@ -22,13 +22,13 @@ public class Q261_CollectorsDream extends Quest
 	private static final String qn = "Q261_CollectorsDream";
 	
 	// NPC
-	private final static int ALSHUPES = 30222;
+	private static final int ALSHUPES = 30222;
 	
 	// Items
-	private final static int GIANT_SPIDER_LEG = 1087;
+	private static final int GIANT_SPIDER_LEG = 1087;
 	
 	// Reward
-	private final static int ADENA = 57;
+	private static final int ADENA = 57;
 	
 	public Q261_CollectorsDream(int questId, String name, String descr)
 	{
@@ -74,13 +74,7 @@ public class Q261_CollectorsDream extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 15)
-					htmltext = "30222-02.htm";
-				else
-				{
-					htmltext = "30222-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 15) ? "30222-01.htm" : "30222-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -90,8 +84,8 @@ public class Q261_CollectorsDream extends Quest
 					st.takeItems(GIANT_SPIDER_LEG, -1);
 					st.rewardItems(ADENA, 1000);
 					st.rewardExpAndSp(2000, 0);
-					st.exitQuest(true);
 					st.playSound(QuestState.SOUND_FINISH);
+					st.exitQuest(true);
 				}
 				else
 					htmltext = "30222-04.htm";

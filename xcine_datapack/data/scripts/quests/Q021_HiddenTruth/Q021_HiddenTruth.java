@@ -21,38 +21,29 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q021_HiddenTruth extends Quest
 {
-	private final static String qn = "Q021_HiddenTruth";
+	private static final String qn = "Q021_HiddenTruth";
 	
 	// NPCs
-	private final static int MYSTERIOUS_WIZARD = 31522;
-	private final static int TOMBSTONE = 31523;
-	private final static int VON_HELLMAN = 31524;
-	private final static int VON_HELLMAN_PAGE = 31525;
-	private final static int BROKEN_BOOKSHELF = 31526;
-	private final static int AGRIPEL = 31348;
-	private final static int DOMINIC = 31350;
-	private final static int BENEDICT = 31349;
-	private final static int INNOCENTIN = 31328;
+	private static final int MYSTERIOUS_WIZARD = 31522;
+	private static final int TOMBSTONE = 31523;
+	private static final int VON_HELLMAN = 31524;
+	private static final int VON_HELLMAN_PAGE = 31525;
+	private static final int BROKEN_BOOKSHELF = 31526;
+	private static final int AGRIPEL = 31348;
+	private static final int DOMINIC = 31350;
+	private static final int BENEDICT = 31349;
+	private static final int INNOCENTIN = 31328;
 	
 	// Items
-	private final static int CROSS_OF_EINHASAD = 7140;
-	private final static int CROSS_OF_EINHASAD_NEXT_QUEST = 7141;
+	private static final int CROSS_OF_EINHASAD = 7140;
+	private static final int CROSS_OF_EINHASAD_NEXT_QUEST = 7141;
 	
-	private L2Npc VonHellmannPage;
-	private L2Npc VonHellmann;
+	private L2Npc _vonHellmannPage;
+	private L2Npc _vonHellmann;
 	
-	private void spawnVonHellmann(QuestState st)
+	public Q021_HiddenTruth()
 	{
-		if (VonHellmann == null)
-		{
-			VonHellmann = addSpawn(VON_HELLMAN, 51432, -54570, -3136, 0, false, 0, true);
-			VonHellmann.broadcastNpcSay("Who awoke me?");
-		}
-	}
-	
-	public Q021_HiddenTruth(int questId, String name, String descr)
-	{
-		super(questId, name, descr);
+		super(21, qn, "Hidden Truth");
 		
 		questItemIds = new int[]
 		{
@@ -89,14 +80,14 @@ public class Q021_HiddenTruth extends Quest
 			st.playSound(QuestState.SOUND_MIDDLE);
 			
 			// Spawn the page.
-			if (VonHellmannPage == null)
+			if (_vonHellmannPage == null)
 			{
-				VonHellmannPage = addSpawn(VON_HELLMAN_PAGE, 51462, -54539, -3176, 0, false, 90000, true);
-				VonHellmannPage.broadcastNpcSay("My master has instructed me to be your guide, " + st.getPlayer().getName() + ".");
+				_vonHellmannPage = addSpawn(VON_HELLMAN_PAGE, 51462, -54539, -3176, 0, false, 90000, true);
+				_vonHellmannPage.broadcastNpcSay("My master has instructed me to be your guide, " + player.getName() + ".");
 				
 				// Make it move.
-				startQuestTimer("1", 4000, VonHellmannPage, player, false);
-				startQuestTimer("pageDespawn", 88000, VonHellmannPage, player, false);
+				startQuestTimer("1", 4000, _vonHellmannPage, player, false);
+				startQuestTimer("pageDespawn", 88000, _vonHellmannPage, player, false);
 			}
 		}
 		else if (event.equalsIgnoreCase("31526-08.htm"))
@@ -107,44 +98,44 @@ public class Q021_HiddenTruth extends Quest
 		else if (event.equalsIgnoreCase("31526-14.htm"))
 		{
 			st.set("cond", "6");
-			st.giveItems(CROSS_OF_EINHASAD, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);
+			st.giveItems(CROSS_OF_EINHASAD, 1);
 		}
 		else if (event.equalsIgnoreCase("1"))
 		{
-			VonHellmannPage.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(52373, -54296, -3136, 0));
-			VonHellmannPage.broadcastNpcSay("Follow me...");
-			startQuestTimer("2", 5000, VonHellmannPage, player, false);
+			_vonHellmannPage.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(52373, -54296, -3136, 0));
+			_vonHellmannPage.broadcastNpcSay("Follow me...");
+			startQuestTimer("2", 5000, _vonHellmannPage, player, false);
 			return null;
 		}
 		else if (event.equalsIgnoreCase("2"))
 		{
-			VonHellmannPage.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(52279, -53064, -3161, 0));
-			startQuestTimer("3", 12000, VonHellmannPage, player, false);
+			_vonHellmannPage.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(52279, -53064, -3161, 0));
+			startQuestTimer("3", 12000, _vonHellmannPage, player, false);
 			return null;
 		}
 		else if (event.equalsIgnoreCase("3"))
 		{
-			VonHellmannPage.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(51909, -51725, -3125, 0));
-			startQuestTimer("4", 15000, VonHellmannPage, player, false);
+			_vonHellmannPage.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(51909, -51725, -3125, 0));
+			startQuestTimer("4", 15000, _vonHellmannPage, player, false);
 			return null;
 		}
 		else if (event.equalsIgnoreCase("4"))
 		{
-			VonHellmannPage.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(52438, -51240, -3097, 0));
-			VonHellmannPage.broadcastNpcSay("This where that here...");
-			startQuestTimer("5", 5000, VonHellmannPage, player, false);
+			_vonHellmannPage.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(52438, -51240, -3097, 0));
+			_vonHellmannPage.broadcastNpcSay("This where that here...");
+			startQuestTimer("5", 5000, _vonHellmannPage, player, false);
 			return null;
 		}
 		else if (event.equalsIgnoreCase("5"))
 		{
-			VonHellmannPage.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(52143, -51418, -3085, 0));
-			VonHellmannPage.broadcastNpcSay("I want to speak to you...");
+			_vonHellmannPage.getAI().setIntention(CtrlIntention.AI_INTENTION_MOVE_TO, new L2CharPosition(52143, -51418, -3085, 0));
+			_vonHellmannPage.broadcastNpcSay("I want to speak to you...");
 			return null;
 		}
 		else if (event.equalsIgnoreCase("31328-05.htm"))
 		{
-			if (st.getQuestItemsCount(CROSS_OF_EINHASAD) != 0)
+			if (st.hasQuestItems(CROSS_OF_EINHASAD))
 			{
 				st.takeItems(CROSS_OF_EINHASAD, 1);
 				st.giveItems(CROSS_OF_EINHASAD_NEXT_QUEST, 1);
@@ -153,7 +144,7 @@ public class Q021_HiddenTruth extends Quest
 			}
 		}
 		else if (event.equalsIgnoreCase("pageDespawn"))
-			VonHellmannPage = null;
+			_vonHellmannPage = null;
 		
 		return htmltext;
 	}
@@ -169,13 +160,7 @@ public class Q021_HiddenTruth extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (st.getPlayer().getLevel() >= 63)
-					htmltext = "31522-01.htm";
-				else
-				{
-					htmltext = "31522-03.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 63) ? "31522-03.htm" : "31522-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -194,7 +179,7 @@ public class Q021_HiddenTruth extends Quest
 							htmltext = "31523-04.htm";
 							spawnVonHellmann(st);
 						}
-						else if (cond >= 4)
+						else if (cond > 3)
 							htmltext = "31523-04.htm";
 						break;
 					
@@ -203,7 +188,7 @@ public class Q021_HiddenTruth extends Quest
 							htmltext = "31524-01.htm";
 						else if (cond == 3)
 							htmltext = "31524-07.htm";
-						else if (cond >= 4)
+						else if (cond > 3)
 							htmltext = "31524-07a.htm";
 						break;
 					
@@ -211,7 +196,7 @@ public class Q021_HiddenTruth extends Quest
 						if (cond == 3 || cond == 4)
 						{
 							htmltext = "31525-01.htm";
-							if (!VonHellmannPage.isMoving())
+							if (!_vonHellmannPage.isMoving())
 							{
 								htmltext = "31525-02.htm";
 								if (cond == 3)
@@ -228,36 +213,36 @@ public class Q021_HiddenTruth extends Quest
 						{
 							htmltext = "31526-01.htm";
 							
-							if (!VonHellmannPage.isMoving())
+							if (!_vonHellmannPage.isMoving())
 							{
 								st.set("cond", "5");
 								st.playSound(QuestState.SOUND_MIDDLE);
 								
-								if (VonHellmannPage != null)
+								if (_vonHellmannPage != null)
 								{
-									VonHellmannPage.deleteMe();
-									VonHellmannPage = null;
+									_vonHellmannPage.deleteMe();
+									_vonHellmannPage = null;
 									
 									cancelQuestTimer("pageDespawn", null, player);
 								}
 								
-								if (VonHellmann != null)
+								if (_vonHellmann != null)
 								{
-									VonHellmann.deleteMe();
-									VonHellmann = null;
+									_vonHellmann.deleteMe();
+									_vonHellmann = null;
 								}
 							}
 						}
 						else if (cond == 5)
 							htmltext = "31526-10.htm";
-						else if (cond >= 6)
+						else if (cond > 5)
 							htmltext = "31526-15.htm";
 						break;
 					
 					case AGRIPEL:
 					case BENEDICT:
 					case DOMINIC:
-						if ((cond == 6 || cond == 7) && st.getQuestItemsCount(CROSS_OF_EINHASAD) >= 1)
+						if ((cond == 6 || cond == 7) && st.hasQuestItems(CROSS_OF_EINHASAD))
 						{
 							int npcId = npc.getNpcId();
 							
@@ -295,7 +280,7 @@ public class Q021_HiddenTruth extends Quest
 						break;
 					
 					case INNOCENTIN:
-						if (cond == 7 && st.getQuestItemsCount(CROSS_OF_EINHASAD) != 0)
+						if (cond == 7 && st.hasQuestItems(CROSS_OF_EINHASAD))
 							htmltext = "31328-01.htm";
 						break;
 				}
@@ -312,8 +297,17 @@ public class Q021_HiddenTruth extends Quest
 		return htmltext;
 	}
 	
+	private void spawnVonHellmann(QuestState st)
+	{
+		if (_vonHellmann == null)
+		{
+			_vonHellmann = addSpawn(VON_HELLMAN, 51432, -54570, -3136, 0, false, 0, true);
+			_vonHellmann.broadcastNpcSay("Who awoke me?");
+		}
+	}
+	
 	public static void main(String[] args)
 	{
-		new Q021_HiddenTruth(21, qn, "Hidden Truth");
+		new Q021_HiddenTruth();
 	}
 }

@@ -82,15 +82,7 @@ public class Q247_PossessorOfAPreciousSoul extends Quest
 		{
 			case STATE_CREATED:
 				if (st.hasQuestItems(CARADINE_LETTER_3))
-				{
-					if (!player.isSubClassActive() || player.getLevel() < 75)
-					{
-						htmltext = "31740-02.htm";
-						st.exitQuest(true);
-					}
-					else
-						htmltext = "31740-01.htm";
-				}
+					htmltext = (!player.isSubClassActive() || player.getLevel() < 75) ? "31740-02.htm" : "31740-01.htm";
 				break;
 			
 			case STATE_STARTED:

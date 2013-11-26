@@ -20,26 +20,23 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q165_ShilensHunt extends Quest
 {
-	private final static String qn = "Q165_ShilensHunt";
+	private static final String qn = "Q165_ShilensHunt";
 	
 	// Items
 	private static final int DARK_BEZOAR = 1160;
 	private static final int LESSER_HEALING_POTION = 1060;
 	
-	// NPC
-	private static final int NELSYA = 30348;
-	
-	public Q165_ShilensHunt(int questId, String name, String descr)
+	public Q165_ShilensHunt()
 	{
-		super(questId, name, descr);
+		super(165, qn, "Shilen's Hunt");
 		
 		questItemIds = new int[]
 		{
 			DARK_BEZOAR
 		};
 		
-		addStartNpc(NELSYA);
-		addTalkId(NELSYA);
+		addStartNpc(30348); // Nelsya
+		addTalkId(30348);
 		
 		addKillId(20456, 20529, 20532, 20536);
 	}
@@ -54,8 +51,8 @@ public class Q165_ShilensHunt extends Quest
 		
 		if (event.equalsIgnoreCase("30348-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
 		
@@ -73,21 +70,12 @@ public class Q165_ShilensHunt extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() == Race.DarkElf)
-				{
-					if (player.getLevel() >= 3)
-						htmltext = "30348-02.htm";
-					else
-					{
-						htmltext = "30348-01.htm";
-						st.exitQuest(true);
-					}
-				}
-				else
-				{
+				if (player.getRace() != Race.DarkElf)
 					htmltext = "30348-00.htm";
-					st.exitQuest(true);
-				}
+				else if (player.getLevel() < 3)
+					htmltext = "30348-01.htm";
+				else
+					htmltext = "30348-02.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -97,8 +85,8 @@ public class Q165_ShilensHunt extends Quest
 					st.takeItems(DARK_BEZOAR, -1);
 					st.rewardItems(LESSER_HEALING_POTION, 5);
 					st.rewardExpAndSp(1000, 0);
-					st.exitQuest(false);
 					st.playSound(QuestState.SOUND_FINISH);
+					st.exitQuest(false);
 				}
 				else
 					htmltext = "30348-04.htm";
@@ -127,6 +115,6 @@ public class Q165_ShilensHunt extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q165_ShilensHunt(165, qn, "Shilen's Hunt");
+		new Q165_ShilensHunt();
 	}
 }

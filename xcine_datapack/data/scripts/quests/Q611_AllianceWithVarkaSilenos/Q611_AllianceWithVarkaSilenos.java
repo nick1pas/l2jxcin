@@ -25,8 +25,8 @@ import net.xcine.util.Rnd;
  */
 public class Q611_AllianceWithVarkaSilenos extends Quest
 {
-	private final static String qn = "Q611_AllianceWithVarkaSilenos";
-	private final static String qn2 = "Q612_WarWithKetraOrcs";
+	private static final String qn = "Q611_AllianceWithVarkaSilenos";
+	private static final String qn2 = "Q612_WarWithKetraOrcs";
 	
 	private static final TIntIntHashMap Chance = new TIntIntHashMap();
 	{

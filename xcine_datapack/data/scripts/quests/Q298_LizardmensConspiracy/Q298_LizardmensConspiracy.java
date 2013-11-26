@@ -97,13 +97,7 @@ public class Q298_LizardmensConspiracy extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 25)
-					htmltext = "30333-0a.htm";
-				else
-				{
-					htmltext = "30333-0b.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 25) ? "30333-0b.htm" : "30333-0a.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -117,7 +111,7 @@ public class Q298_LizardmensConspiracy extends Quest
 					case ROHMER:
 						if (cond == 1)
 						{
-							if (st.getQuestItemsCount(PATROL_REPORT) == 1)
+							if (st.hasQuestItems(PATROL_REPORT))
 								htmltext = "30344-0.htm";
 							else
 								htmltext = "30344-0a.htm";

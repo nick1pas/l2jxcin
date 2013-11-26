@@ -33,16 +33,16 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 	private static final int TOROCCO = 30555;
 	
 	// Items
-	private static final int GOUPHS_CONTRACT = 1559;
-	private static final int REEPS_CONTRACT = 1560;
+	private static final int GOUPH_CONTRACT = 1559;
+	private static final int REEP_CONTRACT = 1560;
 	private static final int ELVEN_WINE = 1561;
-	private static final int BRUNOS_DICE = 1562;
-	private static final int BRUNOS_CONTRACT = 1563;
+	private static final int BRUNO_DICE = 1562;
+	private static final int BRUNO_CONTRACT = 1563;
 	private static final int AQUAMARINE = 1564;
 	private static final int CHRYSOBERYL = 1565;
-	private static final int GEM_BOX1 = 1566;
+	private static final int GEM_BOX = 1566;
 	private static final int COAL_PIECE = 1567;
-	private static final int BRUNOS_LETTER = 1568;
+	private static final int BRUNO_LETTER = 1568;
 	private static final int BERRY_TART = 1569;
 	private static final int BAT_DIAGRAM = 1570;
 	private static final int STAR_DIAMOND = 1571;
@@ -63,22 +63,22 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 	private static final int ECHO_CELEBRATION = 4416;
 	private static final int LESSER_HEALING_POTION = 1060;
 	
-	public Q108_JumbleTumbleDiamondFuss(int questId, String name, String descr)
+	public Q108_JumbleTumbleDiamondFuss()
 	{
-		super(questId, name, descr);
+		super(108, qn, "Jumble, Tumble, Diamond Fuss");
 		
 		questItemIds = new int[]
 		{
-			GOUPHS_CONTRACT,
-			REEPS_CONTRACT,
+			GOUPH_CONTRACT,
+			REEP_CONTRACT,
 			ELVEN_WINE,
-			BRUNOS_DICE,
-			BRUNOS_CONTRACT,
+			BRUNO_DICE,
+			BRUNO_CONTRACT,
 			AQUAMARINE,
 			CHRYSOBERYL,
-			GEM_BOX1,
+			GEM_BOX,
 			COAL_PIECE,
-			BRUNOS_LETTER,
+			BRUNO_LETTER,
 			BERRY_TART,
 			BAT_DIAGRAM,
 			STAR_DIAMOND
@@ -100,24 +100,24 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 		
 		if (event.equalsIgnoreCase("30523-03.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
-			st.giveItems(GOUPHS_CONTRACT, 1);
+			st.giveItems(GOUPH_CONTRACT, 1);
 		}
 		else if (event.equalsIgnoreCase("30555-02.htm"))
 		{
 			st.set("cond", "3");
 			st.playSound(QuestState.SOUND_MIDDLE);
-			st.takeItems(REEPS_CONTRACT, 1);
+			st.takeItems(REEP_CONTRACT, 1);
 			st.giveItems(ELVEN_WINE, 1);
 		}
 		else if (event.equalsIgnoreCase("30526-02.htm"))
 		{
 			st.set("cond", "5");
 			st.playSound(QuestState.SOUND_MIDDLE);
-			st.takeItems(BRUNOS_DICE, 1);
-			st.giveItems(BRUNOS_CONTRACT, 1);
+			st.takeItems(BRUNO_DICE, 1);
+			st.giveItems(BRUNO_CONTRACT, 1);
 		}
 		
 		return htmltext;
@@ -135,15 +135,9 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.Dwarf)
-				{
 					htmltext = "30523-00.htm";
-					st.exitQuest(true);
-				}
 				else if (player.getLevel() < 10)
-				{
 					htmltext = "30523-01.htm";
-					st.exitQuest(true);
-				}
 				else
 					htmltext = "30523-02.htm";
 				break;
@@ -162,7 +156,7 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 							htmltext = "30523-06.htm";
 							st.set("cond", "8");
 							st.playSound(QuestState.SOUND_MIDDLE);
-							st.takeItems(GEM_BOX1, 1);
+							st.takeItems(GEM_BOX, 1);
 							st.giveItems(COAL_PIECE, 1);
 						}
 						else if (cond > 7 && cond < 12)
@@ -205,8 +199,8 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 							htmltext = "30516-01.htm";
 							st.set("cond", "2");
 							st.playSound(QuestState.SOUND_MIDDLE);
-							st.takeItems(GOUPHS_CONTRACT, 1);
-							st.giveItems(REEPS_CONTRACT, 1);
+							st.takeItems(GOUPH_CONTRACT, 1);
+							st.giveItems(REEP_CONTRACT, 1);
 						}
 						else if (cond > 1)
 							htmltext = "30516-02.htm";
@@ -230,7 +224,7 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 							st.set("cond", "4");
 							st.playSound(QuestState.SOUND_MIDDLE);
 							st.takeItems(ELVEN_WINE, 1);
-							st.giveItems(BRUNOS_DICE, 1);
+							st.giveItems(BRUNO_DICE, 1);
 						}
 						else if (cond == 4)
 							htmltext = "30529-02.htm";
@@ -248,10 +242,10 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 							htmltext = "30526-04.htm";
 							st.set("cond", "7");
 							st.playSound(QuestState.SOUND_MIDDLE);
-							st.takeItems(BRUNOS_CONTRACT, 1);
+							st.takeItems(BRUNO_CONTRACT, 1);
 							st.takeItems(AQUAMARINE, -1);
 							st.takeItems(CHRYSOBERYL, -1);
-							st.giveItems(GEM_BOX1, 1);
+							st.giveItems(GEM_BOX, 1);
 						}
 						else if (cond == 7)
 							htmltext = "30526-05.htm";
@@ -261,7 +255,7 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 							st.set("cond", "9");
 							st.playSound(QuestState.SOUND_MIDDLE);
 							st.takeItems(COAL_PIECE, 1);
-							st.giveItems(BRUNOS_LETTER, 1);
+							st.giveItems(BRUNO_LETTER, 1);
 						}
 						else if (cond == 9)
 							htmltext = "30526-07.htm";
@@ -275,7 +269,7 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 							htmltext = "30521-01.htm";
 							st.set("cond", "10");
 							st.playSound(QuestState.SOUND_MIDDLE);
-							st.takeItems(BRUNOS_LETTER, 1);
+							st.takeItems(BRUNO_LETTER, 1);
 							st.giveItems(BERRY_TART, 1);
 						}
 						else if (cond == 10)
@@ -294,12 +288,7 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 							st.giveItems(BAT_DIAGRAM, 1);
 						}
 						else if (cond == 11)
-						{
-							if (Rnd.get(2) == 0)
-								htmltext = "30522-02.htm";
-							else
-								htmltext = "30522-04.htm";
-						}
+							htmltext = (Rnd.nextBoolean()) ? "30522-02.htm" : "30522-04.htm";
 						else if (cond == 12)
 							htmltext = "30522-03.htm";
 						break;
@@ -307,7 +296,7 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 				break;
 			
 			case STATE_COMPLETED:
-				htmltext = Quest.getAlreadyCompletedMsg();
+				htmltext = getAlreadyCompletedMsg();
 				break;
 		}
 		return htmltext;
@@ -345,6 +334,6 @@ public class Q108_JumbleTumbleDiamondFuss extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q108_JumbleTumbleDiamondFuss(108, qn, "Jumble, Tumble, Diamond Fuss");
+		new Q108_JumbleTumbleDiamondFuss();
 	}
 }

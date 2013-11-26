@@ -11,19 +11,19 @@ public class Q364_JovialAccordion extends Quest
 	private static final String qn = "Q364_JovialAccordion";
 	
 	// NPCs
-	private final static int BARBADO = 30959;
-	private final static int SWAN = 30957;
-	private final static int SABRIN = 30060;
-	private final static int XABER = 30075;
-	private final static int CLOTH_CHEST = 30961;
-	private final static int BEER_CHEST = 30960;
+	private static final int BARBADO = 30959;
+	private static final int SWAN = 30957;
+	private static final int SABRIN = 30060;
+	private static final int XABER = 30075;
+	private static final int CLOTH_CHEST = 30961;
+	private static final int BEER_CHEST = 30960;
 	
 	// Items
-	private final static int KEY_1 = 4323;
-	private final static int KEY_2 = 4324;
-	private final static int STOLEN_BEER = 4321;
-	private final static int STOLEN_CLOTHES = 4322;
-	private final static int ECHO = 4421;
+	private static final int KEY_1 = 4323;
+	private static final int KEY_2 = 4324;
+	private static final int STOLEN_BEER = 4321;
+	private static final int STOLEN_CLOTHES = 4322;
+	private static final int ECHO = 4421;
 	
 	public Q364_JovialAccordion(int questId, String name, String descr)
 	{

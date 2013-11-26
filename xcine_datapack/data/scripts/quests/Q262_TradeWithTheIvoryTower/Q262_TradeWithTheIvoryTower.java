@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q262_TradeWithTheIvoryTower extends Quest
 {
-	private final static String qn = "Q262_TradeWithTheIvoryTower";
+	private static final String qn = "Q262_TradeWithTheIvoryTower";
 	
 	// NPC
 	private static final int Vollodos = 30137;
@@ -71,13 +71,7 @@ public class Q262_TradeWithTheIvoryTower extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 8)
-					htmltext = "30137-02.htm";
-				else
-				{
-					htmltext = "30137-01.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 8) ? "30137-01.htm" : "30137-02.htm";
 				break;
 			
 			case STATE_STARTED:

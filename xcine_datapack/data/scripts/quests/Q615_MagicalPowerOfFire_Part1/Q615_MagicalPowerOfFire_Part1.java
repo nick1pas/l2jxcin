@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q615_MagicalPowerOfFire_Part1 extends Quest
 {
-	private final static String qn = "Q615_MagicalPowerOfFire_Part1";
+	private static final String qn = "Q615_MagicalPowerOfFire_Part1";
 	
 	// NPCs
 	private static final int NARAN = 31378;

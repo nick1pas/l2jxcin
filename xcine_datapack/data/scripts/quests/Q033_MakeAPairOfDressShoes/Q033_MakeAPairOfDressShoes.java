@@ -34,59 +34,63 @@ public class Q033_MakeAPairOfDressShoes extends Quest
 	// Rewards
 	public static int DRESS_SHOES_BOX = 7113;
 	
-	public Q033_MakeAPairOfDressShoes(int questId, String name, String descr)
+	public Q033_MakeAPairOfDressShoes()
 	{
-		super(questId, name, descr);
+		super(33, qn, "Make a Pair of Dress Shoes");
 		
 		addStartNpc(WOODLEY);
 		addTalkId(WOODLEY, IAN, LEIKAR);
 	}
 	
 	@Override
-	public String onEvent(String event, QuestState st)
+	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		String htmltext = event;
-		if (event.equals("30838-1.htm"))
+		QuestState st = player.getQuestState(qn);
+		if (st == null)
+			return htmltext;
+		
+		if (event.equalsIgnoreCase("30838-1.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 		}
-		else if (event.equals("31520-1.htm"))
+		else if (event.equalsIgnoreCase("31520-1.htm"))
 		{
 			st.set("cond", "2");
 			st.playSound(QuestState.SOUND_MIDDLE);
 		}
-		else if (event.equals("30838-3.htm"))
+		else if (event.equalsIgnoreCase("30838-3.htm"))
 		{
 			st.set("cond", "3");
 			st.playSound(QuestState.SOUND_MIDDLE);
 		}
-		else if (event.equals("30838-5.htm"))
+		else if (event.equalsIgnoreCase("30838-5.htm"))
 		{
 			if (st.getQuestItemsCount(LEATHER) >= 200 && st.getQuestItemsCount(THREAD) >= 600 && st.getQuestItemsCount(ADENA) >= 200000)
 			{
-				st.takeItems(LEATHER, 200);
-				st.takeItems(THREAD, 600);
-				st.takeItems(ADENA, 200000);
 				st.set("cond", "4");
 				st.playSound(QuestState.SOUND_MIDDLE);
+				st.takeItems(ADENA, 200000);
+				st.takeItems(LEATHER, 200);
+				st.takeItems(THREAD, 600);
 			}
 			else
 				htmltext = "30838-4a.htm";
 		}
-		else if (event.equals("30164-1.htm"))
+		else if (event.equalsIgnoreCase("30164-1.htm"))
 		{
 			if (st.getQuestItemsCount(ADENA) >= 300000)
 			{
-				st.takeItems(ADENA, 300000);
 				st.set("cond", "5");
 				st.playSound(QuestState.SOUND_MIDDLE);
+				st.takeItems(ADENA, 300000);
 			}
 			else
 				htmltext = "30164-1a.htm";
 		}
-		else if (event.equals("30838-7.htm"))
+		else if (event.equalsIgnoreCase("30838-7.htm"))
 		{
 			st.giveItems(DRESS_SHOES_BOX, 1);
 			st.playSound(QuestState.SOUND_FINISH);
@@ -113,16 +117,10 @@ public class Q033_MakeAPairOfDressShoes extends Quest
 					if (fwear != null && fwear.getInt("cond") == 7)
 						htmltext = "30838-0.htm";
 					else
-					{
 						htmltext = "30838-0a.htm";
-						st.exitQuest(true);
-					}
 				}
 				else
-				{
 					htmltext = "30838-0b.htm";
-					st.exitQuest(true);
-				}
 				break;
 			
 			case STATE_STARTED:
@@ -150,7 +148,7 @@ public class Q033_MakeAPairOfDressShoes extends Quest
 					case LEIKAR:
 						if (cond == 1)
 							htmltext = "31520-0.htm";
-						else if (cond >= 2)
+						else if (cond > 1)
 							htmltext = "31520-1a.htm";
 						break;
 					
@@ -173,6 +171,6 @@ public class Q033_MakeAPairOfDressShoes extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q033_MakeAPairOfDressShoes(33, qn, "Make a Pair of Dress Shoes");
+		new Q033_MakeAPairOfDressShoes();
 	}
 }

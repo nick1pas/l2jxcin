@@ -19,7 +19,7 @@ import net.xcine.gameserver.model.quest.QuestState;
 
 public class Q155_FindSirWindawood extends Quest
 {
-	private final static String qn = "Q155_FindSirWindawood";
+	private static final String qn = "Q155_FindSirWindawood";
 	
 	// Items
 	private static final int OFFICIAL_LETTER = 1019;
@@ -29,9 +29,9 @@ public class Q155_FindSirWindawood extends Quest
 	private static final int ABELLOS = 30042;
 	private static final int WINDAWOOD = 30311;
 	
-	public Q155_FindSirWindawood(int questId, String name, String descr)
+	public Q155_FindSirWindawood()
 	{
-		super(questId, name, descr);
+		super(155, qn, "Find Sir Windawood");
 		
 		questItemIds = new int[]
 		{
@@ -52,10 +52,10 @@ public class Q155_FindSirWindawood extends Quest
 		
 		if (event.equalsIgnoreCase("30042-02.htm"))
 		{
-			st.set("cond", "1");
 			st.setState(STATE_STARTED);
-			st.giveItems(OFFICIAL_LETTER, 1);
+			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
+			st.giveItems(OFFICIAL_LETTER, 1);
 		}
 		
 		return htmltext;
@@ -72,13 +72,7 @@ public class Q155_FindSirWindawood extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getLevel() >= 3)
-					htmltext = "30042-01.htm";
-				else
-				{
-					htmltext = "30042-01a.htm";
-					st.exitQuest(true);
-				}
+				htmltext = (player.getLevel() < 3) ? "30042-01a.htm" : "30042-01.htm";
 				break;
 			
 			case STATE_STARTED:
@@ -89,10 +83,10 @@ public class Q155_FindSirWindawood extends Quest
 						break;
 					
 					case WINDAWOOD:
-						if (st.getQuestItemsCount(OFFICIAL_LETTER) == 1)
+						if (st.hasQuestItems(OFFICIAL_LETTER))
 						{
 							htmltext = "30311-01.htm";
-							st.takeItems(OFFICIAL_LETTER, -1);
+							st.takeItems(OFFICIAL_LETTER, 1);
 							st.rewardItems(HASTE_POTION, 1);
 							st.playSound(QuestState.SOUND_FINISH);
 							st.exitQuest(false);
@@ -111,6 +105,6 @@ public class Q155_FindSirWindawood extends Quest
 	
 	public static void main(String[] args)
 	{
-		new Q155_FindSirWindawood(155, qn, "Find Sir Windawood");
+		new Q155_FindSirWindawood();
 	}
 }

@@ -94,15 +94,9 @@ public class Q292_BrigandsSweep extends Quest
 		{
 			case STATE_CREATED:
 				if (player.getRace() != Race.Dwarf)
-				{
 					htmltext = "30532-00.htm";
-					st.exitQuest(true);
-				}
 				else if (player.getLevel() < 5)
-				{
 					htmltext = "30532-01.htm";
-					st.exitQuest(true);
-				}
 				else
 					htmltext = "30532-02.htm";
 				break;

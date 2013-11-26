@@ -23,7 +23,7 @@ import net.xcine.gameserver.network.serverpackets.SystemMessage;
 
 public class Q510_AClansReputation extends Quest
 {
-	private final static String qn = "Q510_AClansReputation";
+	private static final String qn = "Q510_AClansReputation";
 	
 	// NPC
 	private static final int Valdis = 31331;

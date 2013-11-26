@@ -155,9 +155,10 @@ public class Q602_ShadowOfLight extends Quest
 	public String onKill(L2Npc npc, L2PcInstance player, boolean isPet)
 	{
 		L2PcInstance partyMember = getRandomPartyMember(player, npc, "cond", "1");
-		QuestState st = partyMember.getQuestState(qn);
-		if (st == null)
+		if (partyMember == null)
 			return null;
+		
+		QuestState st = partyMember.getQuestState(qn);
 		
 		if (st.dropItems(EYE_OF_DARKNESS, 1, 100, 300000))
 			st.set("cond", "2");

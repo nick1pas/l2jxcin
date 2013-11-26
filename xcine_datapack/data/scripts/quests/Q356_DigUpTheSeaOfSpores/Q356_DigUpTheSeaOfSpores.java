@@ -20,18 +20,18 @@ import net.xcine.util.Rnd;
 
 public class Q356_DigUpTheSeaOfSpores extends Quest
 {
-	private final static String qn = "Q356_DigUpTheSeaOfSpores";
+	private static final String qn = "Q356_DigUpTheSeaOfSpores";
 	
 	// Items
-	private final static int HERB_SPORE = 5866;
-	private final static int CARN_SPORE = 5865;
+	private static final int HERB_SPORE = 5866;
+	private static final int CARN_SPORE = 5865;
 	
 	// NPC
-	private final static int GAUEN = 30717;
+	private static final int GAUEN = 30717;
 	
 	// Monsters
-	private final static int ROTTING_TREE = 20558;
-	private final static int SPORE_ZOMBIE = 20562;
+	private static final int ROTTING_TREE = 20558;
+	private static final int SPORE_ZOMBIE = 20562;
 	
 	public Q356_DigUpTheSeaOfSpores(int questId, String name, String descr)
 	{

@@ -29,8 +29,10 @@ import net.xcine.gameserver.model.Location;
 import net.xcine.gameserver.model.actor.L2Character;
 import net.xcine.gameserver.model.actor.L2Npc;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.entity.BanditStrongholdSiege;
 import net.xcine.gameserver.model.entity.Castle;
 import net.xcine.gameserver.model.entity.ClanHall;
+import net.xcine.gameserver.model.entity.WildBeastFarmSiege;
 import net.xcine.gameserver.model.zone.type.L2ArenaZone;
 import net.xcine.gameserver.model.zone.type.L2ClanHallZone;
 import net.xcine.gameserver.xmlfactory.XMLDocumentFactory;
@@ -344,6 +346,20 @@ public class MapRegionTable
 					if ((castle.getSiege().checkIsDefender(player.getClan()) || castle.getSiege().checkIsAttacker(player.getClan())) && SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE) == SevenSigns.CABAL_DAWN)
 						return TownManager.getSecondClosestTown(activeChar).getSpawnLoc();
 				}
+			}
+			
+			if (BanditStrongholdSiege.getInstance().isPlayerRegister(((L2PcInstance)activeChar).getClan(),activeChar.getName()))
+			{
+				L2Npc flag = BanditStrongholdSiege.getInstance().getSiegeFlag(((L2PcInstance)activeChar).getClan());
+				if (flag != null)
+					return new Location(flag.getX(), flag.getY(), flag.getZ());
+			}
+
+			if (WildBeastFarmSiege.getInstance().isPlayerRegister(((L2PcInstance)activeChar).getClan(),activeChar.getName()))
+			{
+				L2Npc flag = WildBeastFarmSiege.getInstance().getSiegeFlag(((L2PcInstance)activeChar).getClan());
+				if (flag != null)
+					return new Location(flag.getX(), flag.getY(), flag.getZ());
 			}
 		}
 		

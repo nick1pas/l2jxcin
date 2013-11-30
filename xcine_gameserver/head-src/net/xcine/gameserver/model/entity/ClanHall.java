@@ -48,6 +48,7 @@ public class ClanHall
 	private List<String> _doorDefault = new ArrayList<>();;
 	private final String _name;
 	private int _ownerId;
+	private L2Clan _ownerClan;
 	private final int _lease;
 	private final String _desc;
 	private final String _location;
@@ -205,6 +206,20 @@ public class ClanHall
 		}
 	}
 	
+	public L2Clan getOwnerClan()
+	{
+		if(_ownerId == 0)
+		{
+			return null;
+		}
+
+		if(_ownerClan == null)
+		{
+			_ownerClan = ClanTable.getInstance().getClan(getOwnerId());
+		}
+
+		return _ownerClan;
+	}
 	public ClanHall(int clanHallId, String name, int ownerId, int lease, String desc, String location, long paidUntil, int Grade, boolean paid)
 	{
 		_clanHallId = clanHallId;

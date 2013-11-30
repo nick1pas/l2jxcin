@@ -89,11 +89,13 @@ import net.xcine.gameserver.model.L2Multisell;
 import net.xcine.gameserver.model.L2World;
 import net.xcine.gameserver.model.PartyMatchRoomList;
 import net.xcine.gameserver.model.PartyMatchWaitingList;
+import net.xcine.gameserver.model.entity.BanditStrongholdSiege;
 import net.xcine.gameserver.model.entity.Castle;
 import net.xcine.gameserver.model.entity.DevastatedCastle;
 import net.xcine.gameserver.model.entity.FortressOfDead;
 import net.xcine.gameserver.model.entity.FortressOfResistance;
 import net.xcine.gameserver.model.entity.Hero;
+import net.xcine.gameserver.model.entity.WildBeastFarmSiege;
 import net.xcine.gameserver.model.olympiad.Olympiad;
 import net.xcine.gameserver.model.olympiad.OlympiadGameManager;
 import net.xcine.gameserver.network.L2GameClient;
@@ -162,9 +164,10 @@ public class GameServer
 		SpellbookTable.getInstance();
 		
 		Util.printSection("Conquerable Halls");
+		BanditStrongholdSiege.getInstance();
+		WildBeastFarmSiege.getInstance();
 		DevastatedCastle.getInstance();
 		FortressOfResistance.getInstance();
-		FortressOfDead.getInstance();
 		
 		Util.printSection("Augments");
 		AugmentationData.getInstance();

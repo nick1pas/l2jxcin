@@ -33,6 +33,7 @@ public abstract class L2Object
 	private int _objectId; // Object identifier
 	private ObjectPoly _poly;
 	private ObjectPosition _position;
+	private int _instanceId = 0;
 	
 	public L2Object(int objectId)
 	{
@@ -343,5 +344,10 @@ public abstract class L2Object
 	public String toString()
 	{
 		return (getClass().getSimpleName() + ":" + getName() + "[" + getObjectId() + "]");
+	}
+	
+	public int getInstanceId()
+	{
+		return _instanceId;
 	}
 }

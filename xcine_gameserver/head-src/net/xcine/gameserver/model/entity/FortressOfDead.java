@@ -333,7 +333,7 @@ public class FortressOfDead
 		private int _z;
 		private int _heading;
 
-		MonsterLocation(int id, int x, int y, int z, int heading)
+		public MonsterLocation(int id, int x, int y, int z, int heading)
 		{
 			_id = id;
 			_x = x;
@@ -352,17 +352,17 @@ public class FortressOfDead
 			return _x;
 		}
 
-		public  int getY()
+		public int getY()
 		{
 			return _y;
 		}
 
-		public  int getZ()
+		public int getZ()
 		{
 			return _z;
 		}
 
-		public  int getHeading()
+		public int getHeading()
 		{
 			return _heading;
 		}
@@ -728,7 +728,6 @@ public class FortressOfDead
 			{
 				L2NpcTemplate template = NpcTable.getInstance().getTemplate(ml.getId());
 				L2Spawn sp = new L2Spawn(template);
-				//sp.setAmount(1);
 				sp.setLocx(ml.getX());
 				sp.setLocy(ml.getY());
 				sp.setLocz(ml.getZ());

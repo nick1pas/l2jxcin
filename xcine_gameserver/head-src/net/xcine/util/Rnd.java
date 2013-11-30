@@ -436,4 +436,24 @@ public final class Rnd
 	{
 		return rnd.nextLong();
 	}
+
+	/**
+	 *
+	 * @param chance
+	 * @return true 
+	 */
+	public static boolean chance(final int chance)
+	{
+		return chance >= 1 && (chance > 99 || get(99) + 1 <= chance);
+	}
+
+	/**
+	 * @param chance
+	 *          
+	 * @return true 
+	 */
+	public static boolean chance(final double chance)
+	{
+		return nextDouble() <= chance / 100.;
+	}
 }

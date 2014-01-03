@@ -14,6 +14,7 @@
  */
 package net.xcine.gameserver.network.clientpackets;
 
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.L2ClanMember;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -38,6 +39,12 @@ public class RequestGiveNickName extends L2GameClientPacket
 		final L2PcInstance activeChar = getClient().getActiveChar();
 		if (activeChar == null)
 			return;
+				
+		if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(activeChar))
+		{
+			activeChar.sendMessage("You cannot change title while participating in an event.");
+			return;
+		}
 		
 		// Noblesse can bestow a title to themselves
 		if (activeChar.isNoble() && _target.matches(activeChar.getName()))

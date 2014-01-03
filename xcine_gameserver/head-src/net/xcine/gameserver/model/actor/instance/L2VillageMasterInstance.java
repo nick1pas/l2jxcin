@@ -22,6 +22,7 @@ import net.xcine.gameserver.datatables.CharTemplateTable;
 import net.xcine.gameserver.datatables.ClanTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.SkillTreeTable;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.instancemanager.SiegeManager;
 import net.xcine.gameserver.model.L2Clan;
 import net.xcine.gameserver.model.L2Clan.SubPledge;
@@ -167,6 +168,12 @@ public class L2VillageMasterInstance extends L2NpcInstance
 			if (player.isCastingNow() || player.isAllSkillsDisabled())
 			{
 				player.sendPacket(SystemMessageId.SUBCLASS_NO_CHANGE_OR_CREATE_WHILE_SKILL_IN_USE);
+				return;
+			}
+ 			
+			if (EventManager.getInstance().players.contains(player))
+			{
+				player.sendMessage("Subclass cannot be changed while registered to event.");
 				return;
 			}
 			

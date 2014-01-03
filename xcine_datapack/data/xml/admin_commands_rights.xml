@@ -395,5 +395,18 @@
 	<aCar name="admin_zone_check" accessLevel="1" />
 	<aCar name="admin_zone_visual" accessLevel="1" />
 	<aCar name="admin_zone_visual_clear" accessLevel="1" />
-	
+	 	
+	<!-- FENCES -->
+	<aCar name="admin_spawnfence" accessLevel="1" />
+	<aCar name="admin_deletefence" accessLevel="1" />
+	<aCar name="admin_listfence" accessLevel="1" />
+
+	<!-- EVENTS -->
+	<aCar name="admin_events" accessLevel="1" />
+	<aCar name="admin_enableEvent" accessLevel="1" />
+	<aCar name="admin_configureEvent" accessLevel="1" />
+	<aCar name="admin_event_set" accessLevel="1" />
+	<aCar name="admin_event_finish" accessLevel="1" />
+	<aCar name="admin_event_start" accessLevel="1" />
+
 </list>

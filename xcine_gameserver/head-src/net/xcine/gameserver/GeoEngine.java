@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.DoorTable;
+import net.xcine.gameserver.datatables.FenceTable;
 import net.xcine.gameserver.model.L2Object;
 import net.xcine.gameserver.model.L2Spawn;
 import net.xcine.gameserver.model.L2World;
@@ -116,6 +117,9 @@ public class GeoEngine extends GeoData
 	{
 		if (DoorTable.getInstance().checkIfDoorsBetween(cha.getX(), cha.getY(), cha.getZ(), target.getX(), target.getY(), target.getZ()))
 			return false;
+ 		
+		if (!FenceTable.canSeeTarget(cha, target.getX(), target.getY()))
+			return false;
 		
 		if (cha.getZ() >= target.getZ())
 			return canSeeTarget(cha.getX(), cha.getY(), cha.getZ(), target.getX(), target.getY(), target.getZ());
@@ -166,6 +170,9 @@ public class GeoEngine extends GeoData
 	@Override
 	public boolean canSeeTargetDebug(L2PcInstance gm, L2Object target)
 	{
+		if (!FenceTable.canSeeTarget(gm, target.getX(), target.getY()))
+			return false;
+		
 		// comments: see above
 		int z = gm.getZ() + 45;
 		int z2 = target.getZ() + 45;
@@ -205,6 +212,9 @@ public class GeoEngine extends GeoData
 	{
 		Location startpoint = new Location(x, y, z);
 		if (DoorTable.getInstance().checkIfDoorsBetween(x, y, z, tx, ty, tz))
+			return startpoint;
+		
+		if (!FenceTable.canSeeTarget(x,y, tx, ty))
 			return startpoint;
 		
 		Location destiny = new Location(tx, ty, tz);

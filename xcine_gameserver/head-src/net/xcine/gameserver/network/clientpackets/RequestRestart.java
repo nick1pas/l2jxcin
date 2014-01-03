@@ -16,6 +16,7 @@ package net.xcine.gameserver.network.clientpackets;
 
 import net.xcine.Config;
 import net.xcine.gameserver.SevenSignsFestival;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.model.L2Party;
 import net.xcine.gameserver.model.actor.L2Character;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -74,6 +75,13 @@ public final class RequestRestart extends L2GameClientPacket
 				_log.fine(player.getName() + " tried to restart while fighting.");
 			
 			player.sendPacket(SystemMessageId.CANT_RESTART_WHILE_FIGHTING);
+			sendPacket(RestartResponse.valueOf(false));
+			return;
+		}
+ 		
+		if (EventManager.getInstance().isRegistered(player))
+		{
+			player.sendMessage("You cannot restart while you are a participant of an event.");
 			sendPacket(RestartResponse.valueOf(false));
 			return;
 		}

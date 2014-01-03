@@ -17,6 +17,7 @@ package net.xcine.gameserver.network.clientpackets;
 import net.xcine.Config;
 import net.xcine.gameserver.GameTimeController;
 import net.xcine.gameserver.ThreadPoolManager;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.handler.ItemHandler;
 import net.xcine.gameserver.model.L2ItemInstance;
@@ -129,6 +130,9 @@ public final class UseItem extends L2GameClientPacket
 			if ((_itemId >= 7117 && _itemId <= 7135) || (_itemId >= 7554 && _itemId <= 7559))
 				return;
 		}
+ 		
+		if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(activeChar) && !EventManager.getInstance().getCurrentEvent().onUseItem(activeChar, item))
+			return;
 		
 		if (activeChar.isFishing() && (_itemId < 6535 || _itemId > 6540))
 		{

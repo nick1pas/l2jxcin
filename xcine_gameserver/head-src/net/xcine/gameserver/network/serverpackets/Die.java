@@ -15,6 +15,7 @@
 package net.xcine.gameserver.network.serverpackets;
 
 import net.xcine.gameserver.datatables.AccessLevels;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.instancemanager.CastleManager;
 import net.xcine.gameserver.model.L2AccessLevel;
 import net.xcine.gameserver.model.L2Clan;
@@ -32,6 +33,7 @@ public class Die extends L2GameServerPacket
 	private L2AccessLevel _access = AccessLevels._userAccessLevel;
 	private L2Clan _clan;
 	L2Character _activeChar;
+	private boolean _event;
 	
 	public Die(L2Character cha)
 	{
@@ -41,7 +43,7 @@ public class Die extends L2GameServerPacket
 			L2PcInstance player = (L2PcInstance) cha;
 			_access = player.getAccessLevel();
 			_clan = player.getClan();
-			
+			_event = EventManager.getInstance().isRegistered(cha);
 		}
 		_charObjId = cha.getObjectId();
 		_fake = !cha.isDead();
@@ -58,31 +60,42 @@ public class Die extends L2GameServerPacket
 		
 		writeC(0x06);
 		writeD(_charObjId);
-		writeD(0x01); // to nearest village
 		
-		if (_clan != null)
+		if (_event)
 		{
-			L2SiegeClan siegeClan = null;
-			boolean isInDefense = false;
-			
-			Castle castle = CastleManager.getInstance().getCastle(_activeChar);
-			if (castle != null && castle.getSiege().getIsInProgress())
-			{
-				// siege in progress
-				siegeClan = castle.getSiege().getAttackerClan(_clan);
-				if (siegeClan == null && castle.getSiege().checkIsDefender(_clan))
-					isInDefense = true;
-			}
-			
-			writeD(_clan.hasHideout() ? 0x01 : 0x00); // to hide away
-			writeD(_clan.hasCastle() || isInDefense ? 0x01 : 0x00); // to castle
-			writeD(siegeClan != null && !isInDefense && !siegeClan.getFlag().isEmpty() ? 0x01 : 0x00); // to siege HQ
+			writeD(0x00);
+			writeD(0x00);
+			writeD(0x00);
+			writeD(0x00);
 		}
 		else
 		{
-			writeD(0x00); // to hide away
-			writeD(0x00); // to castle
-			writeD(0x00); // to siege HQ
+			writeD(0x01); // to nearest village
+				
+			if (_clan != null)
+			{
+				L2SiegeClan siegeClan = null;
+				boolean isInDefense = false;
+				
+				Castle castle = CastleManager.getInstance().getCastle(_activeChar);
+				if (castle != null && castle.getSiege().getIsInProgress())
+				{
+					// siege in progress
+					siegeClan = castle.getSiege().getAttackerClan(_clan);
+					if (siegeClan == null && castle.getSiege().checkIsDefender(_clan))
+						isInDefense = true;
+				}
+				
+				writeD(_clan.hasHideout() ? 0x01 : 0x00); // to hide away
+				writeD(_clan.hasCastle() || isInDefense ? 0x01 : 0x00); // to castle
+				writeD(siegeClan != null && !isInDefense && !siegeClan.getFlag().isEmpty() ? 0x01 : 0x00); // to siege HQ
+			}
+			else
+			{
+				writeD(0x00); // to hide away
+				writeD(0x00); // to castle
+				writeD(0x00); // to siege HQ
+			}
 		}
 		
 		writeD(_sweepable ? 0x01 : 0x00); // sweepable (blue glow)

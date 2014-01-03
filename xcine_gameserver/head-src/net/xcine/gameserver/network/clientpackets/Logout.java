@@ -16,6 +16,7 @@ package net.xcine.gameserver.network.clientpackets;
 
 import net.xcine.Config;
 import net.xcine.gameserver.SevenSignsFestival;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.model.L2Party;
 import net.xcine.gameserver.model.actor.L2Character;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -66,6 +67,13 @@ public final class Logout extends L2GameClientPacket
 				_log.fine(player.getName() + " tried to logout while fighting.");
 			
 			player.sendPacket(SystemMessageId.CANT_LOGOUT_WHILE_FIGHTING);
+			player.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+ 		}
+ 		
+		if (EventManager.getInstance().isRegistered(player))
+		{
+			player.sendMessage("You cannot logout while you are a participant of an event.");
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}

@@ -16,9 +16,11 @@ package net.xcine.gameserver.network.serverpackets;
 
 import net.xcine.Config;
 import net.xcine.gameserver.datatables.NpcTable;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.instancemanager.CursedWeaponsManager;
 import net.xcine.gameserver.model.Location;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
+import net.xcine.gameserver.model.base.Race;
 import net.xcine.gameserver.model.itemcontainer.Inventory;
 import net.xcine.gameserver.skills.AbnormalEffect;
 
@@ -30,6 +32,7 @@ public class CharInfo extends L2GameServerPacket
 	private final int _mAtkSpd, _pAtkSpd;
 	private final int _runSpd, _walkSpd;
 	private final float _moveMultiplier;
+	private boolean _inSpecialEvent;
 	
 	public CharInfo(L2PcInstance cha)
 	{
@@ -47,6 +50,7 @@ public class CharInfo extends L2GameServerPacket
 		_moveMultiplier = _activeChar.getMovementSpeedMultiplier();
 		_runSpd = (int) (_activeChar.getRunSpeed() / _moveMultiplier);
 		_walkSpd = (int) (_activeChar.getWalkSpeed() / _moveMultiplier);
+		_inSpecialEvent = EventManager.getInstance().isRegistered(_activeChar) && EventManager.getInstance().isSpecialEvent();
 	}
 	
 	@Override
@@ -67,27 +71,55 @@ public class CharInfo extends L2GameServerPacket
 		writeD(_z);
 		writeD(_heading);
 		writeD(_activeChar.getObjectId());
-		writeS(_activeChar.getName());
-		writeD(_activeChar.getRace().ordinal());
-		writeD(_activeChar.getAppearance().getSex() ? 1 : 0);
+				
+			if (_inSpecialEvent)
+			{
+				writeS("Player");
+				writeD(Race.Dwarf.ordinal());
+				writeD(1);
+			}
+			else
+			{            
+				writeS(_activeChar.getName());
+				writeD(_activeChar.getRace().ordinal());
+				writeD(_activeChar.getAppearance().getSex() ? 1 : 0);
+			}
 		
 		if (_activeChar.getClassIndex() == 0)
 			writeD(_activeChar.getClassId().getId());
 		else
 			writeD(_activeChar.getBaseClass());
 		
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HAIRALL));
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HEAD));
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_RHAND));
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LHAND));
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_GLOVES));
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_CHEST));
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LEGS));
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_FEET));
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_BACK));
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_RHAND));
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HAIR));
-		writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_FACE));
+		if (_inSpecialEvent)
+		{
+			writeD(0);
+			writeD(0);
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_RHAND));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LHAND));
+			writeD(0);
+			writeD(6408);
+			writeD(0);
+			writeD(0);
+			writeD(0);
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_RHAND));
+			writeD(0);
+			writeD(0);
+		}
+		else
+		{
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HAIRALL));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HEAD));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_RHAND));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LHAND));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_GLOVES));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_CHEST));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_LEGS));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_FEET));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_BACK));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_RHAND));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_HAIR));
+			writeD(_inv.getPaperdollItemId(Inventory.PAPERDOLL_FACE));
+		}
 		
 		// c6 new h's
 		writeH(0x00);
@@ -138,6 +170,11 @@ public class CharInfo extends L2GameServerPacket
 			writeF(NpcTable.getInstance().getTemplate(_activeChar.getMountNpcId()).getCollisionRadius());
 			writeF(NpcTable.getInstance().getTemplate(_activeChar.getMountNpcId()).getCollisionHeight());
 		}
+		else if (_inSpecialEvent)
+		{
+			writeF(9);
+			writeF(18);
+		}
 		else
 		{
 			writeF(_activeChar.getBaseTemplate().getCollisionRadius());
@@ -150,13 +187,25 @@ public class CharInfo extends L2GameServerPacket
 		
 		if (gmSeeInvis)
 			writeS("Invisible");
+		else if (_inSpecialEvent)
+			writeS("");
 		else
 			writeS(_activeChar.getTitle());
 		
-		writeD(_activeChar.getClanId());
-		writeD(_activeChar.getClanCrestId());
-		writeD(_activeChar.getAllyId());
-		writeD(_activeChar.getAllyCrestId());
+		if (_inSpecialEvent)
+		{
+			writeD(0);
+			writeD(0);
+			writeD(0);
+			writeD(0);
+		}
+		else
+		{
+			writeD(_activeChar.getClanId());
+			writeD(_activeChar.getClanCrestId());
+			writeD(_activeChar.getAllyId());
+			writeD(_activeChar.getAllyCrestId());
+		}
 		
 		writeD(0);
 		

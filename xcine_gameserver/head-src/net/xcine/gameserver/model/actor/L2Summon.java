@@ -20,6 +20,7 @@ import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.ai.L2CharacterAI;
 import net.xcine.gameserver.ai.L2SummonAI;
 import net.xcine.gameserver.datatables.ItemTable;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.handler.ItemHandler;
 import net.xcine.gameserver.model.L2ItemInstance;
@@ -99,6 +100,10 @@ public abstract class L2Summon extends L2Playable
 		_ai = new L2SummonAI(new L2Summon.AIAccessor());
 		
 		setXYZInvisible(owner.getX() + 50, owner.getY() + 100, owner.getZ() + 100);
+		
+		if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(owner))
+			for (L2Skill skill : EventManager.getInstance().getCurrentEvent().getSummonBuffs(owner))
+				skill.getEffects(owner, this);
 	}
 	
 	@Override

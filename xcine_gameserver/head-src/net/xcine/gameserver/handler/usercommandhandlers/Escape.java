@@ -15,6 +15,7 @@
 package net.xcine.gameserver.handler.usercommandhandlers;
 
 import net.xcine.gameserver.datatables.SkillTable;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.handler.IUserCommandHandler;
 import net.xcine.gameserver.instancemanager.GrandBossManager;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -31,7 +32,7 @@ public class Escape implements IUserCommandHandler
 	@Override
 	public boolean useUserCommand(int id, L2PcInstance activeChar)
 	{
-        if (activeChar.isCastingNow() || activeChar.isSitting() || activeChar.isMovementDisabled() || activeChar.isOutOfControl() || activeChar.isInOlympiadMode() || activeChar.inObserverMode() || activeChar.isFestivalParticipant() || activeChar.isInJail() || GrandBossManager.isInBossZone(activeChar))
+        if (EventManager.getInstance().isRegistered(activeChar) || activeChar.isCastingNow() || activeChar.isSitting() || activeChar.isMovementDisabled() || activeChar.isOutOfControl() || activeChar.isInOlympiadMode() || activeChar.inObserverMode() || activeChar.isFestivalParticipant() || activeChar.isInJail() || GrandBossManager.isInBossZone(activeChar))
         {
             activeChar.sendMessage("Your current state doesn't allow you to use the /unstuck command.");
             return false;

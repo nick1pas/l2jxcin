@@ -18,6 +18,7 @@ import java.util.concurrent.ScheduledFuture;
 
 import net.xcine.Config;
 import net.xcine.gameserver.ThreadPoolManager;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.instancemanager.RaidBossPointsManager;
 import net.xcine.gameserver.instancemanager.RaidBossSpawnManager;
 import net.xcine.gameserver.instancemanager.RaidBossSpawnManager.StatusEnum;
@@ -78,6 +79,9 @@ public class L2RaidBossInstance extends L2MonsterInstance
 			final L2PcInstance player = killer.getActingPlayer();
 			if (player != null)
 			{
+				if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(player))
+					EventManager.getInstance().getCurrentEvent().onKill(this, player);
+									
 				broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.RAID_WAS_SUCCESSFUL));
 				broadcastPacket(new PlaySound("systemmsg_e.1209"));
 				

@@ -14,7 +14,11 @@
  */
 package net.xcine.gameserver.handler.chathandlers;
 
+import java.util.StringTokenizer;
+
 import net.xcine.gameserver.handler.IChatHandler;
+import net.xcine.gameserver.handler.IVoicedCommandHandler;
+import net.xcine.gameserver.handler.VoicedCommandHandler;
 import net.xcine.gameserver.model.BlockList;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.serverpackets.CreatureSay;
@@ -37,15 +41,43 @@ public class ChatAll implements IChatHandler
 	@Override
 	public void handleChat(int type, L2PcInstance activeChar, String params, String text)
 	{
-		CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
-		
-		for (L2PcInstance player : activeChar.getKnownList().getKnownPlayers())
-		{
-			if (activeChar.isInsideRadius(player, 1250, false, true) && !BlockList.isBlocked(player, activeChar))
-				player.sendPacket(cs);
-		}
-		
-		activeChar.sendPacket(cs);
+		boolean vcd_used = false;
+        if (text.startsWith("."))
+        {
+            StringTokenizer st = new StringTokenizer(text);
+            IVoicedCommandHandler vch;
+            String command = "";
+
+            if (st.countTokens() > 1)
+            {
+                command = st.nextToken().substring(1);
+                params = text.substring(command.length() + 2);
+                vch = VoicedCommandHandler.getInstance().getHandler(command);
+            }
+            else
+            {
+                command = text.substring(1);
+                vch = VoicedCommandHandler.getInstance().getHandler(command);
+            }
+            
+            if (vch != null)
+            {
+                vch.useVoicedCommand(command, activeChar, params);
+                vcd_used = true;
+            }
+        }
+        if (!vcd_used)
+        {
+        	CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
+    		
+    		for (L2PcInstance player : activeChar.getKnownList().getKnownPlayers())
+    		{
+    			if (activeChar.isInsideRadius(player, 1250, false, true) && !BlockList.isBlocked(player, activeChar))
+    				player.sendPacket(cs);
+    		}
+    		
+    		activeChar.sendPacket(cs);
+        }
 	}
 	
 	/**

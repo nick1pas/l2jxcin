@@ -20,6 +20,8 @@ import java.util.logging.Logger;
 
 import net.xcine.Config;
 import net.xcine.L2DatabaseFactory;
+import net.xcine.gameserver.event.EventBuffer;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.instancemanager.CastleManorManager;
 import net.xcine.gameserver.instancemanager.FourSepulchersManager;
 import net.xcine.gameserver.instancemanager.GrandBossManager;
@@ -186,6 +188,9 @@ public class Shutdown extends Thread
 			// Save all manor data
 			CastleManorManager.getInstance().save();
 			_log.info("Manors data has been saved.");
+ 			
+			if (EventManager.getInstance().getBoolean("eventBufferEnabled")) 
+				EventBuffer.getInstance().updateSQL();
 			
 			// Save items on ground before closing
 			if (Config.SAVE_DROPPED_ITEM)

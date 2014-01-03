@@ -15,6 +15,7 @@
 package net.xcine.gameserver.network.clientpackets;
 
 import net.xcine.Config;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.model.BlockList;
 import net.xcine.gameserver.model.L2Party;
 import net.xcine.gameserver.model.L2World;
@@ -44,6 +45,12 @@ public final class RequestJoinParty extends L2GameClientPacket
 		final L2PcInstance requestor = getClient().getActiveChar();
 		if (requestor == null)
 			return;
+				
+		if (EventManager.getInstance().isRegistered(requestor) && EventManager.getInstance().isSpecialEvent())
+		{
+			requestor.sendMessage("You cannot make a party while in LMS or DM events.");
+			return;
+		}
 		
 		final L2PcInstance target = L2World.getInstance().getPlayer(_name);
 		if (target == null)

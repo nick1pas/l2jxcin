@@ -15,6 +15,7 @@
 package net.xcine.gameserver.model.actor;
 
 import net.xcine.gameserver.ai.CtrlEvent;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.model.CharEffectList;
 import net.xcine.gameserver.model.L2Effect;
 import net.xcine.gameserver.model.L2Skill;
@@ -126,9 +127,14 @@ public abstract class L2Playable extends L2Character
 		
 		// Stop HP/MP/CP Regeneration task
 		getStatus().stopHpMpRegeneration();
-		
+ 		
+		if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(this))
+        {
+            // do nothing
+        }
+
 		// Stop all active skills effects in progress
-		if (isPhoenixBlessed())
+		else if (isPhoenixBlessed())
 		{
 			// remove Lucky Charm if player has SoulOfThePhoenix/Salvation buff
 			if (getCharmOfLuck())

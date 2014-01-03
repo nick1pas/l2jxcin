@@ -18,10 +18,6 @@
  */
 package net.xcine.gameserver.model.quest;
 
-import com.mysql.jdbc.log.Log;
-import com.mysql.jdbc.log.LogFactory;
-import com.sun.corba.se.spi.orbutil.threadpool.ThreadPoolManager;
-
 import net.xcine.gameserver.datatables.NpcTable;
 import net.xcine.gameserver.model.L2Spawn;
 import net.xcine.gameserver.model.actor.L2Character;
@@ -31,8 +27,6 @@ import net.xcine.util.Rnd;
 
 public final class QuestSpawn
 {
-	private final static Log _log = LogFactory(QuestSpawn.class);
-
 	private static QuestSpawn instance;
 
 	public static QuestSpawn getInstance()
@@ -43,16 +37,6 @@ public final class QuestSpawn
 		}
 
 		return instance;
-	}
-
-	/**
-	 * @param class1
-	 * @return
-	 */
-	private static Log LogFactory(Class<QuestSpawn> class1)
-	{
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public class DeSpawnScheduleTimerTask implements Runnable
@@ -142,7 +126,7 @@ public final class QuestSpawn
 	/**
 	 * @return
 	 */
-	private Object ThreadPoolManager()
+	private static Object ThreadPoolManager()
 	{
 		// TODO Auto-generated method stub
 		return null;

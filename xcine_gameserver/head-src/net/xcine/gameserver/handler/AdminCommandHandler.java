@@ -35,6 +35,7 @@ import net.xcine.gameserver.handler.admincommandhandlers.AdminEditChar;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminEditNpc;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminEffects;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminEnchant;
+import net.xcine.gameserver.handler.admincommandhandlers.AdminEvents;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminExpSp;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminGeodata;
 import net.xcine.gameserver.handler.admincommandhandlers.AdminGm;
@@ -133,6 +134,7 @@ public class AdminCommandHandler
 		registerAdminCommandHandler(new AdminUnblockIp());
 		registerAdminCommandHandler(new AdminZone());
 		registerAdminCommandHandler(new AdminAio());
+		registerAdminCommandHandler(new AdminEvents());
 	}
 	
 	public void registerAdminCommandHandler(IAdminCommandHandler handler)

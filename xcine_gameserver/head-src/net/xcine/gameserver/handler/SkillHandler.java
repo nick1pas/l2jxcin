@@ -18,7 +18,9 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 
 import net.xcine.gameserver.handler.skillhandlers.BalanceLife;
 import net.xcine.gameserver.handler.skillhandlers.Blow;
+import net.xcine.gameserver.handler.skillhandlers.Bomb;
 import net.xcine.gameserver.handler.skillhandlers.Cancel;
+import net.xcine.gameserver.handler.skillhandlers.Capture;
 import net.xcine.gameserver.handler.skillhandlers.CombatPointHeal;
 import net.xcine.gameserver.handler.skillhandlers.Continuous;
 import net.xcine.gameserver.handler.skillhandlers.CpDamPercent;
@@ -94,6 +96,8 @@ public class SkillHandler
 		registerSkillHandler(new Sweep());
 		registerSkillHandler(new TakeCastle());
 		registerSkillHandler(new Unlock());
+		registerSkillHandler(new Bomb());
+		registerSkillHandler(new Capture());
 	}
 	
 	public void registerSkillHandler(ISkillHandler handler)

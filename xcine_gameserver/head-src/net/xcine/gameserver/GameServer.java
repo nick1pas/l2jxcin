@@ -57,11 +57,15 @@ import net.xcine.gameserver.datatables.SpellbookTable;
 import net.xcine.gameserver.datatables.StaticObjects;
 import net.xcine.gameserver.datatables.SummonItemsData;
 import net.xcine.gameserver.datatables.TeleportLocationTable;
+import net.xcine.gameserver.event.EventBuffer;
+import net.xcine.gameserver.event.EventManager;
+import net.xcine.gameserver.event.EventStats;
 import net.xcine.gameserver.handler.AdminCommandHandler;
 import net.xcine.gameserver.handler.ChatHandler;
 import net.xcine.gameserver.handler.ItemHandler;
 import net.xcine.gameserver.handler.SkillHandler;
 import net.xcine.gameserver.handler.UserCommandHandler;
+import net.xcine.gameserver.handler.VoicedCommandHandler;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.instancemanager.AuctionManager;
 import net.xcine.gameserver.instancemanager.BoatManager;
@@ -92,7 +96,6 @@ import net.xcine.gameserver.model.PartyMatchWaitingList;
 import net.xcine.gameserver.model.entity.BanditStrongholdSiege;
 import net.xcine.gameserver.model.entity.Castle;
 import net.xcine.gameserver.model.entity.DevastatedCastle;
-import net.xcine.gameserver.model.entity.FortressOfDead;
 import net.xcine.gameserver.model.entity.FortressOfResistance;
 import net.xcine.gameserver.model.entity.Hero;
 import net.xcine.gameserver.model.entity.WildBeastFarmSiege;
@@ -279,9 +282,15 @@ public class GameServer
 		_log.config("ItemHandler: Loaded " + ItemHandler.getInstance().size() + " handlers.");
 		_log.config("SkillHandler: Loaded " + SkillHandler.getInstance().size() + " handlers.");
 		_log.config("UserCommandHandler: Loaded " + UserCommandHandler.getInstance().size() + " handlers.");
+		_log.config("VoicedCommandHandler: Loaded " + VoicedCommandHandler.getInstance().size() + " handlers.");
 		
 		if (Config.ALLOW_WEDDING)
 			CoupleManager.getInstance();
+ 		
+		EventManager.getInstance();
+		EventStats.getInstance();
+		if (EventManager.getInstance().getBoolean("eventBufferEnabled"))
+			EventBuffer.getInstance();
 		
 		Util.printSection("System");
 		TaskManager.getInstance();

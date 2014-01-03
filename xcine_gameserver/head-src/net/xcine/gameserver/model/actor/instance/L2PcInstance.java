@@ -37,6 +37,7 @@ import java.util.logging.Level;
 
 import net.xcine.Config;
 import net.xcine.L2DatabaseFactory;
+import net.xcine.gameserver.Announcements;
 import net.xcine.gameserver.GameTimeController;
 import net.xcine.gameserver.GeoData;
 import net.xcine.gameserver.ItemsAutoDestroy;
@@ -65,6 +66,7 @@ import net.xcine.gameserver.datatables.PetDataTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.SkillTable.FrequentSkill;
 import net.xcine.gameserver.datatables.SkillTreeTable;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.handler.IItemHandler;
 import net.xcine.gameserver.handler.ItemHandler;
 import net.xcine.gameserver.instancemanager.CastleManager;
@@ -585,6 +587,7 @@ public final class L2PcInstance extends L2Playable
 	
 	// Used for protection after teleport
 	private long _protectEndTime = 0;
+	private int antiAfkTime;
 	
 	public boolean isSpawnProtected()
 	{
@@ -3305,6 +3308,12 @@ public final class L2PcInstance extends L2Playable
 	@Override
 	public void onAction(L2PcInstance player)
 	{
+		if (!EventManager.getInstance().canTargetPlayer(this, player))
+		{
+			player.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
+					
 		// Check if the player already target this L2PcInstance
 		if (player.getTarget() != this)
 		{
@@ -4101,6 +4110,17 @@ public final class L2PcInstance extends L2Playable
 				CursedWeaponsManager.getInstance().drop(_cursedWeaponEquippedId, killer);
 			else
 			{
+				if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(this))
+				{
+					if (killer.isRaid() || killer.isRaidMinion())
+						EventManager.getInstance().getCurrentEvent().onDie(this, killer);
+					else if (pk != null && EventManager.getInstance().isRegistered(pk))
+					{
+						EventManager.getInstance().getCurrentEvent().onKill(this, pk);
+						EventManager.getInstance().getCurrentEvent().onDie(this, pk);
+					}
+				}
+									
 				if (pk == null || !pk.isCursedWeaponEquipped())
 				{
 					onDieDropItem(killer); // Check if any item should be dropped
@@ -4287,6 +4307,19 @@ public final class L2PcInstance extends L2Playable
 		// If in duel and you kill (only can kill l2summon), do nothing
 		if (isInDuel() && targetPlayer.isInDuel())
 			return;
+ 		
+		if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered(targetPlayer))		
+		{
+			if (!(target instanceof L2Summon))
+			{
+				increasePvpKills();
+				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_S2);
+				sm.addZoneName(getX(), getY(), getZ());
+				sm.addString("- " + getName() + " killed " + targetPlayer.getName() + ".");
+				Announcements.announceToAll(sm);
+			}
+			return;
+		}
 		
 		// If in Arena, do nothing
 		if (isInsideZone(ZONE_PVP) || targetPlayer.isInsideZone(ZONE_PVP))
@@ -4416,6 +4449,9 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (isInsideZone(ZONE_PVP))
 			return;
+ 		
+		if (EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
+			return;
 		
 		PvpFlagTaskManager.getInstance().addPvpFlagTask(this, System.currentTimeMillis() + Config.PVP_NORMAL_TIME);
 		
@@ -4427,6 +4463,9 @@ public final class L2PcInstance extends L2Playable
 	{
 		final L2PcInstance player = target.getActingPlayer();
 		if (player == null)
+			return;
+		
+		if (EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
 			return;
 		
 		if ((isInDuel() && player.getDuelId() == getDuelId()))
@@ -4468,6 +4507,9 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void deathPenalty(boolean atwar)
 	{
+		if (EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
+			return;
+					
 		// Get the level of the L2PcInstance
 		final int lvl = getLevel();
 		
@@ -4996,6 +5038,9 @@ public final class L2PcInstance extends L2Playable
 		L2ItemInstance wpn = getInventory().getPaperdollItem(Inventory.PAPERDOLL_RHAND);
 		if (wpn != null)
 		{
+			if (wpn.getItemId() == 9999)
+				return false;
+							
 			L2ItemInstance[] unequipped = getInventory().unEquipItemInBodySlotAndRecord(wpn.getItem().getBodyPart());
 			InventoryUpdate iu = new InventoryUpdate();
 			for (L2ItemInstance itm : unequipped)
@@ -5022,6 +5067,9 @@ public final class L2PcInstance extends L2Playable
 		L2ItemInstance sld = getInventory().getPaperdollItem(Inventory.PAPERDOLL_LHAND);
 		if (sld != null)
 		{
+			if (sld.getItemId() == 17 && EventManager.getInstance().isRegistered(this))
+				return false;
+							
 			L2ItemInstance[] unequipped = getInventory().unEquipItemInBodySlotAndRecord(sld.getItem().getBodyPart());
 			InventoryUpdate iu = new InventoryUpdate();
 			for (L2ItemInstance itm : unequipped)
@@ -6878,6 +6926,9 @@ public final class L2PcInstance extends L2Playable
 			// Check if the L2PcInstance is in an arena or a siege area
 			if (isInsideZone(ZONE_PVP) && cha.isInsideZone(ZONE_PVP))
 				return true;
+ 			
+			if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered(attacker))
+				return true;
 			
 			if (getClan() != null)
 			{
@@ -6932,6 +6983,21 @@ public final class L2PcInstance extends L2Playable
 	@Override
 	public boolean useMagic(L2Skill skill, boolean forceUse, boolean dontMove)
 	{
+		if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(this))
+		{
+			if (!EventManager.getInstance().getCurrentEvent().getBoolean("allowUseMagic"))
+			{
+				sendPacket(ActionFailed.STATIC_PACKET);
+				return false; 
+			}
+			
+			if (!EventManager.getInstance().getCurrentEvent().onUseMagic(skill))
+			{
+				sendPacket(ActionFailed.STATIC_PACKET);
+				return false;
+			}
+		}
+					
 		// Cancels the use of skills when player uses a cursed weapon or is flying.
 		if ((isCursedWeaponEquipped() && !skill.isDemonicSkill()) // If CW, allow ONLY demonic skills.
 			|| (getMountType() == 1 && !skill.isStriderSkill()) // If mounted, allow ONLY Strider skills.
@@ -7505,6 +7571,9 @@ public final class L2PcInstance extends L2Playable
 			
 			if (skill.isPvpSkill()) // pvp skill
 			{
+				if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered((L2PcInstance) target))
+					return true;
+									
 				// in clan war player can attack whites even with sleep etc.
 				if (getClan() != null && ((L2PcInstance) target).getClan() != null)
 				{
@@ -7518,6 +7587,9 @@ public final class L2PcInstance extends L2Playable
 			}
 			else if ((skilldat != null && !skilldat.isCtrlPressed() && skill.isOffensive() && !srcIsSummon) || (skilldatpet != null && !skilldatpet.isCtrlPressed() && skill.isOffensive() && srcIsSummon))
 			{
+				if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRegistered((L2PcInstance) target))
+					return true;
+									
 				// in clan war player can attack whites even with sleep etc.
 				if (getClan() != null && ((L2PcInstance) target).getClan() != null)
 				{
@@ -8511,7 +8583,10 @@ public final class L2PcInstance extends L2Playable
 		
 		if (!_subclassLock.tryLock())
 			return false;
-		
+ 		
+		if (EventManager.getInstance().players.contains(this))
+			return false;
+
 		try
 		{
 			if (getTotalSubClasses() == 3 || classIndex == 0)
@@ -9433,6 +9508,10 @@ public final class L2PcInstance extends L2Playable
 	@Override
 	public void deleteMe()
 	{
+		EventManager.getInstance().onLogout(this);
+		if (EventManager.getInstance().isRegistered(this))
+			EventManager.getInstance().getCurrentEvent().onLogout(this);
+				
 		cleanup();
 		store();
 		super.deleteMe();
@@ -10426,6 +10505,9 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (getDeathPenaltyBuffLevel() >= 15) // maximum level reached
 			return;
+ 		
+		if (EventManager.getInstance().isRegistered(this) && EventManager.getInstance().isRunning())
+			return;
 		
 		if (getDeathPenaltyBuffLevel() != 0)
 		{
@@ -10893,7 +10975,7 @@ public final class L2PcInstance extends L2Playable
 		if (summonerChar == null)
 			return false;
 		
-		if (summonerChar.isInOlympiadMode() || summonerChar.inObserverMode() || summonerChar.isInsideZone(L2Character.ZONE_NOSUMMONFRIEND) || summonerChar.isMounted())
+		if (summonerChar.isInOlympiadMode() || summonerChar.inObserverMode() || summonerChar.isInsideZone(L2Character.ZONE_NOSUMMONFRIEND) || summonerChar.isMounted() || EventManager.getInstance().isRegistered(summonerChar))
 			return false;
 		
 		return true;
@@ -10939,6 +11021,12 @@ public final class L2PcInstance extends L2Playable
 		if (targetChar.inObserverMode() || targetChar.isInsideZone(L2Character.ZONE_NOSUMMONFRIEND))
 		{
 			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IN_SUMMON_BLOCKING_AREA).addCharName(targetChar));
+			return false;
+		}
+		
+		if (EventManager.getInstance().isRegistered(targetChar))
+		{
+			summonerChar.sendMessage("Your cannot summon a player that is in event.");
 			return false;
 		}
 		
@@ -11206,16 +11294,14 @@ public final class L2PcInstance extends L2Playable
 			}
 		}
 	}
-
-	/**
-	 * @param i
-	 * @param j
-	 * @param string
-	 * @param string2
-	 */
-	public void sendChatMessage(int i, int j, String string, String string2)
-	{
-		// TODO Auto-generated method stub
 		
+	public int getAntiAfk()
+	{
+		return antiAfkTime;
+	}
+			
+	public void setAntiAfk(int antiAfk)
+	{	
+		antiAfkTime = antiAfk;
 	}
 }

@@ -39,6 +39,7 @@ import net.xcine.gameserver.datatables.DoorTable;
 import net.xcine.gameserver.datatables.MapRegionTable;
 import net.xcine.gameserver.datatables.MapRegionTable.TeleportWhereType;
 import net.xcine.gameserver.datatables.SkillTable.FrequentSkill;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.handler.ISkillHandler;
 import net.xcine.gameserver.handler.SkillHandler;
 import net.xcine.gameserver.instancemanager.DimensionalRiftManager;
@@ -580,6 +581,26 @@ public abstract class L2Character extends L2Object
 	{
 		if (Config.DEBUG)
 			_log.fine(getName() + " doAttack: target=" + target);
+ 		
+		if (this instanceof L2PcInstance && EventManager.getInstance().isRegistered(this) || this instanceof L2Summon && EventManager.getInstance().isRegistered(((L2Summon) this).getOwner()))
+        {
+            L2PcInstance p = getActingPlayer();
+            L2PcInstance t = null;
+            if (target instanceof L2PcInstance || target instanceof L2Summon)
+            {
+                t = target.getActingPlayer();
+                if (EventManager.getInstance().areTeammates(p, t))
+                {
+                    sendPacket(ActionFailed.STATIC_PACKET);
+                    return;
+                }
+            }
+            if (!EventManager.getInstance().getCurrentEvent().canAttack(p, target))
+            {
+                sendPacket(ActionFailed.STATIC_PACKET);
+                return;
+            }
+        }
 		
 		if (!isAlikeDead() && target != null)
 		{
@@ -767,6 +788,9 @@ public abstract class L2Character extends L2Object
 			if (player.getPet() != target)
 				player.updatePvPStatus(target);
 		}
+ 		
+		if (this instanceof L2PcInstance && target instanceof L2PcInstance && EventManager.getInstance().isRegistered(this))
+			EventManager.getInstance().getCurrentEvent().onHit((L2PcInstance) this, (L2PcInstance) target); 
 		
 		// Check if hit isn't missed
 		if (!hitted)
@@ -797,7 +821,7 @@ public abstract class L2Character extends L2Object
 			
 			// If we didn't miss the hit, discharge the shoulshots, if any
 			setChargedShot(ShotType.SOULSHOT, false);
-			
+	
 			if (player != null)
 			{
 				if (player.isCursedWeaponEquipped())
@@ -1135,6 +1159,45 @@ public abstract class L2Character extends L2Object
 			
 			return;
 		}
+
+		try
+        {
+			if (getTarget() != null && (this instanceof L2PcInstance || this instanceof L2Summon))
+			{
+				boolean isArea = false;
+				switch (skill.getTargetType())
+				{
+					case TARGET_AREA:
+					case TARGET_FRONT_AREA:
+					case TARGET_BEHIND_AREA:
+					case TARGET_AURA:
+					case TARGET_FRONT_AURA:
+					case TARGET_BEHIND_AURA:
+						isArea = true;
+				}
+				
+				if (!isArea)
+				{
+					L2PcInstance p = getActingPlayer();
+					if (p != null && EventManager.getInstance().isRegistered(p))
+					{
+						if (!EventManager.getInstance().getCurrentEvent().canAttack(p, getTarget()))
+						{
+							getAI().setIntention(AI_INTENTION_ACTIVE);
+							return;
+						}
+						
+						if (getTarget() instanceof L2PcInstance && EventManager.getInstance().areTeammates(p, (L2PcInstance) getTarget()) && skill.isOffensive())
+						{
+							getAI().setIntention(AI_INTENTION_ACTIVE);
+							return;
+						}
+					}
+				}
+			}
+        }
+        catch(ClassCastException e){}
+		
 		// Override casting type
 		if (skill.isSimultaneousCast() && !simultaneously)
 			simultaneously = true;

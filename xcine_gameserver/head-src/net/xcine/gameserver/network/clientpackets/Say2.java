@@ -19,6 +19,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.handler.ChatHandler;
 import net.xcine.gameserver.handler.IChatHandler;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
@@ -196,6 +197,12 @@ public final class Say2 extends L2GameClientPacket
 		}
 		
 		_text = _text.replaceAll("\\\\n", "");
+ 		
+		if (EventManager.getInstance().isRegistered(activeChar) && !EventManager.getInstance().getCurrentEvent().onSay(_type, activeChar, _text))
+		{
+			activeChar.sendMessage("You cannot talk right now.");
+			return;
+		}
 		
 		IChatHandler handler = ChatHandler.getInstance().getChatHandler(_type);
 		if (handler != null)

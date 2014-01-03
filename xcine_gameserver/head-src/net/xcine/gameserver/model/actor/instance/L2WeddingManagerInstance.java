@@ -20,6 +20,7 @@ import net.xcine.Config;
 import net.xcine.gameserver.Announcements;
 import net.xcine.gameserver.ai.CtrlIntention;
 import net.xcine.gameserver.datatables.SkillTable.FrequentSkill;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.instancemanager.CastleManager;
 import net.xcine.gameserver.instancemanager.CoupleManager;
 import net.xcine.gameserver.model.L2ItemInstance;
@@ -143,7 +144,7 @@ public class L2WeddingManagerInstance extends L2NpcInstance
 			}
 			
 			// Simple checks to avoid exploits
-			if (partner.isInJail() || partner.isInOlympiadMode() || partner.isInDuel() || partner.isFestivalParticipant() || (partner.isInParty() && partner.getParty().isInDimensionalRift()) || partner.inObserverMode())
+			if (EventManager.getInstance().isRegistered(partner) || partner.isInJail() || partner.isInOlympiadMode() || partner.isInDuel() || partner.isFestivalParticipant() || (partner.isInParty() && partner.getParty().isInDimensionalRift()) || partner.inObserverMode())
 			{
 				player.sendMessage("Due to the current partner's status, the teleportation failed.");
 				return;

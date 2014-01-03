@@ -18,8 +18,6 @@
  */
 package net.xcine.gameserver.model.quest;
 
-import com.sun.corba.se.spi.orbutil.threadpool.ThreadPoolManager;
-
 import java.util.List;
 
 import javolution.util.FastList;
@@ -56,7 +54,7 @@ public class QuestStateManager
 	}
 
 	private static QuestStateManager _instance;
-	private List<QuestState> _questStates = new FastList<QuestState>();
+	private List<QuestState> _questStates = new FastList<>();
 
 	public QuestStateManager()
 	{
@@ -117,7 +115,7 @@ public class QuestStateManager
 		}
 	}
 
-	private void removeQuestState(QuestState qs)
+	private static void removeQuestState(QuestState qs)
 	{
 		qs = null;
 	}
@@ -138,7 +136,7 @@ public class QuestStateManager
 	{
 		if(_questStates == null)
 		{
-			_questStates = new FastList<QuestState>();
+			_questStates = new FastList<>();
 		}
 		return _questStates;
 	}

@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
 import net.xcine.Config;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.network.L2GameClient.GameClientState;
 import net.xcine.gameserver.network.clientpackets.*;
 import net.xcine.util.Util;
@@ -98,6 +99,9 @@ public final class L2GamePacketHandler implements IPacketHandler<L2GameClient>, 
 				}
 				break;
 			case IN_GAME:
+				if (EventManager.getInstance().isRunning() && EventManager.getInstance().getInt("antiAfkTime") > 0 && EventManager.getInstance().isRegistered(client.getActiveChar()))
+					client.getActiveChar().setAntiAfk(EventManager.getInstance().getInt("antiAfkTime"));
+									
 				switch (opcode)
 				{
 					case 0x01:

@@ -32,6 +32,7 @@ import net.xcine.gameserver.datatables.HelperBuffTable;
 import net.xcine.gameserver.datatables.ItemTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.SkillTable.FrequentSkill;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.idfactory.IdFactory;
 import net.xcine.gameserver.instancemanager.CastleManager;
 import net.xcine.gameserver.instancemanager.DimensionalRiftManager;
@@ -1518,6 +1519,19 @@ public class L2Npc extends L2Character
 			filename = SevenSigns.SEVEN_SIGNS_HTML_PATH + "rift/GuardianOfBorder.htm";
 		else
 			filename = getHtmlPath(npcId, val);
+ 		
+		if (npcId == EventManager.getInstance().getInt("managerNpcId"))
+        {
+            EventManager.getInstance().showFirstHtml(player,getObjectId());
+            player.sendPacket(ActionFailed.STATIC_PACKET);
+            return;
+        }
+		
+        if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(player) && EventManager.getInstance().getCurrentEvent().onTalkNpc(this, player))
+        {
+            player.sendPacket(ActionFailed.STATIC_PACKET);
+            return;
+        }
 		
 		// Send a Server->Client NpcHtmlMessage containing the text of the L2Npc to the L2PcInstance
 		NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());

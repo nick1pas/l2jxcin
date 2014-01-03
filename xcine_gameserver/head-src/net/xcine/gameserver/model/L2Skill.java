@@ -24,6 +24,7 @@ import net.xcine.gameserver.GeoData;
 import net.xcine.gameserver.datatables.ItemTable;
 import net.xcine.gameserver.datatables.SkillTable;
 import net.xcine.gameserver.datatables.SkillTreeTable;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.model.actor.L2Attackable;
 import net.xcine.gameserver.model.actor.L2Character;
 import net.xcine.gameserver.model.actor.L2Npc;
@@ -1430,6 +1431,15 @@ public abstract class L2Skill implements IChanceSkillTrigger
 							
 							if (!checkForAreaOffensiveSkills(activeChar, obj, this, srcInArena))
 								continue;
+ 							
+							if (EventManager.getInstance().isRunning() && (obj instanceof L2PcInstance || obj instanceof L2Summon) && activeChar instanceof L2PcInstance)
+							{
+								L2PcInstance o = obj.getActingPlayer();
+								if (EventManager.getInstance().isRegistered(activeChar) && 
+									EventManager.getInstance().isRegistered(o) &&
+									EventManager.getInstance().areTeammates(o, (L2PcInstance) activeChar))
+									continue;
+							}
 							
 							if (onlyFirst)
 								return new L2Character[]
@@ -1471,7 +1481,17 @@ public abstract class L2Skill implements IChanceSkillTrigger
 					
 					if (!checkForAreaOffensiveSkills(activeChar, obj, this, srcInArena))
 						continue;
-					
+										
+					if (EventManager.getInstance().isRunning() && (obj instanceof L2PcInstance || obj instanceof L2Summon) && activeChar instanceof L2PcInstance)
+					{
+						L2PcInstance o = obj.getActingPlayer();
+						if (EventManager.getInstance().getCurrentEvent().numberOfTeams() > 1 && 
+							EventManager.getInstance().isRegistered((L2PcInstance)activeChar) && 
+							EventManager.getInstance().isRegistered(o) && 
+							EventManager.getInstance().getCurrentEvent().getTeam(o) == EventManager.getInstance().getCurrentEvent().getTeam((L2PcInstance)activeChar))
+							continue;
+					}
+										
 					targetList.add(obj);
 				}
 				
@@ -2082,11 +2102,20 @@ public abstract class L2Skill implements IChanceSkillTrigger
 					final L2Summon targetSummon = (L2Summon) target;
 					final L2PcInstance summonOwner = targetSummon.getActingPlayer();
 					
-					if (activeChar instanceof L2PcInstance && activeChar.getPet() != targetSummon && !targetSummon.isDead() && (summonOwner.getPvpFlag() != 0 || summonOwner.getKarma() > 0) || (summonOwner.isInsideZone(L2Character.ZONE_PVP) && ((L2PcInstance) activeChar).isInsideZone(L2Character.ZONE_PVP)) || (summonOwner.isInDuel() && ((L2PcInstance) activeChar).isInDuel() && summonOwner.getDuelId() == ((L2PcInstance) activeChar).getDuelId()))
-						return new L2Character[]
+					if (activeChar instanceof L2PcInstance)
+					{
+						if (EventManager.getInstance().isRunning() && EventManager.getInstance().isRegistered(activeChar) && EventManager.getInstance().isRegistered(summonOwner) && !EventManager.getInstance().areTeammates(summonOwner, (L2PcInstance) activeChar))
+							return new L2Character[]
 						{
 							targetSummon
 						};
+						
+						if (activeChar.getPet() != targetSummon && !targetSummon.isDead() && (summonOwner.getPvpFlag() != 0 || summonOwner.getKarma() > 0) || (summonOwner.isInsideZone(L2Character.ZONE_PVP) && ((L2PcInstance) activeChar).isInsideZone(L2Character.ZONE_PVP)) || (summonOwner.isInDuel() && ((L2PcInstance) activeChar).isInDuel() && summonOwner.getDuelId() == ((L2PcInstance) activeChar).getDuelId()))
+							return new L2Character[]
+						{
+							targetSummon
+						};
+					}
 				}
 				return _emptyTargetList;
 			}

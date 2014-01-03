@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.xcine.Config;
+import net.xcine.gameserver.event.EventManager;
 import net.xcine.gameserver.model.actor.instance.L2PcInstance;
 import net.xcine.gameserver.network.SystemMessageId;
 import net.xcine.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -154,6 +155,12 @@ public class OlympiadManager
 			player.sendPacket(SystemMessageId.GAME_REQUEST_CANNOT_BE_MADE);
 			return false;
 		}
+ 		
+		if (EventManager.getInstance().players.contains(player))
+		{
+            player.sendMessage("You can't join olympiad while participating in an Event.");
+            return false;
+        }
 		
 		switch (type)
 		{

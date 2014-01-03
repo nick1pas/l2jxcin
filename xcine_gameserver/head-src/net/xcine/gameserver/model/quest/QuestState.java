@@ -198,7 +198,7 @@ public final class QuestState
 		_vars.clear();
 		
 		// Remove registered quest items.
-		int[] itemIdList = (int[]) _quest.getRegisteredItemIds();
+		int[] itemIdList = _quest.getRegisteredItemIds();
 		if (itemIdList != null)
 		{
 			for (int itemId : itemIdList)

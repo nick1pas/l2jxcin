@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
+import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.ItemTable;
@@ -65,7 +66,6 @@ import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.taskmanager.DecayTaskManager;
 import net.sf.l2j.gameserver.taskmanager.ItemsOnGroundTaskManager;
 import net.sf.l2j.gameserver.util.Util;
-import net.sf.l2j.util.Rnd;
 
 public class L2PetInstance extends L2Summon
 {
@@ -406,7 +406,7 @@ public class L2PetInstance extends L2Summon
 	}
 	
 	@Override
-	protected void doPickupItem(L2Object object)
+	public void doPickupItem(L2Object object)
 	{
 		if (isDead())
 			return;

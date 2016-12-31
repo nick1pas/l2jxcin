@@ -17,7 +17,7 @@ package net.sf.l2j.gameserver.model.actor.status;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.entity.Duel;
+import net.sf.l2j.gameserver.model.entity.Duel.DuelState;
 
 public class NpcStatus extends CharStatus
 {
@@ -42,7 +42,7 @@ public class NpcStatus extends CharStatus
 		{
 			final L2PcInstance attackerPlayer = attacker.getActingPlayer();
 			if (attackerPlayer != null && attackerPlayer.isInDuel())
-				attackerPlayer.setDuelState(Duel.DUELSTATE_INTERRUPTED);
+				attackerPlayer.setDuelState(DuelState.INTERRUPTED);
 			
 			// Add attackers to npc's attacker list
 			getActiveChar().addAttackerToAttackByList(attacker);

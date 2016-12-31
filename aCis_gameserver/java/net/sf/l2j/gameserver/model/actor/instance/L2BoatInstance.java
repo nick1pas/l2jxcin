@@ -16,7 +16,7 @@ package net.sf.l2j.gameserver.model.actor.instance;
 
 import java.util.logging.Logger;
 
-import net.sf.l2j.gameserver.ai.L2BoatAI;
+import net.sf.l2j.gameserver.ai.model.L2BoatAI;
 import net.sf.l2j.gameserver.model.L2CharPosition;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.L2Vehicle;
@@ -35,7 +35,8 @@ public class L2BoatInstance extends L2Vehicle
 	public L2BoatInstance(int objectId, CharTemplate template)
 	{
 		super(objectId, template);
-		setAI(new L2BoatAI(new AIAccessor()));
+		
+		setAI(new L2BoatAI(this));
 	}
 	
 	@Override
@@ -55,9 +56,9 @@ public class L2BoatInstance extends L2Vehicle
 	}
 	
 	@Override
-	public void oustPlayer(L2PcInstance player)
+	public void oustPlayer(L2PcInstance player, boolean removeFromList)
 	{
-		super.oustPlayer(player);
+		super.oustPlayer(player, removeFromList);
 		
 		final Location loc = getOustLoc();
 		if (player.isOnline())

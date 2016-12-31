@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
+import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2World;
@@ -33,7 +34,6 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemLocation;
 import net.sf.l2j.gameserver.model.item.kind.Item;
-import net.sf.l2j.util.Rnd;
 
 public abstract class ItemContainer
 {
@@ -118,21 +118,6 @@ public abstract class ItemContainer
 		for (ItemInstance item : _items)
 		{
 			if (item.getItemId() == itemId)
-				return item;
-		}
-		return null;
-	}
-	
-	/**
-	 * @param itemId : the itemId to check.
-	 * @param itemToIgnore : used during a loop, to avoid returning the same item.
-	 * @return the item by using its itemId, or null if not found in inventory
-	 */
-	public ItemInstance getItemByItemId(int itemId, ItemInstance itemToIgnore)
-	{
-		for (ItemInstance item : _items)
-		{
-			if (item.getItemId() == itemId && !item.equals(itemToIgnore))
 				return item;
 		}
 		return null;
@@ -559,7 +544,7 @@ public abstract class ItemContainer
 				if (item == null)
 					continue;
 				
-				L2World.getInstance().storeObject(item);
+				L2World.getInstance().addObject(item);
 				
 				L2PcInstance owner = (getOwner() == null) ? null : getOwner().getActingPlayer();
 				

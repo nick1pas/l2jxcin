@@ -70,7 +70,7 @@ public final class XMLDocumentFactory
 		return _builder.newDocument();
 	}
 	
-	private final static boolean checkFile(final File file)
+	private static final boolean checkFile(final File file)
 	{
 		if (!file.exists())
 			return false;

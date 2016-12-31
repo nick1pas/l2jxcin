@@ -15,7 +15,6 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.L2GameClient;
@@ -40,13 +39,7 @@ public final class RequestRestart extends L2GameClientPacket
 		if (player == null)
 			return;
 		
-		if (player.getActiveEnchantItem() != null)
-		{
-			sendPacket(RestartResponse.valueOf(false));
-			return;
-		}
-		
-		if (player.isLocked())
+		if (player.getActiveEnchantItem() != null || player.isLocked() || player.isInStoreMode())
 		{
 			sendPacket(RestartResponse.valueOf(false));
 			return;
@@ -59,35 +52,26 @@ public final class RequestRestart extends L2GameClientPacket
 			return;
 		}
 		
-		if (player.isInStoreMode())
-		{
-			sendPacket(RestartResponse.valueOf(false));
-			return;
-		}
-		
-		if (AttackStanceTaskManager.getInstance().isInAttackStance(player) && !player.isGM())
+		if (AttackStanceTaskManager.getInstance().isInAttackStance(player))
 		{
 			player.sendPacket(SystemMessageId.CANT_RESTART_WHILE_FIGHTING);
 			sendPacket(RestartResponse.valueOf(false));
 			return;
 		}
 		
-		// Prevent player from restarting if they are a festival participant and it is in progress,
-		// otherwise notify party members that the player is not longer a participant.
 		if (player.isFestivalParticipant())
 		{
 			if (SevenSignsFestival.getInstance().isFestivalInitialized())
 			{
+				player.sendPacket(SystemMessageId.NO_RESTART_HERE);
 				sendPacket(RestartResponse.valueOf(false));
 				return;
 			}
 			
-			final L2Party playerParty = player.getParty();
-			if (playerParty != null)
+			if (player.isInParty())
 				player.getParty().broadcastToPartyMembers(SystemMessage.sendString(player.getName() + " has been removed from the upcoming festival."));
 		}
 		
-		// Remove player from Boss Zone
 		player.removeFromBossZone();
 		
 		final L2GameClient client = getClient();

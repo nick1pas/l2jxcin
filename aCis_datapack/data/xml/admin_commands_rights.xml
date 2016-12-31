@@ -12,7 +12,6 @@
 	<aCar name="admin_silence" accessLevel="1" />
 	<aCar name="admin_tradeoff" accessLevel="1" />
 	<aCar name="admin_reload" accessLevel="1" />
-	<aCar name="admin_script_load" accessLevel="1" />
 
 	<!-- ANNOUNCEMENTS -->
 	<aCar name="admin_announce" accessLevel="1" />
@@ -276,10 +275,6 @@
 	<aCar name="admin_polymorph_menu" accessLevel="1" />
 	<aCar name="admin_unpolymorph_menu" accessLevel="1" />
 
-	<!-- REPAIR CHAR -->
-	<aCar name="admin_restore" accessLevel="1" />
-	<aCar name="admin_repair" accessLevel="1" />
-
 	<!-- RES -->
 	<aCar name="admin_res" accessLevel="1" />
 	<aCar name="admin_res_monster" accessLevel="1" />
@@ -360,6 +355,5 @@
 	<!-- ZONE -->
 	<aCar name="admin_zone_check" accessLevel="1" />
 	<aCar name="admin_zone_visual" accessLevel="1" />
-	<aCar name="admin_zone_visual_clear" accessLevel="1" />
 	
 </list>

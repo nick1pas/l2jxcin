@@ -103,7 +103,7 @@ public class L2MerchantInstance extends L2NpcInstance
 		}
 		else if (actualCommand.equalsIgnoreCase("Multisell_Shadow"))
 		{
-			NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
+			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 			
 			if (player.getLevel() < 40)
 				html.setFile("data/html/common/shadow_item-lowlevel.htm");

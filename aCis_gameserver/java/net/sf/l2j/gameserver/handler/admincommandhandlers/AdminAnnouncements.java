@@ -49,19 +49,19 @@ public class AdminAnnouncements implements IAdminCommandHandler
 					break;
 				
 				case "all":
-					for (L2PcInstance player : L2World.getInstance().getAllPlayers().values())
+					for (L2PcInstance player : L2World.getInstance().getPlayers())
 						AnnouncementTable.getInstance().showAnnouncements(player, false);
 					
 					AnnouncementTable.getInstance().listAnnouncements(activeChar);
 					break;
-					
+				
 				case "all_auto":
-					for (L2PcInstance player : L2World.getInstance().getAllPlayers().values())
+					for (L2PcInstance player : L2World.getInstance().getPlayers())
 						AnnouncementTable.getInstance().showAnnouncements(player, true);
 					
 					AnnouncementTable.getInstance().listAnnouncements(activeChar);
 					break;
-					
+				
 				case "add":
 					try
 					{

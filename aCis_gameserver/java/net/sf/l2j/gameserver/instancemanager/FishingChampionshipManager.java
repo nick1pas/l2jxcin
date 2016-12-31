@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
+import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.ServerVariables;
@@ -33,7 +34,6 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
-import net.sf.l2j.util.Rnd;
 
 /**
  * @author n0nam3
@@ -279,7 +279,7 @@ public class FishingChampionshipManager
 					{
 						pl.addItem("fishing_reward", Config.ALT_FISH_CHAMPIONSHIP_REWARD_ITEM, rewardCnt, null, true);
 						
-						NpcHtmlMessage html = new NpcHtmlMessage(0);
+						final NpcHtmlMessage html = new NpcHtmlMessage(0);
 						html.setFile("data/html/fisherman/championship/fish_event_reward001.htm");
 						pl.sendPacket(html);
 					}
@@ -290,7 +290,7 @@ public class FishingChampionshipManager
 	
 	public void showMidResult(L2PcInstance pl)
 	{
-		NpcHtmlMessage html = new NpcHtmlMessage(0);
+		final NpcHtmlMessage html = new NpcHtmlMessage(0);
 		
 		if (_needRefresh)
 		{
@@ -323,7 +323,7 @@ public class FishingChampionshipManager
 	
 	public void showChampScreen(L2PcInstance pl, int objectId)
 	{
-		NpcHtmlMessage html = new NpcHtmlMessage(objectId);
+		final NpcHtmlMessage html = new NpcHtmlMessage(objectId);
 		html.setFile("data/html/fisherman/championship/fish_event001.htm");
 		
 		String str = null;

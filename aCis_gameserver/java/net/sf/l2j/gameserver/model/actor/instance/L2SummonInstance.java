@@ -265,4 +265,9 @@ public class L2SummonInstance extends L2Summon
 	{
 		return getOwner().destroyItemByItemId(process, itemId, count, reference, sendMessage);
 	}
+	
+	@Override
+	public void doPickupItem(L2Object object)
+	{
+	}
 }

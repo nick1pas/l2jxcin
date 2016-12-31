@@ -35,6 +35,7 @@ import java.util.LinkedList;
  * @param <T>
  * @author KenM
  */
+@SuppressWarnings("resource")
 public final class SelectorThread<T extends MMOClient<?>> extends Thread
 {
 	// default BYTE_ORDER

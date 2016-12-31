@@ -25,7 +25,6 @@ import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.instancemanager.CoupleManager;
 import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
 import net.sf.l2j.gameserver.instancemanager.PetitionManager;
-import net.sf.l2j.gameserver.instancemanager.QuestManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.SiegeManager;
 import net.sf.l2j.gameserver.model.L2Clan;
@@ -37,8 +36,6 @@ import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.entity.Couple;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.olympiad.Olympiad;
-import net.sf.l2j.gameserver.model.quest.Quest;
-import net.sf.l2j.gameserver.model.quest.QuestState;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.Die;
@@ -59,6 +56,9 @@ import net.sf.l2j.gameserver.network.serverpackets.ShortCutInit;
 import net.sf.l2j.gameserver.network.serverpackets.SkillCoolTime;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
+import net.sf.l2j.gameserver.scripting.Quest;
+import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.ScriptManager;
 import net.sf.l2j.gameserver.taskmanager.GameTimeTaskManager;
 
 public class EnterWorld extends L2GameClientPacket
@@ -188,7 +188,7 @@ public class EnterWorld extends L2GameClientPacket
 		if (!Config.DISABLE_TUTORIAL)
 			loadTutorial(activeChar);
 		
-		for (Quest quest : QuestManager.getInstance().getAllManagedScripts())
+		for (Quest quest : ScriptManager.getInstance().getQuests())
 		{
 			if (quest != null && quest.getOnEnterWorld())
 				quest.notifyEnterWorld(activeChar);
@@ -206,15 +206,15 @@ public class EnterWorld extends L2GameClientPacket
 		// Clan notice, if active.
 		if (Config.ENABLE_COMMUNITY_BOARD && clan != null && clan.isNoticeEnabled())
 		{
-			NpcHtmlMessage notice = new NpcHtmlMessage(0);
-			notice.setFile("data/html/clan_notice.htm");
-			notice.replace("%clan_name%", clan.getName());
-			notice.replace("%notice_text%", clan.getNotice().replaceAll("\r\n", "<br>").replaceAll("action", "").replaceAll("bypass", ""));
-			sendPacket(notice);
+			final NpcHtmlMessage html = new NpcHtmlMessage(0);
+			html.setFile("data/html/clan_notice.htm");
+			html.replace("%clan_name%", clan.getName());
+			html.replace("%notice_text%", clan.getNotice().replaceAll("\r\n", "<br>").replaceAll("action", "").replaceAll("bypass", ""));
+			sendPacket(html);
 		}
 		else if (Config.SERVER_NEWS)
 		{
-			NpcHtmlMessage html = new NpcHtmlMessage(0);
+			final NpcHtmlMessage html = new NpcHtmlMessage(0);
 			html.setFile("data/html/servnews.htm");
 			sendPacket(html);
 		}

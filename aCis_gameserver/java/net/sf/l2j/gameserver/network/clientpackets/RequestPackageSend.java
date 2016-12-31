@@ -20,7 +20,7 @@ import java.util.List;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.holder.ItemHolder;
+import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.ItemContainer;
 import net.sf.l2j.gameserver.model.itemcontainer.PcFreight;
@@ -31,7 +31,7 @@ import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
 public final class RequestPackageSend extends L2GameClientPacket
 {
-	private List<ItemHolder> _items;
+	private List<IntIntHolder> _items;
 	private int _objectID;
 	
 	@Override
@@ -50,7 +50,7 @@ public final class RequestPackageSend extends L2GameClientPacket
 			int id = readD();
 			int cnt = readD();
 			
-			_items.add(new ItemHolder(id, cnt));
+			_items.add(new IntIntHolder(id, cnt));
 		}
 	}
 	
@@ -94,16 +94,16 @@ public final class RequestPackageSend extends L2GameClientPacket
 		int currentAdena = player.getAdena();
 		int slots = 0;
 		
-		for (ItemHolder i : _items)
+		for (IntIntHolder i : _items)
 		{
-			int count = i.getCount();
+			int count = i.getValue();
 			
 			// Check validity of requested item
 			ItemInstance item = player.checkItemManipulation(i.getId(), count);
 			if (item == null)
 			{
 				i.setId(0);
-				i.setCount(0);
+				i.setValue(0);
 				
 				_log.warning("Error depositing a warehouse object for char " + player.getName() + " (validity check)");
 				continue;
@@ -138,10 +138,10 @@ public final class RequestPackageSend extends L2GameClientPacket
 		
 		// Proceed to the transfer
 		InventoryUpdate playerIU = new InventoryUpdate();
-		for (ItemHolder i : _items)
+		for (IntIntHolder i : _items)
 		{
 			int objectId = i.getId();
-			int count = i.getCount();
+			int count = i.getValue();
 			
 			// check for an invalid item
 			if (objectId == 0 && count == 0)

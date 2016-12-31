@@ -21,12 +21,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import net.sf.l2j.Config;
+import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.ai.L2AttackableAI;
-import net.sf.l2j.gameserver.ai.L2CharacterAI;
-import net.sf.l2j.gameserver.ai.L2SiegeGuardAI;
+import net.sf.l2j.gameserver.ai.model.L2AttackableAI;
+import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
+import net.sf.l2j.gameserver.ai.model.L2SiegeGuardAI;
 import net.sf.l2j.gameserver.datatables.HerbDropTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
@@ -42,18 +43,17 @@ import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
 import net.sf.l2j.gameserver.model.actor.knownlist.AttackableKnownList;
 import net.sf.l2j.gameserver.model.actor.status.AttackableStatus;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.model.holder.ItemHolder;
+import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.DropCategory;
 import net.sf.l2j.gameserver.model.item.DropData;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
-import net.sf.l2j.gameserver.model.quest.Quest;
-import net.sf.l2j.gameserver.model.quest.QuestEventType;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
+import net.sf.l2j.gameserver.scripting.EventType;
+import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.util.Util;
-import net.sf.l2j.util.Rnd;
 
 /**
  * This class manages all NPC that can be attacked, such as :
@@ -258,8 +258,8 @@ public class L2Attackable extends L2Npc
 		_seeThroughSilentMove = val;
 	}
 	
-	private final List<ItemHolder> _sweepItems = new ArrayList<>();
-	private final List<ItemHolder> _harvestItems = new ArrayList<>();
+	private final List<IntIntHolder> _sweepItems = new ArrayList<>();
+	private final List<IntIntHolder> _harvestItems = new ArrayList<>();
 	
 	private int _seedType = 0;
 	private int _seederObjId = 0;
@@ -325,7 +325,7 @@ public class L2Attackable extends L2Npc
 			synchronized (this)
 			{
 				if (_ai == null)
-					_ai = new L2AttackableAI(new AIAccessor());
+					_ai = new L2AttackableAI(this);
 				
 				return _ai;
 			}
@@ -460,7 +460,7 @@ public class L2Attackable extends L2Npc
 			
 			if (player != null)
 			{
-				List<Quest> quests = getTemplate().getEventQuests(QuestEventType.ON_KILL);
+				List<Quest> quests = getTemplate().getEventQuests(EventType.ON_KILL);
 				if (quests != null)
 					for (Quest quest : quests)
 						ThreadPoolManager.getInstance().scheduleEffect(new OnKillNotifyTask(this, quest, player, killer instanceof L2Summon), 3000);
@@ -599,7 +599,7 @@ public class L2Attackable extends L2Npc
 					
 					exp *= 1 - penalty;
 					
-					if (isOverhit() && getOverhitAttacker().getActingPlayer() != null && attacker == getOverhitAttacker().getActingPlayer())
+					if (isOverhit() && _overhitAttacker != null && _overhitAttacker.getActingPlayer() != null && attacker == _overhitAttacker.getActingPlayer())
 					{
 						attacker.sendPacket(SystemMessageId.OVER_HIT);
 						exp += calculateOverhitExp(exp);
@@ -681,7 +681,7 @@ public class L2Attackable extends L2Npc
 				
 				// Check for an over-hit enabled strike
 				// (When in party, the over-hit exp bonus is given to the whole party and splitted proportionally through the party members)
-				if (isOverhit() && getOverhitAttacker().getActingPlayer() != null && attacker == getOverhitAttacker().getActingPlayer())
+				if (isOverhit() && _overhitAttacker != null && _overhitAttacker.getActingPlayer() != null && attacker == _overhitAttacker.getActingPlayer())
 				{
 					attacker.sendPacket(SystemMessageId.OVER_HIT);
 					exp += calculateOverhitExp(exp);
@@ -717,7 +717,7 @@ public class L2Attackable extends L2Npc
 		L2PcInstance player = attacker.getActingPlayer();
 		if (player != null)
 		{
-			List<Quest> quests = getTemplate().getEventQuests(QuestEventType.ON_ATTACK);
+			List<Quest> quests = getTemplate().getEventQuests(EventType.ON_ATTACK);
 			if (quests != null)
 				for (Quest quest : quests)
 					quest.notifyAttack(this, player, damage, attacker instanceof L2Summon);
@@ -756,10 +756,10 @@ public class L2Attackable extends L2Npc
 			final L2PcInstance targetPlayer = attacker.getActingPlayer();
 			if (targetPlayer != null)
 			{
-				List<Quest> quests = getTemplate().getEventQuests(QuestEventType.ON_AGGRO_RANGE_ENTER);
+				List<Quest> quests = getTemplate().getEventQuests(EventType.ON_AGGRO);
 				if (quests != null)
 					for (Quest quest : quests)
-						quest.notifyAggroRangeEnter(this, targetPlayer, (attacker instanceof L2Summon));
+						quest.notifyAggro(this, targetPlayer, (attacker instanceof L2Summon));
 			}
 			else
 			{
@@ -934,7 +934,7 @@ public class L2Attackable extends L2Npc
 	 * @param isSweep if true, use spoil drop chance.
 	 * @return the ItemHolder.
 	 */
-	private ItemHolder calculateRewardItem(L2PcInstance lastAttacker, DropData drop, int levelModifier, boolean isSweep)
+	private IntIntHolder calculateRewardItem(L2PcInstance lastAttacker, DropData drop, int levelModifier, boolean isSweep)
 	{
 		// Get default drop chance
 		double dropChance = drop.getChance();
@@ -1002,7 +1002,7 @@ public class L2Attackable extends L2Npc
 				itemCount *= Config.CHAMPION_ADENAS_REWARDS;
 		
 		if (itemCount > 0)
-			return new ItemHolder(drop.getItemId(), itemCount);
+			return new IntIntHolder(drop.getItemId(), itemCount);
 		
 		return null;
 	}
@@ -1015,7 +1015,7 @@ public class L2Attackable extends L2Npc
 	 * @param levelModifier level modifier in %'s (will be subtracted from drop chance)
 	 * @return the ItemHolder.
 	 */
-	private ItemHolder calculateCategorizedRewardItem(L2PcInstance lastAttacker, DropCategory categoryDrops, int levelModifier)
+	private IntIntHolder calculateCategorizedRewardItem(L2PcInstance lastAttacker, DropCategory categoryDrops, int levelModifier)
 	{
 		if (categoryDrops == null)
 			return null;
@@ -1103,7 +1103,7 @@ public class L2Attackable extends L2Npc
 					itemCount *= Config.CHAMPION_ADENAS_REWARDS;
 			
 			if (itemCount > 0)
-				return new ItemHolder(drop.getItemId(), itemCount);
+				return new IntIntHolder(drop.getItemId(), itemCount);
 		}
 		return null;
 	}
@@ -1133,7 +1133,7 @@ public class L2Attackable extends L2Npc
 		return 0;
 	}
 	
-	private static ItemHolder calculateCategorizedHerbItem(DropCategory categoryDrops, int levelModifier)
+	private static IntIntHolder calculateCategorizedHerbItem(DropCategory categoryDrops, int levelModifier)
 	{
 		if (categoryDrops == null)
 			return null;
@@ -1221,7 +1221,7 @@ public class L2Attackable extends L2Npc
 			}
 			
 			if (itemCount > 0)
-				return new ItemHolder(drop.getItemId(), itemCount);
+				return new IntIntHolder(drop.getItemId(), itemCount);
 		}
 		return null;
 	}
@@ -1261,7 +1261,7 @@ public class L2Attackable extends L2Npc
 		// now throw all categorized drops and handle spoil.
 		for (DropCategory cat : npcTemplate.getDropData())
 		{
-			ItemHolder item = null;
+			IntIntHolder item = null;
 			if (cat.isSweep())
 			{
 				if (getSpoilerId() != 0)
@@ -1299,7 +1299,7 @@ public class L2Attackable extends L2Npc
 						
 					// Broadcast message if RaidBoss was defeated
 					if (isRaid() && !isRaidMinion())
-						broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_DIED_DROPPED_S3_S2).addCharName(this).addItemName(item.getId()).addNumber(item.getCount()));
+						broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_DIED_DROPPED_S3_S2).addCharName(this).addItemName(item.getId()).addNumber(item.getValue()));
 				}
 			}
 		}
@@ -1320,9 +1320,9 @@ public class L2Attackable extends L2Npc
 			
 			if (Rnd.get(100) < dropChance)
 			{
-				final ItemHolder item = new ItemHolder(Config.CHAMPION_REWARD_ID, Math.max(1, Rnd.get(1, Config.CHAMPION_REWARD_QTY)));
+				final IntIntHolder item = new IntIntHolder(Config.CHAMPION_REWARD_ID, Math.max(1, Rnd.get(1, Config.CHAMPION_REWARD_QTY)));
 				if (Config.AUTO_LOOT)
-					player.addItem("ChampionLoot", item.getId(), item.getCount(), this, true);
+					player.addItem("ChampionLoot", item.getId(), item.getValue(), this, true);
 				else
 					dropItem(player, item);
 			}
@@ -1333,7 +1333,7 @@ public class L2Attackable extends L2Npc
 		{
 			for (DropCategory cat : HerbDropTable.getInstance().getHerbDroplist(getTemplate().getDropHerbGroup()))
 			{
-				final ItemHolder item = calculateCategorizedHerbItem(cat, levelModifier);
+				final IntIntHolder item = calculateCategorizedHerbItem(cat, levelModifier);
 				if (item != null)
 				{
 					if (Config.AUTO_LOOT_HERBS)
@@ -1341,10 +1341,10 @@ public class L2Attackable extends L2Npc
 					else
 					{
 						// If multiple similar herbs drop, split them and make a unique drop per item.
-						final int count = item.getCount();
+						final int count = item.getValue();
 						if (count > 1)
 						{
-							item.setCount(1);
+							item.setValue(1);
 							for (int i = 0; i < count; i++)
 								dropItem(player, item);
 						}
@@ -1362,12 +1362,12 @@ public class L2Attackable extends L2Npc
 	 * @param item The ItemHolder.
 	 * @return the dropped item instance.
 	 */
-	public ItemInstance dropItem(L2PcInstance mainDamageDealer, ItemHolder item)
+	public ItemInstance dropItem(L2PcInstance mainDamageDealer, IntIntHolder item)
 	{
 		int randDropLim = 70;
 		
 		ItemInstance ditem = null;
-		for (int i = 0; i < item.getCount(); i++)
+		for (int i = 0; i < item.getValue(); i++)
 		{
 			// Randomize drop position
 			int newX = getX() + Rnd.get(randDropLim * 2 + 1) - randDropLim;
@@ -1377,7 +1377,7 @@ public class L2Attackable extends L2Npc
 			if (ItemTable.getInstance().getTemplate(item.getId()) != null)
 			{
 				// Init the dropped ItemInstance and add it in the world as a visible object at the position where mob was last
-				ditem = ItemTable.getInstance().createItem("Loot", item.getId(), item.getCount(), mainDamageDealer, this);
+				ditem = ItemTable.getInstance().createItem("Loot", item.getId(), item.getValue(), mainDamageDealer, this);
 				ditem.getDropProtection().protect(mainDamageDealer);
 				ditem.dropMe(this, newX, newY, newZ);
 				
@@ -1435,7 +1435,7 @@ public class L2Attackable extends L2Npc
 	/**
 	 * @return list containing all ItemHolder that can be spoiled.
 	 */
-	public List<ItemHolder> getSweepItems()
+	public List<IntIntHolder> getSweepItems()
 	{
 		return _sweepItems;
 	}
@@ -1443,7 +1443,7 @@ public class L2Attackable extends L2Npc
 	/**
 	 * @return list containing all ItemHolder that can be harvested.
 	 */
-	public List<ItemHolder> getHarvestItems()
+	public List<IntIntHolder> getHarvestItems()
 	{
 		return _harvestItems;
 	}
@@ -1698,7 +1698,7 @@ public class L2Attackable extends L2Npc
 			if (diff > 0)
 				count += diff;
 			
-			_harvestItems.add(new ItemHolder(L2Manor.getInstance().getCropType(_seedType), count * Config.RATE_DROP_MANOR));
+			_harvestItems.add(new IntIntHolder(L2Manor.getInstance().getCropType(_seedType), count * Config.RATE_DROP_MANOR));
 		}
 	}
 	
@@ -1857,7 +1857,7 @@ public class L2Attackable extends L2Npc
 	}
 	
 	@Override
-	protected void moveToLocation(int x, int y, int z, int offset)
+	public void moveToLocation(int x, int y, int z, int offset)
 	{
 		if (isAttackingNow())
 			return;

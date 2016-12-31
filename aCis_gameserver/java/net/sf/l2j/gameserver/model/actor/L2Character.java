@@ -26,11 +26,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
+import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.ai.L2AttackableAI;
-import net.sf.l2j.gameserver.ai.L2CharacterAI;
+import net.sf.l2j.gameserver.ai.model.L2AttackableAI;
+import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
 import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
@@ -72,8 +73,6 @@ import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.item.kind.Weapon;
 import net.sf.l2j.gameserver.model.item.type.WeaponType;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
-import net.sf.l2j.gameserver.model.quest.Quest;
-import net.sf.l2j.gameserver.model.quest.QuestEventType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.AbstractNpcInfo.NpcInfo;
@@ -95,6 +94,8 @@ import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.StopMove;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.network.serverpackets.TeleportToLocation;
+import net.sf.l2j.gameserver.scripting.EventType;
+import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.skills.AbnormalEffect;
 import net.sf.l2j.gameserver.skills.Calculator;
 import net.sf.l2j.gameserver.skills.Formulas;
@@ -121,7 +122,6 @@ import net.sf.l2j.gameserver.templates.skills.L2EffectType;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 import net.sf.l2j.gameserver.util.Broadcast;
 import net.sf.l2j.gameserver.util.Util;
-import net.sf.l2j.util.Rnd;
 
 /**
  * L2Character is the mother class of all character objects of the world (PC, NPC...) :
@@ -553,7 +553,7 @@ public abstract class L2Character extends L2Object
 	 * </ul>
 	 * @param target The L2Character targeted
 	 */
-	protected synchronized void doAttack(L2Character target)
+	public void doAttack(L2Character target)
 	{
 		if (target == null || isAttackingDisabled())
 		{
@@ -738,7 +738,7 @@ public abstract class L2Character extends L2Object
 					if (victim != null)
 					{
 						L2Npc mob = ((L2Npc) this);
-						List<Quest> quests = mob.getTemplate().getEventQuests(QuestEventType.ON_ATTACK_ACT);
+						List<Quest> quests = mob.getTemplate().getEventQuests(EventType.ON_ATTACK_ACT);
 						if (quests != null)
 							for (Quest quest : quests)
 								quest.notifyAttackAct(mob, victim);
@@ -1583,6 +1583,11 @@ public abstract class L2Character extends L2Object
 			getAI().stopAITask();
 	}
 	
+	public void detachAI()
+	{
+		_ai = null;
+	}
+	
 	protected void calculateRewards(L2Character killer)
 	{
 	}
@@ -1594,41 +1599,11 @@ public abstract class L2Character extends L2Object
 			return;
 		
 		setIsDead(false);
-		boolean restorefull = false;
 		
-		if (this instanceof L2Playable && ((L2Playable) this).isPhoenixBlessed())
-		{
-			restorefull = true;
-			((L2Playable) this).stopPhoenixBlessing(null);
-		}
-		
-		if (restorefull)
-		{
-			_status.setCurrentHp(getMaxHp());
-			_status.setCurrentMp(getMaxMp());
-		}
-		else
-			_status.setCurrentHp(getMaxHp() * Config.RESPAWN_RESTORE_HP);
+		_status.setCurrentHp(getMaxHp() * Config.RESPAWN_RESTORE_HP);
 		
 		// Start broadcast status
 		broadcastPacket(new Revive(this));
-		
-		// Start paralyze task if it's a player
-		if (this instanceof L2PcInstance)
-		{
-			final L2PcInstance player = ((L2PcInstance) this);
-			
-			// Schedule a paralyzed task to wait for the animation to finish
-			ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					player.setIsParalyzed(false);
-				}
-			}, player.getAnimationTimer());
-			setIsParalyzed(true);
-		}
 		
 		if (getWorldRegion() != null)
 			getWorldRegion().onRevive(this);
@@ -1648,13 +1623,14 @@ public abstract class L2Character extends L2Object
 	 */
 	public L2CharacterAI getAI()
 	{
-		L2CharacterAI ai = _ai; // copy handle
+		L2CharacterAI ai = _ai;
 		if (ai == null)
 		{
 			synchronized (this)
 			{
 				if (_ai == null)
-					_ai = new L2CharacterAI(new AIAccessor());
+					_ai = new L2CharacterAI(this);
+				
 				return _ai;
 			}
 		}
@@ -1815,7 +1791,7 @@ public abstract class L2Character extends L2Object
 	 */
 	public boolean isAttackingDisabled()
 	{
-		return isFlying() || isStunned() || isImmobileUntilAttacked() || isSleeping() || _attackEndTime > System.currentTimeMillis() || isParalyzed() || isAlikeDead() || isCoreAIDisabled();
+		return isFlying() || isStunned() || isImmobileUntilAttacked() || isSleeping() || isAttackingNow() || isParalyzed() || isAlikeDead() || isCoreAIDisabled();
 	}
 	
 	public final Calculator[] getCalculators()
@@ -1897,6 +1873,11 @@ public abstract class L2Character extends L2Object
 	public L2Summon getPet()
 	{
 		return null;
+	}
+	
+	public boolean isSeated()
+	{
+		return false;
 	}
 	
 	public boolean isRiding()
@@ -2781,91 +2762,6 @@ public abstract class L2Character extends L2Object
 		return _effects.getFirstEffect(tp);
 	}
 	
-	// =========================================================
-	// NEED TO ORGANIZE AND MOVE TO PROPER PLACE
-	/** This class permit to the L2Character AI to obtain informations and uses L2Character method */
-	public class AIAccessor
-	{
-		public AIAccessor()
-		{
-		}
-		
-		/**
-		 * @return the L2Character managed by this Accessor AI.
-		 */
-		public L2Character getActor()
-		{
-			return L2Character.this;
-		}
-		
-		/**
-		 * Accessor to L2Character moveToLocation() method with an interaction area.
-		 * @param x
-		 * @param y
-		 * @param z
-		 * @param offset
-		 */
-		public void moveTo(int x, int y, int z, int offset)
-		{
-			moveToLocation(x, y, z, offset);
-		}
-		
-		/**
-		 * Accessor to L2Character moveToLocation() method without interaction area.
-		 * @param x
-		 * @param y
-		 * @param z
-		 */
-		public void moveTo(int x, int y, int z)
-		{
-			moveToLocation(x, y, z, 0);
-		}
-		
-		/**
-		 * Accessor to L2Character stopMove() method.
-		 * @param pos The L2CharPosition position.
-		 */
-		public void stopMove(L2CharPosition pos)
-		{
-			L2Character.this.stopMove(pos);
-		}
-		
-		/**
-		 * Accessor to L2Character doAttack() method.
-		 * @param target The target to make checks on.
-		 */
-		public void doAttack(L2Character target)
-		{
-			L2Character.this.doAttack(target);
-		}
-		
-		/**
-		 * Accessor to L2Character doCast() method.
-		 * @param skill The skill object to launch.
-		 */
-		public void doCast(L2Skill skill)
-		{
-			L2Character.this.doCast(skill);
-		}
-		
-		/**
-		 * @param evt An event which happens.
-		 * @return a new NotifyAITask.
-		 */
-		public NotifyAITask newNotifyTask(CtrlEvent evt)
-		{
-			return new NotifyAITask(evt);
-		}
-		
-		/**
-		 * Cancel the AI.
-		 */
-		public void detachAI()
-		{
-			_ai = null;
-		}
-	}
-	
 	/**
 	 * This class group all mouvement data.<BR>
 	 * <BR>
@@ -3515,7 +3411,7 @@ public abstract class L2Character extends L2Object
 	 * @param z The Y position of the destination
 	 * @param offset The size of the interaction area of the L2Character targeted
 	 */
-	protected void moveToLocation(int x, int y, int z, int offset)
+	public void moveToLocation(int x, int y, int z, int offset)
 	{
 		// get movement speed of character
 		float speed = getStat().getMoveSpeed();
@@ -5180,7 +5076,7 @@ public abstract class L2Character extends L2Object
 				// Mobs in range 1000 see spell
 				for (L2Npc npcMob : player.getKnownList().getKnownTypeInRadius(L2Npc.class, 1000))
 				{
-					List<Quest> quests = npcMob.getTemplate().getEventQuests(QuestEventType.ON_SKILL_SEE);
+					List<Quest> quests = npcMob.getTemplate().getEventQuests(EventType.ON_SKILL_SEE);
 					if (quests != null)
 						for (Quest quest : quests)
 							quest.notifySkillSee(npcMob, player, skill, targets, this instanceof L2Summon);

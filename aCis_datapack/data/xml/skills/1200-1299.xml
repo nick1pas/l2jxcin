@@ -1374,10 +1374,10 @@
 		<enchant2 name="mpConsume" val="#ench2MpConsume"/>
 		<enchant2 name="mpInitialConsume" val="#ench2mpInitialConsume"/>
 		<for>
-			<effect time="15" name="HealOverTime" val="#hot" stackOrder="#stackOrder" stackType="life_force_orc"/>
+			<effect count="15" name="HealOverTime" val="#hot" stackOrder="#stackOrder" stackType="life_force_orc"/>
 		</for>
 		<enchant1for>
-			<effect time="15" name="HealOverTime" val="#ench1hot" stackOrder="#ench1stackOrder" stackType="life_force_orc"/>
+			<effect count="15" name="HealOverTime" val="#ench1hot" stackOrder="#ench1stackOrder" stackType="life_force_orc"/>
 		</enchant1for>
 	</skill>
 	<skill id="1257" levels="3" name="Decrease Weight" enchantLevels1="30" enchantLevels2="30" >

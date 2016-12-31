@@ -15,6 +15,7 @@
 package net.sf.l2j.gameserver.scripting.quests;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
+import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -362,7 +363,7 @@ public class Q022_TragedyInVonHellmannForest extends Quest
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		QuestState st = attacker.getQuestState(qn);
 		if (st == null || !st.isStarted() || isPet)

@@ -99,7 +99,13 @@ public class Q232_TestOfTheLord extends Quest
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(ORDEAL_NECKLACE, 1);
-			st.giveItems(DIMENSIONAL_DIAMOND, 92);
+			
+			if (!player.getMemos().getBool("secondClassChange39", false))
+			{
+				htmltext = "30565-05b.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_39.get(player.getClassId().getId()));
+				player.getMemos().set("secondClassChange39", true);
+			}
 		}
 		else if (event.equalsIgnoreCase("30565-08.htm"))
 		{

@@ -15,6 +15,8 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.commons.random.Rnd;
+import net.sf.l2j.commons.util.ArraysUtil;
+
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.model.L2SummonAI;
 import net.sf.l2j.gameserver.model.L2Object;
@@ -163,7 +165,7 @@ public final class RequestActionUse extends L2GameClientPacket
 					return;
 				
 				// Sin eater, Big Boom, Wyvern can't attack with attack button.
-				if (Util.contains(PASSIVE_SUMMONS, pet.getNpcId()))
+				if (ArraysUtil.contains(PASSIVE_SUMMONS, pet.getNpcId()))
 					return;
 				
 				if (pet.isOutOfControl())

@@ -23,11 +23,12 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -54,7 +55,7 @@ public final class ItemsOnGroundTaskManager implements Runnable
 	public ItemsOnGroundTaskManager()
 	{
 		// Run task each 5 seconds.
-		ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(this, 5000, 5000);
+		ThreadPool.scheduleAtFixedRate(this, 5000, 5000);
 		
 		// Item saving is disabled, return.
 		if (!Config.SAVE_DROPPED_ITEM)
@@ -73,7 +74,7 @@ public final class ItemsOnGroundTaskManager implements Runnable
 				
 				// Create new item.
 				final ItemInstance item = new ItemInstance(result.getInt(1), result.getInt(2));
-				L2World.getInstance().addObject(item);
+				World.getInstance().addObject(item);
 				
 				// Check and set count.
 				final int count = result.getInt(3);
@@ -86,11 +87,7 @@ public final class ItemsOnGroundTaskManager implements Runnable
 					item.setEnchantLevel(enchant);
 				
 				// Spawn item in the world.
-				item.getPosition().set(result.getInt(5), result.getInt(6), result.getInt(7));
-				item.setRegion(L2World.getInstance().getRegion(item.getPosition()));
-				item.getRegion().addVisibleObject(item);
-				item.setIsVisible(true);
-				L2World.getInstance().addVisibleObject(item, item.getRegion());
+				item.spawnMe(result.getInt(5), result.getInt(6), result.getInt(7));
 				
 				// Get interval, add item to the list.
 				long interval = result.getLong(8);
@@ -193,9 +190,7 @@ public final class ItemsOnGroundTaskManager implements Runnable
 			
 			// Destroy item and remove from task.
 			final ItemInstance item = entry.getKey();
-			L2World.getInstance().removeVisibleObject(item, item.getRegion());
-			L2World.getInstance().removeObject(item);
-			_items.remove(item);
+			item.decayMe();
 		}
 	}
 	

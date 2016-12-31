@@ -18,15 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.l2j.gameserver.datatables.ItemTable;
+import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.base.Sex;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.templates.StatsSet;
 
-/**
- * @author mkizub
- */
 public class PcTemplate extends CharTemplate
 {
 	private final ClassId _classId;
@@ -38,9 +36,7 @@ public class PcTemplate extends CharTemplate
 	private final double _collisionRadiusFemale;
 	private final double _collisionHeightFemale;
 	
-	private final int _spawnX;
-	private final int _spawnY;
-	private final int _spawnZ;
+	private final Location _spawn;
 	
 	private final int _classBaseLevel;
 	
@@ -63,9 +59,7 @@ public class PcTemplate extends CharTemplate
 		_collisionRadiusFemale = set.getDouble("radiusFemale");
 		_collisionHeightFemale = set.getDouble("heightFemale");
 		
-		_spawnX = set.getInteger("spawnX");
-		_spawnY = set.getInteger("spawnY");
-		_spawnZ = set.getInteger("spawnZ");
+		_spawn = new Location(set.getInteger("spawnX"), set.getInteger("spawnY"), set.getInteger("spawnZ"));
 		
 		_classBaseLevel = set.getInteger("baseLvl");
 		
@@ -153,19 +147,9 @@ public class PcTemplate extends CharTemplate
 		return (sex == Sex.MALE) ? _collisionHeight : _collisionHeightFemale;
 	}
 	
-	public final int getSpawnX()
+	public final Location getSpawn()
 	{
-		return _spawnX;
-	}
-	
-	public final int getSpawnY()
-	{
-		return _spawnY;
-	}
-	
-	public final int getSpawnZ()
-	{
-		return _spawnZ;
+		return _spawn;
 	}
 	
 	public final int getClassBaseLevel()

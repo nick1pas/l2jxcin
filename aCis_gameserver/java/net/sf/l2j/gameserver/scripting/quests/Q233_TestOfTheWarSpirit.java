@@ -13,6 +13,7 @@
 package net.sf.l2j.gameserver.scripting.quests;
 
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.ClassId;
@@ -109,12 +110,18 @@ public class Q233_TestOfTheWarSpirit extends Quest
 			return htmltext;
 		
 		// SOMAK
-		if (event.equalsIgnoreCase("30510-05e.htm"))
+		if (event.equalsIgnoreCase("30510-05.htm"))
 		{
 			st.setState(STATE_STARTED);
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
-			st.giveItems(DIMENSIONAL_DIAMOND, 92);
+			
+			if (!player.getMemos().getBool("secondClassChange39", false))
+			{
+				htmltext = "30510-05e.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_39.get(player.getClassId().getId()));
+				player.getMemos().set("secondClassChange39", true);
+			}
 		}
 		// ORIM
 		else if (event.equalsIgnoreCase("30630-04.htm"))

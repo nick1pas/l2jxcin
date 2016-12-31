@@ -27,7 +27,7 @@ import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -166,8 +166,8 @@ public class ItemTable
 				item.setDropProtection(actor.getObjectId(), false);
 		}
 		
-		// Add the ItemInstance object to _allObjects of L2world
-		L2World.getInstance().addObject(item);
+		// Add the ItemInstance object to _objects of World.
+		World.getInstance().addObject(item);
 		
 		// Set Item parameters
 		if (item.isStackable() && count > 1)
@@ -219,7 +219,7 @@ public class ItemTable
 			item.setLocation(ItemLocation.VOID);
 			item.setLastChange(ItemInstance.REMOVED);
 			
-			L2World.getInstance().removeObject(item);
+			World.getInstance().removeObject(item);
 			IdFactory.getInstance().releaseId(item.getObjectId());
 			
 			if (Config.LOG_ITEMS)

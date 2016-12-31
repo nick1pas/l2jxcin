@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import net.sf.l2j.commons.util.ArraysUtil;
+
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.handler.ItemHandler;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -22,7 +24,6 @@ import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.PetItemList;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class RequestPetUseItem extends L2GameClientPacket
 {
@@ -92,7 +93,7 @@ public final class RequestPetUseItem extends L2GameClientPacket
 			return;
 		}
 		
-		if (Util.contains(PET_FOOD_IDS, item.getItemId()) && !pet.getTemplate().canEatFood(item.getItemId()))
+		if (ArraysUtil.contains(PET_FOOD_IDS, item.getItemId()) && !pet.getTemplate().canEatFood(item.getItemId()))
 		{
 			activeChar.sendPacket(SystemMessageId.PET_CANNOT_USE_ITEM);
 			return;

@@ -1787,7 +1787,7 @@
 				<sub order="0x40" stat="cancelVuln" val="80" />
 				<mul order="0x30" stat="gainHp" val="2" />
 				<mul order="0x30" stat="pDef" val="0.75"/>
-				<mul order="0x30" stat="mDef" val="0.75"/>
+				<sub order="0x40" stat="mDef" val="25"/>
 			</effect>
 			<effect name="BlockDebuff" time="120" noicon="1" val="0" stackOrder="3" stackType="abnormal_debuff_invincibility" />
 		</for>

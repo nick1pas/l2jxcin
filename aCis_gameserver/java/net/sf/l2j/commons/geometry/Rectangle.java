@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.commons.geometry;
 
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.Location;
 
 /**
@@ -66,12 +68,12 @@ public class Rectangle extends AShape
 	@Override
 	public boolean isInside(int x, int y)
 	{
-		int dx = (x - _x) / _w;
-		if (dx < 0 || dx > 1)
+		int d = x - _x;
+		if (d < 0 || d > _w)
 			return false;
 		
-		int dy = (y - _y) / _h;
-		if (dy < 0 || _y > 1)
+		d = y - _y;
+		if (d < 0 || d > _h)
 			return false;
 		
 		return true;
@@ -80,12 +82,12 @@ public class Rectangle extends AShape
 	@Override
 	public boolean isInside(int x, int y, int z)
 	{
-		int dx = (x - _x) / _w;
-		if (dx < 0 || dx > 1)
+		int d = x - _x;
+		if (d < 0 || d > _w)
 			return false;
 		
-		int dy = (y - _y) / _h;
-		if (dy < 0 || _y > 1)
+		d = y - _y;
+		if (d < 0 || d > _h)
 			return false;
 		
 		return true;
@@ -94,9 +96,7 @@ public class Rectangle extends AShape
 	@Override
 	public Location getRandomLocation()
 	{
-		final int x = (int) (_x + Math.random() * _w);
-		final int y = (int) (_y + Math.random() * _h);
-		
-		return new Location(x, y, 0);
+		// calculate coordinates and return
+		return new Location(_x + Rnd.get(_w), _y + Rnd.get(_h), 0);
 	}
 }

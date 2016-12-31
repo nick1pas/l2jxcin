@@ -16,7 +16,7 @@ package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.BlockList;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -47,8 +47,8 @@ public final class TradeRequest extends L2GameClientPacket
 			return;
 		}
 		
-		final L2PcInstance target = L2World.getInstance().getPlayer(_objectId);
-		if (target == null || !player.getKnownList().knowsObject(target) || target.equals(player))
+		final L2PcInstance target = World.getInstance().getPlayer(_objectId);
+		if (target == null || !player.getKnownType(L2PcInstance.class).contains(target) || target.equals(player))
 		{
 			player.sendPacket(SystemMessageId.TARGET_IS_INCORRECT);
 			return;

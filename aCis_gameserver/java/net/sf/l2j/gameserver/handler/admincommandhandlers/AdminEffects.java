@@ -19,7 +19,7 @@ import java.util.StringTokenizer;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.L2Summon;
@@ -32,7 +32,7 @@ import net.sf.l2j.gameserver.network.serverpackets.ExRedSky;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
-import net.sf.l2j.gameserver.network.serverpackets.SignsSky;
+import net.sf.l2j.gameserver.network.serverpackets.SSQInfo;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 import net.sf.l2j.gameserver.network.serverpackets.StopMove;
 import net.sf.l2j.gameserver.network.serverpackets.SunRise;
@@ -128,12 +128,16 @@ public class AdminEffects implements IAdminCommandHandler
 				
 				L2GameServerPacket packet = null;
 				
-				if (type.equals("signsky"))
+				if (type.equals("ssqinfo"))
 				{
 					if (state.equals("dawn"))
-						packet = new SignsSky(2);
+						packet = SSQInfo.DAWN_SKY_PACKET;
 					else if (state.equals("dusk"))
-						packet = new SignsSky(1);
+						packet = SSQInfo.DUSK_SKY_PACKET;
+					else if (state.equals("red"))
+						packet = SSQInfo.RED_SKY_PACKET;
+					else if (state.equals("regular"))
+						packet = SSQInfo.REGULAR_SKY_PACKET;
 				}
 				else if (type.equals("sky"))
 				{
@@ -145,14 +149,18 @@ public class AdminEffects implements IAdminCommandHandler
 						packet = new ExRedSky(10);
 				}
 				else
-					activeChar.sendMessage("Usage: //atmosphere <signsky dawn|dusk> <sky day|night|red>");
+				{
+					activeChar.sendMessage("Usage: //atmosphere <ssqinfo dawn|dusk|red|regular>");
+					activeChar.sendMessage("Usage: //atmosphere <sky day|night|red>");
+				}
 				
 				if (packet != null)
 					Broadcast.toAllOnlinePlayers(packet);
 			}
 			catch (Exception ex)
 			{
-				activeChar.sendMessage("Usage: //atmosphere <signsky dawn|dusk> <sky day|night|red>");
+				activeChar.sendMessage("Usage: //atmosphere <ssqinfo dawn|dusk|red|regular>");
+				activeChar.sendMessage("Usage: //atmosphere <sky day|night|red>");
 			}
 		}
 		else if (command.startsWith("admin_jukebox"))
@@ -175,7 +183,7 @@ public class AdminEffects implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_para_all"))
 		{
-			for (L2PcInstance player : activeChar.getKnownList().getKnownType(L2PcInstance.class))
+			for (L2PcInstance player : activeChar.getKnownType(L2PcInstance.class))
 			{
 				if (!player.isGM())
 				{
@@ -187,7 +195,7 @@ public class AdminEffects implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_unpara_all"))
 		{
-			for (L2PcInstance player : activeChar.getKnownList().getKnownType(L2PcInstance.class))
+			for (L2PcInstance player : activeChar.getKnownType(L2PcInstance.class))
 			{
 				player.stopAbnormalEffect(0x0800);
 				player.setIsParalyzed(false);
@@ -247,31 +255,16 @@ public class AdminEffects implements IAdminCommandHandler
 				String oldName = "null";
 				
 				L2Object target = activeChar.getTarget();
-				L2Character player = null;
 				
-				if (target instanceof L2Character)
-				{
-					player = (L2Character) target;
-					oldName = player.getName();
-				}
-				else
-				{
-					player = activeChar;
-					oldName = activeChar.getName();
-				}
+				if (!(target instanceof L2Npc))
+					return false;
 				
-				if (player instanceof L2PcInstance)
-					L2World.getInstance().removePlayer((L2PcInstance) player);
+				oldName = target.getName();
 				
-				player.setName(name);
+				target.setName(name);
 				
-				if (player instanceof L2PcInstance)
-				{
-					L2World.getInstance().addVisibleObject(player, null);
-					((L2PcInstance) player).broadcastUserInfo();
-				}
-				else if (player instanceof L2Npc)
-					player.broadcastPacket(new NpcInfo((L2Npc) player, null));
+				if (target instanceof L2Npc)
+					((L2Npc) target).broadcastPacket(new NpcInfo((L2Npc) target, null));
 				
 				activeChar.sendMessage("Changed name from " + oldName + " to " + name + ".");
 			}
@@ -290,7 +283,7 @@ public class AdminEffects implements IAdminCommandHandler
 					final String targetOrRadius = st.nextToken();
 					if (targetOrRadius != null)
 					{
-						L2PcInstance player = L2World.getInstance().getPlayer(targetOrRadius);
+						L2PcInstance player = World.getInstance().getPlayer(targetOrRadius);
 						if (player != null)
 						{
 							if (performSocial(social, player))
@@ -302,7 +295,7 @@ public class AdminEffects implements IAdminCommandHandler
 						{
 							final int radius = Integer.parseInt(targetOrRadius);
 							
-							for (L2Object object : activeChar.getKnownList().getKnownTypeInRadius(L2Character.class, radius))
+							for (L2Character object : activeChar.getKnownTypeInRadius(L2Character.class, radius))
 								performSocial(social, object);
 							
 							activeChar.sendMessage(radius + " units radius was affected by your social request.");
@@ -339,7 +332,7 @@ public class AdminEffects implements IAdminCommandHandler
 					final String targetOrRadius = st.nextToken();
 					if (targetOrRadius != null)
 					{
-						L2PcInstance player = L2World.getInstance().getPlayer(targetOrRadius);
+						L2PcInstance player = World.getInstance().getPlayer(targetOrRadius);
 						if (player != null)
 						{
 							if (performAbnormal(abnormal, player))
@@ -351,7 +344,7 @@ public class AdminEffects implements IAdminCommandHandler
 						{
 							final int radius = Integer.parseInt(targetOrRadius);
 							
-							for (L2Object object : activeChar.getKnownList().getKnownTypeInRadius(L2Character.class, radius))
+							for (L2Character object : activeChar.getKnownTypeInRadius(L2Character.class, radius))
 								performAbnormal(abnormal, object);
 							
 							activeChar.sendMessage(radius + " units radius was affected by your abnormal request.");

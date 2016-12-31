@@ -13,6 +13,7 @@
 package net.sf.l2j.gameserver.scripting.quests;
 
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.ClassId;
@@ -87,20 +88,19 @@ public class Q226_TestOfTheHealer extends Quest
 			return htmltext;
 		
 		// BANDELLOS
-		if (event.equalsIgnoreCase("30473-04a.htm"))
+		if (event.equalsIgnoreCase("30473-04.htm"))
 		{
 			st.setState(STATE_STARTED);
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(REPORT_OF_PERRIN, 1);
-			if (player.getClassId() == ClassId.KNIGHT)
-				st.giveItems(DIMENSIONAL_DIAMOND, 104);
-			else if (player.getClassId() == ClassId.ELVEN_KNIGHT)
-				st.giveItems(DIMENSIONAL_DIAMOND, 72);
-			else if (player.getClassId() == ClassId.CLERIC)
-				st.giveItems(DIMENSIONAL_DIAMOND, 60);
-			else
-				st.giveItems(DIMENSIONAL_DIAMOND, 45);
+			
+			if (!player.getMemos().getBool("secondClassChange39", false))
+			{
+				htmltext = "30473-04a.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_39.get(player.getClassId().getId()));
+				player.getMemos().set("secondClassChange39", true);
+			}
 		}
 		else if (event.equalsIgnoreCase("30473-09.htm"))
 		{

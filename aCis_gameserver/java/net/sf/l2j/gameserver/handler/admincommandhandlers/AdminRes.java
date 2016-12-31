@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -72,7 +72,7 @@ public class AdminRes implements IAdminCommandHandler
 		if (resParam != null)
 		{
 			// Check if a player name was specified as a param.
-			L2PcInstance plyr = L2World.getInstance().getPlayer(resParam);
+			L2PcInstance plyr = World.getInstance().getPlayer(resParam);
 			
 			if (plyr != null)
 				obj = plyr;
@@ -83,7 +83,7 @@ public class AdminRes implements IAdminCommandHandler
 				{
 					int radius = Integer.parseInt(resParam);
 					
-					for (L2PcInstance knownPlayer : activeChar.getKnownList().getKnownTypeInRadius(L2PcInstance.class, radius))
+					for (L2PcInstance knownPlayer : activeChar.getKnownTypeInRadius(L2PcInstance.class, radius))
 						doResurrect(knownPlayer);
 					
 					activeChar.sendMessage("Resurrected all players within a " + radius + " unit radius.");
@@ -123,7 +123,7 @@ public class AdminRes implements IAdminCommandHandler
 			{
 				radius = Integer.parseInt(radiusStr);
 				
-				for (L2Character knownChar : activeChar.getKnownList().getKnownTypeInRadius(L2Character.class, radius))
+				for (L2Character knownChar : activeChar.getKnownTypeInRadius(L2Character.class, radius))
 					if (!(knownChar instanceof L2PcInstance))
 						doResurrect(knownChar);
 				

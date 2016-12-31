@@ -38,7 +38,7 @@ public class L2WaterZone extends L2ZoneType
 			((L2PcInstance) character).broadcastUserInfo();
 		else if (character instanceof L2Npc)
 		{
-			for (L2PcInstance player : character.getKnownList().getKnownType(L2PcInstance.class))
+			for (L2PcInstance player : character.getKnownType(L2PcInstance.class))
 			{
 				if (character.getMoveSpeed() == 0)
 					player.sendPacket(new ServerObjectInfo((L2Npc) character, player));
@@ -53,12 +53,11 @@ public class L2WaterZone extends L2ZoneType
 	{
 		character.setInsideZone(ZoneId.WATER, false);
 		
-		// TODO: update to only send speed status when that packet is known
 		if (character instanceof L2PcInstance)
 			((L2PcInstance) character).broadcastUserInfo();
 		else if (character instanceof L2Npc)
 		{
-			for (L2PcInstance player : character.getKnownList().getKnownType(L2PcInstance.class))
+			for (L2PcInstance player : character.getKnownType(L2PcInstance.class))
 			{
 				if (character.getMoveSpeed() == 0)
 					player.sendPacket(new ServerObjectInfo((L2Npc) character, player));

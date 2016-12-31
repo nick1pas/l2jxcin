@@ -35,7 +35,7 @@ public class ChatAll implements IChatHandler
 			return;
 		
 		final CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
-		for (L2PcInstance player : activeChar.getKnownList().getKnownTypeInRadius(L2PcInstance.class, 1250))
+		for (L2PcInstance player : activeChar.getKnownTypeInRadius(L2PcInstance.class, 1250))
 		{
 			if (!BlockList.isBlocked(player, activeChar))
 				player.sendPacket(cs);

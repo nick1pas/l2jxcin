@@ -20,16 +20,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import net.sf.l2j.Config;
-import net.sf.l2j.L2DatabaseFactory;
+import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.commons.mmocore.SelectorConfig;
 import net.sf.l2j.commons.mmocore.SelectorThread;
+
+import net.sf.l2j.Config;
+import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.cache.CrestCache;
 import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.communitybbs.Manager.ForumsBBSManager;
@@ -96,7 +97,7 @@ import net.sf.l2j.gameserver.instancemanager.SiegeManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.instancemanager.games.MonsterRace;
 import net.sf.l2j.gameserver.model.L2Manor;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.model.olympiad.Olympiad;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadGameManager;
@@ -114,12 +115,10 @@ import net.sf.l2j.gameserver.taskmanager.AttackStanceTaskManager;
 import net.sf.l2j.gameserver.taskmanager.DecayTaskManager;
 import net.sf.l2j.gameserver.taskmanager.GameTimeTaskManager;
 import net.sf.l2j.gameserver.taskmanager.ItemsOnGroundTaskManager;
-import net.sf.l2j.gameserver.taskmanager.KnownListUpdateTaskManager;
 import net.sf.l2j.gameserver.taskmanager.MovementTaskManager;
 import net.sf.l2j.gameserver.taskmanager.PvpFlagTaskManager;
 import net.sf.l2j.gameserver.taskmanager.RandomAnimationTaskManager;
 import net.sf.l2j.gameserver.taskmanager.ShadowItemTaskManager;
-import net.sf.l2j.gameserver.taskmanager.TaskManager;
 import net.sf.l2j.gameserver.taskmanager.WaterTaskManager;
 import net.sf.l2j.gameserver.xmlfactory.XMLDocumentFactory;
 import net.sf.l2j.util.DeadLockDetector;
@@ -134,7 +133,6 @@ public class GameServer
 	private final DeadLockDetector _deadDetectThread;
 	public static GameServer gameServer;
 	private final LoginServerThread _loginThread;
-	public static final Calendar dateTimeServerStarted = Calendar.getInstance();
 	
 	public long getUsedMemoryMB()
 	{
@@ -149,14 +147,16 @@ public class GameServer
 	public GameServer() throws Exception
 	{
 		gameServer = this;
-		
-		IdFactory.getInstance();
-		ThreadPoolManager.getInstance();
-		
 		new File("./data/crests").mkdirs();
 		
+		StringUtil.printSection("ThreadPool");
+		ThreadPool.init();
+		
+		StringUtil.printSection("IdFactory");
+		IdFactory.getInstance();
+		
 		StringUtil.printSection("World");
-		L2World.getInstance();
+		World.getInstance();
 		MapRegionTable.getInstance();
 		AnnouncementTable.getInstance();
 		ServerMemo.getInstance();
@@ -212,19 +212,14 @@ public class GameServer
 		StringUtil.printSection("Geodata & Pathfinding");
 		GeoEngine.getInstance();
 		
-		StringUtil.printSection("World Bosses");
-		GrandBossManager.getInstance();
-		
 		StringUtil.printSection("Zones");
 		ZoneManager.getInstance();
-		GrandBossManager.getInstance().initZones();
 		
 		StringUtil.printSection("Task Managers");
 		AttackStanceTaskManager.getInstance();
 		DecayTaskManager.getInstance();
 		GameTimeTaskManager.getInstance();
 		ItemsOnGroundTaskManager.getInstance();
-		KnownListUpdateTaskManager.getInstance();
 		MovementTaskManager.getInstance();
 		PvpFlagTaskManager.getInstance();
 		RandomAnimationTaskManager.getInstance();
@@ -252,10 +247,11 @@ public class GameServer
 		HerbDropTable.getInstance();
 		NpcTable.getInstance();
 		NpcWalkerRoutesTable.getInstance();
-		DoorTable.getInstance();
+		DoorTable.getInstance().spawn();
 		StaticObjects.load();
 		SpawnTable.getInstance();
 		RaidBossSpawnManager.getInstance();
+		GrandBossManager.getInstance();
 		DayNightSpawnManager.getInstance();
 		DimensionalRiftManager.getInstance();
 		
@@ -280,8 +276,14 @@ public class GameServer
 			BoatTalkingGludin.load();
 		}
 		
-		StringUtil.printSection("Monster Derby Track");
+		StringUtil.printSection("Events");
 		MonsterRace.getInstance();
+		
+		if (Config.ALLOW_WEDDING)
+			CoupleManager.getInstance();
+		
+		if (Config.ALT_FISH_CHAMPIONSHIP_ENABLED)
+			FishingChampionshipManager.getInstance();
 		
 		StringUtil.printSection("Handlers");
 		_log.config("AutoSpawnHandler: Loaded " + AutoSpawnManager.getInstance().size() + " handlers.");
@@ -291,14 +293,7 @@ public class GameServer
 		_log.config("SkillHandler: Loaded " + SkillHandler.getInstance().size() + " handlers.");
 		_log.config("UserCommandHandler: Loaded " + UserCommandHandler.getInstance().size() + " handlers.");
 		
-		if (Config.ALLOW_WEDDING)
-			CoupleManager.getInstance();
-		
-		if (Config.ALT_FISH_CHAMPIONSHIP_ENABLED)
-			FishingChampionshipManager.getInstance();
-		
 		StringUtil.printSection("System");
-		TaskManager.getInstance();
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		ForumsBBSManager.getInstance();
 		_log.config("IdFactory: Free ObjectIDs remaining: " + IdFactory.getInstance().size());

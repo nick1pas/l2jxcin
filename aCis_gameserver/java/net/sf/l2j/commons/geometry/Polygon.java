@@ -17,6 +17,8 @@ package net.sf.l2j.commons.geometry;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.Location;
 
 /**
@@ -45,7 +47,7 @@ public class Polygon extends AShape
 	}
 	
 	/**
-	 * Constructor of the {@link Polygon}.
+	 * Constructor of the {@link Polygon}. Creates a polygon, which consists of triangles using Kong's algorithm.
 	 * @param id : Virtual ID of the polygon, used to separate constructor types.
 	 * @param points : List of {@code int[]} points, forming a polygon.
 	 */
@@ -65,7 +67,7 @@ public class Polygon extends AShape
 			// calculate non convex points
 			final List<int[]> nonConvexPoints = calculateNonConvexPoints(points, isCw);
 			
-			// triangulate the polygon
+			// polygon triangulation of points based on orientation and non-convex points
 			triangles = doTriangulationAlgorithm(points, isCw, nonConvexPoints);
 			
 			// calculate polygon size
@@ -91,13 +93,15 @@ public class Polygon extends AShape
 	@Override
 	public double getArea()
 	{
-		return _size;
+		// not supported yet
+		return -1;
 	}
 	
 	@Override
 	public double getVolume()
 	{
-		return 0;
+		// not supported yet
+		return -1;
 	}
 	
 	@Override
@@ -114,7 +118,7 @@ public class Polygon extends AShape
 	public boolean isInside(int x, int y, int z)
 	{
 		for (AShape shape : _shapes)
-			if (shape.isInside(x, y))
+			if (shape.isInside(x, y, z))
 				return true;
 		
 		return false;
@@ -123,7 +127,7 @@ public class Polygon extends AShape
 	@Override
 	public Location getRandomLocation()
 	{
-		int size = (int) (Math.random() * _size);
+		int size = Rnd.get(_size);
 		
 		for (AShape shape : _shapes)
 		{
@@ -310,7 +314,7 @@ public class Polygon extends AShape
 		if (!(isConvex(isCw, A, B, C)))
 			return false;
 		
-		// iterate over all konkav points and check if one of them lies inside the given triangle
+		// iterate over all concave points and check if one of them lies inside the given triangle
 		for (int i = 0; i < nonConvexPoints.size(); i++)
 		{
 			if (isInside(A, B, C, nonConvexPoints.get(i)))
@@ -338,7 +342,7 @@ public class Polygon extends AShape
 		final boolean cw = (C[0] * BAy - C[1] * BAx + BAx * A[1] - BAy * A[0]) > 0;
 		
 		// compare with orientation of polygon
-		return !(cw == isCw);
+		return cw != isCw;
 	}
 	
 	/**

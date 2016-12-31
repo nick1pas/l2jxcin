@@ -19,6 +19,7 @@ import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
+import net.sf.l2j.gameserver.model.item.type.EtcItemType;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.EnchantResult;
 import net.sf.l2j.gameserver.util.Util;
@@ -68,7 +69,7 @@ public final class RequestGiveItemToPet extends L2GameClientPacket
 		if (item == null || item.isAugmented())
 			return;
 		
-		if (item.isHeroItem() || !item.isDropable() || !item.isDestroyable() || !item.isTradable())
+		if (item.isHeroItem() || !item.isDropable() || !item.isDestroyable() || !item.isTradable() || item.getItem().getItemType() == EtcItemType.ARROW || item.getItem().getItemType() == EtcItemType.SHOT)
 		{
 			player.sendPacket(SystemMessageId.ITEM_NOT_FOR_PETS);
 			return;
@@ -106,7 +107,6 @@ public final class RequestGiveItemToPet extends L2GameClientPacket
 			player.sendPacket(SystemMessageId.ENCHANT_SCROLL_CANCELLED);
 		}
 		
-		if (player.transferItem("Transfer", _objectId, _amount, pet.getInventory(), pet) == null)
-			_log.warning("Invalid item transfer request: " + pet.getName() + "(pet) --> " + player.getName());
+		player.transferItem("Transfer", _objectId, _amount, pet.getInventory(), pet);
 	}
 }

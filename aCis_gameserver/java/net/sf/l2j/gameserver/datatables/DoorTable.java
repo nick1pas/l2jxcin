@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import net.sf.l2j.commons.geometry.Polygon;
+
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.geoengine.geodata.ABlock;
 import net.sf.l2j.gameserver.geoengine.geodata.GeoStructure;
@@ -66,6 +67,7 @@ public class DoorTable
 			castle.getDoors().clear();
 		
 		load();
+		spawn();
 	}
 	
 	private final void load()
@@ -265,7 +267,7 @@ public class DoorTable
 							// create door instance
 							final L2DoorInstance door = new L2DoorInstance(IdFactory.getInstance().getNextId(), template);
 							door.setCurrentHpMp(door.getMaxHp(), door.getMaxMp());
-							door.setXYZInvisible(posX, posY, posZ);
+							door.getPosition().set(posX, posY, posZ);
 							
 							_doors.put(door.getDoorId(), door);
 						}
@@ -273,20 +275,28 @@ public class DoorTable
 				}
 			}
 			
-			// spawn doors
-			for (L2DoorInstance door : _doors.values())
-				door.spawnMe();
-			
-			// load doors upgrades
-			for (Castle castle : CastleManager.getInstance().getCastles())
-				castle.loadDoorUpgrade();
-			
 			_log.info("DoorTable: Loaded " + _doors.size() + " doors templates.");
 		}
 		catch (Exception e)
 		{
 			_log.warning("DoorTable: Error while creating table: " + e);
 		}
+	}
+	
+	/**
+	 * Spawns doors into the world.
+	 */
+	public final void spawn()
+	{
+		// Note: keep as side-method, do not join to the load(). On initial load, the DoorTable.getInstance() is not initialized, yet L2DoorInstance is calling it during spawn process...causing NPE -> one advantage/disadvantage of singletons.
+		
+		// spawn doors
+		for (L2DoorInstance door : _doors.values())
+			door.spawnMe();
+		
+		// load doors upgrades
+		for (Castle castle : CastleManager.getInstance().getCastles())
+			castle.loadDoorUpgrade();
 	}
 	
 	public L2DoorInstance getDoor(int id)

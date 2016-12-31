@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.commons.geometry;
 
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.Location;
 
 /**
@@ -66,7 +68,7 @@ public class Circle extends AShape
 		final int dx = x - _x;
 		final int dy = y - _y;
 		
-		return dx * dx + dy * dy < _r * _r;
+		return (dx * dx + dy * dy) <= _r * _r;
 	}
 	
 	@Override
@@ -75,15 +77,17 @@ public class Circle extends AShape
 		final int dx = x - _x;
 		final int dy = y - _y;
 		
-		return dx * dx + dy * dy < _r * _r;
+		return (dx * dx + dy * dy) <= _r * _r;
 	}
 	
 	@Override
 	public Location getRandomLocation()
 	{
-		final double angle = Math.random() * Math.PI * 2;
-		final double distance = Math.random() * _r;
+		// get uniform distance and angle
+		final double distance = Math.sqrt(Rnd.nextDouble()) * _r;
+		final double angle = Rnd.nextDouble() * Math.PI * 2;
 		
-		return new Location((int) (Math.cos(angle) * distance), (int) (Math.sin(angle) * distance), 0);
+		// calculate coordinates and return
+		return new Location((int) (distance * Math.cos(angle)), (int) (distance * Math.sin(angle)), 0);
 	}
 }

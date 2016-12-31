@@ -18,7 +18,7 @@ import net.sf.l2j.gameserver.datatables.RecipeTable;
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance.PrivateStoreType;
+import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance.StoreType;
 import net.sf.l2j.gameserver.model.item.RecipeList;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -54,7 +54,7 @@ public class Recipes implements IItemHandler
 		{
 			if (activeChar.hasDwarvenCraft())
 			{
-				if (activeChar.getPrivateStoreType() == PrivateStoreType.MANUFACTURE)
+				if (activeChar.getStoreType() == StoreType.MANUFACTURE)
 					activeChar.sendPacket(SystemMessageId.CANT_ALTER_RECIPEBOOK_WHILE_CRAFTING);
 				else if (rp.getLevel() > activeChar.getDwarvenCraft())
 					activeChar.sendPacket(SystemMessageId.CREATE_LVL_TOO_LOW_TO_REGISTER);
@@ -74,7 +74,7 @@ public class Recipes implements IItemHandler
 		{
 			if (activeChar.hasCommonCraft())
 			{
-				if (activeChar.getPrivateStoreType() == PrivateStoreType.MANUFACTURE)
+				if (activeChar.getStoreType() == StoreType.MANUFACTURE)
 					activeChar.sendPacket(SystemMessageId.CANT_ALTER_RECIPEBOOK_WHILE_CRAFTING);
 				else if (rp.getLevel() > activeChar.getCommonCraft())
 					activeChar.sendPacket(SystemMessageId.CREATE_LVL_TOO_LOW_TO_REGISTER);

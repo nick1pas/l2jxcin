@@ -108,7 +108,7 @@ public class EffectSignetMDam extends L2Effect
 		
 		List<L2Character> targets = new ArrayList<>();
 		
-		for (L2Character cha : _actor.getKnownList().getKnownTypeInRadius(L2Character.class, getSkill().getSkillRadius()))
+		for (L2Character cha : _actor.getKnownTypeInRadius(L2Character.class, getSkill().getSkillRadius()))
 		{
 			if (cha == caster)
 				continue;

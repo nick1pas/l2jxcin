@@ -22,9 +22,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
-import net.sf.l2j.Config;
+import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.ThreadPoolManager;
+
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.model.L2AttackableAI;
@@ -40,12 +41,9 @@ import net.sf.l2j.gameserver.model.L2Manor;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.RewardInfo;
-import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
-import net.sf.l2j.gameserver.model.actor.knownlist.AttackableKnownList;
 import net.sf.l2j.gameserver.model.actor.status.AttackableStatus;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
@@ -92,18 +90,6 @@ public class L2Attackable extends L2Npc
 	public L2Attackable(int objectId, NpcTemplate template)
 	{
 		super(objectId, template);
-	}
-	
-	@Override
-	public void initKnownList()
-	{
-		setKnownList(new AttackableKnownList(this));
-	}
-	
-	@Override
-	public AttackableKnownList getKnownList()
-	{
-		return (AttackableKnownList) super.getKnownList();
 	}
 	
 	@Override
@@ -167,7 +153,7 @@ public class L2Attackable extends L2Npc
 						{
 							_commandChannelTimer = new CommandChannelTimer(this);
 							_commandChannelLastAttack = System.currentTimeMillis();
-							ThreadPoolManager.getInstance().scheduleGeneral(_commandChannelTimer, 10000); // check for last attack
+							ThreadPool.schedule(_commandChannelTimer, 10000); // check for last attack
 							_firstCommandChannelAttacked.broadcastToChannelMembers(new CreatureSay(0, Say2.PARTYROOM_ALL, "", "You have looting rights!")); // TODO: retail msg
 						}
 					}
@@ -178,21 +164,8 @@ public class L2Attackable extends L2Npc
 		}
 		
 		// Add damage and hate to the attacker AggroInfo of the L2Attackable _aggroList
-		if (attacker != null)
-			addDamage(attacker, (int) damage);
+		addDamage(attacker, (int) damage, skill);
 		
-		// If this L2Attackable is a L2MonsterInstance and it has spawned minions, call its minions to battle
-		if (this instanceof L2MonsterInstance)
-		{
-			L2MonsterInstance master = (L2MonsterInstance) this;
-			
-			if (master.hasMinions())
-				master.getMinionList().onAssist(this, attacker);
-			
-			master = master.getLeader();
-			if (master != null && master.hasMinions())
-				master.getMinionList().onAssist(this, attacker);
-		}
 		// Reduce the current HP of the L2Attackable and launch the doDie Task if necessary
 		super.reduceCurrentHp(damage, attacker, awake, isDOT, skill);
 	}
@@ -227,7 +200,7 @@ public class L2Attackable extends L2Npc
 				List<Quest> quests = getTemplate().getEventQuests(EventType.ON_KILL);
 				if (quests != null)
 					for (Quest quest : quests)
-						ThreadPoolManager.getInstance().scheduleEffect(new OnKillNotifyTask(this, quest, player, killer instanceof L2Summon), 3000);
+						ThreadPool.schedule(new OnKillNotifyTask(this, quest, player, killer instanceof L2Summon), 3000);
 			}
 		}
 		catch (Exception e)
@@ -325,7 +298,7 @@ public class L2Attackable extends L2Npc
 			if (attackerParty == null)
 			{
 				// Calculate Exp and SP rewards.
-				if (attacker.getKnownList().knowsObject(this) && !attacker.isDead())
+				if (!attacker.isDead() && attacker.getKnownType(L2Attackable.class).contains(this))
 				{
 					// Calculate the difference of level between this attacker and the L2Attackable.
 					final int levelDiff = attacker.getLevel() - getLevel();
@@ -446,7 +419,7 @@ public class L2Attackable extends L2Npc
 		setSpoilerId(0);
 		
 		// Clear all aggro char from list
-		clearAggroList();
+		_aggroList.clear();
 		
 		// Clear Harvester Reward List
 		_harvestItems.clear();
@@ -522,15 +495,6 @@ public class L2Attackable extends L2Npc
 		return getLeader() != null;
 	}
 	
-	@Override
-	public void moveToLocation(int x, int y, int z, int offset)
-	{
-		if (isAttackingNow())
-			return;
-		
-		super.moveToLocation(x, y, z, offset);
-	}
-	
 	public void addAttackerToAttackByList(L2Character player)
 	{
 		if (player == null || player == this)
@@ -543,8 +507,9 @@ public class L2Attackable extends L2Npc
 	 * Add damage and hate to the attacker AggroInfo of the L2Attackable _aggroList.
 	 * @param attacker The L2Character that gave damages to this L2Attackable
 	 * @param damage The number of damages given by the attacker L2Character
+	 * @param skill The skill used to make damage.
 	 */
-	public void addDamage(L2Character attacker, int damage)
+	public void addDamage(L2Character attacker, int damage, L2Skill skill)
 	{
 		if (attacker == null || isDead())
 			return;
@@ -556,7 +521,7 @@ public class L2Attackable extends L2Npc
 			List<Quest> quests = getTemplate().getEventQuests(EventType.ON_ATTACK);
 			if (quests != null)
 				for (Quest quest : quests)
-					quest.notifyAttack(this, player, damage, attacker instanceof L2Summon);
+					quest.notifyAttack(this, player, damage, attacker instanceof L2Summon, skill);
 		}
 		// for now hard code damage hate caused by an L2Attackable
 		else
@@ -578,12 +543,7 @@ public class L2Attackable extends L2Npc
 			return;
 		
 		// Get or create the AggroInfo of the attacker.
-		AggroInfo ai = _aggroList.get(attacker);
-		if (ai == null)
-		{
-			ai = new AggroInfo(attacker);
-			_aggroList.put(attacker, ai);
-		}
+		final AggroInfo ai = _aggroList.computeIfAbsent(attacker, AggroInfo::new);
 		ai.addDamage(damage);
 		ai.addHate(aggro);
 		
@@ -645,7 +605,7 @@ public class L2Attackable extends L2Npc
 			if (amount <= 0)
 			{
 				((L2AttackableAI) getAI()).setGlobalAggro(-25);
-				clearAggroList();
+				_aggroList.clear();
 				getAI().setIntention(CtrlIntention.ACTIVE);
 				setWalking();
 			}
@@ -663,7 +623,7 @@ public class L2Attackable extends L2Npc
 			if (getMostHated() == null)
 			{
 				((L2AttackableAI) getAI()).setGlobalAggro(-25);
-				clearAggroList();
+				_aggroList.clear();
 				getAI().setIntention(CtrlIntention.ACTIVE);
 				setWalking();
 			}
@@ -1245,12 +1205,24 @@ public class L2Attackable extends L2Npc
 		getAI().setIntention(CtrlIntention.CAST, skill, target);
 	}
 	
-	public void returnHome()
+	public final boolean returnHome(boolean cleanAggro)
 	{
-		clearAggroList();
+		if (cleanAggro)
+			_aggroList.clear();
 		
-		if (hasAI() && getSpawn() != null)
-			getAI().setIntention(CtrlIntention.MOVE_TO, new Location(getSpawn().getLocx(), getSpawn().getLocy(), getSpawn().getLocz()));
+		if (hasAI() && !isDead() && getMoveSpeed() > 0 && getSpawn() != null && !isInsideRadius(getSpawn().getLocX(), getSpawn().getLocY(), getDriftRange(), false))
+		{
+			setIsReturningToSpawnPoint(true);
+			setWalking();
+			getAI().setIntention(CtrlIntention.MOVE_TO, getSpawn().getLoc());
+			return true;
+		}
+		return false;
+	}
+	
+	public int getDriftRange()
+	{
+		return Config.MAX_DRIFT_RANGE;
 	}
 	
 	public final Set<L2Character> getAttackByList()
@@ -1261,31 +1233,6 @@ public class L2Attackable extends L2Npc
 	public final Map<L2Character, AggroInfo> getAggroList()
 	{
 		return _aggroList;
-	}
-	
-	/**
-	 * @return True if the _aggroList of this L2Attackable is Empty.
-	 */
-	public boolean gotNoTarget()
-	{
-		return _aggroList.isEmpty();
-	}
-	
-	/**
-	 * @param player The L2Character searched in the _aggroList of the L2Attackable
-	 * @return True if the _aggroList of this L2Attackable contains the L2Character.
-	 */
-	public boolean containsTarget(L2Character player)
-	{
-		return _aggroList.containsKey(player);
-	}
-	
-	/**
-	 * Clear the _aggroList of the L2Attackable.
-	 */
-	public void clearAggroList()
-	{
-		_aggroList.clear();
 	}
 	
 	public final boolean isReturningToSpawnPoint()
@@ -1651,7 +1598,7 @@ public class L2Attackable extends L2Npc
 				_monster.setCommandChannelLastAttack(0);
 			}
 			else
-				ThreadPoolManager.getInstance().scheduleGeneral(this, 10000); // 10sec
+				ThreadPool.schedule(this, 10000); // 10sec
 		}
 	}
 	
@@ -1675,5 +1622,22 @@ public class L2Attackable extends L2Npc
 		{
 			_quest.notifyKill(_attackable, _killer, _isPet);
 		}
+	}
+	
+	@Override
+	public void addKnownObject(L2Object object)
+	{
+		if (object instanceof L2PcInstance && getAI().getIntention() == CtrlIntention.IDLE)
+			getAI().setIntention(CtrlIntention.ACTIVE, null);
+	}
+	
+	@Override
+	public void removeKnownObject(L2Object object)
+	{
+		super.removeKnownObject(object);
+		
+		// remove object from agro list
+		if (object instanceof L2Character)
+			getAggroList().remove(object);
 	}
 }

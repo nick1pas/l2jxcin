@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.gameserver.model;
 
+import net.sf.l2j.gameserver.templates.StatsSet;
+
 public class PetDataEntry
 {
 	private final long _maxExp;
@@ -36,27 +38,57 @@ public class PetDataEntry
 	private final int _ssCount;
 	private final int _spsCount;
 	
-	public PetDataEntry(long maxExp, int maxMeal, int expType, int mealInBattle, int mealInNormal, double pAtk, double pDef, double mAtk, double mDef, double maxHp, double maxMp, float hpRegen, float mpRegen, int ssCount, int spsCount)
+	private final int _mountMealInBattle;
+	private final int _mountMealInNormal;
+	private final int _mountAtkSpd;
+	private final double _mountPAtk;
+	private final double _mountMAtk;
+	private final int _mountBaseSpeed;
+	private final int _mountWaterSpeed;
+	private final int _mountFlySpeed;
+	
+	public PetDataEntry(StatsSet stats)
 	{
-		_maxExp = maxExp;
+		_maxExp = stats.getLong("exp");
 		
-		_maxMeal = maxMeal;
-		_expType = expType;
-		_mealInBattle = mealInBattle;
-		_mealInNormal = mealInNormal;
+		_maxMeal = stats.getInteger("maxMeal");
+		_expType = stats.getInteger("expType");
+		_mealInBattle = stats.getInteger("mealInBattle");
+		_mealInNormal = stats.getInteger("mealInNormal");
 		
-		_pAtk = pAtk;
-		_pDef = pDef;
-		_mAtk = mAtk;
-		_mDef = mDef;
-		_maxHp = maxHp;
-		_maxMp = maxMp;
+		_pAtk = stats.getDouble("pAtk");
+		_pDef = stats.getDouble("pDef");
+		_mAtk = stats.getDouble("mAtk");
+		_mDef = stats.getDouble("mDef");
+		_maxHp = stats.getDouble("hp");
+		_maxMp = stats.getDouble("mp");
 		
-		_hpRegen = hpRegen;
-		_mpRegen = mpRegen;
+		_hpRegen = stats.getFloat("hpRegen");
+		_mpRegen = stats.getFloat("mpRegen");
 		
-		_ssCount = ssCount;
-		_spsCount = spsCount;
+		_ssCount = stats.getInteger("ssCount");
+		_spsCount = stats.getInteger("spsCount");
+		
+		_mountMealInBattle = stats.getInteger("mealInBattleOnRide", 0);
+		_mountMealInNormal = stats.getInteger("mealInNormalOnRide", 0);
+		_mountAtkSpd = stats.getInteger("atkSpdOnRide", 0);
+		_mountPAtk = stats.getDouble("pAtkOnRide", 0);
+		_mountMAtk = stats.getDouble("mAtkOnRide", 0);
+		
+		String speed = stats.getString("speedOnRide", null);
+		if (speed != null)
+		{
+			String[] speeds = speed.split(";");
+			_mountBaseSpeed = Integer.parseInt(speeds[0]);
+			_mountWaterSpeed = Integer.parseInt(speeds[2]);
+			_mountFlySpeed = Integer.parseInt(speeds[4]);
+		}
+		else
+		{
+			_mountBaseSpeed = 0;
+			_mountWaterSpeed = 0;
+			_mountFlySpeed = 0;
+		}
 	}
 	
 	public long getMaxExp()
@@ -132,5 +164,45 @@ public class PetDataEntry
 	public int getSpsCount()
 	{
 		return _spsCount;
+	}
+	
+	public int getMountMealInBattle()
+	{
+		return _mountMealInBattle;
+	}
+	
+	public int getMountMealInNormal()
+	{
+		return _mountMealInNormal;
+	}
+	
+	public int getMountAtkSpd()
+	{
+		return _mountAtkSpd;
+	}
+	
+	public double getMountPAtk()
+	{
+		return _mountPAtk;
+	}
+	
+	public double getMountMAtk()
+	{
+		return _mountMAtk;
+	}
+	
+	public int getMountBaseSpeed()
+	{
+		return _mountBaseSpeed;
+	}
+	
+	public int getMountSwimSpeed()
+	{
+		return _mountWaterSpeed;
+	}
+	
+	public int getMountFlySpeed()
+	{
+		return _mountFlySpeed;
 	}
 }

@@ -15,18 +15,19 @@
 package net.sf.l2j.gameserver.scripting.scripts.ai.group;
 
 import net.sf.l2j.commons.random.Rnd;
+import net.sf.l2j.commons.util.ArraysUtil;
+
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
+import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.scripting.scripts.ai.AbstractNpcAI;
-import net.sf.l2j.gameserver.util.Util;
+import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
 /**
  * AI for mobs in Plains of Dion (near Floran Village)
- * @author Gladicek
  */
-public final class PlainsOfDion extends AbstractNpcAI
+public final class PlainsOfDion extends L2AttackableAIScript
 {
 	private static final int MONSTERS[] =
 	{
@@ -54,20 +55,24 @@ public final class PlainsOfDion extends AbstractNpcAI
 	public PlainsOfDion()
 	{
 		super("ai/group");
-		
+	}
+	
+	@Override
+	protected void registerNpcs()
+	{
 		addAttackId(MONSTERS);
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance player, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance player, int damage, boolean isPet, L2Skill skill)
 	{
 		if (npc.isScriptValue(0))
 		{
 			npc.broadcastNpcSay(MONSTERS_MSG[Rnd.get(5)].replace("$s1", player.getName()));
 			
-			for (L2MonsterInstance obj : npc.getKnownList().getKnownTypeInRadius(L2MonsterInstance.class, 300))
+			for (L2MonsterInstance obj : npc.getKnownTypeInRadius(L2MonsterInstance.class, 300))
 			{
-				if (Util.contains(MONSTERS, obj.getNpcId()) && !obj.isAttackingNow() && !obj.isDead() && GeoEngine.getInstance().canSeeTarget(npc, obj))
+				if (!obj.isAttackingNow() && !obj.isDead() && ArraysUtil.contains(MONSTERS, obj.getNpcId()) && GeoEngine.getInstance().canSeeTarget(npc, obj))
 				{
 					attack(obj, player);
 					obj.broadcastNpcSay(MONSTERS_ASSIST_MSG[Rnd.get(3)]);
@@ -75,6 +80,6 @@ public final class PlainsOfDion extends AbstractNpcAI
 			}
 			npc.setScriptValue(1);
 		}
-		return super.onAttack(npc, player, damage, isPet);
+		return super.onAttack(npc, player, damage, isPet, skill);
 	}
 }

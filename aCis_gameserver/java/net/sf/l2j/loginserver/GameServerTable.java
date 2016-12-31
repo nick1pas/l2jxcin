@@ -28,8 +28,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.commons.random.Rnd;
+
+import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.xmlfactory.XMLDocumentFactory;
 import net.sf.l2j.loginserver.network.gameserverpackets.ServerStatus;
 

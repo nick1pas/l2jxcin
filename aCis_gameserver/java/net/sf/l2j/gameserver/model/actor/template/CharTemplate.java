@@ -38,8 +38,6 @@ public class CharTemplate
 	
 	private final int _basePAtkSpd;
 	
-	private final int _baseAtkRange;
-	
 	private final int _baseCritRate;
 	
 	private final int _baseWalkSpd;
@@ -69,8 +67,6 @@ public class CharTemplate
 		_baseMDef = set.getDouble("mDef");
 		
 		_basePAtkSpd = set.getInteger("atkSpd", 300);
-		
-		_baseAtkRange = set.getInteger("attackRange", 40);
 		
 		_baseCritRate = set.getInteger("crit", 4);
 		
@@ -154,11 +150,6 @@ public class CharTemplate
 	public final int getBasePAtkSpd()
 	{
 		return _basePAtkSpd;
-	}
-	
-	public final int getBaseAtkRange()
-	{
-		return _baseAtkRange;
 	}
 	
 	public final int getBaseCritRate()

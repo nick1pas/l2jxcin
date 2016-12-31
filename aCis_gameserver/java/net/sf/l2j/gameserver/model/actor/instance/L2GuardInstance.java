@@ -17,16 +17,11 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import java.util.List;
 
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.ThreadPoolManager;
+
 import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.ai.model.L2AttackableAI;
-import net.sf.l2j.gameserver.model.L2World;
-import net.sf.l2j.gameserver.model.L2WorldRegion;
-import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.knownlist.GuardKnownList;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
@@ -43,34 +38,9 @@ import net.sf.l2j.gameserver.scripting.Quest;
  */
 public final class L2GuardInstance extends L2Attackable
 {
-	private static final int RETURN_INTERVAL = 60000;
-	
-	public class ReturnTask implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			if (getAI().getIntention() == CtrlIntention.IDLE)
-				returnHome();
-		}
-	}
-	
 	public L2GuardInstance(int objectId, NpcTemplate template)
 	{
 		super(objectId, template);
-		ThreadPoolManager.getInstance().scheduleAiAtFixedRate(new ReturnTask(), RETURN_INTERVAL, RETURN_INTERVAL + Rnd.get(60000));
-	}
-	
-	@Override
-	public void initKnownList()
-	{
-		setKnownList(new GuardKnownList(this));
-	}
-	
-	@Override
-	public final GuardKnownList getKnownList()
-	{
-		return (GuardKnownList) super.getKnownList();
 	}
 	
 	@Override
@@ -79,30 +49,11 @@ public final class L2GuardInstance extends L2Attackable
 		return attacker instanceof L2MonsterInstance;
 	}
 	
-	/**
-	 * Notify the L2GuardInstance to return to its home location (MOVE_TO) and clear its _aggroList.<BR>
-	 * <BR>
-	 */
-	@Override
-	public void returnHome()
-	{
-		if (!isInsideRadius(getSpawn().getLocx(), getSpawn().getLocy(), L2Npc.INTERACTION_DISTANCE, false))
-		{
-			clearAggroList();
-			getAI().setIntention(CtrlIntention.MOVE_TO, new Location(getSpawn().getLocx(), getSpawn().getLocy(), getSpawn().getLocz()));
-		}
-	}
-	
 	@Override
 	public void onSpawn()
 	{
 		setIsNoRndWalk(true);
 		super.onSpawn();
-		
-		// check the region where this mob is, do not activate the AI if region is inactive.
-		L2WorldRegion region = L2World.getInstance().getRegion(getX(), getY());
-		if (region != null && !region.isActive())
-			((L2AttackableAI) getAI()).stopAITask();
 	}
 	
 	@Override
@@ -133,20 +84,27 @@ public final class L2GuardInstance extends L2Attackable
 			}
 			else
 			{
+				// Rotate the player to face the instance
+				player.sendPacket(new MoveToPawn(player, this, L2Npc.INTERACTION_DISTANCE));
+				
+				// Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet
+				player.sendPacket(ActionFailed.STATIC_PACKET);
+				
 				// Some guards have no HTMs on retail. Bypass the chat window if such guard is met.
 				switch (getNpcId())
 				{
-					case 31671:
+					case 30733: // Guards in start villages
+					case 31032:
+					case 31033:
+					case 31034:
+					case 31035:
+					case 31036:
+					case 31671: // Patrols
 					case 31672:
 					case 31673:
 					case 31674:
-						// Send a Server->Client ActionFailed to the L2PcInstance in order to avoid that the client wait another packet
-						player.sendPacket(ActionFailed.STATIC_PACKET);
 						return;
 				}
-				
-				// Rotate the player to face the instance
-				player.sendPacket(new MoveToPawn(player, this, L2Npc.INTERACTION_DISTANCE));
 				
 				if (hasRandomAnimation())
 					onRandomAnimation(Rnd.get(8));
@@ -168,5 +126,11 @@ public final class L2GuardInstance extends L2Attackable
 	public boolean isGuard()
 	{
 		return true;
+	}
+	
+	@Override
+	public int getDriftRange()
+	{
+		return 20;
 	}
 }

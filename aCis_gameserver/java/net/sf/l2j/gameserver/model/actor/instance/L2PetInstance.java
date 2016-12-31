@@ -23,10 +23,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 
+import net.sf.l2j.commons.concurrent.ThreadPool;
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
@@ -37,8 +38,8 @@ import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.L2World;
 import net.sf.l2j.gameserver.model.PetDataEntry;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Summon;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance.TimeStamp;
@@ -173,39 +174,17 @@ public class L2PetInstance extends L2Summon
 		}
 	}
 	
-	public synchronized static L2PetInstance spawnPet(NpcTemplate template, L2PcInstance owner, ItemInstance control)
-	{
-		// Owner has a pet listed in world.
-		if (L2World.getInstance().getPet(owner.getObjectId()) != null)
-			return null;
-		
-		// Add the pet instance to world.
-		final L2PetInstance pet = restore(control, template, owner);
-		if (pet != null)
-		{
-			pet.setTitle(owner.getName());
-			L2World.getInstance().addPet(owner.getObjectId(), pet);
-		}
-		
-		return pet;
-	}
-	
 	public L2PetInstance(int objectId, NpcTemplate template, L2PcInstance owner, ItemInstance control)
 	{
 		super(objectId, template, owner);
 		
+		getPosition().set(owner.getX() + 50, owner.getY() + 100, owner.getZ());
+		
 		_controlItemId = control.getObjectId();
 		
-		if (template.getNpcId() == 12564)
-			getStat().setLevel((byte) getOwner().getLevel());
-		else
-			getStat().setLevel(template.getLevel());
-		
 		_inventory = new PetInventory(this);
-		_inventory.restore();
 		
 		_mountable = isMountable(template.getNpcId());
-		_petData = getTemplate().getPetDataEntry(getLevel());
 	}
 	
 	@Override
@@ -395,6 +374,13 @@ public class L2PetInstance extends L2Summon
 			return;
 		}
 		
+		// Can't pickup shots and arrows.
+		if (target.getItem().getItemType() == EtcItemType.ARROW || target.getItem().getItemType() == EtcItemType.SHOT)
+		{
+			getOwner().sendPacket(SystemMessageId.ITEM_NOT_FOR_PETS);
+			return;
+		}
+		
 		synchronized (target)
 		{
 			if (!target.isVisible())
@@ -561,9 +547,6 @@ public class L2PetInstance extends L2Summon
 			petIU.addRemovedItem(oldItem);
 		sendPacket(petIU);
 		
-		// Update pet current load aswell
-		updateAndBroadcastStatus(1);
-		
 		// Send player inventory update packet
 		InventoryUpdate playerIU = new InventoryUpdate();
 		if (newItem.getCount() > count)
@@ -605,7 +588,7 @@ public class L2PetInstance extends L2Summon
 	public void destroyControlItem(L2PcInstance owner)
 	{
 		// remove the pet instance from world
-		L2World.getInstance().removePet(owner.getObjectId());
+		World.getInstance().removePet(owner.getObjectId());
 		
 		// delete from inventory
 		try
@@ -627,7 +610,7 @@ public class L2PetInstance extends L2Summon
 				
 				owner.broadcastUserInfo();
 				
-				L2World.getInstance().removeObject(removedItem);
+				World.getInstance().removeObject(removedItem);
 			}
 		}
 		catch (Exception e)
@@ -656,7 +639,7 @@ public class L2PetInstance extends L2Summon
 		return _mountable;
 	}
 	
-	private static L2PetInstance restore(ItemInstance control, NpcTemplate template, L2PcInstance owner)
+	public static L2PetInstance restore(ItemInstance control, NpcTemplate template, L2PcInstance owner)
 	{
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
@@ -673,6 +656,14 @@ public class L2PetInstance extends L2Summon
 			{
 				rset.close();
 				statement.close();
+				
+				pet.getStat().setLevel((template.getNpcId() == 12564) ? (byte) pet.getOwner().getLevel() : template.getLevel());
+				pet.getStat().setExp(pet.getExpForThisLevel());
+				pet.getStatus().setCurrentHp(pet.getMaxHp());
+				pet.getStatus().setCurrentMp(pet.getMaxMp());
+				pet.setCurrentFed(pet.getPetData().getMaxMeal());
+				pet.store();
+				
 				return pet;
 			}
 			
@@ -685,7 +676,6 @@ public class L2PetInstance extends L2Summon
 			
 			pet.getStatus().setCurrentHp(rset.getDouble("curHp"));
 			pet.getStatus().setCurrentMp(rset.getDouble("curMp"));
-			pet.getStatus().setCurrentCp(pet.getMaxCp());
 			if (rset.getDouble("curHp") < 0.5)
 			{
 				pet.setIsDead(true);
@@ -760,7 +750,7 @@ public class L2PetInstance extends L2Summon
 		stopFeed();
 		
 		if (!isDead() && getOwner().getPet() == this)
-			_feedTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new FeedTask(), 10000, 10000);
+			_feedTask = ThreadPool.scheduleAtFixedRate(new FeedTask(), 10000, 10000);
 	}
 	
 	@Override
@@ -781,7 +771,7 @@ public class L2PetInstance extends L2Summon
 		
 		// Drop pet from world's pet list.
 		if (!isDead())
-			L2World.getInstance().removePet(owner.getObjectId());
+			World.getInstance().removePet(owner.getObjectId());
 	}
 	
 	/**
@@ -853,8 +843,8 @@ public class L2PetInstance extends L2Summon
 		int oldOwnerId = getOwner().getObjectId();
 		
 		setOwner(owner);
-		L2World.getInstance().removePet(oldOwnerId);
-		L2World.getInstance().addPet(oldOwnerId, this);
+		World.getInstance().removePet(oldOwnerId);
+		World.getInstance().addPet(oldOwnerId, this);
 	}
 	
 	public int getCurrentLoad()

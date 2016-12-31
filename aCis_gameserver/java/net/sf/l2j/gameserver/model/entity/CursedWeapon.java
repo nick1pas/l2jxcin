@@ -22,9 +22,10 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.sf.l2j.L2DatabaseFactory;
+import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.ThreadPoolManager;
+
+import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
@@ -330,7 +331,7 @@ public class CursedWeapon
 		cancelDailyTimerTask();
 		
 		// Activate the "1h dropped CW" timer.
-		_dropTimerTask = ThreadPoolManager.getInstance().scheduleGeneral(new DropTimerTask(), 3600000L);
+		_dropTimerTask = ThreadPool.schedule(new DropTimerTask(), 3600000L);
 		
 		// Reset current stage to 1.
 		_currentStage = 1;
@@ -434,7 +435,7 @@ public class CursedWeapon
 			_hungryTime = _durationLost * 60;
 			_endTime = (System.currentTimeMillis() + _duration * 3600000L);
 			
-			_overallTimerTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new OverallTimerTask(), 60000L, 60000L);
+			_overallTimerTask = ThreadPool.scheduleAtFixedRate(new OverallTimerTask(), 60000L, 60000L);
 		}
 		else
 		{
@@ -443,8 +444,8 @@ public class CursedWeapon
 				endOfLife();
 			else
 			{
-				_dailyTimerTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new DailyTimerTask(), 60000L, 60000L);
-				_overallTimerTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new OverallTimerTask(), 60000L, 60000L);
+				_dailyTimerTask = ThreadPool.scheduleAtFixedRate(new DailyTimerTask(), 60000L, 60000L);
+				_overallTimerTask = ThreadPool.scheduleAtFixedRate(new OverallTimerTask(), 60000L, 60000L);
 			}
 		}
 	}
@@ -458,8 +459,8 @@ public class CursedWeapon
 			
 			// Start timers.
 			_endTime = System.currentTimeMillis() + _duration * 3600000L;
-			_overallTimerTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new OverallTimerTask(), 60000L, 60000L);
-			_dropTimerTask = ThreadPoolManager.getInstance().scheduleGeneral(new DropTimerTask(), 3600000L);
+			_overallTimerTask = ThreadPool.scheduleAtFixedRate(new OverallTimerTask(), 60000L, 60000L);
+			_dropTimerTask = ThreadPool.schedule(new DropTimerTask(), 3600000L);
 			
 			return true;
 		}
@@ -494,7 +495,7 @@ public class CursedWeapon
 		_hungryTime = _durationLost * 60;
 		
 		// Activate the daily timer.
-		_dailyTimerTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new DailyTimerTask(), 60000L, 60000L);
+		_dailyTimerTask = ThreadPool.scheduleAtFixedRate(new DailyTimerTask(), 60000L, 60000L);
 		
 		// Cancel the "1h dropped CW" timer.
 		cancelDropTimerTask();

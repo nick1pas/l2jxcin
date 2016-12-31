@@ -47,7 +47,6 @@ public class DoorStat extends CharStat
 		else if (sealOwner == SevenSigns.CABAL_DUSK)
 			defense *= 0.3;
 		
-		// TODO: is it necessary to continue with calc stat? can doors receive Pdef/Mdef buff?
 		return (int) defense;
 	}
 	
@@ -62,7 +61,6 @@ public class DoorStat extends CharStat
 		else if (sealOwner == SevenSigns.CABAL_DUSK)
 			defense *= 0.3;
 		
-		// TODO: is it necessary to continue with calc stat? can doors receive Pdef/Mdef buff?
 		return (int) defense;
 	}
 	

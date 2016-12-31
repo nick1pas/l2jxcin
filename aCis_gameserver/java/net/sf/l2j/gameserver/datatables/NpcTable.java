@@ -62,6 +62,7 @@ public class NpcTable
 		{
 			final File dir = new File("./data/xml/npcs");
 			final StatsSet set = new StatsSet();
+			final StatsSet petSet = new StatsSet();
 			
 			for (File file : dir.listFiles())
 			{
@@ -192,29 +193,16 @@ public class NpcTable
 									{
 										attrs = petCat.getAttributes();
 										
-										final int level = Integer.parseInt(attrs.getNamedItem("level").getNodeValue());
+										// Get all nodes.
+										for (int i = 0; i < attrs.getLength(); i++)
+										{
+											// Add them to stats by node name and node value.
+											Node node = attrs.item(i);
+											petSet.set(node.getNodeName(), node.getNodeValue());
+										}
 										
-										final long maxExp = Long.parseLong(attrs.getNamedItem("exp").getNodeValue());
-										
-										final int maxMeal = Integer.parseInt(attrs.getNamedItem("maxMeal").getNodeValue());
-										final int expType = Integer.parseInt(attrs.getNamedItem("expType").getNodeValue());
-										final int mealInBattle = Integer.parseInt(attrs.getNamedItem("mealInBattle").getNodeValue());
-										final int mealInNormal = Integer.parseInt(attrs.getNamedItem("mealInNormal").getNodeValue());
-										
-										final double pAtk = Double.parseDouble(attrs.getNamedItem("pAtk").getNodeValue());
-										final double pDef = Double.parseDouble(attrs.getNamedItem("pDef").getNodeValue());
-										final double mAtk = Double.parseDouble(attrs.getNamedItem("mAtk").getNodeValue());
-										final double mDef = Double.parseDouble(attrs.getNamedItem("mDef").getNodeValue());
-										final double maxHp = Double.parseDouble(attrs.getNamedItem("hp").getNodeValue());
-										final double maxMp = Double.parseDouble(attrs.getNamedItem("mp").getNodeValue());
-										
-										final float hpRegen = Float.parseFloat(attrs.getNamedItem("hpRegen").getNodeValue());
-										final float mpRegen = Float.parseFloat(attrs.getNamedItem("mpRegen").getNodeValue());
-										
-										final int ssCount = Integer.parseInt(attrs.getNamedItem("ssCount").getNodeValue());
-										final int spsCount = Integer.parseInt(attrs.getNamedItem("spsCount").getNodeValue());
-										
-										entries.put(level, new PetDataEntry(maxExp, maxMeal, expType, mealInBattle, mealInNormal, pAtk, pDef, mAtk, mDef, maxHp, maxMp, hpRegen, mpRegen, ssCount, spsCount));
+										entries.put(petSet.getInteger("level"), new PetDataEntry(petSet));
+										petSet.clear();
 									}
 								}
 								set.set("petData", entries);

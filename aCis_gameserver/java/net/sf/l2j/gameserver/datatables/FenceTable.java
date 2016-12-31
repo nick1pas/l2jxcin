@@ -78,8 +78,9 @@ public class FenceTable
 	 * @param sizeX : Size of the {@link L2FenceInstance} in X direction.
 	 * @param sizeY : Size of the {@link L2FenceInstance} in Y direction.
 	 * @param height : The height of {@link L2FenceInstance}.
+	 * @return The newly created L2FenceInstance object.
 	 */
-	public final void addFence(int x, int y, int z, int type, int sizeX, int sizeY, int height)
+	public final L2FenceInstance addFence(int x, int y, int z, int type, int sizeX, int sizeY, int height)
 	{
 		final FenceSize fsx = getFenceSize(sizeX);
 		final FenceSize fsy = getFenceSize(sizeY);
@@ -87,7 +88,7 @@ public class FenceTable
 		if (fsx == null || fsy == null)
 		{
 			_log.warning("FenceTable: Unknown dimensions for fence, x=" + sizeX + " y=" + sizeY);
-			return;
+			return null;
 		}
 		
 		// adjust coordinates to align fence symmetrically to geodata
@@ -120,6 +121,8 @@ public class FenceTable
 		// add fence to geoengine and list
 		GeoEngine.getInstance().addGeoObject(fence);
 		_fences.add(fence);
+		
+		return fence;
 	}
 	
 	/**

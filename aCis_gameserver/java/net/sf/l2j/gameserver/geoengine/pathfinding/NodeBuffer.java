@@ -252,7 +252,9 @@ public class NodeBuffer
 		// Z distance between nearby cells is higher than cell size, record as geodata bug
 		if (node.getLoc().getZ() > (z + 2 * GeoStructure.CELL_HEIGHT))
 		{
-			GeoEngine.getInstance().addGeoBug(node.getLoc(), "NodeBufferDiag: Check Z coords.");
+			if (Config.DEBUG_GEO_NODE)
+				GeoEngine.getInstance().addGeoBug(node.getLoc(), "NodeBufferDiag: Check Z coords.");
+			
 			return;
 		}
 		

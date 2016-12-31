@@ -21,10 +21,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import net.sf.l2j.Config;
+import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.ThreadPoolManager;
+
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.datatables.ClanTable;
@@ -50,11 +51,11 @@ import net.sf.l2j.gameserver.model.actor.instance.L2MerchantInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2TeleporterInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2WarehouseInstance;
-import net.sf.l2j.gameserver.model.actor.knownlist.NpcKnownList;
 import net.sf.l2j.gameserver.model.actor.stat.NpcStat;
 import net.sf.l2j.gameserver.model.actor.status.NpcStatus;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.AIType;
+import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.Race;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
@@ -68,12 +69,10 @@ import net.sf.l2j.gameserver.network.serverpackets.ExShowVariationCancelWindow;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowVariationMakeWindow;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
-import net.sf.l2j.gameserver.network.serverpackets.MyTargetSelected;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.NpcSay;
 import net.sf.l2j.gameserver.network.serverpackets.ServerObjectInfo;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
-import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.Quest;
@@ -96,7 +95,7 @@ import net.sf.l2j.gameserver.util.Broadcast;
  */
 public class L2Npc extends L2Character
 {
-	public static final int INTERACTION_DISTANCE = 150;
+	public static final int INTERACTION_DISTANCE = 100;
 	private static final int SOCIAL_INTERVAL = 12000;
 	
 	private L2Spawn _spawn;
@@ -191,18 +190,6 @@ public class L2Npc extends L2Character
 	}
 	
 	@Override
-	public void initKnownList()
-	{
-		setKnownList(new NpcKnownList(this));
-	}
-	
-	@Override
-	public NpcKnownList getKnownList()
-	{
-		return (NpcKnownList) super.getKnownList();
-	}
-	
-	@Override
 	public void initCharStat()
 	{
 		setStat(new NpcStat(this));
@@ -265,13 +252,22 @@ public class L2Npc extends L2Character
 	}
 	
 	/**
+	 * Return True if this L2Npc is undead in function of the L2NpcTemplate.
+	 */
+	@Override
+	public boolean isUndead()
+	{
+		return getTemplate().getRace() == Race.UNDEAD;
+	}
+	
+	/**
 	 * Send a packet NpcInfo with state of abnormal effect to all L2PcInstance in the _KnownPlayers of the L2Npc.
 	 */
 	@Override
 	public void updateAbnormalEffect()
 	{
 		// Send NpcInfo with state of abnormal effect to all L2PcInstance in the _KnownPlayers of the L2Npc
-		for (L2PcInstance player : getKnownList().getKnownType(L2PcInstance.class))
+		for (L2PcInstance player : getKnownType(L2PcInstance.class))
 		{
 			if (getMoveSpeed() == 0)
 				player.sendPacket(new ServerObjectInfo(this, player));
@@ -326,33 +322,6 @@ public class L2Npc extends L2Character
 		return false;
 	}
 	
-	/**
-	 * Manage actions when a player click on the L2Npc.<BR>
-	 * <BR>
-	 * <B><U> Actions on first click on the L2Npc (Select it)</U> :</B><BR>
-	 * <BR>
-	 * <li>Set the L2Npc as target of the L2PcInstance player (if necessary)</li> <li>Send MyTargetSelected to the L2PcInstance player (display the select window)</li> <li>If L2Npc is autoAttackable, send StatusUpdate to the L2PcInstance in order to update L2Npc HP bar</li> <li>Send ValidateLocation
-	 * to correct the L2Npc position and heading on the client</li><BR>
-	 * <BR>
-	 * <B><U> Actions on second click on the L2Npc (Attack it/Intercat with it)</U> :</B><BR>
-	 * <BR>
-	 * <li>Send MyTargetSelected to the L2PcInstance player (display the select window)</li> <li>If L2Npc is autoAttackable, notify the L2PcInstance AI with ATTACK (after a height verification)</li> <li>If L2Npc is NOT autoAttackable, notify the L2PcInstance AI with INTERACT (after a distance
-	 * verification) and show message</li><BR>
-	 * <BR>
-	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : Each group of Server->Client packet must be terminated by a ActionFailed packet in order to avoid that client wait an other packet</B></FONT><BR>
-	 * <BR>
-	 * <B><U> Example of use </U> :</B><BR>
-	 * <BR>
-	 * <li>Client packet : Action, AttackRequest</li><BR>
-	 * <BR>
-	 * <B><U> Overriden in </U> :</B><BR>
-	 * <BR>
-	 * <li>L2ArtefactInstance : Manage only fisrt click to select Artefact</li><BR>
-	 * <BR>
-	 * <li>L2GuardInstance :</li><BR>
-	 * <BR>
-	 * @param player The L2PcInstance that start an action on the L2Npc
-	 */
 	@Override
 	public void onAction(L2PcInstance player)
 	{
@@ -364,18 +333,7 @@ public class L2Npc extends L2Character
 			// Check if the player is attackable (without a forced attack) and isn't dead
 			if (isAutoAttackable(player))
 			{
-				if (!isAlikeDead())
-					player.getAI().setIntention(CtrlIntention.ATTACK, this);
-				else
-				{
-					// Rotate the player to face the instance
-					player.sendPacket(new MoveToPawn(player, this, L2Npc.INTERACTION_DISTANCE));
-					
-					// Send ActionFailed to the player in order to avoid he stucks
-					player.sendPacket(ActionFailed.STATIC_PACKET);
-					
-					player.getAI().setIntention(CtrlIntention.FOLLOW, this);
-				}
+				player.getAI().setIntention(CtrlIntention.ATTACK, this);
 			}
 			else
 			{
@@ -410,9 +368,6 @@ public class L2Npc extends L2Character
 		}
 	}
 	
-	/**
-	 * Manage the shift && left click action.
-	 */
 	@Override
 	public void onActionShift(L2PcInstance player)
 	{
@@ -428,7 +383,7 @@ public class L2Npc extends L2Character
 			html.replace("%race%", getTemplate().getRace().toString());
 			html.replace("%tmplid%", getTemplate().getIdTemplate());
 			html.replace("%aggro%", getTemplate().getAggroRange());
-			html.replace("%corpse%", getTemplate().getCorpseTime());
+			html.replace("%corpse%", StringUtil.getTimeStamp(getTemplate().getCorpseTime()));
 			html.replace("%enchant%", getTemplate().getEnchantEffect());
 			html.replace("%hp%", (int) getCurrentHp());
 			html.replace("%hpmax%", getMaxHp());
@@ -461,11 +416,11 @@ public class L2Npc extends L2Character
 			
 			if (getSpawn() != null)
 			{
-				html.replace("%spawn%", getSpawn().getLocx() + " " + getSpawn().getLocy() + " " + getSpawn().getLocz());
-				html.replace("%loc2d%", (int) Math.sqrt(getPlanDistanceSq(getSpawn().getLocx(), getSpawn().getLocy())));
-				html.replace("%loc3d%", (int) Math.sqrt(getDistanceSq(getSpawn().getLocx(), getSpawn().getLocy(), getSpawn().getLocz())));
-				html.replace("%resp%", getSpawn().getRespawnDelay() / 1000);
-				html.replace("%rand_resp%", getSpawn().getRandomRespawnDelay());
+				html.replace("%spawn%", getSpawn().getLoc().toString());
+				html.replace("%loc2d%", (int) Math.sqrt(getPlanDistanceSq(getSpawn().getLocX(), getSpawn().getLocY())));
+				html.replace("%loc3d%", (int) Math.sqrt(getDistanceSq(getSpawn().getLocX(), getSpawn().getLocY(), getSpawn().getLocZ())));
+				html.replace("%resp%", StringUtil.getTimeStamp(getSpawn().getRespawnDelay()));
+				html.replace("%rand_resp%", StringUtil.getTimeStamp(getSpawn().getRespawnRandom()));
 			}
 			else
 			{
@@ -495,27 +450,10 @@ public class L2Npc extends L2Character
 			html.replace("%ai_spsinfo%", _currentSpsCount + "[" + getTemplate().getSpsCount() + "] - " + getTemplate().getSpsRate() + "%");
 			html.replace("%butt%", ((this instanceof L2MerchantInstance) ? "<button value=\"Shop\" action=\"bypass -h admin_show_shop " + getNpcId() + "\" width=65 height=19 back=\"L2UI_ch3.smallbutton2_over\" fore=\"L2UI_ch3.smallbutton2\">" : ""));
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
 		}
 		
 		if (player.getTarget() != this)
-		{
-			// Set the target of the L2PcInstance player
 			player.setTarget(this);
-			
-			// Send MyTargetSelected to the L2PcInstance player
-			player.sendPacket(new MyTargetSelected(getObjectId(), player.getLevel() - getLevel()));
-			
-			// Check if the player is attackable (without a forced attack)
-			if (isAutoAttackable(player))
-			{
-				// Send StatusUpdate of the L2Npc to the L2PcInstance to update its HP bar
-				StatusUpdate su = new StatusUpdate(this);
-				su.addAttribute(StatusUpdate.CUR_HP, (int) getCurrentHp());
-				su.addAttribute(StatusUpdate.MAX_HP, getMaxHp());
-				player.sendPacket(su);
-			}
-		}
 		else
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
@@ -660,11 +598,11 @@ public class L2Npc extends L2Character
 		}
 		else if (command.startsWith("multisell"))
 		{
-			MultisellData.getInstance().separateAndSend(Integer.parseInt(command.substring(9).trim()), player, false, getCastle().getTaxRate());
+			MultisellData.getInstance().separateAndSend(command.substring(9).trim(), player, this, false);
 		}
 		else if (command.startsWith("exc_multisell"))
 		{
-			MultisellData.getInstance().separateAndSend(Integer.parseInt(command.substring(13).trim()), player, true, getCastle().getTaxRate());
+			MultisellData.getInstance().separateAndSend(command.substring(13).trim(), player, this, true);
 		}
 		else if (command.startsWith("Augment"))
 		{
@@ -1046,7 +984,9 @@ public class L2Npc extends L2Character
 			item.setCustomType1(lotonumber);
 			item.setEnchantLevel(enchant);
 			item.setCustomType2(type2);
-			player.addItem("Loto", item, player, true);
+			
+			player.addItem("Loto", item, player, false);
+			player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.EARNED_ITEM_S1).addItemName(4442));
 			
 			html.setFile(getHtmlPath(npcId, 3));
 		}
@@ -1102,7 +1042,15 @@ public class L2Npc extends L2Character
 			html.setFile(getHtmlPath(npcId, 4));
 			html.replace("%result%", sb.toString());
 		}
-		else if (val > 24) // >24 - check lottery ticket by item object id
+		else if (val == 25) // 25 - lottery instructions
+		{
+			html.setFile(getHtmlPath(npcId, 2));
+			html.replace("%prize5%", Config.ALT_LOTTERY_5_NUMBER_RATE * 100);
+			html.replace("%prize4%", Config.ALT_LOTTERY_4_NUMBER_RATE * 100);
+			html.replace("%prize3%", Config.ALT_LOTTERY_3_NUMBER_RATE * 100);
+			html.replace("%prize2%", Config.ALT_LOTTERY_2_AND_1_NUMBER_PRIZE);
+		}
+		else if (val > 25) // >25 - check lottery ticket by item object id
 		{
 			int lotonumber = Lottery.getInstance().getId();
 			ItemInstance item = player.getInventory().getItemByObjectId(val);
@@ -1122,10 +1070,6 @@ public class L2Npc extends L2Character
 		html.replace("%race%", Lottery.getInstance().getId());
 		html.replace("%adena%", Lottery.getInstance().getPrize());
 		html.replace("%ticket_price%", Config.ALT_LOTTERY_TICKET_PRICE);
-		html.replace("%prize5%", Config.ALT_LOTTERY_5_NUMBER_RATE * 100);
-		html.replace("%prize4%", Config.ALT_LOTTERY_4_NUMBER_RATE * 100);
-		html.replace("%prize3%", Config.ALT_LOTTERY_3_NUMBER_RATE * 100);
-		html.replace("%prize2%", Config.ALT_LOTTERY_2_AND_1_NUMBER_PRIZE);
 		html.replace("%enddate%", DateFormat.getDateInstance().format(Lottery.getInstance().getEndDate()));
 		player.sendPacket(html);
 		
@@ -1383,17 +1327,6 @@ public class L2Npc extends L2Character
 				quest.notifySpawn(this);
 	}
 	
-	/**
-	 * Remove the L2Npc from the world and update its spawn object (for a complete removal use the deleteMe method).<BR>
-	 * <BR>
-	 * <B><U> Actions</U> :</B><BR>
-	 * <BR>
-	 * <li>Remove the L2Npc from the world when the decay task is launched</li> <li>Decrease its spawn counter</li> <li>Manage Siege task (killFlag, killCT)</li><BR>
-	 * <BR>
-	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T REMOVE the object from _allObjects of L2World </B></FONT><BR>
-	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T SEND Server->Client packets to players</B></FONT><BR>
-	 * <BR>
-	 */
 	@Override
 	public void onDecay()
 	{
@@ -1402,32 +1335,24 @@ public class L2Npc extends L2Character
 		
 		setDecayed(true);
 		
+		List<Quest> quests = getTemplate().getEventQuests(EventType.ON_DECAY);
+		if (quests != null)
+			for (Quest quest : quests)
+				quest.notifyDecay(this);
+		
 		// Remove the L2Npc from the world when the decay task is launched.
 		super.onDecay();
 		
 		// Respawn it, if possible.
 		if (_spawn != null)
-			_spawn.respawn(this);
+			_spawn.doRespawn();
 	}
 	
-	/**
-	 * Remove PROPERLY the L2Npc from the world.<BR>
-	 * <BR>
-	 * <B><U> Actions</U> :</B><BR>
-	 * <BR>
-	 * <li>Remove the L2Npc from the world and update its spawn object</li> <li>Remove all L2Object from _knownObjects and _knownPlayer of the L2Npc then cancel Attak or Cast and notify AI</li> <li>Remove L2Object object from _allObjects of L2World</li><BR>
-	 * <BR>
-	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T SEND Server->Client packets to players</B></FONT><BR>
-	 * <BR>
-	 */
 	@Override
 	public void deleteMe()
 	{
 		// Decay
 		onDecay();
-		
-		// Remove all L2Object from _knownObjects and _knownPlayer of the L2Character then cancel Attak or Cast and notify AI
-		getKnownList().removeAllKnownObjects();
 		
 		super.deleteMe();
 	}
@@ -1528,7 +1453,7 @@ public class L2Npc extends L2Character
 	
 	public L2Npc scheduleDespawn(long delay)
 	{
-		ThreadPoolManager.getInstance().scheduleGeneral(this.new DespawnTask(), delay);
+		ThreadPool.schedule(new DespawnTask(), delay);
 		return this;
 	}
 	
@@ -1612,7 +1537,7 @@ public class L2Npc extends L2Character
 				return;
 			
 			_currentSsCount--;
-			Broadcast.toSelfAndKnownPlayersInRadiusSq(this, new MagicSkillUse(this, this, 2154, 1, 0, 0), 360000);
+			Broadcast.toSelfAndKnownPlayersInRadius(this, new MagicSkillUse(this, this, 2154, 1, 0, 0), 600);
 			setChargedShot(ShotType.SOULSHOT, true);
 		}
 		
@@ -1625,7 +1550,7 @@ public class L2Npc extends L2Character
 				return;
 			
 			_currentSpsCount--;
-			Broadcast.toSelfAndKnownPlayersInRadiusSq(this, new MagicSkillUse(this, this, 2061, 1, 0, 0), 360000);
+			Broadcast.toSelfAndKnownPlayersInRadius(this, new MagicSkillUse(this, this, 2061, 1, 0, 0), 600);
 			setChargedShot(ShotType.SPIRITSHOT, true);
 		}
 	}

@@ -17,12 +17,14 @@ package net.sf.l2j.gameserver.scripting.scripts.ai.individual;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.commons.random.Rnd;
+
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
+import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
@@ -36,7 +38,7 @@ import net.sf.l2j.gameserver.network.serverpackets.Earthquake;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 import net.sf.l2j.gameserver.scripting.EventType;
-import net.sf.l2j.gameserver.scripting.scripts.ai.AbstractNpcAI;
+import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 import net.sf.l2j.gameserver.templates.StatsSet;
 import net.sf.l2j.gameserver.util.Util;
 
@@ -49,9 +51,9 @@ import net.sf.l2j.gameserver.util.Util;
  * </ul>
  * Waker's sacrifice is handled between neck and roar animation.
  */
-public class Baium extends AbstractNpcAI
+public class Baium extends L2AttackableAIScript
 {
-	private static final L2BossZone BAIUM_LAIR = GrandBossManager.getInstance().getZoneById(110002);
+	private static final L2BossZone BAIUM_LAIR = ZoneManager.getInstance().getZoneById(110002, L2BossZone.class);
 	
 	private static final int STONE_BAIUM = 29025;
 	private static final int LIVE_BAIUM = 29020;
@@ -83,9 +85,6 @@ public class Baium extends AbstractNpcAI
 		// Quest NPC starter initialization
 		addStartNpc(STONE_BAIUM);
 		addTalkId(STONE_BAIUM);
-		
-		// Baium onAttack, onKill, onSpawn
-		registerMob(LIVE_BAIUM, EventType.ON_ATTACK, EventType.ON_KILL, EventType.ON_SPAWN);
 		
 		final StatsSet info = GrandBossManager.getInstance().getStatsSet(LIVE_BAIUM);
 		final int status = GrandBossManager.getInstance().getBossStatus(LIVE_BAIUM);
@@ -140,6 +139,12 @@ public class Baium extends AbstractNpcAI
 		}
 		else
 			addSpawn(STONE_BAIUM, 116033, 17447, 10104, 40188, false, 0, false);
+	}
+	
+	@Override
+	protected void registerNpcs()
+	{
+		addEventIds(LIVE_BAIUM, EventType.ON_ATTACK, EventType.ON_KILL, EventType.ON_SPAWN);
 	}
 	
 	@Override
@@ -211,7 +216,7 @@ public class Baium extends AbstractNpcAI
 					// Unspawn angels
 					for (L2Npc minion : _minions)
 					{
-						minion.getSpawn().stopRespawn();
+						minion.getSpawn().setRespawnState(false);
 						minion.deleteMe();
 					}
 					_minions.clear();
@@ -313,7 +318,7 @@ public class Baium extends AbstractNpcAI
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		if (!BAIUM_LAIR.isInsideZone(attacker))
 		{
@@ -328,17 +333,17 @@ public class Baium extends AbstractNpcAI
 		{
 			if (attacker.getMountType() == 1)
 			{
-				L2Skill skill = SkillTable.getInstance().getInfo(4258, 1);
-				if (attacker.getFirstEffect(skill) == null)
+				final L2Skill debuff = SkillTable.getInstance().getInfo(4258, 1);
+				if (attacker.getFirstEffect(debuff) == null)
 				{
 					npc.setTarget(attacker);
-					npc.doCast(skill);
+					npc.doCast(debuff);
 				}
 			}
 			// update a variable with the last action against baium
 			_lastAttackTime = System.currentTimeMillis();
 		}
-		return super.onAttack(npc, attacker, damage, isPet);
+		return super.onAttack(npc, attacker, damage, isPet, skill);
 	}
 	
 	@Override
@@ -363,7 +368,7 @@ public class Baium extends AbstractNpcAI
 		// Unspawn angels.
 		for (L2Npc minion : _minions)
 		{
-			minion.getSpawn().stopRespawn();
+			minion.getSpawn().setRespawnState(false);
 			minion.deleteMe();
 		}
 		_minions.clear();
@@ -387,7 +392,7 @@ public class Baium extends AbstractNpcAI
 		int npcId = npc.getNpcId();
 		List<L2Character> result = new ArrayList<>();
 		
-		for (L2Character obj : npc.getKnownList().getKnownType(L2Character.class))
+		for (L2Character obj : npc.getKnownType(L2Character.class))
 		{
 			if (obj instanceof L2PcInstance)
 			{
@@ -430,7 +435,7 @@ public class Baium extends AbstractNpcAI
 			return;
 		
 		// Pickup a target if no or dead victim. If Baium was hitting an angel, 50% luck he reconsiders his target. 10% luck he decides to reconsiders his target.
-		if (_actualVictim == null || _actualVictim.isDead() || !(npc.getKnownList().knowsObject(_actualVictim)) || (_actualVictim instanceof L2MonsterInstance && Rnd.get(10) < 5) || Rnd.get(10) == 0)
+		if (_actualVictim == null || _actualVictim.isDead() || !(npc.getKnownType(L2PcInstance.class).contains(_actualVictim)) || (_actualVictim instanceof L2MonsterInstance && Rnd.get(10) < 5) || Rnd.get(10) == 0)
 			_actualVictim = getRandomTarget(npc);
 		
 		// If result is null, return directly.
@@ -469,7 +474,7 @@ public class Baium extends AbstractNpcAI
 		final int chance = Rnd.get(100); // Remember, it's 0 to 99, not 1 to 100.
 		
 		// If Baium feels surrounded or see 2+ angels, he unleashes his wrath upon heads :).
-		if (getPlayersCountInRadius(600, npc, false) >= 20 || npc.getKnownList().getKnownTypeInRadius(L2MonsterInstance.class, 600).size() >= 2)
+		if (getPlayersCountInRadius(600, npc, false) >= 20 || npc.getKnownTypeInRadius(L2MonsterInstance.class, 600).size() >= 2)
 		{
 			if (chance < 25)
 				skill = 4130;

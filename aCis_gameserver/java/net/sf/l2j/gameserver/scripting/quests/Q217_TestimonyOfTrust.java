@@ -15,6 +15,7 @@
 package net.sf.l2j.gameserver.scripting.quests;
 
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.ClassRace;
@@ -119,7 +120,13 @@ public class Q217_TestimonyOfTrust extends Quest
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(LETTER_TO_ELF, 1);
 			st.giveItems(LETTER_TO_DARK_ELF, 1);
-			st.giveItems(DIMENSIONAL_DIAMOND, 16);
+			
+			if (!player.getMemos().getBool("secondClassChange37", false))
+			{
+				htmltext = "30191-04a.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_37.get(player.getRace().ordinal()));
+				player.getMemos().set("secondClassChange37", true);
+			}
 		}
 		else if (event.equalsIgnoreCase("30154-03.htm"))
 		{

@@ -16,7 +16,8 @@ package net.sf.l2j.gameserver.ai.model;
 
 import java.util.List;
 
-import net.sf.l2j.gameserver.ThreadPoolManager;
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.NpcWalkerRoutesTable;
 import net.sf.l2j.gameserver.model.L2NpcWalkerNode;
@@ -45,7 +46,7 @@ public class L2NpcWalkerAI extends L2CharacterAI implements Runnable
 		_route = NpcWalkerRoutesTable.getInstance().getRouteForNpc(getActor().getNpcId());
 		
 		if (_route != null)
-			ThreadPoolManager.getInstance().scheduleAiAtFixedRate(this, 1000, 1000);
+			ThreadPool.scheduleAtFixedRate(this, 1000, 1000);
 		else
 			_log.warning(getClass().getSimpleName() + ": Missing route data for NpcID: " + _actor);
 	}

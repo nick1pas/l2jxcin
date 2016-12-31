@@ -14,8 +14,8 @@
  */
 package net.sf.l2j.gameserver.handler.skillhandlers;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.handler.ISkillHandler;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
@@ -51,15 +51,6 @@ public class Fishing implements ISkillHandler
 			return;
 		
 		L2PcInstance player = (L2PcInstance) activeChar;
-		
-		/*
-		 * If fishing is disabled, there isn't much point in doing anything else, unless you are GM. so this got moved up here, before anything else.
-		 */
-		if (!Config.ALLOWFISHING)
-		{
-			player.sendMessage("Fishing feature is disabled on this server.");
-			return;
-		}
 		
 		if (player.isFishing())
 		{

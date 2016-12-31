@@ -57,8 +57,9 @@ public abstract class AShape
 	public abstract boolean isInside(int x, int y, int z);
 	
 	/**
-	 * Returns X, Y, Z of point inside Ashape floor projection.
-	 * @return int[] : X, Y, Z coordinates.
+	 * Returns {@link Location} of random point inside AShape.<br>
+	 * In case AShape is only in 2D space, Z is set as 0.
+	 * @return {@link Location} : Random location inside AShape.
 	 */
 	public abstract Location getRandomLocation();
 }

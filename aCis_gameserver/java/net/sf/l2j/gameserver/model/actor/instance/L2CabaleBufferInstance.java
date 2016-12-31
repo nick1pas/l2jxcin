@@ -18,8 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 
+import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.ThreadPoolManager;
+
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
@@ -70,7 +71,7 @@ public class L2CabaleBufferInstance extends L2NpcInstance
 	{
 		super(objectId, template);
 		
-		_aiTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(new CabaleAI(this), 5000, 5000);
+		_aiTask = ThreadPool.scheduleAtFixedRate(new CabaleAI(this), 5000, 5000);
 	}
 	
 	@Override
@@ -138,7 +139,7 @@ public class L2CabaleBufferInstance extends L2NpcInstance
 			final List<L2PcInstance> playersList = new ArrayList<>();
 			final List<L2PcInstance> gmsList = new ArrayList<>();
 			
-			for (L2PcInstance player : getKnownList().getKnownTypeInRadius(L2PcInstance.class, 900))
+			for (L2PcInstance player : getKnownTypeInRadius(L2PcInstance.class, 900))
 			{
 				if (player.isGM())
 					gmsList.add(player);

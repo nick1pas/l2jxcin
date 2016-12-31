@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.sf.l2j.commons.lang.StringUtil;
+
 import net.sf.l2j.gameserver.datatables.FenceTable;
 import net.sf.l2j.gameserver.datatables.GmListTable;
 import net.sf.l2j.gameserver.datatables.NpcTable;
@@ -31,7 +32,7 @@ import net.sf.l2j.gameserver.instancemanager.RaidBossSpawnManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Spawn;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2FenceInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -114,7 +115,7 @@ public class AdminSpawn implements IAdminCommandHandler
 					index++;
 					name = spawn.getTemplate().getName();
 					
-					final L2Npc _npc = spawn.getLastSpawn();
+					final L2Npc _npc = spawn.getNpc();
 					if (_npc != null)
 					{
 						x = _npc.getX();
@@ -123,9 +124,9 @@ public class AdminSpawn implements IAdminCommandHandler
 					}
 					else
 					{
-						x = spawn.getLocx();
-						y = spawn.getLocy();
-						z = spawn.getLocz();
+						x = spawn.getLocX();
+						y = spawn.getLocY();
+						z = spawn.getLocZ();
 					}
 					StringUtil.append(sb, "<tr><td><a action=\"bypass -h admin_move_to ", x, " ", y, " ", z, "\">", index, " - (", x, " ", y, " ", z, ")", "</a></td></tr>");
 				}
@@ -197,7 +198,7 @@ public class AdminSpawn implements IAdminCommandHandler
 			Broadcast.toAllOnlinePlayers(SystemMessage.getSystemMessage(SystemMessageId.NPC_SERVER_NOT_OPERATING));
 			RaidBossSpawnManager.getInstance().cleanUp();
 			DayNightSpawnManager.getInstance().cleanUp();
-			L2World.getInstance().deleteVisibleNpcSpawns();
+			World.getInstance().deleteVisibleNpcSpawns();
 			GmListTable.broadcastMessageToGMs("NPCs' unspawn is now complete.");
 		}
 		else if (command.startsWith("admin_spawnday"))
@@ -209,7 +210,7 @@ public class AdminSpawn implements IAdminCommandHandler
 			// make sure all spawns are deleted
 			RaidBossSpawnManager.getInstance().cleanUp();
 			DayNightSpawnManager.getInstance().cleanUp();
-			L2World.getInstance().deleteVisibleNpcSpawns();
+			World.getInstance().deleteVisibleNpcSpawns();
 			// now respawn all
 			NpcTable.getInstance().reloadAllNpc();
 			SpawnTable.getInstance().reloadAll();
@@ -245,7 +246,7 @@ public class AdminSpawn implements IAdminCommandHandler
 			st.nextToken();
 			try
 			{
-				L2Object object = L2World.getInstance().getObject(Integer.parseInt(st.nextToken()));
+				L2Object object = World.getInstance().getObject(Integer.parseInt(st.nextToken()));
 				if (object instanceof L2FenceInstance)
 				{
 					FenceTable.getInstance().removeFence((L2FenceInstance) object);
@@ -311,10 +312,7 @@ public class AdminSpawn implements IAdminCommandHandler
 		try
 		{
 			L2Spawn spawn = new L2Spawn(template);
-			spawn.setLocx(target.getX());
-			spawn.setLocy(target.getY());
-			spawn.setLocz(target.getZ());
-			spawn.setHeading(activeChar.getHeading());
+			spawn.setLoc(target.getX(), target.getY(), target.getZ(), activeChar.getHeading());
 			spawn.setRespawnDelay(respawnTime);
 			
 			if (RaidBossSpawnManager.getInstance().getValidTemplate(spawn.getNpcId()) != null)
@@ -332,11 +330,13 @@ public class AdminSpawn implements IAdminCommandHandler
 			else
 			{
 				SpawnTable.getInstance().addNewSpawn(spawn, permanent);
-				spawn.init();
+				spawn.doSpawn(false);
+				if (permanent)
+					spawn.setRespawnState(true);
 			}
 			
 			if (!permanent)
-				spawn.stopRespawn();
+				spawn.setRespawnState(false);
 			
 			activeChar.sendMessage("Spawned " + template.getName() + ".");
 			

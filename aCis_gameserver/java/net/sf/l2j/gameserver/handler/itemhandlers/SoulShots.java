@@ -15,6 +15,7 @@
 package net.sf.l2j.gameserver.handler.itemhandlers;
 
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
@@ -76,6 +77,6 @@ public class SoulShots implements IItemHandler
 		
 		weaponInst.setChargedShot(ShotType.SOULSHOT, true);
 		activeChar.sendPacket(SystemMessageId.ENABLED_SOULSHOT);
-		Broadcast.toSelfAndKnownPlayersInRadiusSq(activeChar, new MagicSkillUse(activeChar, activeChar, skills[0].getId(), 1, 0, 0), 360000);
+		Broadcast.toSelfAndKnownPlayersInRadius(activeChar, new MagicSkillUse(activeChar, activeChar, skills[0].getId(), 1, 0, 0), 600);
 	}
 }

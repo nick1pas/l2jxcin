@@ -17,7 +17,6 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import net.sf.l2j.gameserver.model.MinionList;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.knownlist.MonsterKnownList;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 
 /**
@@ -46,18 +45,6 @@ public class L2MonsterInstance extends L2Attackable
 	public L2MonsterInstance(int objectId, NpcTemplate template)
 	{
 		super(objectId, template);
-	}
-	
-	@Override
-	public void initKnownList()
-	{
-		setKnownList(new MonsterKnownList(this));
-	}
-	
-	@Override
-	public final MonsterKnownList getKnownList()
-	{
-		return (MonsterKnownList) super.getKnownList();
 	}
 	
 	@Override
@@ -123,7 +110,7 @@ public class L2MonsterInstance extends L2Attackable
 			return false;
 		
 		if (_master != null)
-			_master.getMinionList().onMinionDie(this, _master.getSpawn().getRespawnDelay() / 2);
+			_master.getMinionList().onMinionDie(this, _master.getSpawn().getRespawnDelay() * 1000 / 2);
 		
 		return true;
 	}

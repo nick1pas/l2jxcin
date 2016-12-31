@@ -15,8 +15,8 @@
 package net.sf.l2j.gameserver.model.actor.stat;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
+import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
@@ -177,13 +177,6 @@ public class PcStat extends PlayableStat
 		if (getActiveChar().isInParty())
 			getActiveChar().getParty().recalculatePartyLevel(); // Recalculate the party level
 			
-		StatusUpdate su = new StatusUpdate(getActiveChar());
-		su.addAttribute(StatusUpdate.LEVEL, getLevel());
-		su.addAttribute(StatusUpdate.MAX_CP, getMaxCp());
-		su.addAttribute(StatusUpdate.MAX_HP, getMaxHp());
-		su.addAttribute(StatusUpdate.MAX_MP, getMaxMp());
-		getActiveChar().sendPacket(su);
-		
 		// Update the overloaded status of the L2PcInstance
 		getActiveChar().refreshOverloaded();
 		// Update the expertise status of the L2PcInstance
@@ -322,27 +315,35 @@ public class PcStat extends PlayableStat
 	public int getBaseRunSpeed()
 	{
 		if (getActiveChar().isMounted())
-			// FIXME: change to petdata mount run speed
-			return NpcTable.getInstance().getTemplate(getActiveChar().getMountNpcId()).getBaseRunSpeed();
+		{
+			int base = (getActiveChar().isFlying()) ? getActiveChar().getPetDataEntry().getMountFlySpeed() : getActiveChar().getPetDataEntry().getMountBaseSpeed();
+			
+			if (getActiveChar().getLevel() < getActiveChar().getMountLevel())
+				base /= 2;
+			
+			if (getActiveChar().checkFoodState(getActiveChar().getPetTemplate().getHungryLimit()))
+				base /= 2;
+			
+			return base;
+		}
 		
 		return super.getBaseRunSpeed();
-	}
-	
-	@Override
-	public int getBaseWalkSpeed()
-	{
-		if (getActiveChar().isMounted())
-			// FIXME: change to petdata mount walk speed
-			return NpcTable.getInstance().getTemplate(getActiveChar().getMountNpcId()).getBaseWalkSpeed();
-		
-		return super.getBaseWalkSpeed();
 	}
 	
 	public int getBaseSwimSpeed()
 	{
 		if (getActiveChar().isMounted())
-			// FIXME: change to petdata mount swim speed
-			return NpcTable.getInstance().getTemplate(getActiveChar().getMountNpcId()).getBaseWalkSpeed();
+		{
+			int base = getActiveChar().getPetDataEntry().getMountSwimSpeed();
+			
+			if (getActiveChar().getLevel() < getActiveChar().getMountLevel())
+				base /= 2;
+			
+			if (getActiveChar().checkFoodState(getActiveChar().getPetTemplate().getHungryLimit()))
+				base /= 2;
+			
+			return base;
+		}
 		
 		return getActiveChar().getTemplate().getBaseSwimSpeed();
 	}
@@ -371,15 +372,69 @@ public class PcStat extends PlayableStat
 	}
 	
 	@Override
+	public int getMAtk(L2Character target, L2Skill skill)
+	{
+		if (getActiveChar().isMounted())
+		{
+			double base = getActiveChar().getPetDataEntry().getMountMAtk();
+			
+			if (getActiveChar().getLevel() < getActiveChar().getMountLevel())
+				base /= 2;
+			
+			return (int) calcStat(Stats.MAGIC_ATTACK, base, null, null);
+		}
+		
+		return super.getMAtk(target, skill);
+	}
+	
+	@Override
 	public int getMAtkSpd()
 	{
-		int val = super.getMAtkSpd();
+		double base = 333;
+		
+		if (getActiveChar().isMounted())
+		{
+			if (getActiveChar().checkFoodState(getActiveChar().getPetTemplate().getHungryLimit()))
+				base /= 2;
+		}
 		
 		final int penalty = getActiveChar().getExpertiseArmorPenalty();
 		if (penalty > 0)
-			val *= Math.pow(0.84, penalty);
+			base *= Math.pow(0.84, penalty);
 		
-		return val;
+		return (int) calcStat(Stats.MAGIC_ATTACK_SPEED, base, null, null);
+	}
+	
+	@Override
+	public int getPAtk(L2Character target)
+	{
+		if (getActiveChar().isMounted())
+		{
+			double base = getActiveChar().getPetDataEntry().getMountPAtk();
+			
+			if (getActiveChar().getLevel() < getActiveChar().getMountLevel())
+				base /= 2;
+			
+			return (int) calcStat(Stats.POWER_ATTACK, base, null, null);
+		}
+		
+		return super.getPAtk(target);
+	}
+	
+	@Override
+	public int getPAtkSpd()
+	{
+		if (getActiveChar().isMounted())
+		{
+			int base = getActiveChar().getPetDataEntry().getMountAtkSpd();
+			
+			if (getActiveChar().checkFoodState(getActiveChar().getPetTemplate().getHungryLimit()))
+				base /= 2;
+			
+			return (int) calcStat(Stats.POWER_ATTACK_SPEED, base, null, null);
+		}
+		
+		return super.getPAtkSpd();
 	}
 	
 	@Override

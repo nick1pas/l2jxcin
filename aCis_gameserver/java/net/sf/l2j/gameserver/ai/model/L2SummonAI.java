@@ -16,8 +16,9 @@ package net.sf.l2j.gameserver.ai.model;
 
 import java.util.concurrent.Future;
 
+import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.ThreadPoolManager;
+
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Object;
@@ -77,9 +78,7 @@ public class L2SummonAI extends L2PlayableAI implements Runnable
 	
 	private void thinkAttack()
 	{
-		L2Character target = (L2Character) getTarget();
-		if (target == null)
-			return;
+		final L2Character target = (L2Character) getTarget();
 		
 		if (checkTargetLostOrDead(target))
 		{
@@ -88,10 +87,7 @@ public class L2SummonAI extends L2PlayableAI implements Runnable
 		}
 		
 		if (maybeMoveToPawn(target, _actor.getPhysicalAttackRange()))
-		{
-			_actor.breakAttack();
 			return;
-		}
 		
 		clientStopMoving(null);
 		_actor.doAttack(target);
@@ -261,7 +257,7 @@ public class L2SummonAI extends L2PlayableAI implements Runnable
 	private void startAvoidTask()
 	{
 		if (_avoidTask == null)
-			_avoidTask = ThreadPoolManager.getInstance().scheduleAiAtFixedRate(this, 100, 100);
+			_avoidTask = ThreadPool.scheduleAtFixedRate(this, 100, 100);
 	}
 	
 	private void stopAvoidTask()

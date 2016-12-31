@@ -22,12 +22,14 @@ package net.sf.l2j.gameserver.handler.itemhandlers;
 
 import java.util.logging.Level;
 
-import net.sf.l2j.gameserver.ThreadPoolManager;
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.SummonItemsData;
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Spawn;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -39,8 +41,8 @@ import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillLaunched;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
-import net.sf.l2j.gameserver.network.serverpackets.PetItemList;
 import net.sf.l2j.gameserver.network.serverpackets.SetupGauge;
+import net.sf.l2j.gameserver.network.serverpackets.SetupGauge.GaugeColor;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.util.Broadcast;
 
@@ -95,7 +97,7 @@ public class SummonItems implements IItemHandler
 			case 0: // static summons (like Christmas tree)
 				try
 				{
-					for (L2XmassTreeInstance ch : activeChar.getKnownList().getKnownTypeInRadius(L2XmassTreeInstance.class, 1200))
+					for (L2XmassTreeInstance ch : activeChar.getKnownTypeInRadius(L2XmassTreeInstance.class, 1200)) // FIXME pointless
 					{
 						if (npcTemplate.getNpcId() == L2XmassTreeInstance.SPECIAL_TREE_ID)
 						{
@@ -107,10 +109,8 @@ public class SummonItems implements IItemHandler
 					if (activeChar.destroyItem("Summon", item.getObjectId(), 1, null, false))
 					{
 						final L2Spawn spawn = new L2Spawn(npcTemplate);
-						spawn.setLocx(activeChar.getX());
-						spawn.setLocy(activeChar.getY());
-						spawn.setLocz(activeChar.getZ());
-						spawn.stopRespawn();
+						spawn.setLoc(activeChar.getX(), activeChar.getY(), activeChar.getZ(), activeChar.getHeading());
+						spawn.setRespawnState(false);
 						
 						final L2Npc npc = spawn.doSpawn(true);
 						npc.setTitle(activeChar.getName());
@@ -127,11 +127,11 @@ public class SummonItems implements IItemHandler
 				activeChar.setTarget(activeChar);
 				Broadcast.toSelfAndKnownPlayers(activeChar, new MagicSkillUse(activeChar, 2046, 1, 5000, 0));
 				activeChar.setTarget(oldTarget);
-				activeChar.sendPacket(new SetupGauge(0, 5000));
+				activeChar.sendPacket(new SetupGauge(GaugeColor.BLUE, 5000));
 				activeChar.sendPacket(SystemMessageId.SUMMON_A_PET);
 				activeChar.setIsCastingNow(true);
 				
-				ThreadPoolManager.getInstance().scheduleGeneral(new PetSummonFinalizer(activeChar, npcTemplate, item), 5000);
+				ThreadPool.schedule(new PetSummonFinalizer(activeChar, npcTemplate, item), 5000);
 				break;
 			case 2: // wyvern
 				activeChar.mount(sitem.getNpcId(), item.getObjectId(), true);
@@ -165,35 +165,24 @@ public class SummonItems implements IItemHandler
 				if (_item == null || _item.getOwnerId() != _activeChar.getObjectId() || _item.getLocation() != ItemInstance.ItemLocation.INVENTORY)
 					return;
 				
-				final L2PetInstance pet = L2PetInstance.spawnPet(_npcTemplate, _activeChar, _item);
+				// Owner has a pet listed in world.
+				if (World.getInstance().getPet(_activeChar.getObjectId()) != null)
+					return;
+				
+				// Add the pet instance to world.
+				final L2PetInstance pet = L2PetInstance.restore(_item, _npcTemplate, _activeChar);
 				if (pet == null)
 					return;
 				
-				pet.setShowSummonAnimation(true);
-				
-				if (!pet.isRespawned())
-				{
-					pet.setCurrentHp(pet.getMaxHp());
-					pet.setCurrentMp(pet.getMaxMp());
-					pet.getStat().setExp(pet.getExpForThisLevel());
-					pet.setCurrentFed(pet.getPetData().getMaxMeal());
-				}
-				
-				pet.setRunning();
-				
-				if (!pet.isRespawned())
-					pet.store();
+				World.getInstance().addPet(_activeChar.getObjectId(), pet);
 				
 				_activeChar.setPet(pet);
 				
-				pet.spawnMe(_activeChar.getX() + 50, _activeChar.getY() + 100, _activeChar.getZ());
+				pet.setRunning();
+				pet.setTitle(_activeChar.getName());
+				pet.spawnMe();
 				pet.startFeed();
-				_item.setEnchantLevel(pet.getLevel());
-				
 				pet.setFollowStatus(true);
-				
-				pet.getOwner().sendPacket(new PetItemList(pet));
-				pet.broadcastStatusUpdate();
 			}
 			catch (Exception e)
 			{

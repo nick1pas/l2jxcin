@@ -14,7 +14,12 @@
  */
 package net.sf.l2j.gameserver.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
+
+import net.sf.l2j.commons.math.MathUtil;
 
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.NpcTable;
@@ -22,10 +27,10 @@ import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.knownlist.ObjectKnownList;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
+import net.sf.l2j.gameserver.util.Util;
 
 /**
  * Mother class of all interactive objects in the world (PC, NPC, Item...)
@@ -49,15 +54,13 @@ public abstract class L2Object
 	private int _polyId;
 	
 	private SpawnLocation _position = new SpawnLocation(0, 0, 0, 0);
-	private L2WorldRegion _region;
+	private WorldRegion _region;
 	
 	private boolean _isVisible;
 	
 	public L2Object(int objectId)
 	{
 		_objectId = objectId;
-		
-		setRegion(L2World.getInstance().getRegion(_position));
 	}
 	
 	public void onAction(L2PcInstance player)
@@ -84,24 +87,14 @@ public abstract class L2Object
 	 */
 	public void decayMe()
 	{
-		assert _region != null;
+		setRegion(null);
 		
-		final L2WorldRegion region = _region;
-		
-		synchronized (this)
-		{
-			_isVisible = false;
-			setRegion(null);
-		}
-		
-		// Out of synchronized to avoid deadlocks
-		L2World.getInstance().removeVisibleObject(this, region);
-		L2World.getInstance().removeObject(this);
+		World.getInstance().removeObject(this);
 	}
 	
 	public void refreshID()
 	{
-		L2World.getInstance().removeObject(this);
+		World.getInstance().removeObject(this);
 		IdFactory.getInstance().releaseId(getObjectId());
 		_objectId = IdFactory.getInstance().getNextId();
 	}
@@ -111,67 +104,20 @@ public abstract class L2Object
 	 */
 	public final void spawnMe()
 	{
-		assert _region == null;
+		_isVisible = true;
 		
-		synchronized (this)
-		{
-			// Set the x,y,z position of the L2Object spawn and update its _worldregion
-			_isVisible = true;
-			setRegion(L2World.getInstance().getRegion(_position));
-		}
+		setRegion(World.getInstance().getRegion(_position));
 		
-		// Add the L2Object spawn in the _allobjects of L2World
-		L2World.getInstance().addObject(this);
-		
-		// Add the L2Object spawn to _visibleObjects and if necessary to _allplayers of its L2WorldRegion
-		_region.addVisibleObject(this);
-		
-		// Add the L2Object spawn in the world as a visible object -- out of synchronized to avoid deadlocks
-		L2World.getInstance().addVisibleObject(this, _region);
+		World.getInstance().addObject(this);
 		
 		onSpawn();
 	}
 	
 	public final void spawnMe(int x, int y, int z)
 	{
-		assert _region == null;
+		_position.set(MathUtil.limit(x, World.WORLD_X_MIN + 100, World.WORLD_X_MAX - 100), MathUtil.limit(y, World.WORLD_Y_MIN + 100, World.WORLD_Y_MAX - 100), z);
 		
-		synchronized (this)
-		{
-			// Set the x,y,z position of the L2Object spawn and update its _worldregion
-			_isVisible = true;
-			
-			if (x > L2World.WORLD_X_MAX)
-				x = L2World.WORLD_X_MAX - 5000;
-			if (x < L2World.WORLD_X_MIN)
-				x = L2World.WORLD_X_MIN + 5000;
-			if (y > L2World.WORLD_Y_MAX)
-				y = L2World.WORLD_Y_MAX - 5000;
-			if (y < L2World.WORLD_Y_MIN)
-				y = L2World.WORLD_Y_MIN + 5000;
-			
-			_position.set(x, y, z);
-			setRegion(L2World.getInstance().getRegion(_position));
-		}
-		
-		// Add the L2Object spawn in the _allobjects of L2World
-		L2World.getInstance().addObject(this);
-		
-		// Add the L2Object spawn to _visibleObjects and if necessary to _allplayers of its L2WorldRegion
-		_region.addVisibleObject(this);
-		
-		// Add the L2Object spawn in the world as a visible object
-		L2World.getInstance().addVisibleObject(this, _region);
-		
-		onSpawn();
-	}
-	
-	public void toggleVisible()
-	{
-		if (isVisible())
-			decayMe();
-		else
-			spawnMe();
+		spawnMe();
 	}
 	
 	public boolean isAttackable()
@@ -200,11 +146,6 @@ public abstract class L2Object
 		
 		if (!_isVisible)
 			setRegion(null);
-	}
-	
-	public ObjectKnownList getKnownList()
-	{
-		return null;
 	}
 	
 	public final String getName()
@@ -343,38 +284,14 @@ public abstract class L2Object
 	 */
 	public final void setXYZ(int x, int y, int z)
 	{
-		assert _region != null;
-		
 		_position.set(x, y, z);
 		
-		try
-		{
-			if (!isVisible())
-				return;
-			
-			final L2WorldRegion region = L2World.getInstance().getRegion(_position);
-			if (region != _region)
-			{
-				_region.removeVisibleObject(this);
-				
-				setRegion(region);
-				
-				// Add the L2Oject spawn to _visibleObjects and if necessary to _allplayers of its L2WorldRegion
-				_region.addVisibleObject(this);
-			}
-		}
-		catch (Exception e)
-		{
-			_log.warning("Object Id at bad coords: (x: " + getX() + ", y: " + getY() + ", z: " + getZ() + ").");
-			badCoords();
-		}
-	}
-	
-	/**
-	 * Called on setXYZ exception.
-	 */
-	protected void badCoords()
-	{
+		if (!isVisible())
+			return;
+		
+		final WorldRegion region = World.getInstance().getRegion(_position);
+		if (region != _region)
+			setRegion(region);
 	}
 	
 	/**
@@ -385,48 +302,28 @@ public abstract class L2Object
 	 */
 	public final void setXYZInvisible(int x, int y, int z)
 	{
-		assert _region == null;
+		_position.set(MathUtil.limit(x, World.WORLD_X_MIN + 100, World.WORLD_X_MAX - 100), MathUtil.limit(y, World.WORLD_Y_MIN + 100, World.WORLD_Y_MAX - 100), z);
 		
-		if (x > L2World.WORLD_X_MAX)
-			x = L2World.WORLD_X_MAX - 5000;
-		if (x < L2World.WORLD_X_MIN)
-			x = L2World.WORLD_X_MIN + 5000;
-		if (y > L2World.WORLD_Y_MAX)
-			y = L2World.WORLD_Y_MAX - 5000;
-		if (y < L2World.WORLD_Y_MIN)
-			y = L2World.WORLD_Y_MIN + 5000;
-		
-		_position.set(x, y, z);
 		setIsVisible(false);
 	}
 	
-	/**
-	 * @return the x position of the L2Object.
-	 */
+	public final void setXYZInvisible(Location loc)
+	{
+		setXYZInvisible(loc.getX(), loc.getY(), loc.getZ());
+	}
+	
 	public final int getX()
 	{
-		assert _region != null || _isVisible;
-		
 		return _position.getX();
 	}
 	
-	/**
-	 * @return the y position of the L2Object.
-	 */
 	public final int getY()
 	{
-		assert _region != null || _isVisible;
-		
 		return _position.getY();
 	}
 	
-	/**
-	 * @return the z position of the L2Object.
-	 */
 	public final int getZ()
 	{
-		assert _region != null || _isVisible;
-		
 		return _position.getZ();
 	}
 	
@@ -435,13 +332,150 @@ public abstract class L2Object
 		return _position;
 	}
 	
-	public final L2WorldRegion getRegion()
+	public final WorldRegion getRegion()
 	{
 		return _region;
 	}
 	
-	public void setRegion(L2WorldRegion value)
+	/**
+	 * Update current and surrounding regions, based on both current region and region setted as parameter.
+	 * @param newRegion : null to remove the object, or the new region.
+	 */
+	public void setRegion(WorldRegion newRegion)
 	{
-		_region = value;
+		List<WorldRegion> oldAreas = Collections.emptyList();
+		
+		if (_region != null)
+		{
+			_region.removeVisibleObject(this);
+			oldAreas = _region.getSurroundingRegions();
+		}
+		
+		List<WorldRegion> newAreas = Collections.emptyList();
+		
+		if (newRegion != null)
+		{
+			newRegion.addVisibleObject(this);
+			newAreas = newRegion.getSurroundingRegions();
+		}
+		
+		// For every old surrounding area NOT SHARED with new surrounding areas.
+		for (WorldRegion region : oldAreas)
+		{
+			if (!newAreas.contains(region))
+			{
+				// Update all objects.
+				for (L2Object obj : region.getObjects())
+				{
+					if (obj == this)
+						continue;
+					
+					obj.removeKnownObject(this);
+					removeKnownObject(obj);
+				}
+				
+				// Desactivate the old neighbor region.
+				if (this instanceof L2PcInstance && region.isEmptyNeighborhood())
+					region.setActive(false);
+			}
+		}
+		
+		// For every new surrounding area NOT SHARED with old surrounding areas.
+		for (WorldRegion region : newAreas)
+		{
+			if (!oldAreas.contains(region))
+			{
+				// Update all objects.
+				for (L2Object obj : region.getObjects())
+				{
+					if (obj == this)
+						continue;
+					
+					obj.addKnownObject(this);
+					addKnownObject(obj);
+				}
+				
+				// Activate the new neighbor region.
+				if (this instanceof L2PcInstance)
+					region.setActive(true);
+			}
+		}
+		
+		_region = newRegion;
+	}
+	
+	/**
+	 * Add object to known list.
+	 * @param object : {@link L2Object} to be added.
+	 */
+	public void addKnownObject(L2Object object)
+	{
+	}
+	
+	/**
+	 * Remove object from known list.
+	 * @param object : {@link L2Object} to be removed.
+	 */
+	public void removeKnownObject(L2Object object)
+	{
+	}
+	
+	/**
+	 * Return the known list of given object type.
+	 * @param <A> : Object type must be instance of {@link L2Object}.
+	 * @param type : Class specifying object type.
+	 * @return List<A> : Known list of given object type.
+	 */
+	@SuppressWarnings("unchecked")
+	public final <A> List<A> getKnownType(Class<A> type)
+	{
+		final WorldRegion region = _region;
+		if (region == null)
+			return Collections.emptyList();
+		
+		final List<A> result = new ArrayList<>();
+		
+		for (WorldRegion reg : region.getSurroundingRegions())
+		{
+			for (L2Object obj : reg.getObjects())
+			{
+				if (obj == this || !type.isAssignableFrom(obj.getClass()))
+					continue;
+				
+				result.add((A) obj);
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Return the known list of given object type within specified radius.
+	 * @param <A> : Object type must be instance of {@link L2Object}.
+	 * @param type : Class specifying object type.
+	 * @param radius : Radius to in which object must be located.
+	 * @return List<A> : Known list of given object type.
+	 */
+	@SuppressWarnings("unchecked")
+	public final <A> List<A> getKnownTypeInRadius(Class<A> type, int radius)
+	{
+		final WorldRegion region = _region;
+		if (region == null)
+			return Collections.emptyList();
+		
+		final List<A> result = new ArrayList<>();
+		
+		for (WorldRegion reg : region.getSurroundingRegions())
+		{
+			for (L2Object obj : reg.getObjects())
+			{
+				if (obj == this || !type.isAssignableFrom(obj.getClass()) || !Util.checkIfInRange(radius, this, obj, true))
+					continue;
+				
+				result.add((A) obj);
+			}
+		}
+		
+		return result;
 	}
 }

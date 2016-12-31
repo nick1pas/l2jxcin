@@ -25,11 +25,12 @@ import java.net.UnknownHostException;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import net.sf.l2j.Config;
-import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.commons.mmocore.SelectorConfig;
 import net.sf.l2j.commons.mmocore.SelectorThread;
+
+import net.sf.l2j.Config;
+import net.sf.l2j.L2DatabaseFactory;
 
 /**
  * @author KenM

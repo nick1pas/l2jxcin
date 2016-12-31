@@ -162,7 +162,7 @@ public class BlockList
 		if (listOwner == null)
 			return;
 		
-		String charName = CharNameTable.getInstance().getNameById(targetId);
+		String charName = CharNameTable.getInstance().getPlayerName(targetId);
 		
 		if (listOwner.getFriendList().contains(targetId))
 		{
@@ -184,7 +184,7 @@ public class BlockList
 		sm.addString(charName);
 		listOwner.sendPacket(sm);
 		
-		L2PcInstance player = L2World.getInstance().getPlayer(targetId);
+		L2PcInstance player = World.getInstance().getPlayer(targetId);
 		
 		if (player != null)
 		{
@@ -200,7 +200,7 @@ public class BlockList
 			return;
 		
 		SystemMessage sm;
-		String charName = CharNameTable.getInstance().getNameById(targetId);
+		String charName = CharNameTable.getInstance().getPlayerName(targetId);
 		
 		if (!listOwner.getBlockList().getBlockList().contains(targetId))
 		{
@@ -237,7 +237,7 @@ public class BlockList
 		listOwner.sendPacket(SystemMessageId.BLOCK_LIST_HEADER);
 		
 		for (int playerId : listOwner.getBlockList().getBlockList())
-			listOwner.sendMessage((i++) + ". " + CharNameTable.getInstance().getNameById(playerId));
+			listOwner.sendMessage((i++) + ". " + CharNameTable.getInstance().getPlayerName(playerId));
 		
 		listOwner.sendPacket(SystemMessageId.FRIEND_LIST_FOOTER);
 	}
@@ -249,7 +249,7 @@ public class BlockList
 	 */
 	public static boolean isInBlockList(int ownerId, int targetId)
 	{
-		L2PcInstance player = L2World.getInstance().getPlayer(ownerId);
+		L2PcInstance player = World.getInstance().getPlayer(ownerId);
 		
 		if (player != null)
 			return BlockList.isBlocked(player, targetId);

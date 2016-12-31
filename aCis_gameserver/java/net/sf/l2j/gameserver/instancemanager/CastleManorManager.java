@@ -24,14 +24,15 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.sf.l2j.commons.concurrent.ThreadPool;
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Manor;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.itemcontainer.ClanWarehouse;
@@ -285,7 +286,7 @@ public class CastleManorManager
 	{
 		_log.info("CastleManorManager: Manor refresh updated.");
 		
-		_scheduledManorRefresh = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		_scheduledManorRefresh = ThreadPool.schedule(new Runnable()
 		{
 			@Override
 			public void run()
@@ -295,7 +296,7 @@ public class CastleManorManager
 					setUnderMaintenance(true);
 					_log.info("CastleManorManager: Under maintenance mode started.");
 					
-					_scheduledMaintenanceEnd = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+					_scheduledMaintenanceEnd = ThreadPool.schedule(new Runnable()
 					{
 						@Override
 						public void run()
@@ -323,7 +324,7 @@ public class CastleManorManager
 	{
 		_log.info("CastleManorManager: Manor period approve updated.");
 		
-		_scheduledNextPeriodapprove = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		_scheduledNextPeriodapprove = ThreadPool.schedule(new Runnable()
 		{
 			@Override
 			public void run()
@@ -453,7 +454,7 @@ public class CastleManorManager
 			
 			// Sending notification to a clan leader
 			L2PcInstance clanLeader = null;
-			clanLeader = L2World.getInstance().getPlayer(clan.getLeader().getName());
+			clanLeader = World.getInstance().getPlayer(clan.getLeader().getName());
 			if (clanLeader != null)
 				clanLeader.sendPacket(SystemMessageId.THE_MANOR_INFORMATION_HAS_BEEN_UPDATED);
 			

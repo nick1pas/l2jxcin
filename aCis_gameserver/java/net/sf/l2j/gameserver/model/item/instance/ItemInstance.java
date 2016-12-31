@@ -25,17 +25,16 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.instancemanager.MercTicketManager;
 import net.sf.l2j.gameserver.model.L2Augmentation;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2World;
-import net.sf.l2j.gameserver.model.L2WorldRegion;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.actor.L2Character;
@@ -660,7 +659,7 @@ public final class ItemInstance extends L2Object implements Runnable
 	 */
 	public boolean isAugmented()
 	{
-		return _augmentation == null ? false : true;
+		return _augmentation != null;
 	}
 	
 	/**
@@ -920,7 +919,7 @@ public final class ItemInstance extends L2Object implements Runnable
 	/**
 	 * Init a dropped ItemInstance and add it in the world as a visible object.<BR>
 	 * <BR>
-	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T ADD the object to _allObjects of L2World </B></FONT><BR>
+	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T ADD the object to _objects of World </B></FONT><BR>
 	 * <BR>
 	 * @param dropper : the character who dropped the item.
 	 * @param x : X location of the item.
@@ -929,7 +928,7 @@ public final class ItemInstance extends L2Object implements Runnable
 	 */
 	public final void dropMe(L2Character dropper, int x, int y, int z)
 	{
-		ThreadPoolManager.getInstance().executeTask(new ItemDropTask(this, dropper, x, y, z));
+		ThreadPool.execute(new ItemDropTask(this, dropper, x, y, z));
 	}
 	
 	public class ItemDropTask implements Runnable
@@ -960,19 +959,8 @@ public final class ItemInstance extends L2Object implements Runnable
 				_z = dropDest.getZ();
 			}
 			
-			synchronized (_itm)
-			{
-				// Set the x,y,z position of the ItemInstance dropped and update its _worldregion
-				_itm.setIsVisible(true);
-				_itm.getPosition().set(_x, _y, _z);
-				_itm.setRegion(L2World.getInstance().getRegion(getPosition()));
-			}
-			
-			_itm.getRegion().addVisibleObject(_itm);
 			_itm.setDropperObjectId(_dropper != null ? _dropper.getObjectId() : 0); // Set the dropper Id for the knownlist packets in sendInfo
-			
-			// Add the ItemInstance dropped in the world as a visible object
-			L2World.getInstance().addVisibleObject(_itm, _itm.getRegion());
+			_itm.spawnMe(_x, _y, _z);
 			
 			ItemsOnGroundTaskManager.getInstance().add(_itm, _dropper);
 			
@@ -981,46 +969,32 @@ public final class ItemInstance extends L2Object implements Runnable
 	}
 	
 	/**
-	 * Remove a ItemInstance from the world and send server->client GetItem packets.<BR>
+	 * Remove a ItemInstance from the visible world and send server->client GetItem packets.<BR>
 	 * <BR>
-	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T REMOVE the object from _allObjects of L2World </B></FONT><BR>
+	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T REMOVE the object from _objects of World.</B></FONT><BR>
 	 * <BR>
 	 * @param player Player that pick up the item
 	 */
 	public final void pickupMe(L2Character player)
 	{
-		assert getRegion() != null;
-		
-		L2WorldRegion oldregion = getRegion();
-		
-		// Create a server->client GetItem packet to pick up the ItemInstance
 		player.broadcastPacket(new GetItem(this, player.getObjectId()));
 		
-		synchronized (this)
-		{
-			setIsVisible(false);
-			setRegion(null);
-		}
-		
-		// if this item is a mercenary ticket, remove the spawns!
-		int itemId = getItemId();
-		
-		if (MercTicketManager.getTicketCastleId(itemId) > 0)
+		if (MercTicketManager.getTicketCastleId(_itemId) > 0)
 			MercTicketManager.getInstance().removeTicket(this);
 		
-		if (!Config.DISABLE_TUTORIAL && (itemId == 57 || itemId == 6353))
+		if (!Config.DISABLE_TUTORIAL && (_itemId == 57 || _itemId == 6353))
 		{
 			L2PcInstance actor = player.getActingPlayer();
 			if (actor != null)
 			{
 				QuestState qs = actor.getQuestState("Tutorial");
 				if (qs != null)
-					qs.getQuest().notifyEvent("CE" + itemId + "", null, actor);
+					qs.getQuest().notifyEvent("CE" + _itemId + "", null, actor);
 			}
 		}
 		
-		// Remove the ItemInstance from the world (out of synchro, to avoid deadlocks)
-		L2World.getInstance().removeVisibleObject(this, oldregion);
+		// Calls directly setRegion(null), we don't have to care about.
+		setIsVisible(false);
 	}
 	
 	/**
@@ -1137,7 +1111,7 @@ public final class ItemInstance extends L2Object implements Runnable
 	public synchronized void setDropProtection(int ownerId, boolean isRaidParty)
 	{
 		_ownerId = ownerId;
-		_dropProtection = ThreadPoolManager.getInstance().scheduleGeneral(this, (isRaidParty) ? RAID_LOOT_PROTECTION_TIME : REGULAR_LOOT_PROTECTION_TIME);
+		_dropProtection = ThreadPool.schedule(this, (isRaidParty) ? RAID_LOOT_PROTECTION_TIME : REGULAR_LOOT_PROTECTION_TIME);
 	}
 	
 	public synchronized void removeDropProtection()

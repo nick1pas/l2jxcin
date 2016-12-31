@@ -42,7 +42,7 @@ public class Location
 	@Override
 	public String toString()
 	{
-		return "(" + _x + ", " + _y + ", " + _z + ")";
+		return _x + ", " + _y + ", " + _z;
 	}
 	
 	@Override

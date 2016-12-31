@@ -212,7 +212,6 @@
 	<!-- MAMMON -->
 	<aCar name="admin_mammon_find" accessLevel="1" />
 	<aCar name="admin_mammon_respawn" accessLevel="1" />
-	<aCar name="admin_msg" accessLevel="1" />
 
 	<!-- MANOR -->
 	<aCar name="admin_manor" accessLevel="1" />
@@ -260,6 +259,7 @@
 	<aCar name="admin_forge" accessLevel="1" />
 	<aCar name="admin_forge2" accessLevel="1" />
 	<aCar name="admin_forge3" accessLevel="1" />
+	<aCar name="admin_msg" accessLevel="1" />
 
 	<!-- PLEDGE -->
 	<aCar name="admin_pledge" accessLevel="1" />

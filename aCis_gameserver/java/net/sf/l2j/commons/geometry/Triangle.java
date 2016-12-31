@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.commons.geometry;
 
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.Location;
 
 /**
@@ -25,13 +27,16 @@ public class Triangle extends AShape
 	protected final int _Ax;
 	protected final int _Ay;
 	
-	// BA vector coords
+	// BA vector coordinates
 	protected final int _BAx;
 	protected final int _BAy;
 	
-	// CA vector coords
+	// CA vector coordinates
 	protected final int _CAx;
 	protected final int _CAy;
+	
+	// size
+	protected final int _size;
 	
 	/**
 	 * Triangle constructor.
@@ -49,18 +54,20 @@ public class Triangle extends AShape
 		
 		_CAx = C[0] - A[0];
 		_CAy = C[1] - A[1];
+		
+		_size = Math.abs(_BAx * _CAy - _CAx * _BAy) / 2;
 	}
 	
 	@Override
 	public final int getSize()
 	{
-		return Math.abs(_BAx * _CAy - _CAx * _BAy) / 2;
+		return _size;
 	}
 	
 	@Override
 	public double getArea()
 	{
-		return Math.abs(_BAx * _CAy - _CAx * _BAy) / 2;
+		return _size;
 	}
 	
 	@Override
@@ -101,8 +108,8 @@ public class Triangle extends AShape
 	public Location getRandomLocation()
 	{
 		// get relative length of AB and AC vectors
-		double ba = Math.random();
-		double ca = Math.random();
+		double ba = Rnd.nextDouble();
+		double ca = Rnd.nextDouble();
 		
 		// adjust length if too long
 		if (ba + ca > 1)
@@ -111,7 +118,7 @@ public class Triangle extends AShape
 			ca = 1 - ca;
 		}
 		
-		// calc coords (take A, add AB and AC)
+		// calculate coordinates (take A, add AB and AC)
 		final int x = _Ax + (int) (ba * _BAx + ca * _CAx);
 		final int y = _Ay + (int) (ba * _BAy + ca * _CAy);
 		

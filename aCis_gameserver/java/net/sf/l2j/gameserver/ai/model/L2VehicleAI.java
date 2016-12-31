@@ -123,11 +123,6 @@ public class L2VehicleAI extends L2CharacterAI
 	}
 	
 	@Override
-	protected void onEvtForgetObject(L2Object object)
-	{
-	}
-	
-	@Override
 	protected void onEvtCancel()
 	{
 	}

@@ -78,7 +78,7 @@ public class EffectSignet extends L2Effect
 		getEffector().reduceCurrentMp(mpConsume);
 		
 		List<L2Character> targets = new ArrayList<>();
-		for (L2Character cha : _actor.getKnownList().getKnownTypeInRadius(L2Character.class, getSkill().getSkillRadius()))
+		for (L2Character cha : _actor.getKnownTypeInRadius(L2Character.class, getSkill().getSkillRadius()))
 		{
 			if (_skill.isOffensive() && !L2Skill.checkForAreaOffensiveSkills(getEffector(), cha, _skill, _srcInArena))
 				continue;

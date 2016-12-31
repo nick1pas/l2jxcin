@@ -14,7 +14,8 @@
  */
 package net.sf.l2j.gameserver.ai.model;
 
-import net.sf.l2j.gameserver.ThreadPoolManager;
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
@@ -84,7 +85,7 @@ public class L2DoorAI extends L2CharacterAI
 	@Override
 	protected void onEvtAttacked(L2Character attacker)
 	{
-		ThreadPoolManager.getInstance().executeTask(new onEventAttackedDoorTask((L2DoorInstance) _actor, attacker));
+		ThreadPool.execute(new onEventAttackedDoorTask((L2DoorInstance) _actor, attacker));
 	}
 	
 	@Override
@@ -128,11 +129,6 @@ public class L2DoorAI extends L2CharacterAI
 	}
 	
 	@Override
-	protected void onEvtForgetObject(L2Object object)
-	{
-	}
-	
-	@Override
 	protected void onEvtCancel()
 	{
 	}
@@ -156,7 +152,7 @@ public class L2DoorAI extends L2CharacterAI
 		@Override
 		public void run()
 		{
-			for (L2SiegeGuardInstance guard : _door.getKnownList().getKnownType(L2SiegeGuardInstance.class))
+			for (L2SiegeGuardInstance guard : _door.getKnownType(L2SiegeGuardInstance.class))
 			{
 				if (_actor.isInsideRadius(guard, guard.getTemplate().getClanRange(), false, true) && Math.abs(_attacker.getZ() - guard.getZ()) < 200)
 					guard.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, _attacker, 15);

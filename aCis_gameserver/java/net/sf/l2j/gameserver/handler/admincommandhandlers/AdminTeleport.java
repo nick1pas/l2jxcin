@@ -18,11 +18,11 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.datatables.MapRegionTable;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
@@ -71,7 +71,7 @@ public class AdminTeleport implements IAdminCommandHandler
 			{
 				st.nextToken();
 				String plyr = st.nextToken();
-				L2PcInstance player = L2World.getInstance().getPlayer(plyr);
+				L2PcInstance player = World.getInstance().getPlayer(plyr);
 				if (player == null)
 				{
 					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
@@ -86,7 +86,7 @@ public class AdminTeleport implements IAdminCommandHandler
 			try
 			{
 				String targetName = command.substring(13);
-				L2PcInstance player = L2World.getInstance().getPlayer(targetName);
+				L2PcInstance player = World.getInstance().getPlayer(targetName);
 				if (player == null)
 				{
 					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
@@ -104,7 +104,7 @@ public class AdminTeleport implements IAdminCommandHandler
 			try
 			{
 				String targetName = command.substring(19);
-				L2PcInstance player = L2World.getInstance().getPlayer(targetName);
+				L2PcInstance player = World.getInstance().getPlayer(targetName);
 				if (player == null)
 				{
 					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
@@ -133,7 +133,7 @@ public class AdminTeleport implements IAdminCommandHandler
 			try
 			{
 				String targetName = command.substring(18);
-				L2PcInstance player = L2World.getInstance().getPlayer(targetName);
+				L2PcInstance player = World.getInstance().getPlayer(targetName);
 				if (player == null)
 				{
 					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
@@ -178,7 +178,7 @@ public class AdminTeleport implements IAdminCommandHandler
 			{
 				st.nextToken();
 				String plyr = st.nextToken();
-				L2PcInstance player = L2World.getInstance().getPlayer(plyr);
+				L2PcInstance player = World.getInstance().getPlayer(plyr);
 				if (player == null)
 				{
 					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
@@ -206,7 +206,7 @@ public class AdminTeleport implements IAdminCommandHandler
 	
 	private static void sendHome(L2PcInstance player)
 	{
-		player.teleToLocation(MapRegionTable.TeleportWhereType.Town);
+		player.teleToLocation(TeleportWhereType.TOWN);
 		player.setIsIn7sDungeon(false);
 		player.sendMessage("A GM sent you at nearest town.");
 	}

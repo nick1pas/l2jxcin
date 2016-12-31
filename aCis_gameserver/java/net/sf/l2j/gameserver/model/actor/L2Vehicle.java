@@ -17,16 +17,17 @@ package net.sf.l2j.gameserver.model.actor;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.l2j.gameserver.ThreadPoolManager;
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
 import net.sf.l2j.gameserver.ai.model.L2VehicleAI;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.VehiclePathPoint;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.knownlist.VehicleKnownList;
 import net.sf.l2j.gameserver.model.actor.stat.VehicleStat;
 import net.sf.l2j.gameserver.model.actor.template.CharTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -77,7 +78,7 @@ public class L2Vehicle extends L2Character
 	public void runEngine(int delay)
 	{
 		if (_engine != null)
-			ThreadPoolManager.getInstance().scheduleGeneral(_engine, delay);
+			ThreadPool.schedule(_engine, delay);
 	}
 	
 	public void executePath(VehiclePathPoint[] path)
@@ -156,12 +157,6 @@ public class L2Vehicle extends L2Character
 	}
 	
 	@Override
-	public void initKnownList()
-	{
-		setKnownList(new VehicleKnownList(this));
-	}
-	
-	@Override
 	public VehicleStat getStat()
 	{
 		return (VehicleStat) super.getStat();
@@ -206,11 +201,11 @@ public class L2Vehicle extends L2Character
 		player.setInsideZone(ZoneId.PEACE, false);
 		player.sendPacket(SystemMessageId.EXIT_PEACEFUL_ZONE);
 		
-		final Location loc = (location.equals(Location.DUMMY_LOC)) ? MapRegionTable.getInstance().getTeleToLocation(this, MapRegionTable.TeleportWhereType.Town) : location;
+		final Location loc = (location.equals(Location.DUMMY_LOC)) ? MapRegionTable.getInstance().getTeleToLocation(this, TeleportWhereType.TOWN) : location;
 		if (player.isOnline())
 			player.teleToLocation(loc.getX(), loc.getY(), loc.getZ(), 0);
 		else
-			player.setXYZInvisible(loc.getX(), loc.getY(), loc.getZ()); // disconnects handling
+			player.setXYZInvisible(loc); // disconnects handling
 	}
 	
 	public boolean addPassenger(L2PcInstance player)
@@ -262,7 +257,7 @@ public class L2Vehicle extends L2Character
 	 */
 	public void payForRide(int itemId, int count, Location loc)
 	{
-		for (L2PcInstance player : getKnownList().getKnownTypeInRadius(L2PcInstance.class, 1000))
+		for (L2PcInstance player : getKnownTypeInRadius(L2PcInstance.class, 1000))
 		{
 			if (player.isInBoat() && player.getBoat() == this)
 			{
@@ -353,9 +348,6 @@ public class L2Vehicle extends L2Character
 		
 		// Decay the vehicle.
 		decayMe();
-		
-		// Remove from knownlist.
-		getKnownList().removeAllKnownObjects();
 		
 		super.deleteMe();
 	}

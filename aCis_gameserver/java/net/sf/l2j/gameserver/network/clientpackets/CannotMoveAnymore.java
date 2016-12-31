@@ -17,8 +17,6 @@ package net.sf.l2j.gameserver.network.clientpackets;
 import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.network.serverpackets.StopMove;
-import net.sf.l2j.gameserver.network.serverpackets.StopRotation;
 
 public final class CannotMoveAnymore extends L2GameClientPacket
 {
@@ -43,13 +41,7 @@ public final class CannotMoveAnymore extends L2GameClientPacket
 		if (player == null)
 			return;
 		
-		final SpawnLocation loc = new SpawnLocation(_x, _y, _z, _heading);
-		
-		player.stopMove(loc);
-		player.broadcastPacket(new StopMove(player));
-		player.broadcastPacket(new StopRotation(player.getObjectId(), _heading, 0));
-		
 		if (player.hasAI())
-			player.getAI().notifyEvent(CtrlEvent.EVT_ARRIVED_BLOCKED, loc);
+			player.getAI().notifyEvent(CtrlEvent.EVT_ARRIVED_BLOCKED, new SpawnLocation(_x, _y, _z, _heading));
 	}
 }

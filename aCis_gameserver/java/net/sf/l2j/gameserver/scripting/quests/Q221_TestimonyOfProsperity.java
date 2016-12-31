@@ -128,13 +128,19 @@ public class Q221_TestimonyOfProsperity extends Quest
 			return htmltext;
 		
 		// PARMAN
-		if (event.equalsIgnoreCase("30104-04e.htm"))
+		if (event.equalsIgnoreCase("30104-04.htm"))
 		{
 			st.setState(STATE_STARTED);
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(RING_OF_TESTIMONY_1, 1);
-			st.giveItems(DIMENSIONAL_DIAMOND, 50);
+			
+			if (!player.getMemos().getBool("secondClassChange37", false))
+			{
+				htmltext = "30104-04e.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_37.get(player.getRace().ordinal()));
+				player.getMemos().set("secondClassChange37", true);
+			}
 		}
 		else if (event.equalsIgnoreCase("30104-07.htm"))
 		{

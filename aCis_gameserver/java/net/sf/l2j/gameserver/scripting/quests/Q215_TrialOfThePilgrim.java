@@ -15,6 +15,7 @@
 package net.sf.l2j.gameserver.scripting.quests;
 
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.ClassId;
@@ -89,7 +90,13 @@ public class Q215_TrialOfThePilgrim extends Quest
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(VOUCHER_OF_TRIAL, 1);
-			st.giveItems(DIMENSIONAL_DIAMOND, 49);
+			
+			if (!player.getMemos().getBool("secondClassChange35", false))
+			{
+				htmltext = "30648-04a.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_35.get(player.getClassId().getId()));
+				player.getMemos().set("secondClassChange35", true);
+			}
 		}
 		else if (event.equalsIgnoreCase("30649-04.htm"))
 		{

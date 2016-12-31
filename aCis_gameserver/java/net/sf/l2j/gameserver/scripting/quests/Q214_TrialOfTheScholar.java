@@ -123,13 +123,19 @@ public class Q214_TrialOfTheScholar extends Quest
 			return htmltext;
 		
 		// MIRIEN
-		if (event.equalsIgnoreCase("30461-04a.htm"))
+		if (event.equalsIgnoreCase("30461-04.htm"))
 		{
 			st.setState(STATE_STARTED);
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(MIRIEN_SIGIL_1, 1);
-			st.giveItems(DIMENSIONAL_DIAMOND, 168);
+			
+			if (!player.getMemos().getBool("secondClassChange35", false))
+			{
+				htmltext = "30461-04a.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_35.get(player.getClassId().getId()));
+				player.getMemos().set("secondClassChange35", true);
+			}
 		}
 		else if (event.equalsIgnoreCase("30461-09.htm"))
 		{

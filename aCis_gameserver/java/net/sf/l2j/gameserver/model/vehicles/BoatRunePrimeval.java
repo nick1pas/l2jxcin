@@ -17,7 +17,8 @@ package net.sf.l2j.gameserver.model.vehicles;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.sf.l2j.gameserver.ThreadPoolManager;
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 import net.sf.l2j.gameserver.instancemanager.BoatManager;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.VehiclePathPoint;
@@ -117,7 +118,7 @@ public class BoatRunePrimeval implements Runnable
 					break;
 				case 1:
 					BoatManager.getInstance().broadcastPackets(PRIMEVAL_DOCK, RUNE_DOCK[0], ARRIVED_AT_PRIMEVAL, ARRIVED_AT_PRIMEVAL_2, PRIMEVAL_SOUND);
-					ThreadPoolManager.getInstance().scheduleGeneral(this, 180000);
+					ThreadPool.schedule(this, 180000);
 					break;
 				case 2:
 					BoatManager.getInstance().broadcastPackets(PRIMEVAL_DOCK, RUNE_DOCK[0], LEAVING_PRIMEVAL, PRIMEVAL_SOUND);
@@ -134,7 +135,7 @@ public class BoatRunePrimeval implements Runnable
 						if (_shoutCount > 35)
 							_shoutCount = 0;
 						
-						ThreadPoolManager.getInstance().scheduleGeneral(this, 5000);
+						ThreadPool.schedule(this, 5000);
 						return;
 					}
 					BoatManager.getInstance().dockShip(BoatManager.RUNE_HARBOR, true);
@@ -142,7 +143,7 @@ public class BoatRunePrimeval implements Runnable
 					break;
 				case 4:
 					BoatManager.getInstance().broadcastPackets(RUNE_DOCK[0], PRIMEVAL_DOCK, ARRIVED_AT_RUNE, ARRIVED_AT_RUNE_2, RUNE_SOUND);
-					ThreadPoolManager.getInstance().scheduleGeneral(this, 180000);
+					ThreadPool.schedule(this, 180000);
 					break;
 			}
 			_shoutCount = 0;

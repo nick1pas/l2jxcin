@@ -16,7 +16,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.datatables.SkillTable;
+import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
@@ -184,7 +186,7 @@ public class Q230_TestOfTheSummoner extends Quest
 			return null;
 		
 		// GALATEA
-		if (event.equals("30634-08a.htm"))
+		if (event.equals("30634-08.htm"))
 		{
 			st.setState(STATE_STARTED);
 			st.set("cond", "1");
@@ -196,7 +198,13 @@ public class Q230_TestOfTheSummoner extends Quest
 			st.set("Almors", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(GALATEA_LETTER, 1);
-			st.giveItems(DIMENSIONAL_DIAMOND, 122);
+			
+			if (!player.getMemos().getBool("secondClassChange39", false))
+			{
+				htmltext = "30634-08a.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_39.get(player.getClassId().getId()));
+				player.getMemos().set("secondClassChange39", true);
+			}
 		}
 		// LARA
 		else if (event.equals("30063-02.htm")) // Lara first time to give a list out
@@ -843,7 +851,7 @@ public class Q230_TestOfTheSummoner extends Quest
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		QuestState st = checkPlayerState(attacker, npc, STATE_STARTED);
 		if (st == null)

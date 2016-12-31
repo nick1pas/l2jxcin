@@ -97,13 +97,19 @@ public class Q213_TrialOfTheSeeker extends Quest
 			return htmltext;
 		
 		// DUFNER
-		if (event.equalsIgnoreCase("30106-05a.htm"))
+		if (event.equalsIgnoreCase("30106-05.htm"))
 		{
 			st.setState(STATE_STARTED);
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(DUFNER_LETTER, 1);
-			st.giveItems(DIMENSIONAL_DIAMOND, 128);
+			
+			if (!player.getMemos().getBool("secondClassChange35", false))
+			{
+				htmltext = "30106-05a.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_35.get(player.getClassId().getId()));
+				player.getMemos().set("secondClassChange35", true);
+			}
 		}
 		// TERRY
 		else if (event.equalsIgnoreCase("30064-03.htm"))

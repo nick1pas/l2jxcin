@@ -32,6 +32,6 @@ public class RequestRecordInfo extends L2GameClientPacket
 			return;
 		
 		activeChar.sendPacket(new UserInfo(activeChar));
-		activeChar.getKnownList().refreshInfos();
+		activeChar.refreshInfos();
 	}
 }

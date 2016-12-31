@@ -29,6 +29,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 import net.sf.l2j.commons.config.ExProperties;
+
 import net.sf.l2j.gameserver.model.holder.BuffSkillHolder;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 
@@ -242,6 +243,7 @@ public final class Config
 	public static int OBSTACLE_MULTIPLIER;
 	public static int MAX_ITERATIONS;
 	public static boolean DEBUG_PATH;
+	public static boolean DEBUG_GEO_NODE;
 	
 	// --------------------------------------------------
 	// HexID
@@ -368,10 +370,6 @@ public final class Config
 	public static int MAX_NPC_ANIMATION;
 	public static int MIN_MONSTER_ANIMATION;
 	public static int MAX_MONSTER_ANIMATION;
-	
-	public static boolean GRIDS_ALWAYS_ON;
-	public static int GRID_NEIGHBOR_TURNON_TIME;
-	public static int GRID_NEIGHBOR_TURNOFF_TIME;
 	
 	// --------------------------------------------------
 	// Players
@@ -592,7 +590,6 @@ public final class Config
 	public static int WEAR_PRICE;
 	public static boolean ALLOW_LOTTERY;
 	public static boolean ALLOW_WATER;
-	public static boolean ALLOWFISHING;
 	public static boolean ALLOW_BOAT;
 	public static boolean ALLOW_CURSED_WEAPONS;
 	public static boolean ALLOW_MANOR;
@@ -633,9 +630,14 @@ public final class Config
 	public static int TRADE_CHAT_TIME;
 	public static int SOCIAL_TIME;
 	
+	/** ThreadPool */
+	public static int SCHEDULED_THREAD_POOL_COUNT;
+	public static int THREADS_PER_SCHEDULED_THREAD_POOL;
+	public static int INSTANT_THREAD_POOL_COUNT;
+	public static int THREADS_PER_INSTANT_THREAD_POOL;
+	
 	/** Misc */
 	public static boolean L2WALKER_PROTECTION;
-	public static boolean AUTODELETE_INVALID_QUEST_DATA;
 	public static boolean SERVER_NEWS;
 	public static int ZONE_TOWN;
 	public static boolean DISABLE_TUTORIAL;
@@ -644,14 +646,6 @@ public final class Config
 	// Those "hidden" settings haven't configs to avoid admins to fuck their server
 	// You still can experiment changing values here. But don't say I didn't warn you.
 	// --------------------------------------------------
-	
-	/** Threads & Packets size */
-	public static int THREAD_P_EFFECTS = 6; // default 6
-	public static int THREAD_P_GENERAL = 15; // default 15
-	public static int GENERAL_PACKET_THREAD_CORE_SIZE = 4; // default 4
-	public static int IO_PACKET_THREAD_CORE_SIZE = 2; // default 2
-	public static int GENERAL_THREAD_CORE_SIZE = 4; // default 4
-	public static int AI_MAX_THREAD = 10; // default 10
 	
 	/** Reserve Host on LoginServerThread */
 	public static boolean RESERVE_HOST_ON_LOGIN = false; // default false
@@ -931,6 +925,7 @@ public final class Config
 		HEURISTIC_WEIGHT = geoengine.getProperty("HeuristicWeight", 20);
 		MAX_ITERATIONS = geoengine.getProperty("MaxIterations", 3500);
 		DEBUG_PATH = geoengine.getProperty("DebugPath", false);
+		DEBUG_GEO_NODE = geoengine.getProperty("DebugGeoNode", false);
 	}
 	
 	/**
@@ -1076,10 +1071,6 @@ public final class Config
 		MAX_NPC_ANIMATION = npcs.getProperty("MaxNPCAnimation", 40);
 		MIN_MONSTER_ANIMATION = npcs.getProperty("MinMonsterAnimation", 10);
 		MAX_MONSTER_ANIMATION = npcs.getProperty("MaxMonsterAnimation", 40);
-		
-		GRIDS_ALWAYS_ON = npcs.getProperty("GridsAlwaysOn", false);
-		GRID_NEIGHBOR_TURNON_TIME = npcs.getProperty("GridNeighborTurnOnTime", 1);
-		GRID_NEIGHBOR_TURNOFF_TIME = npcs.getProperty("GridNeighborTurnOffTime", 90);
 	}
 	
 	/**
@@ -1312,7 +1303,6 @@ public final class Config
 		WEAR_PRICE = server.getProperty("WearPrice", 10);
 		ALLOW_LOTTERY = server.getProperty("AllowLottery", true);
 		ALLOW_WATER = server.getProperty("AllowWater", true);
-		ALLOWFISHING = server.getProperty("AllowFishing", false);
 		ALLOW_MANOR = server.getProperty("AllowManor", true);
 		ALLOW_BOAT = server.getProperty("AllowBoat", true);
 		ALLOW_CURSED_WEAPONS = server.getProperty("AllowCursedWeapons", true);
@@ -1349,8 +1339,12 @@ public final class Config
 		TRADE_CHAT_TIME = server.getProperty("TradeChatTime", 0);
 		SOCIAL_TIME = server.getProperty("SocialTime", 2000);
 		
+		SCHEDULED_THREAD_POOL_COUNT = server.getProperty("ScheduledThreadPoolCount", -1);
+		THREADS_PER_SCHEDULED_THREAD_POOL = server.getProperty("ThreadsPerScheduledThreadPool", 4);
+		INSTANT_THREAD_POOL_COUNT = server.getProperty("InstantThreadPoolCount", -1);
+		THREADS_PER_INSTANT_THREAD_POOL = server.getProperty("ThreadsPerInstantThreadPool", 2);
+		
 		L2WALKER_PROTECTION = server.getProperty("L2WalkerProtection", false);
-		AUTODELETE_INVALID_QUEST_DATA = server.getProperty("AutoDeleteInvalidQuestData", false);
 		ZONE_TOWN = server.getProperty("ZoneTown", 0);
 		SERVER_NEWS = server.getProperty("ShowServerNews", false);
 		DISABLE_TUTORIAL = server.getProperty("DisableTutorial", false);
@@ -1376,7 +1370,7 @@ public final class Config
 		REQUEST_ID = server.getProperty("RequestServerID", 0);
 		ACCEPT_ALTERNATE_ID = server.getProperty("AcceptAlternateID", true);
 		
-		LOGIN_TRY_BEFORE_BAN = server.getProperty("LoginTryBeforeBan", 10);
+		LOGIN_TRY_BEFORE_BAN = server.getProperty("LoginTryBeforeBan", 3);
 		LOGIN_BLOCK_AFTER_BAN = server.getProperty("LoginBlockAfterBan", 600);
 		
 		LOG_LOGIN_CONTROLLER = server.getProperty("LogLoginController", false);

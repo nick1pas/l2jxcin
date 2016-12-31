@@ -14,8 +14,9 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.handler.ItemHandler;
 import net.sf.l2j.gameserver.model.L2Skill;
@@ -41,27 +42,21 @@ public final class UseItem extends L2GameClientPacket
 	private int _objectId;
 	private boolean _ctrlPressed;
 	
-	/** Weapon Equip Task */
 	public static class WeaponEquipTask implements Runnable
 	{
-		ItemInstance item;
-		L2PcInstance activeChar;
+		ItemInstance _item;
+		L2PcInstance _activeChar;
 		
 		public WeaponEquipTask(ItemInstance it, L2PcInstance character)
 		{
-			item = it;
-			activeChar = character;
+			_item = it;
+			_activeChar = character;
 		}
 		
 		@Override
 		public void run()
 		{
-			// If character is still engaged in strike we should not change weapon
-			if (activeChar.isAttackingNow())
-				return;
-			
-			// Equip or unEquip
-			activeChar.useEquippableItem(item, false);
+			_activeChar.useEquippableItem(_item, false);
 		}
 	}
 	
@@ -219,13 +214,9 @@ public final class UseItem extends L2GameClientPacket
 				return;
 			
 			if (activeChar.isAttackingNow())
-			{
-				ThreadPoolManager.getInstance().scheduleGeneral(new WeaponEquipTask(item, activeChar), (activeChar.getAttackEndTime() - System.currentTimeMillis()));
-				return;
-			}
-			
-			// Equip or unEquip
-			activeChar.useEquippableItem(item, true);
+				ThreadPool.schedule(new WeaponEquipTask(item, activeChar), (activeChar.getAttackEndTime() - System.currentTimeMillis()));
+			else
+				activeChar.useEquippableItem(item, true);
 		}
 		else
 		{

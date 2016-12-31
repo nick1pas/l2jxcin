@@ -76,10 +76,10 @@ public class MapRegionTable
 	
 	public static enum TeleportWhereType
 	{
-		Castle,
-		ClanHall,
-		SiegeFlag,
-		Town
+		CASTLE,
+		CLAN_HALL,
+		SIEGE_FLAG,
+		TOWN
 	}
 	
 	public static MapRegionTable getInstance()
@@ -287,7 +287,7 @@ public class MapRegionTable
 			if (player.getClan() != null)
 			{
 				// If teleport to clan hall
-				if (teleportWhere == TeleportWhereType.ClanHall)
+				if (teleportWhere == TeleportWhereType.CLAN_HALL)
 				{
 					clanhall = ClanHallManager.getInstance().getClanHallByOwner(player.getClan());
 					if (clanhall != null)
@@ -299,7 +299,7 @@ public class MapRegionTable
 				}
 				
 				// If teleport to castle
-				if (teleportWhere == TeleportWhereType.Castle)
+				if (teleportWhere == TeleportWhereType.CASTLE)
 				{
 					castle = CastleManager.getInstance().getCastleByOwner(player.getClan());
 					
@@ -316,7 +316,7 @@ public class MapRegionTable
 				}
 				
 				// If teleport to SiegeHQ
-				if (teleportWhere == TeleportWhereType.SiegeFlag)
+				if (teleportWhere == TeleportWhereType.SIEGE_FLAG)
 				{
 					castle = CastleManager.getInstance().getCastle(player);
 					

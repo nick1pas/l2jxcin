@@ -17,7 +17,8 @@ package net.sf.l2j.gameserver.model.vehicles;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.sf.l2j.gameserver.ThreadPoolManager;
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 import net.sf.l2j.gameserver.instancemanager.BoatManager;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.VehiclePathPoint;
@@ -124,46 +125,46 @@ public class BoatInnadrilTour implements Runnable
 				case 0:
 					BoatManager.getInstance().broadcastPacket(DOCK, DOCK, LEAVE_INNADRIL5);
 					_boat.broadcastPacket(INNADRIL_SOUND_LEAVE_5MIN);
-					ThreadPoolManager.getInstance().scheduleGeneral(this, 240000);
+					ThreadPool.schedule(this, 240000);
 					break;
 				case 1:
 					BoatManager.getInstance().broadcastPacket(DOCK, DOCK, LEAVE_INNADRIL1);
 					_boat.broadcastPacket(INNADRIL_SOUND_LEAVE_1MIN);
-					ThreadPoolManager.getInstance().scheduleGeneral(this, 40000);
+					ThreadPool.schedule(this, 40000);
 					break;
 				case 2:
 					BoatManager.getInstance().broadcastPacket(DOCK, DOCK, LEAVE_INNADRIL0);
 					_boat.broadcastPacket(INNADRIL_SOUND_LEAVE_1MIN);
-					ThreadPoolManager.getInstance().scheduleGeneral(this, 20000);
+					ThreadPool.schedule(this, 20000);
 					break;
 				case 3:
 					BoatManager.getInstance().broadcastPackets(DOCK, DOCK, LEAVING_INNADRIL, INNADRIL_SOUND);
 					_boat.payForRide(0, 1, OUST_LOC);
 					_boat.executePath(TOUR);
-					ThreadPoolManager.getInstance().scheduleGeneral(this, 650000);
+					ThreadPool.schedule(this, 650000);
 					break;
 				case 4:
 					BoatManager.getInstance().broadcastPacket(DOCK, DOCK, ARRIVAL20);
-					ThreadPoolManager.getInstance().scheduleGeneral(this, 300000);
+					ThreadPool.schedule(this, 300000);
 					break;
 				case 5:
 					BoatManager.getInstance().broadcastPacket(DOCK, DOCK, ARRIVAL15);
-					ThreadPoolManager.getInstance().scheduleGeneral(this, 300000);
+					ThreadPool.schedule(this, 300000);
 					break;
 				case 6:
 					BoatManager.getInstance().broadcastPacket(DOCK, DOCK, ARRIVAL10);
-					ThreadPoolManager.getInstance().scheduleGeneral(this, 300000);
+					ThreadPool.schedule(this, 300000);
 					break;
 				case 7:
 					BoatManager.getInstance().broadcastPacket(DOCK, DOCK, ARRIVAL5);
-					ThreadPoolManager.getInstance().scheduleGeneral(this, 240000);
+					ThreadPool.schedule(this, 240000);
 					break;
 				case 8:
 					BoatManager.getInstance().broadcastPacket(DOCK, DOCK, ARRIVAL1);
 					break;
 				case 9:
 					BoatManager.getInstance().broadcastPackets(DOCK, DOCK, ARRIVED_AT_INNADRIL, INNADRIL_SOUND);
-					ThreadPoolManager.getInstance().scheduleGeneral(this, 300000);
+					ThreadPool.schedule(this, 300000);
 					break;
 			}
 			_cycle++;

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Object;
@@ -69,11 +70,11 @@ public class EffectConfuseMob extends L2Effect
 		List<L2Character> targetList = new ArrayList<>();
 		
 		// Getting the possible targets
-		for (L2Object obj : getEffected().getKnownList().getKnownObjects())
+		for (L2Attackable obj : getEffected().getKnownType(L2Attackable.class))
 		{
 			// Only attackable NPCs are put in the list.
-			if (obj instanceof L2Attackable && !(obj instanceof L2ChestInstance) && obj != getEffected())
-				targetList.add((L2Character) obj);
+			if (!(obj instanceof L2ChestInstance))
+				targetList.add(obj);
 		}
 		
 		// if there is no target, exit function
@@ -81,8 +82,7 @@ public class EffectConfuseMob extends L2Effect
 			return true;
 		
 		// Choosing randomly a new target
-		int nextTargetIdx = Rnd.get(targetList.size());
-		L2Object target = targetList.get(nextTargetIdx);
+		L2Object target = Rnd.get(targetList);
 		
 		// Attacking the target
 		getEffected().setTarget(target);

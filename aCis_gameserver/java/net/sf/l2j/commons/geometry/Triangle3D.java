@@ -14,9 +14,13 @@
  */
 package net.sf.l2j.commons.geometry;
 
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.Location;
 
 /**
+ * Tri-sided polygon in 3D, while having bottom and top area flat (in Z coordinate).<br>
+ * It is <b>not</b> 3D oriented triangle.
  * @author Hasha
  */
 public class Triangle3D extends Triangle
@@ -24,6 +28,9 @@ public class Triangle3D extends Triangle
 	// min and max Z coorinates
 	private final int _minZ;
 	private final int _maxZ;
+	
+	// total length of all sides
+	private final double _length;
 	
 	/**
 	 * Triangle constructor.
@@ -37,20 +44,22 @@ public class Triangle3D extends Triangle
 		
 		_minZ = Math.min(A[2], Math.min(B[2], C[2]));
 		_maxZ = Math.max(A[2], Math.max(B[2], C[2]));
+		
+		final int CBx = _CAx - _BAx;
+		final int CBy = _CAy - _BAy;
+		_length = Math.sqrt(_BAx * _BAx + _BAy * _BAy) + Math.sqrt(_CAx * _CAx + _CAy * _CAy) + Math.sqrt(CBx * CBx + CBy * CBy);
 	}
 	
 	@Override
 	public double getArea()
 	{
-		// returns size
-		return Math.abs(_BAx * _CAy - _CAx * _BAy) / 2;
+		return _size * 2 + _length * (_maxZ - _minZ);
 	}
 	
 	@Override
 	public double getVolume()
 	{
-		// returns size
-		return Math.abs(_BAx * _CAy - _CAx * _BAy) / 2 * (_maxZ - _minZ);
+		return _size * (_maxZ - _minZ);
 	}
 	
 	@Override
@@ -59,23 +68,15 @@ public class Triangle3D extends Triangle
 		if (z < _minZ || z > _maxZ)
 			return false;
 		
-		// method parameters must be LONG, since whole calculations must be done in LONG...we are doing really big numbers
-		final long dx = x - _Ax;
-		final long dy = y - _Ay;
-		
-		final boolean a = (0 - dx) * (_BAy - 0) - (_BAx - 0) * (0 - dy) > 0;
-		final boolean b = (_BAx - dx) * (_CAy - _BAy) - (_CAx - _BAx) * (_BAy - dy) > 0;
-		final boolean c = (_CAx - dx) * (0 - _CAy) - (0 - _CAx) * (_CAy - dy) > 0;
-		
-		return a == b && b == c;
+		return super.isInside(x, y, z);
 	}
 	
 	@Override
 	public final Location getRandomLocation()
 	{
 		// get relative length of AB and AC vectors
-		double ba = Math.random();
-		double ca = Math.random();
+		double ba = Rnd.nextDouble();
+		double ca = Rnd.nextDouble();
 		
 		// adjust length if too long
 		if (ba + ca > 1)
@@ -89,6 +90,6 @@ public class Triangle3D extends Triangle
 		final int y = _Ay + (int) (ba * _BAy + ca * _CAy);
 		
 		// return
-		return new Location(x, y, (_minZ + _maxZ) / 2);
+		return new Location(x, y, Rnd.get(_minZ, _maxZ));
 	}
 }

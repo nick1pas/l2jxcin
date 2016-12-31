@@ -393,7 +393,7 @@ public class CharStat
 	 */
 	public int getPhysicalAttackRange()
 	{
-		return _activeChar.getTemplate().getBaseAtkRange();
+		return getActiveChar().getAttackType().getRange();
 	}
 	
 	/**

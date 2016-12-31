@@ -35,11 +35,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
+import net.sf.l2j.commons.concurrent.ThreadPool;
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.LoginServerThread;
-import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.NextAction;
@@ -56,7 +57,7 @@ import net.sf.l2j.gameserver.datatables.FishTable;
 import net.sf.l2j.gameserver.datatables.GmListTable;
 import net.sf.l2j.gameserver.datatables.HennaTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
-import net.sf.l2j.gameserver.datatables.MapRegionTable;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.RecipeTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
@@ -71,10 +72,10 @@ import net.sf.l2j.gameserver.instancemanager.CoupleManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
 import net.sf.l2j.gameserver.instancemanager.DuelManager;
-import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
 import net.sf.l2j.gameserver.instancemanager.SiegeManager;
+import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.BlockList;
 import net.sf.l2j.gameserver.model.FishData;
 import net.sf.l2j.gameserver.model.L2AccessLevel;
@@ -93,13 +94,13 @@ import net.sf.l2j.gameserver.model.L2ShortCut;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
 import net.sf.l2j.gameserver.model.L2SkillLearn;
-import net.sf.l2j.gameserver.model.L2World;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.MacroList;
 import net.sf.l2j.gameserver.model.PetDataEntry;
 import net.sf.l2j.gameserver.model.ShortCuts;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.SpawnLocation;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
@@ -107,7 +108,6 @@ import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.L2Summon;
 import net.sf.l2j.gameserver.model.actor.L2Vehicle;
 import net.sf.l2j.gameserver.model.actor.appearance.PcAppearance;
-import net.sf.l2j.gameserver.model.actor.knownlist.PcKnownList;
 import net.sf.l2j.gameserver.model.actor.stat.PcStat;
 import net.sf.l2j.gameserver.model.actor.status.PcStatus;
 import net.sf.l2j.gameserver.model.actor.template.PcTemplate;
@@ -141,6 +141,7 @@ import net.sf.l2j.gameserver.model.itemcontainer.PcWarehouse;
 import net.sf.l2j.gameserver.model.itemcontainer.PetInventory;
 import net.sf.l2j.gameserver.model.itemcontainer.listeners.ItemPassiveSkillsListener;
 import net.sf.l2j.gameserver.model.memo.PlayerMemo;
+import net.sf.l2j.gameserver.model.multisell.PreparedListContainer;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadGameManager;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadGameTask;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadManager;
@@ -158,6 +159,7 @@ import net.sf.l2j.gameserver.network.serverpackets.ChairSit;
 import net.sf.l2j.gameserver.network.serverpackets.ChangeWaitType;
 import net.sf.l2j.gameserver.network.serverpackets.CharInfo;
 import net.sf.l2j.gameserver.network.serverpackets.ConfirmDlg;
+import net.sf.l2j.gameserver.network.serverpackets.DeleteObject;
 import net.sf.l2j.gameserver.network.serverpackets.EtcStatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.ExAutoSoulShot;
 import net.sf.l2j.gameserver.network.serverpackets.ExDuelUpdateUserInfo;
@@ -198,11 +200,13 @@ import net.sf.l2j.gameserver.network.serverpackets.Ride;
 import net.sf.l2j.gameserver.network.serverpackets.SendTradeDone;
 import net.sf.l2j.gameserver.network.serverpackets.ServerClose;
 import net.sf.l2j.gameserver.network.serverpackets.SetupGauge;
+import net.sf.l2j.gameserver.network.serverpackets.SetupGauge.GaugeColor;
 import net.sf.l2j.gameserver.network.serverpackets.ShortBuffStatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.ShortCutInit;
 import net.sf.l2j.gameserver.network.serverpackets.SkillCoolTime;
 import net.sf.l2j.gameserver.network.serverpackets.SkillList;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
+import net.sf.l2j.gameserver.network.serverpackets.SpawnItem;
 import net.sf.l2j.gameserver.network.serverpackets.StaticObject;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.StopMove;
@@ -214,6 +218,7 @@ import net.sf.l2j.gameserver.network.serverpackets.TradePressOtherOk;
 import net.sf.l2j.gameserver.network.serverpackets.TradePressOwnOk;
 import net.sf.l2j.gameserver.network.serverpackets.TradeStart;
 import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
+import net.sf.l2j.gameserver.network.serverpackets.ValidateLocation;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
@@ -249,7 +254,7 @@ import net.sf.l2j.gameserver.util.Util;
  */
 public final class L2PcInstance extends L2Playable
 {
-	public enum PrivateStoreType
+	public enum StoreType
 	{
 		NONE(0),
 		SELL(1),
@@ -261,7 +266,7 @@ public final class L2PcInstance extends L2Playable
 		
 		private int _id;
 		
-		private PrivateStoreType(int id)
+		private StoreType(int id)
 		{
 			_id = id;
 		}
@@ -386,7 +391,6 @@ public final class L2PcInstance extends L2Playable
 	
 	private int _lastCompassZone; // the last compass zone update send to the client
 	
-	private boolean _isInWater;
 	private boolean _isIn7sDungeon;
 	
 	private PunishLevel _punishLevel = PunishLevel.NONE;
@@ -398,7 +402,6 @@ public final class L2PcInstance extends L2Playable
 	private int _olympiadGameId = -1;
 	private int _olympiadSide = -1;
 	
-	private boolean _isInDuel;
 	private DuelState _duelState = DuelState.NO_DUEL;
 	private int _duelId;
 	private SystemMessageId _noDuelReason = SystemMessageId.THERE_IS_NO_OPPONENT_TO_RECEIVE_YOUR_CHALLENGE_FOR_A_DUEL;
@@ -445,13 +448,15 @@ public final class L2PcInstance extends L2Playable
 	private PcFreight _freight;
 	private final List<PcFreight> _depositedFreight = new ArrayList<>();
 	
-	private PrivateStoreType _privateStoreType = PrivateStoreType.NONE;
+	private StoreType _storeType = StoreType.NONE;
 	
 	private TradeList _activeTradeList;
 	private ItemContainer _activeWarehouse;
 	private L2ManufactureList _createList;
 	private TradeList _sellList;
 	private TradeList _buyList;
+	
+	private PreparedListContainer _currentMultiSell;
 	
 	private boolean _isNoble;
 	private boolean _isHero;
@@ -582,10 +587,10 @@ public final class L2PcInstance extends L2Playable
 	private double _mpUpdateDecCheck = .0;
 	private double _mpUpdateInterval = .0;
 	
-	private volatile int _clientX;
-	private volatile int _clientY;
-	private volatile int _clientZ;
-	private volatile int _clientHeading;
+	private int _clientX;
+	private int _clientY;
+	private int _clientZ;
+	private int _clientHeading;
 	
 	private int _mailPosition;
 	
@@ -595,7 +600,6 @@ public final class L2PcInstance extends L2Playable
 	private ScheduledFuture<?> _shortBuffTask;
 	private int _shortBuffTaskSkillId;
 	
-	private boolean _isMarried;
 	private int _coupleId;
 	private boolean _isUnderMarryRequest;
 	private int _requesterId;
@@ -675,14 +679,58 @@ public final class L2PcInstance extends L2Playable
 		// Set the name of the L2PcInstance
 		player.setName(name);
 		
+		// Cache few informations into CharNameTable.
+		CharNameTable.getInstance().addPlayer(objectId, accountName, name, player.getAccessLevel().getLevel());
+		
 		// Set the base class ID to that of the actual class ID.
 		player.setBaseClass(player.getClassId());
 		
 		// Add the player in the characters table of the database
-		boolean ok = player.createDb();
-		
-		if (!ok)
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		{
+			PreparedStatement statement = con.prepareStatement(INSERT_CHARACTER);
+			statement.setString(1, accountName);
+			statement.setInt(2, player.getObjectId());
+			statement.setString(3, player.getName());
+			statement.setInt(4, player.getLevel());
+			statement.setInt(5, player.getMaxHp());
+			statement.setDouble(6, player.getCurrentHp());
+			statement.setInt(7, player.getMaxCp());
+			statement.setDouble(8, player.getCurrentCp());
+			statement.setInt(9, player.getMaxMp());
+			statement.setDouble(10, player.getCurrentMp());
+			statement.setInt(11, player.getAppearance().getFace());
+			statement.setInt(12, player.getAppearance().getHairStyle());
+			statement.setInt(13, player.getAppearance().getHairColor());
+			statement.setInt(14, player.getAppearance().getSex().ordinal());
+			statement.setLong(15, player.getExp());
+			statement.setInt(16, player.getSp());
+			statement.setInt(17, player.getKarma());
+			statement.setInt(18, player.getPvpKills());
+			statement.setInt(19, player.getPkKills());
+			statement.setInt(20, player.getClanId());
+			statement.setInt(21, player.getRace().ordinal());
+			statement.setInt(22, player.getClassId().getId());
+			statement.setLong(23, player.getDeleteTimer());
+			statement.setInt(24, player.hasDwarvenCraft() ? 1 : 0);
+			statement.setString(25, player.getTitle());
+			statement.setInt(26, player.getAccessLevel().getLevel());
+			statement.setInt(27, player.isOnlineInt());
+			statement.setInt(28, player.isIn7sDungeon() ? 1 : 0);
+			statement.setInt(29, player.getClanPrivileges());
+			statement.setInt(30, player.wantsPeace() ? 1 : 0);
+			statement.setInt(31, player.getBaseClass());
+			statement.setInt(32, player.isNoble() ? 1 : 0);
+			statement.setLong(33, 0);
+			statement.setLong(34, System.currentTimeMillis());
+			statement.executeUpdate();
+			statement.close();
+		}
+		catch (Exception e)
+		{
+			_log.severe("Could not insert char data: " + e);
 			return null;
+		}
 		
 		return player;
 	}
@@ -714,18 +762,6 @@ public final class L2PcInstance extends L2Playable
 		_mpUpdateInterval = getMaxMp() / 352.0;
 		_mpUpdateIncCheck = getMaxMp();
 		_mpUpdateDecCheck = getMaxMp() - _mpUpdateInterval;
-	}
-	
-	@Override
-	public void initKnownList()
-	{
-		setKnownList(new PcKnownList(this));
-	}
-	
-	@Override
-	public final PcKnownList getKnownList()
-	{
-		return (PcKnownList) super.getKnownList();
 	}
 	
 	@Override
@@ -826,7 +862,7 @@ public final class L2PcInstance extends L2Playable
 	
 	public boolean isInStoreMode()
 	{
-		return _privateStoreType != PrivateStoreType.NONE;
+		return _storeType != StoreType.NONE;
 	}
 	
 	public boolean isCrafting()
@@ -1004,7 +1040,7 @@ public final class L2PcInstance extends L2Playable
 		if (qs == null)
 			return;
 		
-		L2Object object = L2World.getInstance().getObject(getLastQuestNpcObject());
+		L2Object object = World.getInstance().getObject(getLastQuestNpcObject());
 		if (!(object instanceof L2Npc) || !isInsideRadius(object, L2Npc.INTERACTION_DISTANCE, false, false))
 			return;
 		
@@ -1215,7 +1251,12 @@ public final class L2PcInstance extends L2Playable
 		super.revalidateZone(force);
 		
 		if (Config.ALLOW_WATER)
-			checkWaterState();
+		{
+			if (isInsideZone(ZoneId.WATER))
+				WaterTaskManager.getInstance().add(this);
+			else
+				WaterTaskManager.getInstance().remove(this);
+		}
 		
 		if (isInsideZone(ZoneId.SIEGE))
 		{
@@ -2089,7 +2130,7 @@ public final class L2PcInstance extends L2Playable
 			// Schedule a sit down task to wait for the animation to finish
 			getAI().setIntention(CtrlIntention.REST);
 			
-			ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+			ThreadPool.schedule(new Runnable()
 			{
 				@Override
 				public void run()
@@ -2114,7 +2155,7 @@ public final class L2PcInstance extends L2Playable
 			broadcastPacket(new ChangeWaitType(this, ChangeWaitType.WT_STANDING));
 			
 			// Schedule a stand up task to wait for the animation to finish
-			ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+			ThreadPool.schedule(new Runnable()
 			{
 				@Override
 				public void run()
@@ -2136,7 +2177,7 @@ public final class L2PcInstance extends L2Playable
 		// Cancels any shop types.
 		if (isInStoreMode())
 		{
-			setPrivateStoreType(PrivateStoreType.NONE);
+			setStoreType(StoreType.NONE);
 			broadcastUserInfo();
 		}
 		
@@ -2199,7 +2240,7 @@ public final class L2PcInstance extends L2Playable
 			{
 				if (_throneId != 0)
 				{
-					final L2Object object = L2World.getInstance().getObject(_throneId);
+					final L2Object object = World.getInstance().getObject(_throneId);
 					if (object instanceof L2StaticObjectInstance)
 						((L2StaticObjectInstance) object).setBusy(false);
 					
@@ -2236,7 +2277,7 @@ public final class L2PcInstance extends L2Playable
 					{
 						if (_throneId != 0)
 						{
-							final L2Object object = L2World.getInstance().getObject(_throneId);
+							final L2Object object = World.getInstance().getObject(_throneId);
 							if (object instanceof L2StaticObjectInstance)
 								((L2StaticObjectInstance) object).setBusy(false);
 							
@@ -2843,7 +2884,8 @@ public final class L2PcInstance extends L2Playable
 	/**
 	 * Drop item from inventory by using its <B>objectID</B> and send InventoryUpdate packet to the L2PcInstance.
 	 * @param process String Identifier of process triggering this action
-	 * @param item ItemInstance to be dropped
+	 * @param objectId int Item Instance identifier of the item to be dropped
+	 * @param count int Quantity of items to be dropped
 	 * @param x int coordinate for drop X
 	 * @param y int coordinate for drop Y
 	 * @param z int coordinate for drop Z
@@ -2851,9 +2893,10 @@ public final class L2PcInstance extends L2Playable
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 * @return ItemInstance corresponding to the new item or the updated item in inventory
 	 */
-	public ItemInstance dropItem(String process, ItemInstance item, int x, int y, int z, L2Object reference, boolean sendMessage)
+	public ItemInstance dropItem(String process, int objectId, int count, int x, int y, int z, L2Object reference, boolean sendMessage)
 	{
-		item = _inventory.dropItem(process, item, this, reference);
+		ItemInstance invItem = _inventory.getItemByObjectId(objectId);
+		ItemInstance item = _inventory.dropItem(process, objectId, count, this, reference);
 		
 		if (item == null)
 		{
@@ -2867,7 +2910,7 @@ public final class L2PcInstance extends L2Playable
 		
 		// Send inventory update packet
 		InventoryUpdate playerIU = new InventoryUpdate();
-		playerIU.addItem(item);
+		playerIU.addItem(invItem);
 		sendPacket(playerIU);
 		
 		// Update current load as well
@@ -2884,7 +2927,7 @@ public final class L2PcInstance extends L2Playable
 	
 	public ItemInstance checkItemManipulation(int objectId, int count)
 	{
-		if (L2World.getInstance().getObject(objectId) == null)
+		if (World.getInstance().getObject(objectId) == null)
 			return null;
 		
 		final ItemInstance item = getInventory().getItemByObjectId(objectId);
@@ -2921,7 +2964,7 @@ public final class L2PcInstance extends L2Playable
 		if (protect)
 		{
 			if (_protectTask == null)
-				_protectTask = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+				_protectTask = ThreadPool.schedule(new Runnable()
 				{
 					@Override
 					public void run()
@@ -3084,23 +3127,6 @@ public final class L2PcInstance extends L2Playable
 		return true;
 	}
 	
-	/**
-	 * Manage actions when a player click on this L2PcInstance.<BR>
-	 * <BR>
-	 * <B><U> Actions on first click on the L2PcInstance (Select it)</U> :</B>
-	 * <ul>
-	 * <li>Set the target of the player</li>
-	 * <li>Send MyTargetSelected to the player (display the select window)</li>
-	 * </ul>
-	 * <B><U> Actions on second click on the L2PcInstance (Follow it/Attack it/Intercat with it)</U> :</B>
-	 * <ul>
-	 * <li>Send MyTargetSelected to the player (display the select window)</li>
-	 * <li>If this L2PcInstance has a Private Store, notify the player AI with INTERACT</li>
-	 * <li>If this L2PcInstance is autoAttackable, notify the player AI with ATTACK</li>
-	 * <li>If this L2PcInstance is NOT autoAttackable, notify the player AI with FOLLOW</li>
-	 * </ul>
-	 * @param player The player that start an action on this L2PcInstance
-	 */
 	@Override
 	public void onAction(L2PcInstance player)
 	{
@@ -3279,14 +3305,16 @@ public final class L2PcInstance extends L2Playable
 	
 	public final void broadcastCharInfo()
 	{
-		for (L2PcInstance player : getKnownList().getKnownType(L2PcInstance.class))
+		for (L2PcInstance player : getKnownType(L2PcInstance.class))
 		{
 			player.sendPacket(new CharInfo(this));
 			
 			final int relation = getRelation(player);
-			player.sendPacket(new RelationChanged(this, relation, isAutoAttackable(player)));
+			final boolean isAutoAttackable = isAutoAttackable(player);
+			
+			player.sendPacket(new RelationChanged(this, relation, isAutoAttackable));
 			if (getPet() != null)
-				player.sendPacket(new RelationChanged(getPet(), relation, isAutoAttackable(player)));
+				player.sendPacket(new RelationChanged(getPet(), relation, isAutoAttackable));
 		}
 	}
 	
@@ -3354,7 +3382,7 @@ public final class L2PcInstance extends L2Playable
 			L2PcInstance temp = (L2PcInstance) target;
 			sendPacket(new MoveToPawn(this, temp, L2Npc.INTERACTION_DISTANCE));
 			
-			switch (temp.getPrivateStoreType())
+			switch (temp.getStoreType())
 			{
 				case SELL:
 				case PACKAGE_SELL:
@@ -3527,7 +3555,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		
 		// Schedule a paralyzed task to wait for the animation to finish
-		ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		ThreadPool.schedule(new Runnable()
 		{
 			@Override
 			public void run()
@@ -3564,14 +3592,14 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (canOpenPrivateStore())
 		{
-			if (getPrivateStoreType() == PrivateStoreType.BUY || getPrivateStoreType() == PrivateStoreType.BUY_MANAGE)
-				setPrivateStoreType(PrivateStoreType.NONE);
+			if (getStoreType() == StoreType.BUY || getStoreType() == StoreType.BUY_MANAGE)
+				setStoreType(StoreType.NONE);
 			
-			if (getPrivateStoreType() == PrivateStoreType.NONE)
+			if (getStoreType() == StoreType.NONE)
 			{
 				standUp();
 				
-				setPrivateStoreType(PrivateStoreType.BUY_MANAGE);
+				setStoreType(StoreType.BUY_MANAGE);
 				sendPacket(new PrivateStoreManageListBuy(this));
 			}
 		}
@@ -3588,14 +3616,14 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (canOpenPrivateStore())
 		{
-			if (getPrivateStoreType() == PrivateStoreType.SELL || getPrivateStoreType() == PrivateStoreType.SELL_MANAGE || getPrivateStoreType() == PrivateStoreType.PACKAGE_SELL)
-				setPrivateStoreType(PrivateStoreType.NONE);
+			if (getStoreType() == StoreType.SELL || getStoreType() == StoreType.SELL_MANAGE || getStoreType() == StoreType.PACKAGE_SELL)
+				setStoreType(StoreType.NONE);
 			
-			if (getPrivateStoreType() == PrivateStoreType.NONE)
+			if (getStoreType() == StoreType.NONE)
 			{
 				standUp();
 				
-				setPrivateStoreType(PrivateStoreType.SELL_MANAGE);
+				setStoreType(StoreType.SELL_MANAGE);
 				sendPacket(new PrivateStoreManageListSell(this, isPackageSale));
 			}
 		}
@@ -3613,9 +3641,9 @@ public final class L2PcInstance extends L2Playable
 		if (canOpenPrivateStore())
 		{
 			if (isInStoreMode())
-				setPrivateStoreType(PrivateStoreType.NONE);
+				setStoreType(StoreType.NONE);
 			
-			if (getPrivateStoreType() == PrivateStoreType.NONE)
+			if (getStoreType() == StoreType.NONE)
 			{
 				standUp();
 				
@@ -3634,15 +3662,16 @@ public final class L2PcInstance extends L2Playable
 		}
 	}
 	
-	/**
-	 * Set a target.
-	 * <ul>
-	 * <li>Remove the L2PcInstance from the _statusListener of the old target if it was a L2Character</li>
-	 * <li>Add the L2PcInstance to the _statusListener of the new target if it's a L2Character</li>
-	 * <li>Target the new L2Object (add the target to the L2PcInstance _target, _knownObject and L2PcInstance to _KnownObject of the L2Object)</li>
-	 * </ul>
-	 * @param newTarget The L2Object to target
-	 */
+	public final PreparedListContainer getMultiSell()
+	{
+		return _currentMultiSell;
+	}
+	
+	public final void setMultiSell(PreparedListContainer list)
+	{
+		_currentMultiSell = list;
+	}
+	
 	@Override
 	public void setTarget(L2Object newTarget)
 	{
@@ -3684,7 +3713,7 @@ public final class L2PcInstance extends L2Playable
 		// Verify if it's a static object.
 		if (newTarget instanceof L2StaticObjectInstance)
 		{
-			sendPacket(new MyTargetSelected(newTarget.getObjectId(), getLevel()));
+			sendPacket(new MyTargetSelected(newTarget.getObjectId(), 0));
 			sendPacket(new StaticObject((L2StaticObjectInstance) newTarget));
 		}
 		// Add the L2PcInstance to the _statusListener of the new target if it's a L2Character
@@ -3692,22 +3721,20 @@ public final class L2PcInstance extends L2Playable
 		{
 			final L2Character target = (L2Character) newTarget;
 			
-			target.addStatusListener(this);
+			// Validate location of the new target.
+			if (newTarget.getObjectId() != getObjectId())
+				sendPacket(new ValidateLocation(target));
 			
 			// Show the client his new target.
-			if (target.isAutoAttackable(this))
-			{
-				// Show the client his new target.
-				sendPacket(new MyTargetSelected(target.getObjectId(), getLevel() - target.getLevel()));
-				
-				// Send max/current hp.
-				final StatusUpdate su = new StatusUpdate(target);
-				su.addAttribute(StatusUpdate.MAX_HP, target.getMaxHp());
-				su.addAttribute(StatusUpdate.CUR_HP, (int) target.getCurrentHp());
-				sendPacket(su);
-			}
-			else
-				sendPacket(new MyTargetSelected(target.getObjectId(), 0));
+			sendPacket(new MyTargetSelected(target.getObjectId(), (target.isAutoAttackable(this) || target instanceof L2Summon) ? getLevel() - target.getLevel() : 0));
+			
+			target.addStatusListener(this);
+			
+			// Send max/current hp.
+			final StatusUpdate su = new StatusUpdate(target);
+			su.addAttribute(StatusUpdate.MAX_HP, target.getMaxHp());
+			su.addAttribute(StatusUpdate.CUR_HP, (int) target.getCurrentHp());
+			sendPacket(su);
 			
 			Broadcast.toKnownPlayers(this, new TargetSelected(getObjectId(), newTarget.getObjectId(), getX(), getY(), getZ()));
 		}
@@ -3765,16 +3792,6 @@ public final class L2PcInstance extends L2Playable
 		return armor.getItemType() instanceof ArmorType && armor.getItemType() == type;
 	}
 	
-	public boolean isMarried()
-	{
-		return _isMarried;
-	}
-	
-	public void setMarried(boolean state)
-	{
-		_isMarried = state;
-	}
-	
 	public boolean isUnderMarryRequest()
 	{
 		return _isUnderMarryRequest;
@@ -3800,29 +3817,29 @@ public final class L2PcInstance extends L2Playable
 		_requesterId = requesterId;
 	}
 	
-	public void EngageAnswer(int answer)
+	public void engageAnswer(int answer)
 	{
 		if (!_isUnderMarryRequest || _requesterId == 0)
 			return;
 		
-		L2PcInstance ptarget = L2World.getInstance().getPlayer(_requesterId);
-		if (ptarget != null)
+		final L2PcInstance requester = World.getInstance().getPlayer(_requesterId);
+		if (requester != null)
 		{
 			if (answer == 1)
 			{
 				// Create the couple
-				CoupleManager.getInstance().createCouple(ptarget, this);
+				CoupleManager.getInstance().addCouple(requester, this);
 				
 				// Then "finish the job"
-				L2WeddingManagerInstance.justMarried(ptarget, this);
+				L2WeddingManagerInstance.justMarried(requester, this);
 			}
 			else
 			{
 				setUnderMarryRequest(false);
 				sendMessage("You declined your partner's marriage request.");
 				
-				ptarget.setUnderMarryRequest(false);
-				ptarget.sendMessage("Your partner declined your marriage request.");
+				requester.setUnderMarryRequest(false);
+				requester.sendMessage("Your partner declined your marriage request.");
 			}
 		}
 	}
@@ -3932,7 +3949,7 @@ public final class L2PcInstance extends L2Playable
 		if (_fusionSkill != null)
 			abortCast();
 		
-		for (L2Character character : getKnownList().getKnownType(L2Character.class))
+		for (L2Character character : getKnownType(L2Character.class))
 			if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == this)
 				character.abortCast();
 		
@@ -3942,7 +3959,7 @@ public final class L2PcInstance extends L2Playable
 		// calculate death penalty buff
 		calculateDeathPenaltyBuffLevel(killer);
 		
-		stopWaterTask();
+		WaterTaskManager.getInstance().remove(this);
 		
 		if (isPhoenixBlessed() || (isAffected(L2EffectFlag.CHARM_OF_COURAGE) && isInSiege()))
 			reviveRequest(this, null, false);
@@ -4235,7 +4252,7 @@ public final class L2PcInstance extends L2Playable
 	public void stopAllTimers()
 	{
 		stopHpMpRegeneration();
-		stopWaterTask();
+		WaterTaskManager.getInstance().remove(this);
 		stopFeed();
 		
 		_petTemplate = null;
@@ -4501,20 +4518,20 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	/**
-	 * Set the Private Store type of the L2PcInstance.
-	 * @param type The value : 0 = none, 1 = sell, 2 = sellmanage, 3 = buy, 4 = buymanage, 5 = manufacture.
+	 * Set the Store type of the L2PcInstance.
+	 * @param type : 0 = none, 1 = sell, 2 = sellmanage, 3 = buy, 4 = buymanage, 5 = manufacture.
 	 */
-	public void setPrivateStoreType(PrivateStoreType type)
+	public void setStoreType(StoreType type)
 	{
-		_privateStoreType = type;
+		_storeType = type;
 	}
 	
 	/**
-	 * @return The Private Store type of the L2PcInstance.
+	 * @return The Store type of the L2PcInstance.
 	 */
-	public PrivateStoreType getPrivateStoreType()
+	public StoreType getStoreType()
 	{
-		return _privateStoreType;
+		return _storeType;
 	}
 	
 	/**
@@ -4858,7 +4875,8 @@ public final class L2PcInstance extends L2Playable
 	
 	public boolean dismount()
 	{
-		sendPacket(new SetupGauge(3, 0, 0));
+		sendPacket(new SetupGauge(GaugeColor.GREEN, 0));
+		
 		int petId = _mountNpcId;
 		if (setMount(0, 0, 0))
 		{
@@ -4919,6 +4937,7 @@ public final class L2PcInstance extends L2Playable
 				stopFeed();
 				dismount();
 				sendPacket(SystemMessageId.OUT_OF_FEED_MOUNT_CANCELED);
+				return;
 			}
 			
 			ItemInstance food = getInventory().getItemByItemId(_petTemplate.getFood1());
@@ -4947,16 +4966,16 @@ public final class L2PcInstance extends L2Playable
 		{
 			setCurrentFeed(((L2PetInstance) getPet()).getCurrentFed());
 			_controlItemId = getPet().getControlItemId();
-			sendPacket(new SetupGauge(3, getCurrentFeed() * 10000 / getFeedConsume(), _petData.getMaxMeal() * 10000 / getFeedConsume()));
+			sendPacket(new SetupGauge(GaugeColor.GREEN, getCurrentFeed() * 10000 / getFeedConsume(), _petData.getMaxMeal() * 10000 / getFeedConsume()));
 			if (!isDead())
-				_mountFeedTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new FeedTask(), 10000, 10000);
+				_mountFeedTask = ThreadPool.scheduleAtFixedRate(new FeedTask(), 10000, 10000);
 		}
 		else if (_canFeed)
 		{
 			setCurrentFeed(_petData.getMaxMeal());
-			sendPacket(new SetupGauge(3, getCurrentFeed() * 10000 / getFeedConsume(), _petData.getMaxMeal() * 10000 / getFeedConsume()));
+			sendPacket(new SetupGauge(GaugeColor.GREEN, getCurrentFeed() * 10000 / getFeedConsume(), _petData.getMaxMeal() * 10000 / getFeedConsume()));
 			if (!isDead())
-				_mountFeedTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new FeedTask(), 10000, 10000);
+				_mountFeedTask = ThreadPool.scheduleAtFixedRate(new FeedTask(), 10000, 10000);
 		}
 	}
 	
@@ -4974,6 +4993,11 @@ public final class L2PcInstance extends L2Playable
 		return _petTemplate;
 	}
 	
+	public PetDataEntry getPetDataEntry()
+	{
+		return _petData;
+	}
+	
 	public int getCurrentFeed()
 	{
 		return _curFeed;
@@ -4981,20 +5005,21 @@ public final class L2PcInstance extends L2Playable
 	
 	protected int getFeedConsume()
 	{
-		return (isAttackingNow()) ? _petData.getMealInBattle() : _petData.getMealInNormal();
+		return (isAttackingNow()) ? _petData.getMountMealInBattle() : _petData.getMountMealInNormal();
 	}
 	
 	public void setCurrentFeed(int num)
 	{
-		_curFeed = (num > _petData.getMaxMeal()) ? _petData.getMaxMeal() : num;
-		sendPacket(new SetupGauge(3, getCurrentFeed() * 10000 / getFeedConsume(), _petData.getMaxMeal() * 10000 / getFeedConsume()));
+		_curFeed = Math.min(num, _petData.getMaxMeal());
+		
+		sendPacket(new SetupGauge(GaugeColor.GREEN, getCurrentFeed() * 10000 / getFeedConsume(), _petData.getMaxMeal() * 10000 / getFeedConsume()));
 	}
 	
 	/**
 	 * @param state : The state to check (can be autofeed, hungry or unsummon).
 	 * @return true if the limit is reached, false otherwise or if there is no need to feed.
 	 */
-	protected boolean checkFoodState(double state)
+	public boolean checkFoodState(double state)
 	{
 		return (_canFeed) ? getCurrentFeed() < (_petData.getMaxMeal() * state) : false;
 	}
@@ -5133,7 +5158,7 @@ public final class L2PcInstance extends L2Playable
 		getAppearance().setTitleColor(_accessLevel.getTitleColor());
 		broadcastUserInfo();
 		
-		CharNameTable.getInstance().addName(this);
+		CharNameTable.getInstance().updatePlayerData(this, true);
 	}
 	
 	public void setAccountAccesslevel(int level)
@@ -5226,64 +5251,9 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	/**
-	 * Create a new player in the characters table of the database.
-	 * @return true if successful.
-	 */
-	private boolean createDb()
-	{
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
-		{
-			PreparedStatement statement = con.prepareStatement(INSERT_CHARACTER);
-			statement.setString(1, _accountName);
-			statement.setInt(2, getObjectId());
-			statement.setString(3, getName());
-			statement.setInt(4, getLevel());
-			statement.setInt(5, getMaxHp());
-			statement.setDouble(6, getCurrentHp());
-			statement.setInt(7, getMaxCp());
-			statement.setDouble(8, getCurrentCp());
-			statement.setInt(9, getMaxMp());
-			statement.setDouble(10, getCurrentMp());
-			statement.setInt(11, getAppearance().getFace());
-			statement.setInt(12, getAppearance().getHairStyle());
-			statement.setInt(13, getAppearance().getHairColor());
-			statement.setInt(14, getAppearance().getSex().ordinal());
-			statement.setLong(15, getExp());
-			statement.setInt(16, getSp());
-			statement.setInt(17, getKarma());
-			statement.setInt(18, getPvpKills());
-			statement.setInt(19, getPkKills());
-			statement.setInt(20, getClanId());
-			statement.setInt(21, getRace().ordinal());
-			statement.setInt(22, getClassId().getId());
-			statement.setLong(23, getDeleteTimer());
-			statement.setInt(24, hasDwarvenCraft() ? 1 : 0);
-			statement.setString(25, getTitle());
-			statement.setInt(26, getAccessLevel().getLevel());
-			statement.setInt(27, isOnlineInt());
-			statement.setInt(28, isIn7sDungeon() ? 1 : 0);
-			statement.setInt(29, getClanPrivileges());
-			statement.setInt(30, wantsPeace() ? 1 : 0);
-			statement.setInt(31, getBaseClass());
-			statement.setInt(32, isNoble() ? 1 : 0);
-			statement.setLong(33, 0);
-			statement.setLong(34, System.currentTimeMillis());
-			statement.executeUpdate();
-			statement.close();
-		}
-		catch (Exception e)
-		{
-			_log.severe("Could not insert char data: " + e);
-			return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * Retrieve a L2PcInstance from the characters table of the database and add it in _allObjects of the L2world.
+	 * Retrieve a L2PcInstance from the characters table of the database.
 	 * <ul>
 	 * <li>Retrieve the L2PcInstance from the characters table of the database</li>
-	 * <li>Add the L2PcInstance object in _allObjects</li>
 	 * <li>Set the x,y,z position of the L2PcInstance and make it invisible</li>
 	 * <li>Update the overloaded status of the L2PcInstance</li>
 	 * </ul>
@@ -5416,7 +5386,7 @@ public final class L2PcInstance extends L2Playable
 				player.setDeathPenaltyBuffLevel(rset.getInt("death_penalty_level"));
 				
 				// Set the x,y,z position of the L2PcInstance and make it invisible
-				player.setXYZInvisible(rset.getInt("x"), rset.getInt("y"), rset.getInt("z"));
+				player.getPosition().set(rset.getInt("x"), rset.getInt("y"), rset.getInt("z"));
 				
 				// Set Hero status if it applies
 				if (Hero.getInstance().isActiveHero(objectId))
@@ -5448,7 +5418,7 @@ public final class L2PcInstance extends L2Playable
 				}
 				
 				// Restore pet if exists in the world
-				player.setPet(L2World.getInstance().getPet(player.getObjectId()));
+				player.setPet(World.getInstance().getPet(player.getObjectId()));
 				if (player.getPet() != null)
 					player.getPet().setOwner(player);
 				
@@ -6777,13 +6747,6 @@ public final class L2PcInstance extends L2Playable
 		if (skill.isSiegeSummonSkill() && (!SiegeManager.checkIfOkToSummon(this) || !SevenSigns.getInstance().checkSummonConditions(this)))
 			return false;
 		
-		// Check if this skill is enabled (ex : reuse time)
-		if (isSkillDisabled(skill))
-		{
-			sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_PREPARED_FOR_REUSE).addSkillName(skill));
-			return false;
-		}
-		
 		// ************************************* Check casting conditions *******************************************
 		
 		// Check if all casting conditions are completed
@@ -7081,7 +7044,7 @@ public final class L2PcInstance extends L2Playable
 		if (objectId == getObjectId())
 			return true;
 		
-		final L2PcInstance looter = L2World.getInstance().getPlayer(objectId);
+		final L2PcInstance looter = World.getInstance().getPlayer(objectId);
 		if (looter == null)
 			return false;
 		
@@ -7346,7 +7309,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		_inventoryDisable = true;
 		
-		ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		ThreadPool.schedule(new Runnable()
 		{
 			@Override
 			public void run()
@@ -7657,7 +7620,6 @@ public final class L2PcInstance extends L2Playable
 		getAppearance().setInvisible();
 		
 		sendPacket(new ObservationMode(x, y, z));
-		getKnownList().removeAllKnownObjects(); // reinit knownlist
 		setXYZ(x, y, z);
 		
 		broadcastUserInfo();
@@ -7693,7 +7655,6 @@ public final class L2PcInstance extends L2Playable
 	public void leaveObserverMode()
 	{
 		setTarget(null);
-		getKnownList().removeAllKnownObjects(); // reinit knownlist
 		setXYZ(_savedLocation.getX(), _savedLocation.getY(), _savedLocation.getZ());
 		setIsParalyzed(false);
 		stopParalyze(false);
@@ -7873,7 +7834,7 @@ public final class L2PcInstance extends L2Playable
 	
 	public boolean isInDuel()
 	{
-		return _isInDuel;
+		return _duelId > 0;
 	}
 	
 	public int getDuelId()
@@ -7899,8 +7860,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (duelId > 0)
 		{
-			_isInDuel = true;
-			_duelState = DuelState.DUELLING;
+			_duelState = DuelState.ON_COUNTDOWN;
 			_duelId = duelId;
 		}
 		else
@@ -7910,7 +7870,6 @@ public final class L2PcInstance extends L2Playable
 				enableAllSkills();
 				getStatus().startHpMpRegeneration();
 			}
-			_isInDuel = false;
 			_duelState = DuelState.NO_DUEL;
 			_duelId = 0;
 		}
@@ -8309,7 +8268,7 @@ public final class L2PcInstance extends L2Playable
 			abortCast();
 			
 			// Stop casting for any player that may be casting a force buff on this l2pcinstance.
-			for (L2Character character : getKnownList().getKnownType(L2Character.class))
+			for (L2Character character : getKnownType(L2Character.class))
 				if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == this)
 					character.abortCast();
 			
@@ -8392,6 +8351,14 @@ public final class L2PcInstance extends L2Playable
 			// Clear resurrect xp calculation
 			setExpBeforeDeath(0);
 			
+			// Remove shot automation
+			disableAutoShotsAll();
+			
+			// Discharge any active shots
+			ItemInstance item = getActiveWeaponInstance();
+			if (item != null)
+				item.unChargeAllShots();
+			
 			_shortCuts.restore();
 			sendPacket(new ShortCutInit(this));
 			
@@ -8410,36 +8377,6 @@ public final class L2PcInstance extends L2Playable
 		return _subclassLock.isLocked();
 	}
 	
-	public void stopWaterTask()
-	{
-		if (_isInWater)
-		{
-			_isInWater = false;
-			sendPacket(new SetupGauge(2, 0));
-			WaterTaskManager.getInstance().remove(this);
-		}
-	}
-	
-	public void startWaterTask()
-	{
-		if (!isDead() && !_isInWater)
-		{
-			_isInWater = true;
-			final int time = (int) calcStat(Stats.BREATH, 60000 * getRace().getBreathMultiplier(), this, null);
-			
-			sendPacket(new SetupGauge(2, time));
-			WaterTaskManager.getInstance().add(this, time);
-		}
-	}
-	
-	public void checkWaterState()
-	{
-		if (isInsideZone(ZoneId.WATER))
-			startWaterTask();
-		else
-			stopWaterTask();
-	}
-	
 	public void onPlayerEnter()
 	{
 		if (isCursedWeaponEquipped())
@@ -8455,13 +8392,13 @@ public final class L2PcInstance extends L2Playable
 			{
 				if (SevenSigns.getInstance().getPlayerCabal(getObjectId()) != SevenSigns.getInstance().getCabalHighestScore())
 				{
-					teleToLocation(MapRegionTable.TeleportWhereType.Town);
+					teleToLocation(TeleportWhereType.TOWN);
 					setIsIn7sDungeon(false);
 				}
 			}
 			else if (SevenSigns.getInstance().getPlayerCabal(getObjectId()) == SevenSigns.CABAL_NULL)
 			{
-				teleToLocation(MapRegionTable.TeleportWhereType.Town);
+				teleToLocation(TeleportWhereType.TOWN);
 				setIsIn7sDungeon(false);
 			}
 		}
@@ -8570,7 +8507,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		
 		// Schedule a paralyzed task to wait for the animation to finish
-		ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		ThreadPool.schedule(new Runnable()
 		{
 			@Override
 			public void run()
@@ -8798,30 +8735,31 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	/**
-	 * Test multiple cases where the item shouldn't be able to manipulate.
+	 * Test cases (player drop, trade item) where the item shouldn't be able to manipulate.
 	 * @param objectId : The item objectId.
 	 * @return true if it the item can be manipulated, false ovtherwise.
 	 */
-	public boolean validateItemManipulation(int objectId)
+	public ItemInstance validateItemManipulation(int objectId)
 	{
 		final ItemInstance item = getInventory().getItemByObjectId(objectId);
 		
 		// You don't own the item, or item is null.
 		if (item == null || item.getOwnerId() != getObjectId())
-			return false;
+			return null;
 		
 		// Pet whom item you try to manipulate is summoned/mounted.
 		if (getPet() != null && getPet().getControlItemId() == objectId || _mountObjectId == objectId)
-			return false;
+			return null;
 		
+		// Item is under enchant process.
 		if (getActiveEnchantItem() != null && getActiveEnchantItem().getObjectId() == objectId)
-			return false;
+			return null;
 		
 		// Can't trade a cursed weapon.
 		if (CursedWeaponsManager.getInstance().isCursed(item.getItemId()))
-			return false;
+			return null;
 		
-		return true;
+		return item;
 	}
 	
 	public synchronized void clearBypass()
@@ -8921,7 +8859,7 @@ public final class L2PcInstance extends L2Playable
 			stopAllTimers();
 			
 			// Cancel the cast of eventual fusion skill users on this target.
-			for (L2Character character : getKnownList().getKnownType(L2Character.class))
+			for (L2Character character : getKnownType(L2Character.class))
 				if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == this)
 					character.abortCast();
 			
@@ -8977,10 +8915,9 @@ public final class L2PcInstance extends L2Playable
 			if (isGM())
 				GmListTable.getInstance().deleteGm(this);
 			
-			// Check if the L2PcInstance is in observer mode to set its position to its position
-			// before entering in observer mode
+			// Check if the L2PcInstance is in observer mode to set its position to its position before entering in observer mode
 			if (inObserverMode())
-				setXYZInvisible(_savedLocation.getX(), _savedLocation.getY(), _savedLocation.getZ());
+				setXYZInvisible(_savedLocation);
 			
 			// Oust player from boat
 			if (getVehicle() != null)
@@ -8999,20 +8936,17 @@ public final class L2PcInstance extends L2Playable
 			if (isCursedWeaponEquipped())
 				CursedWeaponsManager.getInstance().getCursedWeapon(_cursedWeaponEquippedId).setPlayer(null);
 			
-			// Remove all L2Object from _knownObjects and _knownPlayer of the L2Character then cancel Attak or Cast and notify AI
-			getKnownList().removeAllKnownObjects();
-			
 			if (getClanId() > 0)
 				getClan().broadcastToOtherOnlineMembers(new PledgeShowMemberListUpdate(this), this);
 			
 			if (isSeated())
 			{
-				final L2Object object = L2World.getInstance().getObject(_throneId);
+				final L2Object object = World.getInstance().getObject(_throneId);
 				if (object instanceof L2StaticObjectInstance)
 					((L2StaticObjectInstance) object).setBusy(false);
 			}
 			
-			L2World.getInstance().removePlayer(this); // force remove in case of crash during teleport
+			World.getInstance().removePlayer(this); // force remove in case of crash during teleport
 			
 			// friends & blocklist update
 			notifyFriends(false);
@@ -9077,7 +9011,7 @@ public final class L2PcInstance extends L2Playable
 				else if (lureid == 6521 || lureid == 6524 || lureid == 6527 || lureid == 8507 || lureid == 8510 || lureid == 8513) // high grade
 					checkDelay = Math.round((float) (_fish.getGutsCheckTime() * (0.66)));
 			}
-			_fishingTask = ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(new LookingForFishTask(_fish.getWaitTime(), _fish.getFishGuts(), _fish.getType(_lure.isNightLure()), isNoob, isUpperGrade), 10000, checkDelay);
+			_fishingTask = ThreadPool.scheduleAtFixedRate(new LookingForFishTask(_fish.getWaitTime(), _fish.getFishGuts(), _fish.getType(_lure.isNightLure()), isNoob, isUpperGrade), 10000, checkDelay);
 		}
 	}
 	
@@ -9566,7 +9500,7 @@ public final class L2PcInstance extends L2Playable
 					_punishTimer = delayInMilliseconds;
 					
 					// start the countdown
-					_punishTask = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+					_punishTask = ThreadPool.schedule(new Runnable()
 					{
 						@Override
 						public void run()
@@ -9597,7 +9531,7 @@ public final class L2PcInstance extends L2Playable
 					_punishTimer = delayInMilliseconds;
 					
 					// start the countdown
-					_punishTask = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+					_punishTask = ThreadPool.schedule(new Runnable()
 					{
 						@Override
 						public void run()
@@ -9660,7 +9594,7 @@ public final class L2PcInstance extends L2Playable
 			// If punish timer exists, restart punishtask.
 			if (_punishTimer > 0)
 			{
-				_punishTask = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+				_punishTask = ThreadPool.schedule(new Runnable()
 				{
 					@Override
 					public void run()
@@ -9728,7 +9662,7 @@ public final class L2PcInstance extends L2Playable
 			_shortBuffTask = null;
 		}
 		
-		_shortBuffTask = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		_shortBuffTask = ThreadPool.schedule(new Runnable()
 		{
 			@Override
 			public void run()
@@ -9972,7 +9906,7 @@ public final class L2PcInstance extends L2Playable
 	
 	public void enteredNoLanding(int delay)
 	{
-		_dismountTask = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		_dismountTask = ThreadPool.schedule(new Runnable()
 		{
 			@Override
 			public void run()
@@ -10006,15 +9940,8 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void removeFromBossZone()
 	{
-		try
-		{
-			for (L2BossZone _zone : GrandBossManager.getInstance().getZones())
-				_zone.removePlayer(this);
-		}
-		catch (Exception e)
-		{
-			_log.log(Level.WARNING, "Exception on removeFromBossZone(): " + e.getMessage(), e);
-		}
+		for (L2BossZone _zone : ZoneManager.getInstance().getAllZones(L2BossZone.class))
+			_zone.removePlayer(this);
 	}
 	
 	/**
@@ -10077,7 +10004,7 @@ public final class L2PcInstance extends L2Playable
 			_chargeTask = null;
 		}
 		
-		_chargeTask = ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		_chargeTask = ThreadPool.schedule(new Runnable()
 		{
 			@Override
 			public void run()
@@ -10396,7 +10323,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		for (int id : _friendList)
 		{
-			L2PcInstance friend = L2World.getInstance().getPlayer(id);
+			L2PcInstance friend = World.getInstance().getPlayer(id);
 			if (friend != null)
 			{
 				friend.sendPacket(new FriendList(friend));
@@ -10427,11 +10354,14 @@ public final class L2PcInstance extends L2Playable
 	@Override
 	public void broadcastRelationsChanges()
 	{
-		for (L2PcInstance player : getKnownList().getKnownType(L2PcInstance.class))
+		for (L2PcInstance player : getKnownType(L2PcInstance.class))
 		{
-			player.sendPacket(new RelationChanged(this, getRelation(player), isAutoAttackable(player)));
+			final int relation = getRelation(player);
+			final boolean isAutoAttackable = isAutoAttackable(player);
+			
+			player.sendPacket(new RelationChanged(this, relation, isAutoAttackable));
 			if (getPet() != null)
-				player.sendPacket(new RelationChanged(getPet(), getRelation(player), isAutoAttackable(player)));
+				player.sendPacket(new RelationChanged(getPet(), relation, isAutoAttackable));
 		}
 	}
 	
@@ -10449,26 +10379,30 @@ public final class L2PcInstance extends L2Playable
 			
 			if (isSeated())
 			{
-				final L2Object object = L2World.getInstance().getObject(_throneId);
+				final L2Object object = World.getInstance().getObject(_throneId);
 				if (object instanceof L2StaticObjectInstance)
 					activeChar.sendPacket(new ChairSit(getObjectId(), ((L2StaticObjectInstance) object).getStaticObjectId()));
 			}
 		}
 		
-		final int relation1 = getRelation(activeChar);
-		activeChar.sendPacket(new RelationChanged(this, relation1, isAutoAttackable(activeChar)));
-		if (getPet() != null)
-			activeChar.sendPacket(new RelationChanged(getPet(), relation1, isAutoAttackable(activeChar)));
+		int relation = getRelation(activeChar);
+		boolean isAutoAttackable = isAutoAttackable(activeChar);
 		
-		final int relation2 = activeChar.getRelation(this);
-		sendPacket(new RelationChanged(activeChar, relation2, activeChar.isAutoAttackable(this)));
+		activeChar.sendPacket(new RelationChanged(this, relation, isAutoAttackable));
+		if (getPet() != null)
+			activeChar.sendPacket(new RelationChanged(getPet(), relation, isAutoAttackable));
+		
+		relation = activeChar.getRelation(this);
+		isAutoAttackable = activeChar.isAutoAttackable(this);
+		
+		sendPacket(new RelationChanged(activeChar, relation, isAutoAttackable));
 		if (activeChar.getPet() != null)
-			sendPacket(new RelationChanged(activeChar.getPet(), relation2, activeChar.isAutoAttackable(this)));
+			sendPacket(new RelationChanged(activeChar.getPet(), relation, isAutoAttackable));
 		
 		if (isInBoat())
 			activeChar.sendPacket(new GetOnVehicle(getObjectId(), getBoat().getObjectId(), getVehiclePosition()));
 		
-		switch (getPrivateStoreType())
+		switch (getStoreType())
 		{
 			case SELL:
 			case PACKAGE_SELL:
@@ -10559,9 +10493,47 @@ public final class L2PcInstance extends L2Playable
 	}
 	
 	@Override
-	protected void badCoords()
+	public void addKnownObject(L2Object object)
 	{
-		teleToLocation(0, 0, 0, 0);
-		sendMessage("Error with your coords, Please ask a GM for help!");
+		sendInfoFrom(object);
+	}
+	
+	@Override
+	public void removeKnownObject(L2Object object)
+	{
+		super.removeKnownObject(object);
+		
+		// send Server-Client Packet DeleteObject to the L2PcInstance
+		sendPacket(new DeleteObject(object, (object instanceof L2PcInstance) && ((L2PcInstance) object).isSeated()));
+	}
+	
+	public final void refreshInfos()
+	{
+		for (L2Object object : getKnownType(L2Object.class))
+		{
+			if (object instanceof L2PcInstance && ((L2PcInstance) object).inObserverMode())
+				continue;
+			
+			sendInfoFrom(object);
+		}
+	}
+	
+	private final void sendInfoFrom(L2Object object)
+	{
+		if (object.getPolyType() == PolyType.ITEM)
+			sendPacket(new SpawnItem(object));
+		else
+		{
+			// send object info to player
+			object.sendInfo(this);
+			
+			if (object instanceof L2Character)
+			{
+				// Update the state of the L2Character object client side by sending Server->Client packet MoveToPawn/MoveToLocation and AutoAttackStart to the L2PcInstance
+				L2Character obj = (L2Character) object;
+				if (obj.hasAI())
+					obj.getAI().describeStateToPlayer(this);
+			}
+		}
 	}
 }

@@ -15,12 +15,13 @@
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import net.sf.l2j.gameserver.datatables.ArmorSetsTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.item.ArmorSet;
 import net.sf.l2j.gameserver.model.item.kind.Item;
@@ -63,7 +64,7 @@ public class AdminCreateItem implements IAdminCommandHandler
 				final int id = Integer.parseInt(st.nextToken());
 				final int count = (st.hasMoreTokens()) ? Integer.parseInt(st.nextToken()) : 1;
 				
-				final Collection<L2PcInstance> players = L2World.getInstance().getPlayers();
+				final Collection<L2PcInstance> players = World.getInstance().getPlayers();
 				for (L2PcInstance player : players)
 					createItem(activeChar, player, id, count, 0, false);
 				
@@ -176,23 +177,15 @@ public class AdminCreateItem implements IAdminCommandHandler
 		
 		if (radius > 0)
 		{
-			int counter = 0;
-			
-			for (L2PcInstance obj : activeChar.getKnownList().getKnownTypeInRadius(L2PcInstance.class, radius))
+			final List<L2PcInstance> players = activeChar.getKnownTypeInRadius(L2PcInstance.class, radius);
+			for (L2PcInstance obj : players)
 			{
-				if (!(obj.equals(activeChar)))
-				{
-					obj.getInventory().addItem("Admin", id, num, obj, activeChar);
-					obj.sendMessage("A GM spawned " + num + " " + template.getName() + " in your inventory.");
-					counter++;
-					
-					// Send whole item list and open inventory window
-					obj.sendPacket(new ItemList(obj, true));
-				}
+				obj.addItem("Admin", id, num, activeChar, false);
+				obj.sendMessage("A GM spawned " + num + " " + template.getName() + " in your inventory.");
 			}
 			
 			if (sendGmMessage)
-				activeChar.sendMessage(counter + " players rewarded with " + num + " " + template.getName() + " in a " + radius + " radius.");
+				activeChar.sendMessage(players.size() + " players rewarded with " + num + " " + template.getName() + " in a " + radius + " radius.");
 		}
 		else
 		{

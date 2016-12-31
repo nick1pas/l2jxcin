@@ -23,7 +23,9 @@ import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2StaticObjectInstance;
+import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
+import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
 public class L2PlayerAI extends L2PlayableAI
 {
@@ -184,6 +186,7 @@ public class L2PlayerAI extends L2PlayableAI
 	@Override
 	protected void clientNotifyDead()
 	{
+		_clientMovingToPawnOffset = 0;
 		_clientMoving = false;
 		
 		super.clientNotifyDead();
@@ -191,19 +194,27 @@ public class L2PlayerAI extends L2PlayableAI
 	
 	private void thinkAttack()
 	{
-		L2Character target = (L2Character) getTarget();
+		final L2Character target = (L2Character) getTarget();
 		if (target == null)
-			return;
-		
-		if (checkTargetLostOrDead(target))
 		{
-			// Notify the target
 			setTarget(null);
+			setIntention(CtrlIntention.ACTIVE);
 			return;
 		}
 		
 		if (maybeMoveToPawn(target, _actor.getPhysicalAttackRange()))
 			return;
+		
+		if (target.isAlikeDead())
+		{
+			if (target instanceof L2PcInstance && ((L2PcInstance) target).isFakeDeath())
+				target.stopFakeDeath(true);
+			else
+			{
+				setIntention(CtrlIntention.ACTIVE);
+				return;
+			}
+		}
 		
 		clientStopMoving(null);
 		_actor.doAttack(target);
@@ -238,23 +249,15 @@ public class L2PlayerAI extends L2PlayableAI
 				_actor.setIsCastingNow(false);
 				return;
 			}
+			
+			if (_actor.isSkillDisabled(_skill))
+				_actor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_PREPARED_FOR_REUSE).addSkillName(_skill));
 		}
 		
-		if (!_skill.isToggle())
+		if (_skill.getHitTime() > 50 && !_skill.isSimultaneousCast())
 			clientStopMoving(null);
 		
-		L2Object oldTarget = _actor.getTarget();
-		if (oldTarget != null && target != null && oldTarget != target)
-		{
-			// Replace the current target by the cast target
-			_actor.setTarget(getTarget());
-			// Launch the Cast of the skill
-			_actor.doCast(_skill);
-			// Restore the initial target
-			_actor.setTarget(oldTarget);
-		}
-		else
-			_actor.doCast(_skill);
+		_actor.doCast(_skill);
 	}
 	
 	private void thinkPickUp()

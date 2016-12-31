@@ -22,9 +22,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 
-import net.sf.l2j.Config;
+import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.ThreadPoolManager;
+
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.model.L2AttackableAI;
@@ -45,17 +46,16 @@ import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
-import net.sf.l2j.gameserver.model.L2World;
-import net.sf.l2j.gameserver.model.L2WorldRegion;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.SpawnLocation;
+import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldRegion;
 import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2NpcWalkerInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2RiftInvaderInstance;
-import net.sf.l2j.gameserver.model.actor.knownlist.CharKnownList;
 import net.sf.l2j.gameserver.model.actor.stat.CharStat;
 import net.sf.l2j.gameserver.model.actor.status.CharStatus;
 import net.sf.l2j.gameserver.model.actor.template.CharTemplate;
@@ -83,6 +83,7 @@ import net.sf.l2j.gameserver.network.serverpackets.MoveToLocation;
 import net.sf.l2j.gameserver.network.serverpackets.Revive;
 import net.sf.l2j.gameserver.network.serverpackets.ServerObjectInfo;
 import net.sf.l2j.gameserver.network.serverpackets.SetupGauge;
+import net.sf.l2j.gameserver.network.serverpackets.SetupGauge.GaugeColor;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.StopMove;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -149,7 +150,6 @@ public abstract class L2Character extends L2Object
 	private CharStat _stat;
 	private CharStatus _status;
 	private CharTemplate _template; // The link on the L2CharTemplate object containing generic and static properties
-	private CharKnownList _knownList;
 	
 	private String _title;
 	private double _hpUpdateIncCheck = .0;
@@ -195,7 +195,6 @@ public abstract class L2Character extends L2Object
 	public L2Character(int objectId, CharTemplate template)
 	{
 		super(objectId);
-		initKnownList();
 		initCharStat();
 		initCharStatus();
 		
@@ -245,9 +244,8 @@ public abstract class L2Character extends L2Object
 	/**
 	 * Remove the L2Character from the world when the decay task is launched.<BR>
 	 * <BR>
-	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T REMOVE the object from _allObjects of L2World </B></FONT><BR>
-	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T SEND Server->Client packets to players</B></FONT><BR>
-	 * <BR>
+	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T REMOVE the object from _objects of World.</B></FONT><BR>
+	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T SEND Server->Client packets to players.</B></FONT>
 	 */
 	public void onDecay()
 	{
@@ -528,7 +526,7 @@ public abstract class L2Character extends L2Object
 		
 		if (!isAlikeDead())
 		{
-			if (this instanceof L2Npc && target.isAlikeDead() || !getKnownList().knowsObject(target))
+			if (this instanceof L2Npc && target.isAlikeDead() || !getKnownType(L2Character.class).contains(target))
 			{
 				getAI().setIntention(CtrlIntention.ACTIVE);
 				sendPacket(ActionFailed.STATIC_PACKET);
@@ -605,7 +603,7 @@ public abstract class L2Character extends L2Object
 				if (timeToNextBowAttack > 0)
 				{
 					// Cancel the action because the bow can't be re-use at this moment
-					ThreadPoolManager.getInstance().scheduleAi(new NotifyAITask(CtrlEvent.EVT_READY_TO_ACT), timeToNextBowAttack);
+					ThreadPool.schedule(new NotifyAITask(CtrlEvent.EVT_READY_TO_ACT), timeToNextBowAttack);
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return;
 				}
@@ -615,7 +613,7 @@ public abstract class L2Character extends L2Object
 				if (getCurrentMp() < mpConsume)
 				{
 					// If L2PcInstance doesn't have enough MP, stop the attack
-					ThreadPoolManager.getInstance().scheduleAi(new NotifyAITask(CtrlEvent.EVT_READY_TO_ACT), 100);
+					ThreadPool.schedule(new NotifyAITask(CtrlEvent.EVT_READY_TO_ACT), 100);
 					sendPacket(SystemMessage.getSystemMessage(SystemMessageId.NOT_ENOUGH_MP));
 					sendPacket(ActionFailed.STATIC_PACKET);
 					return;
@@ -631,9 +629,6 @@ public abstract class L2Character extends L2Object
 					return;
 			}
 		}
-		
-		// Add the L2PcInstance to _knownObjects and _knownPlayer of the target
-		target.getKnownList().addKnownObject(this);
 		
 		// Recharge any active auto soulshot tasks for current L2Character instance.
 		rechargeShots(true, false);
@@ -741,7 +736,7 @@ public abstract class L2Character extends L2Object
 			broadcastPacket(attack);
 		
 		// Notify AI with EVT_READY_TO_ACT
-		ThreadPoolManager.getInstance().scheduleAi(new NotifyAITask(CtrlEvent.EVT_READY_TO_ACT), timeAtk);
+		ThreadPool.schedule(new NotifyAITask(CtrlEvent.EVT_READY_TO_ACT), timeAtk);
 	}
 	
 	/**
@@ -804,11 +799,11 @@ public abstract class L2Character extends L2Object
 			sendPacket(SystemMessage.getSystemMessage(SystemMessageId.GETTING_READY_TO_SHOOT_AN_ARROW));
 			
 			// Send SetupGauge
-			sendPacket(new SetupGauge(SetupGauge.RED, sAtk + reuse));
+			sendPacket(new SetupGauge(GaugeColor.RED, sAtk + reuse));
 		}
 		
 		// Create a new hit task with Medium priority
-		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage1, crit1, miss1, attack.soulshot, shld1), sAtk);
+		ThreadPool.schedule(new HitTask(target, damage1, crit1, miss1, attack.soulshot, shld1), sAtk);
 		
 		// Calculate and set the disable delay of the bow in function of the Attack Speed
 		_disableBowAttackEndTime = System.currentTimeMillis() + (sAtk + reuse);
@@ -879,10 +874,10 @@ public abstract class L2Character extends L2Object
 		}
 		
 		// Create a new hit task with Medium priority for hit 1
-		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage1, crit1, miss1, attack.soulshot, shld1), sAtk / 2);
+		ThreadPool.schedule(new HitTask(target, damage1, crit1, miss1, attack.soulshot, shld1), sAtk / 2);
 		
 		// Create a new hit task with Medium priority for hit 2 with a higher delay
-		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage2, crit2, miss2, attack.soulshot, shld2), sAtk);
+		ThreadPool.schedule(new HitTask(target, damage2, crit2, miss2, attack.soulshot, shld2), sAtk);
 		
 		// Add those hits to the Server-Client packet Attack
 		attack.hit(attack.createHit(target, damage1, miss1, crit1, shld1), attack.createHit(target, damage2, miss2, crit2, shld2));
@@ -916,7 +911,7 @@ public abstract class L2Character extends L2Object
 		boolean hitted = doAttackHitSimple(attack, target, 100, sAtk);
 		double attackpercent = 85;
 		
-		for (L2Character obj : getKnownList().getKnownType(L2Character.class))
+		for (L2Character obj : getKnownType(L2Character.class))
 		{
 			if (obj == target || obj.isAlikeDead())
 				continue;
@@ -1008,7 +1003,7 @@ public abstract class L2Character extends L2Object
 		}
 		
 		// Create a new hit task with Medium priority
-		ThreadPoolManager.getInstance().scheduleAi(new HitTask(target, damage1, crit1, miss1, attack.soulshot, shld1), sAtk);
+		ThreadPool.schedule(new HitTask(target, damage1, crit1, miss1, attack.soulshot, shld1), sAtk);
 		
 		// Add this hit to the Server-Client packet Attack
 		attack.hit(attack.createHit(target, damage1, miss1, crit1, shld1));
@@ -1186,7 +1181,7 @@ public abstract class L2Character extends L2Object
 			// queue herbs and potions
 			if (isCastingSimultaneouslyNow())
 			{
-				ThreadPoolManager.getInstance().scheduleAi(new UsePotionTask(this, skill), 100);
+				ThreadPool.schedule(new UsePotionTask(this, skill), 100);
 				return;
 			}
 			setIsCastingSimultaneouslyNow(true);
@@ -1311,7 +1306,7 @@ public abstract class L2Character extends L2Object
 			
 			// Before start AI Cast Broadcast Fly Effect is Need
 			if (this instanceof L2PcInstance && skill.getFlyType() != null)
-				ThreadPoolManager.getInstance().scheduleEffect(new FlyToLocationTask(this, target, skill), 50);
+				ThreadPool.schedule(new FlyToLocationTask(this, target, skill), 50);
 		}
 		
 		MagicUseTask mut = new MagicUseTask(targets, skill, hitTime, coolTime, simultaneously);
@@ -1321,7 +1316,7 @@ public abstract class L2Character extends L2Object
 		{
 			// Send SetupGauge with the color of the gauge and the casting time
 			if (this instanceof L2PcInstance && !effectWhileCasting)
-				sendPacket(new SetupGauge(SetupGauge.BLUE, hitTime));
+				sendPacket(new SetupGauge(GaugeColor.BLUE, hitTime));
 			
 			if (effectWhileCasting)
 				mut.phase = 2;
@@ -1337,7 +1332,7 @@ public abstract class L2Character extends L2Object
 				
 				// Create a task MagicUseTask to launch the MagicSkill at the end of the casting time (hitTime)
 				// For client animation reasons (party buffs especially) 400 ms before!
-				_skillCast2 = ThreadPoolManager.getInstance().scheduleEffect(mut, hitTime - 400);
+				_skillCast2 = ThreadPool.schedule(mut, hitTime - 400);
 			}
 			else
 			{
@@ -1350,7 +1345,7 @@ public abstract class L2Character extends L2Object
 				
 				// Create a task MagicUseTask to launch the MagicSkill at the end of the casting time (hitTime)
 				// For client animation reasons (party buffs especially) 400 ms before!
-				_skillCast = ThreadPoolManager.getInstance().scheduleEffect(mut, hitTime - 400);
+				_skillCast = ThreadPool.schedule(mut, hitTime - 400);
 			}
 		}
 		else
@@ -1407,7 +1402,7 @@ public abstract class L2Character extends L2Object
 		// prevent casting signets to peace zone
 		if (skill.getSkillType() == L2SkillType.SIGNET || skill.getSkillType() == L2SkillType.SIGNET_CASTTIME)
 		{
-			final L2WorldRegion region = getRegion();
+			final WorldRegion region = getRegion();
 			if (region == null)
 				return false;
 			
@@ -1534,7 +1529,7 @@ public abstract class L2Character extends L2Object
 		if (hasAI())
 			getAI().notifyEvent(CtrlEvent.EVT_DEAD, null);
 		
-		final L2WorldRegion region = getRegion();
+		final WorldRegion region = getRegion();
 		if (region != null)
 			region.onDeath(this);
 		
@@ -1569,7 +1564,7 @@ public abstract class L2Character extends L2Object
 		// Start broadcast status
 		broadcastPacket(new Revive(this));
 		
-		final L2WorldRegion region = getRegion();
+		final WorldRegion region = getRegion();
 		if (region != null)
 			region.onRevive(this);
 	}
@@ -1857,7 +1852,7 @@ public abstract class L2Character extends L2Object
 			((L2Summon) this).broadcastStatusUpdate();
 		else if (this instanceof L2Npc)
 		{
-			for (L2PcInstance player : getKnownList().getKnownType(L2PcInstance.class))
+			for (L2PcInstance player : getKnownType(L2PcInstance.class))
 			{
 				if (getMoveSpeed() == 0)
 					player.sendPacket(new ServerObjectInfo((L2Npc) this, player));
@@ -1907,22 +1902,6 @@ public abstract class L2Character extends L2Object
 	public boolean isUndead()
 	{
 		return false;
-	}
-	
-	public void initKnownList()
-	{
-		setKnownList(new CharKnownList(this));
-	}
-	
-	@Override
-	public CharKnownList getKnownList()
-	{
-		return _knownList;
-	}
-	
-	public void setKnownList(CharKnownList value)
-	{
-		_knownList = value;
 	}
 	
 	public void initCharStat()
@@ -2319,7 +2298,7 @@ public abstract class L2Character extends L2Object
 		broadcastPacket(new Revive(this));
 		
 		// Schedule a paralyzed task to wait for the animation to finish
-		ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+		ThreadPool.schedule(new Runnable()
 		{
 			@Override
 			public void run()
@@ -2887,7 +2866,7 @@ public abstract class L2Character extends L2Object
 		{
 			if (broadcastFull)
 			{
-				for (L2PcInstance player : getKnownList().getKnownType(L2PcInstance.class))
+				for (L2PcInstance player : getKnownType(L2PcInstance.class))
 				{
 					if (getMoveSpeed() == 0)
 						player.sendPacket(new ServerObjectInfo((L2Npc) this, player));
@@ -2951,7 +2930,7 @@ public abstract class L2Character extends L2Object
 	 */
 	public boolean isInCombat()
 	{
-		return (getAI().getTarget() != null || getAI().isAutoAttacking());
+		return hasAI() && getAI().isAutoAttacking();
 	}
 	
 	/**
@@ -3216,26 +3195,19 @@ public abstract class L2Character extends L2Object
 	}
 	
 	/**
-	 * Stop movement of the L2Character (Called by AI Accessor only).<BR>
-	 * <BR>
-	 * <B><U> Actions</U> :</B>
+	 * Stop movement of the L2Character (called by AI Accessor only).
 	 * <ul>
 	 * <li>Delete movement data of the L2Character</li>
-	 * <li>Set the current position (x,y,z), its current L2WorldRegion if necessary and its heading</li>
-	 * <li>Remove the L2Object object from _gmList** of GmListTable</li>
-	 * <li>Remove object from _knownObjects and _knownPlayer* of all surrounding L2WorldRegion L2Characters</li>
+	 * <li>Set the current position and refresh the region if necessary</li>
 	 * </ul>
-	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T send Server->Client packet StopMove/StopRotation </B></FONT><BR>
-	 * <BR>
-	 * @param loc
+	 * @param loc : The SpawnLocation where the character must stop.
 	 */
 	public void stopMove(SpawnLocation loc)
 	{
 		// Delete movement data of the L2Character
 		_move = null;
 		
-		// Set the current position (x,y,z), its current L2WorldRegion if necessary and its heading
-		// All data are contained in a L2CharPosition object
+		// Set the current position and refresh the region if necessary.
 		if (loc != null)
 		{
 			setXYZ(loc.getX(), loc.getY(), loc.getZ());
@@ -3280,18 +3252,8 @@ public abstract class L2Character extends L2Object
 	 */
 	public void setTarget(L2Object object)
 	{
-		if (object != null)
-		{
-			if (!object.isVisible())
-				object = null;
-			else if (object != _target)
-			{
-				getKnownList().addKnownObject(object);
-				
-				if (object.getKnownList() != null)
-					object.getKnownList().addKnownObject(this);
-			}
-		}
+		if (object != null && !object.isVisible())
+			object = null;
 		
 		_target = object;
 	}
@@ -3301,10 +3263,7 @@ public abstract class L2Character extends L2Object
 	 */
 	public final int getTargetId()
 	{
-		if (_target != null)
-			return _target.getObjectId();
-		
-		return -1;
+		return (_target != null) ? _target.getObjectId() : -1;
 	}
 	
 	/**
@@ -3444,8 +3403,8 @@ public abstract class L2Character extends L2Object
 			int originalX = x;
 			int originalY = y;
 			int originalZ = z;
-			int gtx = (originalX - L2World.WORLD_X_MIN) >> 4;
-			int gty = (originalY - L2World.WORLD_Y_MIN) >> 4;
+			int gtx = (originalX - World.WORLD_X_MIN) >> 4;
+			int gty = (originalY - World.WORLD_Y_MIN) >> 4;
 			
 			// Movement checks:
 			// when geodata == 2, for all characters except mobs returning home (could be changed later to teleport if pathfinding fails)
@@ -3468,7 +3427,7 @@ public abstract class L2Character extends L2Object
 					}
 				}
 				
-				if (curX < L2World.WORLD_X_MIN || curX > L2World.WORLD_X_MAX || curY < L2World.WORLD_Y_MIN || curY > L2World.WORLD_Y_MAX)
+				if (curX < World.WORLD_X_MIN || curX > World.WORLD_X_MAX || curY < World.WORLD_Y_MIN || curY > World.WORLD_Y_MAX)
 				{
 					// Temporary fix for character outside world region errors
 					_log.warning("Character " + getName() + " outside world area, in coordinates x:" + curX + " y:" + curY);
@@ -3815,6 +3774,10 @@ public abstract class L2Character extends L2Object
 	 */
 	protected void onHitTimer(L2Character target, int damage, boolean crit, boolean miss, boolean soulshot, byte shld)
 	{
+		// Deny the whole process if actor is casting.
+		if (isCastingNow())
+			return;
+		
 		// If the attacker/target is dead or use fake death, notify the AI with EVT_CANCEL
 		if (target == null || isAlikeDead())
 		{
@@ -3822,7 +3785,7 @@ public abstract class L2Character extends L2Object
 			return;
 		}
 		
-		if ((this instanceof L2Npc && target.isAlikeDead()) || target.isDead() || (!getKnownList().knowsObject(target) && !(this instanceof L2DoorInstance)))
+		if ((this instanceof L2Npc && target.isAlikeDead()) || target.isDead() || (!getKnownType(L2Character.class).contains(target) && !(this instanceof L2DoorInstance)))
 		{
 			getAI().notifyEvent(CtrlEvent.EVT_CANCEL);
 			
@@ -3915,10 +3878,6 @@ public abstract class L2Character extends L2Object
 				}
 			}
 			
-			// Notify AI with EVT_ATTACKED
-			if (target.hasAI())
-				target.getAI().notifyEvent(CtrlEvent.EVT_ATTACKED, this);
-			
 			getAI().clientStartAutoAttack();
 			
 			// Manage cast break of the target (calculating rate, sending message...)
@@ -3989,18 +3948,6 @@ public abstract class L2Character extends L2Object
 		// default is to do nothing
 	}
 	
-	/**
-	 * Manage Forced attack (shift + select target).<BR>
-	 * <BR>
-	 * <B><U> Actions</U> :</B>
-	 * <ul>
-	 * <li>If L2Character or target is in a town area, send a system message TARGET_IN_PEACEZONE ActionFailed</li>
-	 * <li>If target is confused, send ActionFailed</li>
-	 * <li>If L2Character is a L2ArtefactInstance, send ActionFailed</li>
-	 * <li>Send MyTargetSelected to start attack and Notify AI with ATTACK</li>
-	 * </ul>
-	 * @param player The L2PcInstance to attack
-	 */
 	@Override
 	public void onForcedAttack(L2PcInstance player)
 	{
@@ -4107,7 +4054,7 @@ public abstract class L2Character extends L2Object
 	{
 		try
 		{
-			L2WorldRegion region = L2World.getInstance().getRegion(getX(), getY());
+			WorldRegion region = World.getInstance().getRegion(getX(), getY());
 			return ((region != null) && (region.isActive()));
 		}
 		catch (Exception e)
@@ -4516,7 +4463,7 @@ public abstract class L2Character extends L2Object
 		if (mut.hitTime == 0)
 			onMagicHitTimer(mut);
 		else
-			_skillCast = ThreadPoolManager.getInstance().scheduleEffect(mut, 400);
+			_skillCast = ThreadPool.schedule(mut, 400);
 	}
 	
 	/*
@@ -4652,9 +4599,9 @@ public abstract class L2Character extends L2Object
 		else
 		{
 			if (mut.simultaneously)
-				_skillCast2 = ThreadPoolManager.getInstance().scheduleEffect(mut, mut.coolTime);
+				_skillCast2 = ThreadPool.schedule(mut, mut.coolTime);
 			else
-				_skillCast = ThreadPoolManager.getInstance().scheduleEffect(mut, mut.coolTime);
+				_skillCast = ThreadPool.schedule(mut, mut.coolTime);
 		}
 	}
 	
@@ -4707,7 +4654,7 @@ public abstract class L2Character extends L2Object
 				final SkillUseHolder queuedSkill = player.getQueuedSkill();
 				if (queuedSkill.getSkill() != null)
 				{
-					ThreadPoolManager.getInstance().executeTask(new QueuedMagicUseTask(player, queuedSkill.getSkill(), queuedSkill.isCtrlPressed(), queuedSkill.isShiftPressed()));
+					ThreadPool.execute(new QueuedMagicUseTask(player, queuedSkill.getSkill(), queuedSkill.isCtrlPressed(), queuedSkill.isShiftPressed()));
 					player.setQueuedSkill(null, false, false);
 				}
 			}
@@ -4963,7 +4910,7 @@ public abstract class L2Character extends L2Object
 				}
 				
 				// Mobs in range 1000 see spell
-				for (L2Npc npcMob : player.getKnownList().getKnownTypeInRadius(L2Npc.class, 1000))
+				for (L2Npc npcMob : player.getKnownTypeInRadius(L2Npc.class, 1000))
 				{
 					List<Quest> quests = npcMob.getTemplate().getEventQuests(EventType.ON_SKILL_SEE);
 					if (quests != null)
@@ -5532,13 +5479,7 @@ public abstract class L2Character extends L2Object
 	}
 	
 	@Override
-	protected void badCoords()
-	{
-		decayMe();
-	}
-	
-	@Override
-	public final void setRegion(L2WorldRegion value)
+	public final void setRegion(WorldRegion value)
 	{
 		// confirm revalidation of old region's zones
 		if (getRegion() != null)
@@ -5550,5 +5491,13 @@ public abstract class L2Character extends L2Object
 		}
 		
 		super.setRegion(value);
+	}
+	
+	@Override
+	public void removeKnownObject(L2Object object)
+	{
+		// If object is targeted by the L2Character, cancel Attack or Cast
+		if (object == getTarget())
+			setTarget(null);
 	}
 }

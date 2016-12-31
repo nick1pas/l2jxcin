@@ -105,7 +105,13 @@ public class Q222_TestOfTheDuelist extends Quest
 			st.giveItems(ORDER_GIRAN, 1);
 			st.giveItems(ORDER_OREN, 1);
 			st.giveItems(ORDER_ADEN, 1);
-			st.giveItems(DIMENSIONAL_DIAMOND, 72);
+			
+			if (!player.getMemos().getBool("secondClassChange39", false))
+			{
+				htmltext = "30623-07a.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_39.get(player.getClassId().getId()));
+				player.getMemos().set("secondClassChange39", true);
+			}
 		}
 		else if (event.equalsIgnoreCase("30623-16.htm"))
 		{

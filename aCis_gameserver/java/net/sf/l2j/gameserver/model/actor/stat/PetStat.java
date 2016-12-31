@@ -80,9 +80,7 @@ public class PetStat extends SummonStat
 	{
 		getActiveChar().setPetData(getActiveChar().getTemplate().getPetDataEntry(value));
 		
-		getActiveChar().stopFeed();
 		super.setLevel(value); // Set level.
-		getActiveChar().startFeed();
 		
 		// If a control item exists and its level is different of the new level.
 		final ItemInstance controlItem = getActiveChar().getControlItem();
@@ -125,11 +123,12 @@ public class PetStat extends SummonStat
 	@Override
 	public int getMAtkSpd()
 	{
-		int val = super.getMAtkSpd();
-		if (getActiveChar().checkHungryState())
-			val = val / 2;
+		double base = 333;
 		
-		return val;
+		if (getActiveChar().checkHungryState())
+			base /= 2;
+		
+		return (int) calcStat(Stats.MAGIC_ATTACK_SPEED, base, null, null);
 	}
 	
 	@Override
@@ -147,11 +146,12 @@ public class PetStat extends SummonStat
 	@Override
 	public int getPAtkSpd()
 	{
-		int val = super.getPAtkSpd();
-		if (getActiveChar().checkHungryState())
-			val = val / 2;
+		double base = getActiveChar().getTemplate().getBasePAtkSpd();
 		
-		return val;
+		if (getActiveChar().checkHungryState())
+			base /= 2;
+		
+		return (int) calcStat(Stats.POWER_ATTACK_SPEED, base, null, null);
 	}
 	
 	@Override

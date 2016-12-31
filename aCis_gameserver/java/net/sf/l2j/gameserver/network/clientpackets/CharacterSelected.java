@@ -14,14 +14,12 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.datatables.CharNameTable;
 import net.sf.l2j.gameserver.model.CharSelectInfoPackage;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.L2GameClient.GameClientState;
 import net.sf.l2j.gameserver.network.serverpackets.CharSelected;
-import net.sf.l2j.gameserver.network.serverpackets.SignsSky;
+import net.sf.l2j.gameserver.network.serverpackets.SSQInfo;
 import net.sf.l2j.gameserver.util.FloodProtectors;
 import net.sf.l2j.gameserver.util.FloodProtectors.Action;
 
@@ -55,44 +53,32 @@ public class CharacterSelected extends L2GameClientPacket
 		if (!FloodProtectors.performAction(client, Action.CHARACTER_SELECT))
 			return;
 		
-		// we should always be able to acquire the lock
-		// but if we cant lock then nothing should be done (ie repeated packet)
+		// we should always be able to acquire the lock but if we cant lock then nothing should be done (ie repeated packet)
 		if (client.getActiveCharLock().tryLock())
 		{
 			try
 			{
-				// should always be null
-				// but if not then this is repeated packet and nothing should be done here
+				// should always be null but if not then this is repeated packet and nothing should be done here
 				if (client.getActiveChar() == null)
 				{
 					final CharSelectInfoPackage info = client.getCharSelection(_charSlot);
-					if (info == null)
+					if (info == null || info.getAccessLevel() < 0)
 						return;
-					
-					// Selected character is banned. Acts like if nothing occured...
-					if (info.getAccessLevel() < 0)
-						return;
-					
-					// The L2PcInstance must be created here, so that it can be attached to the L2GameClient
-					if (Config.DEBUG)
-						_log.fine("Selected slot: " + _charSlot);
 					
 					// Load up character from disk
 					final L2PcInstance cha = client.loadCharFromDisk(_charSlot);
 					if (cha == null)
 						return;
 					
-					CharNameTable.getInstance().addName(cha);
-					
 					cha.setClient(client);
 					client.setActiveChar(cha);
 					cha.setOnlineStatus(true, true);
 					
-					sendPacket(new SignsSky());
+					sendPacket(SSQInfo.sendSky());
 					
 					client.setState(GameClientState.IN_GAME);
-					CharSelected cs = new CharSelected(cha, client.getSessionId().playOkID1);
-					sendPacket(cs);
+					
+					sendPacket(new CharSelected(cha, client.getSessionId().playOkID1));
 				}
 			}
 			finally

@@ -14,12 +14,12 @@
  */
 package net.sf.l2j.gameserver.model.itemcontainer;
 
-import net.sf.l2j.gameserver.datatables.ItemTable;
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemLocation;
-import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.item.type.EtcItemType;
 
 public class PetInventory extends Inventory
@@ -61,6 +61,7 @@ public class PetInventory extends Inventory
 	{
 		super.refreshWeight();
 		getOwner().updateAndBroadcastStatus(1);
+		getOwner().sendPetInfosToOwner();
 	}
 	
 	public boolean validateCapacity(ItemInstance item)
@@ -79,16 +80,9 @@ public class PetInventory extends Inventory
 		return (_items.size() + slots <= _owner.getInventoryLimit());
 	}
 	
-	public boolean validateWeight(ItemInstance item, long count)
+	public boolean validateWeight(ItemInstance item, int count)
 	{
-		int weight = 0;
-		
-		Item template = ItemTable.getInstance().getTemplate(item.getItemId());
-		if (template == null)
-			return false;
-		
-		weight += count * template.getWeight();
-		return validateWeight(weight);
+		return validateWeight(count * item.getItem().getWeight());
 	}
 	
 	@Override
@@ -110,29 +104,22 @@ public class PetInventory extends Inventory
 	}
 	
 	@Override
-	public void restore()
-	{
-		super.restore();
-		
-		// check for equipped items from other pets
-		for (ItemInstance item : _items)
-		{
-			if (item.isEquipped())
-			{
-				if (!item.getItem().checkCondition(getOwner(), getOwner(), false))
-					unEquipItemInSlot(item.getLocationSlot());
-			}
-		}
-	}
-	
-	@Override
 	public void deleteMe()
 	{
 		final L2PcInstance petOwner = getOwner().getOwner();
 		if (petOwner != null)
 		{
 			for (ItemInstance item : _items)
-				getOwner().transferItem("return", item.getObjectId(), item.getCount(), petOwner.getInventory(), petOwner, getOwner());
+			{
+				if (petOwner.getInventory().validateCapacity(1))
+					getOwner().transferItem("return", item.getObjectId(), item.getCount(), petOwner.getInventory(), petOwner, getOwner());
+				else
+				{
+					final ItemInstance droppedItem = dropItem("drop", item.getObjectId(), item.getCount(), petOwner, getOwner());
+					droppedItem.dropMe(getOwner(), getOwner().getX() + Rnd.get(-70, 70), getOwner().getY() + Rnd.get(-70, 70), getOwner().getZ() + 30);
+				}
+				
+			}
 		}
 		_items.clear();
 	}

@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.handler.ISkillHandler;
 import net.sf.l2j.gameserver.handler.SkillHandler;
 import net.sf.l2j.gameserver.model.L2Effect;
@@ -372,7 +373,7 @@ public final class Weapon extends Item
 		if (caster instanceof L2PcInstance)
 		{
 			// Mobs in range 1000 see spell
-			for (L2Npc npcMob : caster.getKnownList().getKnownTypeInRadius(L2Npc.class, 1000))
+			for (L2Npc npcMob : caster.getKnownTypeInRadius(L2Npc.class, 1000))
 			{
 				List<Quest> quests = npcMob.getTemplate().getEventQuests(EventType.ON_SKILL_SEE);
 				if (quests != null)

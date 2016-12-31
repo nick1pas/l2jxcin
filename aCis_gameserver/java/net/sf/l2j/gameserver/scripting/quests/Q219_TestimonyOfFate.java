@@ -131,7 +131,13 @@ public class Q219_TestimonyOfFate extends Quest
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(KAIRA_LETTER, 1);
-			st.giveItems(DIMENSIONAL_DIAMOND, 98);
+			
+			if (!player.getMemos().getBool("secondClassChange37", false))
+			{
+				htmltext = "30476-05a.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_37.get(player.getRace().ordinal()));
+				player.getMemos().set("secondClassChange37", true);
+			}
 		}
 		else if (event.equalsIgnoreCase("30114-04.htm"))
 		{

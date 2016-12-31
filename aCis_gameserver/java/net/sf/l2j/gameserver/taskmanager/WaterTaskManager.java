@@ -17,14 +17,17 @@ package net.sf.l2j.gameserver.taskmanager;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.sf.l2j.gameserver.ThreadPoolManager;
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
+import net.sf.l2j.gameserver.network.serverpackets.SetupGauge;
+import net.sf.l2j.gameserver.network.serverpackets.SetupGauge.GaugeColor;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
+import net.sf.l2j.gameserver.skills.Stats;
 
 /**
  * Updates {@link L2PcInstance} drown timer and reduces {@link L2PcInstance} HP, when drowning.
- * @author Tryskell, Hasha
  */
 public final class WaterTaskManager implements Runnable
 {
@@ -38,17 +41,23 @@ public final class WaterTaskManager implements Runnable
 	protected WaterTaskManager()
 	{
 		// Run task each second.
-		ThreadPoolManager.getInstance().scheduleEffectAtFixedRate(this, 1000, 1000);
+		ThreadPool.scheduleAtFixedRate(this, 1000, 1000);
 	}
 	
 	/**
 	 * Adds {@link L2PcInstance} to the WaterTask.
 	 * @param player : {@link L2PcInstance} to be added and checked.
-	 * @param time : Time in ms, after which the drowning effect is applied.
 	 */
-	public final void add(L2PcInstance player, long time)
+	public final void add(L2PcInstance player)
 	{
-		_players.put(player, System.currentTimeMillis() + time);
+		if (!player.isDead() && !_players.containsKey(player))
+		{
+			final int time = (int) player.calcStat(Stats.BREATH, 60000 * player.getRace().getBreathMultiplier(), player, null);
+			
+			_players.put(player, System.currentTimeMillis() + time);
+			
+			player.sendPacket(new SetupGauge(GaugeColor.CYAN, time));
+		}
 	}
 	
 	/**
@@ -57,7 +66,8 @@ public final class WaterTaskManager implements Runnable
 	 */
 	public final void remove(L2PcInstance player)
 	{
-		_players.remove(player);
+		if (_players.remove(player) != null)
+			player.sendPacket(new SetupGauge(GaugeColor.CYAN, 0));
 	}
 	
 	@Override

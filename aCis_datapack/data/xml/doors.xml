@@ -3633,7 +3633,7 @@
 			<loc x="112782" y="-78064" z="22" />
 		</coordinates>
 		<stats hp="126600" pDef="644" mDef="518" height="610" />
-		<function openType="SKILL" closeTime="30" />
+		<function triggeredId="23150003" openType="SKILL" closeTime="30" />
 	</door>
 	<door id="23150003" type="DOOR" level="3" name="brilliance_door_02">
 		<position x="112744" y="-78088" z="56" />
@@ -3644,7 +3644,7 @@
 			<loc x="112641" y="-78064" z="22" />
 		</coordinates>
 		<stats hp="126600" pDef="644" mDef="518" height="610" />
-		<function openType="SKILL" closeTime="30" />
+		<function triggeredId="23150004" openType="SKILL" closeTime="30" />
 	</door>
 	<door id="23150001" type="DOOR" level="3" name="solina_secret_door_01">
 		<position x="110719" y="-81567" z="-1584" />

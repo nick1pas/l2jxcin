@@ -19,8 +19,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.commons.lang.StringUtil;
+
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.geoengine.geodata.GeoLocation;
 import net.sf.l2j.gameserver.geoengine.pathfinding.Node;
 import net.sf.l2j.gameserver.geoengine.pathfinding.NodeBuffer;

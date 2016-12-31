@@ -18,9 +18,10 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
-import net.sf.l2j.Config;
+import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.ThreadPoolManager;
+
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.model.actor.L2Character;
@@ -127,7 +128,7 @@ public class MinionList
 		
 		final int time = _master.isRaid() ? (int) Config.RAID_MINION_RESPAWN_TIMER : respawnTime;
 		if (time > 0 && !_master.isAlikeDead())
-			ThreadPoolManager.getInstance().scheduleGeneral(new MinionRespawnTask(minion), time);
+			ThreadPool.schedule(new MinionRespawnTask(minion), time);
 	}
 	
 	/**

@@ -13,7 +13,7 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
 import net.sf.l2j.gameserver.datatables.CharNameTable;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 
 /**
  * Support for "Chat with Friends" dialog. <BR>
@@ -33,8 +33,8 @@ public class FriendStatus extends L2GameServerPacket
 	public FriendStatus(int objId)
 	{
 		_objid = objId;
-		_name = CharNameTable.getInstance().getNameById(objId);
-		_online = L2World.getInstance().getPlayer(objId) != null;
+		_name = CharNameTable.getInstance().getPlayerName(objId);
+		_online = World.getInstance().getPlayer(objId) != null;
 	}
 	
 	@Override

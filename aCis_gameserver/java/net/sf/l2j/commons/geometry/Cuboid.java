@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.commons.geometry;
 
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.Location;
 
 /**
@@ -60,12 +62,12 @@ public class Cuboid extends Rectangle
 		if (z < _minZ || z > _maxZ)
 			return false;
 		
-		int dx = (x - _x) / _w;
-		if (dx < 0 || dx > 1)
+		int d = x - _x;
+		if (d < 0 || d > _w)
 			return false;
 		
-		int dy = (y - _y) / _h;
-		if (dy < 0 || _y > 1)
+		d = y - _y;
+		if (d < 0 || d > _h)
 			return false;
 		
 		return true;
@@ -74,11 +76,7 @@ public class Cuboid extends Rectangle
 	@Override
 	public Location getRandomLocation()
 	{
-		// calc coords (take A, add AB and AC)
-		final int x = (int) (_x + Math.random() * _w);
-		final int y = (int) (_y + Math.random() * _h);
-		
-		// return
-		return new Location(x, y, (_minZ + _maxZ) / 2);
+		// calculate coordinates and return
+		return new Location(_x + Rnd.get(_w), _y + Rnd.get(_h), Rnd.get(_minZ, _maxZ));
 	}
 }

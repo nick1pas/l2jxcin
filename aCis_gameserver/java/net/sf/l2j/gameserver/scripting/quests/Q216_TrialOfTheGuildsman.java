@@ -15,6 +15,7 @@
 package net.sf.l2j.gameserver.scripting.quests;
 
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.ClassId;
@@ -106,7 +107,13 @@ public class Q216_TrialOfTheGuildsman extends Quest
 				st.playSound(QuestState.SOUND_ACCEPT);
 				st.takeItems(57, 2000);
 				st.giveItems(VALKON_RECOMMENDATION, 1);
-				st.giveItems(DIMENSIONAL_DIAMOND, 85);
+				
+				if (!player.getMemos().getBool("secondClassChange35", false))
+				{
+					htmltext = "30103-06d.htm";
+					st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_35.get(player.getClassId().getId()));
+					player.getMemos().set("secondClassChange35", true);
+				}
 			}
 			else
 				htmltext = "30103-05a.htm";

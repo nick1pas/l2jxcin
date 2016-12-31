@@ -27,19 +27,20 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.sf.l2j.Config;
-import net.sf.l2j.L2DatabaseFactory;
+import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.mmocore.MMOClient;
 import net.sf.l2j.commons.mmocore.MMOConnection;
 import net.sf.l2j.commons.mmocore.ReceivablePacket;
+
+import net.sf.l2j.Config;
+import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.LoginServerThread;
 import net.sf.l2j.gameserver.LoginServerThread.SessionKey;
-import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.datatables.CharNameTable;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.model.CharSelectInfoPackage;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
@@ -98,7 +99,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		_stats = new ClientStats();
 		_packetQueue = new ArrayBlockingQueue<>(Config.CLIENT_PACKET_QUEUE_SIZE);
 		
-		_autoSaveInDB = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new AutoSaveTask(), 300000L, 900000L);
+		_autoSaveInDB = ThreadPool.scheduleAtFixedRate(new AutoSaveTask(), 300000L, 900000L);
 	}
 	
 	public byte[] enableCrypt()
@@ -296,7 +297,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		if (objid < 0)
 			return;
 		
-		CharNameTable.getInstance().removeName(objid);
+		CharNameTable.getInstance().removePlayer(objid);
 		
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
@@ -394,37 +395,39 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		}
 	}
 	
-	public L2PcInstance loadCharFromDisk(int charslot)
+	public L2PcInstance loadCharFromDisk(int slot)
 	{
-		final int objId = getObjectIdForSlot(charslot);
-		if (objId < 0)
+		final int objectId = getObjectIdForSlot(slot);
+		if (objectId < 0)
 			return null;
 		
-		L2PcInstance character = L2World.getInstance().getPlayer(objId);
-		if (character != null)
+		L2PcInstance player = World.getInstance().getPlayer(objectId);
+		if (player != null)
 		{
 			// exploit prevention, should not happens in normal way
-			_log.severe("Attempt of double login: " + character.getName() + "(" + objId + ") " + getAccountName());
-			if (character.getClient() != null)
-				character.getClient().closeNow();
+			_log.severe("Attempt of double login: " + player.getName() + "(" + objectId + ") " + getAccountName());
+			
+			if (player.getClient() != null)
+				player.getClient().closeNow();
 			else
-				character.deleteMe();
+				player.deleteMe();
 			
 			return null;
 		}
 		
-		character = L2PcInstance.restore(objId);
-		if (character != null)
+		player = L2PcInstance.restore(objectId);
+		if (player != null)
 		{
-			character.setRunning(); // running is default
-			character.standUp(); // standing is default
+			player.setRunning(); // running is default
+			player.standUp(); // standing is default
 			
-			character.setOnlineStatus(true, false);
+			player.setOnlineStatus(true, false);
+			World.getInstance().addPlayer(player);
 		}
 		else
-			_log.severe("L2GameClient: could not restore in slot: " + charslot);
+			_log.severe("L2GameClient: could not restore in slot: " + slot);
 		
-		return character;
+		return player;
 	}
 	
 	/**
@@ -475,7 +478,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		// no long running tasks here, do it async
 		try
 		{
-			ThreadPoolManager.getInstance().executeTask(new DisconnectTask());
+			ThreadPool.execute(new DisconnectTask());
 		}
 		catch (RejectedExecutionException e)
 		{
@@ -495,7 +498,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 			if (_cleanupTask != null)
 				cancelCleanup();
 			
-			_cleanupTask = ThreadPoolManager.getInstance().scheduleGeneral(new CleanupTask(), 0); // instant
+			_cleanupTask = ThreadPool.schedule(new CleanupTask(), 0); // instant
 		}
 	}
 	
@@ -559,7 +562,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 			synchronized (this)
 			{
 				if (_cleanupTask == null)
-					_cleanupTask = ThreadPoolManager.getInstance().scheduleGeneral(new CleanupTask(), fast ? 5 : 15000L);
+					_cleanupTask = ThreadPool.schedule(new CleanupTask(), fast ? 5 : 15000L);
 			}
 		}
 		catch (Exception e1)
@@ -715,28 +718,19 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		
 		try
 		{
-			if (_state == GameClientState.CONNECTED)
+			if (_state == GameClientState.CONNECTED && getStats().processedPackets > 3)
 			{
-				if (getStats().processedPackets > 3)
-				{
-					if (Config.PACKET_HANDLER_DEBUG)
-						_log.severe("Client " + toString() + " - Disconnected, too many packets in non-authed state.");
-					closeNow();
-					return;
-				}
+				if (Config.PACKET_HANDLER_DEBUG)
+					_log.severe("Client " + toString() + " - Disconnected, too many packets in non-authed state.");
 				
-				ThreadPoolManager.getInstance().executeIOPacket(this);
+				closeNow();
+				return;
 			}
-			else
-				ThreadPoolManager.getInstance().executePacket(this);
+			
+			ThreadPool.execute(this);
 		}
 		catch (RejectedExecutionException e)
 		{
-			// if the server is shutdown we ignore
-			if (!ThreadPoolManager.getInstance().isShutdown())
-			{
-				_log.severe("Failed executing: " + packet.getClass().getSimpleName() + " for Client: " + toString());
-			}
 		}
 	}
 	

@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.commons.geometry;
 
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.Location;
 
 /**
@@ -53,16 +55,16 @@ public class Cube extends Square
 	@Override
 	public boolean isInside(int x, int y, int z)
 	{
-		int dz = z - _z;
-		if (dz < 0 || dz > _a)
+		int d = z - _z;
+		if (d < 0 || d > _a)
 			return false;
 		
-		int dx = x - _x;
-		if (dx < 0 || dx > _a)
+		d = x - _x;
+		if (d < 0 || d > _a)
 			return false;
 		
-		int dy = y - _y;
-		if (dy < 0 || _y > _a)
+		d = y - _y;
+		if (d < 0 || d > _a)
 			return false;
 		
 		return true;
@@ -71,10 +73,7 @@ public class Cube extends Square
 	@Override
 	public Location getRandomLocation()
 	{
-		final int x = (int) (_x + Math.random() * _a);
-		final int y = (int) (_y + Math.random() * _a);
-		final int z = (int) (_z + Math.random() * _a);
-		
-		return new Location(x, y, z);
+		// calculate coordinates and return
+		return new Location(_x + Rnd.get(_a), _y + Rnd.get(_a), _z + Rnd.get(_a));
 	}
 }

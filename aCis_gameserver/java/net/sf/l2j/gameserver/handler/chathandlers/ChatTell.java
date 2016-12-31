@@ -16,7 +16,7 @@ package net.sf.l2j.gameserver.handler.chathandlers;
 
 import net.sf.l2j.gameserver.handler.IChatHandler;
 import net.sf.l2j.gameserver.model.BlockList;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
@@ -34,7 +34,7 @@ public class ChatTell implements IChatHandler
 		if (target == null)
 			return;
 		
-		final L2PcInstance receiver = L2World.getInstance().getPlayer(target);
+		final L2PcInstance receiver = World.getInstance().getPlayer(target);
 		if (receiver == null || receiver.getClient().isDetached())
 		{
 			activeChar.sendPacket(SystemMessageId.TARGET_IS_NOT_FOUND_IN_THE_GAME);

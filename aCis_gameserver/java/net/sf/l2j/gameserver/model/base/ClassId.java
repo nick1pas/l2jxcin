@@ -360,6 +360,8 @@ public enum ClassId
 	public static final EnumSet<ClassId> getAvailableSubclasses(L2PcInstance player)
 	{
 		ClassId classId = VALUES[player.getBaseClass()];
+		if (classId._level < 2)
+			return null;
 		
 		// handle 3rd level class
 		if (classId._level == 3)

@@ -87,12 +87,18 @@ public class Q231_TestOfTheMaestro extends Quest
 			return htmltext;
 		
 		// LOCKIRIN
-		if (event.equalsIgnoreCase("30531-04a.htm"))
+		if (event.equalsIgnoreCase("30531-04.htm"))
 		{
 			st.setState(STATE_STARTED);
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
-			st.giveItems(DIMENSIONAL_DIAMOND, 23);
+			
+			if (!player.getMemos().getBool("secondClassChange39", false))
+			{
+				htmltext = "30531-04a.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_39.get(player.getClassId().getId()));
+				player.getMemos().set("secondClassChange39", true);
+			}
 		}
 		// BALANKI
 		else if (event.equalsIgnoreCase("30533-02.htm"))

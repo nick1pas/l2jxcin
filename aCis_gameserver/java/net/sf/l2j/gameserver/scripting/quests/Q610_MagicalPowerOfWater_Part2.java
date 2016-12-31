@@ -14,8 +14,11 @@ package net.sf.l2j.gameserver.scripting.quests;
 
 import java.util.logging.Level;
 
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.instancemanager.RaidBossSpawnManager;
 import net.sf.l2j.gameserver.instancemanager.RaidBossSpawnManager.StatusEnum;
+import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2RaidBossInstance;
@@ -182,7 +185,7 @@ public class Q610_MagicalPowerOfWater_Part2 extends Quest
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		_status = IDLE_INTERVAL;
 		return null;
@@ -225,9 +228,7 @@ public class Q610_MagicalPowerOfWater_Part2 extends Quest
 		if (raid != null && raid.getRaidStatus() == StatusEnum.ALIVE)
 		{
 			// set temporarily spawn location (to provide correct behavior of L2RaidBossInstance.checkAndReturnToSpawn())
-			raid.getSpawn().setLocx(104771);
-			raid.getSpawn().setLocy(-36993);
-			raid.getSpawn().setLocz(-1149);
+			raid.getSpawn().setLoc(104771, -36993, -1149, Rnd.get(65536));
 			
 			// teleport raid from secret place
 			raid.teleToLocation(104771, -36993, -1149, 100);
@@ -245,9 +246,7 @@ public class Q610_MagicalPowerOfWater_Part2 extends Quest
 	private void despawnRaid(L2Npc raid)
 	{
 		// reset spawn location
-		raid.getSpawn().setLocx(-105900);
-		raid.getSpawn().setLocy(-252700);
-		raid.getSpawn().setLocz(-15542);
+		raid.getSpawn().setLoc(-105900, -252700, -15542, 0);
 		
 		// teleport raid back to secret place
 		if (!raid.isDead())

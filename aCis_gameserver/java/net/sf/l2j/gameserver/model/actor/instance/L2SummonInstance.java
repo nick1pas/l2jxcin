@@ -17,7 +17,8 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 
-import net.sf.l2j.gameserver.ThreadPoolManager;
+import net.sf.l2j.commons.concurrent.ThreadPool;
+
 import net.sf.l2j.gameserver.model.AggroInfo;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
@@ -48,7 +49,6 @@ public class L2SummonInstance extends L2Summon
 	public L2SummonInstance(int objectId, NpcTemplate template, L2PcInstance owner, L2Skill skill)
 	{
 		super(objectId, template, owner);
-		setShowSummonAnimation(true);
 		
 		if (skill != null)
 		{
@@ -68,7 +68,7 @@ public class L2SummonInstance extends L2Summon
 		else
 			_nextItemConsumeTime = _totalLifeTime - _totalLifeTime / (_itemConsumeSteps + 1);
 		
-		_summonLifeTask = ThreadPoolManager.getInstance().scheduleGeneralAtFixedRate(new SummonLifetime(getOwner(), this), 1000, 1000);
+		_summonLifeTask = ThreadPool.scheduleAtFixedRate(new SummonLifetime(getOwner(), this), 1000, 1000);
 	}
 	
 	@Override
@@ -160,7 +160,7 @@ public class L2SummonInstance extends L2Summon
 			return false;
 		
 		// Send aggro of mobs to summoner.
-		for (L2Attackable mob : getKnownList().getKnownType(L2Attackable.class))
+		for (L2Attackable mob : getKnownType(L2Attackable.class))
 		{
 			if (mob.isDead())
 				continue;

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
+import net.sf.l2j.commons.util.ArraysUtil;
+
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SkillTreeTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
@@ -1388,7 +1390,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 					final L2PcInstance sourcePlayer = activeChar.getActingPlayer();
 					
 					targetList.add(activeChar);
-					for (L2Character obj : activeChar.getKnownList().getKnownTypeInRadius(L2Character.class, _skillRadius))
+					for (L2Character obj : activeChar.getKnownTypeInRadius(L2Character.class, _skillRadius))
 					{
 						if (!(obj == activeChar || obj == sourcePlayer || obj instanceof L2Npc || obj instanceof L2Attackable))
 							continue;
@@ -1400,7 +1402,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				{
 					final boolean srcInArena = activeChar.isInArena();
 					
-					for (L2Character obj : activeChar.getKnownList().getKnownTypeInRadius(L2Character.class, _skillRadius))
+					for (L2Character obj : activeChar.getKnownTypeInRadius(L2Character.class, _skillRadius))
 					{
 						if (obj instanceof L2Attackable || obj instanceof L2Playable)
 						{
@@ -1446,7 +1448,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				final boolean srcInArena = activeChar.isInArena();
 				List<L2Character> targetList = new ArrayList<>();
 				
-				for (L2Character obj : target.getKnownList().getKnownType(L2Character.class))
+				for (L2Character obj : target.getKnownType(L2Character.class))
 				{
 					if (obj == null || obj == target || obj == activeChar)
 						continue;
@@ -1499,7 +1501,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				else
 					origin = activeChar;
 				
-				for (L2Character obj : activeChar.getKnownList().getKnownType(L2Character.class))
+				for (L2Character obj : activeChar.getKnownType(L2Character.class))
 				{
 					if (!(obj instanceof L2Attackable || obj instanceof L2Playable))
 						continue;
@@ -1655,7 +1657,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				
 				if (player.getClan() != null)
 				{
-					for (L2PcInstance obj : activeChar.getKnownList().getKnownTypeInRadius(L2PcInstance.class, radius))
+					for (L2PcInstance obj : activeChar.getKnownTypeInRadius(L2PcInstance.class, radius))
 					{
 						if ((obj.getAllyId() == 0 || obj.getAllyId() != player.getAllyId()) && (obj.getClan() == null || obj.getClanId() != player.getClanId()))
 							continue;
@@ -1701,7 +1703,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				
 				if (player.getClan() != null)
 				{
-					for (L2PcInstance obj : activeChar.getKnownList().getKnownTypeInRadius(L2PcInstance.class, radius))
+					for (L2PcInstance obj : activeChar.getKnownTypeInRadius(L2PcInstance.class, radius))
 					{
 						if (!obj.isDead())
 							continue;
@@ -1784,9 +1786,9 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				else if (activeChar instanceof L2Npc)
 				{
 					targetList.add(activeChar);
-					for (L2Npc newTarget : activeChar.getKnownList().getKnownTypeInRadius(L2Npc.class, _castRange))
+					for (L2Npc newTarget : activeChar.getKnownTypeInRadius(L2Npc.class, _castRange))
 					{
-						if (newTarget.isDead() || !Util.contains(((L2Npc) activeChar).getTemplate().getClans(), newTarget.getTemplate().getClans()))
+						if (newTarget.isDead() || !ArraysUtil.contains(((L2Npc) activeChar).getTemplate().getClans(), newTarget.getTemplate().getClans()))
 							continue;
 						
 						targetList.add(newTarget);
@@ -1910,7 +1912,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				
 				final boolean srcInArena = activeChar.isInArena();
 				
-				for (L2Character obj : activeChar.getKnownList().getKnownTypeInRadius(L2Character.class, _skillRadius))
+				for (L2Character obj : activeChar.getKnownTypeInRadius(L2Character.class, _skillRadius))
 				{
 					if (!(obj instanceof L2Attackable || obj instanceof L2Playable))
 						continue;
@@ -1960,7 +1962,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			{
 				List<L2Character> targetList = new ArrayList<>();
 				
-				for (L2Character obj : activeChar.getKnownList().getKnownTypeInRadius(L2Character.class, _skillRadius))
+				for (L2Character obj : activeChar.getKnownTypeInRadius(L2Character.class, _skillRadius))
 				{
 					if (obj instanceof L2Npc || obj instanceof L2SummonInstance)
 						target = obj;

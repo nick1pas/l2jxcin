@@ -18,15 +18,18 @@ import java.util.List;
 import java.util.Locale;
 
 import net.sf.l2j.commons.lang.StringUtil;
+
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.games.MonsterRace;
 import net.sf.l2j.gameserver.instancemanager.games.MonsterRace.HistoryInfo;
 import net.sf.l2j.gameserver.instancemanager.games.MonsterRace.RaceState;
-import net.sf.l2j.gameserver.model.actor.knownlist.RaceManagerKnownList;
+import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
+import net.sf.l2j.gameserver.network.serverpackets.DeleteObject;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
@@ -47,18 +50,6 @@ public class L2RaceManagerInstance extends L2NpcInstance
 	public L2RaceManagerInstance(int objectId, NpcTemplate template)
 	{
 		super(objectId, template);
-	}
-	
-	@Override
-	public void initKnownList()
-	{
-		setKnownList(new RaceManagerKnownList(this));
-	}
-	
-	@Override
-	public final RaceManagerKnownList getKnownList()
-	{
-		return (RaceManagerKnownList) super.getKnownList();
 	}
 	
 	@Override
@@ -170,7 +161,7 @@ public class L2RaceManagerInstance extends L2NpcInstance
 				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.ACQUIRED_S1_S2).addNumber(MonsterRace.getInstance().getRaceNumber()).addItemName(4443));
 				
 				// Refresh lane bet.
-				MonsterRace.setBetOnLane(ticket, TICKET_PRICES[priceId - 1], true);
+				MonsterRace.getInstance().setBetOnLane(ticket, TICKET_PRICES[priceId - 1], true);
 				super.onBypassFeedback(player, "Chat 0");
 				return;
 			}
@@ -343,5 +334,26 @@ public class L2RaceManagerInstance extends L2NpcInstance
 		}
 		else
 			super.onBypassFeedback(player, command);
+	}
+	
+	@Override
+	public void addKnownObject(L2Object object)
+	{
+		if (object instanceof L2PcInstance)
+			((L2PcInstance) object).sendPacket(MonsterRace.getInstance().getRacePacket());
+	}
+	
+	@Override
+	public void removeKnownObject(L2Object object)
+	{
+		super.removeKnownObject(object);
+		
+		if (object instanceof L2PcInstance)
+		{
+			final L2PcInstance player = ((L2PcInstance) object);
+			
+			for (L2Npc npc : MonsterRace.getInstance().getMonsters())
+				player.sendPacket(new DeleteObject(npc));
+		}
 	}
 }

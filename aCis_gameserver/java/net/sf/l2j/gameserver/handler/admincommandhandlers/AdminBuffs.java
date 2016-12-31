@@ -3,10 +3,11 @@ package net.sf.l2j.gameserver.handler.admincommandhandlers;
 import java.util.StringTokenizer;
 
 import net.sf.l2j.commons.lang.StringUtil;
+
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -37,7 +38,7 @@ public class AdminBuffs implements IAdminCommandHandler
 			if (st.hasMoreTokens())
 			{
 				String playername = st.nextToken();
-				L2PcInstance player = L2World.getInstance().getPlayer(playername);
+				L2PcInstance player = World.getInstance().getPlayer(playername);
 				if (player == null)
 				{
 					activeChar.sendPacket(SystemMessageId.TARGET_IS_NOT_FOUND_IN_THE_GAME);
@@ -108,11 +109,8 @@ public class AdminBuffs implements IAdminCommandHandler
 				String val = st.nextToken();
 				int radius = Integer.parseInt(val);
 				
-				for (L2PcInstance knownChar : activeChar.getKnownList().getKnownTypeInRadius(L2PcInstance.class, radius))
-				{
-					if (!knownChar.equals(activeChar))
-						knownChar.stopAllEffects();
-				}
+				for (L2PcInstance knownChar : activeChar.getKnownTypeInRadius(L2PcInstance.class, radius))
+					knownChar.stopAllEffects();
 				
 				activeChar.sendMessage("All effects canceled within radius " + radius + ".");
 				return true;
@@ -133,7 +131,7 @@ public class AdminBuffs implements IAdminCommandHandler
 			{
 				final String name = st.nextToken();
 				
-				player = L2World.getInstance().getPlayer(name);
+				player = World.getInstance().getPlayer(name);
 				if (player == null)
 				{
 					activeChar.sendMessage("The player " + name + " is not online.");
@@ -210,7 +208,7 @@ public class AdminBuffs implements IAdminCommandHandler
 		if (skillId < 1)
 			return;
 		
-		final L2Object obj = L2World.getInstance().getObject(objId);
+		final L2Object obj = World.getInstance().getObject(objId);
 		if (obj instanceof L2Character)
 		{
 			final L2Character target = (L2Character) obj;
@@ -229,7 +227,7 @@ public class AdminBuffs implements IAdminCommandHandler
 	
 	private static void removeAllBuffs(L2PcInstance activeChar, int objId)
 	{
-		final L2Object target = L2World.getInstance().getObject(objId);
+		final L2Object target = World.getInstance().getObject(objId);
 		if (target instanceof L2Character)
 		{
 			((L2Character) target).stopAllEffects();

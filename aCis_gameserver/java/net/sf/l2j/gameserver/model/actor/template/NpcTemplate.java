@@ -148,11 +148,11 @@ public class NpcTemplate extends CharTemplate
 		
 		_aiType = set.getEnum("aiType", AIType.class, AIType.DEFAULT);
 		
-		_ssCount = set.getInteger("ssCount");
-		_ssRate = set.getInteger("ssRate");
-		_spsCount = set.getInteger("spsCount");
-		_spsRate = set.getInteger("spsRate");
-		_aggroRange = set.getInteger("aggro");
+		_ssCount = set.getInteger("ssCount", 0);
+		_ssRate = set.getInteger("ssRate", 0);
+		_spsCount = set.getInteger("spsCount", 0);
+		_spsRate = set.getInteger("spsRate", 0);
+		_aggroRange = set.getInteger("aggro", 0);
 		
 		if (set.containsKey("clan"))
 		{
@@ -163,8 +163,8 @@ public class NpcTemplate extends CharTemplate
 				_ignoredIds = set.getIntegerArray("ignoredIds");
 		}
 		
-		_canMove = set.getBool("canMove");
-		_isSeedable = set.getBool("seedable");
+		_canMove = set.getBool("canMove", true);
+		_isSeedable = set.getBool("seedable", false);
 		
 		_categories = set.getList("drops");
 		_minions = set.getList("minions");

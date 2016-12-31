@@ -37,7 +37,7 @@ public class SpawnLocation extends Location
 	@Override
 	public String toString()
 	{
-		return "(" + _x + ", " + _y + ", " + _z + ", " + _heading + ")";
+		return _x + ", " + _y + ", " + _z + ", " + _heading;
 	}
 	
 	@Override

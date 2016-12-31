@@ -87,7 +87,7 @@ public class L2ControlTowerInstance extends L2Npc
 			getCastle().getSiege().killedCT();
 			
 			for (L2Spawn spawn : _guards)
-				spawn.stopRespawn();
+				spawn.setRespawnState(false);
 			
 			_guards.clear();
 		}

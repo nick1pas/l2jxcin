@@ -104,7 +104,7 @@ public class L2SkillSiegeFlag extends L2Skill
 			sm = SystemMessage.getSystemMessage(SystemMessageId.NOT_ANOTHER_HEADQUARTERS);
 		else if (!player.isInsideZone(ZoneId.HQ))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.NOT_SET_UP_BASE_HERE);
-		else if (!player.getKnownList().getKnownTypeInRadius(L2SiegeFlagInstance.class, 400).isEmpty())
+		else if (!player.getKnownTypeInRadius(L2SiegeFlagInstance.class, 400).isEmpty())
 			sm = SystemMessage.getSystemMessage(SystemMessageId.HEADQUARTERS_TOO_CLOSE);
 		else
 			return true;

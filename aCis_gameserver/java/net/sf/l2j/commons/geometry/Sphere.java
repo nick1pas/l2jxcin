@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.commons.geometry;
 
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.Location;
 
 /**
@@ -57,16 +59,23 @@ public class Sphere extends Circle
 		final int dy = y - _y;
 		final int dz = z - _z;
 		
-		return dx * dx + dy * dy + dz * dz < _r * _r;
+		return (dx * dx + dy * dy + dz * dz) <= _r * _r;
 	}
 	
 	@Override
 	public final Location getRandomLocation()
 	{
-		final int x = (int) (_x + (2 * Math.random() - 1) * _r);
-		final int y = (int) (_y + (2 * Math.random() - 1) * _r);
-		final int z = (int) (_z + (2 * Math.random() - 1) * _r);
+		// get uniform distance and angles
+		final double r = Math.cbrt(Rnd.nextDouble()) * _r;
+		final double phi = Rnd.nextDouble() * 2 * Math.PI;
+		final double theta = Math.acos(2 * Rnd.nextDouble() - 1);
 		
+		// calculate coordinates
+		final int x = (int) (_x + (r * Math.cos(phi) * Math.sin(theta)));
+		final int y = (int) (_y + (r * Math.sin(phi) * Math.sin(theta)));
+		final int z = (int) (_z + (r * Math.cos(theta)));
+		
+		// return
 		return new Location(x, y, z);
 	}
 }

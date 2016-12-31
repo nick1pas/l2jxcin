@@ -14,15 +14,12 @@
  */
 package net.sf.l2j.gameserver.model.actor.instance;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
 import net.sf.l2j.gameserver.ai.model.L2SiegeGuardAI;
-import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.knownlist.SiegeGuardKnownList;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
@@ -35,18 +32,6 @@ public final class L2SiegeGuardInstance extends L2Attackable
 	public L2SiegeGuardInstance(int objectId, NpcTemplate template)
 	{
 		super(objectId, template);
-	}
-	
-	@Override
-	public void initKnownList()
-	{
-		setKnownList(new SiegeGuardKnownList(this));
-	}
-	
-	@Override
-	public final SiegeGuardKnownList getKnownList()
-	{
-		return (SiegeGuardKnownList) super.getKnownList();
 	}
 	
 	@Override
@@ -81,28 +66,6 @@ public final class L2SiegeGuardInstance extends L2Attackable
 	public boolean hasRandomAnimation()
 	{
 		return false;
-	}
-	
-	/**
-	 * This method forces guard to return to home location previously set
-	 */
-	@Override
-	public void returnHome()
-	{
-		if (getMoveSpeed() <= 0)
-			return;
-		
-		if (!isInsideRadius(getSpawn().getLocx(), getSpawn().getLocy(), 40, false))
-		{
-			if (Config.DEBUG)
-				_log.fine(getObjectId() + ": moving home");
-			
-			setIsReturningToSpawnPoint(true);
-			clearAggroList();
-			
-			if (hasAI())
-				getAI().setIntention(CtrlIntention.MOVE_TO, new Location(getSpawn().getLocx(), getSpawn().getLocy(), getSpawn().getLocz()));
-		}
 	}
 	
 	/**
@@ -152,5 +115,11 @@ public final class L2SiegeGuardInstance extends L2Attackable
 	public boolean isGuard()
 	{
 		return true;
+	}
+	
+	@Override
+	public int getDriftRange()
+	{
+		return 20;
 	}
 }

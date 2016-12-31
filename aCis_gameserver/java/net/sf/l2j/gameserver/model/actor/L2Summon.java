@@ -33,7 +33,6 @@ import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
-import net.sf.l2j.gameserver.model.actor.knownlist.SummonKnownList;
 import net.sf.l2j.gameserver.model.actor.stat.SummonStat;
 import net.sf.l2j.gameserver.model.actor.status.SummonStatus;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -75,21 +74,6 @@ public abstract class L2Summon extends L2Playable
 		
 		_showSummonAnimation = true;
 		_owner = owner;
-		_ai = new L2SummonAI(this);
-		
-		setXYZInvisible(owner.getX() + 50, owner.getY() + 100, owner.getZ() + 100);
-	}
-	
-	@Override
-	public void initKnownList()
-	{
-		setKnownList(new SummonKnownList(this));
-	}
-	
-	@Override
-	public final SummonKnownList getKnownList()
-	{
-		return (SummonKnownList) super.getKnownList();
 	}
 	
 	@Override
@@ -145,7 +129,7 @@ public abstract class L2Summon extends L2Playable
 	@Override
 	public void updateAbnormalEffect()
 	{
-		for (L2PcInstance player : getKnownList().getKnownType(L2PcInstance.class))
+		for (L2PcInstance player : getKnownType(L2PcInstance.class))
 			player.sendPacket(new SummonInfo(this, player, 1));
 	}
 	
@@ -238,7 +222,6 @@ public abstract class L2Summon extends L2Playable
 			}
 			
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
 		}
 		super.onActionShift(player);
 	}
@@ -344,7 +327,6 @@ public abstract class L2Summon extends L2Playable
 		owner.sendPacket(new PetDelete(getSummonType(), getObjectId()));
 		
 		decayMe();
-		getKnownList().removeAllKnownObjects();
 		owner.setPet(null);
 		super.deleteMe();
 	}
@@ -372,7 +354,6 @@ public abstract class L2Summon extends L2Playable
 			
 			decayMe();
 			
-			getKnownList().removeAllKnownObjects();
 			setTarget(null);
 			
 			// Disable beastshots
@@ -797,17 +778,14 @@ public abstract class L2Summon extends L2Playable
 		sendPacket(new PetStatusUpdate(this));
 		
 		if (isVisible())
-			broadcastNpcInfo(val);
-	}
-	
-	public void broadcastNpcInfo(int val)
-	{
-		for (L2PcInstance player : getKnownList().getKnownType(L2PcInstance.class))
 		{
-			if (player == getOwner())
-				continue;
-			
-			player.sendPacket(new SummonInfo(this, player, val));
+			for (L2PcInstance player : getKnownType(L2PcInstance.class))
+			{
+				if (player == getOwner())
+					continue;
+				
+				player.sendPacket(new SummonInfo(this, player, val));
+			}
 		}
 	}
 	
@@ -827,7 +805,7 @@ public abstract class L2Summon extends L2Playable
 	@Override
 	public void broadcastRelationsChanges()
 	{
-		for (L2PcInstance player : getOwner().getKnownList().getKnownType(L2PcInstance.class))
+		for (L2PcInstance player : getOwner().getKnownType(L2PcInstance.class))
 			player.sendPacket(new RelationChanged(this, getOwner().getRelation(player), isAutoAttackable(player)));
 	}
 	
@@ -835,7 +813,7 @@ public abstract class L2Summon extends L2Playable
 	public void sendInfo(L2PcInstance activeChar)
 	{
 		// Check if the L2PcInstance is the owner of the Pet
-		if (activeChar.equals(getOwner()))
+		if (activeChar == getOwner())
 		{
 			activeChar.sendPacket(new PetInfo(this, 0));
 			

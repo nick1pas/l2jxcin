@@ -14,8 +14,9 @@
  */
 package net.sf.l2j.gameserver.model.actor.instance;
 
+import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.ThreadPoolManager;
+
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
 import net.sf.l2j.gameserver.ai.model.L2DoorAI;
@@ -30,7 +31,6 @@ import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.knownlist.DoorKnownList;
 import net.sf.l2j.gameserver.model.actor.stat.DoorStat;
 import net.sf.l2j.gameserver.model.actor.status.DoorStatus;
 import net.sf.l2j.gameserver.model.actor.template.DoorTemplate;
@@ -86,8 +86,10 @@ public class L2DoorInstance extends L2Character implements IGeoObject
 		if (_clanHall != null)
 			_clanHall.getDoors().add(this);
 		
-		// set default status and name
-		_open = getTemplate().isOpened();
+		// temporarily set opposite state to initial state (will be set correctly by onSpawn)
+		_open = !getTemplate().isOpened();
+		
+		// set name
 		setName(template.getName());
 	}
 	
@@ -185,7 +187,7 @@ public class L2DoorInstance extends L2Character implements IGeoObject
 			
 			// try to schedule automatic state change
 			if (time > 0)
-				ThreadPoolManager.getInstance().scheduleGeneral(new Runnable()
+				ThreadPool.schedule(new Runnable()
 				{
 					@Override
 					public void run()
@@ -194,18 +196,6 @@ public class L2DoorInstance extends L2Character implements IGeoObject
 					}
 				}, time * 1000);
 		}
-	}
-	
-	@Override
-	public void initKnownList()
-	{
-		setKnownList(new DoorKnownList(this));
-	}
-	
-	@Override
-	public final DoorKnownList getKnownList()
-	{
-		return (DoorKnownList) super.getKnownList();
 	}
 	
 	@Override
@@ -356,7 +346,6 @@ public class L2DoorInstance extends L2Character implements IGeoObject
 			html.replace("%spawn%", getX() + " " + getY() + " " + getZ());
 			html.replace("%height%", getTemplate().getCollisionHeight());
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
 		}
 		
 		if (player.getTarget() != this)
@@ -391,8 +380,7 @@ public class L2DoorInstance extends L2Character implements IGeoObject
 	@Override
 	public void onSpawn()
 	{
-		if (!_open)
-			GeoEngine.getInstance().addGeoObject(this);
+		changeState(getTemplate().isOpened(), false);
 		
 		super.onSpawn();
 	}
@@ -426,7 +414,7 @@ public class L2DoorInstance extends L2Character implements IGeoObject
 	@Override
 	public void broadcastStatusUpdate()
 	{
-		for (L2PcInstance player : getKnownList().getKnownType(L2PcInstance.class))
+		for (L2PcInstance player : getKnownType(L2PcInstance.class))
 			player.sendPacket(new DoorStatusUpdate(this, player));
 	}
 	

@@ -101,13 +101,19 @@ public class Q228_TestOfMagus extends Quest
 			return htmltext;
 		
 		// RUKAL
-		if (event.equalsIgnoreCase("30629-04a.htm"))
+		if (event.equalsIgnoreCase("30629-04.htm"))
 		{
 			st.setState(STATE_STARTED);
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
-			st.giveItems(DIMENSIONAL_DIAMOND, 122);
 			st.giveItems(RUKAL_LETTER, 1);
+			
+			if (!player.getMemos().getBool("secondClassChange39", false))
+			{
+				htmltext = "30629-04a.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_39.get(player.getClassId().getId()));
+				player.getMemos().set("secondClassChange39", true);
+			}
 		}
 		else if (event.equalsIgnoreCase("30629-10.htm"))
 		{

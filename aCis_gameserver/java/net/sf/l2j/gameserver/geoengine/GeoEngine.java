@@ -25,9 +25,10 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.commons.config.ExProperties;
 import net.sf.l2j.commons.math.MathUtil;
+
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.geoengine.geodata.ABlock;
 import net.sf.l2j.gameserver.geoengine.geodata.BlockComplex;
 import net.sf.l2j.gameserver.geoengine.geodata.BlockComplexDynamic;
@@ -42,8 +43,8 @@ import net.sf.l2j.gameserver.geoengine.geodata.IBlockDynamic;
 import net.sf.l2j.gameserver.geoengine.geodata.IGeoObject;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2World;
 import net.sf.l2j.gameserver.model.Location;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -92,9 +93,9 @@ public class GeoEngine
 		final ExProperties props = Config.initProperties(Config.GEOENGINE_FILE);
 		int loaded = 0;
 		int failed = 0;
-		for (int rx = L2World.TILE_X_MIN; rx <= L2World.TILE_X_MAX; rx++)
+		for (int rx = World.TILE_X_MIN; rx <= World.TILE_X_MAX; rx++)
 		{
-			for (int ry = L2World.TILE_Y_MIN; ry <= L2World.TILE_Y_MAX; ry++)
+			for (int ry = World.TILE_Y_MIN; ry <= World.TILE_Y_MAX; ry++)
 			{
 				if (props.containsKey(String.valueOf(rx) + "_" + String.valueOf(ry)))
 				{
@@ -157,8 +158,8 @@ public class GeoEngine
 			buffer.order(ByteOrder.LITTLE_ENDIAN);
 			
 			// get block indexes
-			final int blockX = (regionX - L2World.TILE_X_MIN) * GeoStructure.REGION_BLOCKS_X;
-			final int blockY = (regionY - L2World.TILE_Y_MIN) * GeoStructure.REGION_BLOCKS_Y;
+			final int blockX = (regionX - World.TILE_X_MIN) * GeoStructure.REGION_BLOCKS_X;
+			final int blockY = (regionY - World.TILE_Y_MIN) * GeoStructure.REGION_BLOCKS_Y;
 			
 			// loop over region blocks
 			for (int ix = 0; ix < GeoStructure.REGION_BLOCKS_X; ix++)
@@ -219,8 +220,8 @@ public class GeoEngine
 	private final void loadNullBlocks(int regionX, int regionY)
 	{
 		// get block indexes
-		final int blockX = (regionX - L2World.TILE_X_MIN) * GeoStructure.REGION_BLOCKS_X;
-		final int blockY = (regionY - L2World.TILE_Y_MIN) * GeoStructure.REGION_BLOCKS_Y;
+		final int blockX = (regionX - World.TILE_X_MIN) * GeoStructure.REGION_BLOCKS_X;
+		final int blockY = (regionY - World.TILE_Y_MIN) * GeoStructure.REGION_BLOCKS_Y;
 		
 		// load all null blocks
 		for (int ix = 0; ix < GeoStructure.REGION_BLOCKS_X; ix++)
@@ -237,7 +238,7 @@ public class GeoEngine
 	 */
 	public static final int getGeoX(int worldX)
 	{
-		return (MathUtil.limit(worldX, L2World.WORLD_X_MIN, L2World.WORLD_X_MAX) - L2World.WORLD_X_MIN) >> 4;
+		return (MathUtil.limit(worldX, World.WORLD_X_MIN, World.WORLD_X_MAX) - World.WORLD_X_MIN) >> 4;
 	}
 	
 	/**
@@ -247,7 +248,7 @@ public class GeoEngine
 	 */
 	public static final int getGeoY(int worldY)
 	{
-		return (MathUtil.limit(worldY, L2World.WORLD_Y_MIN, L2World.WORLD_Y_MAX) - L2World.WORLD_Y_MIN) >> 4;
+		return (MathUtil.limit(worldY, World.WORLD_Y_MIN, World.WORLD_Y_MAX) - World.WORLD_Y_MIN) >> 4;
 	}
 	
 	/**
@@ -257,7 +258,7 @@ public class GeoEngine
 	 */
 	public static final int getWorldX(int geoX)
 	{
-		return (MathUtil.limit(geoX, 0, GeoStructure.GEO_CELLS_X) << 4) + L2World.WORLD_X_MIN + 8;
+		return (MathUtil.limit(geoX, 0, GeoStructure.GEO_CELLS_X) << 4) + World.WORLD_X_MIN + 8;
 	}
 	
 	/**
@@ -267,7 +268,7 @@ public class GeoEngine
 	 */
 	public static final int getWorldY(int geoY)
 	{
-		return (MathUtil.limit(geoY, 0, GeoStructure.GEO_CELLS_Y) << 4) + L2World.WORLD_Y_MIN + 8;
+		return (MathUtil.limit(geoY, 0, GeoStructure.GEO_CELLS_Y) << 4) + World.WORLD_Y_MIN + 8;
 	}
 	
 	/**
@@ -482,6 +483,10 @@ public class GeoEngine
 					// check for dynamic block
 					if (!(block instanceof IBlockDynamic))
 					{
+						// null block means no geodata (particular region file is not loaded), no geodata means no geobjects
+						if (block instanceof BlockNull)
+							continue;
+						
 						// not a dynamic block, convert it
 						if (block instanceof BlockFlat)
 						{
@@ -770,7 +775,8 @@ public class GeoEngine
 			gty = nty;
 		}
 		
-		return true;
+		// when iteration is completed, compare final Z coordinates
+		return Math.abs(goz - gtz) < GeoStructure.CELL_HEIGHT * 4;
 	}
 	
 	/**
@@ -935,7 +941,8 @@ public class GeoEngine
 			gty = nty;
 		}
 		
-		return true;
+		// when iteration is completed, compare final Z coordinates
+		return Math.abs(goz - gtz) < GeoStructure.CELL_HEIGHT * 4;
 	}
 	
 	/**
@@ -1177,8 +1184,8 @@ public class GeoEngine
 		int gox = getGeoX(loc.getX());
 		int goy = getGeoY(loc.getY());
 		int goz = loc.getZ();
-		int rx = gox / GeoStructure.REGION_CELLS_X + L2World.TILE_X_MIN;
-		int ry = goy / GeoStructure.REGION_CELLS_Y + L2World.TILE_Y_MIN;
+		int rx = gox / GeoStructure.REGION_CELLS_X + World.TILE_X_MIN;
+		int ry = goy / GeoStructure.REGION_CELLS_Y + World.TILE_Y_MIN;
 		int bx = (gox / GeoStructure.BLOCK_CELLS_X) % GeoStructure.REGION_BLOCKS_X;
 		int by = (goy / GeoStructure.BLOCK_CELLS_Y) % GeoStructure.REGION_BLOCKS_Y;
 		int cx = gox % GeoStructure.BLOCK_CELLS_X;

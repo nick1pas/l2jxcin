@@ -16,8 +16,9 @@ package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import java.util.StringTokenizer;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.commons.lang.StringUtil;
+
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.cache.CrestCache;
 import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.datatables.AdminCommandAccessRights;
@@ -34,7 +35,7 @@ import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -96,7 +97,7 @@ public class AdminAdmin implements IAdminCommandHandler
 			}
 			
 			String firstParam = st.nextToken();
-			L2PcInstance player = L2World.getInstance().getPlayer(firstParam);
+			L2PcInstance player = World.getInstance().getPlayer(firstParam);
 			if (player != null)
 			{
 				if (st.hasMoreTokens())
@@ -105,7 +106,7 @@ public class AdminAdmin implements IAdminCommandHandler
 					if (StringUtil.isDigit(secondParam))
 					{
 						int radius = Integer.parseInt(secondParam);
-						for (L2Character knownChar : player.getKnownList().getKnownTypeInRadius(L2Character.class, radius))
+						for (L2Character knownChar : player.getKnownTypeInRadius(L2Character.class, radius))
 						{
 							if (knownChar.equals(activeChar))
 								continue;
@@ -123,13 +124,9 @@ public class AdminAdmin implements IAdminCommandHandler
 			else if (StringUtil.isDigit(firstParam))
 			{
 				int radius = Integer.parseInt(firstParam);
-				for (L2Character knownChar : activeChar.getKnownList().getKnownTypeInRadius(L2Character.class, radius))
-				{
-					if (knownChar.equals(activeChar))
-						continue;
-					
+				for (L2Character knownChar : activeChar.getKnownTypeInRadius(L2Character.class, radius))
 					kill(activeChar, knownChar);
-				}
+				
 				activeChar.sendMessage("Killed all characters within a " + radius + " unit radius.");
 			}
 		}

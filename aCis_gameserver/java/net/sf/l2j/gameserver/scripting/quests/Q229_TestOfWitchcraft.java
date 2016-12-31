@@ -14,6 +14,7 @@
  */
 package net.sf.l2j.gameserver.scripting.quests;
 
+import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.ClassId;
@@ -115,13 +116,19 @@ public class Q229_TestOfWitchcraft extends Quest
 			return htmltext;
 		
 		// ORIM
-		if (event.equalsIgnoreCase("30630-08a.htm"))
+		if (event.equalsIgnoreCase("30630-08.htm"))
 		{
 			st.setState(STATE_STARTED);
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(ORIM_DIAGRAM, 1);
-			st.giveItems(DIMENSIONAL_DIAMOND, 104);
+			
+			if (!player.getMemos().getBool("secondClassChange39", false))
+			{
+				htmltext = "30630-08a.htm";
+				st.giveItems(DIMENSIONAL_DIAMOND, DF_REWARD_39.get(player.getClassId().getId()));
+				player.getMemos().set("secondClassChange39", true);
+			}
 		}
 		else if (event.equalsIgnoreCase("30630-14.htm"))
 		{
@@ -484,7 +491,7 @@ public class Q229_TestOfWitchcraft extends Quest
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet)
+	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		QuestState st = checkPlayerState(attacker, npc, STATE_STARTED);
 		if (st == null)

@@ -58,7 +58,7 @@ public class EffectSignetAntiSummon extends L2Effect
 		final int mpConsume = getSkill().getMpConsume();
 		final L2PcInstance caster = (L2PcInstance) getEffector();
 		
-		for (L2Playable cha : _actor.getKnownList().getKnownTypeInRadius(L2Playable.class, getSkill().getSkillRadius()))
+		for (L2Playable cha : _actor.getKnownTypeInRadius(L2Playable.class, getSkill().getSkillRadius()))
 		{
 			if (!caster.canAttackCharacter(cha))
 				continue;

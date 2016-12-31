@@ -22,7 +22,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 /**
  * This class handles following admin commands:
  * <ul>
- * <li>announce list|all|add|add_auto|del : announcement management.</li>
+ * <li>announce list|all|all_auto|add|add_auto|del : announcement management.</li>
  * <li>ann : announces to all players (basic usage).</li>
  * <li>say : critical announces to all players.</li>
  * </ul>
@@ -50,11 +50,18 @@ public class AdminAnnouncements implements IAdminCommandHandler
 				
 				case "all":
 					for (L2PcInstance player : L2World.getInstance().getAllPlayers().values())
-						AnnouncementTable.getInstance().showAnnouncements(player);
+						AnnouncementTable.getInstance().showAnnouncements(player, false);
 					
 					AnnouncementTable.getInstance().listAnnouncements(activeChar);
 					break;
-				
+					
+				case "all_auto":
+					for (L2PcInstance player : L2World.getInstance().getAllPlayers().values())
+						AnnouncementTable.getInstance().showAnnouncements(player, true);
+					
+					AnnouncementTable.getInstance().listAnnouncements(activeChar);
+					break;
+					
 				case "add":
 					try
 					{

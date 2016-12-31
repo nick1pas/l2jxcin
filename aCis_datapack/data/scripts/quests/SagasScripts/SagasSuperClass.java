@@ -154,7 +154,7 @@ public class SagasSuperClass extends Quest
 			addKillId(Guardian_Angel);
 	}
 	
-	private void cast(L2Npc npc, L2Character target, int skillId, int level)
+	private static void cast(L2Npc npc, L2Character target, int skillId, int level)
 	{
 		target.broadcastPacket(new MagicSkillUse(target, target, skillId, level, 6000, 1));
 		target.broadcastPacket(new MagicSkillUse(npc, npc, skillId, level, 6000, 1));

@@ -275,7 +275,7 @@ public class Q620_FourGoblets extends Quest
 	 * @param st the QuestState of the player, used to reward him.
 	 * @return true if there was a reward, false if not (used to call a "no-reward" html)
 	 */
-	private boolean calculateBoxReward(QuestState st)
+	private static boolean calculateBoxReward(QuestState st)
 	{
 		boolean reward = false;
 		int rnd = Rnd.get(5);

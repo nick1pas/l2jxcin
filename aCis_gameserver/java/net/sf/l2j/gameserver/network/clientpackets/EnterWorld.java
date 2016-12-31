@@ -80,12 +80,6 @@ public class EnterWorld extends L2GameClientPacket
 			return;
 		}
 		
-		if (L2World.getInstance().findObject(activeChar.getObjectId()) != null)
-		{
-			if (Config.DEBUG)
-				_log.warning("User already exist in OID map! User " + activeChar.getName() + " is character clone.");
-		}
-		
 		if (activeChar.isGM())
 		{
 			if (Config.GM_STARTUP_INVULNERABLE && AdminCommandAccessRights.getInstance().hasAccess("admin_invul", activeChar.getAccessLevel()))
@@ -172,7 +166,7 @@ public class EnterWorld extends L2GameClientPacket
 		// Announcements, welcome & Seven signs period messages
 		activeChar.sendPacket(SystemMessageId.WELCOME_TO_LINEAGE);
 		SevenSigns.getInstance().sendCurrentPeriodMsg(activeChar);
-		AnnouncementTable.getInstance().showAnnouncements(activeChar);
+		AnnouncementTable.getInstance().showAnnouncements(activeChar, false);
 		
 		// if player is DE, check for shadow sense skill at night
 		if (activeChar.getRace() == Race.DarkElf && activeChar.getSkillLevel(294) == 1)

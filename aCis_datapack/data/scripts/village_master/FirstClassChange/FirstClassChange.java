@@ -22,6 +22,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.Race;
 import net.sf.l2j.gameserver.model.quest.Quest;
 import net.sf.l2j.gameserver.model.quest.QuestState;
+import net.sf.l2j.gameserver.network.serverpackets.HennaInfo;
 
 /**
  * @author fernandopm
@@ -363,6 +364,7 @@ public class FirstClassChange extends Quest
 						
 						player.setClassId(array[0]);
 						player.setBaseClass(array[0]);
+						player.sendPacket(new HennaInfo(player));
 						player.broadcastUserInfo();
 					}
 					else

@@ -56,7 +56,7 @@ public abstract class AbstractNpcAI extends Quest
 	
 	/**
 	 * Register a monster on particular event types.
-	 * @param mobs A mob.
+	 * @param mob A mob.
 	 * @param types Types of event to register mob on.
 	 */
 	public void registerMob(int mob, QuestEventType... types)

@@ -24,6 +24,7 @@ import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.model.holder.ItemHolder;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
+import net.sf.l2j.gameserver.network.serverpackets.HennaInfo;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
 import net.sf.l2j.util.StringUtil;
@@ -254,6 +255,7 @@ public final class L2ClassMasterInstance extends L2NpcInstance
 		else
 			player.setBaseClass(player.getActiveClass());
 		
+		player.sendPacket(new HennaInfo(player));
 		player.broadcastUserInfo();
 		return true;
 	}

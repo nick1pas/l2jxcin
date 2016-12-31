@@ -14,7 +14,6 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.L2World;
 import net.sf.l2j.gameserver.model.TradeList;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -40,11 +39,7 @@ public final class TradeDone extends L2GameClientPacket
 		
 		final TradeList trade = player.getActiveTradeList();
 		if (trade == null)
-		{
-			if (Config.DEBUG)
-				_log.warning("player.getTradeList == null in " + getType() + " for player " + player.getName());
 			return;
-		}
 		
 		if (trade.isLocked())
 			return;

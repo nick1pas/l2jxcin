@@ -388,7 +388,7 @@ public class Q422_RepentYourSins extends Quest
 		return null;
 	}
 	
-	private int findSinEaterLvl(L2PcInstance player)
+	private static int findSinEaterLvl(L2PcInstance player)
 	{
 		return player.getInventory().getItemByItemId(PENITENT_MANACLES).getEnchantLevel();
 	}

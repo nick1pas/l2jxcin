@@ -124,6 +124,16 @@ public class L2MerchantInstance extends L2NpcInstance
 			
 			MultisellData.getInstance().separateAndSend(Integer.parseInt(st.nextToken()), player, true, getCastle().getTaxRate());
 		}
+		else if (actualCommand.equalsIgnoreCase("Newbie_Exc_Multisell"))
+		{
+			if (st.countTokens() < 1)
+				return;
+			
+			if (player.isNewbie())
+				MultisellData.getInstance().separateAndSend(Integer.parseInt(st.nextToken()), player, true, getCastle().getTaxRate());
+			else
+				showChatWindow(player, "data/html/exchangelvlimit.htm");
+		}
 		else
 			super.onBypassFeedback(player, command);
 	}

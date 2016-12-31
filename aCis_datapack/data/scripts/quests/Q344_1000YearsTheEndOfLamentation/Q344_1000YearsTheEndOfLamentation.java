@@ -181,7 +181,7 @@ public class Q344_1000YearsTheEndOfLamentation extends Quest
 		return htmltext;
 	}
 	
-	private void rewards(QuestState st, int npcId)
+	private static void rewards(QuestState st, int npcId)
 	{
 		switch (npcId)
 		{

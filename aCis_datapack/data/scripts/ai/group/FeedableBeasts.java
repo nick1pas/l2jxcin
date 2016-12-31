@@ -718,8 +718,8 @@ public class FeedableBeasts extends AbstractNpcAI
 		// If the mob is at 0th level (when it still listens to all feeders) lock it to the first feeder!
 		if (growthLevel == 0 && _FeedInfo.containsKey(objectId))
 			return super.onSkillSee(npc, caster, skill, targets, isPet);
-		else
-			_FeedInfo.put(objectId, caster.getObjectId());
+		
+		_FeedInfo.put(objectId, caster.getObjectId());
 		
 		int food = 0;
 		if (skillId == SKILL_GOLDEN_SPICE)

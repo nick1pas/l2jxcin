@@ -59,7 +59,7 @@ public class AnnouncementTable
 	{
 		// Clean first tasks from automatic announcements.
 		for (Announcement announce : _announcements.values())
-			announce.stopDaemon();
+			announce.stopTask();
 		
 		load();
 	}
@@ -116,15 +116,21 @@ public class AnnouncementTable
 	/**
 	 * Send stored announcements from _announcements Map to a specific player.
 	 * @param activeChar : The player to send infos.
+	 * @param autoOrNot : If True, sends only automatic announcements, otherwise send classic ones.
 	 */
-	public void showAnnouncements(L2PcInstance activeChar)
+	public void showAnnouncements(L2PcInstance activeChar, boolean autoOrNot)
 	{
 		for (Announcement announce : _announcements.values())
 		{
-			if (announce.isAuto())
-				continue;
-			
-			activeChar.sendPacket(new CreatureSay(0, announce.isCritical() ? Say2.CRITICAL_ANNOUNCE : Say2.ANNOUNCEMENT, activeChar.getName(), announce.getMessage()));
+			if (autoOrNot)
+				announce.reloadTask();
+			else
+			{
+				if (announce.isAuto())
+					continue;
+				
+				activeChar.sendPacket(new CreatureSay(0, announce.isCritical() ? Say2.CRITICAL_ANNOUNCE : Say2.ANNOUNCEMENT, activeChar.getName(), announce.getMessage()));
+			}
 		}
 	}
 	
@@ -208,7 +214,7 @@ public class AnnouncementTable
 	public void delAnnouncement(int index)
 	{
 		// Stop the current task, if any.
-		_announcements.remove(index).stopDaemon();
+		_announcements.remove(index).stopTask();
 		
 		// Regenerate the XML.
 		regenerateXML();

@@ -76,14 +76,14 @@ public class HotSpringDisease extends AbstractNpcAI
 		return super.onAttackAct(npc, victim);
 	}
 	
-	private void tryToApplyEffect(L2Npc npc, L2PcInstance victim, int skillId)
+	private static void tryToApplyEffect(L2Npc npc, L2PcInstance victim, int skillId)
 	{
 		if (Rnd.get(100) < DISEASE_CHANCE)
 		{
 			int level = 1;
 			
 			L2Effect[] effects = victim.getAllEffects();
-			if (effects.length != 0 || effects != null)
+			if (effects.length != 0)
 			{
 				for (L2Effect e : effects)
 				{

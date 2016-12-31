@@ -553,7 +553,7 @@ public abstract class L2Character extends L2Object
 	 * </ul>
 	 * @param target The L2Character targeted
 	 */
-	protected void doAttack(L2Character target)
+	protected synchronized void doAttack(L2Character target)
 	{
 		if (target == null || isAttackingDisabled())
 		{
@@ -673,14 +673,12 @@ public abstract class L2Character extends L2Object
 		// Recharge any active auto soulshot tasks for current L2Character instance.
 		rechargeShots(true, false);
 		
-		// Verify if soulshots are charged.
-		boolean wasSSCharged = isChargedShot(ShotType.SOULSHOT);
-		
 		// Get the Attack Speed of the L2Character (delay (in milliseconds) before next attack)
 		int timeAtk = calculateTimeBetweenAttacks(target, weaponItemType);
 		_attackEndTime = System.currentTimeMillis() + timeAtk;
+		
 		// Create Attack
-		Attack attack = new Attack(this, wasSSCharged, (weaponItem != null) ? weaponItem.getCrystalType().getId() : 0);
+		Attack attack = new Attack(this, isChargedShot(ShotType.SOULSHOT), (weaponItem != null) ? weaponItem.getCrystalType().getId() : 0);
 		
 		// Make sure that char is facing selected target
 		setHeading(Util.calculateHeadingFrom(this, target));

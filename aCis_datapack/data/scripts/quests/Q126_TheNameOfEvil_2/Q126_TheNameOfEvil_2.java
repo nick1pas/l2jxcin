@@ -390,7 +390,7 @@ public class Q126_TheNameOfEvil_2 extends Quest
 		return htmltext;
 	}
 	
-	private String getSongOne(QuestState st)
+	private static String getSongOne(QuestState st)
 	{
 		String htmltext = "32122-24.htm";
 		if (st.getInt("cond") == 14 && st.getInt("DO") > 0 && st.getInt("MI") > 0 && st.getInt("FA") > 0 && st.getInt("SOL") > 0 && st.getInt("FA_2") > 0)
@@ -407,7 +407,7 @@ public class Q126_TheNameOfEvil_2 extends Quest
 		return htmltext;
 	}
 	
-	private String getSongTwo(QuestState st)
+	private static String getSongTwo(QuestState st)
 	{
 		String htmltext = "32122-45.htm";
 		if (st.getInt("cond") == 15 && st.getInt("FA") > 0 && st.getInt("SOL") > 0 && st.getInt("TI") > 0 && st.getInt("SOL_2") > 0 && st.getInt("FA_2") > 0)
@@ -424,7 +424,7 @@ public class Q126_TheNameOfEvil_2 extends Quest
 		return htmltext;
 	}
 	
-	private String getSongTri(QuestState st)
+	private static String getSongTri(QuestState st)
 	{
 		String htmltext = "32122-66.htm";
 		if (st.getInt("cond") == 16 && st.getInt("SOL") > 0 && st.getInt("FA") > 0 && st.getInt("MI") > 0 && st.getInt("FA_2") > 0 && st.getInt("MI_2") > 0)

@@ -180,9 +180,8 @@ public class Q350_EnhanceYourWeapon extends Quest
 	 * @param mob : The mob to make checks on.
 	 * @param npcInfo : The mob's leveling informations.
 	 * @param chance : Input variable used to determine keep/stage/break of the crystal.
-	 * @return Returns true only, when crystal is staged or broken (aka any type of crystal change is made), else returns false.
 	 */
-	private void tryToStageCrystal(L2PcInstance player, L2Attackable mob, LevelingInfo npcInfo, int chance)
+	private static void tryToStageCrystal(L2PcInstance player, L2Attackable mob, LevelingInfo npcInfo, int chance)
 	{
 		SoulCrystalData crystalData = null;
 		ItemInstance crystalItem = null;
@@ -266,7 +265,7 @@ public class Q350_EnhanceYourWeapon extends Quest
 	 * @param scd : SoulCrystalData of to take information form.
 	 * @param stage : Switch to determine success or fail.
 	 */
-	private void exchangeCrystal(L2PcInstance player, SoulCrystalData scd, boolean stage)
+	private static void exchangeCrystal(L2PcInstance player, SoulCrystalData scd, boolean stage)
 	{
 		QuestState st = player.getQuestState(qn);
 		

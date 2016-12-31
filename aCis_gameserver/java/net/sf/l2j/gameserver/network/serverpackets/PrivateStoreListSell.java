@@ -15,22 +15,20 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
 import net.sf.l2j.gameserver.model.TradeList;
+import net.sf.l2j.gameserver.model.TradeList.TradeItem;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 
 public class PrivateStoreListSell extends L2GameServerPacket
 {
-	private final L2PcInstance _storePlayer;
-	private final L2PcInstance _activeChar;
 	private final int _playerAdena;
+	private final L2PcInstance _storePlayer;
+	private final TradeItem[] _items;
 	private final boolean _packageSale;
-	private final TradeList.TradeItem[] _items;
 	
-	// player's private shop
 	public PrivateStoreListSell(L2PcInstance player, L2PcInstance storePlayer)
 	{
-		_activeChar = player;
+		_playerAdena = player.getAdena();
 		_storePlayer = storePlayer;
-		_playerAdena = _activeChar.getAdena();
 		_items = _storePlayer.getSellList().getItems();
 		_packageSale = _storePlayer.getSellList().isPackaged();
 	}
@@ -42,8 +40,8 @@ public class PrivateStoreListSell extends L2GameServerPacket
 		writeD(_storePlayer.getObjectId());
 		writeD(_packageSale ? 1 : 0);
 		writeD(_playerAdena);
-		
 		writeD(_items.length);
+		
 		for (TradeList.TradeItem item : _items)
 		{
 			writeD(item.getItem().getType2());

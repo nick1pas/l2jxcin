@@ -72,12 +72,12 @@ public class Q325_GrimCollector extends Quest
 			addKillId(npcId);
 	}
 	
-	private int getNumberOfPieces(QuestState st)
+	private static int getNumberOfPieces(QuestState st)
 	{
 		return st.getQuestItemsCount(ZOMBIE_HEAD) + st.getQuestItemsCount(SPINE) + st.getQuestItemsCount(ARM_BONE) + st.getQuestItemsCount(ZOMBIE_HEART) + st.getQuestItemsCount(ZOMBIE_LIVER) + st.getQuestItemsCount(SKULL) + st.getQuestItemsCount(RIB_BONE) + st.getQuestItemsCount(THIGH_BONE) + st.getQuestItemsCount(COMPLETE_SKELETON);
 	}
 	
-	private void payback(QuestState st)
+	private static void payback(QuestState st)
 	{
 		final int count = getNumberOfPieces(st);
 		if (count > 0)

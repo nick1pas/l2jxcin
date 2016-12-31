@@ -278,7 +278,7 @@ public class Q419_GetAPet extends Quest
 		return null;
 	}
 	
-	private String join(List<String> list)
+	private static String join(List<String> list)
 	{
 		StringBuilder sb = new StringBuilder();
 		String loopDelim = "";
@@ -291,7 +291,7 @@ public class Q419_GetAPet extends Quest
 		return sb.toString();
 	}
 	
-	private String checkQuestions(QuestState st)
+	private static String checkQuestions(QuestState st)
 	{
 		final int answers = st.getInt("correct") + (st.getInt("wrong"));
 		if (answers < 10)

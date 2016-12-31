@@ -457,7 +457,7 @@ public class Baium extends AbstractNpcAI
 	 * @param npc baium
 	 * @return a usable skillId
 	 */
-	private int getRandomSkill(L2Npc npc)
+	private static int getRandomSkill(L2Npc npc)
 	{
 		// Baium's selfheal. It happens exceptionaly.
 		if (npc.getCurrentHp() / npc.getMaxHp() < 0.1)

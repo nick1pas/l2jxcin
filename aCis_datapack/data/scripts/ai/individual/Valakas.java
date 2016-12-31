@@ -431,7 +431,7 @@ public class Valakas extends AbstractNpcAI
 	 * @param npc valakas
 	 * @return a usable skillId
 	 */
-	private int getRandomSkill(L2Npc npc)
+	private static int getRandomSkill(L2Npc npc)
 	{
 		final double hpRatio = npc.getCurrentHp() / npc.getMaxHp();
 		

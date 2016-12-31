@@ -489,6 +489,7 @@ public class Antharas extends AbstractNpcAI
 	
 	/**
 	 * Drop timers, meaning Antharas is dead or inactivity task occured.
+	 * @param npc : The NPC to affect.
 	 */
 	private void dropTimers(L2Npc npc)
 	{

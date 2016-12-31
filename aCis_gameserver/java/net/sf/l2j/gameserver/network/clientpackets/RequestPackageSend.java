@@ -20,6 +20,7 @@ import java.util.List;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.holder.ItemHolder;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.ItemContainer;
 import net.sf.l2j.gameserver.model.itemcontainer.PcFreight;
@@ -28,20 +29,17 @@ import net.sf.l2j.gameserver.network.serverpackets.InventoryUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
-/**
- * @author -Wooden-
- */
 public final class RequestPackageSend extends L2GameClientPacket
 {
-	private List<Item> _items = null;
+	private List<ItemHolder> _items;
 	private int _objectID;
 	
 	@Override
 	protected void readImpl()
 	{
 		_objectID = readD();
-		int count = readD();
 		
+		int count = readD();
 		if (count < 0 || count > Config.MAX_ITEM_IN_PACKET)
 			return;
 		
@@ -49,9 +47,10 @@ public final class RequestPackageSend extends L2GameClientPacket
 		
 		for (int i = 0; i < count; i++)
 		{
-			int id = readD(); // this is some id sent in PackageSendableList
+			int id = readD();
 			int cnt = readD();
-			_items.add(new Item(id, cnt));
+			
+			_items.add(new ItemHolder(id, cnt));
 		}
 	}
 	
@@ -95,18 +94,18 @@ public final class RequestPackageSend extends L2GameClientPacket
 		int currentAdena = player.getAdena();
 		int slots = 0;
 		
-		for (Item i : _items)
+		for (ItemHolder i : _items)
 		{
-			int objectId = i.id;
-			int count = i.count;
+			int count = i.getCount();
 			
 			// Check validity of requested item
-			ItemInstance item = player.checkItemManipulation(objectId, count);
+			ItemInstance item = player.checkItemManipulation(i.getId(), count);
 			if (item == null)
 			{
+				i.setId(0);
+				i.setCount(0);
+				
 				_log.warning("Error depositing a warehouse object for char " + player.getName() + " (validity check)");
-				i.id = 0;
-				i.count = 0;
 				continue;
 			}
 			
@@ -139,10 +138,10 @@ public final class RequestPackageSend extends L2GameClientPacket
 		
 		// Proceed to the transfer
 		InventoryUpdate playerIU = new InventoryUpdate();
-		for (Item i : _items)
+		for (ItemHolder i : _items)
 		{
-			int objectId = i.id;
-			int count = i.count;
+			int objectId = i.getId();
+			int count = i.getCount();
 			
 			// check for an invalid item
 			if (objectId == 0 && count == 0)
@@ -178,17 +177,5 @@ public final class RequestPackageSend extends L2GameClientPacket
 		StatusUpdate su = new StatusUpdate(player);
 		su.addAttribute(StatusUpdate.CUR_LOAD, player.getCurrentLoad());
 		player.sendPacket(su);
-	}
-	
-	private class Item
-	{
-		public int id;
-		public int count;
-		
-		public Item(int i, int c)
-		{
-			id = i;
-			count = c;
-		}
 	}
 }

@@ -88,7 +88,7 @@ public class HeroWeapon extends Quest
 		return htmltext;
 	}
 	
-	private boolean hasHeroWeapon(L2PcInstance player)
+	private static boolean hasHeroWeapon(L2PcInstance player)
 	{
 		for (int i : WEAPON_IDS)
 		{

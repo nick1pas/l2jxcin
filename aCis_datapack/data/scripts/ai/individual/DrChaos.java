@@ -271,7 +271,6 @@ public class DrChaos extends AbstractNpcAI
 	/**
 	 * Launches the complete animation.
 	 * @param npc the midget.
-	 * @param player the victim.
 	 */
 	private void crazyMidgetBecomesAngry(L2Npc npc)
 	{

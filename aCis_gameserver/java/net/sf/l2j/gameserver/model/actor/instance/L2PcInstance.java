@@ -338,7 +338,7 @@ public final class L2PcInstance extends L2Playable
 				{
 					setIsParalyzed(false);
 				}
-			}, 500);
+			}, 100);
 			setIsParalyzed(true);
 		}
 		
@@ -2302,7 +2302,7 @@ public final class L2PcInstance extends L2Playable
 						return;
 					
 					sitDown();
-					broadcastPacket(new ChairSit(L2PcInstance.this, ((L2StaticObjectInstance) target).getStaticObjectId()));
+					broadcastPacket(new ChairSit(getObjectId(), ((L2StaticObjectInstance) target).getStaticObjectId()));
 				}
 			});
 			
@@ -2324,7 +2324,7 @@ public final class L2PcInstance extends L2Playable
 				sitDown();
 				
 				if (isThrone && isInsideRadius(target, L2Npc.INTERACTION_DISTANCE, false, false))
-					broadcastPacket(new ChairSit(this, ((L2StaticObjectInstance) target).getStaticObjectId()));
+					broadcastPacket(new ChairSit(getObjectId(), ((L2StaticObjectInstance) target).getStaticObjectId()));
 			}
 		}
 		// Player is moving, wait the current action is done, then sit.
@@ -2345,7 +2345,7 @@ public final class L2PcInstance extends L2Playable
 						sitDown();
 						
 						if (isThrone && isInsideRadius(target, L2Npc.INTERACTION_DISTANCE, false, false))
-							broadcastPacket(new ChairSit(L2PcInstance.this, ((L2StaticObjectInstance) target).getStaticObjectId()));
+							broadcastPacket(new ChairSit(getObjectId(), ((L2StaticObjectInstance) target).getStaticObjectId()));
 					}
 				}
 			});
@@ -9425,7 +9425,7 @@ public final class L2PcInstance extends L2Playable
 		_fishingLoc = null;
 		
 		// Ends fishing
-		broadcastPacket(new ExFishingEnd(win, this));
+		broadcastPacket(new ExFishingEnd(win, getObjectId()));
 		sendPacket(SystemMessageId.REEL_LINE_AND_STOP_FISHING);
 		setIsImmobilized(false);
 		stopLookingForFishTask();

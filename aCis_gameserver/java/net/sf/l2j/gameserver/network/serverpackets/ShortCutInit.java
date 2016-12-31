@@ -22,16 +22,13 @@ import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 
 public class ShortCutInit extends L2GameServerPacket
 {
-	private L2ShortCut[] _shortCuts;
-	private L2PcInstance _activeChar;
+	private final L2ShortCut[] _shortCuts;
+	private final L2PcInstance _activeChar;
 	
 	public ShortCutInit(L2PcInstance activeChar)
 	{
 		_activeChar = activeChar;
-		if (_activeChar == null)
-			return;
-		
-		_shortCuts = _activeChar.getAllShortCuts();
+		_shortCuts = activeChar.getAllShortCuts();
 	}
 	
 	@Override

@@ -14,7 +14,6 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
 import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -68,9 +67,6 @@ public final class RequestRestart extends L2GameClientPacket
 		
 		if (AttackStanceTaskManager.getInstance().isInAttackStance(player) && !player.isGM())
 		{
-			if (Config.DEBUG)
-				_log.fine(player.getName() + " tried to restart while fighting.");
-			
 			player.sendPacket(SystemMessageId.CANT_RESTART_WHILE_FIGHTING);
 			sendPacket(RestartResponse.valueOf(false));
 			return;

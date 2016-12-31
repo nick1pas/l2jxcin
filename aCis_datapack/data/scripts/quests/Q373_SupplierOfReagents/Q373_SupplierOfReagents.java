@@ -357,8 +357,7 @@ public class Q373_SupplierOfReagents extends Quest
 						st.giveItems(formula[3], temperature[2]);
 						return "31149-12-" + formula[3] + ".htm";
 					}
-					else
-						return "31149-11.htm";
+					return "31149-11.htm";
 				}
 			}
 			htmltext = "31149-13.htm";

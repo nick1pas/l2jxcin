@@ -128,10 +128,7 @@ public final class Say2 extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		if (Config.DEBUG)
-			_log.info("Say2: Msg Type = '" + _type + "' Text = '" + _text + "'.");
-		
-		L2PcInstance activeChar = getClient().getActiveChar();
+		final L2PcInstance activeChar = getClient().getActiveChar();
 		if (activeChar == null)
 			return;
 		

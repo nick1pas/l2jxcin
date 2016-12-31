@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.Server;
 import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.commons.mmocore.SelectorConfig;
 import net.sf.l2j.commons.mmocore.SelectorThread;
@@ -58,8 +57,6 @@ public class L2LoginServer
 	
 	public L2LoginServer() throws Exception
 	{
-		Server.serverMode = Server.MODE_LOGINSERVER;
-		
 		final String LOG_FOLDER = "./log"; // Name of folder for log file
 		final String LOG_NAME = "config/log.cfg"; // Name of log file
 		
@@ -75,7 +72,7 @@ public class L2LoginServer
 		StringUtil.printSection("aCis");
 		
 		// Initialize config
-		Config.load();
+		Config.loadLoginServer();
 		
 		// Factories
 		L2DatabaseFactory.getInstance();

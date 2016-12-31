@@ -419,6 +419,7 @@ public class Castle
 			if (door.isDead())
 				door.doRevive();
 			
+			door.closeMe();
 			door.setCurrentHp((isDoorWeak) ? door.getMaxHp() / 2 : door.getMaxHp());
 			door.broadcastStatusUpdate();
 		}
@@ -430,10 +431,7 @@ public class Castle
 	public void closeDoors()
 	{
 		for (L2DoorInstance door : _doors)
-		{
-			if (door.isOpened())
-				door.closeMe();
-		}
+			door.closeMe();
 	}
 	
 	/**
@@ -448,7 +446,7 @@ public class Castle
 		if (door == null)
 			return;
 		
-		door.setUpgradeHpRatio(hp);
+		door.getStat().setUpgradeHpRatio(hp);
 		door.setCurrentHp(door.getMaxHp());
 		
 		if (db)
@@ -499,7 +497,7 @@ public class Castle
 	public void removeDoorUpgrade()
 	{
 		for (L2DoorInstance door : _doors)
-			door.setUpgradeHpRatio(1);
+			door.getStat().setUpgradeHpRatio(1);
 		
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{

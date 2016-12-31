@@ -158,12 +158,12 @@ public class Q223_TestOfTheChampion extends Quest
 		{
 			case STATE_CREATED:
 				final ClassId classId = player.getClassId();
-				if (classId != ClassId.warrior && classId != ClassId.orcRaider)
+				if (classId != ClassId.WARRIOR && classId != ClassId.ORC_RAIDER)
 					htmltext = "30624-01.htm";
 				else if (player.getLevel() < 39)
 					htmltext = "30624-02.htm";
 				else
-					htmltext = (classId == ClassId.warrior) ? "30624-03.htm" : "30624-04.htm";
+					htmltext = (classId == ClassId.WARRIOR) ? "30624-03.htm" : "30624-04.htm";
 				break;
 			
 			case STATE_STARTED:

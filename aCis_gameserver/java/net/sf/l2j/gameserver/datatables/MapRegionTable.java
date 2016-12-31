@@ -28,7 +28,7 @@ import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.base.Race;
+import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
@@ -370,7 +370,7 @@ public class MapRegionTable
 	 * @param y : The current player's Y location.
 	 * @return the closest L2TownZone based on a X/Y location.
 	 */
-	private static final L2TownZone getClosestTown(Race race, int x, int y)
+	private static final L2TownZone getClosestTown(ClassRace race, int x, int y)
 	{
 		switch (getMapRegion(x, y))
 		{
@@ -378,10 +378,10 @@ public class MapRegionTable
 				return getTown(2);
 				
 			case 1:// Elven
-				return getTown((race == Race.DarkElf) ? 1 : 3);
+				return getTown((race == ClassRace.DARK_ELF) ? 1 : 3);
 				
 			case 2:// DE
-				return getTown((race == Race.Elf) ? 3 : 1);
+				return getTown((race == ClassRace.ELF) ? 3 : 1);
 				
 			case 3: // Orc
 				return getTown(4);

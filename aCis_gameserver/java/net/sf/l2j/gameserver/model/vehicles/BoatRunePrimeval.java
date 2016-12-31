@@ -19,19 +19,20 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.instancemanager.BoatManager;
+import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.VehiclePathPoint;
-import net.sf.l2j.gameserver.model.actor.instance.L2BoatInstance;
+import net.sf.l2j.gameserver.model.actor.L2Vehicle;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 
-/**
- * @author DS
- */
 public class BoatRunePrimeval implements Runnable
 {
 	private static final Logger _log = Logger.getLogger(BoatRunePrimeval.class.getName());
+	
+	private static final Location OUST_LOC_1 = new Location(34513, -38009, -3640);
+	private static final Location OUST_LOC_2 = new Location(10447, -24982, -3664);
 	
 	// Time: 239s
 	private static final VehiclePathPoint[] RUNE_TO_PRIMEVAL =
@@ -70,7 +71,7 @@ public class BoatRunePrimeval implements Runnable
 	
 	private static final VehiclePathPoint PRIMEVAL_DOCK = RUNE_TO_PRIMEVAL[RUNE_TO_PRIMEVAL.length - 1];
 	
-	private final L2BoatInstance _boat;
+	private final L2Vehicle _boat;
 	private int _cycle = 0;
 	private int _shoutCount = 0;
 	
@@ -85,7 +86,7 @@ public class BoatRunePrimeval implements Runnable
 	private final PlaySound RUNE_SOUND;
 	private final PlaySound PRIMEVAL_SOUND;
 	
-	public BoatRunePrimeval(L2BoatInstance boat)
+	public BoatRunePrimeval(L2Vehicle boat)
 	{
 		_boat = boat;
 		
@@ -111,7 +112,7 @@ public class BoatRunePrimeval implements Runnable
 				case 0:
 					BoatManager.getInstance().dockShip(BoatManager.RUNE_HARBOR, false);
 					BoatManager.getInstance().broadcastPackets(RUNE_DOCK[0], PRIMEVAL_DOCK, LEAVING_RUNE, RUNE_SOUND);
-					_boat.payForRide(8925, 1, 34513, -38009, -3640);
+					_boat.payForRide(8925, 1, OUST_LOC_1);
 					_boat.executePath(RUNE_TO_PRIMEVAL);
 					break;
 				case 1:
@@ -120,7 +121,7 @@ public class BoatRunePrimeval implements Runnable
 					break;
 				case 2:
 					BoatManager.getInstance().broadcastPackets(PRIMEVAL_DOCK, RUNE_DOCK[0], LEAVING_PRIMEVAL, PRIMEVAL_SOUND);
-					_boat.payForRide(8924, 1, 10447, -24982, -3664);
+					_boat.payForRide(8924, 1, OUST_LOC_2);
 					_boat.executePath(PRIMEVAL_TO_RUNE);
 					break;
 				case 3:
@@ -157,7 +158,7 @@ public class BoatRunePrimeval implements Runnable
 	
 	public static void load()
 	{
-		final L2BoatInstance boat = BoatManager.getInstance().getNewBoat(5, 34381, -37680, -3610, 40785);
+		final L2Vehicle boat = BoatManager.getInstance().getNewBoat(5, 34381, -37680, -3610, 40785);
 		if (boat != null)
 		{
 			boat.registerEngine(new BoatRunePrimeval(boat));

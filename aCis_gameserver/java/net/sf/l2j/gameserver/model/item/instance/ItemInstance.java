@@ -30,9 +30,8 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.ItemTable;
-import net.sf.l2j.gameserver.geoengine.PathFinding;
+import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.instancemanager.MercTicketManager;
-import net.sf.l2j.gameserver.model.DropProtection;
 import net.sf.l2j.gameserver.model.L2Augmentation;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2World;
@@ -61,9 +60,8 @@ import net.sf.l2j.gameserver.taskmanager.ItemsOnGroundTaskManager;
 /**
  * This class manages items.
  */
-public final class ItemInstance extends L2Object
+public final class ItemInstance extends L2Object implements Runnable
 {
-	protected static final Logger _log = Logger.getLogger(ItemInstance.class.getName());
 	private static final Logger _logItems = Logger.getLogger("item");
 	
 	/** Enumeration of locations for item */
@@ -79,6 +77,9 @@ public final class ItemInstance extends L2Object
 		LEASE,
 		FREIGHT
 	}
+	
+	private static final long REGULAR_LOOT_PROTECTION_TIME = 15000;
+	private static final long RAID_LOOT_PROTECTION_TIME = 300000;
 	
 	private int _ownerId;
 	private int _dropperObjectId = 0;
@@ -121,9 +122,7 @@ public final class ItemInstance extends L2Object
 	private boolean _storedInDb; // if DB data is up-to-date.
 	
 	private final ReentrantLock _dbLock = new ReentrantLock();
-	private ScheduledFuture<?> _itemLootShedule;
-	
-	private final DropProtection _dropProtection = new DropProtection();
+	private ScheduledFuture<?> _dropProtection;
 	
 	private int _shotsMask = 0;
 	
@@ -165,6 +164,13 @@ public final class ItemInstance extends L2Object
 		
 		_loc = ItemLocation.VOID;
 		_mana = _item.getDuration() * 60;
+	}
+	
+	@Override
+	public synchronized void run()
+	{
+		_ownerId = 0;
+		_dropProtection = null;
 	}
 	
 	/**
@@ -944,11 +950,11 @@ public final class ItemInstance extends L2Object
 		@Override
 		public final void run()
 		{
-			assert _itm.getPosition().getWorldRegion() == null;
+			assert _itm.getRegion() == null;
 			
-			if (Config.GEODATA > 0 && _dropper != null)
+			if (_dropper != null)
 			{
-				Location dropDest = PathFinding.getInstance().canMoveToTargetLoc(_dropper.getX(), _dropper.getY(), _dropper.getZ(), _x, _y, _z);
+				Location dropDest = GeoEngine.getInstance().canMoveToTargetLoc(_dropper.getX(), _dropper.getY(), _dropper.getZ(), _x, _y, _z);
 				_x = dropDest.getX();
 				_y = dropDest.getY();
 				_z = dropDest.getZ();
@@ -958,15 +964,15 @@ public final class ItemInstance extends L2Object
 			{
 				// Set the x,y,z position of the ItemInstance dropped and update its _worldregion
 				_itm.setIsVisible(true);
-				_itm.getPosition().setWorldPosition(_x, _y, _z);
-				_itm.getPosition().setWorldRegion(L2World.getInstance().getRegion(getPosition().getWorldPosition()));
+				_itm.getPosition().set(_x, _y, _z);
+				_itm.setRegion(L2World.getInstance().getRegion(getPosition()));
 			}
 			
-			_itm.getPosition().getWorldRegion().addVisibleObject(_itm);
+			_itm.getRegion().addVisibleObject(_itm);
 			_itm.setDropperObjectId(_dropper != null ? _dropper.getObjectId() : 0); // Set the dropper Id for the knownlist packets in sendInfo
 			
 			// Add the ItemInstance dropped in the world as a visible object
-			L2World.getInstance().addVisibleObject(_itm, _itm.getPosition().getWorldRegion());
+			L2World.getInstance().addVisibleObject(_itm, _itm.getRegion());
 			
 			ItemsOnGroundTaskManager.getInstance().add(_itm, _dropper);
 			
@@ -983,18 +989,17 @@ public final class ItemInstance extends L2Object
 	 */
 	public final void pickupMe(L2Character player)
 	{
-		assert getPosition().getWorldRegion() != null;
+		assert getRegion() != null;
 		
-		L2WorldRegion oldregion = getPosition().getWorldRegion();
+		L2WorldRegion oldregion = getRegion();
 		
 		// Create a server->client GetItem packet to pick up the ItemInstance
-		GetItem gi = new GetItem(this, player.getObjectId());
-		player.broadcastPacket(gi);
+		player.broadcastPacket(new GetItem(this, player.getObjectId()));
 		
 		synchronized (this)
 		{
 			setIsVisible(false);
-			getPosition().setWorldRegion(null);
+			setRegion(null);
 		}
 		
 		// if this item is a mercenary ticket, remove the spawns!
@@ -1124,22 +1129,26 @@ public final class ItemInstance extends L2Object
 		return "" + _item;
 	}
 	
-	public void resetOwnerTimer()
+	public synchronized boolean hasDropProtection()
 	{
-		if (_itemLootShedule != null)
-			_itemLootShedule.cancel(true);
+		return _dropProtection != null;
+	}
+	
+	public synchronized void setDropProtection(int ownerId, boolean isRaidParty)
+	{
+		_ownerId = ownerId;
+		_dropProtection = ThreadPoolManager.getInstance().scheduleGeneral(this, (isRaidParty) ? RAID_LOOT_PROTECTION_TIME : REGULAR_LOOT_PROTECTION_TIME);
+	}
+	
+	public synchronized void removeDropProtection()
+	{
+		if (_dropProtection != null)
+		{
+			_dropProtection.cancel(true);
+			_dropProtection = null;
+		}
 		
-		_itemLootShedule = null;
-	}
-	
-	public void setItemLootShedule(ScheduledFuture<?> sf)
-	{
-		_itemLootShedule = sf;
-	}
-	
-	public ScheduledFuture<?> getItemLootShedule()
-	{
-		return _itemLootShedule;
+		_ownerId = 0;
 	}
 	
 	public void setDestroyProtected(boolean destroyProtected)
@@ -1242,11 +1251,6 @@ public final class ItemInstance extends L2Object
 	public void setDropperObjectId(int id)
 	{
 		_dropperObjectId = id;
-	}
-	
-	public final DropProtection getDropProtection()
-	{
-		return _dropProtection;
 	}
 	
 	@Override

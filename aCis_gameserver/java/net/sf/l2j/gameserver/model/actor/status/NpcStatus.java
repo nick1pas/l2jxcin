@@ -43,9 +43,6 @@ public class NpcStatus extends CharStatus
 			final L2PcInstance attackerPlayer = attacker.getActingPlayer();
 			if (attackerPlayer != null && attackerPlayer.isInDuel())
 				attackerPlayer.setDuelState(DuelState.INTERRUPTED);
-			
-			// Add attackers to npc's attacker list
-			getActiveChar().addAttackerToAttackByList(attacker);
 		}
 		
 		super.reduceHp(value, attacker, awake, isDOT, isHpConsumption);

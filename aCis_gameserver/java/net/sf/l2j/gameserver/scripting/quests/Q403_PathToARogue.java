@@ -66,8 +66,8 @@ public class Q403_PathToARogue extends Quest
 		
 		if (event.equalsIgnoreCase("30379-05.htm"))
 		{
-			if (player.getClassId() != ClassId.fighter)
-				htmltext = (player.getClassId() == ClassId.rogue) ? "30379-02a.htm" : "30379-02.htm";
+			if (player.getClassId() != ClassId.HUMAN_FIGHTER)
+				htmltext = (player.getClassId() == ClassId.ROGUE) ? "30379-02a.htm" : "30379-02.htm";
 			else if (player.getLevel() < 19)
 				htmltext = "30379-02.htm";
 			else if (st.hasQuestItems(BEZIQUE_RECOMMENDATION))

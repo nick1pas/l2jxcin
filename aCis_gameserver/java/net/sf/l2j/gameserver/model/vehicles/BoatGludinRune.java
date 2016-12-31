@@ -19,19 +19,20 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.instancemanager.BoatManager;
+import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.VehiclePathPoint;
-import net.sf.l2j.gameserver.model.actor.instance.L2BoatInstance;
+import net.sf.l2j.gameserver.model.actor.L2Vehicle;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 
-/**
- * @author DS
- */
 public class BoatGludinRune implements Runnable
 {
 	private static final Logger _log = Logger.getLogger(BoatGludinRune.class.getName());
+	
+	private static final Location OUST_LOC_1 = new Location(-90015, 150422, -3610);
+	private static final Location OUST_LOC_2 = new Location(34513, -38009, -3640);
 	
 	// Time: 1151s
 	private static final VehiclePathPoint[] GLUDIN_TO_RUNE =
@@ -102,7 +103,7 @@ public class BoatGludinRune implements Runnable
 		new VehiclePathPoint(-95686, 150514, -3610, 150, 800)
 	};
 	
-	private final L2BoatInstance _boat;
+	private final L2Vehicle _boat;
 	private int _cycle = 0;
 	private int _shoutCount = 0;
 	
@@ -138,7 +139,7 @@ public class BoatGludinRune implements Runnable
 	private final PlaySound RUNE_SOUND_LEAVE_5MIN;
 	private final PlaySound RUNE_SOUND_LEAVE_1MIN;
 	
-	public BoatGludinRune(L2BoatInstance boat)
+	public BoatGludinRune(L2Vehicle boat)
 	{
 		_boat = boat;
 		
@@ -197,7 +198,7 @@ public class BoatGludinRune implements Runnable
 					BoatManager.getInstance().dockShip(BoatManager.GLUDIN_HARBOR, false);
 					BoatManager.getInstance().broadcastPackets(GLUDIN_DOCK[0], RUNE_DOCK[0], LEAVING_GLUDIN);
 					_boat.broadcastPacket(GLUDIN_SOUND);
-					_boat.payForRide(7905, 1, -90015, 150422, -3610);
+					_boat.payForRide(7905, 1, OUST_LOC_1);
 					_boat.executePath(GLUDIN_TO_RUNE);
 					ThreadPoolManager.getInstance().scheduleGeneral(this, 250000);
 					break;
@@ -256,7 +257,7 @@ public class BoatGludinRune implements Runnable
 					BoatManager.getInstance().dockShip(BoatManager.RUNE_HARBOR, false);
 					BoatManager.getInstance().broadcastPackets(RUNE_DOCK[0], GLUDIN_DOCK[0], LEAVING_RUNE);
 					_boat.broadcastPacket(RUNE_SOUND);
-					_boat.payForRide(7904, 1, 34513, -38009, -3640);
+					_boat.payForRide(7904, 1, OUST_LOC_2);
 					_boat.executePath(RUNE_TO_GLUDIN);
 					ThreadPoolManager.getInstance().scheduleGeneral(this, 60000);
 					break;
@@ -310,7 +311,7 @@ public class BoatGludinRune implements Runnable
 	
 	public static void load()
 	{
-		final L2BoatInstance boat = BoatManager.getInstance().getNewBoat(3, -95686, 150514, -3610, 16723);
+		final L2Vehicle boat = BoatManager.getInstance().getNewBoat(3, -95686, 150514, -3610, 16723);
 		if (boat != null)
 		{
 			boat.registerEngine(new BoatGludinRune(boat));

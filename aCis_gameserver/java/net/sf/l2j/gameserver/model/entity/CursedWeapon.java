@@ -27,7 +27,7 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
-import net.sf.l2j.gameserver.geoengine.GeoData;
+import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Party.MessageType;
 import net.sf.l2j.gameserver.model.Location;
@@ -358,7 +358,7 @@ public class CursedWeapon
 		// get position
 		int x = attackable.getX() + Rnd.get(-70, 70);
 		int y = attackable.getY() + Rnd.get(-70, 70);
-		int z = GeoData.getInstance().getHeight(x, y, attackable.getZ());
+		int z = GeoEngine.getInstance().getHeight(x, y, attackable.getZ());
 		
 		// create item and drop it
 		_item = ItemTable.getInstance().createItem("CursedWeapon", _itemId, 1, player, attackable);
@@ -841,10 +841,10 @@ public class CursedWeapon
 	public Location getWorldPosition()
 	{
 		if (_isActivated && _player != null)
-			return _player.getPosition().getWorldPosition();
+			return _player.getPosition();
 		
 		if (_isDropped && _item != null)
-			return _item.getPosition().getWorldPosition();
+			return _item.getPosition();
 		
 		return null;
 	}

@@ -15,11 +15,12 @@
 package net.sf.l2j.gameserver.model.actor.knownlist;
 
 import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.L2Object.PolyType;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Vehicle;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.serverpackets.DeleteObject;
-import net.sf.l2j.gameserver.network.serverpackets.SpawnItemPoly;
+import net.sf.l2j.gameserver.network.serverpackets.SpawnItem;
 
 public class PcKnownList extends PlayableKnownList
 {
@@ -114,8 +115,8 @@ public class PcKnownList extends PlayableKnownList
 		// get player
 		final L2PcInstance player = (L2PcInstance) _activeObject;
 		
-		if (object.getPoly().isMorphed() && object.getPoly().getPolyType().equals("item"))
-			player.sendPacket(new SpawnItemPoly(object));
+		if (object.getPolyType() == PolyType.ITEM)
+			player.sendPacket(new SpawnItem(object));
 		else
 		{
 			// send object info to player

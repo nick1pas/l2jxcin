@@ -14,6 +14,7 @@
  */
 package net.sf.l2j.gameserver.communitybbs.Manager;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -86,7 +87,7 @@ public class RegionBBSManager extends BaseBBSManager
 		content = content.replace("%lord%", ((owner != null) ? owner.getLeaderName() : "None"));
 		content = content.replace("%clanName%", ((owner != null) ? "<a action=\"bypass _bbsclan;home;" + owner.getClanId() + "\">" + owner.getName() + "</a>" : "None"));
 		content = content.replace("%allyName%", ((owner != null && owner.getAllyId() > 0) ? owner.getAllyName() : "None"));
-		content = content.replace("%siegeDate%", StringUtil.REVERSED_DATE_MM.format(castle.getSiegeDate().getTimeInMillis()));
+		content = content.replace("%siegeDate%", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(castle.getSiegeDate().getTimeInMillis()));
 		
 		final StringBuilder sb = new StringBuilder(200);
 		

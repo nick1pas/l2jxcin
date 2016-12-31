@@ -19,19 +19,20 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.instancemanager.BoatManager;
+import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.VehiclePathPoint;
-import net.sf.l2j.gameserver.model.actor.instance.L2BoatInstance;
+import net.sf.l2j.gameserver.model.actor.L2Vehicle;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 
-/**
- * @author DS
- */
 public class BoatGiranTalking implements Runnable
 {
 	private static final Logger _log = Logger.getLogger(BoatGiranTalking.class.getName());
+	
+	private static final Location OUST_LOC_1 = new Location(46763, 187041, -3451);
+	private static final Location OUST_LOC_2 = new Location(-96777, 258970, -3623);
 	
 	// Time: 868s
 	private static final VehiclePathPoint[] GIRAN_TO_TALKING =
@@ -87,7 +88,7 @@ public class BoatGiranTalking implements Runnable
 	
 	private static final VehiclePathPoint GIRAN_DOCK = TALKING_TO_GIRAN[TALKING_TO_GIRAN.length - 1];
 	
-	private final L2BoatInstance _boat;
+	private final L2Vehicle _boat;
 	private int _cycle = 0;
 	private int _shoutCount = 0;
 	
@@ -124,7 +125,7 @@ public class BoatGiranTalking implements Runnable
 	private final PlaySound TALKING_SOUND_LEAVE_5MIN;
 	private final PlaySound TALKING_SOUND_LEAVE_1MIN;
 	
-	public BoatGiranTalking(L2BoatInstance boat)
+	public BoatGiranTalking(L2Vehicle boat)
 	{
 		_boat = boat;
 		
@@ -187,7 +188,7 @@ public class BoatGiranTalking implements Runnable
 				case 3:
 					BoatManager.getInstance().broadcastPackets(GIRAN_DOCK, TALKING_DOCK[0], LEAVING_GIRAN, ARRIVAL_TALKING15);
 					_boat.broadcastPacket(GIRAN_SOUND);
-					_boat.payForRide(3946, 1, 46763, 187041, -3451);
+					_boat.payForRide(3946, 1, OUST_LOC_1);
 					_boat.executePath(GIRAN_TO_TALKING);
 					ThreadPoolManager.getInstance().scheduleGeneral(this, 250000);
 					break;
@@ -242,7 +243,7 @@ public class BoatGiranTalking implements Runnable
 					BoatManager.getInstance().dockShip(BoatManager.TALKING_ISLAND, false);
 					BoatManager.getInstance().broadcastPackets(TALKING_DOCK[0], GIRAN_DOCK, LEAVING_TALKING);
 					_boat.broadcastPacket(TALKING_SOUND);
-					_boat.payForRide(3945, 1, -96777, 258970, -3623);
+					_boat.payForRide(3945, 1, OUST_LOC_2);
 					_boat.executePath(TALKING_TO_GIRAN);
 					ThreadPoolManager.getInstance().scheduleGeneral(this, 200000);
 					break;
@@ -284,7 +285,7 @@ public class BoatGiranTalking implements Runnable
 	
 	public static void load()
 	{
-		final L2BoatInstance boat = BoatManager.getInstance().getNewBoat(2, 48950, 190613, -3610, 60800);
+		final L2Vehicle boat = BoatManager.getInstance().getNewBoat(2, 48950, 190613, -3610, 60800);
 		if (boat != null)
 		{
 			boat.registerEngine(new BoatGiranTalking(boat));

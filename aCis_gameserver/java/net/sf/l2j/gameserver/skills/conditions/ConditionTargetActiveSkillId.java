@@ -14,7 +14,6 @@
  */
 package net.sf.l2j.gameserver.skills.conditions;
 
-import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.skills.Env;
 
 /**
@@ -49,17 +48,7 @@ public class ConditionTargetActiveSkillId extends Condition
 	@Override
 	public boolean testImpl(Env env)
 	{
-		for (L2Skill sk : env.getTarget().getAllSkills())
-		{
-			if (sk != null)
-			{
-				if (sk.getId() == _skillId)
-				{
-					if (_skillLevel == -1 || _skillLevel <= sk.getLevel())
-						return true;
-				}
-			}
-		}
-		return false;
+		final int skillLevel = env.getTarget().getSkillLevel(_skillId);
+		return _skillLevel == -1 || _skillLevel <= skillLevel;
 	}
 }

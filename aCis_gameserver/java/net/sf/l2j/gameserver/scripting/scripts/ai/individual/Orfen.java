@@ -19,10 +19,10 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
-import net.sf.l2j.gameserver.model.L2CharPosition;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Spawn;
+import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
@@ -272,7 +272,7 @@ public class Orfen extends AbstractNpcAI
 		if (index.getX() == 43728) // Hack !
 			npc.teleToLocation(index.getX(), index.getY(), index.getZ(), 0);
 		else
-			npc.getAI().setIntention(CtrlIntention.MOVE_TO, new L2CharPosition(index.getX(), index.getY(), index.getZ(), 0));
+			npc.getAI().setIntention(CtrlIntention.MOVE_TO, new Location(index.getX(), index.getY(), index.getZ()));
 	}
 	
 	private void spawnBoss(L2GrandBossInstance npc)

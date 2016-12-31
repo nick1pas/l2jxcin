@@ -21,7 +21,7 @@ import net.sf.l2j.Config;
 import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.SkillTable;
-import net.sf.l2j.gameserver.geoengine.PathFinding;
+import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.SpawnLocation;
@@ -391,7 +391,7 @@ public class Baium extends AbstractNpcAI
 		{
 			if (obj instanceof L2PcInstance)
 			{
-				if (obj.isDead() || !(PathFinding.getInstance().canSeeTarget(npc, obj)))
+				if (obj.isDead() || !(GeoEngine.getInstance().canSeeTarget(npc, obj)))
 					continue;
 				
 				if (((L2PcInstance) obj).isGM() && ((L2PcInstance) obj).getAppearance().getInvisible())
@@ -440,7 +440,7 @@ public class Baium extends AbstractNpcAI
 		final L2Skill skill = SkillTable.getInstance().getInfo(getRandomSkill(npc), 1);
 		
 		// Adapt the skill range, because Baium is fat.
-		if (Util.checkIfInRange(skill.getCastRange() + npc.getCollisionRadius(), npc, _actualVictim, true))
+		if (Util.checkIfInRange((int) (skill.getCastRange() + npc.getCollisionRadius()), npc, _actualVictim, true))
 		{
 			npc.getAI().setIntention(CtrlIntention.IDLE);
 			npc.setTarget(skill.getId() == 4135 ? npc : _actualVictim);

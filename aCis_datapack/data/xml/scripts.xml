@@ -111,7 +111,7 @@
 	<script path="quests.Q218_TestimonyOfLife"/>
 	<script path="quests.Q219_TestimonyOfFate"/>
  	<script path="quests.Q220_TestimonyOfGlory"/>
-<!-- 	<script path="quests.Q221_TestimonyOfProsperity"/> -->
+	<script path="quests.Q221_TestimonyOfProsperity"/>
 	<script path="quests.Q222_TestOfTheDuelist"/>
 	<script path="quests.Q223_TestOfTheChampion"/>
 	<script path="quests.Q224_TestOfSagittarius"/>
@@ -119,7 +119,7 @@
  	<script path="quests.Q226_TestOfTheHealer"/>
 <!-- 	<script path="quests.Q227_TestOfTheReformer"/> -->
 	<script path="quests.Q228_TestOfMagus"/>
-<!-- 	<script path="quests.Q229_TestOfWitchcraft"/> -->
+ 	<script path="quests.Q229_TestOfWitchcraft"/>
 	<script path="quests.Q230_TestOfTheSummoner"/>
 	<script path="quests.Q231_TestOfTheMaestro"/>
 	<script path="quests.Q232_TestOfTheLord"/>
@@ -235,9 +235,9 @@
 	<script path="quests.Q411_PathToAnAssassin"/>
 	<script path="quests.Q412_PathToADarkWizard"/>
 	<script path="quests.Q413_PathToAShillienOracle"/>
-<!-- 	<script path="quests.Q414_PathToAnOrcRaider"/> -->
+ 	<script path="quests.Q414_PathToAnOrcRaider"/>
 	<script path="quests.Q415_PathToAMonk"/>
-<!-- 	<script path="quests.Q416_PathToAnOrcShaman"/> -->
+ 	<script path="quests.Q416_PathToAnOrcShaman"/>
 	<script path="quests.Q417_PathToBecomeAScavenger"/>
 	<script path="quests.Q418_PathToAnArtisan"/>
 	<script path="quests.Q419_GetAPet"/>
@@ -290,7 +290,7 @@
 	<script path="quests.Q636_TruthBeyondTheGate"/>
 	<script path="quests.Q637_ThroughTheGateOnceMore"/>
 	<script path="quests.Q638_SeekersOfTheHolyGrail"/>
-<!-- 	<script path="quests.Q639_GuardiansOfTheHolyGrail"/> -->
+ 	<script path="quests.Q639_GuardiansOfTheHolyGrail"/>
 	<script path="quests.Q640_TheZeroHour"/>
 	<script path="quests.Q641_AttackSailren"/>
 	<script path="quests.Q642_APowerfulPrimevalCreature"/>

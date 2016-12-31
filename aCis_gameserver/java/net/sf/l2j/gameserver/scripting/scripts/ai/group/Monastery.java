@@ -15,12 +15,13 @@
 package net.sf.l2j.gameserver.scripting.scripts.ai.group;
 
 import net.sf.l2j.gameserver.datatables.SkillTable;
-import net.sf.l2j.gameserver.geoengine.PathFinding;
+import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.base.Sex;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.scripts.ai.AbstractNpcAI;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
@@ -59,7 +60,7 @@ public class Monastery extends AbstractNpcAI
 			if (player.getActiveWeaponInstance() != null)
 			{
 				npc.setTarget(player);
-				npc.broadcastNpcSay(((player.getAppearance().getSex()) ? "Sister " : "Brother ") + player.getName() + ", move your weapon away!");
+				npc.broadcastNpcSay(((player.getAppearance().getSex() == Sex.FEMALE) ? "Sister " : "Brother ") + player.getName() + ", move your weapon away!");
 				
 				switch (npc.getNpcId())
 				{
@@ -88,7 +89,7 @@ public class Monastery extends AbstractNpcAI
 			{
 				if (obj.equals(npc))
 				{
-					npc.broadcastNpcSay(((caster.getAppearance().getSex()) ? "Sister " : "Brother ") + caster.getName() + ", move your weapon away!");
+					npc.broadcastNpcSay(((caster.getAppearance().getSex() == Sex.FEMALE) ? "Sister " : "Brother ") + caster.getName() + ", move your weapon away!");
 					attack(((L2Attackable) npc), caster);
 					break;
 				}
@@ -102,12 +103,12 @@ public class Monastery extends AbstractNpcAI
 	{
 		for (L2PcInstance target : npc.getKnownList().getKnownType(L2PcInstance.class))
 		{
-			if (!target.isDead() && PathFinding.getInstance().canSeeTarget(npc, target) && Util.checkIfInRange(npc.getAggroRange(), npc, target, true))
+			if (!target.isDead() && GeoEngine.getInstance().canSeeTarget(npc, target) && Util.checkIfInRange(npc.getTemplate().getAggroRange(), npc, target, true))
 			{
 				if (target.getActiveWeaponInstance() != null && !npc.isInCombat() && npc.getTarget() == null)
 				{
 					npc.setTarget(target);
-					npc.broadcastNpcSay(((target.getAppearance().getSex()) ? "Sister " : "Brother ") + target.getName() + ", move your weapon away!");
+					npc.broadcastNpcSay(((target.getAppearance().getSex() == Sex.FEMALE) ? "Sister " : "Brother ") + target.getName() + ", move your weapon away!");
 					
 					switch (npc.getNpcId())
 					{

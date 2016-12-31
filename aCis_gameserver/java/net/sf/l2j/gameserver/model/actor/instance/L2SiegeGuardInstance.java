@@ -18,7 +18,7 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
 import net.sf.l2j.gameserver.ai.model.L2SiegeGuardAI;
-import net.sf.l2j.gameserver.model.L2CharPosition;
+import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
@@ -89,7 +89,7 @@ public final class L2SiegeGuardInstance extends L2Attackable
 	@Override
 	public void returnHome()
 	{
-		if (getWalkSpeed() <= 0)
+		if (getMoveSpeed() <= 0)
 			return;
 		
 		if (!isInsideRadius(getSpawn().getLocx(), getSpawn().getLocy(), 40, false))
@@ -101,7 +101,7 @@ public final class L2SiegeGuardInstance extends L2Attackable
 			clearAggroList();
 			
 			if (hasAI())
-				getAI().setIntention(CtrlIntention.MOVE_TO, new L2CharPosition(getSpawn().getLocx(), getSpawn().getLocy(), getSpawn().getLocz(), 0));
+				getAI().setIntention(CtrlIntention.MOVE_TO, new Location(getSpawn().getLocx(), getSpawn().getLocy(), getSpawn().getLocz()));
 		}
 	}
 	

@@ -14,6 +14,7 @@
  */
 package net.sf.l2j.gameserver.handler.usercommandhandlers;
 
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import net.sf.l2j.commons.lang.StringUtil;
@@ -39,22 +40,23 @@ public class ClanPenalty implements IUserCommandHandler
 	@Override
 	public boolean useUserCommand(int id, L2PcInstance activeChar)
 	{
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		final StringBuilder sb = new StringBuilder();
 		
 		// Join a clan penalty.
 		if (activeChar.getClanJoinExpiryTime() > System.currentTimeMillis())
-			StringUtil.append(sb, "<tr><td width=170>Unable to join a clan.</td><td width=100 align=center>", StringUtil.REVERSED_DATE.format(activeChar.getClanJoinExpiryTime()), "</td></tr>");
+			StringUtil.append(sb, "<tr><td width=170>Unable to join a clan.</td><td width=100 align=center>", sdf.format(activeChar.getClanJoinExpiryTime()), "</td></tr>");
 		
 		// Create a clan penalty.
 		if (activeChar.getClanCreateExpiryTime() > System.currentTimeMillis())
-			StringUtil.append(sb, "<tr><td width=170>Unable to create a clan.</td><td width=100 align=center>", StringUtil.REVERSED_DATE.format(activeChar.getClanCreateExpiryTime()), "</td></tr>");
+			StringUtil.append(sb, "<tr><td width=170>Unable to create a clan.</td><td width=100 align=center>", sdf.format(activeChar.getClanCreateExpiryTime()), "</td></tr>");
 		
 		final L2Clan clan = activeChar.getClan();
 		if (clan != null)
 		{
 			// Invitation in a clan penalty.
 			if (clan.getCharPenaltyExpiryTime() > System.currentTimeMillis())
-				StringUtil.append(sb, "<tr><td width=170>Unable to invite a clan member.</td><td width=100 align=center>", StringUtil.REVERSED_DATE.format(clan.getCharPenaltyExpiryTime()), "</td></tr>");
+				StringUtil.append(sb, "<tr><td width=170>Unable to invite a clan member.</td><td width=100 align=center>", sdf.format(clan.getCharPenaltyExpiryTime()), "</td></tr>");
 			
 			// War penalty.
 			if (!clan.getWarPenalty().isEmpty())
@@ -65,7 +67,7 @@ public class ClanPenalty implements IUserCommandHandler
 					{
 						final L2Clan enemyClan = ClanTable.getInstance().getClan(entry.getKey());
 						if (enemyClan != null)
-							StringUtil.append(sb, "<tr><td width=170>Unable to attack ", enemyClan.getName(), " clan.</td><td width=100 align=center>", StringUtil.REVERSED_DATE.format(entry.getValue()), "</td></tr>");
+							StringUtil.append(sb, "<tr><td width=170>Unable to attack ", enemyClan.getName(), " clan.</td><td width=100 align=center>", sdf.format(entry.getValue()), "</td></tr>");
 					}
 				}
 			}

@@ -215,7 +215,7 @@ public class AdminSiege implements IAdminCommandHandler
 		{
 			if (castle != null)
 			{
-				sb.append("<td fixwidth=90><a action=\"bypass -h admin_siege " + castle.getName() + "\">" + castle.getName() + "</a></td>");
+				StringUtil.append(sb, "<td fixwidth=90><a action=\"bypass -h admin_siege ", castle.getName(), "\">", castle.getName(), "</a></td>");
 				i++;
 			}
 			

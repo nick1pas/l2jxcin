@@ -14,7 +14,7 @@ package net.sf.l2j.gameserver.scripting.quests;
 
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.base.Race;
+import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
@@ -151,6 +151,7 @@ public class Q220_TestimonyOfGlory extends Quest
 			st.takeItems(SCEPTER_OF_TUNATH, 1);
 			st.takeItems(SCEPTER_OF_TUREK, 1);
 			st.takeItems(SCEPTER_OF_VUKU, 1);
+			
 			if (player.getLevel() >= 37)
 			{
 				st.set("cond", "6");
@@ -160,6 +161,7 @@ public class Q220_TestimonyOfGlory extends Quest
 			else
 			{
 				htmltext = "30642-06.htm";
+				st.playSound(QuestState.SOUND_ITEMGET);
 				st.giveItems(CHIANTA_ORDER_2, 1);
 			}
 		}
@@ -171,6 +173,7 @@ public class Q220_TestimonyOfGlory extends Quest
 			else
 			{
 				htmltext = "30501-03.htm";
+				st.playSound(QuestState.SOUND_ITEMGET);
 				st.giveItems(KASMAN_LETTER_1, 1);
 			}
 			st.addRadar(-2150, 124443, -3724);
@@ -182,6 +185,7 @@ public class Q220_TestimonyOfGlory extends Quest
 			else
 			{
 				htmltext = "30501-06.htm";
+				st.playSound(QuestState.SOUND_ITEMGET);
 				st.giveItems(KASMAN_LETTER_2, 1);
 			}
 			st.addRadar(-94294, 110818, -3563);
@@ -193,6 +197,7 @@ public class Q220_TestimonyOfGlory extends Quest
 			else
 			{
 				htmltext = "30501-09.htm";
+				st.playSound(QuestState.SOUND_ITEMGET);
 				st.giveItems(KASMAN_LETTER_3, 1);
 			}
 			st.addRadar(-55217, 200628, -3724);
@@ -205,6 +210,7 @@ public class Q220_TestimonyOfGlory extends Quest
 			else
 			{
 				htmltext = "30515-03.htm";
+				st.playSound(QuestState.SOUND_ITEMGET);
 				st.giveItems(MANAKIA_LETTER_1, 1);
 			}
 			st.addRadar(80100, 119991, -2264);
@@ -216,6 +222,7 @@ public class Q220_TestimonyOfGlory extends Quest
 			else
 			{
 				htmltext = "30515-06.htm";
+				st.playSound(QuestState.SOUND_ITEMGET);
 				st.giveItems(MANAKIA_LETTER_2, 1);
 			}
 			st.addRadar(19815, 189703, -3032);
@@ -223,8 +230,10 @@ public class Q220_TestimonyOfGlory extends Quest
 		// VOLTAR
 		else if (event.equalsIgnoreCase("30615-04.htm"))
 		{
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.takeItems(MANAKIA_LETTER_1, 1);
 			st.giveItems(GLOVE_OF_VOLTAR, 1);
+			
 			if (!_sonsOfVoltar)
 			{
 				addSpawn(PASHIKA_SON_OF_VOLTAR, 80117, 120039, -2259, 0, false, 200000, true);
@@ -238,8 +247,10 @@ public class Q220_TestimonyOfGlory extends Quest
 		// KEPRA
 		else if (event.equalsIgnoreCase("30616-05.htm"))
 		{
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.takeItems(MANAKIA_LETTER_2, 1);
 			st.giveItems(GLOVE_OF_KEPRA, 1);
+			
 			if (!_enkuOrcOverlords)
 			{
 				addSpawn(ENKU_ORC_OVERLORD, 19894, 189743, -3074, 0, false, 200000, true);
@@ -255,8 +266,10 @@ public class Q220_TestimonyOfGlory extends Quest
 		// BURAI
 		else if (event.equalsIgnoreCase("30617-04.htm"))
 		{
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.takeItems(KASMAN_LETTER_2, 1);
 			st.giveItems(GLOVE_OF_BURAI, 1);
+			
 			if (!_makumBugbearThugs)
 			{
 				addSpawn(MAKUM_BUGBEAR_THUG, -94292, 110781, -3701, 0, false, 200000, true);
@@ -272,15 +285,19 @@ public class Q220_TestimonyOfGlory extends Quest
 		{
 			st.takeItems(KASMAN_LETTER_3, 1);
 			st.giveItems(SCEPTER_OF_TUNATH, 1);
+			
 			if (st.hasQuestItems(SCEPTER_OF_BREKA, SCEPTER_OF_ENKU, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK))
 			{
 				st.set("cond", "5");
 				st.playSound(QuestState.SOUND_MIDDLE);
 			}
+			else
+				st.playSound(QuestState.SOUND_ITEMGET);
 		}
 		// DRIKO
 		else if (event.equalsIgnoreCase("30619-03.htm"))
 		{
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.takeItems(KASMAN_LETTER_1, 1);
 			st.giveItems(DRIKO_CONTRACT, 1);
 		}
@@ -323,7 +340,7 @@ public class Q220_TestimonyOfGlory extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() != Race.Orc)
+				if (player.getRace() != ClassRace.ORC)
 					htmltext = "30514-01.htm";
 				else if (player.getLevel() < 37)
 					htmltext = "30514-02.htm";
@@ -441,11 +458,14 @@ public class Q220_TestimonyOfGlory extends Quest
 								st.takeItems(PASHIKA_HEAD, 1);
 								st.takeItems(VULTUS_HEAD, 1);
 								st.giveItems(SCEPTER_OF_BREKA, 1);
+								
 								if (st.hasQuestItems(SCEPTER_OF_ENKU, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH))
 								{
 									st.set("cond", "5");
 									st.playSound(QuestState.SOUND_MIDDLE);
 								}
+								else
+									st.playSound(QuestState.SOUND_ITEMGET);
 							}
 							else if (st.hasQuestItems(SCEPTER_OF_BREKA))
 								htmltext = "30615-07.htm";
@@ -467,6 +487,7 @@ public class Q220_TestimonyOfGlory extends Quest
 							else if (st.hasQuestItems(GLOVE_OF_KEPRA))
 							{
 								htmltext = "30616-05.htm";
+								
 								if (!_enkuOrcOverlords)
 								{
 									addSpawn(ENKU_ORC_OVERLORD, 19894, 189743, -3074, 0, false, 200000, true);
@@ -484,11 +505,14 @@ public class Q220_TestimonyOfGlory extends Quest
 								htmltext = "30616-06.htm";
 								st.takeItems(ENKU_OVERLORD_HEAD, 4);
 								st.giveItems(SCEPTER_OF_ENKU, 1);
+								
 								if (st.hasQuestItems(SCEPTER_OF_BREKA, SCEPTER_OF_VUKU, SCEPTER_OF_TUREK, SCEPTER_OF_TUNATH))
 								{
 									st.set("cond", "5");
 									st.playSound(QuestState.SOUND_MIDDLE);
 								}
+								else
+									st.playSound(QuestState.SOUND_ITEMGET);
 							}
 							else if (st.hasQuestItems(SCEPTER_OF_ENKU))
 								htmltext = "30616-07.htm";
@@ -510,6 +534,7 @@ public class Q220_TestimonyOfGlory extends Quest
 							else if (st.hasQuestItems(GLOVE_OF_BURAI))
 							{
 								htmltext = "30617-04.htm";
+								
 								if (!_makumBugbearThugs)
 								{
 									addSpawn(MAKUM_BUGBEAR_THUG, -94292, 110781, -3701, 0, false, 200000, true);
@@ -525,11 +550,14 @@ public class Q220_TestimonyOfGlory extends Quest
 								htmltext = "30617-05.htm";
 								st.takeItems(MAKUM_BUGBEAR_HEAD, 2);
 								st.giveItems(SCEPTER_OF_TUREK, 1);
+								
 								if (st.hasQuestItems(SCEPTER_OF_BREKA, SCEPTER_OF_VUKU, SCEPTER_OF_ENKU, SCEPTER_OF_TUNATH))
 								{
 									st.set("cond", "5");
 									st.playSound(QuestState.SOUND_MIDDLE);
 								}
+								else
+									st.playSound(QuestState.SOUND_ITEMGET);
 							}
 							else if (st.hasQuestItems(SCEPTER_OF_TUREK))
 								htmltext = "30617-06.htm";
@@ -573,11 +601,14 @@ public class Q220_TestimonyOfGlory extends Quest
 									st.takeItems(DRIKO_CONTRACT, 1);
 									st.takeItems(STAKATO_DRONE_HUSK, 30);
 									st.giveItems(SCEPTER_OF_VUKU, 1);
+									
 									if (st.hasQuestItems(SCEPTER_OF_BREKA, SCEPTER_OF_TUREK, SCEPTER_OF_ENKU, SCEPTER_OF_TUNATH))
 									{
 										st.set("cond", "5");
 										st.playSound(QuestState.SOUND_MIDDLE);
 									}
+									else
+										st.playSound(QuestState.SOUND_ITEMGET);
 								}
 								else
 									htmltext = "30619-04.htm";

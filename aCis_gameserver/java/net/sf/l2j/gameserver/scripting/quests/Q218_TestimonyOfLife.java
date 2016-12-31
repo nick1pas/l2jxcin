@@ -15,7 +15,7 @@ package net.sf.l2j.gameserver.scripting.quests;
 import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.base.Race;
+import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 import net.sf.l2j.gameserver.scripting.Quest;
@@ -189,7 +189,7 @@ public class Q218_TestimonyOfLife extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() != Race.Elf)
+				if (player.getRace() != ClassRace.ELF)
 					htmltext = "30460-01.htm";
 				else if (player.getLevel() < 37 || player.getClassId().level() != 1)
 					htmltext = "30460-02.htm";

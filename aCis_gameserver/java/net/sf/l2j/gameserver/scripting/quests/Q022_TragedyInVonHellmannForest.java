@@ -44,8 +44,8 @@ public class Q022_TragedyInVonHellmannForest extends Quest
 	// Monsters
 	private static final int SOUL_OF_WELL = 27217;
 	
-	private static L2Npc _ghostOfPriestInstance = null;
-	private static L2Npc _soulOfWellInstance = null;
+	private L2Npc _ghostOfPriestInstance = null;
+	private L2Npc _soulOfWellInstance = null;
 	
 	public Q022_TragedyInVonHellmannForest()
 	{

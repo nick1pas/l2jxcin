@@ -30,7 +30,7 @@
 		<set name="runSpd" val="230"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="queen_ant_clan" clanRange="2000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="queen_ant_clan" clanRange="2000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4021" level="1"/>
 			<skill id="4045" level="1"/>
@@ -133,7 +133,7 @@
 		<set name="runSpd" val="60"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="queen_ant_clan" clanRange="4500" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="queen_ant_clan" clanRange="4500" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="12"/>
@@ -172,7 +172,7 @@
 		<set name="runSpd" val="130"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="queen_ant_clan" clanRange="700" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="queen_ant_clan" clanRange="700" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="12"/>
@@ -208,7 +208,7 @@
 		<set name="runSpd" val="230"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" clan="queen_ant_clan" clanRange="700" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" clan="queen_ant_clan" clanRange="700" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="12"/>
@@ -244,7 +244,7 @@
 		<set name="runSpd" val="230"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="queen_ant_clan" clanRange="700" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="queen_ant_clan" clanRange="700" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="12"/>
@@ -280,7 +280,7 @@
 		<set name="runSpd" val="110"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="curma_core_clan" clanRange="4500" canMove="false" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="curma_core_clan" clanRange="4500" canMove="false" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="2"/>
@@ -372,7 +372,7 @@
 		<set name="runSpd" val="110"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1050" clan="curma_core_clan" clanRange="2300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1050" clan="curma_core_clan" clanRange="2300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4275" level="2"/>
@@ -410,7 +410,7 @@
 		<set name="runSpd" val="230"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="950" clan="curma_core_clan" clanRange="700" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="950" clan="curma_core_clan" clanRange="700" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4001" level="5"/>
 			<skill id="4045" level="1"/>
@@ -449,7 +449,7 @@
 		<set name="runSpd" val="120"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="650" clan="curma_core_clan" clanRange="800" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="650" clan="curma_core_clan" clanRange="800" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4035" level="4"/>
 			<skill id="4045" level="1"/>
@@ -486,7 +486,7 @@
 		<set name="runSpd" val="110"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="750" clan="curma_core_clan" clanRange="1200" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="750" clan="curma_core_clan" clanRange="1200" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="3"/>
@@ -522,7 +522,7 @@
 		<set name="runSpd" val="150"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="850" clan="curma_core_clan" clanRange="1500" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="850" clan="curma_core_clan" clanRange="1500" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4001" level="4"/>
 			<skill id="4045" level="1"/>
@@ -559,7 +559,7 @@
 		<set name="runSpd" val="20"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="750" clan="curma_core_clan" clanRange="800" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="750" clan="curma_core_clan" clanRange="800" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4001" level="4"/>
 			<skill id="4045" level="1"/>
@@ -599,7 +599,7 @@
 		<set name="runSpd" val="110"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="curma_core_clan" clanRange="1200" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="curma_core_clan" clanRange="1200" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="11"/>
@@ -635,7 +635,7 @@
 		<set name="runSpd" val="230"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" clan="orfen_clan" clanRange="3500" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" clan="orfen_clan" clanRange="3500" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4062" level="1"/>
@@ -731,7 +731,7 @@
 		<set name="runSpd" val="230"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="orfen_clan" clanRange="2500" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="orfen_clan" clanRange="2500" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="12"/>
@@ -767,7 +767,7 @@
 		<set name="runSpd" val="230"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="orfen_clan" clanRange="2700" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="orfen_clan" clanRange="2700" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="12"/>
@@ -803,7 +803,7 @@
 		<set name="runSpd" val="230"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="orfen_clan" clanRange="2700" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="orfen_clan" clanRange="2700" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="12"/>
@@ -839,7 +839,7 @@
 		<set name="runSpd" val="230"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="orfen_clan" clanRange="2900" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="orfen_clan" clanRange="2900" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="12"/>
@@ -875,7 +875,7 @@
 		<set name="runSpd" val="186"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4122" level="1"/>
@@ -1079,7 +1079,7 @@
 		<set name="runSpd" val="120"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4256" level="1"/>
@@ -1151,7 +1151,7 @@
 		<set name="runSpd" val="170"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="80"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="2000" clan="archangel_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="2000" clan="archangel_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="8"/>
@@ -1187,7 +1187,7 @@
 		<set name="runSpd" val="190"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="1"/>
@@ -1304,7 +1304,7 @@
 		<set name="runSpd" val="150"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4071" level="5"/>
@@ -1350,7 +1350,7 @@
 		<set name="runSpd" val="155"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4071" level="5"/>
@@ -1396,7 +1396,7 @@
 		<set name="runSpd" val="120"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="1"/>
@@ -1432,7 +1432,7 @@
 		<set name="runSpd" val="140"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4275" level="2"/>
@@ -1475,7 +1475,7 @@
 		<set name="runSpd" val="140"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4275" level="2"/>
@@ -1518,7 +1518,7 @@
 		<set name="runSpd" val="300"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="valakas_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="valakas_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="10"/>
@@ -1727,7 +1727,7 @@
 		<set name="runSpd" val="1"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="1100"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" clan="valakas_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" clan="valakas_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="2"/>
@@ -1764,7 +1764,7 @@
 		<set name="runSpd" val="200"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4178" level="9"/>
@@ -1814,7 +1814,7 @@
 		<set name="runSpd" val="170"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4209" level="9"/>
@@ -1852,7 +1852,7 @@
 		<set name="runSpd" val="60"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="2"/>
@@ -1888,7 +1888,7 @@
 		<set name="runSpd" val="200"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4197" level="9"/>
@@ -1938,7 +1938,7 @@
 		<set name="runSpd" val="170"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4193" level="9"/>
@@ -1976,7 +1976,7 @@
 		<set name="runSpd" val="60"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="2"/>
@@ -2012,7 +2012,7 @@
 		<set name="runSpd" val="200"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4170" level="9"/>
@@ -2061,7 +2061,7 @@
 		<set name="runSpd" val="200"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4184" level="9"/>
@@ -2113,7 +2113,7 @@
 		<set name="runSpd" val="170"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4191" level="9"/>
@@ -2151,7 +2151,7 @@
 		<set name="runSpd" val="170"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4210" level="9"/>
@@ -2189,7 +2189,7 @@
 		<set name="runSpd" val="200"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4168" level="1"/>
@@ -2244,7 +2244,7 @@
 		<set name="runSpd" val="60"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4179" level="9"/>
@@ -2281,7 +2281,7 @@
 		<set name="runSpd" val="60"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="2"/>
@@ -2317,7 +2317,7 @@
 		<set name="runSpd" val="170"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4209" level="9"/>
@@ -2355,7 +2355,7 @@
 		<set name="runSpd" val="170"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="fire_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4191" level="9"/>
@@ -2393,7 +2393,7 @@
 		<set name="runSpd" val="31"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="6"/>
@@ -2429,7 +2429,7 @@
 		<set name="runSpd" val="111"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="2000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="2000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="9"/>
@@ -2465,7 +2465,7 @@
 		<set name="runSpd" val="155"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="2000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="2000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="9"/>
@@ -2644,7 +2644,7 @@
 		<set name="runSpd" val="1"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="corpse" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="1000" canMove="true" seedable="false"/>
+		<ai type="CORPSE" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="1000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="2"/>
@@ -2680,7 +2680,7 @@
 		<set name="runSpd" val="1"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="corpse" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="1000" canMove="true" seedable="false"/>
+		<ai type="CORPSE" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="1000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="2"/>
@@ -2716,7 +2716,7 @@
 		<set name="runSpd" val="200"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="2000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="2000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="9"/>
@@ -2755,7 +2755,7 @@
 		<set name="runSpd" val="200"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="6000" clan="frintessa_clan" clanRange="2000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="6000" clan="frintessa_clan" clanRange="2000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="9"/>
@@ -2794,7 +2794,7 @@
 		<set name="runSpd" val="1"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4390" level="1"/>
@@ -2831,7 +2831,7 @@
 		<set name="runSpd" val="1"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="frintessa_clan" clanRange="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4390" level="1"/>
@@ -2868,7 +2868,7 @@
 		<set name="runSpd" val="220"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="9"/>
@@ -2920,7 +2920,7 @@
 		<set name="runSpd" val="120"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="6000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="6000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="19"/>
@@ -2956,7 +2956,7 @@
 		<set name="runSpd" val="190"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="ice_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="ice_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="7"/>
@@ -3024,7 +3024,7 @@
 		<set name="runSpd" val="190"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="ice_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="ice_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4010" level="5"/>
 			<skill id="4045" level="1"/>
@@ -3069,7 +3069,7 @@
 		<set name="runSpd" val="190"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="ice_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="ice_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4010" level="5"/>
 			<skill id="4045" level="1"/>
@@ -3114,7 +3114,7 @@
 		<set name="runSpd" val="190"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="ice_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="ice_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4173" level="1"/>
@@ -3173,7 +3173,7 @@
 		<set name="runSpd" val="120"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="19"/>
@@ -3209,7 +3209,7 @@
 		<set name="runSpd" val="210"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" clan="andreas_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" clan="andreas_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4183" level="3"/>
@@ -3266,7 +3266,7 @@
 		<set name="runSpd" val="200"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" clan="andreas_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" clan="andreas_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4193" level="1"/>
@@ -3309,7 +3309,7 @@
 		<set name="runSpd" val="200"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" clan="andreas_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="500" clan="andreas_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4210" level="1"/>
@@ -3353,7 +3353,7 @@
 		<set name="runSpd" val="185"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4172" level="2"/>
@@ -3410,7 +3410,7 @@
 		<set name="runSpd" val="186"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4122" level="1"/>
@@ -3614,7 +3614,7 @@
 		<set name="runSpd" val="186"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4122" level="1"/>
@@ -3815,7 +3815,7 @@
 		<set name="runSpd" val="186"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4122" level="1"/>
@@ -4016,7 +4016,7 @@
 		<set name="runSpd" val="180"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="10"/>
@@ -4101,7 +4101,7 @@
 		<set name="runSpd" val="250"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4416" level="10"/>
 		</skills>
@@ -4136,7 +4136,7 @@
 		<set name="runSpd" val="245"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4416" level="10"/>
 		</skills>
@@ -4171,7 +4171,7 @@
 		<set name="runSpd" val="255"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4416" level="10"/>
 		</skills>
@@ -4206,7 +4206,7 @@
 		<set name="runSpd" val="247"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4416" level="10"/>
 		</skills>
@@ -4241,7 +4241,7 @@
 		<set name="runSpd" val="252"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4416" level="10"/>
 		</skills>
@@ -4276,7 +4276,7 @@
 		<set name="runSpd" val="243"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4416" level="10"/>
 		</skills>
@@ -4311,7 +4311,7 @@
 		<set name="runSpd" val="250"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="1000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4416" level="10"/>
 		</skills>
@@ -4346,7 +4346,7 @@
 		<set name="runSpd" val="190"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4174" level="1"/>
@@ -4405,7 +4405,7 @@
 		<set name="runSpd" val="160"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="solina_clan" clanRange="1000" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="solina_clan" clanRange="1000" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4416" level="8"/>
@@ -4462,7 +4462,7 @@
 		<set name="runSpd" val="190"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="solina_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="solina_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4414" level="3"/>
@@ -4505,7 +4505,7 @@
 		<set name="runSpd" val="190"/>
 		<set name="dropHerbGroup" val="0"/>
 		<set name="attackRange" val="40"/>
-		<ai type="default" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="solina_clan" clanRange="300" canMove="true" seedable="false"/>
+		<ai type="DEFAULT" ssCount="0" ssRate="0" spsCount="0" spsRate="0" aggro="0" clan="solina_clan" clanRange="300" canMove="true" seedable="false"/>
 		<skills>
 			<skill id="4045" level="1"/>
 			<skill id="4414" level="3"/>

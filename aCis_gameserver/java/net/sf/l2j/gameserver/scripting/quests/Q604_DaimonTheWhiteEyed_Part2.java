@@ -51,8 +51,9 @@ public class Q604_DaimonTheWhiteEyed_Part2 extends Quest
 	// Other
 	private static final int CHECK_INTERVAL = 600000; // 10 minutes
 	private static final int IDLE_INTERVAL = 3; // (X * CHECK_INTERVAL) = 30 minutes
-	private static L2Npc _npc = null;
-	private static int _status = -1;
+	
+	private L2Npc _npc = null;
+	private int _status = -1;
 	
 	public Q604_DaimonTheWhiteEyed_Part2()
 	{
@@ -237,10 +238,10 @@ public class Q604_DaimonTheWhiteEyed_Part2 extends Quest
 			_npc = addSpawn(DAIMON_ALTAR, 186304, -43744, -3193, 57000, false, 0, false);
 	}
 	
-	private static boolean spawnRaid()
+	private boolean spawnRaid()
 	{
 		L2RaidBossInstance raid = RaidBossSpawnManager.getInstance().getBosses().get(DAIMON_THE_WHITE_EYED);
-		if (raid.getRaidStatus() == StatusEnum.ALIVE)
+		if (raid != null && raid.getRaidStatus() == StatusEnum.ALIVE)
 		{
 			// set temporarily spawn location (to provide correct behavior of L2RaidBossInstance.checkAndReturnToSpawn())
 			raid.getSpawn().setLocx(185900);
@@ -260,7 +261,7 @@ public class Q604_DaimonTheWhiteEyed_Part2 extends Quest
 		return false;
 	}
 	
-	private static void despawnRaid(L2Npc raid)
+	private void despawnRaid(L2Npc raid)
 	{
 		// reset spawn location
 		raid.getSpawn().setLocx(-106500);

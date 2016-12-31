@@ -81,32 +81,32 @@ public class CharTemplate
 		_collisionHeight = set.getDouble("height");
 	}
 	
-	public int getBaseSTR()
+	public final int getBaseSTR()
 	{
 		return _baseSTR;
 	}
 	
-	public int getBaseCON()
+	public final int getBaseCON()
 	{
 		return _baseCON;
 	}
 	
-	public int getBaseDEX()
+	public final int getBaseDEX()
 	{
 		return _baseDEX;
 	}
 	
-	public int getBaseINT()
+	public final int getBaseINT()
 	{
 		return _baseINT;
 	}
 	
-	public int getBaseWIT()
+	public final int getBaseWIT()
 	{
 		return _baseWIT;
 	}
 	
-	public int getBaseMEN()
+	public final int getBaseMEN()
 	{
 		return _baseMEN;
 	}
@@ -121,86 +121,68 @@ public class CharTemplate
 		return _baseMpMax;
 	}
 	
-	public double getBaseHpReg()
+	public final double getBaseHpReg()
 	{
 		return _baseHpReg;
 	}
 	
-	public double getBaseMpReg()
+	public final double getBaseMpReg()
 	{
 		return _baseMpReg;
 	}
 	
-	public double getBasePAtk()
+	public final double getBasePAtk()
 	{
 		return _basePAtk;
 	}
 	
-	public double getBaseMAtk()
+	public final double getBaseMAtk()
 	{
 		return _baseMAtk;
 	}
 	
-	public double getBasePDef()
+	public final double getBasePDef()
 	{
 		return _basePDef;
 	}
 	
-	public double getBaseMDef()
+	public final double getBaseMDef()
 	{
 		return _baseMDef;
 	}
 	
-	public int getBasePAtkSpd()
+	public final int getBasePAtkSpd()
 	{
 		return _basePAtkSpd;
 	}
 	
-	public int getBaseAtkRange()
+	public final int getBaseAtkRange()
 	{
 		return _baseAtkRange;
 	}
 	
-	public int getBaseCritRate()
+	public final int getBaseCritRate()
 	{
 		return _baseCritRate;
 	}
 	
-	public int getBaseWalkSpd()
+	public final int getBaseWalkSpeed()
 	{
 		return _baseWalkSpd;
 	}
 	
-	public int getBaseRunSpd()
+	public final int getBaseRunSpeed()
 	{
 		return _baseRunSpd;
 	}
 	
-	public int getCollisionRadius()
+	public final double getCollisionRadius()
 	{
-		return getCollisionRadius(false);
+		return _collisionRadius;
 	}
 	
-	/**
-	 * @param sex : True - female, False - male.
-	 * @return : radius depending on sex.
-	 */
-	public int getCollisionRadius(boolean sex)
+	public final double getCollisionHeight()
 	{
-		return (int) _collisionRadius;
-	}
-	
-	public int getCollisionHeight()
-	{
-		return getCollisionHeight(false);
-	}
-	
-	/**
-	 * @param sex : True - female, False - male.
-	 * @return : height depending on sex.
-	 */
-	protected int getCollisionHeight(boolean sex)
-	{
-		return (int) _collisionHeight;
+		return _collisionHeight;
 	}
 }

@@ -28,7 +28,6 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.L2World;
-import net.sf.l2j.gameserver.model.L2WorldRegion;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -87,12 +86,11 @@ public final class ItemsOnGroundTaskManager implements Runnable
 					item.setEnchantLevel(enchant);
 				
 				// Spawn item in the world.
-				item.getPosition().setWorldPosition(result.getInt(5), result.getInt(6), result.getInt(7));
-				L2WorldRegion region = L2World.getInstance().getRegion(item.getPosition().getWorldPosition());
-				item.getPosition().setWorldRegion(region);
-				region.addVisibleObject(item);
+				item.getPosition().set(result.getInt(5), result.getInt(6), result.getInt(7));
+				item.setRegion(L2World.getInstance().getRegion(item.getPosition()));
+				item.getRegion().addVisibleObject(item);
 				item.setIsVisible(true);
-				L2World.getInstance().addVisibleObject(item, item.getPosition().getWorldRegion());
+				L2World.getInstance().addVisibleObject(item, item.getRegion());
 				
 				// Get interval, add item to the list.
 				long interval = result.getLong(8);
@@ -195,7 +193,7 @@ public final class ItemsOnGroundTaskManager implements Runnable
 			
 			// Destroy item and remove from task.
 			final ItemInstance item = entry.getKey();
-			L2World.getInstance().removeVisibleObject(item, item.getWorldRegion());
+			L2World.getInstance().removeVisibleObject(item, item.getRegion());
 			L2World.getInstance().removeObject(item);
 			_items.remove(item);
 		}

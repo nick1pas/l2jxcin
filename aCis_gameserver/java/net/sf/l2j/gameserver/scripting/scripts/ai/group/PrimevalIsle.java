@@ -79,7 +79,7 @@ public class PrimevalIsle extends AbstractNpcAI
 		if (event.equalsIgnoreCase("skill"))
 		{
 			int playableCounter = 0;
-			for (L2Playable playable : npc.getKnownList().getKnownTypeInRadius(L2Playable.class, npc.getAggroRange()))
+			for (L2Playable playable : npc.getKnownList().getKnownTypeInRadius(L2Playable.class, npc.getTemplate().getAggroRange()))
 			{
 				if (!playable.isDead())
 					playableCounter++;

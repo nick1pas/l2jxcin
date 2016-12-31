@@ -95,7 +95,7 @@ public class OlympiadManager
 		if (_nonClassBasedRegisters.contains(objId))
 		{
 			if (showMessage)
-				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_ALREADY_BEEN_REGISTERED_IN_A_WAITING_LIST_OF_AN_EVENT));
+				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_BEEN_REGISTERED_IN_A_WAITING_LIST_OF_NO_CLASS_GAMES));
 			
 			return true;
 		}
@@ -104,7 +104,7 @@ public class OlympiadManager
 		if (classed != null && classed.contains(objId))
 		{
 			if (showMessage)
-				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_ALREADY_BEEN_REGISTERED_IN_A_WAITING_LIST_OF_AN_EVENT));
+				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_BEEN_REGISTERED_IN_A_WAITING_LIST_OF_CLASSIFIED_GAMES));
 			
 			return true;
 		}

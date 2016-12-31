@@ -61,7 +61,7 @@ public class SiegeManager
 	
 	protected SiegeManager()
 	{
-		ExProperties sieges = Config.load(Config.SIEGE_FILE);
+		final ExProperties sieges = Config.initProperties(Config.SIEGE_FILE);
 		MAX_ATTACKERS_NUMBER = sieges.getProperty("AttackerMaxClans", 10);
 		ATTACKERS_RESPAWN_DELAY = sieges.getProperty("AttackerRespawn", 10000);
 		MAX_DEFENDERS_NUMBER = sieges.getProperty("DefenderMaxClans", 10);

@@ -14,6 +14,7 @@
  */
 package net.sf.l2j.gameserver.instancemanager;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -461,6 +462,7 @@ public final class PetitionManager
 	
 	public void sendPendingPetitionList(L2PcInstance activeChar)
 	{
+		final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		final StringBuilder sb = new StringBuilder("<html><body><center><font color=\"LEVEL\">Current Petitions</font><br><table width=\"300\">");
 		
 		if (getPendingPetitionCount() == 0)
@@ -480,7 +482,7 @@ public final class PetitionManager
 			else
 				sb.append("<font color=\"999999\">In Process</font>");
 			
-			StringUtil.append(sb, "</td><td>", currPetition.getPetitioner().getName(), "</td><td>", currPetition.getTypeAsString(), "</td><td>", StringUtil.DATE.format(currPetition.getSubmitTime()), "</td></tr>");
+			StringUtil.append(sb, "</td><td>", currPetition.getPetitioner().getName(), "</td><td>", currPetition.getTypeAsString(), "</td><td>", sdf.format(currPetition.getSubmitTime()), "</td></tr>");
 		}
 		
 		sb.append("</table><br><button value=\"Refresh\" action=\"bypass -h admin_view_petitions\" width=\"50\" " + "height=\"15\" back=\"sek.cbui94\" fore=\"sek.cbui92\"><br><button value=\"Back\" action=\"bypass -h admin_admin\" " + "width=\"40\" height=\"15\" back=\"sek.cbui94\" fore=\"sek.cbui92\"></center></body></html>");
@@ -517,7 +519,7 @@ public final class PetitionManager
 		
 		sb.append("<center><br><font color=\"LEVEL\">Petition #" + currPetition.getId() + "</font><br1>");
 		sb.append("<img src=\"L2UI.SquareGray\" width=\"200\" height=\"1\"></center><br>");
-		sb.append("Submit Time: " + StringUtil.DATE_MM.format(currPetition.getSubmitTime()) + "<br1>");
+		sb.append("Submit Time: " + new SimpleDateFormat("dd-MM-yyyy HH:mm").format(currPetition.getSubmitTime()) + "<br1>");
 		sb.append("Petitioner: " + currPetition.getPetitioner().getName() + "<br1>");
 		sb.append("Petition Type: " + currPetition.getTypeAsString() + "<br>" + currPetition.getContent() + "<br>");
 		sb.append("<center><button value=\"Accept\" action=\"bypass -h admin_accept_petition " + currPetition.getId() + "\"" + "width=\"50\" height=\"15\" back=\"sek.cbui94\" fore=\"sek.cbui92\"><br1>");

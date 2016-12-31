@@ -532,7 +532,7 @@ public class L2CastleChamberlainInstance extends L2MerchantInstance
 			if (door == null)
 				return;
 			
-			final int currentHpRatio = door.getUpgradeHpRatio();
+			final int currentHpRatio = door.getStat().getUpgradeHpRatio();
 			
 			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 			

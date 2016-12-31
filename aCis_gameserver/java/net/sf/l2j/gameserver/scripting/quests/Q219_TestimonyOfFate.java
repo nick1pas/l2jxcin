@@ -17,7 +17,7 @@ import java.util.Map;
 
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.base.Race;
+import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
@@ -166,12 +166,12 @@ public class Q219_TestimonyOfFate extends Quest
 		}
 		else if (event.equalsIgnoreCase("31845-02.htm"))
 		{
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.giveItems(PIXY_GARNET, 1);
 		}
 		else if (event.equalsIgnoreCase("31850-02.htm"))
 		{
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.giveItems(BLIGHT_TREANT_SEED, 1);
 		}
 		else if (event.equalsIgnoreCase("30419-05.htm"))
@@ -198,7 +198,7 @@ public class Q219_TestimonyOfFate extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getRace() != Race.DarkElf)
+				if (player.getRace() != ClassRace.DARK_ELF)
 					htmltext = "30476-02.htm";
 				else if (player.getLevel() < 37 || player.getClassId().level() != 1)
 					htmltext = "30476-01.htm";
@@ -390,7 +390,7 @@ public class Q219_TestimonyOfFate extends Quest
 								if (st.getQuestItemsCount(GRANDIS_SKULL) >= 10 && st.getQuestItemsCount(KARUL_BUGBEAR_SKULL) >= 10 && st.getQuestItemsCount(BREKA_OVERLORD_SKULL) >= 10 && st.getQuestItemsCount(LETO_OVERLORD_SKULL) >= 10)
 								{
 									htmltext = "31845-04.htm";
-									st.playSound(QuestState.SOUND_MIDDLE);
+									st.playSound(QuestState.SOUND_ITEMGET);
 									st.takeItems(BREKA_OVERLORD_SKULL, -1);
 									st.takeItems(GRANDIS_SKULL, -1);
 									st.takeItems(KARUL_BUGBEAR_SKULL, -1);
@@ -418,7 +418,7 @@ public class Q219_TestimonyOfFate extends Quest
 								if (st.hasQuestItems(BLACK_WILLOW_LEAF))
 								{
 									htmltext = "31850-04.htm";
-									st.playSound(QuestState.SOUND_MIDDLE);
+									st.playSound(QuestState.SOUND_ITEMGET);
 									st.takeItems(BLACK_WILLOW_LEAF, 1);
 									st.takeItems(BLIGHT_TREANT_SEED, 1);
 									st.giveItems(BLIGHT_TREANT_SAP, 1);

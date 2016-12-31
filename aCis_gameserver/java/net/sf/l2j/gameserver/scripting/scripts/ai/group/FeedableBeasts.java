@@ -573,7 +573,7 @@ public class FeedableBeasts extends AbstractNpcAI
 			// If tamed, the mob that will spawn depends on the class type (fighter/mage) of the player!
 			if (Rnd.get(2) == 0)
 			{
-				if (player.getClassId().isMage())
+				if (player.isMageClass())
 					nextNpcId = _GrowthCapableMobs.get(npcId).getMob(food, 1, 1);
 				else
 					nextNpcId = _GrowthCapableMobs.get(npcId).getMob(food, 1, 0);
@@ -607,7 +607,7 @@ public class FeedableBeasts extends AbstractNpcAI
 		// player might have and initialize the Tamed Beast.
 		if (Util.contains(TAMED_BEASTS, nextNpcId))
 		{
-			if (player.getTrainedBeast() != null && !(player.getTrainedBeast() == null))
+			if (player.getTrainedBeast() != null)
 				player.getTrainedBeast().deleteMe();
 			
 			NpcTemplate template = NpcTable.getInstance().getTemplate(nextNpcId);

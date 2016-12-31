@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -70,7 +71,7 @@ public class MailBBSManager extends BaseBBSManager
 			return _bypass;
 		}
 		
-		public static final MailType VALUES[] = values();
+		public static final MailType[] VALUES = values();
 	}
 	
 	private final Map<Integer, List<Mail>> _mails = new HashMap<>();
@@ -245,7 +246,7 @@ public class MailBBSManager extends BaseBBSManager
 					letter.subject = result.getString("subject");
 					letter.message = result.getString("message");
 					letter.sentDate = result.getTimestamp("sentDate");
-					letter.sentDateString = StringUtil.REVERSED_DATE_MM.format(letter.sentDate);
+					letter.sentDateString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(letter.sentDate);
 					letter.unread = result.getInt("unread") != 0;
 					_letters.add(0, letter);
 				}
@@ -481,7 +482,7 @@ public class MailBBSManager extends BaseBBSManager
 		long date = Calendar.getInstance().getTimeInMillis();
 		
 		for (Mail letter : getPlayerMails(activeChar.getObjectId()))
-			if (letter.sentDate.after(ts) && letter.location.equals("sentbox"))
+			if (letter.sentDate.after(ts) && letter.location == MailType.SENTBOX)
 				countTodaysLetters++;
 		
 		if (countTodaysLetters >= 10 && !activeChar.isGM())
@@ -556,7 +557,7 @@ public class MailBBSManager extends BaseBBSManager
 					letter.subject = abbreviate(subject, 128);
 					letter.message = message;
 					letter.sentDate = time;
-					letter.sentDateString = StringUtil.REVERSED_DATE_MM.format(letter.sentDate);
+					letter.sentDateString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(letter.sentDate);
 					letter.unread = true;
 					getPlayerMails(recipId).add(0, letter);
 					
@@ -593,7 +594,7 @@ public class MailBBSManager extends BaseBBSManager
 				letter.subject = abbreviate(subject, 128);
 				letter.message = message;
 				letter.sentDate = time;
-				letter.sentDateString = StringUtil.REVERSED_DATE_MM.format(letter.sentDate);
+				letter.sentDateString = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(letter.sentDate);
 				letter.unread = false;
 				getPlayerMails(activeChar.getObjectId()).add(0, letter);
 			}

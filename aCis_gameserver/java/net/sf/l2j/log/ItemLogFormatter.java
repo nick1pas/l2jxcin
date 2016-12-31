@@ -14,6 +14,7 @@
  */
 package net.sf.l2j.log;
 
+import java.text.SimpleDateFormat;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
@@ -32,7 +33,7 @@ public class ItemLogFormatter extends Formatter
 	{
 		final StringBuilder sb = new StringBuilder();
 		
-		StringUtil.append(sb, "[", StringUtil.DATE_SS.format(record.getMillis()), "] ", record.getMessage());
+		StringUtil.append(sb, "[", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(record.getMillis()), "] ", record.getMessage());
 		
 		for (Object p : record.getParameters())
 		{

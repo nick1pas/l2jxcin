@@ -14,9 +14,7 @@
  */
 package net.sf.l2j.commons.lang;
 
-import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,16 +32,6 @@ public final class StringUtil
 	
 	public static final String LETTERS = LOWER_CASE_LETTERS + UPPER_CASE_LETTERS;
 	public static final String LETTERS_AND_DIGITS = LETTERS + DIGITS;
-	
-	public static final DateFormat DATE = new SimpleDateFormat("dd-MM-yyyy");
-	public static final DateFormat DATE_HH = new SimpleDateFormat("dd-MM-yyyy HH");
-	public static final DateFormat DATE_MM = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-	public static final DateFormat DATE_SS = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-	
-	public static final DateFormat REVERSED_DATE = new SimpleDateFormat("yyyy-MM-dd");
-	public static final DateFormat REVERSED_DATE_HH = new SimpleDateFormat("yyyy-MM-dd HH");
-	public static final DateFormat REVERSED_DATE_MM = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-	public static final DateFormat REVERSED_DATE_SS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	private static final Logger LOG = Logger.getLogger(StringUtil.class.getName());
 	

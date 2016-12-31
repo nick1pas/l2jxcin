@@ -61,6 +61,6 @@ public class AttackableKnownList extends NpcKnownList
 		// get attackable
 		final L2Attackable attackable = (L2Attackable) _activeObject;
 		
-		return Math.max(300, Math.max(attackable.getAggroRange(), attackable.getClanRange()));
+		return Math.max(300, Math.max(attackable.getTemplate().getAggroRange(), attackable.getTemplate().getClanRange()));
 	}
 }

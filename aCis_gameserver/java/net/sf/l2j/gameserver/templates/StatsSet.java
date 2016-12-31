@@ -14,17 +14,20 @@
  */
 package net.sf.l2j.gameserver.templates;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is used in order to have a set of couples (key,value).<BR>
  * Methods deployed are accessors to the set (add/get value from its key) and addition of a whole set in the current one.
  * @author mkizub, G1ta0
  */
+@SuppressWarnings("serial")
 public class StatsSet extends HashMap<String, Object>
 {
-	private static final long serialVersionUID = 8071544899414292397L;
-	
 	public StatsSet()
 	{
 		super();
@@ -85,27 +88,16 @@ public class StatsSet extends HashMap<String, Object>
 		remove(key);
 	}
 	
-	public boolean isSet(final String key)
-	{
-		return get(key) != null;
-	}
-	
-	@Override
-	public StatsSet clone()
-	{
-		return new StatsSet(this);
-	}
-	
 	public boolean getBool(final String key)
 	{
 		final Object val = get(key);
 		
-		if (val instanceof Number)
-			return ((Number) val).intValue() != 0;
-		if (val instanceof String)
-			return Boolean.parseBoolean((String) val);
 		if (val instanceof Boolean)
 			return (Boolean) val;
+		if (val instanceof String)
+			return Boolean.parseBoolean((String) val);
+		if (val instanceof Number)
+			return ((Number) val).intValue() != 0;
 		
 		throw new IllegalArgumentException("StatsSet : Boolean value required, but found: " + val + " for key: " + key + ".");
 	}
@@ -114,12 +106,12 @@ public class StatsSet extends HashMap<String, Object>
 	{
 		final Object val = get(key);
 		
-		if (val instanceof Number)
-			return ((Number) val).intValue() != 0;
-		if (val instanceof String)
-			return Boolean.parseBoolean((String) val);
 		if (val instanceof Boolean)
 			return (Boolean) val;
+		if (val instanceof String)
+			return Boolean.parseBoolean((String) val);
+		if (val instanceof Number)
+			return ((Number) val).intValue() != 0;
 		
 		return defaultValue;
 	}
@@ -144,6 +136,34 @@ public class StatsSet extends HashMap<String, Object>
 			return ((Number) val).byteValue();
 		if (val instanceof String)
 			return Byte.parseByte((String) val);
+		
+		return defaultValue;
+	}
+	
+	public double getDouble(final String key)
+	{
+		final Object val = get(key);
+		
+		if (val instanceof Number)
+			return ((Number) val).doubleValue();
+		if (val instanceof String)
+			return Double.parseDouble((String) val);
+		if (val instanceof Boolean)
+			return (Boolean) val ? 1. : 0.;
+		
+		throw new IllegalArgumentException("StatsSet : Double value required, but found: " + val + " for key: " + key + ".");
+	}
+	
+	public double getDouble(final String key, final double defaultValue)
+	{
+		final Object val = get(key);
+		
+		if (val instanceof Number)
+			return ((Number) val).doubleValue();
+		if (val instanceof String)
+			return Double.parseDouble((String) val);
+		if (val instanceof Boolean)
+			return (Boolean) val ? 1. : 0.;
 		
 		return defaultValue;
 	}
@@ -243,6 +263,17 @@ public class StatsSet extends HashMap<String, Object>
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getList(final String key)
+	{
+		final Object val = get(key);
+		
+		if (val == null)
+			return Collections.emptyList();
+		
+		return (ArrayList<T>) val;
+	}
+	
 	public long getLong(final String key)
 	{
 		final Object val = get(key);
@@ -298,32 +329,15 @@ public class StatsSet extends HashMap<String, Object>
 		throw new IllegalArgumentException("StatsSet : Long array required, but found: " + val + " for key: " + key + ".");
 	}
 	
-	public double getDouble(final String key)
+	@SuppressWarnings("unchecked")
+	public <T, U> Map<T, U> getMap(final String key)
 	{
 		final Object val = get(key);
 		
-		if (val instanceof Number)
-			return ((Number) val).doubleValue();
-		if (val instanceof String)
-			return Double.parseDouble((String) val);
-		if (val instanceof Boolean)
-			return (Boolean) val ? 1. : 0.;
+		if (val == null)
+			return Collections.emptyMap();
 		
-		throw new IllegalArgumentException("StatsSet : Double value required, but found: " + val + " for key: " + key + ".");
-	}
-	
-	public double getDouble(final String key, final double defaultValue)
-	{
-		final Object val = get(key);
-		
-		if (val instanceof Number)
-			return ((Number) val).doubleValue();
-		if (val instanceof String)
-			return Double.parseDouble((String) val);
-		if (val instanceof Boolean)
-			return (Boolean) val ? 1. : 0.;
-		
-		return defaultValue;
+		return (HashMap<T, U>) val;
 	}
 	
 	public String getString(final String key)
@@ -346,19 +360,27 @@ public class StatsSet extends HashMap<String, Object>
 		return defaultValue;
 	}
 	
-	public Object getObject(final String key)
-	{
-		return get(key);
-	}
-	
-	public Object getObject(final String key, final Object defaultValue)
+	public String[] getStringArray(final String key)
 	{
 		final Object val = get(key);
 		
-		if (val != null)
-			return val;
+		if (val instanceof String[])
+			return (String[]) val;
+		if (val instanceof String)
+			return ((String) val).split(";");
 		
-		return defaultValue;
+		throw new IllegalArgumentException("StatsSet : String array required, but found: " + val + " for key: " + key + ".");
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <A> A getObject(final String key, final Class<A> type)
+	{
+		final Object val = get(key);
+		
+		if (val == null || !type.isAssignableFrom(val.getClass()))
+			return null;
+		
+		return (A) val;
 	}
 	
 	@SuppressWarnings("unchecked")

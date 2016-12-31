@@ -31,7 +31,7 @@ import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Clan.SubPledge;
 import net.sf.l2j.gameserver.model.L2World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.base.Race;
+import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.entity.Couple;
 import net.sf.l2j.gameserver.model.entity.Siege;
@@ -155,9 +155,9 @@ public class EnterWorld extends L2GameClientPacket
 		}
 		
 		if (Config.PLAYER_SPAWN_PROTECTION > 0)
-			activeChar.setProtection(true);
+			activeChar.setSpawnProtection(true);
 		
-		activeChar.spawnMe(activeChar.getX(), activeChar.getY(), activeChar.getZ());
+		activeChar.spawnMe();
 		
 		// engage and notify Partner
 		if (Config.ALLOW_WEDDING)
@@ -169,7 +169,7 @@ public class EnterWorld extends L2GameClientPacket
 		AnnouncementTable.getInstance().showAnnouncements(activeChar, false);
 		
 		// if player is DE, check for shadow sense skill at night
-		if (activeChar.getRace() == Race.DarkElf && activeChar.getSkillLevel(294) == 1)
+		if (activeChar.getRace() == ClassRace.DARK_ELF && activeChar.getSkillLevel(294) == 1)
 			activeChar.sendPacket(SystemMessage.getSystemMessage((GameTimeTaskManager.getInstance().isNight()) ? SystemMessageId.NIGHT_S1_EFFECT_APPLIES : SystemMessageId.DAY_S1_EFFECT_DISAPPEARS).addSkillName(294));
 		
 		activeChar.getMacroses().sendUpdate();

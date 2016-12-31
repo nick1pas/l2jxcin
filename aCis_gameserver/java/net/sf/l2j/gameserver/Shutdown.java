@@ -21,6 +21,7 @@ import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.gameserver.datatables.BufferTable;
+import net.sf.l2j.gameserver.datatables.ServerMemo;
 import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
 import net.sf.l2j.gameserver.instancemanager.FishingChampionshipManager;
 import net.sf.l2j.gameserver.instancemanager.FourSepulchersManager;
@@ -96,15 +97,6 @@ public class Shutdown extends Thread
 			_shutdownMode = GM_RESTART;
 		else
 			_shutdownMode = GM_SHUTDOWN;
-	}
-	
-	/**
-	 * get the shutdown-hook instance the shutdown-hook instance is created by the first call of this function, but it has to be registrered externaly.
-	 * @return instance of Shutdown, to be used as shutdown hook
-	 */
-	public static Shutdown getInstance()
-	{
-		return SingletonHolder._instance;
 	}
 	
 	/**
@@ -193,6 +185,10 @@ public class Shutdown extends Thread
 			// Schemes save.
 			BufferTable.getInstance().saveSchemes();
 			_log.info("BufferTable data has been saved.");
+			
+			// Save server memos.
+			ServerMemo.getInstance().storeMe();
+			_log.info("ServerMemo data has been saved.");
 			
 			// Save items on ground before closing
 			ItemsOnGroundTaskManager.getInstance().save();
@@ -439,6 +435,15 @@ public class Shutdown extends Thread
 				_log.log(Level.WARNING, "Failed to logout chararacter: " + player, t);
 			}
 		}
+	}
+	
+	/**
+	 * get the shutdown-hook instance the shutdown-hook instance is created by the first call of this function, but it has to be registrered externaly.
+	 * @return instance of Shutdown, to be used as shutdown hook
+	 */
+	public static Shutdown getInstance()
+	{
+		return SingletonHolder._instance;
 	}
 	
 	private static class SingletonHolder

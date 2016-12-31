@@ -177,8 +177,8 @@ abstract public class OlympiadGameNormal extends AbstractOlympiadGame
 		if (_playerOne.player == null || _playerTwo.player == null)
 			return false;
 		
-		_playerOne.player.setIsOlympiadStart(true);
-		_playerTwo.player.setIsOlympiadStart(true);
+		_playerOne.player.setOlympiadStart(true);
+		_playerTwo.player.setOlympiadStart(true);
 		return true;
 	}
 	

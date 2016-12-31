@@ -49,10 +49,7 @@ public class Unlock implements ISkillHandler
 			}
 			
 			if (doorUnlock(skill) && (!door.isOpened()))
-			{
 				door.openMe();
-				door.onOpen();
-			}
 			else
 				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.FAILED_TO_UNLOCK_DOOR));
 		}

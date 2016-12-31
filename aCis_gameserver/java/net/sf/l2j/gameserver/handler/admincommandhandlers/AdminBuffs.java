@@ -131,42 +131,29 @@ public class AdminBuffs implements IAdminCommandHandler
 			L2PcInstance player = null;
 			if (st.hasMoreTokens())
 			{
-				String playername = st.nextToken();
+				final String name = st.nextToken();
 				
-				try
-				{
-					player = L2World.getInstance().getPlayer(playername);
-				}
-				catch (Exception e)
-				{
-				}
-				
+				player = L2World.getInstance().getPlayer(name);
 				if (player == null)
 				{
-					activeChar.sendMessage("The player " + playername + " is not online.");
+					activeChar.sendMessage("The player " + name + " is not online.");
 					return false;
 				}
 			}
 			else if (activeChar.getTarget() instanceof L2PcInstance)
 				player = (L2PcInstance) activeChar.getTarget();
-			else
+			
+			if (player == null)
 			{
 				activeChar.sendPacket(SystemMessageId.TARGET_IS_INCORRECT);
 				return false;
 			}
 			
-			try
-			{
-				player.getReuseTimeStamp().clear();
-				player.getDisabledSkills().clear();
-				player.sendPacket(new SkillCoolTime(player));
-				activeChar.sendMessage(player.getName() + "'s skills reuse time is now cleaned.");
-				return true;
-			}
-			catch (NullPointerException e)
-			{
-				return false;
-			}
+			player.getReuseTimeStamp().clear();
+			player.getDisabledSkills().clear();
+			player.sendPacket(new SkillCoolTime(player));
+			activeChar.sendMessage(player.getName() + "'s skills reuse time is now cleaned.");
+			return true;
 		}
 		else
 			return true;

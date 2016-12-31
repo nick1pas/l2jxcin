@@ -15,7 +15,7 @@
 package net.sf.l2j.gameserver.scripting.scripts.ai.group;
 
 import net.sf.l2j.commons.random.Rnd;
-import net.sf.l2j.gameserver.geoengine.PathFinding;
+import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -67,7 +67,7 @@ public final class PlainsOfDion extends AbstractNpcAI
 			
 			for (L2MonsterInstance obj : npc.getKnownList().getKnownTypeInRadius(L2MonsterInstance.class, 300))
 			{
-				if (Util.contains(MONSTERS, obj.getNpcId()) && !obj.isAttackingNow() && !obj.isDead() && PathFinding.getInstance().canSeeTarget(npc, obj))
+				if (Util.contains(MONSTERS, obj.getNpcId()) && !obj.isAttackingNow() && !obj.isDead() && GeoEngine.getInstance().canSeeTarget(npc, obj))
 				{
 					attack(obj, player);
 					obj.broadcastNpcSay(MONSTERS_ASSIST_MSG[Rnd.get(3)]);

@@ -694,7 +694,7 @@ public class Olympiad
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			final PreparedStatement statement = con.prepareStatement(OLYMPIAD_GET_HEROS);
-			for (ClassId id : ClassId.values())
+			for (ClassId id : ClassId.VALUES)
 			{
 				if (id.level() != 3)
 					continue;

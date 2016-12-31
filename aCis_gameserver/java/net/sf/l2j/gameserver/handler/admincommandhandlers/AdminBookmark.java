@@ -129,7 +129,7 @@ public class AdminBookmark implements IAdminCommandHandler
 			return;
 		}
 		
-		final int max = MathUtil.countNumberOfPages(bookmarks.size(), PAGE_LIMIT);
+		final int max = MathUtil.countPagesNumber(bookmarks.size(), PAGE_LIMIT);
 		
 		bookmarks = bookmarks.subList((page - 1) * PAGE_LIMIT, Math.min(page * PAGE_LIMIT, bookmarks.size()));
 		

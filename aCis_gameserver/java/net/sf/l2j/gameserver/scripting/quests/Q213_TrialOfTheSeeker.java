@@ -138,6 +138,7 @@ public class Q213_TrialOfTheSeeker extends Quest
 			if (player.getLevel() < 36)
 			{
 				htmltext = "30064-17.htm";
+				st.playSound(QuestState.SOUND_ITEMGET);
 				st.takeItems(ANALYSIS_RESULT, 1);
 				st.giveItems(TERRY_ORDER_3, 1);
 			}
@@ -207,7 +208,7 @@ public class Q213_TrialOfTheSeeker extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getClassId() == ClassId.rogue || player.getClassId() == ClassId.elvenScout || player.getClassId() == ClassId.assassin)
+				if (player.getClassId() == ClassId.ROGUE || player.getClassId() == ClassId.ELVEN_SCOUT || player.getClassId() == ClassId.ASSASSIN)
 					htmltext = (player.getLevel() < 35) ? "30106-02.htm" : "30106-03.htm";
 				else
 					htmltext = "30106-00.htm";

@@ -99,10 +99,14 @@ public class Q231_TestOfTheMaestro extends Quest
 			st.set("bCond", "1");
 		// CROTO
 		else if (event.equalsIgnoreCase("30671-02.htm"))
+		{
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.giveItems(PAINT_OF_KAMURU, 1);
+		}
 		// TOMA
 		else if (event.equalsIgnoreCase("30556-05.htm"))
 		{
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.takeItems(PAINT_OF_TELEPORT_DEVICE, 1);
 			st.giveItems(BROKEN_TELEPORT_DEVICE, 1);
 			player.teleToLocation(140352, -194133, -3146, 0);
@@ -112,6 +116,7 @@ public class Q231_TestOfTheMaestro extends Quest
 		else if (event.equalsIgnoreCase("30673-04.htm"))
 		{
 			st.set("fCond", "2");
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.takeItems(BLOOD_OF_LEECH, -1);
 			st.takeItems(INGREDIENTS_OF_ANTIDOTE, 1);
 			st.takeItems(MARSH_SPIDER_WEB, -1);
@@ -150,7 +155,7 @@ public class Q231_TestOfTheMaestro extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getClassId() != ClassId.artisan)
+				if (player.getClassId() != ClassId.ARTISAN)
 					htmltext = "30531-01.htm";
 				else if (player.getLevel() < 39)
 					htmltext = "30531-02.htm";
@@ -206,6 +211,8 @@ public class Q231_TestOfTheMaestro extends Quest
 								st.set("cond", "2");
 								st.playSound(QuestState.SOUND_MIDDLE);
 							}
+							else
+								st.playSound(QuestState.SOUND_ITEMGET);
 						}
 						else if (bCond == 3)
 							htmltext = "30533-05.htm";
@@ -223,6 +230,7 @@ public class Q231_TestOfTheMaestro extends Quest
 							{
 								htmltext = "30671-04.htm";
 								st.set("bCond", "2");
+								st.playSound(QuestState.SOUND_ITEMGET);
 								st.takeItems(NECKLACE_OF_KAMURU, 1);
 								st.takeItems(PAINT_OF_KAMURU, 1);
 								st.giveItems(LETTER_OF_SOLDER_DETACHMENT, 1);
@@ -259,6 +267,8 @@ public class Q231_TestOfTheMaestro extends Quest
 								st.set("cond", "2");
 								st.playSound(QuestState.SOUND_MIDDLE);
 							}
+							else
+								st.playSound(QuestState.SOUND_ITEMGET);
 						}
 						else if (aCond == 3)
 							htmltext = "30536-04.htm";
@@ -274,6 +284,7 @@ public class Q231_TestOfTheMaestro extends Quest
 							{
 								htmltext = "30556-06.htm";
 								st.set("aCond", "2");
+								st.playSound(QuestState.SOUND_ITEMGET);
 								st.takeItems(BROKEN_TELEPORT_DEVICE, 1);
 								st.giveItems(TELEPORT_DEVICE, 5);
 							}
@@ -289,6 +300,7 @@ public class Q231_TestOfTheMaestro extends Quest
 						{
 							htmltext = "30535-01.htm";
 							st.set("fCond", "1");
+							st.playSound(QuestState.SOUND_ITEMGET);
 							st.giveItems(ARCHITECTURE_OF_KRUMA, 1);
 						}
 						else if (fCond == 1)
@@ -305,6 +317,8 @@ public class Q231_TestOfTheMaestro extends Quest
 								st.set("cond", "2");
 								st.playSound(QuestState.SOUND_MIDDLE);
 							}
+							else
+								st.playSound(QuestState.SOUND_ITEMGET);
 						}
 						else if (fCond == 3)
 							htmltext = "30535-04.htm";
@@ -319,6 +333,7 @@ public class Q231_TestOfTheMaestro extends Quest
 								if (!st.hasQuestItems(INGREDIENTS_OF_ANTIDOTE))
 								{
 									htmltext = "30673-01.htm";
+									st.playSound(QuestState.SOUND_ITEMGET);
 									st.takeItems(ARCHITECTURE_OF_KRUMA, 1);
 									st.giveItems(INGREDIENTS_OF_ANTIDOTE, 1);
 								}

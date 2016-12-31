@@ -131,12 +131,16 @@ public class Q216_TrialOfTheGuildsman extends Quest
 		}
 		else if (event.equalsIgnoreCase("30210-04.htm"))
 		{
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.takeItems(ALTRAN_RECOMMENDATION_1, 1);
 			st.giveItems(NORMAN_INSTRUCTIONS, 1);
 			st.giveItems(NORMAN_RECEIPT, 1);
 		}
 		else if (event.equalsIgnoreCase("30210-10.htm"))
+		{
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.giveItems(NORMAN_LIST, 1);
+		}
 		else if (event.equalsIgnoreCase("30283-03.htm"))
 		{
 			st.set("cond", "5");
@@ -150,11 +154,12 @@ public class Q216_TrialOfTheGuildsman extends Quest
 		}
 		else if (event.equalsIgnoreCase("30298-04.htm"))
 		{
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.takeItems(ALTRAN_RECOMMENDATION_2, 1);
 			st.giveItems(PINTER_INSTRUCTIONS, 1);
 			
 			// Artisan receives a recipe to craft Amber Beads, while spoiler case is handled in onKill section.
-			if (player.getClassId() == ClassId.artisan)
+			if (player.getClassId() == ClassId.ARTISAN)
 			{
 				htmltext = "30298-05.htm";
 				st.giveItems(RECIPE_AMBER_BEAD, 1);
@@ -162,6 +167,7 @@ public class Q216_TrialOfTheGuildsman extends Quest
 		}
 		else if (event.equalsIgnoreCase("30688-02.htm"))
 		{
+			st.playSound(QuestState.SOUND_ITEMGET);
 			st.takeItems(NORMAN_RECEIPT, 1);
 			st.giveItems(DUNING_INSTRUCTIONS, 1);
 		}
@@ -180,7 +186,7 @@ public class Q216_TrialOfTheGuildsman extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getClassId() != ClassId.scavenger && player.getClassId() != ClassId.artisan)
+				if (player.getClassId() != ClassId.SCAVENGER && player.getClassId() != ClassId.ARTISAN)
 					htmltext = "30103-01.htm";
 				else if (player.getLevel() < 35)
 					htmltext = "30103-02.htm";
@@ -231,6 +237,7 @@ public class Q216_TrialOfTheGuildsman extends Quest
 							else if (st.getQuestItemsCount(DUNING_KEY) == 30)
 							{
 								htmltext = "30210-07.htm";
+								st.playSound(QuestState.SOUND_ITEMGET);
 								st.takeItems(DUNING_KEY, -1);
 							}
 							else if (st.hasQuestItems(NORMAN_LIST))
@@ -251,6 +258,8 @@ public class Q216_TrialOfTheGuildsman extends Quest
 										st.set("cond", "6");
 										st.playSound(QuestState.SOUND_MIDDLE);
 									}
+									else
+										st.playSound(QuestState.SOUND_ITEMGET);
 								}
 								else
 									htmltext = "30210-11.htm";
@@ -270,6 +279,7 @@ public class Q216_TrialOfTheGuildsman extends Quest
 								else
 								{
 									htmltext = "30688-04.htm";
+									st.playSound(QuestState.SOUND_ITEMGET);
 									st.takeItems(DUNING_INSTRUCTIONS, 1);
 								}
 							}
@@ -299,6 +309,8 @@ public class Q216_TrialOfTheGuildsman extends Quest
 										st.set("cond", "6");
 										st.playSound(QuestState.SOUND_MIDDLE);
 									}
+									else
+										st.playSound(QuestState.SOUND_ITEMGET);
 								}
 							}
 						}
@@ -365,8 +377,8 @@ public class Q216_TrialOfTheGuildsman extends Quest
 				if (st.hasQuestItems(PINTER_INSTRUCTIONS))
 				{
 					// Different cases if player is a wannabe BH or WS.
-					if (st.dropItemsAlways(AMBER_BEAD, (player.getClassId() == ClassId.scavenger && npc.getSpoilerId() == player.getObjectId()) ? 10 : 5, 70))
-						if (player.getClassId() == ClassId.artisan && Rnd.nextBoolean())
+					if (st.dropItemsAlways(AMBER_BEAD, (player.getClassId() == ClassId.SCAVENGER && npc.getSpoilerId() == player.getObjectId()) ? 10 : 5, 70))
+						if (player.getClassId() == ClassId.ARTISAN && Rnd.nextBoolean())
 							st.giveItems(AMBER_LUMP, 1);
 				}
 				break;

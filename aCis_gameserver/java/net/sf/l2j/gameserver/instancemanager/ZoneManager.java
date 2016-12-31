@@ -415,6 +415,7 @@ public class ZoneManager
 	{
 		if (object == null)
 			return null;
+		
 		return getZone(object.getX(), object.getY(), object.getZ(), type);
 	}
 	
@@ -426,9 +427,8 @@ public class ZoneManager
 	 */
 	public List<L2ZoneType> getZones(int x, int y)
 	{
-		L2WorldRegion region = L2World.getInstance().getRegion(x, y);
-		List<L2ZoneType> temp = new ArrayList<>();
-		for (L2ZoneType zone : region.getZones())
+		final List<L2ZoneType> temp = new ArrayList<>();
+		for (L2ZoneType zone : L2World.getInstance().getRegion(x, y).getZones())
 		{
 			if (zone.isInsideZone(x, y))
 				temp.add(zone);
@@ -445,9 +445,8 @@ public class ZoneManager
 	 */
 	public List<L2ZoneType> getZones(int x, int y, int z)
 	{
-		L2WorldRegion region = L2World.getInstance().getRegion(x, y);
-		List<L2ZoneType> temp = new ArrayList<>();
-		for (L2ZoneType zone : region.getZones())
+		final List<L2ZoneType> temp = new ArrayList<>();
+		for (L2ZoneType zone : L2World.getInstance().getRegion(x, y).getZones())
 		{
 			if (zone.isInsideZone(x, y, z))
 				temp.add(zone);
@@ -467,8 +466,7 @@ public class ZoneManager
 	@SuppressWarnings("unchecked")
 	public <T extends L2ZoneType> T getZone(int x, int y, int z, Class<T> type)
 	{
-		L2WorldRegion region = L2World.getInstance().getRegion(x, y);
-		for (L2ZoneType zone : region.getZones())
+		for (L2ZoneType zone : L2World.getInstance().getRegion(x, y).getZones())
 		{
 			if (zone.isInsideZone(x, y, z) && type.isInstance(zone))
 				return (T) zone;

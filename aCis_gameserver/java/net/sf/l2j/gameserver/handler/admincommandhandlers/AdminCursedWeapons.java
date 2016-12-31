@@ -42,7 +42,6 @@ public class AdminCursedWeapons implements IAdminCommandHandler
 		"admin_cw_info",
 		"admin_cw_remove",
 		"admin_cw_goto",
-		"admin_cw_reload",
 		"admin_cw_add",
 		"admin_cw_info_menu"
 	};
@@ -132,8 +131,6 @@ public class AdminCursedWeapons implements IAdminCommandHandler
 				activeChar.sendPacket(html);
 			}
 		}
-		else if (command.startsWith("admin_cw_reload"))
-			CursedWeaponsManager.getInstance().reload();
 		else
 		{
 			try

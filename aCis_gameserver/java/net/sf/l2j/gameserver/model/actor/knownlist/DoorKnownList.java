@@ -32,10 +32,10 @@ public class DoorKnownList extends CharKnownList
 		if (object instanceof L2SiegeGuardInstance)
 			return 600;
 		
-		if (!(object instanceof L2PcInstance))
-			return 0;
+		if (object instanceof L2PcInstance)
+			return 2000;
 		
-		return 2000;
+		return 0;
 	}
 	
 	@Override
@@ -44,9 +44,9 @@ public class DoorKnownList extends CharKnownList
 		if (object instanceof L2SiegeGuardInstance)
 			return 900;
 		
-		if (!(object instanceof L2PcInstance))
-			return 0;
+		if (object instanceof L2PcInstance)
+			return 3000;
 		
-		return 3000;
+		return 0;
 	}
 }

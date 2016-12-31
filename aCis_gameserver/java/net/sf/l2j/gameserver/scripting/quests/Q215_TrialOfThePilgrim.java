@@ -102,6 +102,7 @@ public class Q215_TrialOfThePilgrim extends Quest
 		{
 			if (st.getQuestItemsCount(57) >= 100000)
 			{
+				st.playSound(QuestState.SOUND_ITEMGET);
 				st.takeItems(57, 100000);
 				st.giveItems(BOOK_OF_GERALD, 1);
 			}
@@ -141,7 +142,7 @@ public class Q215_TrialOfThePilgrim extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getClassId() != ClassId.cleric && player.getClassId() != ClassId.oracle && player.getClassId() != ClassId.shillienOracle && player.getClassId() != ClassId.orcShaman)
+				if (player.getClassId() != ClassId.CLERIC && player.getClassId() != ClassId.ELVEN_ORACLE && player.getClassId() != ClassId.SHILLIEN_ORACLE && player.getClassId() != ClassId.ORC_SHAMAN)
 					htmltext = "30648-02.htm";
 				else if (player.getLevel() < 35)
 					htmltext = "30648-01.htm";
@@ -234,6 +235,7 @@ public class Q215_TrialOfThePilgrim extends Quest
 						else if (cond == 8 && st.hasQuestItems(BOOK_OF_GERALD))
 						{
 							htmltext = "30650-04.htm";
+							st.playSound(QuestState.SOUND_ITEMGET);
 							st.takeItems(BOOK_OF_GERALD, 1);
 							st.giveItems(57, 100000);
 						}

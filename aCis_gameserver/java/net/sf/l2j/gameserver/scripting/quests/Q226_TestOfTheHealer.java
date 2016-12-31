@@ -63,8 +63,8 @@ public class Q226_TestOfTheHealer extends Quest
 	private static final int LETO_LIZARDMAN_LORD = 27127;
 	private static final int TATOMA = 27134;
 	
-	private static L2Npc _tatoma;
-	private static L2Npc _letoLeader;
+	private L2Npc _tatoma;
+	private L2Npc _letoLeader;
 	
 	public Q226_TestOfTheHealer()
 	{
@@ -93,11 +93,11 @@ public class Q226_TestOfTheHealer extends Quest
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(REPORT_OF_PERRIN, 1);
-			if (player.getClassId() == ClassId.knight)
+			if (player.getClassId() == ClassId.KNIGHT)
 				st.giveItems(DIMENSIONAL_DIAMOND, 104);
-			else if (player.getClassId() == ClassId.elvenKnight)
+			else if (player.getClassId() == ClassId.ELVEN_KNIGHT)
 				st.giveItems(DIMENSIONAL_DIAMOND, 72);
-			else if (player.getClassId() == ClassId.cleric)
+			else if (player.getClassId() == ClassId.CLERIC)
 				st.giveItems(DIMENSIONAL_DIAMOND, 60);
 			else
 				st.giveItems(DIMENSIONAL_DIAMOND, 45);
@@ -203,7 +203,7 @@ public class Q226_TestOfTheHealer extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getClassId() != ClassId.knight && player.getClassId() != ClassId.elvenKnight && player.getClassId() != ClassId.cleric && player.getClassId() != ClassId.oracle)
+				if (player.getClassId() != ClassId.KNIGHT && player.getClassId() != ClassId.ELVEN_KNIGHT && player.getClassId() != ClassId.CLERIC && player.getClassId() != ClassId.ELVEN_ORACLE)
 					htmltext = "30473-01.htm";
 				else if (player.getLevel() < 39)
 					htmltext = "30473-02.htm";
@@ -283,6 +283,7 @@ public class Q226_TestOfTheHealer extends Quest
 						else if (cond == 8)
 						{
 							htmltext = "30658-06.htm";
+							st.playSound(QuestState.SOUND_ITEMGET);
 							st.takeItems(WINDY_PEBBLES, 1);
 							st.giveItems(GOLDEN_STATUE, 1);
 						}

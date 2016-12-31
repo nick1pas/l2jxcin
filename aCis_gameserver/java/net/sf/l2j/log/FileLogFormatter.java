@@ -14,10 +14,9 @@
  */
 package net.sf.l2j.log;
 
+import java.text.SimpleDateFormat;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
-
-import net.sf.l2j.commons.lang.StringUtil;
 
 public class FileLogFormatter extends Formatter
 {
@@ -27,6 +26,6 @@ public class FileLogFormatter extends Formatter
 	@Override
 	public String format(LogRecord record)
 	{
-		return StringUtil.DATE_SS.format(record.getMillis()) + SPACE + record.getLevel().getName() + SPACE + record.getThreadID() + SPACE + record.getLoggerName() + SPACE + record.getMessage() + CRLF;
+		return new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(record.getMillis()) + SPACE + record.getLevel().getName() + SPACE + record.getThreadID() + SPACE + record.getLoggerName() + SPACE + record.getMessage() + CRLF;
 	}
 }

@@ -36,12 +36,12 @@ import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
-import net.sf.l2j.gameserver.model.L2CharPosition;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Party.MessageType;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.L2World;
+import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.SpawnListener;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2FestivalMonsterInstance;
@@ -4518,10 +4518,8 @@ public class SevenSignsFestival implements SpawnListener
 					y -= Rnd.get(FESTIVAL_MAX_OFFSET_Y);
 				}
 				
-				L2CharPosition moveTo = new L2CharPosition(x, y, _startLocation._z, Rnd.get(65536));
-				
 				festivalMob.setRunning();
-				festivalMob.getAI().setIntention(CtrlIntention.MOVE_TO, moveTo);
+				festivalMob.getAI().setIntention(CtrlIntention.MOVE_TO, new Location(x, y, _startLocation._z));
 			}
 		}
 		

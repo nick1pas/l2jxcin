@@ -84,8 +84,7 @@ public final class RequestDropItem extends L2GameClientPacket
 		
 		if (!activeChar.getAccessLevel().allowTransaction())
 		{
-			activeChar.sendMessage("Transactions are disabled for your Access Level.");
-			activeChar.sendPacket(SystemMessageId.NOTHING_HAPPENED);
+			activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
 		}
 		
@@ -152,6 +151,6 @@ public final class RequestDropItem extends L2GameClientPacket
 			activeChar.sendPacket(new ItemList(activeChar, true));
 		}
 		
-		activeChar.dropItem("Drop", _objectId, _count, _x, _y, _z, null, false, false);
+		activeChar.dropItem("Drop", item, _x, _y, _z, null, false);
 	}
 }

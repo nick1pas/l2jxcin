@@ -104,7 +104,7 @@ public class Q225_TestOfTheSearcher extends Quest
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.giveItems(LUTHER_LETTER, 1);
-			st.giveItems(DIMENSIONAL_DIAMOND, (player.getClassId() == ClassId.scavenger) ? 82 : 96);
+			st.giveItems(DIMENSIONAL_DIAMOND, (player.getClassId() == ClassId.SCAVENGER) ? 82 : 96);
 		}
 		// ALEX
 		else if (event.equalsIgnoreCase("30291-07.htm"))
@@ -188,12 +188,12 @@ public class Q225_TestOfTheSearcher extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getClassId() != ClassId.rogue && player.getClassId() != ClassId.elvenScout && player.getClassId() != ClassId.assassin && player.getClassId() != ClassId.scavenger)
+				if (player.getClassId() != ClassId.ROGUE && player.getClassId() != ClassId.ELVEN_SCOUT && player.getClassId() != ClassId.ASSASSIN && player.getClassId() != ClassId.SCAVENGER)
 					htmltext = "30690-01.htm";
 				else if (player.getLevel() < 39)
 					htmltext = "30690-02.htm";
 				else
-					htmltext = (player.getClassId() == ClassId.scavenger) ? "30690-04.htm" : "30690-03.htm";
+					htmltext = (player.getClassId() == ClassId.SCAVENGER) ? "30690-04.htm" : "30690-03.htm";
 				break;
 			
 			case STATE_STARTED:

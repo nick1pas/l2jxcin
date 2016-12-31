@@ -31,6 +31,7 @@ import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
 import net.sf.l2j.gameserver.network.serverpackets.PetItemList;
+import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
@@ -165,9 +166,15 @@ public final class UseItem extends L2GameClientPacket
 			
 			// Equip it, removing first the previous item.
 			if (item.isEquipped())
+			{
 				pet.getInventory().unEquipItemInSlot(item.getLocationSlot());
+				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.PET_TOOK_OFF_S1).addItemName(item));
+			}
 			else
+			{
 				pet.getInventory().equipPetItem(item);
+				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.PET_PUT_ON_S1).addItemName(item));
+			}
 			
 			activeChar.sendPacket(new PetItemList(pet));
 			pet.updateAndBroadcastStatus(1);

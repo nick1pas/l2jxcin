@@ -20,10 +20,10 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.geoengine.PathFinding;
-import net.sf.l2j.gameserver.model.L2CharPosition;
+import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
@@ -71,7 +71,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 			return false;
 		
 		// Los Check Here
-		return (_actor.isAutoAttackable(target) && PathFinding.getInstance().canSeeTarget(_actor, target));
+		return (_actor.isAutoAttackable(target) && GeoEngine.getInstance().canSeeTarget(_actor, target));
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 		if (_globalAggro >= 0)
 		{
 			final L2Attackable npc = (L2Attackable) _actor;
-			for (L2Character target : npc.getKnownList().getKnownTypeInRadius(L2Character.class, npc.getClanRange()))
+			for (L2Character target : npc.getKnownList().getKnownTypeInRadius(L2Character.class, npc.getTemplate().getClanRange()))
 			{
 				if (autoAttackCondition(target)) // check aggression
 				{
@@ -203,7 +203,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 				actor.stopHating(attackTarget);
 			
 			// Search the nearest target. If a target is found, continue regular process, else drop angry behavior.
-			attackTarget = targetReconsider(actor.getClanRange(), false);
+			attackTarget = targetReconsider(actor.getTemplate().getClanRange(), false);
 			if (attackTarget == null)
 			{
 				setIntention(CtrlIntention.ACTIVE);
@@ -216,8 +216,8 @@ public class L2SiegeGuardAI extends L2AttackableAI
 		 * Notify aggression.
 		 */
 		
-		final String[] clans = actor.getClans();
-		final int clanRange = actor.getClanRange();
+		final String[] clans = actor.getTemplate().getClans();
+		final int clanRange = actor.getTemplate().getClanRange();
 		
 		// Go through all characters around the actor that belongs to its faction.
 		for (L2SiegeGuardInstance cha : actor.getKnownList().getKnownTypeInRadius(L2SiegeGuardInstance.class, clanRange))
@@ -225,12 +225,12 @@ public class L2SiegeGuardAI extends L2AttackableAI
 			if (cha.isAlikeDead())
 				continue;
 			
-			if (!Util.contains(clans, cha.getClans()))
+			if (!Util.contains(clans, cha.getTemplate().getClans()))
 				continue;
 			
 			if (cha.getAI()._intention == CtrlIntention.IDLE || cha.getAI()._intention == CtrlIntention.ACTIVE)
 			{
-				if (attackTarget.isInsideRadius(cha, cha.getClanRange(), true, false) && PathFinding.getInstance().canSeeTarget(cha, attackTarget))
+				if (attackTarget.isInsideRadius(cha, cha.getTemplate().getClanRange(), true, false) && GeoEngine.getInstance().canSeeTarget(cha, attackTarget))
 				{
 					// Notify the L2Object AI with EVT_AGGRESSION
 					cha.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, getTarget(), 1);
@@ -245,8 +245,8 @@ public class L2SiegeGuardAI extends L2AttackableAI
 		 * Used for range and distance check.
 		 */
 		
-		final int actorCollision = actor.getTemplate().getCollisionRadius();
-		final int combinedCollision = actorCollision + attackTarget.getTemplate().getCollisionRadius();
+		final int actorCollision = (int) actor.getCollisionRadius();
+		final int combinedCollision = (int) (actorCollision + attackTarget.getCollisionRadius());
 		final double dist = Math.sqrt(actor.getPlanDistanceSq(attackTarget.getX(), attackTarget.getY()));
 		
 		int range = combinedCollision;
@@ -294,11 +294,11 @@ public class L2SiegeGuardAI extends L2AttackableAI
 				for (L2Character cha : actor.getKnownList().getKnownTypeInRadius(L2Character.class, 1000))
 				{
 					// Don't bother about dead, not visible, or healthy characters.
-					if (cha.isAlikeDead() || !PathFinding.getInstance().canSeeTarget(actor, cha) || (cha.getCurrentHp() / cha.getMaxHp() > 0.75))
+					if (cha.isAlikeDead() || !GeoEngine.getInstance().canSeeTarget(actor, cha) || (cha.getCurrentHp() / cha.getMaxHp() > 0.75))
 						continue;
 					
 					// Will affect only defenders or NPCs from same faction.
-					if (!actor.isAttackingDisabled() && (cha instanceof L2PcInstance && actor.getCastle().getSiege().checkIsDefender(((L2PcInstance) cha).getClan())) || (cha instanceof L2Npc && Util.contains(clans, ((L2Npc) cha).getClans())))
+					if (!actor.isAttackingDisabled() && (cha instanceof L2PcInstance && actor.getCastle().getSiege().checkIsDefender(((L2PcInstance) cha).getClan())) || (cha instanceof L2Npc && Util.contains(clans, ((L2Npc) cha).getTemplate().getClans())))
 					{
 						for (L2Skill sk : defaultList)
 						{
@@ -326,7 +326,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 					if (!checkSkillCastConditions(sk) || (sk.getCastRange() + range <= dist && !canAura(sk)))
 						continue;
 					
-					if (!PathFinding.getInstance().canSeeTarget(actor, attackTarget))
+					if (!GeoEngine.getInstance().canSeeTarget(actor, attackTarget))
 						continue;
 					
 					if (attackTarget.getFirstEffect(sk) == null)
@@ -406,7 +406,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 					if (!actor.isInsideRadius(newX, newY, actorCollision, false))
 					{
 						int newZ = actor.getZ() + 30;
-						if (PathFinding.getInstance().canMoveToTarget(actor.getX(), actor.getY(), actor.getZ(), newX, newY, newZ))
+						if (GeoEngine.getInstance().canMoveToTarget(actor.getX(), actor.getY(), actor.getZ(), newX, newY, newZ))
 							moveTo(newX, newY, newZ);
 					}
 					return;
@@ -419,15 +419,15 @@ public class L2SiegeGuardAI extends L2AttackableAI
 		 * Test the flee possibility. Archers got 25% chance to flee.
 		 */
 		
-		if (actor.getAiType() == AIType.ARCHER && dist <= (60 + combinedCollision) && Rnd.get(4) > 1)
+		if (actor.getTemplate().getAiType() == AIType.ARCHER && dist <= (60 + combinedCollision) && Rnd.get(4) > 1)
 		{
 			final int posX = actor.getX() + ((attackTarget.getX() < actor.getX()) ? 300 : -300);
 			final int posY = actor.getY() + ((attackTarget.getY() < actor.getY()) ? 300 : -300);
 			final int posZ = actor.getZ() + 30;
 			
-			if (PathFinding.getInstance().canMoveToTarget(actor.getX(), actor.getY(), actor.getZ(), posX, posY, posZ))
+			if (GeoEngine.getInstance().canMoveToTarget(actor.getX(), actor.getY(), actor.getZ(), posX, posY, posZ))
 			{
-				setIntention(CtrlIntention.MOVE_TO, new L2CharPosition(posX, posY, posZ, 0));
+				setIntention(CtrlIntention.MOVE_TO, new Location(posX, posY, posZ));
 				return;
 			}
 		}
@@ -502,7 +502,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 				if (rangeCheck)
 				{
 					// Verify the distance, -15 if the victim is moving, -15 if the npc is moving.
-					double dist = Math.sqrt(actor.getPlanDistanceSq(obj.getX(), obj.getY())) - obj.getTemplate().getCollisionRadius();
+					double dist = Math.sqrt(actor.getPlanDistanceSq(obj.getX(), obj.getY())) - obj.getCollisionRadius();
 					if (actor.isMoving())
 						dist -= 15;
 					

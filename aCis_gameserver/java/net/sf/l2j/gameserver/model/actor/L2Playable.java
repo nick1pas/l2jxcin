@@ -154,7 +154,7 @@ public abstract class L2Playable extends L2Character
 		// Notify L2Character AI
 		getAI().notifyEvent(CtrlEvent.EVT_DEAD);
 		
-		final L2WorldRegion region = getWorldRegion();
+		final L2WorldRegion region = getRegion();
 		if (region != null)
 			region.onDeath(this);
 		
@@ -194,8 +194,9 @@ public abstract class L2Playable extends L2Character
 		// Start broadcast status
 		broadcastPacket(new Revive(this));
 		
-		if (getWorldRegion() != null)
-			getWorldRegion().onRevive(this);
+		final L2WorldRegion region = getRegion();
+		if (region != null)
+			region.onRevive(this);
 	}
 	
 	public boolean checkIfPvP(L2Playable target)

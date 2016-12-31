@@ -152,7 +152,7 @@ public class Q224_TestOfSagittarius extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getClassId() != ClassId.rogue && player.getClassId() != ClassId.elvenScout && player.getClassId() != ClassId.assassin)
+				if (player.getClassId() != ClassId.ROGUE && player.getClassId() != ClassId.ELVEN_SCOUT && player.getClassId() != ClassId.ASSASSIN)
 					htmltext = "30702-02.htm";
 				else if (player.getLevel() < 39)
 					htmltext = "30702-01.htm";

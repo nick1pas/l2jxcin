@@ -22,9 +22,10 @@ import net.sf.l2j.gameserver.ai.Ctrl;
 import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.NextAction;
-import net.sf.l2j.gameserver.model.L2CharPosition;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.Location;
+import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Summon;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -174,7 +175,7 @@ abstract class AbstractAI implements Ctrl
 				onIntentionCast((L2Skill) arg0, (L2Object) arg1);
 				break;
 			case MOVE_TO:
-				onIntentionMoveTo((L2CharPosition) arg0);
+				onIntentionMoveTo((Location) arg0);
 				break;
 			case FOLLOW:
 				onIntentionFollow((L2Character) arg0);
@@ -278,7 +279,7 @@ abstract class AbstractAI implements Ctrl
 					onEvtArrived();
 				break;
 			case EVT_ARRIVED_BLOCKED:
-				onEvtArrivedBlocked((L2CharPosition) arg0);
+				onEvtArrivedBlocked((SpawnLocation) arg0);
 				break;
 			case EVT_FORGET_OBJECT:
 				onEvtForgetObject((L2Object) arg0);
@@ -299,7 +300,10 @@ abstract class AbstractAI implements Ctrl
 		
 		// Do next action.
 		if (_nextAction != null && _nextAction.getEvent() == evt)
+		{
 			_nextAction.run();
+			_nextAction = null;
+		}
 	}
 	
 	protected abstract void onIntentionIdle();
@@ -312,7 +316,7 @@ abstract class AbstractAI implements Ctrl
 	
 	protected abstract void onIntentionCast(L2Skill skill, L2Object target);
 	
-	protected abstract void onIntentionMoveTo(L2CharPosition destination);
+	protected abstract void onIntentionMoveTo(Location loc);
 	
 	protected abstract void onIntentionFollow(L2Character target);
 	
@@ -346,7 +350,7 @@ abstract class AbstractAI implements Ctrl
 	
 	protected abstract void onEvtArrived();
 	
-	protected abstract void onEvtArrivedBlocked(L2CharPosition blocked_at_pos);
+	protected abstract void onEvtArrivedBlocked(SpawnLocation loc);
 	
 	protected abstract void onEvtForgetObject(L2Object object);
 	
@@ -366,8 +370,6 @@ abstract class AbstractAI implements Ctrl
 	 */
 	protected void clientActionFailed()
 	{
-		if (_actor instanceof L2PcInstance)
-			_actor.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 	
 	/**
@@ -446,21 +448,21 @@ abstract class AbstractAI implements Ctrl
 	 * <BR>
 	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : Low level function, used by AI subclasses</B></FONT><BR>
 	 * <BR>
-	 * @param pos
+	 * @param loc
 	 */
-	protected void clientStopMoving(L2CharPosition pos)
+	protected void clientStopMoving(SpawnLocation loc)
 	{
 		// Stop movement of the L2Character
 		if (_actor.isMoving())
-			_actor.stopMove(pos);
+			_actor.stopMove(loc);
 		
-		if (_clientMoving || pos != null)
+		if (_clientMoving || loc != null)
 		{
 			_clientMoving = false;
 			_actor.broadcastPacket(new StopMove(_actor));
 			
-			if (pos != null)
-				_actor.broadcastPacket(new StopRotation(_actor.getObjectId(), pos.heading, 0));
+			if (loc != null)
+				_actor.broadcastPacket(new StopRotation(_actor.getObjectId(), loc.getHeading(), 0));
 		}
 	}
 	

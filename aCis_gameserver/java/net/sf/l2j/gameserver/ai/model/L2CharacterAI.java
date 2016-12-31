@@ -17,12 +17,12 @@ package net.sf.l2j.gameserver.ai.model;
 import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.IntentionCommand;
-import net.sf.l2j.gameserver.geoengine.PathFinding;
-import net.sf.l2j.gameserver.model.L2CharPosition;
+import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
+import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
@@ -241,7 +241,7 @@ public class L2CharacterAI extends AbstractAI
 	 * </ul>
 	 */
 	@Override
-	protected void onIntentionMoveTo(L2CharPosition pos)
+	protected void onIntentionMoveTo(Location loc)
 	{
 		if (getIntention() == CtrlIntention.REST)
 		{
@@ -258,7 +258,7 @@ public class L2CharacterAI extends AbstractAI
 		}
 		
 		// Set the Intention of this AbstractAI to MOVE_TO
-		changeIntention(CtrlIntention.MOVE_TO, pos, null);
+		changeIntention(CtrlIntention.MOVE_TO, loc, null);
 		
 		// Stop the actor auto-attack client side by sending Server->Client packet AutoAttackStop (broadcast)
 		clientStopAutoAttack();
@@ -267,7 +267,7 @@ public class L2CharacterAI extends AbstractAI
 		_actor.abortAttack();
 		
 		// Move the actor to Location (x,y,z) server side AND client side by sending Server->Client packet MoveToLocation (broadcast)
-		moveTo(pos.x, pos.y, pos.z);
+		moveTo(loc.getX(), loc.getY(), loc.getZ());
 	}
 	
 	/**
@@ -403,7 +403,7 @@ public class L2CharacterAI extends AbstractAI
 		// Stop the actor auto-attack client side by sending Server->Client packet AutoAttackStop (broadcast)
 		clientStopAutoAttack();
 		
-		if (getIntention() != CtrlIntention.INTERACT)
+		if (getIntention() != CtrlIntention.INTERACT || _intentionArg0 != object)
 		{
 			// Set the Intention of this AbstractAI to INTERACT
 			changeIntention(CtrlIntention.INTERACT, object, null);
@@ -414,6 +414,8 @@ public class L2CharacterAI extends AbstractAI
 			// Move the actor to Pawn server side AND client side by sending Server->Client packet MoveToPawn (broadcast)
 			moveToPawn(object, 60);
 		}
+		else
+			clientActionFailed();
 	}
 	
 	@Override
@@ -614,14 +616,14 @@ public class L2CharacterAI extends AbstractAI
 	 * </ul>
 	 */
 	@Override
-	protected void onEvtArrivedBlocked(L2CharPosition blocked_at_pos)
+	protected void onEvtArrivedBlocked(SpawnLocation loc)
 	{
 		// If the Intention was MOVE_TO, set the Intention to ACTIVE
 		if (getIntention() == CtrlIntention.MOVE_TO || getIntention() == CtrlIntention.CAST)
 			setIntention(CtrlIntention.ACTIVE);
 		
 		// Stop the actor movement server side AND client side by sending Server->Client packet StopMove/StopRotation (broadcast)
-		clientStopMoving(blocked_at_pos);
+		clientStopMoving(loc);
 		
 		// Launch actions corresponding to the Event Think
 		onEvtThink();
@@ -759,7 +761,7 @@ public class L2CharacterAI extends AbstractAI
 		if (offset < 0)
 			return false; // skill radius -1
 			
-		if (!_actor.isInsideRadius(worldPosition.getX(), worldPosition.getY(), offset + _actor.getTemplate().getCollisionRadius(), false))
+		if (!_actor.isInsideRadius(worldPosition.getX(), worldPosition.getY(), (int) (offset + _actor.getCollisionRadius()), false))
 		{
 			if (_actor.isMovementDisabled())
 				return true;
@@ -811,9 +813,9 @@ public class L2CharacterAI extends AbstractAI
 		if (target == null || offset < 0) // skill radius -1
 			return false;
 		
-		offset += _actor.getTemplate().getCollisionRadius();
+		offset += _actor.getCollisionRadius();
 		if (target instanceof L2Character)
-			offset += ((L2Character) target).getTemplate().getCollisionRadius();
+			offset += ((L2Character) target).getCollisionRadius();
 		
 		if (!_actor.isInsideRadius(target, offset, false, false))
 		{
@@ -940,7 +942,7 @@ public class L2CharacterAI extends AbstractAI
 				boolean cancast = true;
 				for (L2Character target : _actor.getKnownList().getKnownTypeInRadius(L2Character.class, sk.getSkillRadius()))
 				{
-					if (!PathFinding.getInstance().canSeeTarget(_actor, target))
+					if (!GeoEngine.getInstance().canSeeTarget(_actor, target))
 						continue;
 					
 					if (target instanceof L2Attackable && !_actor.isConfused())
@@ -958,7 +960,7 @@ public class L2CharacterAI extends AbstractAI
 				boolean cancast = true;
 				for (L2Character target : ((L2Character) getTarget()).getKnownList().getKnownTypeInRadius(L2Character.class, sk.getSkillRadius()))
 				{
-					if (!PathFinding.getInstance().canSeeTarget(_actor, target))
+					if (!GeoEngine.getInstance().canSeeTarget(_actor, target))
 						continue;
 					
 					if (target instanceof L2Attackable && !_actor.isConfused())
@@ -979,7 +981,7 @@ public class L2CharacterAI extends AbstractAI
 				boolean cancast = false;
 				for (L2Character target : _actor.getKnownList().getKnownTypeInRadius(L2Character.class, sk.getSkillRadius()))
 				{
-					if (!PathFinding.getInstance().canSeeTarget(_actor, target))
+					if (!GeoEngine.getInstance().canSeeTarget(_actor, target))
 						continue;
 					
 					if (target instanceof L2Attackable && !_actor.isConfused())
@@ -997,7 +999,7 @@ public class L2CharacterAI extends AbstractAI
 				boolean cancast = true;
 				for (L2Character target : ((L2Character) getTarget()).getKnownList().getKnownTypeInRadius(L2Character.class, sk.getSkillRadius()))
 				{
-					if (!PathFinding.getInstance().canSeeTarget(_actor, target))
+					if (!GeoEngine.getInstance().canSeeTarget(_actor, target))
 						continue;
 					
 					if (target instanceof L2Attackable && !_actor.isConfused())
@@ -1022,13 +1024,13 @@ public class L2CharacterAI extends AbstractAI
 		int count = 0;
 		int ccount = 0;
 		
-		final String[] actorClans = ((L2Npc) _actor).getClans();
+		final String[] actorClans = ((L2Npc) _actor).getTemplate().getClans();
 		for (L2Attackable target : _actor.getKnownList().getKnownTypeInRadius(L2Attackable.class, sk.getSkillRadius()))
 		{
-			if (!PathFinding.getInstance().canSeeTarget(_actor, target))
+			if (!GeoEngine.getInstance().canSeeTarget(_actor, target))
 				continue;
 			
-			if (!Util.contains(actorClans, target.getClans()))
+			if (!Util.contains(actorClans, target.getTemplate().getClans()))
 				continue;
 			
 			count++;

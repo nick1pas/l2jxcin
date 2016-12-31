@@ -63,22 +63,15 @@ public class MinionList
 		if (_master.isAlikeDead())
 			return;
 		
-		List<L2MinionData> minions = _master.getTemplate().getMinionData();
-		if (minions == null)
-			return;
-		
-		int minionCount, minionId, minionsToSpawn;
-		for (L2MinionData minion : minions)
+		for (MinionData minion : _master.getTemplate().getMinionData())
 		{
-			minionCount = minion.getAmount();
-			minionId = minion.getMinionId();
+			final int minionId = minion.getMinionId();
+			final int minionsToSpawn = minion.getAmount() - countSpawnedMinionsById(minionId);
+			if (minionsToSpawn <= 0)
+				continue;
 			
-			minionsToSpawn = minionCount - countSpawnedMinionsById(minionId);
-			if (minionsToSpawn > 0)
-			{
-				for (int i = 0; i < minionsToSpawn; i++)
-					spawnMinion(_master, minionId);
-			}
+			for (int i = 0; i < minionsToSpawn; i++)
+				spawnMinion(_master, minionId);
 		}
 	}
 	
@@ -168,7 +161,7 @@ public class MinionList
 	public void onMasterTeleported()
 	{
 		final int offset = 200;
-		final int minRadius = _master.getCollisionRadius() + 30;
+		final int minRadius = (int) (_master.getCollisionRadius() + 30);
 		
 		for (L2MonsterInstance minion : _minionReferences)
 		{
@@ -254,8 +247,8 @@ public class MinionList
 		minion.setLeader(master);
 		
 		// Init the position of the Minion and add it in the world as a visible object
-		final int offset = 100 + minion.getCollisionRadius() + master.getCollisionRadius();
-		final int minRadius = master.getCollisionRadius() + 30;
+		final int offset = (int) (100 + minion.getCollisionRadius() + master.getCollisionRadius());
+		final int minRadius = (int) (master.getCollisionRadius() + 30);
 		
 		int newX = Rnd.get(minRadius * 2, offset * 2); // x
 		int newY = Rnd.get(newX, offset * 2); // distance

@@ -26,6 +26,7 @@ import net.sf.l2j.gameserver.model.L2SkillLearn;
 import net.sf.l2j.gameserver.model.L2World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.template.PcTemplate;
+import net.sf.l2j.gameserver.model.base.Sex;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.network.serverpackets.CharCreateFail;
@@ -131,7 +132,7 @@ public final class CharacterCreate extends L2GameClientPacket
 			}
 			
 			int objectId = IdFactory.getInstance().getNextId();
-			newChar = L2PcInstance.create(objectId, template, getClient().getAccountName(), _name, _hairStyle, _hairColor, _face, _sex != 0);
+			newChar = L2PcInstance.create(objectId, template, getClient().getAccountName(), _name, _hairStyle, _hairColor, _face, Sex.values()[_sex]);
 		}
 		
 		newChar.setCurrentCp(0);

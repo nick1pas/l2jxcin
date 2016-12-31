@@ -16,9 +16,10 @@ package net.sf.l2j.gameserver.ai.model;
 
 import net.sf.l2j.gameserver.ThreadPoolManager;
 import net.sf.l2j.gameserver.ai.CtrlEvent;
-import net.sf.l2j.gameserver.model.L2CharPosition;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.Location;
+import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2SiegeGuardInstance;
@@ -56,7 +57,7 @@ public class L2DoorAI extends L2CharacterAI
 	}
 	
 	@Override
-	protected void onIntentionMoveTo(L2CharPosition destination)
+	protected void onIntentionMoveTo(Location loc)
 	{
 	}
 	
@@ -122,7 +123,7 @@ public class L2DoorAI extends L2CharacterAI
 	}
 	
 	@Override
-	protected void onEvtArrivedBlocked(L2CharPosition blocked_at_pos)
+	protected void onEvtArrivedBlocked(SpawnLocation loc)
 	{
 	}
 	
@@ -157,7 +158,7 @@ public class L2DoorAI extends L2CharacterAI
 		{
 			for (L2SiegeGuardInstance guard : _door.getKnownList().getKnownType(L2SiegeGuardInstance.class))
 			{
-				if (_actor.isInsideRadius(guard, guard.getClanRange(), false, true) && Math.abs(_attacker.getZ() - guard.getZ()) < 200)
+				if (_actor.isInsideRadius(guard, guard.getTemplate().getClanRange(), false, true) && Math.abs(_attacker.getZ() - guard.getZ()) < 200)
 					guard.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, _attacker, 15);
 			}
 		}

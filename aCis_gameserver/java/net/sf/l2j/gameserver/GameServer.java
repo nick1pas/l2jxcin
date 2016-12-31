@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.Server;
 import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.commons.mmocore.SelectorConfig;
 import net.sf.l2j.commons.mmocore.SelectorThread;
@@ -56,8 +55,8 @@ import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.MultisellData;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.NpcWalkerRoutesTable;
-import net.sf.l2j.gameserver.datatables.PetDataTable;
 import net.sf.l2j.gameserver.datatables.RecipeTable;
+import net.sf.l2j.gameserver.datatables.ServerMemo;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SkillTreeTable;
 import net.sf.l2j.gameserver.datatables.SoulCrystalsTable;
@@ -66,8 +65,7 @@ import net.sf.l2j.gameserver.datatables.SpellbookTable;
 import net.sf.l2j.gameserver.datatables.StaticObjects;
 import net.sf.l2j.gameserver.datatables.SummonItemsData;
 import net.sf.l2j.gameserver.datatables.TeleportLocationTable;
-import net.sf.l2j.gameserver.geoengine.GeoData;
-import net.sf.l2j.gameserver.geoengine.PathFinding;
+import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.handler.AdminCommandHandler;
 import net.sf.l2j.gameserver.handler.ChatHandler;
 import net.sf.l2j.gameserver.handler.ItemHandler;
@@ -119,6 +117,7 @@ import net.sf.l2j.gameserver.taskmanager.ItemsOnGroundTaskManager;
 import net.sf.l2j.gameserver.taskmanager.KnownListUpdateTaskManager;
 import net.sf.l2j.gameserver.taskmanager.MovementTaskManager;
 import net.sf.l2j.gameserver.taskmanager.PvpFlagTaskManager;
+import net.sf.l2j.gameserver.taskmanager.RandomAnimationTaskManager;
 import net.sf.l2j.gameserver.taskmanager.ShadowItemTaskManager;
 import net.sf.l2j.gameserver.taskmanager.TaskManager;
 import net.sf.l2j.gameserver.taskmanager.WaterTaskManager;
@@ -160,6 +159,7 @@ public class GameServer
 		L2World.getInstance();
 		MapRegionTable.getInstance();
 		AnnouncementTable.getInstance();
+		ServerMemo.getInstance();
 		
 		StringUtil.printSection("Skills");
 		SkillTable.getInstance();
@@ -210,8 +210,7 @@ public class GameServer
 		ClanHallManager.getInstance();
 		
 		StringUtil.printSection("Geodata & Pathfinding");
-		GeoData.initialize();
-		PathFinding.initialize();
+		GeoEngine.getInstance();
 		
 		StringUtil.printSection("World Bosses");
 		GrandBossManager.getInstance();
@@ -228,6 +227,7 @@ public class GameServer
 		KnownListUpdateTaskManager.getInstance();
 		MovementTaskManager.getInstance();
 		PvpFlagTaskManager.getInstance();
+		RandomAnimationTaskManager.getInstance();
 		ShadowItemTaskManager.getInstance();
 		WaterTaskManager.getInstance();
 		
@@ -250,7 +250,6 @@ public class GameServer
 		StringUtil.printSection("NPCs");
 		BufferTable.getInstance();
 		HerbDropTable.getInstance();
-		PetDataTable.getInstance();
 		NpcTable.getInstance();
 		NpcWalkerRoutesTable.getInstance();
 		DoorTable.getInstance();
@@ -365,8 +364,6 @@ public class GameServer
 	
 	public static void main(String[] args) throws Exception
 	{
-		Server.serverMode = Server.MODE_GAMESERVER;
-		
 		final String LOG_FOLDER = "./log"; // Name of folder for log file
 		final String LOG_NAME = "config/log.cfg"; // Name of log file
 		
@@ -382,7 +379,7 @@ public class GameServer
 		StringUtil.printSection("aCis");
 		
 		// Initialize config
-		Config.load();
+		Config.loadGameServer();
 		
 		// Factories
 		XMLDocumentFactory.getInstance();

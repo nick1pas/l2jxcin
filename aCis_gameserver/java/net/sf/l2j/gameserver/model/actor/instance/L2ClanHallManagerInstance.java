@@ -14,10 +14,10 @@
  */
 package net.sf.l2j.gameserver.model.actor.instance;
 
+import java.text.SimpleDateFormat;
 import java.util.StringTokenizer;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.TeleportLocationTable;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
@@ -120,7 +120,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 				{
 					html.setFile("data/html/clanHallManager/vault.htm");
 					html.replace("%rent%", getClanHall().getLease());
-					html.replace("%date%", StringUtil.DATE_MM.format(getClanHall().getPaidUntil()));
+					html.replace("%date%", new SimpleDateFormat("dd-MM-yyyy HH:mm").format(getClanHall().getPaidUntil()));
 				}
 				else
 					html.setFile("data/html/clanHallManager/not_authorized.htm");
@@ -642,7 +642,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 							if (chfHp != null)
 							{
 								html.replace("%hp_recovery%", chfHp.getLvl() + "%</font> (<font color=\"FFAABB\">" + chfHp.getLease() + "</font> adenas / " + (Config.CH_HPREG_FEE_RATIO / 86400000) + " day)");
-								html.replace("%hp_period%", "Next fee at " + StringUtil.DATE_MM.format(chfHp.getEndTime()));
+								html.replace("%hp_period%", "Next fee at " + new SimpleDateFormat("dd-MM-yyyy HH:mm").format(chfHp.getEndTime()));
 								
 								switch (grade)
 								{
@@ -693,7 +693,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 							if (chfExp != null)
 							{
 								html.replace("%exp_recovery%", chfExp.getLvl() + "%</font> (<font color=\"FFAABB\">" + chfExp.getLease() + "</font> adenas / " + (Config.CH_EXPREG_FEE_RATIO / 86400000) + " day)");
-								html.replace("%exp_period%", "Next fee at " + StringUtil.DATE_MM.format(chfExp.getEndTime()));
+								html.replace("%exp_period%", "Next fee at " + new SimpleDateFormat("dd-MM-yyyy HH:mm").format(chfExp.getEndTime()));
 								
 								switch (grade)
 								{
@@ -744,7 +744,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 							if (chfMp != null)
 							{
 								html.replace("%mp_recovery%", chfMp.getLvl() + "%</font> (<font color=\"FFAABB\">" + chfMp.getLease() + "</font> adenas / " + (Config.CH_MPREG_FEE_RATIO / 86400000) + " day)");
-								html.replace("%mp_period%", "Next fee at " + StringUtil.DATE_MM.format(chfMp.getEndTime()));
+								html.replace("%mp_period%", "Next fee at " + new SimpleDateFormat("dd-MM-yyyy HH:mm").format(chfMp.getEndTime()));
 								
 								switch (grade)
 								{
@@ -1105,7 +1105,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 							if (chfTel != null)
 							{
 								html.replace("%tele%", "- Stage " + chfTel.getLvl() + "</font> (<font color=\"FFAABB\">" + chfTel.getLease() + "</font> adenas / " + (Config.CH_TELE_FEE_RATIO / 86400000) + " day)");
-								html.replace("%tele_period%", "Next fee at " + StringUtil.DATE_MM.format(chfTel.getEndTime()));
+								html.replace("%tele_period%", "Next fee at " + new SimpleDateFormat("dd-MM-yyyy HH:mm").format(chfTel.getEndTime()));
 								html.replace("%change_tele%", "[<a action=\"bypass -h npc_%objectId%_manage other tele_cancel\">Remove</a>]" + tele);
 							}
 							else
@@ -1121,7 +1121,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 							if (chfSup != null)
 							{
 								html.replace("%support%", "- Stage " + chfSup.getLvl() + "</font> (<font color=\"FFAABB\">" + chfSup.getLease() + "</font> adenas / " + (Config.CH_SUPPORT_FEE_RATIO / 86400000) + " day)");
-								html.replace("%support_period%", "Next fee at " + StringUtil.DATE_MM.format(chfSup.getEndTime()));
+								html.replace("%support_period%", "Next fee at " + new SimpleDateFormat("dd-MM-yyyy HH:mm").format(chfSup.getEndTime()));
 								
 								switch (grade)
 								{
@@ -1171,7 +1171,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 							if (chfCreate != null)
 							{
 								html.replace("%item%", "- Stage " + chfCreate.getLvl() + "</font> (<font color=\"FFAABB\">" + chfCreate.getLease() + "</font> adenas / " + (Config.CH_ITEM_FEE_RATIO / 86400000) + " day)");
-								html.replace("%item_period%", "Next fee at " + StringUtil.DATE_MM.format(chfCreate.getEndTime()));
+								html.replace("%item_period%", "Next fee at " + new SimpleDateFormat("dd-MM-yyyy HH:mm").format(chfCreate.getEndTime()));
 								html.replace("%change_item%", "[<a action=\"bypass -h npc_%objectId%_manage other item_cancel\">Remove</a>]" + item);
 							}
 							else
@@ -1358,7 +1358,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 							if (chfCurtains != null)
 							{
 								html.replace("%curtain%", "- Stage " + chfCurtains.getLvl() + "</font> (<font color=\"FFAABB\">" + chfCurtains.getLease() + "</font> adenas / " + (Config.CH_CURTAIN_FEE_RATIO / 86400000) + " day)");
-								html.replace("%curtain_period%", "Next fee at " + StringUtil.DATE_MM.format(chfCurtains.getEndTime()));
+								html.replace("%curtain_period%", "Next fee at " + new SimpleDateFormat("dd-MM-yyyy HH:mm").format(chfCurtains.getEndTime()));
 								html.replace("%change_curtain%", "[<a action=\"bypass -h npc_%objectId%_manage deco curtains_cancel\">Remove</a>]" + curtains);
 							}
 							else
@@ -1372,7 +1372,7 @@ public class L2ClanHallManagerInstance extends L2MerchantInstance
 							if (chfPlateform != null)
 							{
 								html.replace("%fixture%", "- Stage " + chfPlateform.getLvl() + "</font> (<font color=\"FFAABB\">" + chfPlateform.getLease() + "</font> adenas / " + (Config.CH_FRONT_FEE_RATIO / 86400000) + " day)");
-								html.replace("%fixture_period%", "Next fee at " + StringUtil.DATE_MM.format(chfPlateform.getEndTime()));
+								html.replace("%fixture_period%", "Next fee at " + new SimpleDateFormat("dd-MM-yyyy HH:mm").format(chfPlateform.getEndTime()));
 								html.replace("%change_fixture%", "[<a action=\"bypass -h npc_%objectId%_manage deco fixtures_cancel\">Remove</a>]" + fixtures);
 							}
 							else

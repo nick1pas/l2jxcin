@@ -85,8 +85,8 @@ public class Q417_PathToBecomeAScavenger extends Quest
 		// PIPPI
 		if (event.equalsIgnoreCase("30524-05.htm"))
 		{
-			if (player.getClassId() != ClassId.dwarvenFighter)
-				htmltext = (player.getClassId() == ClassId.scavenger) ? "30524-02a.htm" : "30524-08.htm";
+			if (player.getClassId() != ClassId.DWARVEN_FIGHTER)
+				htmltext = (player.getClassId() == ClassId.SCAVENGER) ? "30524-02a.htm" : "30524-08.htm";
 			else if (player.getLevel() < 19)
 				htmltext = "30524-02.htm";
 			else if (st.hasQuestItems(RING_OF_RAVEN))

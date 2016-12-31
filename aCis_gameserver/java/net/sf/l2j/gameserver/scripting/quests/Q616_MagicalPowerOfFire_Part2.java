@@ -40,8 +40,9 @@ public class Q616_MagicalPowerOfFire_Part2 extends Quest
 	// Other
 	private static final int CHECK_INTERVAL = 600000; // 10 minutes
 	private static final int IDLE_INTERVAL = 2; // (X * CHECK_INTERVAL) = 20 minutes
-	private static L2Npc _npc = null;
-	private static int _status = -1;
+	
+	private L2Npc _npc = null;
+	private int _status = -1;
 	
 	public Q616_MagicalPowerOfFire_Part2()
 	{
@@ -223,10 +224,10 @@ public class Q616_MagicalPowerOfFire_Part2 extends Quest
 			_npc = addSpawn(KETRAS_HOLY_ALTAR, 142368, -82512, -6487, 58000, false, 0, false);
 	}
 	
-	private static boolean spawnRaid()
+	private boolean spawnRaid()
 	{
 		L2RaidBossInstance raid = RaidBossSpawnManager.getInstance().getBosses().get(SOUL_OF_FIRE_NASTRON);
-		if (raid.getRaidStatus() == StatusEnum.ALIVE)
+		if (raid != null && raid.getRaidStatus() == StatusEnum.ALIVE)
 		{
 			// set temporarily spawn location (to provide correct behavior of L2RaidBossInstance.checkAndReturnToSpawn())
 			raid.getSpawn().setLocx(142624);
@@ -245,7 +246,7 @@ public class Q616_MagicalPowerOfFire_Part2 extends Quest
 		return false;
 	}
 	
-	private static void despawnRaid(L2Npc raid)
+	private void despawnRaid(L2Npc raid)
 	{
 		// reset spawn location
 		raid.getSpawn().setLocx(-105300);

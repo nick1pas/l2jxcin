@@ -97,7 +97,7 @@ public class SummonItems implements IItemHandler
 				{
 					for (L2XmassTreeInstance ch : activeChar.getKnownList().getKnownTypeInRadius(L2XmassTreeInstance.class, 1200))
 					{
-						if (npcTemplate.isSpecialTree())
+						if (npcTemplate.getNpcId() == L2XmassTreeInstance.SPECIAL_TREE_ID)
 						{
 							activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CANNOT_SUMMON_S1_AGAIN).addCharName(ch));
 							return;
@@ -139,34 +139,6 @@ public class SummonItems implements IItemHandler
 		}
 	}
 	
-	static class PetSummonFeedWait implements Runnable
-	{
-		private final L2PcInstance _activeChar;
-		private final L2PetInstance _petSummon;
-		
-		PetSummonFeedWait(L2PcInstance activeChar, L2PetInstance petSummon)
-		{
-			_activeChar = activeChar;
-			_petSummon = petSummon;
-		}
-		
-		@Override
-		public void run()
-		{
-			try
-			{
-				if (_petSummon.getCurrentFed() <= 0)
-					_petSummon.unSummon(_activeChar);
-				else
-					_petSummon.startFeed();
-			}
-			catch (Exception e)
-			{
-				_log.log(Level.SEVERE, "", e);
-			}
-		}
-	}
-	
 	// TODO: this should be inside skill handler
 	static class PetSummonFinalizer implements Runnable
 	{
@@ -193,41 +165,35 @@ public class SummonItems implements IItemHandler
 				if (_item == null || _item.getOwnerId() != _activeChar.getObjectId() || _item.getLocation() != ItemInstance.ItemLocation.INVENTORY)
 					return;
 				
-				final L2PetInstance petSummon = L2PetInstance.spawnPet(_npcTemplate, _activeChar, _item);
-				if (petSummon == null)
+				final L2PetInstance pet = L2PetInstance.spawnPet(_npcTemplate, _activeChar, _item);
+				if (pet == null)
 					return;
 				
-				petSummon.setShowSummonAnimation(true);
-				petSummon.setTitle(_activeChar.getName());
+				pet.setShowSummonAnimation(true);
 				
-				if (!petSummon.isRespawned())
+				if (!pet.isRespawned())
 				{
-					petSummon.setCurrentHp(petSummon.getMaxHp());
-					petSummon.setCurrentMp(petSummon.getMaxMp());
-					petSummon.getStat().setExp(petSummon.getExpForThisLevel());
-					petSummon.setCurrentFed(petSummon.getMaxFed());
+					pet.setCurrentHp(pet.getMaxHp());
+					pet.setCurrentMp(pet.getMaxMp());
+					pet.getStat().setExp(pet.getExpForThisLevel());
+					pet.setCurrentFed(pet.getPetData().getMaxMeal());
 				}
 				
-				petSummon.setRunning();
+				pet.setRunning();
 				
-				if (!petSummon.isRespawned())
-					petSummon.store();
+				if (!pet.isRespawned())
+					pet.store();
 				
-				_activeChar.setPet(petSummon);
+				_activeChar.setPet(pet);
 				
-				petSummon.spawnMe(_activeChar.getX() + 50, _activeChar.getY() + 100, _activeChar.getZ());
-				petSummon.startFeed();
-				_item.setEnchantLevel(petSummon.getLevel());
+				pet.spawnMe(_activeChar.getX() + 50, _activeChar.getY() + 100, _activeChar.getZ());
+				pet.startFeed();
+				_item.setEnchantLevel(pet.getLevel());
 				
-				if (petSummon.getCurrentFed() <= 0)
-					ThreadPoolManager.getInstance().scheduleGeneral(new PetSummonFeedWait(_activeChar, petSummon), 60000);
-				else
-					petSummon.startFeed();
+				pet.setFollowStatus(true);
 				
-				petSummon.setFollowStatus(true);
-				
-				petSummon.getOwner().sendPacket(new PetItemList(petSummon));
-				petSummon.broadcastStatusUpdate();
+				pet.getOwner().sendPacket(new PetItemList(pet));
+				pet.broadcastStatusUpdate();
 			}
 			catch (Exception e)
 			{

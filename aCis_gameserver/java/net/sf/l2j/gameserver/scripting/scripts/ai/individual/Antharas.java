@@ -22,10 +22,10 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
-import net.sf.l2j.gameserver.geoengine.PathFinding;
+import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
-import net.sf.l2j.gameserver.model.L2CharPosition;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2GrandBossInstance;
@@ -353,8 +353,8 @@ public class Antharas extends AbstractNpcAI
 				int posX = x + Rnd.get(-1400, 1400);
 				int posY = y + Rnd.get(-1400, 1400);
 				
-				if (PathFinding.getInstance().canMoveToTarget(x, y, z, posX, posY, z))
-					npc.getAI().setIntention(CtrlIntention.MOVE_TO, new L2CharPosition(posX, posY, z, 0));
+				if (GeoEngine.getInstance().canMoveToTarget(x, y, z, posX, posY, z))
+					npc.getAI().setIntention(CtrlIntention.MOVE_TO, new Location(posX, posY, z));
 			}
 			return;
 		}

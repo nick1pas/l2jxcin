@@ -102,7 +102,7 @@ public class Q212_TrialOfDuty extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-				if (player.getClassId() != ClassId.knight && player.getClassId() != ClassId.elvenKnight && player.getClassId() != ClassId.palusKnight)
+				if (player.getClassId() != ClassId.KNIGHT && player.getClassId() != ClassId.ELVEN_KNIGHT && player.getClassId() != ClassId.PALUS_KNIGHT)
 					htmltext = "30109-02.htm";
 				else if (player.getLevel() < 35)
 					htmltext = "30109-01.htm";

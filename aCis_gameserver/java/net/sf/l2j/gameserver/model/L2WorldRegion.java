@@ -72,9 +72,7 @@ public final class L2WorldRegion
 	
 	public void revalidateZones(L2Character character)
 	{
-		// do NOT update the world region while the character is still in the process of teleporting
-		// Once the teleport is COMPLETED, revalidation occurs safely, at that time.
-		
+		// Do NOT update the world region while the character is still in the process of teleporting
 		if (character.isTeleporting())
 			return;
 		
@@ -325,7 +323,7 @@ public final class L2WorldRegion
 		if (object == null)
 			return;
 		
-		assert object.getWorldRegion() == this;
+		assert object.getRegion() == this;
 		
 		_visibleObjects.put(object.getObjectId(), object);
 		
@@ -351,7 +349,7 @@ public final class L2WorldRegion
 		if (object == null)
 			return;
 		
-		assert object.getWorldRegion() == this || object.getWorldRegion() == null;
+		assert object.getRegion() == this || object.getRegion() == null;
 		
 		_visibleObjects.remove(object.getObjectId());
 		

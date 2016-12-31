@@ -58,6 +58,7 @@ public final class XMLDocumentFactory
 		return _builder.parse(file);
 	}
 	
+	@SuppressWarnings("resource")
 	public final void writeDocument(final String filePath, final Document doc) throws Exception
 	{
 		final File file = new File(filePath);

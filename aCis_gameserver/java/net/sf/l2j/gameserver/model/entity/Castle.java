@@ -733,6 +733,7 @@ public class Castle
 	/**
 	 * Save manor production data.
 	 */
+	@SuppressWarnings("resource")
 	public void saveSeedData()
 	{
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
@@ -832,6 +833,7 @@ public class Castle
 	/**
 	 * Save crop procure data.
 	 */
+	@SuppressWarnings("resource")
 	public void saveCropData()
 	{
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())

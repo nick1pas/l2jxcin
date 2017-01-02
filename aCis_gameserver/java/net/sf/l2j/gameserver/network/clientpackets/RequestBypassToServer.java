@@ -22,6 +22,8 @@ import net.sf.l2j.gameserver.communitybbs.CommunityBoard;
 import net.sf.l2j.gameserver.datatables.AdminCommandAccessRights;
 import net.sf.l2j.gameserver.handler.AdminCommandHandler;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
+import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
+import net.sf.l2j.gameserver.handler.VoicedCommandHandler;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
@@ -95,6 +97,21 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			{
 				playerHelp(activeChar, _command.substring(12));
 			}
+			if (_command.startsWith("voiced_"))
+			{
+				String command = _command.split(" ")[0];
+					
+				IVoicedCommandHandler ach = VoicedCommandHandler.getInstance().getHandler(_command.substring(7));
+					
+				if (ach == null)
+				{
+					activeChar.sendMessage("The command " + command.substring(7) + " does not exist!");
+					_log.warning("No handler registered for command '" + _command + "'");
+					return;
+				}
+				
+				ach.useVoicedCommand(_command.substring(7), activeChar, null);
+			} 
 			else if (_command.startsWith("npc_"))
 			{
 				if (!activeChar.validateBypass(_command))

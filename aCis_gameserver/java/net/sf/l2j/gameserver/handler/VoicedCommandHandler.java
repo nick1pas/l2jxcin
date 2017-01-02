@@ -17,6 +17,7 @@ package net.sf.l2j.gameserver.handler;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Menu;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Online;
 
 public class VoicedCommandHandler
@@ -32,6 +33,7 @@ public class VoicedCommandHandler
 	{
 		// coloque aqui os comandos
 		registerHandler(new Online());
+		registerHandler(new Menu());
 	}
 	
 	public void registerHandler(IVoicedCommandHandler handler)

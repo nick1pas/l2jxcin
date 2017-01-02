@@ -518,6 +518,7 @@ public final class L2PcInstance extends L2Playable
 	private boolean _messageRefusal; // message refusal mode
 	private boolean _tradeRefusal; // Trade refusal
 	private boolean _exchangeRefusal; // Exchange refusal
+	private boolean _isPartyInRefuse; // Party Refusal Mode
 	
 	private L2Party _party;
 	
@@ -7774,7 +7775,17 @@ public final class L2PcInstance extends L2Playable
 	{
 		return _tradeRefusal;
 	}
-	
+    
+    public boolean isPartyInRefuse()
+    {
+        return _isPartyInRefuse;
+    }
+
+    public void setIsPartyInRefuse(boolean value)
+    {
+       _isPartyInRefuse = value;
+    }
+
 	public void setExchangeRefusal(boolean mode)
 	{
 		_exchangeRefusal = mode;

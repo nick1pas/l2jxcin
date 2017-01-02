@@ -69,7 +69,13 @@ public final class RequestJoinParty extends L2GameClientPacket
 			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_ALREADY_IN_PARTY).addPcName(target));
 			return;
 		}
-		
+        
+        if (target.isPartyInRefuse())
+        {
+            requestor.sendMessage("[Party Refuse]: Player in refusal party.");
+            return;
+        }
+  
 		if (target.getClient().isDetached())
 		{
 			requestor.sendMessage("The player you tried to invite is in offline mode.");

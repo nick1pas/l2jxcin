@@ -167,7 +167,18 @@ public abstract class L2Character extends L2Object
 	protected byte _zoneValidateCounter = 4;
 	
 	private boolean _isRaid = false;
-	
+    
+    // protect From Debuffs
+    private boolean _isBuffProtected = false;
+    public void setIsBuffProtected(boolean value)
+    {
+        _isBuffProtected = value;
+    }
+            
+    public boolean isBuffProtected()
+    {
+        return _isBuffProtected;    
+    }
 	/**
 	 * Constructor of L2Character.<BR>
 	 * <BR>

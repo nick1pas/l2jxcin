@@ -168,7 +168,7 @@ public final class OlympiadGameTask implements Runnable
 			int delay = 1; // schedule next call after 1s
 			switch (_state)
 			{
-			// Game created
+				// Game created
 				case BEGIN:
 				{
 					_state = GameState.TELE_TO_ARENA;

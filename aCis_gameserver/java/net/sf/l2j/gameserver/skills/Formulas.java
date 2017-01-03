@@ -19,10 +19,10 @@ import java.util.logging.Logger;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
+import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
-import net.sf.l2j.gameserver.instancemanager.SevenSigns;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2SiegeClan;
 import net.sf.l2j.gameserver.model.L2Skill;
@@ -47,9 +47,6 @@ import net.sf.l2j.gameserver.taskmanager.GameTimeTaskManager;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 import net.sf.l2j.gameserver.util.Util;
 
-/**
- * Global calculations, can be modified by server admins
- */
 public final class Formulas
 {
 	protected static final Logger _log = Logger.getLogger(Formulas.class.getName());
@@ -384,7 +381,7 @@ public final class Formulas
 	public static final double calcFestivalRegenModifier(L2PcInstance activeChar)
 	{
 		final int[] festivalInfo = SevenSignsFestival.getInstance().getFestivalForPlayer(activeChar);
-		final int oracle = festivalInfo[0];
+		final CabalType oracle = CabalType.VALUES[festivalInfo[0]];
 		final int festivalId = festivalInfo[1];
 		int[] festivalCenter;
 		
@@ -393,7 +390,7 @@ public final class Formulas
 			return 0;
 		
 		// Retrieve the X and Y coords for the center of the festival arena the player is in.
-		if (oracle == SevenSigns.CABAL_DAWN)
+		if (oracle == CabalType.DAWN)
 			festivalCenter = SevenSignsFestival.FESTIVAL_DAWN_PLAYER_SPAWNS[festivalId];
 		else
 			festivalCenter = SevenSignsFestival.FESTIVAL_DUSK_PLAYER_SPAWNS[festivalId];
@@ -416,7 +413,7 @@ public final class Formulas
 		if (activeChar == null || activeChar.getClan() == null)
 			return false;
 		
-		final Siege siege = SiegeManager.getSiege(activeChar.getX(), activeChar.getY(), activeChar.getZ());
+		final Siege siege = CastleManager.getInstance().getSiege(activeChar);
 		if (siege == null || !siege.isInProgress())
 			return false;
 		
@@ -1470,7 +1467,7 @@ public final class Formulas
 			case AGGDEBUFF:
 			case CONT:
 				return SKILL_REFLECT_FAILED;
-				
+			
 			case PDAM:
 			case BLOW:
 			case MDAM:
@@ -1513,7 +1510,7 @@ public final class Formulas
 			case MANADAM:
 			case MDOT:
 				return true;
-				
+			
 			case CONFUSION:
 			case ROOT:
 			case STUN:

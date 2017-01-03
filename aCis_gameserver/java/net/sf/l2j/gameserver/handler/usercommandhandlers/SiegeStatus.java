@@ -17,11 +17,11 @@ package net.sf.l2j.gameserver.handler.usercommandhandlers;
 import net.sf.l2j.commons.lang.StringUtil;
 
 import net.sf.l2j.gameserver.handler.IUserCommandHandler;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
+import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.Siege;
-import net.sf.l2j.gameserver.model.zone.type.L2SiegeZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
@@ -54,17 +54,17 @@ public class SiegeStatus implements IUserCommandHandler
 		
 		final StringBuilder sb = new StringBuilder();
 		
-		for (Siege siege : SiegeManager.getSieges())
+		for (Castle castle : CastleManager.getInstance().getCastles())
 		{
+			final Siege siege = castle.getSiege();
 			if (!siege.isInProgress())
 				continue;
 			
 			// Search on lists : as a clan can only be registered in a single siege, break after one case is found.
 			if (siege.getAttackerClan(clan.getClanId()) != null || siege.getDefenderClan(clan.getClanId()) != null)
 			{
-				final L2SiegeZone zone = siege.getCastle().getZone();
 				for (L2PcInstance member : clan.getOnlineMembers())
-					StringUtil.append(sb, "<tr><td width=170>", member.getName(), "</td><td width=100>", (zone.isInsideZone(member.getX(), member.getY(), member.getZ())) ? IN_PROGRESS : OUTSIDE_ZONE, "</td></tr>");
+					StringUtil.append(sb, "<tr><td width=170>", member.getName(), "</td><td width=100>", (castle.getZone().isInsideZone(member.getX(), member.getY(), member.getZ())) ? IN_PROGRESS : OUTSIDE_ZONE, "</td></tr>");
 				
 				final NpcHtmlMessage html = new NpcHtmlMessage(0);
 				html.setFile("data/html/siege_status.htm");

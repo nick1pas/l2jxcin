@@ -36,7 +36,7 @@ import net.sf.l2j.gameserver.handler.itemhandlers.PetFood;
 import net.sf.l2j.gameserver.handler.itemhandlers.Recipes;
 import net.sf.l2j.gameserver.handler.itemhandlers.RollingDice;
 import net.sf.l2j.gameserver.handler.itemhandlers.ScrollOfResurrection;
-import net.sf.l2j.gameserver.handler.itemhandlers.Seed;
+import net.sf.l2j.gameserver.handler.itemhandlers.SeedHandler;
 import net.sf.l2j.gameserver.handler.itemhandlers.SevenSignsRecord;
 import net.sf.l2j.gameserver.handler.itemhandlers.SoulCrystals;
 import net.sf.l2j.gameserver.handler.itemhandlers.SoulShots;
@@ -75,7 +75,7 @@ public class ItemHandler
 		registerItemHandler(new Recipes());
 		registerItemHandler(new RollingDice());
 		registerItemHandler(new ScrollOfResurrection());
-		registerItemHandler(new Seed());
+		registerItemHandler(new SeedHandler());
 		registerItemHandler(new SevenSignsRecord());
 		registerItemHandler(new SoulShots());
 		registerItemHandler(new SpecialXMas());

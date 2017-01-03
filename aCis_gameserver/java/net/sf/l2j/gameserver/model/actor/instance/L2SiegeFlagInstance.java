@@ -17,7 +17,7 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
+import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2SiegeClan;
 import net.sf.l2j.gameserver.model.L2Skill;
@@ -42,7 +42,7 @@ public class L2SiegeFlagInstance extends L2Npc
 		
 		_player = player;
 		_clan = player.getClan();
-		_siege = SiegeManager.getSiege(_player.getX(), _player.getY(), _player.getZ());
+		_siege = CastleManager.getInstance().getSiege(_player);
 		
 		if (_clan == null || _siege == null)
 			throw new NullPointerException(getClass().getSimpleName() + ": Initialization failed.");

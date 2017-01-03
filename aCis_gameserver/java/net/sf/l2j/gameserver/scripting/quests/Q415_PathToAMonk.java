@@ -290,7 +290,7 @@ public class Q415_PathToAMonk extends Quest
 						if (cond == 20)
 							htmltext = "31979-01.htm";
 						break;
-				
+					
 				}
 				break;
 		}

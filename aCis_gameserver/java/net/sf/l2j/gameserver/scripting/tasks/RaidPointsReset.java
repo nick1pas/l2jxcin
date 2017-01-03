@@ -21,9 +21,6 @@ import net.sf.l2j.gameserver.instancemanager.RaidBossPointsManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.scripting.ScheduledQuest;
 
-/**
- * @author Hasha
- */
 public final class RaidPointsReset extends ScheduledQuest
 {
 	public RaidPointsReset()

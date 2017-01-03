@@ -198,7 +198,7 @@ public class Q627_HeartInSearchOfPower extends Quest
 						break;
 				}
 				break;
-		
+			
 		}
 		
 		return htmltext;

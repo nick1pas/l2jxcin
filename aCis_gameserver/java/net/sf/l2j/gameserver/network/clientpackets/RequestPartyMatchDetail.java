@@ -73,7 +73,7 @@ public final class RequestPartyMatchDetail extends L2GameClientPacket
 					continue;
 				
 				member.sendPacket(new ExManagePartyRoomMember(activeChar, room, 0));
-				member.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ENTERED_PARTY_ROOM).addPcName(activeChar));
+				member.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ENTERED_PARTY_ROOM).addCharName(activeChar));
 			}
 			room.addMember(activeChar);
 			

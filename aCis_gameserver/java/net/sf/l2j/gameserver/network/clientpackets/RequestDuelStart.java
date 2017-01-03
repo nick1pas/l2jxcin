@@ -64,7 +64,7 @@ public final class RequestDuelStart extends L2GameClientPacket
 		// Players musn't be too far.
 		if (!activeChar.isInsideRadius(targetChar, 2000, false, false))
 		{
-			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_RECEIVE_A_DUEL_CHALLENGE_BECAUSE_S1_IS_TOO_FAR_AWAY).addPcName(targetChar));
+			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_RECEIVE_A_DUEL_CHALLENGE_BECAUSE_S1_IS_TOO_FAR_AWAY).addCharName(targetChar));
 			return;
 		}
 		
@@ -120,32 +120,39 @@ public final class RequestDuelStart extends L2GameClientPacket
 				if (targetCharChannel != null)
 					targetCharChannel.removeParty(targetCharParty);
 				
-				// TODO partymatching
+				// Partymatching
+				for (L2PcInstance partyMember : activeCharParty.getPartyMembers())
+					partyMember.removeMeFromPartyMatch();
+				
+				for (L2PcInstance partyMember : targetCharParty.getPartyMembers())
+					partyMember.removeMeFromPartyMatch();
 				
 				activeChar.onTransactionRequest(partyLeader);
 				partyLeader.sendPacket(new ExDuelAskStart(activeChar.getName(), _partyDuel));
 				
-				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_PARTY_HAS_BEEN_CHALLENGED_TO_A_DUEL).addPcName(partyLeader));
-				targetChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_PARTY_HAS_CHALLENGED_YOUR_PARTY_TO_A_DUEL).addPcName(activeChar));
+				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_PARTY_HAS_BEEN_CHALLENGED_TO_A_DUEL).addCharName(partyLeader));
+				targetChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_PARTY_HAS_CHALLENGED_YOUR_PARTY_TO_A_DUEL).addCharName(activeChar));
 			}
 			else
-				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addPcName(partyLeader));
+				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addCharName(partyLeader));
 		}
 		// 1vs1 duel.
 		else
 		{
 			if (!targetChar.isProcessingRequest())
 			{
-				// TODO partymatching
+				// Partymatching
+				activeChar.removeMeFromPartyMatch();
+				targetChar.removeMeFromPartyMatch();
 				
 				activeChar.onTransactionRequest(targetChar);
 				targetChar.sendPacket(new ExDuelAskStart(activeChar.getName(), _partyDuel));
 				
-				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_BEEN_CHALLENGED_TO_A_DUEL).addPcName(targetChar));
-				targetChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_CHALLENGED_YOU_TO_A_DUEL).addPcName(activeChar));
+				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_BEEN_CHALLENGED_TO_A_DUEL).addCharName(targetChar));
+				targetChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_CHALLENGED_YOU_TO_A_DUEL).addCharName(activeChar));
 			}
 			else
-				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addPcName(targetChar));
+				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addCharName(targetChar));
 		}
 	}
 }

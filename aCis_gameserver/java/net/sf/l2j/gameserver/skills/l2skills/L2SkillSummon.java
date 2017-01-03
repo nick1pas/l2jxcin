@@ -102,7 +102,7 @@ public class L2SkillSummon extends L2Skill
 			}
 			else
 			{
-				if (player.inObserverMode())
+				if (player.isInObserverMode())
 					return false;
 				
 				if (player.getPet() != null)
@@ -175,7 +175,7 @@ public class L2SkillSummon extends L2Skill
 					else
 						// given by other player
 						player.addCubic(_npcId, _cubicSkillLevel, getPower(), _activationtime, _activationchance, _summonTotalLifeTime, true);
-					
+				
 					player.broadcastUserInfo();
 				}
 				return;

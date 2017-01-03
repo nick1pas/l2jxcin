@@ -19,9 +19,6 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.gameserver.model.olympiad.Olympiad;
 import net.sf.l2j.gameserver.scripting.Quest;
 
-/**
- * @author Hasha
- */
 public final class OlympiadSave extends Quest implements Runnable
 {
 	public OlympiadSave()

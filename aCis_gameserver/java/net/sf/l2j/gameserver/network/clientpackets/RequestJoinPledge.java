@@ -57,7 +57,7 @@ public final class RequestJoinPledge extends L2GameClientPacket
 		if (!activeChar.getRequest().setRequest(target, this))
 			return;
 		
-		target.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_INVITED_YOU_TO_JOIN_THE_CLAN_S2).addPcName(activeChar).addString(clan.getName()));
+		target.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_INVITED_YOU_TO_JOIN_THE_CLAN_S2).addCharName(activeChar).addString(clan.getName()));
 		target.sendPacket(new AskJoinPledge(activeChar.getObjectId(), clan.getName()));
 	}
 	

@@ -31,9 +31,10 @@ import net.sf.l2j.gameserver.taskmanager.PvpFlagTaskManager;
  */
 public class L2SiegeZone extends L2ZoneType
 {
+	private static final int DISMOUNT_DELAY = 5;
+	
 	private int _siegableId = -1;
 	private boolean _isActiveSiege = false;
-	private static final int DISMOUNT_DELAY = 5;
 	
 	public L2SiegeZone(int id)
 	{
@@ -43,18 +44,8 @@ public class L2SiegeZone extends L2ZoneType
 	@Override
 	public void setParameter(String name, String value)
 	{
-		if (name.equals("castleId"))
-		{
-			if (_siegableId != -1)
-				throw new IllegalArgumentException("Siege object already defined!");
+		if (name.equals("castleId") || name.equals("clanHallId"))
 			_siegableId = Integer.parseInt(value);
-		}
-		else if (name.equals("clanHallId"))
-		{
-			if (_siegableId != -1)
-				throw new IllegalArgumentException("Siege object already defined!");
-			_siegableId = Integer.parseInt(value);
-		}
 		else
 			super.setParameter(name, value);
 	}

@@ -14,9 +14,12 @@
  */
 package net.sf.l2j.gameserver.model.actor.stat;
 
+import java.util.Map;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.RewardInfo;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
@@ -74,32 +77,6 @@ public class PcStat extends PlayableStat
 	@Override
 	public boolean addExpAndSp(long addToExp, int addToSp)
 	{
-		// GM check concerning canGainExp().
-		if (!getActiveChar().getAccessLevel().canGainExp())
-			return false;
-		
-		// If this player has a pet, give the xp to the pet now (if any).
-		if (getActiveChar().hasPet())
-		{
-			final L2PetInstance pet = (L2PetInstance) getActiveChar().getPet();
-			if (pet.getStat().getExp() <= (pet.getTemplate().getPetDataEntry(81).getMaxExp() + 10000))
-			{
-				if (Util.checkIfInShortRadius(Config.ALT_PARTY_RANGE, pet, getActiveChar(), true))
-				{
-					int ratio = pet.getPetData().getExpType(); // FIXME
-					if (ratio > 0 && !pet.isDead())
-						pet.addExpAndSp(addToExp * ratio / 100, addToSp * ratio / 100);
-					
-					// now adjust the max ratio to avoid the owner earning negative exp/sp
-					if (ratio > 1)
-						ratio = 1;
-					
-					addToExp = addToExp * (1 - ratio / 100);
-					addToSp = addToSp * (1 - ratio / 100);
-				}
-			}
-		}
-		
 		if (!super.addExpAndSp(addToExp, addToSp))
 			return false;
 		
@@ -115,6 +92,68 @@ public class PcStat extends PlayableStat
 		getActiveChar().sendPacket(sm);
 		
 		return true;
+	}
+	
+	/**
+	 * Add Experience and SP rewards to the L2PcInstance, remove its Karma (if necessary) and Launch increase level task.
+	 * <ul>
+	 * <li>Remove Karma when the player kills L2MonsterInstance</li>
+	 * <li>Send StatusUpdate to the L2PcInstance</li>
+	 * <li>Send a Server->Client System Message to the L2PcInstance</li>
+	 * <li>If the L2PcInstance increases its level, send SocialAction (broadcast)</li>
+	 * <li>If the L2PcInstance increases its level, manage the increase level task (Max MP, Max MP, Recommandation, Expertise and beginner skills...)</li>
+	 * <li>If the L2PcInstance increases its level, send UserInfo to the L2PcInstance</li>
+	 * </ul>
+	 * @param addToExp The Experience value to add
+	 * @param addToSp The SP value to add
+	 * @param rewards The list of players and summons, who done damage
+	 * @return
+	 */
+	public boolean addExpAndSp(long addToExp, int addToSp, Map<L2Character, RewardInfo> rewards)
+	{
+		// GM check concerning canGainExp().
+		if (!getActiveChar().getAccessLevel().canGainExp())
+			return false;
+		
+		// If this player has a pet, give the xp to the pet now (if any).
+		if (getActiveChar().hasPet())
+		{
+			final L2PetInstance pet = (L2PetInstance) getActiveChar().getPet();
+			if (pet.getStat().getExp() <= (pet.getTemplate().getPetDataEntry(81).getMaxExp() + 10000) && !pet.isDead())
+			{
+				if (Util.checkIfInShortRadius(Config.ALT_PARTY_RANGE, pet, getActiveChar(), true))
+				{
+					int ratio = pet.getPetData().getExpType();
+					long petExp = 0;
+					int petSp = 0;
+					if (ratio == -1)
+					{
+						RewardInfo r = rewards.get(pet);
+						RewardInfo reward = rewards.get(getActiveChar());
+						if (r != null && reward != null)
+						{
+							double damageDoneByPet = ((double) (r.getDamage())) / reward.getDamage();
+							petExp = (long) (addToExp * damageDoneByPet);
+							petSp = (int) (addToSp * damageDoneByPet);
+						}
+					}
+					else
+					{
+						// now adjust the max ratio to avoid the owner earning negative exp/sp
+						if (ratio > 100)
+							ratio = 100;
+						
+						petExp = Math.round(addToExp * (1 - (ratio / 100.0)));
+						petSp = (int) Math.round(addToSp * (1 - (ratio / 100.0)));
+					}
+					
+					addToExp -= petExp;
+					addToSp -= petSp;
+					pet.addExpAndSp(petExp, petSp);
+				}
+			}
+		}
+		return addExpAndSp(addToExp, addToSp);
 	}
 	
 	@Override

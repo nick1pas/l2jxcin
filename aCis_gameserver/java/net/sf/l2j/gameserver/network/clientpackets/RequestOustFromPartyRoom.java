@@ -24,10 +24,6 @@ import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ExClosePartyRoom;
 import net.sf.l2j.gameserver.network.serverpackets.PartyMatchList;
 
-/**
- * format (ch) d
- * @author -Wooden-
- */
 public final class RequestOustFromPartyRoom extends L2GameClientPacket
 {
 	private int _charid;
@@ -70,7 +66,7 @@ public final class RequestOustFromPartyRoom extends L2GameClientPacket
 			PartyMatchWaitingList.getInstance().addPlayer(member);
 			
 			// Send Room list
-			member.sendPacket(new PartyMatchList(member, 0, MapRegionTable.getClosestLocation(member.getX(), member.getY()), member.getLevel()));
+			member.sendPacket(new PartyMatchList(member, 0, MapRegionTable.getInstance().getClosestLocation(member.getX(), member.getY()), member.getLevel()));
 			
 			// Clean player's LFP title
 			member.broadcastUserInfo();

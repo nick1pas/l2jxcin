@@ -34,7 +34,8 @@ import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
  * <li>cw_add : adds a cursed weapon into the world - item id or name must be provided. Current target will be the owner.</li>
  * <li>cw_goto : teleports GM to the specified cursed weapon (item or player position).</li>
  * <li>cw_reload : reloads instance manager.</li>
- * </ul>>
+ * </ul>
+ * >
  */
 public class AdminCursedWeapons implements IAdminCommandHandler
 {

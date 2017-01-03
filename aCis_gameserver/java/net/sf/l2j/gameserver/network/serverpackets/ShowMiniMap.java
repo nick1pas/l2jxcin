@@ -32,6 +32,6 @@ public class ShowMiniMap extends L2GameServerPacket
 	{
 		writeC(0x9d);
 		writeD(_mapId);
-		writeD(SevenSigns.getInstance().getCurrentPeriod());
+		writeD(SevenSigns.getInstance().getCurrentPeriod().ordinal());
 	}
 }

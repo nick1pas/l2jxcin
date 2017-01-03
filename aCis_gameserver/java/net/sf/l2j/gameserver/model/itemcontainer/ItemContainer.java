@@ -19,7 +19,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,17 +35,17 @@ import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemLocation;
+import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemState;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 
 public abstract class ItemContainer
 {
 	protected static final Logger _log = Logger.getLogger(ItemContainer.class.getName());
 	
-	protected final List<ItemInstance> _items;
+	protected final Set<ItemInstance> _items = new ConcurrentSkipListSet<>();
 	
 	protected ItemContainer()
 	{
-		_items = new CopyOnWriteArrayList<>();
 	}
 	
 	protected abstract L2Character getOwner();
@@ -75,7 +76,7 @@ public abstract class ItemContainer
 	/**
 	 * @return the list of items in inventory.
 	 */
-	public List<ItemInstance> getItems()
+	public Set<ItemInstance> getItems()
 	{
 		return _items;
 	}
@@ -188,7 +189,7 @@ public abstract class ItemContainer
 		{
 			int count = item.getCount();
 			olditem.changeCount(process, count, actor, reference);
-			olditem.setLastChange(ItemInstance.MODIFIED);
+			olditem.setLastChange(ItemState.MODIFIED);
 			
 			// And destroys the item
 			ItemTable.getInstance().destroyItem(process, item, actor, reference);
@@ -210,7 +211,7 @@ public abstract class ItemContainer
 		{
 			item.setOwnerId(process, getOwnerId(), actor, reference);
 			item.setLocation(getBaseLocation());
-			item.setLastChange((ItemInstance.ADDED));
+			item.setLastChange(ItemState.ADDED);
 			
 			// Add item in inventory
 			addItem(item);
@@ -240,7 +241,7 @@ public abstract class ItemContainer
 		if (item != null && item.isStackable())
 		{
 			item.changeCount(process, count, actor, reference);
-			item.setLastChange(ItemInstance.MODIFIED);
+			item.setLastChange(ItemState.MODIFIED);
 			
 			// Updates database
 			if (itemId == 57 && count < 10000 * Config.RATE_DROP_ADENA)
@@ -267,7 +268,7 @@ public abstract class ItemContainer
 				item = ItemTable.getInstance().createItem(process, itemId, template.isStackable() ? count : 1, actor, reference);
 				item.setOwnerId(getOwnerId());
 				item.setLocation(getBaseLocation());
-				item.setLastChange(ItemInstance.ADDED);
+				item.setLastChange(ItemState.ADDED);
 				
 				// Add item in inventory
 				addItem(item);
@@ -386,7 +387,7 @@ public abstract class ItemContainer
 			if (item.getCount() > count)
 			{
 				item.changeCount(process, -count, actor, reference);
-				item.setLastChange(ItemInstance.MODIFIED);
+				item.setLastChange(ItemState.MODIFIED);
 				
 				// don't update often for untraced items
 				if (process != null || Rnd.get(10) == 0)
@@ -479,6 +480,8 @@ public abstract class ItemContainer
 	 */
 	protected void addItem(ItemInstance item)
 	{
+		item.actualizeTime();
+		
 		_items.add(item);
 	}
 	

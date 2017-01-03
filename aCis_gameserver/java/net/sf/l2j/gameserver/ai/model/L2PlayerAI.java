@@ -149,8 +149,9 @@ public class L2PlayerAI extends L2PlayableAI
 	 * <BR>
 	 * <B><U> Actions</U> : </B><BR>
 	 * <BR>
-	 * <li>Stop the actor auto-attack server side AND client side by sending Server->Client packet AutoAttackStop (broadcast)</li> <li>Set the Intention of this AI to MOVE_TO</li> <li>Move the actor to Location (x,y,z) server side AND client side by sending Server->Client packet MoveToLocation
-	 * (broadcast)</li><BR>
+	 * <li>Stop the actor auto-attack server side AND client side by sending Server->Client packet AutoAttackStop (broadcast)</li>
+	 * <li>Set the Intention of this AI to MOVE_TO</li>
+	 * <li>Move the actor to Location (x,y,z) server side AND client side by sending Server->Client packet MoveToLocation (broadcast)</li><BR>
 	 * <BR>
 	 */
 	@Override

@@ -65,11 +65,6 @@ public class L2NpcInstance extends L2Npc
 			newEffect.stopEffectTask();
 	}
 	
-	public List<ClassId> getClassesToTeach()
-	{
-		return getTemplate().getTeachInfo();
-	}
-	
 	/**
 	 * This method displays SkillList to the player.
 	 * @param player The player who requested the method.
@@ -78,14 +73,6 @@ public class L2NpcInstance extends L2Npc
 	 */
 	public static void showSkillList(L2PcInstance player, L2Npc npc, ClassId classId)
 	{
-		if (((L2NpcInstance) npc).getClassesToTeach() == null)
-		{
-			final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
-			html.setHtml("<html><body>I cannot teach you. My class list is empty.<br>Your admin needs to add me teachTo informations.<br>NpcId:" + npc.getTemplate().getNpcId() + ", your classId:" + player.getClassId().getId() + "</body></html>");
-			player.sendPacket(html);
-			return;
-		}
-		
 		if (!npc.getTemplate().canTeach(classId))
 		{
 			final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
@@ -130,14 +117,6 @@ public class L2NpcInstance extends L2Npc
 	 */
 	public static void showEnchantSkillList(L2PcInstance player, L2Npc npc, ClassId classId)
 	{
-		if (((L2NpcInstance) npc).getClassesToTeach() == null)
-		{
-			final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
-			html.setHtml("<html><body>I cannot teach you. My class list is empty.<br>Your admin needs to add me teachTo informations.<br>NpcId:" + npc.getTemplate().getNpcId() + ", your classId:" + player.getClassId().getId() + "</body></html>");
-			player.sendPacket(html);
-			return;
-		}
-		
 		if (!npc.getTemplate().canTeach(classId))
 		{
 			final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());

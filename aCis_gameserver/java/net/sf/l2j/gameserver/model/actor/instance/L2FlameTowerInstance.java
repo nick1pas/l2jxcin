@@ -17,8 +17,10 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import java.util.List;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
+import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
+import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -43,14 +45,14 @@ public class L2FlameTowerInstance extends L2Npc
 	public boolean isAttackable()
 	{
 		// Attackable during siege by attacker only
-		return (getCastle() != null && getCastle().getSiege().isInProgress());
+		return getCastle() != null && getCastle().getSiege().isInProgress();
 	}
 	
 	@Override
 	public boolean isAutoAttackable(L2Character attacker)
 	{
 		// Attackable during siege by attacker only
-		return (attacker != null && attacker instanceof L2PcInstance && getCastle() != null && getCastle().getSiege().isInProgress() && getCastle().getSiege().checkIsAttacker(((L2PcInstance) attacker).getClan()));
+		return attacker instanceof L2PcInstance && getCastle() != null && getCastle().getSiege().isInProgress() && getCastle().getSiege().checkIsAttacker(((L2PcInstance) attacker).getClan());
 	}
 	
 	@Override
@@ -93,6 +95,22 @@ public class L2FlameTowerInstance extends L2Npc
 			// Message occurs only if the trap was triggered first.
 			if (_zoneList != null && _upgradeLevel != 0)
 				getCastle().getSiege().announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.A_TRAP_DEVICE_HAS_BEEN_STOPPED), false);
+			
+			// Spawn a little version of it. This version is a simple NPC, cleaned on siege end.
+			try
+			{
+				final L2Spawn spawn = new L2Spawn(NpcTable.getInstance().getTemplate(13005));
+				spawn.setLoc(getPosition());
+				
+				final L2Npc tower = spawn.doSpawn(false);
+				tower.setCastle(getCastle());
+				
+				getCastle().getSiege().getDestroyedTowers().add(tower);
+			}
+			catch (Exception e)
+			{
+				_log.warning(getClass().getName() + ": Cannot spawn control tower! " + e);
+			}
 		}
 		
 		return super.doDie(killer);

@@ -17,29 +17,65 @@ package net.sf.l2j.gameserver.model.item;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
+import net.sf.l2j.gameserver.templates.StatsSet;
 
-/**
- * @author Luno
- */
 public final class ArmorSet
 {
-	private final int[] _set;
-	private final int _skillId;
+	private final String _name;
 	
+	private final int[] _set = new int[5];
+	
+	private final int _skillId;
 	private final int _shield;
 	private final int _shieldSkillId;
-	
 	private final int _enchant6Skill;
 	
-	public ArmorSet(int[] set, int skillId, int shield, int shieldSkillId, int enchant6Skill)
+	public ArmorSet(StatsSet set)
 	{
-		_set = set;
-		_skillId = skillId;
+		_name = set.getString("name");
 		
-		_shield = shield;
-		_shieldSkillId = shieldSkillId;
+		_set[0] = set.getInteger("chest");
+		_set[1] = set.getInteger("legs");
+		_set[2] = set.getInteger("head");
+		_set[3] = set.getInteger("gloves");
+		_set[4] = set.getInteger("feet");
 		
-		_enchant6Skill = enchant6Skill;
+		_skillId = set.getInteger("skillId");
+		_shield = set.getInteger("shield");
+		_shieldSkillId = set.getInteger("shieldSkillId");
+		_enchant6Skill = set.getInteger("enchant6Skill");
+	}
+	
+	@Override
+	public String toString()
+	{
+		return _name;
+		
+	}
+	
+	public int[] getSetItemsId()
+	{
+		return _set;
+	}
+	
+	public int getShield()
+	{
+		return _shield;
+	}
+	
+	public int getSkillId()
+	{
+		return _skillId;
+	}
+	
+	public int getShieldSkillId()
+	{
+		return _shieldSkillId;
+	}
+	
+	public int getEnchant6skillId()
+	{
+		return _enchant6Skill;
 	}
 	
 	/**
@@ -93,27 +129,22 @@ public final class ArmorSet
 		{
 			case Inventory.PAPERDOLL_CHEST:
 				return _set[0] == itemId;
-				
+			
 			case Inventory.PAPERDOLL_LEGS:
 				return _set[1] == itemId;
-				
+			
 			case Inventory.PAPERDOLL_HEAD:
 				return _set[2] == itemId;
-				
+			
 			case Inventory.PAPERDOLL_GLOVES:
 				return _set[3] == itemId;
-				
+			
 			case Inventory.PAPERDOLL_FEET:
 				return _set[4] == itemId;
-				
+			
 			default:
 				return false;
 		}
-	}
-	
-	public int getSkillId()
-	{
-		return _skillId;
 	}
 	
 	public boolean containShield(L2PcInstance player)
@@ -131,16 +162,6 @@ public final class ArmorSet
 			return false;
 		
 		return _shield == shieldId;
-	}
-	
-	public int getShieldSkillId()
-	{
-		return _shieldSkillId;
-	}
-	
-	public int getEnchant6skillId()
-	{
-		return _enchant6Skill;
 	}
 	
 	/**
@@ -190,21 +211,5 @@ public final class ArmorSet
 			return false;
 		
 		return true;
-	}
-	
-	/**
-	 * @return chest, legs, gloves, feet, head
-	 */
-	public int[] getSetItemsId()
-	{
-		return _set;
-	}
-	
-	/**
-	 * @return shield id
-	 */
-	public int getShield()
-	{
-		return _shield;
 	}
 }

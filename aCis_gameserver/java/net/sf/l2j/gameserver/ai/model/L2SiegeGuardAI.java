@@ -31,6 +31,7 @@ import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2SiegeGuardInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.AIType;
+import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.util.Util;
 
@@ -257,7 +258,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 			
 			// -------------------------------------------------------------------------------
 			// Heal
-			defaultList = actor.getTemplate().getHealSkills();
+			defaultList = actor.getTemplate().getSkills(SkillType.HEAL);
 			if (!defaultList.isEmpty())
 			{
 				final String[] clans = actor.getTemplate().getClans();
@@ -290,7 +291,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 			
 			// -------------------------------------------------------------------------------
 			// Buff
-			defaultList = actor.getTemplate().getBuffSkills();
+			defaultList = actor.getTemplate().getSkills(SkillType.BUFF);
 			if (!defaultList.isEmpty())
 			{
 				for (L2Skill sk : defaultList)
@@ -312,7 +313,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 			
 			// -------------------------------------------------------------------------------
 			// Debuff - 10% luck to get debuffed.
-			defaultList = actor.getTemplate().getDebuffSkills();
+			defaultList = actor.getTemplate().getSkills(SkillType.DEBUFF);
 			if (Rnd.get(100) < 10 && !defaultList.isEmpty())
 			{
 				for (L2Skill sk : defaultList)
@@ -334,7 +335,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 			
 			// -------------------------------------------------------------------------------
 			// General attack skill - short range is checked, then long range.
-			defaultList = actor.getTemplate().getShortRangeSkills();
+			defaultList = actor.getTemplate().getSkills(SkillType.SHORT_RANGE);
 			if (!defaultList.isEmpty() && dist <= 150)
 			{
 				final L2Skill skill = Rnd.get(defaultList);
@@ -343,7 +344,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 			}
 			else
 			{
-				defaultList = actor.getTemplate().getLongRangeSkills();
+				defaultList = actor.getTemplate().getSkills(SkillType.LONG_RANGE);
 				if (!defaultList.isEmpty() && dist > 150)
 				{
 					final L2Skill skill = Rnd.get(defaultList);

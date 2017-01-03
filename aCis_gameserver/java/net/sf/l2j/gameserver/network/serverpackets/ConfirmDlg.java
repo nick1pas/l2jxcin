@@ -19,24 +19,15 @@ import java.util.List;
 
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
-/**
- * @author kombat Format: cd d[d s/d/dd/ddd]
- */
 public class ConfirmDlg extends L2GameServerPacket
 {
-	private final int _messageId;
-	
-	private int _skillLvL = 1;
-	
 	private static final int TYPE_ZONE_NAME = 7;
 	private static final int TYPE_SKILL_NAME = 4;
 	private static final int TYPE_ITEM_NAME = 3;
@@ -44,22 +35,11 @@ public class ConfirmDlg extends L2GameServerPacket
 	private static final int TYPE_NUMBER = 1;
 	private static final int TYPE_TEXT = 0;
 	
+	private final int _messageId;
 	private final List<CnfDlgData> _info = new ArrayList<>();
 	
 	private int _time = 0;
 	private int _requesterId = 0;
-	
-	private static class CnfDlgData
-	{
-		protected final int type;
-		protected final Object value;
-		
-		protected CnfDlgData(int t, Object val)
-		{
-			type = t;
-			value = val;
-		}
-	}
 	
 	public ConfirmDlg(int messageId)
 	{
@@ -85,39 +65,7 @@ public class ConfirmDlg extends L2GameServerPacket
 	
 	public ConfirmDlg addCharName(L2Character cha)
 	{
-		if (cha instanceof L2Npc)
-			return addNpcName((L2Npc) cha);
-		if (cha instanceof L2PcInstance)
-			return addPcName((L2PcInstance) cha);
-		if (cha instanceof L2Summon)
-			return addNpcName((L2Summon) cha);
 		return addString(cha.getName());
-	}
-	
-	public ConfirmDlg addPcName(L2PcInstance pc)
-	{
-		return addString(pc.getName());
-	}
-	
-	public ConfirmDlg addNpcName(L2Npc npc)
-	{
-		return addNpcName(npc.getTemplate());
-	}
-	
-	public ConfirmDlg addNpcName(L2Summon npc)
-	{
-		return addNpcName(npc.getNpcId());
-	}
-	
-	public ConfirmDlg addNpcName(NpcTemplate tpl)
-	{
-		return addNpcName(tpl.getNpcId());
-	}
-	
-	public ConfirmDlg addNpcName(int id)
-	{
-		_info.add(new CnfDlgData(TYPE_NPC_NAME, id));
-		return this;
 	}
 	
 	public ConfirmDlg addItemName(ItemInstance item)
@@ -136,15 +84,9 @@ public class ConfirmDlg extends L2GameServerPacket
 		return this;
 	}
 	
-	public ConfirmDlg addZoneName(int x, int y, int z)
+	public ConfirmDlg addZoneName(Location loc)
 	{
-		Integer[] coord =
-		{
-			x,
-			y,
-			z
-		};
-		_info.add(new CnfDlgData(TYPE_ZONE_NAME, coord));
+		_info.add(new CnfDlgData(TYPE_ZONE_NAME, loc));
 		return this;
 	}
 	
@@ -165,8 +107,7 @@ public class ConfirmDlg extends L2GameServerPacket
 	
 	public ConfirmDlg addSkillName(int id, int lvl)
 	{
-		_info.add(new CnfDlgData(TYPE_SKILL_NAME, id));
-		_skillLvL = lvl;
+		_info.add(new CnfDlgData(TYPE_SKILL_NAME, new IntIntHolder(id, lvl)));
 		return this;
 	}
 	
@@ -200,27 +141,31 @@ public class ConfirmDlg extends L2GameServerPacket
 			
 			for (CnfDlgData data : _info)
 			{
-				writeD(data.type);
+				writeD(data.getType());
 				
-				switch (data.type)
+				switch (data.getType())
 				{
 					case TYPE_TEXT:
-						writeS((String) data.value);
+						writeS((String) data.getObject());
 						break;
+					
 					case TYPE_NUMBER:
 					case TYPE_NPC_NAME:
 					case TYPE_ITEM_NAME:
-						writeD((Integer) data.value);
+						writeD((Integer) data.getObject());
 						break;
+					
 					case TYPE_SKILL_NAME:
-						writeD((Integer) data.value); // Skill Id
-						writeD(_skillLvL); // Skill lvl
+						final IntIntHolder info = (IntIntHolder) data.getObject();
+						writeD(info.getId());
+						writeD(info.getValue());
 						break;
+					
 					case TYPE_ZONE_NAME:
-						Integer[] array = (Integer[]) data.value;
-						writeD(array[0]);
-						writeD(array[1]);
-						writeD(array[2]);
+						final Location loc = (Location) data.getObject();
+						writeD(loc.getX());
+						writeD(loc.getY());
+						writeD(loc.getZ());
 						break;
 				}
 			}
@@ -228,6 +173,28 @@ public class ConfirmDlg extends L2GameServerPacket
 				writeD(_time);
 			if (_requesterId != 0)
 				writeD(_requesterId);
+		}
+	}
+	
+	private static final class CnfDlgData
+	{
+		private final int _type;
+		private final Object _value;
+		
+		protected CnfDlgData(int type, Object val)
+		{
+			_type = type;
+			_value = val;
+		}
+		
+		public int getType()
+		{
+			return _type;
+		}
+		
+		public Object getObject()
+		{
+			return _value;
 		}
 	}
 }

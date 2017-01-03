@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
+import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Party.MessageType;
@@ -30,6 +31,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.zone.type.L2OlympiadStadiumZone;
+import net.sf.l2j.gameserver.model.zone.type.L2TownZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ExOlympiadMode;
 import net.sf.l2j.gameserver.network.serverpackets.InventoryUpdate;
@@ -106,7 +108,7 @@ public abstract class AbstractOlympiadGame
 			return SystemMessage.getSystemMessage(SystemMessageId.THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_ENDS_THE_GAME);
 		
 		// safety precautions
-		if (player.inObserverMode())
+		if (player.isInObserverMode())
 			return SystemMessage.getSystemMessage(SystemMessageId.THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_DOES_NOT_MEET_THE_REQUIREMENTS_FOR_JOINING_THE_GAME);
 		
 		if (player.isDead())
@@ -146,7 +148,6 @@ public abstract class AbstractOlympiadGame
 		{
 			player.getSavedLocation().set(player.getX(), player.getY(), player.getZ());
 			
-			player.forceStandUp();
 			player.setTarget(null);
 			
 			player.setOlympiadGameId(id);
@@ -314,8 +315,6 @@ public abstract class AbstractOlympiadGame
 	{
 		try
 		{
-			player.forceStandUp();
-			
 			player.setOlympiadMode(false);
 			player.setOlympiadStart(false);
 			player.setOlympiadSide(-1);
@@ -359,12 +358,16 @@ public abstract class AbstractOlympiadGame
 		if (player == null)
 			return;
 		
-		final Location loc = player.getSavedLocation();
+		Location loc = player.getSavedLocation();
 		if (loc.equals(Location.DUMMY_LOC))
 			return;
 		
+		final L2TownZone town = MapRegionTable.getTown(loc.getX(), loc.getY(), loc.getZ());
+		if (town != null)
+			loc = town.getSpawnLoc();
+		
 		player.teleToLocation(loc, 0);
-		player.getSavedLocation().set(player.getX(), player.getY(), player.getZ());
+		player.getSavedLocation().clean();
 	}
 	
 	public static final void rewardParticipant(L2PcInstance player, int[][] reward)

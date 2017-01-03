@@ -226,7 +226,7 @@ public abstract class AbstractRefinePacket extends L2GameClientPacket
 				case NONE:
 				case FISHINGROD:
 					return false;
-					
+				
 				default:
 					break;
 			}
@@ -290,11 +290,11 @@ public abstract class AbstractRefinePacket extends L2GameClientPacket
 			case C:
 			case B:
 				return GEMSTONE_D;
-				
+			
 			case A:
 			case S:
 				return GEMSTONE_C;
-				
+			
 			default:
 				return 0;
 		}
@@ -309,16 +309,16 @@ public abstract class AbstractRefinePacket extends L2GameClientPacket
 		{
 			case C:
 				return 20;
-				
+			
 			case B:
 				return 30;
-				
+			
 			case A:
 				return 20;
-				
+			
 			case S:
 				return 25;
-				
+			
 			default:
 				return 0;
 		}

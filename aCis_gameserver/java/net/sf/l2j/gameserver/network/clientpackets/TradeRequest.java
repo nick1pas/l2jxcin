@@ -81,7 +81,7 @@ public final class TradeRequest extends L2GameClientPacket
 		
 		if (target.isProcessingRequest() || target.isProcessingTransaction())
 		{
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addPcName(target);
+			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addCharName(target);
 			player.sendPacket(sm);
 			return;
 		}
@@ -94,7 +94,7 @@ public final class TradeRequest extends L2GameClientPacket
 		
 		if (BlockList.isBlocked(target, player))
 		{
-			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_ADDED_YOU_TO_IGNORE_LIST).addPcName(target);
+			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_ADDED_YOU_TO_IGNORE_LIST).addCharName(target);
 			player.sendPacket(sm);
 			return;
 		}
@@ -107,6 +107,6 @@ public final class TradeRequest extends L2GameClientPacket
 		
 		player.onTransactionRequest(target);
 		target.sendPacket(new SendTradeRequest(player.getObjectId()));
-		player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.REQUEST_S1_FOR_TRADE).addPcName(target));
+		player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.REQUEST_S1_FOR_TRADE).addCharName(target));
 	}
 }

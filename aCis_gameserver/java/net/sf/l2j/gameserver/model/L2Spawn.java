@@ -70,7 +70,9 @@ public final class L2Spawn implements Runnable
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
-	 * <li>Set the _template of the L2Spawn</li> <li>Calculate the implementationName used to generate the generic constructor of L2Npc managed by this L2Spawn</li> <li>Create the generic constructor of L2Npc managed by this L2Spawn</li><BR>
+	 * <li>Set the _template of the L2Spawn</li>
+	 * <li>Calculate the implementationName used to generate the generic constructor of L2Npc managed by this L2Spawn</li>
+	 * <li>Create the generic constructor of L2Npc managed by this L2Spawn</li><BR>
 	 * <BR>
 	 * @param template : {@link NpcTemplate} the template of {@link L2Npc} to be spawned.
 	 * @throws SecurityException

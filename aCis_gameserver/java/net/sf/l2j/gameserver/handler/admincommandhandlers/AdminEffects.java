@@ -26,7 +26,6 @@ import net.sf.l2j.gameserver.model.actor.L2Summon;
 import net.sf.l2j.gameserver.model.actor.instance.L2ChestInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.AbstractNpcInfo.NpcInfo;
 import net.sf.l2j.gameserver.network.serverpackets.Earthquake;
 import net.sf.l2j.gameserver.network.serverpackets.ExRedSky;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
@@ -48,7 +47,6 @@ import net.sf.l2j.gameserver.util.Broadcast;
  * <li>para/unpara = paralyze/remove paralysis from target.</li>
  * <li>para_all/unpara_all = same as para/unpara, affects the whole world.</li>
  * <li>polyself/unpolyself = makes you look as a specified mob.</li>
- * <li>changename = temporary change name.</li>
  * <li>social = forces an L2Character instance to broadcast social action packets.</li>
  * <li>effect = forces an L2Character instance to broadcast MSU packets.</li>
  * <li>abnormal = force changes over an L2Character instance's abnormal state.</li>
@@ -73,8 +71,6 @@ public class AdminEffects implements IAdminCommandHandler
 		"admin_para_all_menu",
 		"admin_unpara_menu",
 		"admin_para_menu",
-		"admin_changename",
-		"admin_changename_menu",
 		"admin_social",
 		"admin_social_menu",
 		"admin_effect",
@@ -247,38 +243,13 @@ public class AdminEffects implements IAdminCommandHandler
 				activeChar.updateEffectIcons();
 			}
 		}
-		else if (command.startsWith("admin_changename"))
-		{
-			try
-			{
-				String name = st.nextToken();
-				String oldName = "null";
-				
-				L2Object target = activeChar.getTarget();
-				
-				if (!(target instanceof L2Npc))
-					return false;
-				
-				oldName = target.getName();
-				
-				target.setName(name);
-				
-				if (target instanceof L2Npc)
-					((L2Npc) target).broadcastPacket(new NpcInfo((L2Npc) target, null));
-				
-				activeChar.sendMessage("Changed name from " + oldName + " to " + name + ".");
-			}
-			catch (Exception e)
-			{
-			}
-		}
 		else if (command.startsWith("admin_social"))
 		{
 			try
 			{
 				final int social = Integer.parseInt(st.nextToken());
 				
-				if (st.countTokens() == 2)
+				if (st.hasMoreTokens())
 				{
 					final String targetOrRadius = st.nextToken();
 					if (targetOrRadius != null)
@@ -302,7 +273,7 @@ public class AdminEffects implements IAdminCommandHandler
 						}
 					}
 				}
-				else if (st.countTokens() == 1)
+				else
 				{
 					L2Object obj = activeChar.getTarget();
 					if (obj == null)
@@ -313,8 +284,6 @@ public class AdminEffects implements IAdminCommandHandler
 					else
 						activeChar.sendPacket(SystemMessageId.NOTHING_HAPPENED);
 				}
-				else if (!command.contains("menu"))
-					activeChar.sendMessage("Usage: //social <social_id> [player_name|radius]");
 			}
 			catch (Exception e)
 			{
@@ -327,7 +296,7 @@ public class AdminEffects implements IAdminCommandHandler
 			{
 				final int abnormal = Integer.decode("0x" + st.nextToken());
 				
-				if (st.countTokens() == 2)
+				if (st.hasMoreTokens())
 				{
 					final String targetOrRadius = st.nextToken();
 					if (targetOrRadius != null)
@@ -351,7 +320,7 @@ public class AdminEffects implements IAdminCommandHandler
 						}
 					}
 				}
-				else if (st.countTokens() == 1)
+				else
 				{
 					L2Object obj = activeChar.getTarget();
 					if (obj == null)
@@ -362,8 +331,6 @@ public class AdminEffects implements IAdminCommandHandler
 					else
 						activeChar.sendPacket(SystemMessageId.NOTHING_HAPPENED);
 				}
-				else if (!command.contains("menu"))
-					activeChar.sendMessage("Usage: //abnormal <abnormal_mask> [player_name|radius]");
 			}
 			catch (Exception e)
 			{

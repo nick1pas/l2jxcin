@@ -42,7 +42,7 @@ public class ValidatePosition extends L2GameClientPacket
 	protected void runImpl()
 	{
 		final L2PcInstance activeChar = getClient().getActiveChar();
-		if (activeChar == null || activeChar.isTeleporting() || activeChar.inObserverMode())
+		if (activeChar == null || activeChar.isTeleporting() || activeChar.isInObserverMode())
 			return;
 		
 		final int realX = activeChar.getX();

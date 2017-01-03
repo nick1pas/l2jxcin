@@ -440,9 +440,9 @@ public class L2PetInstance extends L2Summon
 			{
 				SystemMessage msg;
 				if (target.getEnchantLevel() > 0)
-					msg = SystemMessage.getSystemMessage(SystemMessageId.ATTENTION_S1_PET_PICKED_UP_S2_S3).addPcName(getOwner()).addNumber(target.getEnchantLevel()).addItemName(target.getItemId());
+					msg = SystemMessage.getSystemMessage(SystemMessageId.ATTENTION_S1_PET_PICKED_UP_S2_S3).addCharName(getOwner()).addNumber(target.getEnchantLevel()).addItemName(target.getItemId());
 				else
-					msg = SystemMessage.getSystemMessage(SystemMessageId.ATTENTION_S1_PET_PICKED_UP_S2).addPcName(getOwner()).addItemName(target.getItemId());
+					msg = SystemMessage.getSystemMessage(SystemMessageId.ATTENTION_S1_PET_PICKED_UP_S2).addCharName(getOwner()).addItemName(target.getItemId());
 				
 				getOwner().broadcastPacket(msg, 1400);
 			}

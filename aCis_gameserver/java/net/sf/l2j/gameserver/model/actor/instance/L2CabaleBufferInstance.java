@@ -24,6 +24,7 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -126,14 +127,14 @@ public class L2CabaleBufferInstance extends L2NpcInstance
 			boolean isBuffAWinner = false;
 			boolean isBuffALoser = false;
 			
-			final int winningCabal = SevenSigns.getInstance().getCabalHighestScore();
-			int losingCabal = SevenSigns.CABAL_NULL;
+			final CabalType winningCabal = SevenSigns.getInstance().getCabalHighestScore();
 			
 			// Defines which cabal is the loser.
-			if (winningCabal == SevenSigns.CABAL_DAWN)
-				losingCabal = SevenSigns.CABAL_DUSK;
-			else if (winningCabal == SevenSigns.CABAL_DUSK)
-				losingCabal = SevenSigns.CABAL_DAWN;
+			CabalType losingCabal = CabalType.NORMAL;
+			if (winningCabal == CabalType.DAWN)
+				losingCabal = CabalType.DUSK;
+			else if (winningCabal == CabalType.DUSK)
+				losingCabal = CabalType.DAWN;
 			
 			// Those lists store players for the shout.
 			final List<L2PcInstance> playersList = new ArrayList<>();
@@ -146,26 +147,24 @@ public class L2CabaleBufferInstance extends L2NpcInstance
 				else
 					playersList.add(player);
 				
-				final int playerCabal = SevenSigns.getInstance().getPlayerCabal(player.getObjectId());
+				final CabalType playerCabal = SevenSigns.getInstance().getPlayerCabal(player.getObjectId());
+				if (playerCabal == CabalType.NORMAL)
+					continue;
 				
-				// Don't go further if player isn't from Dawn or Dusk sides.
-				if (playerCabal != SevenSigns.CABAL_NULL)
+				if (!isBuffAWinner && playerCabal == winningCabal && _caster.getNpcId() == SevenSigns.ORATOR_NPC_ID)
 				{
-					if (!isBuffAWinner && playerCabal == winningCabal && _caster.getNpcId() == SevenSigns.ORATOR_NPC_ID)
-					{
-						isBuffAWinner = true;
-						handleCast(player, (!player.isMageClass() ? 4364 : 4365));
-					}
-					else if (!isBuffALoser && playerCabal == losingCabal && _caster.getNpcId() == SevenSigns.PREACHER_NPC_ID)
-					{
-						isBuffALoser = true;
-						handleCast(player, (!player.isMageClass() ? 4361 : 4362));
-					}
-					
-					// Buff / debuff only 1 ppl per round.
-					if (isBuffAWinner && isBuffALoser)
-						break;
+					isBuffAWinner = true;
+					handleCast(player, (!player.isMageClass() ? 4364 : 4365));
 				}
+				else if (!isBuffALoser && playerCabal == losingCabal && _caster.getNpcId() == SevenSigns.PREACHER_NPC_ID)
+				{
+					isBuffALoser = true;
+					handleCast(player, (!player.isMageClass() ? 4361 : 4362));
+				}
+				
+				// Buff / debuff only 1 ppl per round.
+				if (isBuffAWinner && isBuffALoser)
+					break;
 			}
 			
 			// Autochat every 60sec. The actual AI cycle is 5sec, so delay it of 12 steps.
@@ -176,9 +175,9 @@ public class L2CabaleBufferInstance extends L2NpcInstance
 					// Pickup a random message from string arrays.
 					String text;
 					if (_caster.getCollisionHeight() > 30)
-						text = MESSAGES_LOSER[Rnd.get(MESSAGES_LOSER.length)];
+						text = Rnd.get(MESSAGES_LOSER);
 					else
-						text = MESSAGES_WINNER[Rnd.get(MESSAGES_WINNER.length)];
+						text = Rnd.get(MESSAGES_WINNER);
 					
 					if (text.indexOf("%player_cabal_winner%") > -1)
 					{

@@ -153,7 +153,7 @@ public class AutoSpawnManager
 		if (spawnPoints != null)
 			for (int[] spawnPoint : spawnPoints)
 				newSpawn.addSpawnLocation(spawnPoint);
-		
+			
 		int newId = IdFactory.getInstance().getNextId();
 		newSpawn._objectId = newId;
 		_registeredSpawns.put(newId, newSpawn);
@@ -309,7 +309,7 @@ public class AutoSpawnManager
 		for (AutoSpawnInstance spawnInst : _registeredSpawns.values())
 			if (spawnInst.getNpcId() == npcId)
 				spawnInstList.put(spawnInst.getObjectId(), spawnInst);
-		
+			
 		return spawnInstList;
 	}
 	

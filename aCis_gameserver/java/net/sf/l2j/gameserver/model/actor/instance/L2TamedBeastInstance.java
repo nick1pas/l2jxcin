@@ -14,6 +14,7 @@
  */
 package net.sf.l2j.gameserver.model.actor.instance;
 
+import java.util.List;
 import java.util.concurrent.Future;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
@@ -23,7 +24,7 @@ import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.network.serverpackets.AbstractNpcInfo.NpcInfo;
+import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
 import net.sf.l2j.gameserver.network.serverpackets.NpcSay;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 
@@ -40,17 +41,10 @@ import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 {
 	private static final int MAX_DISTANCE_FROM_HOME = 13000;
-	private static final int MAX_DISTANCE_FROM_OWNER = 2000;
-	private static final int DURATION_CHECK_INTERVAL = 60000;
-	private static final int BUFF_INTERVAL = 5000;
-	
-	private int _foodSkillId;
-	private L2PcInstance _owner;
-	private Future<?> _buffTask = null;
-	private Future<?> _foodTask = null;
+	private static final int TASK_INTERVAL = 5000;
 	
 	// Messages used every minute by the tamed beast when he automatically eats food.
-	protected static final String[] TAMED_TEXT =
+	protected static final String[] FOOD_CHAT =
 	{
 		"Refills! Yeah!",
 		"I am such a gluttonous beast, it is embarrassing! Ha ha.",
@@ -64,38 +58,29 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 		"Yam, yam, yam, yam, yam!"
 	};
 	
-	public L2TamedBeastInstance(int objectId, NpcTemplate template, L2PcInstance owner, int foodSkillId, int x, int y, int z)
+	protected int _foodId;
+	protected L2PcInstance _owner;
+	
+	private Future<?> _aiTask = null;
+	
+	public L2TamedBeastInstance(int objectId, NpcTemplate template, L2PcInstance owner, int foodId, int x, int y, int z)
 	{
 		super(objectId, template);
 		
-		disableCoreAI(true); // Make it brainless.
+		disableCoreAI(true);
 		setCurrentHp(getMaxHp());
 		setCurrentMp(getMaxMp());
+		setTitle(owner.getName());
 		
-		setOwner(owner);
-		setFoodType(foodSkillId);
+		_owner = owner;
+		owner.setTrainedBeast(this);
+		
+		_foodId = foodId;
+		
+		// Generate AI task.
+		_aiTask = ThreadPool.scheduleAtFixedRate(new AiTask(), TASK_INTERVAL, TASK_INTERVAL);
 		
 		spawnMe(x, y, z);
-	}
-	
-	public int getFoodType()
-	{
-		return _foodSkillId;
-	}
-	
-	public void setFoodType(int foodItemId)
-	{
-		if (foodItemId > 0)
-		{
-			_foodSkillId = foodItemId;
-			
-			// Cancel the food check, if existing.
-			if (_foodTask != null)
-				_foodTask.cancel(true);
-			
-			// Start the food check.
-			_foodTask = ThreadPool.scheduleAtFixedRate(new FoodCheck(this), DURATION_CHECK_INTERVAL, DURATION_CHECK_INTERVAL);
-		}
 	}
 	
 	@Override
@@ -104,89 +89,37 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 		if (!super.doDie(killer))
 			return false;
 		
-		getAI().stopFollow();
-		
-		// Clean up AIs.
-		if (_buffTask != null)
-			_buffTask.cancel(true);
-		
-		if (_foodTask != null)
-			_foodTask.cancel(true);
+		// Stop AI task.
+		if (_aiTask != null)
+		{
+			_aiTask.cancel(true);
+			_aiTask = null;
+		}
 		
 		// Clean up actual trained beast.
 		if (_owner != null)
 			_owner.setTrainedBeast(null);
 		
-		// Clean up variables.
-		_buffTask = null;
-		_foodTask = null;
-		_owner = null;
-		_foodSkillId = 0;
 		return true;
-	}
-	
-	public L2PcInstance getOwner()
-	{
-		return _owner;
-	}
-	
-	public void setOwner(L2PcInstance owner)
-	{
-		if (owner != null)
-		{
-			_owner = owner;
-			setTitle(owner.getName());
-			setShowSummonAnimation(true);
-			broadcastPacket(new NpcInfo(this, owner));
-			
-			owner.setTrainedBeast(this);
-			
-			// always and automatically follow the owner.
-			getAI().startFollow(_owner, 200);
-			
-			// Cancel the buff task, if existing.
-			if (_buffTask != null)
-				_buffTask.cancel(true);
-			
-			// Start the buff task.
-			_buffTask = ThreadPool.scheduleAtFixedRate(new CheckOwnerBuffs(this, getTemplate().getBuffSkills().size()), BUFF_INTERVAL, BUFF_INTERVAL);
-		}
-		// Despawn if no owner
-		else
-			deleteMe();
-	}
-	
-	/**
-	 * The "Home" is considered as the central tower in middle of Wild Beast Reserve.
-	 * @return true or false, depending of the location.
-	 */
-	protected boolean isTooFarFromHome()
-	{
-		return !(isInsideRadius(52335, -83086, MAX_DISTANCE_FROM_HOME, true));
 	}
 	
 	@Override
 	public void deleteMe()
 	{
-		// Clean up AI.
-		if (_buffTask != null)
-			_buffTask.cancel(true);
+		// Stop AI task.
+		if (_aiTask != null)
+		{
+			_aiTask.cancel(true);
+			_aiTask = null;
+		}
 		
-		_foodTask.cancel(true);
 		stopHpMpRegeneration();
+		getAI().stopFollow();
 		
 		// Clean up actual trained beast.
 		if (_owner != null)
 			_owner.setTrainedBeast(null);
 		
-		// Clean up variables.
-		setTarget(null);
-		_buffTask = null;
-		_foodTask = null;
-		_owner = null;
-		_foodSkillId = 0;
-		
-		// Remove the spawn.
 		super.deleteMe();
 	}
 	
@@ -204,18 +137,11 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 			return;
 		}
 		
-		// If the owner is too far away, stop anything else and immediately run towards the owner.
-		if (!_owner.isInsideRadius(this, MAX_DISTANCE_FROM_OWNER, true, true))
-		{
-			getAI().startFollow(_owner, 200);
-			return;
-		}
-		
 		// If the owner is dead or if the tamed beast is currently casting a spell,do nothing.
 		if (_owner.isDead() || isCastingNow())
 			return;
 		
-		int proba = Rnd.get(3);
+		final int proba = Rnd.get(3);
 		
 		// Heal, 33% luck.
 		if (proba == 0)
@@ -224,7 +150,7 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 			float HPRatio = ((float) _owner.getCurrentHp()) / _owner.getMaxHp();
 			if (HPRatio < 0.5)
 			{
-				for (L2Skill skill : getTemplate().getHealSkills())
+				for (L2Skill skill : getTemplate().getSkills(SkillType.HEAL))
 				{
 					switch (skill.getSkillType())
 					{
@@ -242,11 +168,14 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 		// Debuff, 33% luck.
 		else if (proba == 1)
 		{
-			for (L2Skill skill : getTemplate().getDebuffSkills())
+			for (L2Skill skill : getTemplate().getSkills(SkillType.DEBUFF))
 			{
 				// if the skill is a debuff, check if the attacker has it already
 				if (attacker.getFirstEffect(skill) == null)
+				{
 					sitCastAndFollow(skill, attacker);
+					return;
+				}
 			}
 		}
 		// Recharge, 33% luck.
@@ -256,7 +185,7 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 			float MPRatio = ((float) _owner.getCurrentMp()) / _owner.getMaxMp();
 			if (MPRatio < 0.5)
 			{
-				for (L2Skill skill : getTemplate().getHealSkills())
+				for (L2Skill skill : getTemplate().getSkills(SkillType.HEAL))
 				{
 					switch (skill.getSkillType())
 					{
@@ -290,52 +219,18 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 		getAI().setIntention(CtrlIntention.FOLLOW, _owner);
 	}
 	
-	private static class FoodCheck implements Runnable
+	private class AiTask implements Runnable
 	{
-		private final L2TamedBeastInstance _tamedBeast;
+		private int _step;
 		
-		FoodCheck(L2TamedBeastInstance tamedBeast)
+		public AiTask()
 		{
-			_tamedBeast = tamedBeast;
 		}
 		
 		@Override
 		public void run()
 		{
-			// Verify first if the tamed beast is still in the good range. If not, delete it.
-			if (_tamedBeast.isTooFarFromHome())
-			{
-				// After deletion, don't go further.
-				_tamedBeast.deleteMe();
-				return;
-			}
-			
-			// Destroy the food from owner's inventory ; if none is found, delete the pet.
-			if (_tamedBeast.getOwner().destroyItemByItemId("BeastMob", _tamedBeast.getFoodType(), 1, _tamedBeast, true))
-			{
-				_tamedBeast.broadcastPacket(new SocialAction(_tamedBeast, 2));
-				_tamedBeast.broadcastPacket(new NpcSay(_tamedBeast.getObjectId(), 0, _tamedBeast.getNpcId(), TAMED_TEXT[Rnd.get(TAMED_TEXT.length)]));
-			}
-			else
-				_tamedBeast.deleteMe();
-		}
-	}
-	
-	private class CheckOwnerBuffs implements Runnable
-	{
-		private final L2TamedBeastInstance _tamedBeast;
-		private final int _numBuffs;
-		
-		CheckOwnerBuffs(L2TamedBeastInstance tamedBeast, int numBuffs)
-		{
-			_tamedBeast = tamedBeast;
-			_numBuffs = numBuffs;
-		}
-		
-		@Override
-		public void run()
-		{
-			L2PcInstance owner = _tamedBeast.getOwner();
+			final L2PcInstance owner = _owner;
 			
 			// Check if the owner is no longer around. If so, despawn.
 			if (owner == null || !owner.isOnline())
@@ -344,11 +239,27 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 				return;
 			}
 			
-			// If the owner is too far away, stop anything else and immediately run towards the owner.
-			if (!isInsideRadius(owner, MAX_DISTANCE_FROM_OWNER, true, true))
+			// Happens every 60s.
+			if (++_step > 12)
 			{
-				getAI().startFollow(owner, 200);
-				return;
+				// Verify first if the tamed beast is still in the good range. If not, delete it.
+				if (!isInsideRadius(52335, -83086, MAX_DISTANCE_FROM_HOME, true))
+				{
+					deleteMe();
+					return;
+				}
+				
+				// Destroy the food from owner's inventory ; if none is found, delete the pet.
+				if (!owner.destroyItemByItemId("BeastMob", _foodId, 1, L2TamedBeastInstance.this, true))
+				{
+					deleteMe();
+					return;
+				}
+				
+				broadcastPacket(new SocialAction(L2TamedBeastInstance.this, 2));
+				broadcastPacket(new NpcSay(getObjectId(), 0, getNpcId(), Rnd.get(FOOD_CHAT)));
+				
+				_step = 0;
 			}
 			
 			// If the owner is dead or if the tamed beast is currently casting a spell,do nothing.
@@ -357,11 +268,13 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 			
 			int totalBuffsOnOwner = 0;
 			int i = 0;
-			int rand = Rnd.get(_numBuffs);
 			L2Skill buffToGive = null;
 			
-			// Get this npc's skills
-			for (L2Skill skill : getTemplate().getBuffSkills())
+			final List<L2Skill> skills = getTemplate().getSkills(SkillType.BUFF);
+			final int rand = Rnd.get(skills.size());
+			
+			// Retrieve the random buff, and check how much tamed beast buffs the player has.
+			for (L2Skill skill : skills)
 			{
 				if (i == rand)
 					buffToGive = skill;
@@ -372,14 +285,11 @@ public final class L2TamedBeastInstance extends L2FeedableBeastInstance
 					totalBuffsOnOwner++;
 			}
 			
-			/*
-			 * If the owner has less than 60% of available buff, cast a random buff. That buff is casted only if the player hasn't it.
-			 */
-			if ((_numBuffs * 2 / 3) > totalBuffsOnOwner)
-				if (owner.getFirstEffect(buffToGive) == null)
-					_tamedBeast.sitCastAndFollow(buffToGive, owner);
-			
-			getAI().setIntention(CtrlIntention.FOLLOW, _tamedBeast.getOwner());
+			// If the owner has less than 2 buffs, cast the chosen buff.
+			if (totalBuffsOnOwner < 2 && owner.getFirstEffect(buffToGive) == null)
+				sitCastAndFollow(buffToGive, owner);
+			else
+				getAI().setIntention(CtrlIntention.FOLLOW, owner);
 		}
 	}
 }

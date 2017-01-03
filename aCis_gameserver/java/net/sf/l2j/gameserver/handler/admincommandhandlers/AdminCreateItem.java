@@ -26,6 +26,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.item.ArmorSet;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
+import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 /**
  * This class handles following admin commands:<br>
@@ -127,34 +128,60 @@ public class AdminCreateItem implements IAdminCommandHandler
 			}
 			else if (command.equals("admin_create_set"))
 			{
-				try
+				// More tokens means you try to use the command directly with a chestId.
+				if (st.hasMoreTokens())
 				{
-					final int chestId = Integer.parseInt(st.nextToken());
-					final ArmorSet set = ArmorSetsTable.getInstance().getSet(chestId);
-					if (set == null)
+					try
 					{
-						activeChar.sendMessage("This chest has no set.");
-						return false;
+						final ArmorSet set = ArmorSetsTable.getInstance().getSet(Integer.parseInt(st.nextToken()));
+						if (set == null)
+						{
+							activeChar.sendMessage("This chest has no set.");
+							return false;
+						}
+						
+						for (int itemId : set.getSetItemsId())
+						{
+							if (itemId > 0)
+								target.getInventory().addItem("Admin", itemId, 1, target, activeChar);
+						}
+						
+						if (set.getShield() > 0)
+							target.getInventory().addItem("Admin", set.getShield(), 1, target, activeChar);
+						
+						activeChar.sendMessage("You have spawned " + set.toString() + " in " + target.getName() + "'s inventory.");
+						
+						// Send the whole item list and open inventory window.
+						target.sendPacket(new ItemList(target, true));
 					}
-					
-					for (int itemId : set.getSetItemsId())
+					catch (Exception e)
 					{
-						if (ItemTable.getInstance().getTemplate(itemId) != null)
-							target.getInventory().addItem("Admin", itemId, 1, target, activeChar);
+						activeChar.sendMessage("Usage: //create_set <chestId>");
 					}
-					
-					if (set.getShield() > 0)
-						target.getInventory().addItem("Admin", set.getShield(), 1, target, activeChar);
-					
-					activeChar.sendMessage("You have spawned " + ItemTable.getInstance().getTemplate(chestId) + " set in " + target.getName() + "'s inventory.");
-					
-					// Send the whole item list and open inventory window.
-					target.sendPacket(new ItemList(target, true));
 				}
-				catch (Exception e)
+				
+				// Regular case (first HTM with all possible sets).
+				int i = 0;
+				
+				final StringBuilder sb = new StringBuilder();
+				for (ArmorSet set : ArmorSetsTable.getInstance().getSets())
 				{
-					activeChar.sendMessage("Usage: //create_set <chestId>");
+					final boolean isNextLine = i % 2 == 0;
+					if (isNextLine)
+						sb.append("<tr>");
+					
+					sb.append("<td><a action=\"bypass -h admin_create_set " + set.getSetItemsId()[0] + "\">" + set.toString() + "</a></td>");
+					
+					if (isNextLine)
+						sb.append("</tr>");
+					
+					i++;
 				}
+				
+				final NpcHtmlMessage html = new NpcHtmlMessage(0);
+				html.setFile("data/html/admin/itemsets.htm");
+				html.replace("%sets%", sb.toString());
+				activeChar.sendPacket(html);
 			}
 		}
 		return true;

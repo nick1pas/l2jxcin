@@ -353,7 +353,7 @@ public final class SelectorThread<T extends MMOClient<?>> extends Thread
 			case 0:
 				// buffer is full nothing to read
 				return false;
-				
+			
 			case 1:
 				// we don`t have enough data for header so we need to read
 				key.interestOps(key.interestOps() | SelectionKey.OP_READ);
@@ -366,7 +366,7 @@ public final class SelectorThread<T extends MMOClient<?>> extends Thread
 					// move the first byte to the beginning :)
 					buf.compact();
 				return false;
-				
+			
 			default:
 				// data size excluding header size :>
 				final int dataPending = (buf.getShort() & 0xFFFF) - HEADER_SIZE;

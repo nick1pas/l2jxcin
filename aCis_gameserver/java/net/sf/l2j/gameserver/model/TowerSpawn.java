@@ -14,11 +14,9 @@
  */
 package net.sf.l2j.gameserver.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author malyelfik
- */
 public class TowerSpawn
 {
 	private final int _npcId;
@@ -32,11 +30,14 @@ public class TowerSpawn
 		_npcId = npcId;
 	}
 	
-	public TowerSpawn(int npcId, SpawnLocation location, List<Integer> zoneList)
+	public TowerSpawn(int npcId, SpawnLocation location, String[] zoneList)
 	{
 		_location = location;
 		_npcId = npcId;
-		_zoneList = zoneList;
+		
+		_zoneList = new ArrayList<>();
+		for (String zoneId : zoneList)
+			_zoneList.add(Integer.parseInt(zoneId));
 	}
 	
 	public int getId()

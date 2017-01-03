@@ -19,6 +19,7 @@ import java.util.List;
 
 import net.sf.l2j.gameserver.model.item.instance.ItemInfo;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
+import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemState;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 
 /**
@@ -47,19 +48,19 @@ public class PetInventoryUpdate extends L2GameServerPacket
 	public void addNewItem(ItemInstance item)
 	{
 		if (item != null)
-			_items.add(new ItemInfo(item, 1));
+			_items.add(new ItemInfo(item, ItemState.ADDED));
 	}
 	
 	public void addModifiedItem(ItemInstance item)
 	{
 		if (item != null)
-			_items.add(new ItemInfo(item, 2));
+			_items.add(new ItemInfo(item, ItemState.MODIFIED));
 	}
 	
 	public void addRemovedItem(ItemInstance item)
 	{
 		if (item != null)
-			_items.add(new ItemInfo(item, 3));
+			_items.add(new ItemInfo(item, ItemState.REMOVED));
 	}
 	
 	public void addItems(List<ItemInstance> items)
@@ -78,12 +79,9 @@ public class PetInventoryUpdate extends L2GameServerPacket
 		
 		for (ItemInfo temp : _items)
 		{
-			if (temp == null || temp.getItem() == null)
-				continue;
-			
 			Item item = temp.getItem();
 			
-			writeH(temp.getChange());
+			writeH(temp.getChange().ordinal());
 			writeH(item.getType1());
 			writeD(temp.getObjectId());
 			writeD(item.getItemId());

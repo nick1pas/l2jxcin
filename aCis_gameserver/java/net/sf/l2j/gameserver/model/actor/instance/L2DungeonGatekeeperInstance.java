@@ -18,6 +18,8 @@ import java.util.StringTokenizer;
 
 import net.sf.l2j.gameserver.datatables.TeleportLocationTable;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.L2TeleportLocation;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -39,35 +41,34 @@ public class L2DungeonGatekeeperInstance extends L2NpcInstance
 		StringTokenizer st = new StringTokenizer(command, " ");
 		String actualCommand = st.nextToken(); // Get actual command
 		
-		int sealAvariceOwner = SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_AVARICE);
-		int sealGnosisOwner = SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_GNOSIS);
-		int playerCabal = SevenSigns.getInstance().getPlayerCabal(player.getObjectId());
-		boolean isSealValidationPeriod = SevenSigns.getInstance().isSealValidationPeriod();
-		int compWinner = SevenSigns.getInstance().getCabalHighestScore();
+		final CabalType sealAvariceOwner = SevenSigns.getInstance().getSealOwner(SealType.AVARICE);
+		final CabalType sealGnosisOwner = SevenSigns.getInstance().getSealOwner(SealType.GNOSIS);
+		final CabalType playerCabal = SevenSigns.getInstance().getPlayerCabal(player.getObjectId());
+		final CabalType winningCabal = SevenSigns.getInstance().getCabalHighestScore();
 		
 		if (actualCommand.startsWith("necro"))
 		{
 			boolean canPort = true;
-			if (isSealValidationPeriod)
+			if (SevenSigns.getInstance().isSealValidationPeriod())
 			{
-				if (compWinner == SevenSigns.CABAL_DAWN && (playerCabal != SevenSigns.CABAL_DAWN || sealAvariceOwner != SevenSigns.CABAL_DAWN))
+				if (winningCabal == CabalType.DAWN && (playerCabal != CabalType.DAWN || sealAvariceOwner != CabalType.DAWN))
 				{
 					player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DAWN);
 					canPort = false;
 				}
-				else if (compWinner == SevenSigns.CABAL_DUSK && (playerCabal != SevenSigns.CABAL_DUSK || sealAvariceOwner != SevenSigns.CABAL_DUSK))
+				else if (winningCabal == CabalType.DUSK && (playerCabal != CabalType.DUSK || sealAvariceOwner != CabalType.DUSK))
 				{
 					player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DUSK);
 					canPort = false;
 				}
-				else if (compWinner == SevenSigns.CABAL_NULL && playerCabal != SevenSigns.CABAL_NULL)
+				else if (winningCabal == CabalType.NORMAL && playerCabal != CabalType.NORMAL)
 					canPort = true;
-				else if (playerCabal == SevenSigns.CABAL_NULL)
+				else if (playerCabal == CabalType.NORMAL)
 					canPort = false;
 			}
 			else
 			{
-				if (playerCabal == SevenSigns.CABAL_NULL)
+				if (playerCabal == CabalType.NORMAL)
 					canPort = false;
 			}
 			
@@ -86,26 +87,26 @@ public class L2DungeonGatekeeperInstance extends L2NpcInstance
 		else if (actualCommand.startsWith("cata"))
 		{
 			boolean canPort = true;
-			if (isSealValidationPeriod)
+			if (SevenSigns.getInstance().isSealValidationPeriod())
 			{
-				if (compWinner == SevenSigns.CABAL_DAWN && (playerCabal != SevenSigns.CABAL_DAWN || sealGnosisOwner != SevenSigns.CABAL_DAWN))
+				if (winningCabal == CabalType.DAWN && (playerCabal != CabalType.DAWN || sealGnosisOwner != CabalType.DAWN))
 				{
 					player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DAWN);
 					canPort = false;
 				}
-				else if (compWinner == SevenSigns.CABAL_DUSK && (playerCabal != SevenSigns.CABAL_DUSK || sealGnosisOwner != SevenSigns.CABAL_DUSK))
+				else if (winningCabal == CabalType.DUSK && (playerCabal != CabalType.DUSK || sealGnosisOwner != CabalType.DUSK))
 				{
 					player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DUSK);
 					canPort = false;
 				}
-				else if (compWinner == SevenSigns.CABAL_NULL && playerCabal != SevenSigns.CABAL_NULL)
+				else if (winningCabal == CabalType.NORMAL && playerCabal != CabalType.NORMAL)
 					canPort = true;
-				else if (playerCabal == SevenSigns.CABAL_NULL)
+				else if (playerCabal == CabalType.NORMAL)
 					canPort = false;
 			}
 			else
 			{
-				if (playerCabal == SevenSigns.CABAL_NULL)
+				if (playerCabal == CabalType.NORMAL)
 					canPort = false;
 			}
 			

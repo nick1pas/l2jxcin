@@ -18,6 +18,7 @@
  */
 package net.sf.l2j.gameserver.datatables;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,25 +35,25 @@ import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.model.holder.BuffSkillHolder;
+import net.sf.l2j.gameserver.xmlfactory.XMLDocumentFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
- * This class stores players' buff schemes into _schemesTable.
- * @author House, Tryskell
+ * This class loads available skills and stores players' buff schemes into _schemesTable.
  */
 public class BufferTable
 {
 	private static final Logger _log = Logger.getLogger(BufferTable.class.getName());
 	
-	private static final Map<Integer, HashMap<String, ArrayList<Integer>>> _schemesTable = new ConcurrentHashMap<>();
-	
 	private static final String LOAD_SCHEMES = "SELECT * FROM buffer_schemes";
 	private static final String DELETE_SCHEMES = "TRUNCATE TABLE buffer_schemes";
 	private static final String INSERT_SCHEME = "INSERT INTO buffer_schemes (object_id, scheme_name, skills) VALUES (?,?,?)";
 	
-	public static BufferTable getInstance()
-	{
-		return SingletonHolder._instance;
-	}
+	private final Map<Integer, HashMap<String, ArrayList<Integer>>> _schemesTable = new ConcurrentHashMap<>();
+	private final Map<Integer, BuffSkillHolder> _availableBuffs = new HashMap<>();
 	
 	public BufferTable()
 	{
@@ -72,13 +73,8 @@ public class BufferTable
 				
 				ArrayList<Integer> schemeList = new ArrayList<>();
 				for (String skill : skills)
-				{
-					// Don't feed the skills list if the config is reached, or if the list is empty.
-					if (skill.isEmpty() || schemeList.size() >= Config.BUFFER_MAX_SKILLS)
-						break;
-					
 					schemeList.add(Integer.valueOf(skill));
-				}
+				
 				setScheme(objectId, schemeName, schemeList);
 				count++;
 			}
@@ -90,7 +86,37 @@ public class BufferTable
 		{
 			_log.warning("BufferTable: Failed to load buff schemes : " + e);
 		}
-		_log.info("BufferTable: Loaded " + count + " players schemes.");
+		
+		try
+		{
+			final File f = new File("./data/xml/buffer_skills.xml");
+			final Document doc = XMLDocumentFactory.getInstance().loadDocument(f);
+			final Node n = doc.getFirstChild();
+			
+			for (Node d = n.getFirstChild(); d != null; d = d.getNextSibling())
+			{
+				if (!d.getNodeName().equalsIgnoreCase("category"))
+					continue;
+				
+				final String category = d.getAttributes().getNamedItem("type").getNodeValue();
+				
+				for (Node c = d.getFirstChild(); c != null; c = c.getNextSibling())
+				{
+					if (!c.getNodeName().equalsIgnoreCase("buff"))
+						continue;
+					
+					final NamedNodeMap attrs = c.getAttributes();
+					final int skillId = Integer.parseInt(attrs.getNamedItem("id").getNodeValue());
+					
+					_availableBuffs.put(skillId, new BuffSkillHolder(skillId, Integer.parseInt(attrs.getNamedItem("price").getNodeValue()), category, attrs.getNamedItem("desc").getNodeValue()));
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			_log.warning("BufferTable: Failed to load buff info : " + e);
+		}
+		_log.info("BufferTable: Loaded " + count + " players schemes and " + _availableBuffs.size() + " available buffs.");
 	}
 	
 	public void saveSchemes()
@@ -121,10 +147,10 @@ public class BufferTable
 					st.setInt(1, player.getKey());
 					st.setString(2, scheme.getKey());
 					st.setString(3, sb.toString());
-					st.executeUpdate();
-					st.clearParameters();
+					st.addBatch();
 				}
 			}
+			st.executeBatch();
 			st.close();
 		}
 		catch (Exception e)
@@ -189,10 +215,10 @@ public class BufferTable
 	 * @param groupType : The type of skills to return.
 	 * @return a list of skills ids based on the given groupType.
 	 */
-	public static List<Integer> getSkillsIdsByType(String groupType)
+	public List<Integer> getSkillsIdsByType(String groupType)
 	{
 		List<Integer> skills = new ArrayList<>();
-		for (BuffSkillHolder skill : Config.BUFFER_BUFFLIST.values())
+		for (BuffSkillHolder skill : _availableBuffs.values())
 		{
 			if (skill.getType().equalsIgnoreCase(groupType))
 				skills.add(skill.getId());
@@ -203,10 +229,10 @@ public class BufferTable
 	/**
 	 * @return a list of all buff types available.
 	 */
-	public static List<String> getSkillTypes()
+	public List<String> getSkillTypes()
 	{
 		List<String> skillTypes = new ArrayList<>();
-		for (BuffSkillHolder skill : Config.BUFFER_BUFFLIST.values())
+		for (BuffSkillHolder skill : _availableBuffs.values())
 		{
 			if (!skillTypes.contains(skill.getType()))
 				skillTypes.add(skill.getType());
@@ -214,8 +240,18 @@ public class BufferTable
 		return skillTypes;
 	}
 	
+	public BuffSkillHolder getAvailableBuff(int skillId)
+	{
+		return _availableBuffs.get(skillId);
+	}
+	
+	public static BufferTable getInstance()
+	{
+		return SingletonHolder.INSTANCE;
+	}
+	
 	private static class SingletonHolder
 	{
-		protected static final BufferTable _instance = new BufferTable();
+		protected static final BufferTable INSTANCE = new BufferTable();
 	}
 }

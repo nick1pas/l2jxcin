@@ -14,23 +14,23 @@
  */
 package net.sf.l2j.gameserver.model;
 
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.L2Playable;
 
 /**
  * This class is used to retain damage infos made on a L2Attackable. It is used for reward purposes.
  */
 public final class RewardInfo
 {
-	private final L2PcInstance _attacker;
+	private final L2Playable _attacker;
 	
 	private int _damage;
 	
-	public RewardInfo(L2PcInstance attacker)
+	public RewardInfo(L2Playable attacker)
 	{
 		_attacker = attacker;
 	}
 	
-	public L2PcInstance getAttacker()
+	public L2Playable getAttacker()
 	{
 		return _attacker;
 	}

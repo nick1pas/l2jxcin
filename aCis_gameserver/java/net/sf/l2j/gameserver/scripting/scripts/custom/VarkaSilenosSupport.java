@@ -112,7 +112,7 @@ public class VarkaSilenosSupport extends Quest
 			4357,
 			6
 		}
-	// Haste: Requires 6 Nepenthese Seeds
+		// Haste: Requires 6 Nepenthese Seeds
 	};
 	
 	/**

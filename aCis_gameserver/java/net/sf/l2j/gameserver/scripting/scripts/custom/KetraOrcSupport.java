@@ -113,7 +113,7 @@ public class KetraOrcSupport extends Quest
 			4357,
 			6
 		}
-	// Haste: Requires 6 Buffalo Horns
+		// Haste: Requires 6 Buffalo Horns
 	};
 	
 	/**

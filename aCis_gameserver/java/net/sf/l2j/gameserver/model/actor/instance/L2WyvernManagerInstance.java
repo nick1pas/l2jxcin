@@ -16,6 +16,8 @@ package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
@@ -30,13 +32,9 @@ import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
  * <li>WYVERN_REQUIRED_LEVEL : the strider's required level;</li>
  * <li>WYVERN_REQUIRED_CRYSTALS : the B-crystals' required amount;</li>
  * </ul>
- * @author Tryskell
  */
 public class L2WyvernManagerInstance extends L2CastleChamberlainInstance
 {
-	final private int neededCrystals = Config.WYVERN_REQUIRED_CRYSTALS;
-	final private int requiredLevel = Config.WYVERN_REQUIRED_LEVEL;
-	
 	public L2WyvernManagerInstance(int objectId, NpcTemplate template)
 	{
 		super(objectId, template);
@@ -54,16 +52,16 @@ public class L2WyvernManagerInstance extends L2CastleChamberlainInstance
 			if (player.isClanLeader())
 			{
 				// Verify if Dusk own Seal of Strife (if true, CLs can't mount wyvern).
-				if (SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE) == SevenSigns.CABAL_DUSK)
+				if (SevenSigns.getInstance().getSealOwner(SealType.STRIFE) == CabalType.DUSK)
 					val = "3";
 				// If player is mounted on a strider
 				else if (player.isMounted() && (player.getMountNpcId() == 12526 || player.getMountNpcId() == 12527 || player.getMountNpcId() == 12528))
 				{
 					// Check for strider level
-					if (player.getMountLevel() < requiredLevel)
+					if (player.getMountLevel() < Config.WYVERN_REQUIRED_LEVEL)
 						val = "6";
 					// Check for items consumption
-					else if (player.destroyItemByItemId("Wyvern", 1460, neededCrystals, player, true))
+					else if (player.destroyItemByItemId("Wyvern", 1460, Config.WYVERN_REQUIRED_CRYSTALS, player, true))
 					{
 						player.dismount();
 						if (player.mount(12621, 0, true))
@@ -125,8 +123,8 @@ public class L2WyvernManagerInstance extends L2CastleChamberlainInstance
 		html.setFile("data/html/wyvernmanager/wyvernmanager-" + val + ".htm");
 		html.replace("%objectId%", getObjectId());
 		html.replace("%npcname%", getName());
-		html.replace("%wyvern_level%", requiredLevel);
-		html.replace("%needed_crystals%", neededCrystals);
+		html.replace("%wyvern_level%", Config.WYVERN_REQUIRED_LEVEL);
+		html.replace("%needed_crystals%", Config.WYVERN_REQUIRED_CRYSTALS);
 		player.sendPacket(html);
 		
 		player.sendPacket(ActionFailed.STATIC_PACKET);

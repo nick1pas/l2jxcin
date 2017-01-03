@@ -45,7 +45,6 @@ import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.SpawnLocation;
@@ -151,7 +150,7 @@ public abstract class L2Character extends L2Object
 	private CharStatus _status;
 	private CharTemplate _template; // The link on the L2CharTemplate object containing generic and static properties
 	
-	private String _title;
+	protected String _title;
 	private double _hpUpdateIncCheck = .0;
 	private double _hpUpdateDecCheck = .0;
 	private double _hpUpdateInterval = .0;
@@ -167,18 +166,7 @@ public abstract class L2Character extends L2Object
 	protected byte _zoneValidateCounter = 4;
 	
 	private boolean _isRaid = false;
-    
-    // protect From Debuffs
-    private boolean _isBuffProtected = false;
-    public void setIsBuffProtected(boolean value)
-    {
-        _isBuffProtected = value;
-    }
-            
-    public boolean isBuffProtected()
-    {
-        return _isBuffProtected;    
-    }
+	
 	/**
 	 * Constructor of L2Character.<BR>
 	 * <BR>
@@ -554,7 +542,7 @@ public abstract class L2Character extends L2Object
 		
 		final L2PcInstance player = getActingPlayer();
 		
-		if (player != null && player.inObserverMode())
+		if (player != null && player.isInObserverMode())
 		{
 			sendPacket(SystemMessage.getSystemMessage(SystemMessageId.OBSERVERS_CANNOT_PARTICIPATE));
 			sendPacket(ActionFailed.STATIC_PACKET);
@@ -1281,7 +1269,7 @@ public abstract class L2Character extends L2Object
 		int level = skill.getLevel();
 		if (level < 1)
 			level = 1;
-		
+			
 		// Send MagicSkillUse with target, displayId, level, skillTime, reuseDelay
 		// to the L2Character AND to all L2PcInstance in the _KnownPlayers of the L2Character
 		if (!skill.isPotion())
@@ -1408,29 +1396,6 @@ public abstract class L2Character extends L2Object
 			// Send ActionFailed to the L2PcInstance
 			sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
-		}
-		
-		// prevent casting signets to peace zone
-		if (skill.getSkillType() == L2SkillType.SIGNET || skill.getSkillType() == L2SkillType.SIGNET_CASTTIME)
-		{
-			final WorldRegion region = getRegion();
-			if (region == null)
-				return false;
-			
-			if (skill.getTargetType() == SkillTargetType.TARGET_GROUND && this instanceof L2PcInstance)
-			{
-				Location wp = ((L2PcInstance) this).getCurrentSkillWorldPosition();
-				if (!region.checkEffectRangeInsidePeaceZone(skill, wp.getX(), wp.getY(), wp.getZ()))
-				{
-					sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill));
-					return false;
-				}
-			}
-			else if (!region.checkEffectRangeInsidePeaceZone(skill, getX(), getY(), getZ()))
-			{
-				sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill));
-				return false;
-			}
 		}
 		
 		// Check if the caster owns the weapon needed
@@ -1974,12 +1939,14 @@ public abstract class L2Character extends L2Object
 	 * Set the Title of the L2Character. Concatens it if length > 16.
 	 * @param value The String to test.
 	 */
-	public final void setTitle(String value)
+	public void setTitle(String value)
 	{
 		if (value == null)
 			_title = "";
+		else if (value.length() > 16)
+			_title = value.substring(0, 15);
 		else
-			_title = value.length() > 16 ? value.substring(0, 15) : value;
+			_title = value;
 	}
 	
 	/** Set the L2Character movement type to walk and send Server->Client packet ChangeMoveType to all others L2PcInstance. */
@@ -3338,7 +3305,7 @@ public abstract class L2Character extends L2Object
 		final boolean verticalMovementOnly = isFlying() && distance == 0 && dz != 0;
 		if (verticalMovementOnly)
 			distance = Math.abs(dz);
-		
+			
 		// TODO: really necessary?
 		// adjust target XYZ when swiming in water (can be easily over 3000)
 		if (isInsideZone(ZoneId.WATER) && distance > 700)
@@ -4112,7 +4079,7 @@ public abstract class L2Character extends L2Object
 		{
 			case BOW:
 				return 1500 * 345 / getStat().getPAtkSpd();
-				
+			
 			default:
 				return Formulas.calcPAtkSpd(this, target, getStat().getPAtkSpd());
 		}
@@ -4215,7 +4182,7 @@ public abstract class L2Character extends L2Object
 	 * @param skillId The identifier of the L2Skill to check the knowledge
 	 * @return True if the skill is known by the L2Character.
 	 */
-	public final L2Skill getSkill(int skillId)
+	public L2Skill getSkill(int skillId)
 	{
 		return getSkills().get(skillId);
 	}
@@ -4393,7 +4360,7 @@ public abstract class L2Character extends L2Object
 		{
 			switch (skill.getTargetType())
 			{
-			// only AURA-type skills can be cast without target
+				// only AURA-type skills can be cast without target
 				case TARGET_AURA:
 				case TARGET_FRONT_AURA:
 				case TARGET_BEHIND_AURA:

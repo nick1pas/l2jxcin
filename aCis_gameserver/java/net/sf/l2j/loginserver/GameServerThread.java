@@ -333,7 +333,9 @@ public class GameServerThread extends Thread
 	}
 	
 	/**
-	 * Attachs a GameServerInfo to this Thread <li>Updates the GameServerInfo values based on GameServerAuth packet</li> <li><b>Sets the GameServerInfo as Authed</b></li>
+	 * Attachs a GameServerInfo to this Thread
+	 * <li>Updates the GameServerInfo values based on GameServerAuth packet</li>
+	 * <li><b>Sets the GameServerInfo as Authed</b></li>
 	 * @param gsi The GameServerInfo to be attached.
 	 * @param gameServerAuth The server info.
 	 */

@@ -24,6 +24,7 @@ import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -57,7 +58,7 @@ public final class L2BabyPetInstance extends L2PetInstance
 		
 		double healPower = 0;
 		int skillLevel;
-		for (L2Skill skill : getTemplate().getHealSkills())
+		for (L2Skill skill : getTemplate().getSkills(SkillType.HEAL))
 		{
 			if (skill.getTargetType() != SkillTargetType.TARGET_OWNER_PET || skill.getSkillType() != L2SkillType.HEAL)
 				continue;

@@ -62,7 +62,7 @@ public class SummonItems implements IItemHandler
 			return;
 		}
 		
-		if (activeChar.inObserverMode())
+		if (activeChar.isInObserverMode())
 			return;
 		
 		if (activeChar.isAllSkillsDisabled() || activeChar.isCastingNow())

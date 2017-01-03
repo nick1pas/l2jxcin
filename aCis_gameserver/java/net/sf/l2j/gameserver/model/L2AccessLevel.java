@@ -142,7 +142,7 @@ public class L2AccessLevel
 	 * Returns if the access level contains allowedAccess as child<br>
 	 * <br>
 	 * @param accessLevel as AccessLevel<br>
-	 * <br>
+	 *            <br>
 	 * @return boolean: true if a child access level is equals to allowedAccess, otherwise false<br>
 	 */
 	public boolean hasChildAccess(L2AccessLevel accessLevel)

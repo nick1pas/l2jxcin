@@ -95,7 +95,7 @@ public class L2Request
 		
 		if (partner.getRequest().isProcessingRequest())
 		{
-			_player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addPcName(partner));
+			_player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addCharName(partner));
 			return false;
 		}
 		

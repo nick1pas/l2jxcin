@@ -16,6 +16,7 @@ package net.sf.l2j.gameserver.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Future;
@@ -274,7 +275,7 @@ public class L2Party
 	
 	public void broadcastToPartyMembersNewLeader()
 	{
-		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_BECOME_A_PARTY_LEADER).addPcName(getLeader());
+		final SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_BECOME_A_PARTY_LEADER).addCharName(getLeader());
 		for (L2PcInstance member : _members)
 		{
 			if (member != null)
@@ -324,8 +325,8 @@ public class L2Party
 		broadcastToPartyMembers(new PartySmallWindowAdd(player, this));
 		
 		// Send messages
-		player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_JOINED_S1_PARTY).addPcName(getLeader()));
-		broadcastToPartyMembers(SystemMessage.getSystemMessage(SystemMessageId.S1_JOINED_PARTY).addPcName(player));
+		player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_JOINED_S1_PARTY).addCharName(getLeader()));
+		broadcastToPartyMembers(SystemMessage.getSystemMessage(SystemMessageId.S1_JOINED_PARTY).addCharName(player));
 		
 		// Add player to party, adjust party level
 		_members.add(player);
@@ -405,16 +406,16 @@ public class L2Party
 		for (L2Character character : player.getKnownType(L2Character.class))
 			if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == player)
 				character.abortCast();
-		
+			
 		if (type == MessageType.Expelled)
 		{
 			player.sendPacket(SystemMessageId.HAVE_BEEN_EXPELLED_FROM_PARTY);
-			broadcastToPartyMembers(SystemMessage.getSystemMessage(SystemMessageId.S1_WAS_EXPELLED_FROM_PARTY).addPcName(player));
+			broadcastToPartyMembers(SystemMessage.getSystemMessage(SystemMessageId.S1_WAS_EXPELLED_FROM_PARTY).addCharName(player));
 		}
 		else if (type == MessageType.Left || type == MessageType.Disconnected)
 		{
 			player.sendPacket(SystemMessageId.YOU_LEFT_PARTY);
-			broadcastToPartyMembers(SystemMessage.getSystemMessage(SystemMessageId.S1_LEFT_PARTY).addPcName(player));
+			broadcastToPartyMembers(SystemMessage.getSystemMessage(SystemMessageId.S1_LEFT_PARTY).addCharName(player));
 		}
 		
 		player.sendPacket(PartySmallWindowDeleteAll.STATIC_PACKET);
@@ -486,7 +487,7 @@ public class L2Party
 					if (isInCommandChannel() && temp.equals(_commandChannel.getChannelLeader()))
 					{
 						_commandChannel.setChannelLeader(getLeader());
-						_commandChannel.broadcastToChannelMembers(SystemMessage.getSystemMessage(SystemMessageId.COMMAND_CHANNEL_LEADER_NOW_S1).addPcName(_commandChannel.getChannelLeader()));
+						_commandChannel.broadcastToChannelMembers(SystemMessage.getSystemMessage(SystemMessageId.COMMAND_CHANNEL_LEADER_NOW_S1).addCharName(_commandChannel.getChannelLeader()));
 					}
 					
 					if (player.isInPartyMatchRoom())
@@ -535,11 +536,11 @@ public class L2Party
 		
 		// Send messages to other party members about reward
 		if (item.getCount() > 1)
-			broadcastToPartyMembers(target, SystemMessage.getSystemMessage(SystemMessageId.S1_OBTAINED_S3_S2).addPcName(target).addItemName(item).addItemNumber(item.getCount()));
+			broadcastToPartyMembers(target, SystemMessage.getSystemMessage(SystemMessageId.S1_OBTAINED_S3_S2).addCharName(target).addItemName(item).addItemNumber(item.getCount()));
 		else if (item.getEnchantLevel() > 0)
-			broadcastToPartyMembers(target, SystemMessage.getSystemMessage(SystemMessageId.S1_OBTAINED_S2_S3).addPcName(target).addNumber(item.getEnchantLevel()).addItemName(item));
+			broadcastToPartyMembers(target, SystemMessage.getSystemMessage(SystemMessageId.S1_OBTAINED_S2_S3).addCharName(target).addNumber(item.getEnchantLevel()).addItemName(item));
 		else
-			broadcastToPartyMembers(target, SystemMessage.getSystemMessage(SystemMessageId.S1_OBTAINED_S2).addPcName(target).addItemName(item));
+			broadcastToPartyMembers(target, SystemMessage.getSystemMessage(SystemMessageId.S1_OBTAINED_S2).addCharName(target).addItemName(item));
 	}
 	
 	/**
@@ -568,14 +569,14 @@ public class L2Party
 		if (item.getValue() > 1)
 		{
 			msg = spoil ? SystemMessage.getSystemMessage(SystemMessageId.S1_SWEEPED_UP_S3_S2) : SystemMessage.getSystemMessage(SystemMessageId.S1_OBTAINED_S3_S2);
-			msg.addPcName(looter);
+			msg.addCharName(looter);
 			msg.addItemName(item.getId());
 			msg.addItemNumber(item.getValue());
 		}
 		else
 		{
 			msg = spoil ? SystemMessage.getSystemMessage(SystemMessageId.S1_SWEEPED_UP_S2) : SystemMessage.getSystemMessage(SystemMessageId.S1_OBTAINED_S2);
-			msg.addPcName(looter);
+			msg.addCharName(looter);
 			msg.addItemName(item.getId());
 		}
 		broadcastToPartyMembers(looter, msg);
@@ -612,7 +613,9 @@ public class L2Party
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
-	 * <li>Get the L2PcInstance owner of the L2SummonInstance (if necessary)</li> <li>Calculate the Experience and SP reward distribution rate</li> <li>Add Experience and SP to the L2PcInstance</li><BR>
+	 * <li>Get the L2PcInstance owner of the L2SummonInstance (if necessary)</li>
+	 * <li>Calculate the Experience and SP reward distribution rate</li>
+	 * <li>Add Experience and SP to the L2PcInstance</li><BR>
 	 * <BR>
 	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method DOESN'T GIVE rewards to L2PetInstance</B></FONT><BR>
 	 * <BR>
@@ -621,8 +624,9 @@ public class L2Party
 	 * @param spReward The SP reward to distribute
 	 * @param rewardedMembers The list of L2PcInstance to reward
 	 * @param topLvl
+	 * @param rewards The list of players and summons
 	 */
-	public void distributeXpAndSp(long xpReward, int spReward, List<L2PcInstance> rewardedMembers, int topLvl)
+	public void distributeXpAndSp(long xpReward, int spReward, List<L2PcInstance> rewardedMembers, int topLvl, Map<L2Character, RewardInfo> rewards)
 	{
 		final List<L2PcInstance> validMembers = getValidMembers(rewardedMembers, topLvl);
 		
@@ -649,12 +653,13 @@ public class L2Party
 				final double preCalculation = (sqLevel / sqLevelSum) * (1 - penalty);
 				
 				final long xp = Math.round(xpReward * preCalculation);
+				final int sp = (int) (spReward * preCalculation);
 				
 				// Set new karma.
 				member.updateKarmaLoss(xp);
 				
 				// Add the XP/SP points to the requested party member
-				member.addExpAndSp(xp, (int) (spReward * preCalculation));
+				member.addExpAndSp(xp, sp, rewards);
 			}
 			else
 				member.addExpAndSp(0, 0);

@@ -88,16 +88,7 @@ public class Continuous implements ISkillHandler
 					// Target under buff immunity.
 					if (target.getFirstEffect(L2EffectType.BLOCK_BUFF) != null)
 						continue;
-                    
-                    // Anti-Buff Protection prevents you from getting buffs by other players
-                    if (activeChar instanceof L2PcInstance && target != activeChar && target.isBuffProtected() && !skill.isHeroSkill()
-                        && (skill.getSkillType() == L2SkillType.BUFF                        
-                        || skill.getSkillType() == L2SkillType.HEAL_PERCENT
-                        || skill.getSkillType() == L2SkillType.MANAHEAL_PERCENT
-                        || skill.getSkillType() == L2SkillType.COMBATPOINTHEAL
-                        || skill.getSkillType() == L2SkillType.REFLECT))
-                    continue;
-   
+					
 					// Player holding a cursed weapon can't be buffed and can't buff
 					if (!(activeChar instanceof L2ClanHallManagerInstance) && target != activeChar)
 					{
@@ -136,7 +127,7 @@ public class Continuous implements ISkillHandler
 			{
 				if (skill.isToggle())
 					target.stopSkillEffects(skill.getId());
-				
+					
 				// if this is a debuff let the duel manager know about it so the debuff
 				// can be removed after the duel (player & target must be in the same duel)
 				if (target instanceof L2PcInstance && ((L2PcInstance) target).isInDuel() && (skill.getSkillType() == L2SkillType.DEBUFF || skill.getSkillType() == L2SkillType.BUFF) && player != null && player.getDuelId() == ((L2PcInstance) target).getDuelId())

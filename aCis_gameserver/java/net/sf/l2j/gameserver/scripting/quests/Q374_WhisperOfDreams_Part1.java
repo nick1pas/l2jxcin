@@ -63,7 +63,7 @@ public class Q374_WhisperOfDreams_Part1 extends Quest
 			6,
 			15550
 		}
-	// Tallum Stockings, 6, 15550 adena
+		// Tallum Stockings, 6, 15550 adena
 	};
 	
 	public Q374_WhisperOfDreams_Part1()

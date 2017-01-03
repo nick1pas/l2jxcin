@@ -19,9 +19,6 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
 import net.sf.l2j.gameserver.scripting.ScheduledQuest;
 
-/**
- * @author Hasha
- */
 public final class Recommendation extends ScheduledQuest
 {
 	public Recommendation()

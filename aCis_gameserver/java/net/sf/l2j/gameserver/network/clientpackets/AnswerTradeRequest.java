@@ -56,7 +56,7 @@ public final class AnswerTradeRequest extends L2GameClientPacket
 		if (_response == 1 && !partner.isRequestExpired())
 			player.startTrade(partner);
 		else
-			partner.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_DENIED_TRADE_REQUEST).addPcName(player));
+			partner.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_DENIED_TRADE_REQUEST).addCharName(player));
 		
 		// Clears requesting status
 		player.setActiveRequester(null);

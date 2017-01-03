@@ -1,13 +1,10 @@
 package net.sf.l2j.gameserver.model.actor.instance;
 
-import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
-/**
- * @author l3x
- */
 public class L2CastleBlacksmithInstance extends L2NpcInstance
 {
 	protected static final int COND_ALL_FALSE = 0;
@@ -22,7 +19,7 @@ public class L2CastleBlacksmithInstance extends L2NpcInstance
 	@Override
 	public void onBypassFeedback(L2PcInstance player, String command)
 	{
-		if (CastleManorManager.getInstance().isDisabled())
+		if (!Config.ALLOW_MANOR)
 		{
 			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 			html.setFile("data/html/npcdefault.htm");
@@ -57,7 +54,7 @@ public class L2CastleBlacksmithInstance extends L2NpcInstance
 	@Override
 	public void showChatWindow(L2PcInstance player, int val)
 	{
-		if (CastleManorManager.getInstance().isDisabled())
+		if (!Config.ALLOW_MANOR)
 		{
 			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 			html.setFile("data/html/npcdefault.htm");

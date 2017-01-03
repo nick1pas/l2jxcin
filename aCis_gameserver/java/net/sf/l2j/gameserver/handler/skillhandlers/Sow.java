@@ -18,21 +18,18 @@ import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.handler.ISkillHandler;
-import net.sf.l2j.gameserver.model.L2Manor;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.manor.Seed;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.scripting.QuestState;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 
-/**
- * @author l3x
- */
 public class Sow implements ISkillHandler
 {
 	private static final L2SkillType[] SKILL_IDS =
@@ -53,19 +50,19 @@ public class Sow implements ISkillHandler
 		final L2PcInstance player = (L2PcInstance) activeChar;
 		final L2MonsterInstance target = (L2MonsterInstance) object;
 		
-		if (target.isDead() || target.isSeeded() || target.getSeederId() != activeChar.getObjectId())
+		if (target.isDead() || !target.isSeeded() || target.getSeederId() != activeChar.getObjectId())
 			return;
 		
-		final int seedId = target.getSeedType();
-		if (seedId == 0)
+		final Seed seed = target.getSeed();
+		if (seed == null)
 			return;
 		
 		// Consuming used seed
-		if (!activeChar.destroyItemByItemId("Consume", seedId, 1, target, false))
+		if (!activeChar.destroyItemByItemId("Consume", seed.getSeedId(), 1, target, false))
 			return;
 		
 		SystemMessage sm;
-		if (calcSuccess(activeChar, target, seedId))
+		if (calcSuccess(activeChar, target, seed))
 		{
 			player.sendPacket(new PlaySound(QuestState.SOUND_ITEMGET));
 			target.setSeeded(activeChar.getObjectId());
@@ -82,17 +79,20 @@ public class Sow implements ISkillHandler
 		target.getAI().setIntention(CtrlIntention.IDLE);
 	}
 	
-	private static boolean calcSuccess(L2Character activeChar, L2Character target, int seedId)
+	private static boolean calcSuccess(L2Character activeChar, L2Character target, Seed seed)
 	{
-		int basicSuccess = (L2Manor.getInstance().isAlternative(seedId) ? 20 : 90);
-		final int minlevelSeed = L2Manor.getInstance().getSeedMinLevel(seedId);
-		final int maxlevelSeed = L2Manor.getInstance().getSeedMaxLevel(seedId);
+		final int minlevelSeed = seed.getLevel() - 5;
+		final int maxlevelSeed = seed.getLevel() + 5;
+		
 		final int levelPlayer = activeChar.getLevel(); // Attacker Level
 		final int levelTarget = target.getLevel(); // target Level
+		
+		int basicSuccess = (seed.isAlternative()) ? 20 : 90;
 		
 		// Seed level
 		if (levelTarget < minlevelSeed)
 			basicSuccess -= 5 * (minlevelSeed - levelTarget);
+		
 		if (levelTarget > maxlevelSeed)
 			basicSuccess -= 5 * (levelTarget - maxlevelSeed);
 		
@@ -100,6 +100,7 @@ public class Sow implements ISkillHandler
 		int diff = (levelPlayer - levelTarget);
 		if (diff < 0)
 			diff = -diff;
+		
 		if (diff > 5)
 			basicSuccess -= 5 * (diff - 5);
 		

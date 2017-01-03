@@ -15,6 +15,7 @@
 package net.sf.l2j.gameserver.model.actor.stat;
 
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
@@ -41,11 +42,16 @@ public class DoorStat extends CharStat
 	{
 		double defense = getActiveChar().getTemplate().getBaseMDef();
 		
-		final int sealOwner = SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE);
-		if (sealOwner == SevenSigns.CABAL_DAWN)
-			defense *= 1.2;
-		else if (sealOwner == SevenSigns.CABAL_DUSK)
-			defense *= 0.3;
+		switch (SevenSigns.getInstance().getSealOwner(SealType.STRIFE))
+		{
+			case DAWN:
+				defense *= 1.2;
+				break;
+			
+			case DUSK:
+				defense *= 0.3;
+				break;
+		}
 		
 		return (int) defense;
 	}
@@ -55,11 +61,16 @@ public class DoorStat extends CharStat
 	{
 		double defense = getActiveChar().getTemplate().getBasePDef();
 		
-		final int sealOwner = SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE);
-		if (sealOwner == SevenSigns.CABAL_DAWN)
-			defense *= 1.2;
-		else if (sealOwner == SevenSigns.CABAL_DUSK)
-			defense *= 0.3;
+		switch (SevenSigns.getInstance().getSealOwner(SealType.STRIFE))
+		{
+			case DAWN:
+				defense *= 1.2;
+				break;
+			
+			case DUSK:
+				defense *= 0.3;
+				break;
+		}
 		
 		return (int) defense;
 	}

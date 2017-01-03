@@ -134,7 +134,6 @@ public final class CharacterCreate extends L2GameClientPacket
 		
 		World.getInstance().addObject(newChar);
 		
-		newChar.addAdena("Init", Config.STARTING_ADENA, null, false);
 		newChar.getPosition().set(template.getSpawn());
 		newChar.setTitle("");
 		

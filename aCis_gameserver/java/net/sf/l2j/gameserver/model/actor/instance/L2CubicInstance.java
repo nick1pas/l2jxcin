@@ -627,7 +627,7 @@ public class L2CubicInstance
 		if (_owner.isInDuel())
 			if (!DuelManager.getInstance().getDuel(_owner.getDuelId()).isPartyDuel())
 				party = null;
-		
+			
 		if (party != null && !_owner.isInOlympiadMode())
 		{
 			// Get all Party Members in a spheric area near the L2Character
@@ -658,7 +658,7 @@ public class L2CubicInstance
 					// if party member's pet not dead, check if it is in castrange of heal cubic
 					if (!isInCubicRange(_owner, partyMember.getPet()))
 						continue;
-					
+						
 					// member's pet is in cubic casting range, check if he need heal and if he have
 					// the lowest HP
 					if (partyMember.getPet().getCurrentHp() < partyMember.getPet().getMaxHp())

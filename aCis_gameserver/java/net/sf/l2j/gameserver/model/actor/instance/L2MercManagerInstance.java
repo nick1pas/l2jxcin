@@ -17,6 +17,8 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import java.util.StringTokenizer;
 
 import net.sf.l2j.gameserver.datatables.BuyListTable;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.buylist.NpcBuyList;
@@ -37,60 +39,87 @@ public final class L2MercManagerInstance extends L2NpcInstance
 	@Override
 	public void onBypassFeedback(L2PcInstance player, String command)
 	{
-		int condition = validateCondition(player);
-		if (condition <= COND_ALL_FALSE)
+		final int condition = validateCondition(player);
+		if (condition < COND_OWNER)
 			return;
 		
-		if (condition == COND_BUSY_BECAUSE_OF_SIEGE)
-			return;
-		else if (condition == COND_OWNER)
+		if (command.startsWith("back"))
+			showChatWindow(player);
+		else if (command.startsWith("how_to"))
 		{
-			StringTokenizer st = new StringTokenizer(command, " ");
-			String actualCommand = st.nextToken(); // Get actual command
-			
-			String val = "";
-			if (st.countTokens() >= 1)
-				val = st.nextToken();
-			
-			if (actualCommand.equalsIgnoreCase("hire"))
+			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
+			html.setFile("data/html/mercmanager/mseller005.htm");
+			html.replace("%objectId%", getObjectId());
+			player.sendPacket(html);
+		}
+		else if (command.startsWith("hire"))
+		{
+			// Can't buy new mercenaries if seal validation period isn't reached.
+			if (!SevenSigns.getInstance().isSealValidationPeriod())
 			{
-				if (val.isEmpty())
-					return;
-				
-				showBuyWindow(player, Integer.parseInt(val));
+				final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
+				html.setFile("data/html/mercmanager/msellerdenial.htm");
+				html.replace("%objectId%", getObjectId());
+				player.sendPacket(html);
 				return;
 			}
+			
+			final StringTokenizer st = new StringTokenizer(command, " ");
+			st.nextToken();
+			
+			final NpcBuyList buyList = BuyListTable.getInstance().getBuyList(Integer.parseInt(getNpcId() + st.nextToken()));
+			if (buyList == null || !buyList.isNpcAllowed(getNpcId()))
+				return;
+			
+			player.tempInventoryDisable();
+			player.sendPacket(new BuyList(buyList, player.getAdena(), 0));
+			
+			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
+			html.setFile("data/html/mercmanager/mseller004.htm");
+			player.sendPacket(html);
 		}
-		
-		super.onBypassFeedback(player, command);
-	}
-	
-	private void showBuyWindow(L2PcInstance player, int val)
-	{
-		final NpcBuyList buyList = BuyListTable.getInstance().getBuyList(val);
-		if (buyList == null || !buyList.isNpcAllowed(getNpcId()))
-			return;
-		
-		player.tempInventoryDisable();
-		player.sendPacket(new BuyList(buyList, player.getAdena(), 0));
+		else if (command.startsWith("merc_limit"))
+		{
+			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
+			html.setFile("data/html/mercmanager/" + ((getCastle().getCastleId() == 5) ? "aden_msellerLimit.htm" : "msellerLimit.htm"));
+			html.replace("%castleName%", getCastle().getName());
+			html.replace("%objectId%", getObjectId());
+			player.sendPacket(html);
+		}
+		else
+			super.onBypassFeedback(player, command);
 	}
 	
 	@Override
 	public void showChatWindow(L2PcInstance player)
 	{
-		String filename = "data/html/mercmanager/mercmanager-no.htm";
-		
-		int condition = validateCondition(player);
-		if (condition == COND_BUSY_BECAUSE_OF_SIEGE)
-			filename = "data/html/mercmanager/mercmanager-busy.htm"; // Busy because of siege
-		else if (condition == COND_OWNER) // Clan owns castle
-			filename = "data/html/mercmanager/mercmanager.htm"; // Owner message window
-			
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		html.setFile(filename);
+		
+		final int condition = validateCondition(player);
+		if (condition == COND_ALL_FALSE)
+			html.setFile("data/html/mercmanager/mseller002.htm");
+		else if (condition == COND_BUSY_BECAUSE_OF_SIEGE)
+			html.setFile("data/html/mercmanager/mseller003.htm");
+		else if (condition == COND_OWNER)
+		{
+			// Different output depending about who is currently owning the Seal of Strife.
+			switch (SevenSigns.getInstance().getSealOwner(SealType.STRIFE))
+			{
+				case DAWN:
+					html.setFile("data/html/mercmanager/mseller001_dawn.htm");
+					break;
+				
+				case DUSK:
+					html.setFile("data/html/mercmanager/mseller001_dusk.htm");
+					break;
+				
+				default:
+					html.setFile("data/html/mercmanager/mseller001.htm");
+					break;
+			}
+		}
+		
 		html.replace("%objectId%", getObjectId());
-		html.replace("%npcId%", getNpcId());
-		html.replace("%npcname%", getName());
 		player.sendPacket(html);
 	}
 	

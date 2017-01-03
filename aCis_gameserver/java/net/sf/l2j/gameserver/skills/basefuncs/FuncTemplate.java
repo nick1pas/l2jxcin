@@ -63,7 +63,7 @@ public final class FuncTemplate
 				Integer.TYPE, // order of execution
 				Object.class, // owner
 				Lambda.class
-			// value for function
+				// value for function
 			});
 		}
 		catch (NoSuchMethodException e)

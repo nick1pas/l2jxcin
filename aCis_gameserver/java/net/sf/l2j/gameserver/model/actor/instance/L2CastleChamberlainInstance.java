@@ -20,10 +20,11 @@ import java.util.StringTokenizer;
 
 import net.sf.l2j.commons.lang.StringUtil;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.ClanTable;
-import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.Castle;
@@ -65,10 +66,6 @@ public class L2CastleChamberlainInstance extends L2MerchantInstance
 	@Override
 	public void onBypassFeedback(L2PcInstance player, String command)
 	{
-		// BypassValidation Exploit plug.
-		if (player.getCurrentFolkNPC() == null || player.getCurrentFolkNPC().getObjectId() != getObjectId())
-			return;
-		
 		final int cond = validateCondition(player);
 		if (cond < COND_OWNER)
 		{
@@ -141,67 +138,49 @@ public class L2CastleChamberlainInstance extends L2MerchantInstance
 				html.replace("%clanname%", clan.getName());
 				html.replace("%clanleadername%", clan.getLeaderName());
 				html.replace("%castlename%", castle.getName());
+				html.replace("%ss_event%", SevenSigns.getInstance().getCurrentPeriod().getName());
 				
-				switch (SevenSigns.getInstance().getCurrentPeriod())
+				switch (SevenSigns.getInstance().getSealOwner(SealType.AVARICE))
 				{
-					case SevenSigns.PERIOD_COMP_RECRUITING:
-						html.replace("%ss_event%", "Quest Event Initialization");
-						break;
-					
-					case SevenSigns.PERIOD_COMPETITION:
-						html.replace("%ss_event%", "Competition (Quest Event)");
-						break;
-					
-					case SevenSigns.PERIOD_COMP_RESULTS:
-						html.replace("%ss_event%", "Quest Event Results");
-						break;
-					
-					case SevenSigns.PERIOD_SEAL_VALIDATION:
-						html.replace("%ss_event%", "Seal Validation");
-						break;
-				}
-				
-				switch (SevenSigns.getInstance().getSealOwner(1))
-				{
-					case SevenSigns.CABAL_NULL:
+					case NORMAL:
 						html.replace("%ss_avarice%", "Not in Possession");
 						break;
 					
-					case SevenSigns.CABAL_DAWN:
+					case DAWN:
 						html.replace("%ss_avarice%", "Lords of Dawn");
 						break;
 					
-					case SevenSigns.CABAL_DUSK:
+					case DUSK:
 						html.replace("%ss_avarice%", "Revolutionaries of Dusk");
 						break;
 				}
 				
-				switch (SevenSigns.getInstance().getSealOwner(2))
+				switch (SevenSigns.getInstance().getSealOwner(SealType.GNOSIS))
 				{
-					case SevenSigns.CABAL_NULL:
+					case NORMAL:
 						html.replace("%ss_gnosis%", "Not in Possession");
 						break;
 					
-					case SevenSigns.CABAL_DAWN:
+					case DAWN:
 						html.replace("%ss_gnosis%", "Lords of Dawn");
 						break;
 					
-					case SevenSigns.CABAL_DUSK:
+					case DUSK:
 						html.replace("%ss_gnosis%", "Revolutionaries of Dusk");
 						break;
 				}
 				
-				switch (SevenSigns.getInstance().getSealOwner(3))
+				switch (SevenSigns.getInstance().getSealOwner(SealType.STRIFE))
 				{
-					case SevenSigns.CABAL_NULL:
+					case NORMAL:
 						html.replace("%ss_strife%", "Not in Possession");
 						break;
 					
-					case SevenSigns.CABAL_DAWN:
+					case DAWN:
 						html.replace("%ss_strife%", "Lords of Dawn");
 						break;
 					
-					case SevenSigns.CABAL_DUSK:
+					case DUSK:
 						html.replace("%ss_strife%", "Revolutionaries of Dusk");
 						break;
 				}
@@ -325,7 +304,7 @@ public class L2CastleChamberlainInstance extends L2MerchantInstance
 				return;
 			
 			String filename = "";
-			if (CastleManorManager.getInstance().isDisabled())
+			if (!Config.ALLOW_MANOR)
 				filename = "data/html/npcdefault.htm";
 			else
 			{
@@ -360,58 +339,49 @@ public class L2CastleChamberlainInstance extends L2MerchantInstance
 			if (!validatePrivileges(player, L2Clan.CP_CS_MANOR_ADMIN))
 				return;
 			
-			if (CastleManorManager.getInstance().isUnderMaintenance())
+			final CastleManorManager manor = CastleManorManager.getInstance();
+			if (manor.isUnderMaintenance())
 			{
 				player.sendPacket(ActionFailed.STATIC_PACKET);
 				player.sendPacket(SystemMessageId.THE_MANOR_SYSTEM_IS_CURRENTLY_UNDER_MAINTENANCE);
 				return;
 			}
 			
-			String params = command.substring(command.indexOf("?") + 1);
-			StringTokenizer str = new StringTokenizer(params, "&");
-			int ask = Integer.parseInt(str.nextToken().split("=")[1]);
-			int state = Integer.parseInt(str.nextToken().split("=")[1]);
-			int time = Integer.parseInt(str.nextToken().split("=")[1]);
+			final String params = command.substring(command.indexOf("?") + 1);
+			final StringTokenizer str = new StringTokenizer(params, "&");
 			
-			int castleId;
-			if (state == -1) // info for current manor
-				castleId = castle.getCastleId();
-			else
-				// info for requested manor
-				castleId = state;
+			final int ask = Integer.parseInt(str.nextToken().split("=")[1]);
+			final int state = Integer.parseInt(str.nextToken().split("=")[1]);
+			final boolean time = str.nextToken().split("=")[1].equals("1");
+			
+			final int castleId = (state == -1) ? castle.getCastleId() : state;
 			
 			switch (ask)
 			{
 				case 3: // Current seeds (Manor info)
-					if (time == 1 && !CastleManager.getInstance().getCastleById(castleId).isNextPeriodApproved())
-						player.sendPacket(new ExShowSeedInfo(castleId, null));
-					else
-						player.sendPacket(new ExShowSeedInfo(castleId, CastleManager.getInstance().getCastleById(castleId).getSeedProduction(time)));
+					player.sendPacket(new ExShowSeedInfo(castleId, time, true));
 					break;
 				
 				case 4: // Current crops (Manor info)
-					if (time == 1 && !CastleManager.getInstance().getCastleById(castleId).isNextPeriodApproved())
-						player.sendPacket(new ExShowCropInfo(castleId, null));
-					else
-						player.sendPacket(new ExShowCropInfo(castleId, CastleManager.getInstance().getCastleById(castleId).getCropProcure(time)));
+					player.sendPacket(new ExShowCropInfo(castleId, time, true));
 					break;
 				
 				case 5: // Basic info (Manor info)
-					player.sendPacket(new ExShowManorDefaultInfo());
+					player.sendPacket(new ExShowManorDefaultInfo(true));
 					break;
 				
 				case 7: // Edit seed setup
-					if (castle.isNextPeriodApproved())
+					if (manor.isManorApproved())
 						player.sendPacket(SystemMessageId.A_MANOR_CANNOT_BE_SET_UP_BETWEEN_6_AM_AND_8_PM);
 					else
-						player.sendPacket(new ExShowSeedSetting(castle.getCastleId()));
+						player.sendPacket(new ExShowSeedSetting(castleId));
 					break;
 				
 				case 8: // Edit crop setup
-					if (castle.isNextPeriodApproved())
+					if (manor.isManorApproved())
 						player.sendPacket(SystemMessageId.A_MANOR_CANNOT_BE_SET_UP_BETWEEN_6_AM_AND_8_PM);
 					else
-						player.sendPacket(new ExShowCropSetting(castle.getCastleId()));
+						player.sendPacket(new ExShowCropSetting(castleId));
 					break;
 			}
 		}
@@ -420,7 +390,7 @@ public class L2CastleChamberlainInstance extends L2MerchantInstance
 			if (!validatePrivileges(player, L2Clan.CP_CS_MANAGE_SIEGE))
 				return;
 			
-			if (castle.getSiege().getSiegeRegistrationEndDate().getTimeInMillis() < Calendar.getInstance().getTimeInMillis())
+			if (castle.getSiege().getSiegeRegistrationEndDate() < Calendar.getInstance().getTimeInMillis())
 				sendFileMessage(player, "data/html/chamberlain/siegetime1.htm");
 			else if (castle.getSiege().isTimeRegistrationOver())
 				sendFileMessage(player, "data/html/chamberlain/siegetime2.htm");
@@ -740,13 +710,13 @@ public class L2CastleChamberlainInstance extends L2MerchantInstance
 				break;
 		}
 		
-		switch (SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE))
+		switch (SevenSigns.getInstance().getSealOwner(SealType.STRIFE))
 		{
-			case SevenSigns.CABAL_DUSK:
+			case DUSK:
 				price *= 3;
 				break;
 			
-			case SevenSigns.CABAL_DAWN:
+			case DAWN:
 				price *= 0.8;
 				break;
 		}
@@ -782,13 +752,13 @@ public class L2CastleChamberlainInstance extends L2MerchantInstance
 				break;
 		}
 		
-		switch (SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE))
+		switch (SevenSigns.getInstance().getSealOwner(SealType.STRIFE))
 		{
-			case SevenSigns.CABAL_DUSK:
+			case DUSK:
 				price *= 3;
 				break;
 			
-			case SevenSigns.CABAL_DAWN:
+			case DAWN:
 				price *= 0.8;
 				break;
 		}

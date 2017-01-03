@@ -119,7 +119,7 @@ public class FeedableBeasts extends L2AttackableAIScript
 		21827,
 		21828,
 		21829
-	// Alpen Kookaburra, Buffalo, Cougar
+		// Alpen Kookaburra, Buffalo, Cougar
 	};
 	
 	private static final Map<Integer, Integer> MAD_COW_POLYMORPH = new HashMap<>();
@@ -700,7 +700,7 @@ public class FeedableBeasts extends L2AttackableAIScript
 		
 		if (GROWTH_CAPABLE_MOBS.containsKey(npcId))
 			growthLevel = GROWTH_CAPABLE_MOBS.get(npcId).getGrowthLevel();
-		
+			
 		// Prevent exploit which allows 2 players to simultaneously raise the same 0-growth beast
 		// If the mob is at 0th level (when it still listens to all feeders) lock it to the first feeder!
 		if (growthLevel == 0 && FEED_INFO.containsKey(objectId))

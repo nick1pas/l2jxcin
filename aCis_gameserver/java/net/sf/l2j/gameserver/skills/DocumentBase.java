@@ -362,7 +362,7 @@ abstract class DocumentBase
 		for (n = n.getFirstChild(); n != null; n = n.getNextSibling())
 			if (n.getNodeType() == Node.ELEMENT_NODE)
 				cond.add(parseCondition(n, template));
-		
+			
 		if (cond.conditions == null || cond.conditions.length == 0)
 			_log.severe("Empty <and> condition in " + _file);
 		
@@ -375,7 +375,7 @@ abstract class DocumentBase
 		for (n = n.getFirstChild(); n != null; n = n.getNextSibling())
 			if (n.getNodeType() == Node.ELEMENT_NODE)
 				cond.add(parseCondition(n, template));
-		
+			
 		if (cond.conditions == null || cond.conditions.length == 0)
 			_log.severe("Empty <or> condition in " + _file);
 		
@@ -387,7 +387,7 @@ abstract class DocumentBase
 		for (n = n.getFirstChild(); n != null; n = n.getNextSibling())
 			if (n.getNodeType() == Node.ELEMENT_NODE)
 				return new ConditionLogicNot(parseCondition(n, template));
-		
+			
 		_log.severe("Empty <not> condition in " + _file);
 		return null;
 	}

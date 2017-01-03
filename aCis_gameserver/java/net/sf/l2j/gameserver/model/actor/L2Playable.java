@@ -37,7 +37,8 @@ import net.sf.l2j.gameserver.templates.skills.L2EffectType;
  * <BR>
  * L2Playable :<BR>
  * <BR>
- * <li>L2PcInstance</li> <li>L2Summon</li><BR>
+ * <li>L2PcInstance</li>
+ * <li>L2Summon</li><BR>
  * <BR>
  */
 public abstract class L2Playable extends L2Character

@@ -28,7 +28,9 @@ public final class Armor extends Item
 	 * Constructor for Armor.<BR>
 	 * <BR>
 	 * <U><I>Variables filled :</I></U><BR>
-	 * <LI>_avoidModifier</LI> <LI>_pDef & _mDef</LI> <LI>_mpBonus & _hpBonus</LI>
+	 * <LI>_avoidModifier</LI>
+	 * <LI>_pDef & _mDef</LI>
+	 * <LI>_mpBonus & _hpBonus</LI>
 	 * @param set : StatsSet designating the set of couples (key,value) caracterizing the armor
 	 * @see Item constructor
 	 */

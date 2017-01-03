@@ -93,7 +93,7 @@ public class Harvest implements ISkillHandler
 						player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_PICKED_UP_S2_S1).addItemName(cropId).addNumber(total));
 						
 						if (player.isInParty())
-							player.getParty().broadcastToPartyMembers(player, SystemMessage.getSystemMessage(SystemMessageId.S1_HARVESTED_S3_S2S).addPcName(player).addItemName(cropId).addNumber(total));
+							player.getParty().broadcastToPartyMembers(player, SystemMessage.getSystemMessage(SystemMessageId.S1_HARVESTED_S3_S2S).addCharName(player).addItemName(cropId).addNumber(total));
 						
 						player.sendPacket(iu);
 					}

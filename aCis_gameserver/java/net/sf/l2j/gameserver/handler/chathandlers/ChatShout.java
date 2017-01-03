@@ -37,11 +37,11 @@ public class ChatShout implements IChatHandler
 			return;
 		
 		final CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
-		final int region = MapRegionTable.getMapRegion(activeChar.getX(), activeChar.getY());
+		final int region = MapRegionTable.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
 		
 		for (L2PcInstance player : World.getInstance().getPlayers())
 		{
-			if (!BlockList.isBlocked(player, activeChar) && region == MapRegionTable.getMapRegion(player.getX(), player.getY()))
+			if (!BlockList.isBlocked(player, activeChar) && region == MapRegionTable.getInstance().getMapRegion(player.getX(), player.getY()))
 				player.sendPacket(cs);
 		}
 	}

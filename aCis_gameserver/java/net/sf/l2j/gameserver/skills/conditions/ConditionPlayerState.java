@@ -54,25 +54,25 @@ public class ConditionPlayerState extends Condition
 		{
 			case RESTING:
 				return (player == null) ? !_required : player.isSitting() == _required;
-				
+			
 			case MOVING:
 				return character.isMoving() == _required;
-				
+			
 			case RUNNING:
 				return character.isMoving() == _required && character.isRunning() == _required;
-				
+			
 			case RIDING:
 				return character.isRiding() == _required;
-				
+			
 			case FLYING:
 				return character.isFlying() == _required;
-				
+			
 			case BEHIND:
 				return character.isBehindTarget() == _required;
-				
+			
 			case FRONT:
 				return character.isInFrontOfTarget() == _required;
-				
+			
 			case OLYMPIAD:
 				return (player == null) ? !_required : player.isInOlympiadMode() == _required;
 		}

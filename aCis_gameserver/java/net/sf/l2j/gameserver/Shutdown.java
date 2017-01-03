@@ -176,7 +176,7 @@ public class Shutdown extends Thread
 			_log.info("Hero data has been saved.");
 			
 			// Save all manor data
-			CastleManorManager.getInstance().save();
+			CastleManorManager.getInstance().storeMe();
 			_log.info("Manors data has been saved.");
 			
 			// Save Fishing tournament data

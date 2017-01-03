@@ -16,6 +16,7 @@ package net.sf.l2j.gameserver.model.actor;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +38,6 @@ import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.AbsorbInfo;
 import net.sf.l2j.gameserver.model.AggroInfo;
 import net.sf.l2j.gameserver.model.L2CommandChannel;
-import net.sf.l2j.gameserver.model.L2Manor;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Skill;
@@ -46,10 +46,12 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
 import net.sf.l2j.gameserver.model.actor.status.AttackableStatus;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.DropCategory;
 import net.sf.l2j.gameserver.model.item.DropData;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
+import net.sf.l2j.gameserver.model.manor.Seed;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
@@ -76,7 +78,7 @@ public class L2Attackable extends L2Npc
 	private boolean _isReturningToSpawnPoint;
 	private boolean _seeThroughSilentMove;
 	
-	private int _seedType;
+	private Seed _seed;
 	private int _seederObjId;
 	
 	private boolean _overhit;
@@ -239,13 +241,11 @@ public class L2Attackable extends L2Npc
 		// Go through the _aggroList of the L2Attackable.
 		for (AggroInfo info : _aggroList.values())
 		{
-			if (info == null)
+			if (!(info.getAttacker() instanceof L2Playable))
 				continue;
 			
 			// Get the L2Character corresponding to this attacker.
-			final L2PcInstance attacker = info.getAttacker().getActingPlayer();
-			if (attacker == null)
-				continue;
+			final L2Playable attacker = (L2Playable) info.getAttacker();
 			
 			// Get damages done by this attacker.
 			final int damage = info.getDamage();
@@ -255,6 +255,8 @@ public class L2Attackable extends L2Npc
 			// Check if attacker isn't too far from this.
 			if (!Util.checkIfInRange(Config.ALT_PARTY_RANGE, this, attacker, true))
 				continue;
+			
+			final L2PcInstance attackerPlayer = attacker.getActingPlayer();
 			
 			totalDamage += damage;
 			
@@ -267,9 +269,20 @@ public class L2Attackable extends L2Npc
 			}
 			reward.addDamage(damage);
 			
+			if (attacker instanceof L2Summon)
+			{
+				reward = rewards.get(attackerPlayer);
+				if (reward == null)
+				{
+					reward = new RewardInfo(attackerPlayer);
+					rewards.put(attackerPlayer, reward);
+				}
+				reward.addDamage(damage);
+			}
+			
 			if (reward.getDamage() > maxDamage)
 			{
-				maxDealer = attacker;
+				maxDealer = attackerPlayer;
 				maxDamage = reward.getDamage();
 			}
 		}
@@ -279,11 +292,11 @@ public class L2Attackable extends L2Npc
 		
 		for (RewardInfo reward : rewards.values())
 		{
-			if (reward == null)
+			if (reward.getAttacker() instanceof L2Summon)
 				continue;
 			
 			// Attacker to be rewarded.
-			final L2PcInstance attacker = reward.getAttacker();
+			final L2PcInstance attacker = reward.getAttacker().getActingPlayer();
 			
 			// Total amount of damage done.
 			final int damage = reward.getDamage();
@@ -325,7 +338,7 @@ public class L2Attackable extends L2Npc
 					attacker.updateKarmaLoss(exp);
 					
 					// Distribute the Exp and SP between the L2PcInstance and its L2Summon.
-					attacker.addExpAndSp(exp, sp);
+					attacker.addExpAndSp(exp, sp, rewards);
 				}
 			}
 			// Share with party members.
@@ -340,6 +353,8 @@ public class L2Attackable extends L2Npc
 				
 				// Go through all L2PcInstance in the party.
 				final List<L2PcInstance> groupMembers = (attackerParty.isInCommandChannel()) ? attackerParty.getCommandChannel().getMembers() : attackerParty.getPartyMembers();
+				
+				final Map<L2Character, RewardInfo> playersWithPets = new HashMap<>();
 				
 				for (L2PcInstance partyPlayer : groupMembers)
 				{
@@ -361,6 +376,10 @@ public class L2Attackable extends L2Npc
 								partyLvl = (attackerParty.isInCommandChannel()) ? attackerParty.getCommandChannel().getLevel() : partyPlayer.getLevel();
 						}
 						rewards.remove(partyPlayer); // Remove the L2PcInstance from the L2Attackable rewards
+						
+						playersWithPets.put(partyPlayer, reward2);
+						if (partyPlayer.hasPet() && rewards.containsKey(partyPlayer.getPet()))
+							playersWithPets.put(partyPlayer.getPet(), rewards.get(partyPlayer.getPet()));
 					}
 					// Add L2PcInstance of the party (that have attacked or not) to members that can be rewarded and in range of the monster.
 					else
@@ -405,7 +424,7 @@ public class L2Attackable extends L2Npc
 				
 				// Distribute Experience and SP rewards to L2PcInstance Party members in the known area of the last attacker
 				if (partyDmg > 0)
-					attackerParty.distributeXpAndSp(exp, sp, rewardedMembers, partyLvl);
+					attackerParty.distributeXpAndSp(exp, sp, rewardedMembers, partyLvl, playersWithPets);
 			}
 		}
 	}
@@ -425,7 +444,7 @@ public class L2Attackable extends L2Npc
 		_harvestItems.clear();
 		
 		// Clear mod Seeded stat
-		_seedType = 0;
+		_seed = null;
 		_seederObjId = 0;
 		
 		// Clear overhit value
@@ -792,7 +811,7 @@ public class L2Attackable extends L2Npc
 		if (isChampion())
 			if (drop.getItemId() == 57 || (drop.getItemId() >= 6360 && drop.getItemId() <= 6362))
 				itemCount *= Config.CHAMPION_ADENAS_REWARDS;
-		
+			
 		if (itemCount > 0)
 			return new IntIntHolder(drop.getItemId(), itemCount);
 		
@@ -811,7 +830,7 @@ public class L2Attackable extends L2Npc
 	{
 		if (categoryDrops == null)
 			return null;
-		
+			
 		// Get default drop chance for the category (that's the sum of chances for all items in the category)
 		// keep track of the base category chance as it'll be used later, if an item is drop from the category.
 		// for everything else, use the total "categoryDropChance"
@@ -842,7 +861,7 @@ public class L2Attackable extends L2Npc
 			DropData drop = categoryDrops.dropOne(isRaid() && !isRaidMinion());
 			if (drop == null)
 				return null;
-			
+				
 			// Now decide the quantity to drop based on the rates and penalties. To get this value
 			// simply divide the modified categoryDropChance by the base category chance. This
 			// results in a chance that will dictate the drops amounts: for each amount over 100
@@ -893,7 +912,7 @@ public class L2Attackable extends L2Npc
 			if (isChampion())
 				if (drop.getItemId() == 57 || (drop.getItemId() >= 6360 && drop.getItemId() <= 6362))
 					itemCount *= Config.CHAMPION_ADENAS_REWARDS;
-			
+				
 			if (itemCount > 0)
 				return new IntIntHolder(drop.getItemId(), itemCount);
 		}
@@ -914,7 +933,7 @@ public class L2Attackable extends L2Npc
 			for (L2Character atkChar : _attackByList)
 				if (atkChar.getLevel() > highestLevel)
 					highestLevel = atkChar.getLevel();
-			
+				
 			// According to official data (Prima), deep blue mobs are 9 or more levels below players
 			if (highestLevel - 9 >= getLevel())
 				return ((highestLevel - (getLevel() + 8)) * 9);
@@ -1205,7 +1224,7 @@ public class L2Attackable extends L2Npc
 		getAI().setIntention(CtrlIntention.CAST, skill, target);
 	}
 	
-	public final boolean returnHome(boolean cleanAggro)
+	public boolean returnHome(boolean cleanAggro)
 	{
 		if (cleanAggro)
 			_aggroList.clear();
@@ -1449,7 +1468,7 @@ public class L2Attackable extends L2Npc
 		// Over-hit damage percentages are limited to 25% max
 		if (overhitPercentage > 25)
 			overhitPercentage = 25;
-		
+			
 		// Get the overhit exp bonus according to the above over-hit damage percentage
 		// (1/1 basis - 13% of over-hit damage, 13% of extra exp is given, and so on...)
 		double overhitExp = ((overhitPercentage / 100) * normalExp);
@@ -1464,13 +1483,13 @@ public class L2Attackable extends L2Npc
 	 */
 	public void setSeeded(int objectId)
 	{
-		if (_seedType != 0 && _seederObjId == objectId)
+		if (_seed != null && _seederObjId == objectId)
 		{
 			int count = 1;
 			
-			for (int skillId : getTemplate().getSkills().keySet())
+			for (L2Skill skill : getTemplate().getSkills(SkillType.PASSIVE))
 			{
-				switch (skillId)
+				switch (skill.getId())
 				{
 					case 4303: // Strong type x2
 						count *= 2;
@@ -1499,24 +1518,24 @@ public class L2Attackable extends L2Npc
 				}
 			}
 			
-			final int diff = (getLevel() - (L2Manor.getInstance().getSeedLevel(_seedType) - 5));
+			final int diff = getLevel() - _seed.getLevel() - 5;
 			if (diff > 0)
 				count += diff;
 			
-			_harvestItems.add(new IntIntHolder(L2Manor.getInstance().getCropType(_seedType), count * Config.RATE_DROP_MANOR));
+			_harvestItems.add(new IntIntHolder(_seed.getCropId(), count * Config.RATE_DROP_MANOR));
 		}
 	}
 	
 	/**
 	 * Sets the seed parameters, but not the seed state.
-	 * @param id - id of the seed.
+	 * @param seed - the seed.
 	 * @param objectId - the player objectId who is sowing the seed.
 	 */
-	public void setSeeded(int id, int objectId)
+	public void setSeeded(Seed seed, int objectId)
 	{
-		if (_seedType == 0)
+		if (_seed == null)
 		{
-			_seedType = id;
+			_seed = seed;
 			_seederObjId = objectId;
 		}
 	}
@@ -1526,14 +1545,14 @@ public class L2Attackable extends L2Npc
 		return _seederObjId;
 	}
 	
-	public int getSeedType()
+	public Seed getSeed()
 	{
-		return _seedType;
+		return _seed;
 	}
 	
 	public boolean isSeeded()
 	{
-		return _seedType > 0;
+		return _seed != null;
 	}
 	
 	protected void setCommandChannelTimer(CommandChannelTimer commandChannelTimer)

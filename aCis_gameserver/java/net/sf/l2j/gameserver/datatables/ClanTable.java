@@ -30,11 +30,11 @@ import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
+import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2ClanMember;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.entity.Siege;
+import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeShowInfoUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeShowMemberListAll;
@@ -221,8 +221,8 @@ public class ClanTable
 		final int castleId = clan.getCastleId();
 		if (castleId == 0)
 		{
-			for (Siege siege : SiegeManager.getSieges())
-				siege.removeSiegeClan(clan);
+			for (Castle castle : CastleManager.getInstance().getCastles())
+				castle.getSiege().removeSiegeClan(clan);
 		}
 		
 		// Drop all items from clan warehouse.

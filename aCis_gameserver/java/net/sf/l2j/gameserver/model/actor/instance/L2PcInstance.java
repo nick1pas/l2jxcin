@@ -73,8 +73,9 @@ import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
 import net.sf.l2j.gameserver.instancemanager.DuelManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.BlockList;
 import net.sf.l2j.gameserver.model.FishData;
@@ -91,16 +92,19 @@ import net.sf.l2j.gameserver.model.L2Party.MessageType;
 import net.sf.l2j.gameserver.model.L2Radar;
 import net.sf.l2j.gameserver.model.L2Request;
 import net.sf.l2j.gameserver.model.L2ShortCut;
+import net.sf.l2j.gameserver.model.L2SiegeClan;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
 import net.sf.l2j.gameserver.model.L2SkillLearn;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.MacroList;
 import net.sf.l2j.gameserver.model.PetDataEntry;
+import net.sf.l2j.gameserver.model.RewardInfo;
 import net.sf.l2j.gameserver.model.ShortCuts;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldRegion;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
@@ -127,6 +131,8 @@ import net.sf.l2j.gameserver.model.holder.SkillUseHolder;
 import net.sf.l2j.gameserver.model.item.Henna;
 import net.sf.l2j.gameserver.model.item.RecipeList;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
+import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemLocation;
+import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemState;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.item.kind.Weapon;
 import net.sf.l2j.gameserver.model.item.type.ActionType;
@@ -436,7 +442,6 @@ public final class L2PcInstance extends L2Playable
 	private boolean _isSitting;
 	
 	private final Location _savedLocation = new Location(0, 0, 0);
-	private boolean _observerMode;
 	
 	private int _recomHave;
 	private int _recomLeft;
@@ -518,15 +523,12 @@ public final class L2PcInstance extends L2Playable
 	private boolean _messageRefusal; // message refusal mode
 	private boolean _tradeRefusal; // Trade refusal
 	private boolean _exchangeRefusal; // Exchange refusal
-	private boolean _isPartyInRefuse; // Party Refusal Mode
 	
 	private L2Party _party;
 	
 	private L2PcInstance _activeRequester;
 	private long _requestExpireTime;
 	private final L2Request _request = new L2Request(this);
-	
-	private ItemInstance _arrowItem;
 	
 	private ScheduledFuture<?> _protectTask;
 	
@@ -1651,8 +1653,7 @@ public final class L2PcInstance extends L2Playable
 			else
 				sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_DISARMED).addItemName(item));
 			
-			int slot = getInventory().getSlotFromItem(item);
-			items = getInventory().unEquipItemInBodySlotAndRecord(slot);
+			items = getInventory().unEquipItemInBodySlotAndRecord(item);
 		}
 		else
 		{
@@ -1881,9 +1882,14 @@ public final class L2PcInstance extends L2Playable
 		// Get the Level of the L2PcInstance
 		int lvl = getLevel();
 		
-		// Remove the Lucky skill once reached lvl 10.
-		if (getSkillLevel(L2Skill.SKILL_LUCKY) > 0 && lvl >= 10)
-			removeSkill(FrequentSkill.LUCKY.getSkill());
+		// Add/Remove the Lucky skill.
+		if (getSkillLevel(L2Skill.SKILL_LUCKY) > 0)
+		{
+			if (lvl >= 10)
+				removeSkill(FrequentSkill.LUCKY.getSkill());
+		}
+		else if (lvl < 10)
+			addSkill(FrequentSkill.LUCKY.getSkill());
 		
 		// Calculate the current higher Expertise of the L2PcInstance
 		for (int i = 0; i < EXPERTISE_LEVELS.length; i++)
@@ -1948,8 +1954,8 @@ public final class L2PcInstance extends L2Playable
 		{
 			getClan().addSkillEffects(this);
 			
-			if (getClan().getLevel() >= SiegeManager.MINIMUM_CLAN_LEVEL && isClanLeader())
-				SiegeManager.addSiegeSkills(this);
+			if (getClan().getLevel() >= Config.MINIMUM_CLAN_LEVEL && isClanLeader())
+				addSiegeSkills();
 		}
 		
 		// Reload passive skills from armors / jewels / weapons
@@ -1972,6 +1978,18 @@ public final class L2PcInstance extends L2Playable
 			result++;
 		}
 		return result;
+	}
+	
+	public void addSiegeSkills()
+	{
+		for (L2Skill sk : SkillTable.getInstance().getSiegeSkills(isNoble()))
+			addSkill(sk, false);
+	}
+	
+	public void removeSiegeSkills()
+	{
+		for (L2Skill sk : SkillTable.getInstance().getSiegeSkills(isNoble()))
+			removeSkill(sk);
 	}
 	
 	/**
@@ -2004,17 +2022,12 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public boolean isCastleLord(int castleId)
 	{
-		L2Clan clan = getClan();
-		
-		// player has clan and is the clan leader, check the castle info
-		if ((clan != null) && (clan.getLeader().getPlayerInstance() == this))
+		final L2Clan clan = getClan();
+		if (clan != null && clan.getLeader().getPlayerInstance() == this)
 		{
-			// if the clan has a castle and it is actually the queried castle, return true
-			Castle castle = CastleManager.getInstance().getCastleByOwner(clan);
-			if ((castle != null) && (castle == CastleManager.getInstance().getCastleById(castleId)))
-				return true;
+			final Castle castle = CastleManager.getInstance().getCastleByOwner(clan);
+			return castle != null && castle.getCastleId() == castleId;
 		}
-		
 		return false;
 	}
 	
@@ -2031,10 +2044,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public int getClanCrestId()
 	{
-		if (_clan != null)
-			return _clan.getCrestId();
-		
-		return 0;
+		return (_clan != null) ? _clan.getCrestId() : 0;
 	}
 	
 	/**
@@ -2042,10 +2052,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public int getClanCrestLargeId()
 	{
-		if (_clan != null)
-			return _clan.getCrestLargeId();
-		
-		return 0;
+		return (_clan != null) ? _clan.getCrestLargeId() : 0;
 	}
 	
 	public long getClanJoinExpiryTime()
@@ -3092,20 +3099,69 @@ public final class L2PcInstance extends L2Playable
 		_reuseTimeStamps.remove(skill.getReuseHashCode());
 	}
 	
-	/**
-	 * @see net.sf.l2j.gameserver.model.actor.L2Character#checkDoCastConditions(net.sf.l2j.gameserver.model.L2Skill)
-	 */
 	@Override
 	protected boolean checkDoCastConditions(L2Skill skill)
 	{
 		if (!super.checkDoCastConditions(skill))
 			return false;
 		
+		// Can't summon multiple servitors.
 		if (skill.getSkillType() == L2SkillType.SUMMON)
 		{
 			if (!((L2SkillSummon) skill).isCubic() && (getPet() != null || isMounted()))
 			{
 				sendPacket(SystemMessageId.SUMMON_ONLY_ONE);
+				return false;
+			}
+		}
+		// Can't use ressurect skills on siege if you are defender and control towers is not alive, if you are attacker and flag isn't spawned or if you aren't part of that siege.
+		else if (skill.getSkillType() == L2SkillType.RESURRECT)
+		{
+			final Castle castle = CastleManager.getInstance().getCastle(this);
+			if (castle != null && castle.getSiege().isInProgress())
+			{
+				if (getClan() != null)
+				{
+					if (castle.getSiege().checkIsDefender(getClan()))
+					{
+						if (castle.getSiege().getControlTowerCount() == 0)
+						{
+							sendPacket(SystemMessage.getSystemMessage(SystemMessageId.TOWER_DESTROYED_NO_RESURRECTION));
+							return false;
+						}
+					}
+					else if (castle.getSiege().checkIsAttacker(getClan()))
+					{
+						final L2SiegeClan siegeClan = castle.getSiege().getAttackerClan(getClan());
+						if (siegeClan.getFlags().isEmpty())
+						{
+							sendPacket(SystemMessage.getSystemMessage(SystemMessageId.NO_RESURRECTION_WITHOUT_BASE_CAMP));
+							return false;
+						}
+					}
+					else
+					{
+						sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CANNOT_BE_RESURRECTED_DURING_SIEGE));
+						return false;
+					}
+				}
+				else
+				{
+					sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CANNOT_BE_RESURRECTED_DURING_SIEGE));
+					return false;
+				}
+			}
+		}
+		// Can't casting signets on peace zone.
+		else if (skill.getSkillType() == L2SkillType.SIGNET || skill.getSkillType() == L2SkillType.SIGNET_CASTTIME)
+		{
+			final WorldRegion region = getRegion();
+			if (region == null)
+				return false;
+			
+			if (!region.checkEffectRangeInsidePeaceZone(skill, (skill.getTargetType() == SkillTargetType.TARGET_GROUND) ? getCurrentSkillWorldPosition() : getPosition()))
+			{
+				sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill));
 				return false;
 			}
 		}
@@ -3118,8 +3174,7 @@ public final class L2PcInstance extends L2Playable
 		}
 		
 		// Check if the spell uses charges
-		final int charges = getCharges();
-		if (skill.getMaxCharges() == 0 && charges < skill.getNumCharges())
+		if (skill.getMaxCharges() == 0 && getCharges() < skill.getNumCharges())
 		{
 			sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill));
 			return false;
@@ -3953,7 +4008,7 @@ public final class L2PcInstance extends L2Playable
 		for (L2Character character : getKnownType(L2Character.class))
 			if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == this)
 				character.abortCast();
-		
+			
 		if (isInParty() && getParty().isInDimensionalRift())
 			getParty().getDimensionalRift().getDeadMemberList().add(this);
 		
@@ -4227,16 +4282,6 @@ public final class L2PcInstance extends L2Playable
 		getStat().addExp(-lostExp);
 	}
 	
-	public boolean isPartyWaiting()
-	{
-		return PartyMatchWaitingList.getInstance().getPlayers().contains(this);
-	}
-	
-	public void setPartyRoom(int id)
-	{
-		_partyroom = id;
-	}
-	
 	public int getPartyRoom()
 	{
 		return _partyroom;
@@ -4245,6 +4290,25 @@ public final class L2PcInstance extends L2Playable
 	public boolean isInPartyMatchRoom()
 	{
 		return _partyroom > 0;
+	}
+	
+	public void setPartyRoom(int id)
+	{
+		_partyroom = id;
+	}
+	
+	/**
+	 * Remove the player from both waiting list and any potential room.
+	 */
+	public void removeMeFromPartyMatch()
+	{
+		PartyMatchWaitingList.getInstance().removePlayer(this);
+		if (_partyroom != 0)
+		{
+			PartyMatchRoom room = PartyMatchRoomList.getInstance().getRoom(_partyroom);
+			if (room != null)
+				room.deleteMember(this);
+		}
 	}
 	
 	/**
@@ -4606,75 +4670,62 @@ public final class L2PcInstance extends L2Playable
 	 * Reduce the number of arrows owned by the L2PcInstance and send InventoryUpdate or ItemList (to unequip if the last arrow was consummed).
 	 */
 	@Override
-	protected void reduceArrowCount()
+	protected void reduceArrowCount() // TODO: replace with a simple player.destroyItem...
 	{
-		ItemInstance arrows = getInventory().getPaperdollItem(Inventory.PAPERDOLL_LHAND);
-		
+		final ItemInstance arrows = getInventory().getPaperdollItem(Inventory.PAPERDOLL_LHAND);
 		if (arrows == null)
-		{
-			getInventory().unEquipItemInSlot(Inventory.PAPERDOLL_LHAND);
-			_arrowItem = null;
-			sendPacket(new ItemList(this, false));
 			return;
-		}
 		
-		// Adjust item quantity
+		final InventoryUpdate iu = new InventoryUpdate();
+		
 		if (arrows.getCount() > 1)
 		{
 			synchronized (arrows)
 			{
-				arrows.changeCountWithoutTrace(-1, this, null);
-				arrows.setLastChange(ItemInstance.MODIFIED);
+				arrows.changeCount(null, -1, this, null);
+				arrows.setLastChange(ItemState.MODIFIED);
+				
+				iu.addModifiedItem(arrows);
 				
 				// could do also without saving, but let's save approx 1 of 10
 				if (Rnd.get(10) < 1)
 					arrows.updateDatabase();
+				
 				_inventory.refreshWeight();
 			}
 		}
 		else
 		{
+			iu.addRemovedItem(arrows);
+			
 			// Destroy entire item and save to database
 			_inventory.destroyItem("Consume", arrows, this, null);
-			
-			getInventory().unEquipItemInSlot(Inventory.PAPERDOLL_LHAND);
-			_arrowItem = null;
-			
-			sendPacket(new ItemList(this, false));
-			return;
 		}
-		
-		InventoryUpdate iu = new InventoryUpdate();
-		iu.addModifiedItem(arrows);
 		sendPacket(iu);
 	}
 	
 	/**
-	 * Equip arrows needed in left hand and send ItemList to the L2PcInstance then return True.
+	 * Check if the arrow item exists on inventory and is already slotted ; if not, equip it.
 	 */
 	@Override
 	protected boolean checkAndEquipArrows()
 	{
-		// Check if nothing is equipped in left hand
-		if (getInventory().getPaperdollItem(Inventory.PAPERDOLL_LHAND) == null)
-		{
-			// Get the ItemInstance of the arrows needed for this bow
-			_arrowItem = getInventory().findArrowForBow(getActiveWeaponItem());
-			
-			if (_arrowItem != null)
-			{
-				// Equip arrows needed in left hand
-				getInventory().setPaperdollItem(Inventory.PAPERDOLL_LHAND, _arrowItem);
-				
-				// Send ItemList to this L2PcINstance to update left hand equipement
-				sendPacket(new ItemList(this, false));
-			}
-		}
-		// Get the ItemInstance of arrows equipped in left hand
-		else
-			_arrowItem = getInventory().getPaperdollItem(Inventory.PAPERDOLL_LHAND);
+		// Retrieve arrows instance on player inventory.
+		final ItemInstance arrows = getInventory().findArrowForBow(getActiveWeaponItem());
+		if (arrows == null)
+			return false;
 		
-		return _arrowItem != null;
+		// Arrows are already equiped, don't bother.
+		if (arrows.getLocation() == ItemLocation.PAPERDOLL)
+			return true;
+		
+		// Equip arrows in left hand.
+		getInventory().setPaperdollItem(Inventory.PAPERDOLL_LHAND, arrows);
+		
+		// Send ItemList to this player to update left hand equipement
+		sendPacket(new ItemList(this, false));
+		
+		return true;
 	}
 	
 	/**
@@ -4691,7 +4742,7 @@ public final class L2PcInstance extends L2Playable
 		ItemInstance wpn = getInventory().getPaperdollItem(Inventory.PAPERDOLL_RHAND);
 		if (wpn != null)
 		{
-			ItemInstance[] unequipped = getInventory().unEquipItemInBodySlotAndRecord(wpn.getItem().getBodyPart());
+			ItemInstance[] unequipped = getInventory().unEquipItemInBodySlotAndRecord(wpn);
 			InventoryUpdate iu = new InventoryUpdate();
 			for (ItemInstance itm : unequipped)
 				iu.addModifiedItem(itm);
@@ -4717,7 +4768,7 @@ public final class L2PcInstance extends L2Playable
 		ItemInstance sld = getInventory().getPaperdollItem(Inventory.PAPERDOLL_LHAND);
 		if (sld != null)
 		{
-			ItemInstance[] unequipped = getInventory().unEquipItemInBodySlotAndRecord(sld.getItem().getBodyPart());
+			ItemInstance[] unequipped = getInventory().unEquipItemInBodySlotAndRecord(sld);
 			InventoryUpdate iu = new InventoryUpdate();
 			for (ItemInstance itm : unequipped)
 				iu.addModifiedItem(itm);
@@ -5640,8 +5691,6 @@ public final class L2PcInstance extends L2Playable
 		storeEffect(storeActiveEffects);
 		storeRecipeBook();
 		
-		SevenSigns.getInstance().saveSevenSignsData(getObjectId());
-		
 		_vars.storeMe();
 	}
 	
@@ -5676,9 +5725,20 @@ public final class L2PcInstance extends L2Playable
 			statement.setInt(10, getAppearance().getHairColor());
 			statement.setInt(11, getAppearance().getSex().ordinal());
 			statement.setInt(12, getHeading());
-			statement.setInt(13, _observerMode ? _savedLocation.getX() : getX());
-			statement.setInt(14, _observerMode ? _savedLocation.getY() : getY());
-			statement.setInt(15, _observerMode ? _savedLocation.getZ() : getZ());
+			
+			if (!isInObserverMode())
+			{
+				statement.setInt(13, getX());
+				statement.setInt(14, getY());
+				statement.setInt(15, getZ());
+			}
+			else
+			{
+				statement.setInt(13, _savedLocation.getX());
+				statement.setInt(14, _savedLocation.getY());
+				statement.setInt(15, _savedLocation.getZ());
+			}
+			
 			statement.setLong(16, exp);
 			statement.setLong(17, getExpBeforeDeath());
 			statement.setInt(18, sp);
@@ -5764,94 +5824,94 @@ public final class L2PcInstance extends L2Playable
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			// Delete all current stored effects for char to avoid dupe
-			PreparedStatement statement = con.prepareStatement(DELETE_SKILL_SAVE);
-			
-			statement.setInt(1, getObjectId());
-			statement.setInt(2, getClassIndex());
-			statement.execute();
-			statement.close();
+			try (PreparedStatement ps = con.prepareStatement(DELETE_SKILL_SAVE))
+			{
+				ps.setInt(1, getObjectId());
+				ps.setInt(2, getClassIndex());
+				ps.executeUpdate();
+			}
 			
 			int buff_index = 0;
-			
 			final List<Integer> storedSkills = new ArrayList<>();
 			
-			// Store all effect data along with calulated remaining reuse delays for matching skills. 'restore_type'= 0.
-			statement = con.prepareStatement(ADD_SKILL_SAVE);
-			
-			if (storeEffects)
+			try (PreparedStatement ps = con.prepareStatement(ADD_SKILL_SAVE))
 			{
-				for (L2Effect effect : getAllEffects())
+				// Store all effect data along with calulated remaining reuse delays for matching skills. 'restore_type'= 0.
+				if (storeEffects)
 				{
-					if (effect == null)
-						continue;
-					
-					switch (effect.getEffectType())
+					for (L2Effect effect : getAllEffects())
 					{
-						case HEAL_OVER_TIME:
-						case COMBAT_POINT_HEAL_OVER_TIME:
+						if (effect == null)
 							continue;
+						
+						switch (effect.getEffectType())
+						{
+							case HEAL_OVER_TIME:
+							case COMBAT_POINT_HEAL_OVER_TIME:
+								continue;
+						}
+						
+						final L2Skill skill = effect.getSkill();
+						if (storedSkills.contains(skill.getReuseHashCode()))
+							continue;
+						
+						storedSkills.add(skill.getReuseHashCode());
+						if (!effect.isHerbEffect() && effect.getInUse() && !skill.isToggle())
+						{
+							ps.setInt(1, getObjectId());
+							ps.setInt(2, skill.getId());
+							ps.setInt(3, skill.getLevel());
+							ps.setInt(4, effect.getCount());
+							ps.setInt(5, effect.getTime());
+							
+							final TimeStamp t = _reuseTimeStamps.get(skill.getReuseHashCode());
+							if (t != null && t.hasNotPassed())
+							{
+								ps.setLong(6, t.getReuse());
+								ps.setDouble(7, t.getStamp());
+							}
+							else
+							{
+								ps.setLong(6, 0);
+								ps.setDouble(7, 0);
+							}
+							
+							ps.setInt(8, 0);
+							ps.setInt(9, getClassIndex());
+							ps.setInt(10, ++buff_index);
+							ps.addBatch(); // Add SQL
+						}
 					}
-					
-					L2Skill skill = effect.getSkill();
-					if (storedSkills.contains(skill.getReuseHashCode()))
+				}
+				
+				// Store the reuse delays of remaining skills which lost effect but still under reuse delay. 'restore_type' 1.
+				for (Map.Entry<Integer, TimeStamp> entry : _reuseTimeStamps.entrySet())
+				{
+					final int hash = entry.getKey();
+					if (storedSkills.contains(hash))
 						continue;
 					
-					storedSkills.add(skill.getReuseHashCode());
-					
-					if (!effect.isHerbEffect() && effect.getInUse() && !skill.isToggle())
+					final TimeStamp t = entry.getValue();
+					if (t != null && t.hasNotPassed())
 					{
-						statement.setInt(1, getObjectId());
-						statement.setInt(2, skill.getId());
-						statement.setInt(3, skill.getLevel());
-						statement.setInt(4, effect.getCount());
-						statement.setInt(5, effect.getTime());
+						storedSkills.add(hash);
 						
-						if (_reuseTimeStamps.containsKey(skill.getReuseHashCode()))
-						{
-							TimeStamp t = _reuseTimeStamps.get(skill.getReuseHashCode());
-							statement.setLong(6, t.hasNotPassed() ? t.getReuse() : 0);
-							statement.setDouble(7, t.hasNotPassed() ? t.getStamp() : 0);
-						}
-						else
-						{
-							statement.setLong(6, 0);
-							statement.setDouble(7, 0);
-						}
-						
-						statement.setInt(8, 0);
-						statement.setInt(9, getClassIndex());
-						statement.setInt(10, ++buff_index);
-						statement.execute();
+						ps.setInt(1, getObjectId());
+						ps.setInt(2, t.getSkillId());
+						ps.setInt(3, t.getSkillLvl());
+						ps.setInt(4, -1);
+						ps.setInt(5, -1);
+						ps.setLong(6, t.getReuse());
+						ps.setDouble(7, t.getStamp());
+						ps.setInt(8, 1);
+						ps.setInt(9, getClassIndex());
+						ps.setInt(10, ++buff_index);
+						ps.addBatch(); // Add SQL
 					}
 				}
-			}
-			
-			// Store the reuse delays of remaining skills which lost effect but still under reuse delay. 'restore_type' 1.
-			for (Map.Entry<Integer, TimeStamp> timestampEntry : _reuseTimeStamps.entrySet())
-			{
-				final int hash = timestampEntry.getKey();
-				if (storedSkills.contains(hash))
-					continue;
 				
-				TimeStamp t = timestampEntry.getValue();
-				if (t != null && t.hasNotPassed())
-				{
-					storedSkills.add(hash);
-					
-					statement.setInt(1, getObjectId());
-					statement.setInt(2, t.getSkillId());
-					statement.setInt(3, t.getSkillLvl());
-					statement.setInt(4, -1);
-					statement.setInt(5, -1);
-					statement.setLong(6, t.getReuse());
-					statement.setDouble(7, t.getStamp());
-					statement.setInt(8, 1);
-					statement.setInt(9, getClassIndex());
-					statement.setInt(10, ++buff_index);
-					statement.execute();
-				}
+				ps.executeBatch(); // Execute SQLs
 			}
-			statement.close();
 		}
 		catch (Exception e)
 		{
@@ -6443,7 +6503,7 @@ public final class L2PcInstance extends L2Playable
 			
 			if (getClan() != null)
 			{
-				final Siege siege = SiegeManager.getSiege(getX(), getY(), getZ());
+				final Siege siege = CastleManager.getInstance().getSiege(this);
 				if (siege != null)
 				{
 					// Check if a siege is in progress and if attacker and the L2PcInstance aren't in the Defender clan
@@ -6480,7 +6540,7 @@ public final class L2PcInstance extends L2Playable
 		{
 			if (getClan() != null)
 			{
-				final Siege siege = SiegeManager.getSiege(this);
+				final Siege siege = CastleManager.getInstance().getSiege(this);
 				return (siege != null && siege.checkIsAttacker(getClan()));
 			}
 		}
@@ -6611,7 +6671,7 @@ public final class L2PcInstance extends L2Playable
 			return false;
 		}
 		
-		if (inObserverMode())
+		if (isInObserverMode())
 		{
 			sendPacket(SystemMessageId.OBSERVERS_CANNOT_PARTICIPATE);
 			abortCast();
@@ -6685,7 +6745,7 @@ public final class L2PcInstance extends L2Playable
 		
 		switch (sklTargetType)
 		{
-		// Target the player if skill type is AURA, PARTY, CLAN or SELF
+			// Target the player if skill type is AURA, PARTY, CLAN or SELF
 			case TARGET_AURA:
 			case TARGET_FRONT_AURA:
 			case TARGET_BEHIND_AURA:
@@ -6745,8 +6805,21 @@ public final class L2PcInstance extends L2Playable
 		// ************************************* Check skill availability *******************************************
 		
 		// Siege summon checks. Both checks send a message to the player if it return false.
-		if (skill.isSiegeSummonSkill() && (!SiegeManager.checkIfOkToSummon(this) || !SevenSigns.getInstance().checkSummonConditions(this)))
-			return false;
+		if (skill.isSiegeSummonSkill())
+		{
+			final Castle castle = CastleManager.getInstance().getCastle(this);
+			if (castle == null || !castle.getSiege().isInProgress() || (getClanId() != 0 && castle.getSiege().getAttackerClan(getClanId()) == null) || (isInSiege() && isInsideZone(ZoneId.CASTLE)))
+			{
+				sendPacket(SystemMessage.getSystemMessage(SystemMessageId.NOT_CALL_PET_FROM_THIS_LOCATION));
+				return false;
+			}
+			
+			if (SevenSigns.getInstance().isSealValidationPeriod() && SevenSigns.getInstance().getSealOwner(SealType.STRIFE) == CabalType.DAWN && SevenSigns.getInstance().getPlayerCabal(getObjectId()) == CabalType.DUSK)
+			{
+				sendPacket(SystemMessageId.SEAL_OF_STRIFE_FORBIDS_SUMMONING);
+				return false;
+			}
+		}
 		
 		// ************************************* Check casting conditions *******************************************
 		
@@ -7013,7 +7086,7 @@ public final class L2PcInstance extends L2Playable
 		
 		if (castle == null || castle.getCastleId() <= 0)
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill);
-		else if (!castle.getArtefacts().contains(target))
+		else if (!castle.isGoodArtifact(target))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.INCORRECT_TARGET);
 		else if (!castle.getSiege().isInProgress())
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill);
@@ -7608,22 +7681,23 @@ public final class L2PcInstance extends L2Playable
 	
 	public void enterObserverMode(int x, int y, int z)
 	{
-		_savedLocation.set(getX(), getY(), getZ());
-		_observerMode = true;
+		dropAllSummons();
+		
+		if (getParty() != null)
+			getParty().removePartyMember(this, MessageType.Expelled);
 		
 		standUp();
 		
-		dropAllSummons();
+		_savedLocation.set(getX(), getY(), getZ());
+		
 		setTarget(null);
-		setIsParalyzed(true);
-		startParalyze();
 		setIsInvul(true);
 		getAppearance().setInvisible();
+		setIsParalyzed(true);
+		startParalyze();
 		
+		teleToLocation(x, y, z, 0);
 		sendPacket(new ObservationMode(x, y, z));
-		setXYZ(x, y, z);
-		
-		broadcastUserInfo();
 	}
 	
 	public void enterOlympiadObserverMode(int id)
@@ -7641,37 +7715,34 @@ public final class L2PcInstance extends L2Playable
 		
 		standUp();
 		
-		if (!_observerMode)
+		// Don't override saved location if we jump from stadium to stadium.
+		if (!isInObserverMode())
 			_savedLocation.set(getX(), getY(), getZ());
 		
-		_observerMode = true;
 		setTarget(null);
 		setIsInvul(true);
 		getAppearance().setInvisible();
+		
 		teleToLocation(task.getZone().getSpawns().get(2), 0);
 		sendPacket(new ExOlympiadMode(3));
-		broadcastUserInfo();
 	}
 	
 	public void leaveObserverMode()
 	{
-		setTarget(null);
-		setXYZ(_savedLocation.getX(), _savedLocation.getY(), _savedLocation.getZ());
-		setIsParalyzed(false);
-		stopParalyze(false);
-		getAppearance().setVisible();
-		setIsInvul(false);
-		
 		if (hasAI())
 			getAI().setIntention(CtrlIntention.IDLE);
 		
-		// prevent receive falling damage
-		setFalling();
+		setTarget(null);
+		getAppearance().setVisible();
+		setIsInvul(false);
+		setIsParalyzed(false);
+		stopParalyze(false);
 		
-		_observerMode = false;
-		_savedLocation.set(getX(), getY(), getZ());
 		sendPacket(new ObservationReturn(_savedLocation));
-		broadcastUserInfo();
+		teleToLocation(_savedLocation, 0);
+		
+		// Clear the location.
+		_savedLocation.clean();
 	}
 	
 	public void leaveOlympiadObserverMode()
@@ -7680,19 +7751,19 @@ public final class L2PcInstance extends L2Playable
 			return;
 		
 		_olympiadGameId = -1;
-		_observerMode = false;
-		
-		setTarget(null);
-		sendPacket(new ExOlympiadMode(0));
-		teleToLocation(_savedLocation, 20);
-		getAppearance().setVisible();
-		setIsInvul(false);
 		
 		if (hasAI())
 			getAI().setIntention(CtrlIntention.IDLE);
 		
-		_savedLocation.set(getX(), getY(), getZ());
-		broadcastUserInfo();
+		setTarget(null);
+		getAppearance().setVisible();
+		setIsInvul(false);
+		
+		sendPacket(new ExOlympiadMode(0));
+		teleToLocation(_savedLocation, 0);
+		
+		// Clear the location.
+		_savedLocation.clean();
 	}
 	
 	public int getOlympiadSide()
@@ -7720,9 +7791,9 @@ public final class L2PcInstance extends L2Playable
 		return _savedLocation;
 	}
 	
-	public boolean inObserverMode()
+	public boolean isInObserverMode()
 	{
-		return _observerMode;
+		return !_isInOlympiadMode && !_savedLocation.equals(Location.DUMMY_LOC);
 	}
 	
 	public int getTeleMode()
@@ -7775,17 +7846,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		return _tradeRefusal;
 	}
-    
-    public boolean isPartyInRefuse()
-    {
-        return _isPartyInRefuse;
-    }
-
-    public void setIsPartyInRefuse(boolean value)
-    {
-       _isPartyInRefuse = value;
-    }
-
+	
 	public void setExchangeRefusal(boolean mode)
 	{
 		_exchangeRefusal = mode;
@@ -7893,7 +7954,7 @@ public final class L2PcInstance extends L2Playable
 	public SystemMessage getNoDuelReason()
 	{
 		// Prepare the message with the good reason.
-		final SystemMessage sm = SystemMessage.getSystemMessage(_noDuelReason).addPcName(this);
+		final SystemMessage sm = SystemMessage.getSystemMessage(_noDuelReason).addCharName(this);
 		
 		// Reinitialize the reason.
 		_noDuelReason = SystemMessageId.THERE_IS_NO_OPPONENT_TO_RECEIVE_YOUR_CHALLENGE_FOR_A_DUEL;
@@ -7950,7 +8011,7 @@ public final class L2PcInstance extends L2Playable
 		else
 			for (L2Skill s : SkillTable.getNobleSkills())
 				super.removeSkill(s); // Just Remove skills without deleting from Sql
-			
+				
 		_isNoble = val;
 		
 		sendSkillList();
@@ -8282,7 +8343,7 @@ public final class L2PcInstance extends L2Playable
 			for (L2Character character : getKnownType(L2Character.class))
 				if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == this)
 					character.abortCast();
-			
+				
 			store();
 			_reuseTimeStamps.clear();
 			
@@ -8407,7 +8468,7 @@ public final class L2PcInstance extends L2Playable
 					setIsIn7sDungeon(false);
 				}
 			}
-			else if (SevenSigns.getInstance().getPlayerCabal(getObjectId()) == SevenSigns.CABAL_NULL)
+			else if (SevenSigns.getInstance().getPlayerCabal(getObjectId()) == CabalType.NORMAL)
 			{
 				teleToLocation(TeleportWhereType.TOWN);
 				setIsIn7sDungeon(false);
@@ -8575,7 +8636,7 @@ public final class L2PcInstance extends L2Playable
 				return;
 			}
 			
-			sendPacket(new ConfirmDlg(SystemMessageId.RESSURECTION_REQUEST_BY_S1).addPcName(Reviver));
+			sendPacket(new ConfirmDlg(SystemMessageId.RESSURECTION_REQUEST_BY_S1).addCharName(Reviver));
 		}
 	}
 	
@@ -8686,6 +8747,11 @@ public final class L2PcInstance extends L2Playable
 	public void addExpAndSp(long addToExp, int addToSp)
 	{
 		getStat().addExpAndSp(addToExp, addToSp);
+	}
+	
+	public void addExpAndSp(long addToExp, int addToSp, Map<L2Character, RewardInfo> rewards)
+	{
+		getStat().addExpAndSp(addToExp, addToSp, rewards);
 	}
 	
 	public void removeExpAndSp(long removeExp, int removeSp)
@@ -8855,13 +8921,7 @@ public final class L2PcInstance extends L2Playable
 			stopMove(null);
 			setTarget(null);
 			
-			PartyMatchWaitingList.getInstance().removePlayer(this);
-			if (_partyroom != 0)
-			{
-				PartyMatchRoom room = PartyMatchRoomList.getInstance().getRoom(_partyroom);
-				if (room != null)
-					room.deleteMember(this);
-			}
+			removeMeFromPartyMatch();
 			
 			if (isFlying())
 				removeSkill(SkillTable.getInstance().getInfo(4289, 1));
@@ -8873,7 +8933,7 @@ public final class L2PcInstance extends L2Playable
 			for (L2Character character : getKnownType(L2Character.class))
 				if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == this)
 					character.abortCast();
-			
+				
 			// Stop signets & toggles effects.
 			for (L2Effect effect : getAllEffects())
 			{
@@ -8927,7 +8987,7 @@ public final class L2PcInstance extends L2Playable
 				GmListTable.getInstance().deleteGm(this);
 			
 			// Check if the L2PcInstance is in observer mode to set its position to its position before entering in observer mode
-			if (inObserverMode())
+			if (isInObserverMode())
 				setXYZInvisible(_savedLocation);
 			
 			// Oust player from boat
@@ -9035,13 +9095,13 @@ public final class L2PcInstance extends L2Playable
 			case 7809: // yellow for beginners
 			case 8486: // prize-winning for beginners
 				return 0;
-				
+			
 			case 8485: // prize-winning luminous
 			case 8506: // green luminous
 			case 8509: // purple luminous
 			case 8512: // yellow luminous
 				return 2;
-				
+			
 			default:
 				return 1;
 		}
@@ -10118,7 +10178,7 @@ public final class L2PcInstance extends L2Playable
 		if (summonerChar == null)
 			return false;
 		
-		if (summonerChar.isInOlympiadMode() || summonerChar.inObserverMode() || summonerChar.isInsideZone(ZoneId.NO_SUMMON_FRIEND) || summonerChar.isMounted())
+		if (summonerChar.isInOlympiadMode() || summonerChar.isInObserverMode() || summonerChar.isInsideZone(ZoneId.NO_SUMMON_FRIEND) || summonerChar.isMounted())
 			return false;
 		
 		return true;
@@ -10133,19 +10193,19 @@ public final class L2PcInstance extends L2Playable
 		
 		if (targetChar.isAlikeDead())
 		{
-			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_DEAD_AT_THE_MOMENT_AND_CANNOT_BE_SUMMONED).addPcName(targetChar));
+			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_DEAD_AT_THE_MOMENT_AND_CANNOT_BE_SUMMONED).addCharName(targetChar));
 			return false;
 		}
 		
 		if (targetChar.isInStoreMode())
 		{
-			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CURRENTLY_TRADING_OR_OPERATING_PRIVATE_STORE_AND_CANNOT_BE_SUMMONED).addPcName(targetChar));
+			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CURRENTLY_TRADING_OR_OPERATING_PRIVATE_STORE_AND_CANNOT_BE_SUMMONED).addCharName(targetChar));
 			return false;
 		}
 		
 		if (targetChar.isRooted() || targetChar.isInCombat())
 		{
-			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_ENGAGED_IN_COMBAT_AND_CANNOT_BE_SUMMONED).addPcName(targetChar));
+			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_ENGAGED_IN_COMBAT_AND_CANNOT_BE_SUMMONED).addCharName(targetChar));
 			return false;
 		}
 		
@@ -10161,7 +10221,7 @@ public final class L2PcInstance extends L2Playable
 			return false;
 		}
 		
-		if (targetChar.inObserverMode() || targetChar.isInsideZone(ZoneId.NO_SUMMON_FRIEND))
+		if (targetChar.isInObserverMode() || targetChar.isInsideZone(ZoneId.NO_SUMMON_FRIEND))
 		{
 			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IN_SUMMON_BLOCKING_AREA).addCharName(targetChar));
 			return false;
@@ -10340,7 +10400,7 @@ public final class L2PcInstance extends L2Playable
 				friend.sendPacket(new FriendList(friend));
 				
 				if (login)
-					friend.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.FRIEND_S1_HAS_LOGGED_IN).addPcName(this));
+					friend.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.FRIEND_S1_HAS_LOGGED_IN).addCharName(this));
 			}
 		}
 	}
@@ -10522,7 +10582,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		for (L2Object object : getKnownType(L2Object.class))
 		{
-			if (object instanceof L2PcInstance && ((L2PcInstance) object).inObserverMode())
+			if (object instanceof L2PcInstance && ((L2PcInstance) object).isInObserverMode())
 				continue;
 			
 			sendInfoFrom(object);

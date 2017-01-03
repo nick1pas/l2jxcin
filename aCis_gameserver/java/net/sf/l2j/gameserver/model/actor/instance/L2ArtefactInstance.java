@@ -22,21 +22,11 @@ import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
 
-/**
- * This class manages all Castle Siege Artefacts.
- */
 public final class L2ArtefactInstance extends L2NpcInstance
 {
 	public L2ArtefactInstance(int objectId, NpcTemplate template)
 	{
 		super(objectId, template);
-	}
-	
-	@Override
-	public void onSpawn()
-	{
-		super.onSpawn();
-		getCastle().registerArtefact(this);
 	}
 	
 	@Override

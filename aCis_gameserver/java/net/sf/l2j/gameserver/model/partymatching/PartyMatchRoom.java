@@ -23,9 +23,6 @@ import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ExManagePartyRoomMember;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
-/**
- * @author Gnacik
- */
 public class PartyMatchRoom
 {
 	private final int _id;
@@ -42,7 +39,7 @@ public class PartyMatchRoom
 		_id = id;
 		_title = title;
 		_loot = loot;
-		_location = MapRegionTable.getClosestLocation(owner.getX(), owner.getY());
+		_location = MapRegionTable.getInstance().getClosestLocation(owner.getX(), owner.getY());
 		_minlvl = minlvl;
 		_maxlvl = maxlvl;
 		_maxmem = maxmem;
@@ -82,7 +79,7 @@ public class PartyMatchRoom
 		for (L2PcInstance _member : getPartyMembers())
 		{
 			SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S1_LEFT_PARTY_ROOM);
-			sm.addPcName(player);
+			sm.addCharName(player);
 			_member.sendPacket(sm);
 			_member.sendPacket(new ExManagePartyRoomMember(player, this, 2));
 		}

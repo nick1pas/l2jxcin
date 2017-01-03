@@ -139,7 +139,7 @@ public class Q384_WarehouseKeepersPastime extends Quest
 			100,
 			951
 		}
-	// Scroll: Enchant Weapon (C)
+		// Scroll: Enchant Weapon (C)
 	};
 	
 	private static final int[][] _rewards_10_lose =
@@ -160,7 +160,7 @@ public class Q384_WarehouseKeepersPastime extends Quest
 			100,
 			917
 		}
-	// Necklace of Mermaid
+		// Necklace of Mermaid
 	};
 	
 	private static final int[][] _rewards_100_win =
@@ -181,7 +181,7 @@ public class Q384_WarehouseKeepersPastime extends Quest
 			100,
 			401
 		}
-	// Drake Leather Armor
+		// Drake Leather Armor
 	};
 	
 	private static final int[][] _rewards_100_lose =
@@ -202,7 +202,7 @@ public class Q384_WarehouseKeepersPastime extends Quest
 			100,
 			135
 		}
-	// Samurai Longsword
+		// Samurai Longsword
 	};
 	
 	public Q384_WarehouseKeepersPastime()

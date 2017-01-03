@@ -1686,7 +1686,7 @@ public class FourSepulchersManager
 			}
 			else
 				ThreadPool.schedule(new ManagerSay(), 5 * 60400);
-			
+				
 			// searching time when attack time will be ended:
 			// counting difference between time when attack time ends and current time
 			// and then launching change time task

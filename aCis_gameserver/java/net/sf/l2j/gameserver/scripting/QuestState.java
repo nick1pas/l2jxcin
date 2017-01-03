@@ -77,7 +77,9 @@ public final class QuestState
 	 * Constructor of the QuestState : save the quest in the list of quests of the player.<BR/>
 	 * <BR/>
 	 * <U><I>Actions :</U></I><BR/>
-	 * <LI>Save informations in the object QuestState created (Quest, Player, Completion, State)</LI> <LI>Add the QuestState in the player's list of quests by using setQuestState()</LI> <LI>Add drops gotten by the quest</LI> <BR/>
+	 * <LI>Save informations in the object QuestState created (Quest, Player, Completion, State)</LI>
+	 * <LI>Add the QuestState in the player's list of quests by using setQuestState()</LI>
+	 * <LI>Add drops gotten by the quest</LI> <BR/>
 	 * @param quest : quest associated with the QuestState
 	 * @param player : L2PcInstance pointing out the player
 	 * @param state : state of the quest
@@ -232,8 +234,10 @@ public final class QuestState
 	 * Return value of parameter "val" after adding the couple (var,val) in class variable "vars".<BR>
 	 * <BR>
 	 * <U><I>Actions :</I></U><BR>
-	 * <LI>Initialize class variable "vars" if is null</LI> <LI>Initialize parameter "val" if is null</LI> <LI>Add/Update couple (var,val) in class variable FastMap "vars"</LI> <LI>If the key represented by "var" exists in FastMap "vars", the couple (var,val) is updated in the database. The key is
-	 * known as existing if the preceding value of the key (given as result of function put()) is not null.<BR>
+	 * <LI>Initialize class variable "vars" if is null</LI>
+	 * <LI>Initialize parameter "val" if is null</LI>
+	 * <LI>Add/Update couple (var,val) in class variable FastMap "vars"</LI>
+	 * <LI>If the key represented by "var" exists in FastMap "vars", the couple (var,val) is updated in the database. The key is known as existing if the preceding value of the key (given as result of function put()) is not null.<BR>
 	 * If the key doesn't exist, the couple is added/created in the database</LI>
 	 * @param var : String indicating the name of the variable for quest
 	 * @param value : String indicating the value of the variable for quest
@@ -287,8 +291,11 @@ public final class QuestState
 	 * Internally handles the progression of the quest so that it is ready for sending appropriate packets to the client<BR>
 	 * <BR>
 	 * <U><I>Actions :</I></U><BR>
-	 * <LI>Check if the new progress number resets the quest to a previous (smaller) step</LI> <LI>If not, check if quest progress steps have been skipped</LI> <LI>If skipped, prepare the variable completedStateFlags appropriately to be ready for sending to clients</LI> <LI>If no steps were skipped,
-	 * flags do not need to be prepared...</LI> <LI>If the passed step resets the quest to a previous step, reset such that steps after the parameter are not considered, while skipped steps before the parameter, if any, maintain their info</LI>
+	 * <LI>Check if the new progress number resets the quest to a previous (smaller) step</LI>
+	 * <LI>If not, check if quest progress steps have been skipped</LI>
+	 * <LI>If skipped, prepare the variable completedStateFlags appropriately to be ready for sending to clients</LI>
+	 * <LI>If no steps were skipped, flags do not need to be prepared...</LI>
+	 * <LI>If the passed step resets the quest to a previous step, reset such that steps after the parameter are not considered, while skipped steps before the parameter, if any, maintain their info</LI>
 	 * @param cond : int indicating the step number for the current quest progress (as will be shown to the client)
 	 * @param old : int indicating the previously noted step For more info on the variable communicating the progress steps to the client, please see
 	 */
@@ -506,7 +513,7 @@ public final class QuestState
 		for (ItemInstance item : _player.getInventory().getItems())
 			if (item != null && item.getItemId() == itemId)
 				count += item.getCount();
-		
+			
 		return count;
 	}
 	
@@ -613,7 +620,7 @@ public final class QuestState
 		// Disarm item, if equipped.
 		if (item.isEquipped())
 		{
-			ItemInstance[] unequiped = _player.getInventory().unEquipItemInBodySlotAndRecord(item.getItem().getBodyPart());
+			ItemInstance[] unequiped = _player.getInventory().unEquipItemInBodySlotAndRecord(item);
 			InventoryUpdate iu = new InventoryUpdate();
 			for (ItemInstance itm : unequiped)
 				iu.addModifiedItem(itm);

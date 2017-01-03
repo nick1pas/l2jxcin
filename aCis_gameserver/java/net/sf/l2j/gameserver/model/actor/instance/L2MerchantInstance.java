@@ -67,7 +67,7 @@ public class L2MerchantInstance extends L2NpcInstance
 			return;
 		
 		player.tempInventoryDisable();
-		player.sendPacket(new BuyList(buyList, player.getAdena(), (getIsInTown()) ? getCastle().getTaxRate() : 0));
+		player.sendPacket(new BuyList(buyList, player.getAdena(), (getCastle() != null) ? getCastle().getTaxRate() : 0));
 	}
 	
 	@Override

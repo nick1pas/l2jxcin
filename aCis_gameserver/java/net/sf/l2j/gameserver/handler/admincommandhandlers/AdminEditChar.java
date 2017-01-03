@@ -36,6 +36,7 @@ import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.L2Summon;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
@@ -43,6 +44,7 @@ import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.model.base.Sex;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.SystemMessageId;
+import net.sf.l2j.gameserver.network.serverpackets.AbstractNpcInfo.NpcInfo;
 import net.sf.l2j.gameserver.network.serverpackets.GMViewItemList;
 import net.sf.l2j.gameserver.network.serverpackets.HennaInfo;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -218,7 +220,7 @@ public class AdminEditChar implements IAdminCommandHandler
 				for (ClassId classid : ClassId.VALUES)
 					if (classidval == classid.getId())
 						valid = true;
-				
+					
 				if (valid && (player.getClassId().getId() != classidval))
 				{
 					player.setClassId(classidval);
@@ -249,17 +251,26 @@ public class AdminEditChar implements IAdminCommandHandler
 		{
 			try
 			{
-				L2Object target = activeChar.getTarget();
-				L2PcInstance player = null;
+				final L2Object target = activeChar.getTarget();
+				final String newTitle = command.substring(15);
 				
 				if (target instanceof L2PcInstance)
-					player = (L2PcInstance) target;
+				{
+					final L2PcInstance player = (L2PcInstance) target;
+					
+					player.setTitle(newTitle);
+					player.sendMessage("Your title has been changed by a GM.");
+					player.broadcastTitleInfo();
+				}
+				else if (target instanceof L2Npc)
+				{
+					final L2Npc npc = (L2Npc) target;
+					
+					npc.setTitle(newTitle);
+					npc.broadcastPacket(new NpcInfo(npc, null));
+				}
 				else
-					return false;
-				
-				player.setTitle(command.substring(15));
-				player.sendMessage("Your title has been changed by a GM.");
-				player.broadcastTitleInfo();
+					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 			}
 			catch (Exception e)
 			{
@@ -270,26 +281,34 @@ public class AdminEditChar implements IAdminCommandHandler
 		{
 			try
 			{
-				String val = command.substring(14);
-				if (!StringUtil.isValidPlayerName(val))
-				{
-					activeChar.sendMessage("The new name doesn't fit with the regex pattern.");
-					return false;
-				}
-				
-				L2Object target = activeChar.getTarget();
-				L2PcInstance player = null;
+				final L2Object target = activeChar.getTarget();
+				final String newName = command.substring(14);
 				
 				if (target instanceof L2PcInstance)
-					player = (L2PcInstance) target;
+				{
+					if (!StringUtil.isValidPlayerName(newName))
+					{
+						activeChar.sendMessage("The new name doesn't fit with the regex pattern.");
+						return false;
+					}
+					
+					final L2PcInstance player = (L2PcInstance) target;
+					
+					player.setName(newName);
+					CharNameTable.getInstance().updatePlayerData(player, false);
+					player.sendMessage("Your name has been changed by a GM.");
+					player.broadcastUserInfo();
+					player.store();
+				}
+				else if (target instanceof L2Npc)
+				{
+					final L2Npc npc = (L2Npc) target;
+					
+					npc.setName(newName);
+					npc.broadcastPacket(new NpcInfo(npc, null));
+				}
 				else
-					return false;
-				
-				player.setName(val);
-				CharNameTable.getInstance().updatePlayerData(player, false);
-				player.sendMessage("Your name has been changed by a GM.");
-				player.broadcastUserInfo();
-				player.store();
+					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 			}
 			catch (Exception e)
 			{

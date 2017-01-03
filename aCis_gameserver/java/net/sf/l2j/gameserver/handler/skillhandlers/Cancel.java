@@ -81,7 +81,7 @@ public class Cancel implements ISkillHandler
 							break;
 						
 						continue;
-						
+					
 					case WARRIOR_BANE:
 						if ("attack_time_down".equalsIgnoreCase(effect.getStackType()))
 							break;

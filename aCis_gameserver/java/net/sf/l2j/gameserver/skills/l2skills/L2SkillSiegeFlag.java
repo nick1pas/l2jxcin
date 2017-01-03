@@ -14,9 +14,9 @@
  */
 package net.sf.l2j.gameserver.skills.l2skills;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Character;
@@ -59,8 +59,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		npcDat.set("id", 35062);
 		npcDat.set("type", "");
 		
-		npcDat.set("name", "Headquarters");
-		npcDat.set("title", player.getClan().getName());
+		npcDat.set("name", player.getClan().getName());
 		
 		npcDat.set("hp", (_isAdvanced) ? 100000 : 50000);
 		npcDat.set("mp", 0);
@@ -100,7 +99,7 @@ public class L2SkillSiegeFlag extends L2Skill
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(247);
 		else if (!player.isClanLeader())
 			sm = SystemMessage.getSystemMessage(SystemMessageId.ONLY_CLAN_LEADER_CAN_ISSUE_COMMANDS);
-		else if (castle.getSiege().getAttackerClan(player.getClan()).getFlags().size() >= SiegeManager.FLAGS_MAX_COUNT)
+		else if (castle.getSiege().getAttackerClan(player.getClan()).getFlags().size() >= Config.FLAGS_MAX_COUNT)
 			sm = SystemMessage.getSystemMessage(SystemMessageId.NOT_ANOTHER_HEADQUARTERS);
 		else if (!player.isInsideZone(ZoneId.HQ))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.NOT_SET_UP_BASE_HERE);

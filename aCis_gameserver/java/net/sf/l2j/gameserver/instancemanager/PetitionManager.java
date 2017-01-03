@@ -123,7 +123,7 @@ public final class PetitionManager
 				else
 				{
 					// Ending petition consultation with <Player>.
-					getResponder().sendPacket(SystemMessage.getSystemMessage(SystemMessageId.PETITION_ENDED_WITH_S1).addPcName(getPetitioner()));
+					getResponder().sendPacket(SystemMessage.getSystemMessage(SystemMessageId.PETITION_ENDED_WITH_S1).addCharName(getPetitioner()));
 					
 					// Receipt No. <ID> petition cancelled.
 					if (endState == PetitionState.Petitioner_Cancel)
@@ -249,7 +249,7 @@ public final class PetitionManager
 		currPetition.sendResponderPacket(SystemMessage.getSystemMessage(SystemMessageId.PETITION_ACCEPTED_RECENT_NO_S1).addNumber(currPetition.getId()));
 		
 		// Petition consultation with <Player> underway.
-		currPetition.sendResponderPacket(SystemMessage.getSystemMessage(SystemMessageId.PETITION_WITH_S1_UNDER_WAY).addPcName(currPetition.getPetitioner()));
+		currPetition.sendResponderPacket(SystemMessage.getSystemMessage(SystemMessageId.PETITION_WITH_S1_UNDER_WAY).addCharName(currPetition.getPetitioner()));
 		return true;
 	}
 	

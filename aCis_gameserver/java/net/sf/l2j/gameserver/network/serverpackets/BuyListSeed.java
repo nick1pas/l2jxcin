@@ -17,31 +17,25 @@ package net.sf.l2j.gameserver.network.serverpackets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.l2j.gameserver.instancemanager.CastleManorManager.SeedProduction;
+import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
+import net.sf.l2j.gameserver.model.manor.SeedProduction;
 
-/**
- * Format: c ddh[hdddhhd]
- * @author l3x
- */
 public final class BuyListSeed extends L2GameServerPacket
 {
 	private final int _manorId;
-	private List<Seed> _list;
+	private final List<SeedProduction> _list;
 	private final int _money;
 	
-	public BuyListSeed(int currentMoney, int castleId, List<SeedProduction> seeds)
+	public BuyListSeed(int currentMoney, int castleId)
 	{
 		_money = currentMoney;
 		_manorId = castleId;
 		
-		if (!seeds.isEmpty())
+		_list = new ArrayList<>();
+		for (SeedProduction s : CastleManorManager.getInstance().getSeedProduction(castleId, false))
 		{
-			_list = new ArrayList<>();
-			for (SeedProduction s : seeds)
-			{
-				if (s.getCanProduce() > 0 && s.getPrice() > 0)
-					_list.add(new Seed(s.getId(), s.getCanProduce(), s.getPrice()));
-			}
+			if (s.getAmount() > 0 && s.getPrice() > 0)
+				_list.add(s);
 		}
 	}
 	
@@ -50,34 +44,22 @@ public final class BuyListSeed extends L2GameServerPacket
 	{
 		writeC(0xE8);
 		
-		writeD(_money); // current money
-		writeD(_manorId); // manor id
+		writeD(_money);
+		writeD(_manorId);
 		
-		if (_list != null && !_list.isEmpty())
+		if (!_list.isEmpty())
 		{
-			writeH(_list.size()); // list length
-			for (Seed s : _list)
+			writeH(_list.size());
+			for (SeedProduction s : _list)
 			{
-				writeH(0x04); // item->type1
-				writeD(s._itemId);
-				writeD(s._itemId);
-				writeD(s._count); // item count
-				writeH(0x04); // Custom Type 2
-				writeH(0x00); // unknown :)
-				writeD(s._price); // price
+				writeH(0x04);
+				writeD(s.getId());
+				writeD(s.getId());
+				writeD(s.getAmount());
+				writeH(0x04);
+				writeH(0x00);
+				writeD(s.getPrice());
 			}
-		}
-	}
-	
-	private static class Seed
-	{
-		public final int _itemId, _count, _price;
-		
-		public Seed(int itemId, int count, int price)
-		{
-			_itemId = itemId;
-			_count = count;
-			_price = price;
 		}
 	}
 }

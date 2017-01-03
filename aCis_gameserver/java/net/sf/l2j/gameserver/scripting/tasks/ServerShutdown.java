@@ -17,9 +17,6 @@ package net.sf.l2j.gameserver.scripting.tasks;
 import net.sf.l2j.gameserver.Shutdown;
 import net.sf.l2j.gameserver.scripting.ScheduledQuest;
 
-/**
- * @author Hasha
- */
 public final class ServerShutdown extends ScheduledQuest
 {
 	private static final int PERIOD = 600; // 10 minutes

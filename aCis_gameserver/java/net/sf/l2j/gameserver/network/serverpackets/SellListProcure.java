@@ -15,31 +15,27 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import net.sf.l2j.gameserver.instancemanager.CastleManager;
-import net.sf.l2j.gameserver.instancemanager.CastleManorManager.CropProcure;
+import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
+import net.sf.l2j.gameserver.model.manor.CropProcure;
 
 public class SellListProcure extends L2GameServerPacket
 {
-	private final Map<ItemInstance, Integer> _sellList = new HashMap<>();
-	private final List<CropProcure> _procureList;
+	private final Map<ItemInstance, Integer> _sellList;
 	
 	private final int _money;
-	private final int _castle;
 	
 	public SellListProcure(L2PcInstance player, int castleId)
 	{
 		_money = player.getAdena();
-		_castle = castleId;
-		_procureList = CastleManager.getInstance().getCastleById(_castle).getCropProcure(0);
+		_sellList = new HashMap<>();
 		
-		for (CropProcure c : _procureList)
+		for (CropProcure c : CastleManorManager.getInstance().getCropProcure(castleId, false))
 		{
-			ItemInstance item = player.getInventory().getItemByItemId(c.getId());
+			final ItemInstance item = player.getInventory().getItemByItemId(c.getId());
 			if (item != null && c.getAmount() > 0)
 				_sellList.put(item, c.getAmount());
 		}
@@ -49,9 +45,9 @@ public class SellListProcure extends L2GameServerPacket
 	protected final void writeImpl()
 	{
 		writeC(0xE9);
-		writeD(_money); // money
-		writeD(0x00); // lease ?
-		writeH(_sellList.size()); // list size
+		writeD(_money);
+		writeD(0x00);
+		writeH(_sellList.size());
 		
 		for (Map.Entry<ItemInstance, Integer> itemEntry : _sellList.entrySet())
 		{
@@ -60,10 +56,10 @@ public class SellListProcure extends L2GameServerPacket
 			writeH(item.getItem().getType1());
 			writeD(item.getObjectId());
 			writeD(item.getItemId());
-			writeD(itemEntry.getValue()); // count
+			writeD(itemEntry.getValue());
 			writeH(item.getItem().getType2());
-			writeH(0); // unknown
-			writeD(0); // price, u shouldnt get any adena for crops, only raw materials
+			writeH(0);
+			writeD(0);
 		}
 	}
 }

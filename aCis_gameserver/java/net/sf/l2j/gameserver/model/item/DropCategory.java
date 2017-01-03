@@ -105,19 +105,19 @@ public class DropCategory
 			}
 		}
 		
+		if (subCatChance == 0)
+			return null;
+		
 		// among the results choose one.
-		int randomIndex = Rnd.get(subCatChance);
+		final int randomIndex = Rnd.get(subCatChance);
+		
 		int sum = 0;
 		for (DropData drop : drops)
 		{
 			sum += drop.getChance();
 			
 			if (sum > randomIndex) // drop this item and exit the function
-			{
-				drops.clear();
-				drops = null;
 				return drop;
-			}
 		}
 		// since it is still within category, only drop one of the acceptable drops from the results.
 		return null;

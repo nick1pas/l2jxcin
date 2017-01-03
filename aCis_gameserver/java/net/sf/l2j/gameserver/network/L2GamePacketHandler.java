@@ -555,7 +555,7 @@ public final class L2GamePacketHandler implements IPacketHandler<L2GameClient>, 
 					case 0xaf:
 						msg = new RequestRecipeItemMakeSelf();
 						break;
-					
+						
 					// case 0xb0:
 					// msg = new RequestRecipeShopManageList(data, client);
 					// break;

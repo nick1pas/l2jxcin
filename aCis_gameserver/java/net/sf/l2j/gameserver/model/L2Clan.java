@@ -36,9 +36,9 @@ import net.sf.l2j.gameserver.communitybbs.Manager.ForumsBBSManager;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance.TimeStamp;
+import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.itemcontainer.ClanWarehouse;
 import net.sf.l2j.gameserver.model.itemcontainer.ItemContainer;
@@ -251,7 +251,7 @@ public class L2Clan
 			return;
 		
 		L2PcInstance exLeader = _leader.getPlayerInstance();
-		SiegeManager.removeSiegeSkills(exLeader);
+		exLeader.removeSiegeSkills();
 		exLeader.setClan(this);
 		exLeader.setClanPrivileges(L2Clan.CP_NOTHING);
 		exLeader.broadcastUserInfo();
@@ -266,9 +266,9 @@ public class L2Clan
 		newLeader.setClan(this);
 		newLeader.setPledgeClass(L2ClanMember.calculatePledgeClass(newLeader));
 		newLeader.setClanPrivileges(L2Clan.CP_ALL);
-		if (_level >= SiegeManager.MINIMUM_CLAN_LEVEL)
+		if (_level >= Config.MINIMUM_CLAN_LEVEL)
 		{
-			SiegeManager.addSiegeSkills(newLeader);
+			newLeader.addSiegeSkills();
 			
 			// Transfering siege skills TimeStamps from old leader to new leader to prevent unlimited headquarters
 			if (!exLeader.getReuseTimeStamp().isEmpty())
@@ -287,7 +287,7 @@ public class L2Clan
 		newLeader.broadcastUserInfo();
 		
 		broadcastClanStatus();
-		broadcastToOnlineMembers(SystemMessage.getSystemMessage(SystemMessageId.CLAN_LEADER_PRIVILEGES_HAVE_BEEN_TRANSFERRED_TO_S1).addPcName(newLeader));
+		broadcastToOnlineMembers(SystemMessage.getSystemMessage(SystemMessageId.CLAN_LEADER_PRIVILEGES_HAVE_BEEN_TRANSFERRED_TO_S1).addCharName(newLeader));
 	}
 	
 	/**
@@ -323,8 +323,9 @@ public class L2Clan
 		player.setPledgeClass(L2ClanMember.calculatePledgeClass(player));
 		
 		// Update siege flag, if needed.
-		for (Siege siege : SiegeManager.getSieges())
+		for (Castle castle : CastleManager.getInstance().getCastles())
 		{
+			final Siege siege = castle.getSiege();
 			if (!siege.isInProgress())
 				continue;
 			
@@ -415,8 +416,9 @@ public class L2Clan
 			}
 		}
 		exMember.saveApprenticeAndSponsor(0, 0);
-		if (Config.REMOVE_CASTLE_CIRCLETS)
-			CastleManager.getInstance().removeCircletsAndCrown(exMember, _castleId);
+		
+		if (Config.REMOVE_CASTLE_CIRCLETS && hasCastle())
+			CastleManager.getInstance().getCastleById(_castleId).removeCircletsAndCrown(exMember);
 		
 		if (exMember.isOnline())
 		{
@@ -436,7 +438,7 @@ public class L2Clan
 			
 			if (player.isClanLeader())
 			{
-				SiegeManager.removeSiegeSkills(player);
+				player.removeSiegeSkills();
 				player.setClanCreateExpiryTime(System.currentTimeMillis() + Config.ALT_CLAN_CREATE_DAYS * 86400000L);
 			}
 			
@@ -539,16 +541,16 @@ public class L2Clan
 				{
 					case 0:
 						return 10;
-						
+					
 					case 1:
 						return 15;
-						
+					
 					case 2:
 						return 20;
-						
+					
 					case 3:
 						return 30;
-						
+					
 					default:
 						return 40;
 				}
@@ -557,7 +559,7 @@ public class L2Clan
 			case 100:
 			case 200:
 				return 20;
-				
+			
 			case 1001:
 			case 1002:
 			case 2001:
@@ -1350,14 +1352,14 @@ public class L2Clan
 			{
 				case SUBUNIT_ACADEMY:
 					return 0;
-					
+				
 				case SUBUNIT_ROYAL1:
 					pledgeType = getAvailablePledgeTypes(SUBUNIT_ROYAL2);
 					break;
 				
 				case SUBUNIT_ROYAL2:
 					return 0;
-					
+				
 				case SUBUNIT_KNIGHT1:
 					pledgeType = getAvailablePledgeTypes(SUBUNIT_KNIGHT2);
 					break;
@@ -1671,19 +1673,19 @@ public class L2Clan
 		
 		if (target.getClanId() != 0)
 		{
-			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_WORKING_WITH_ANOTHER_CLAN).addPcName(target));
+			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_WORKING_WITH_ANOTHER_CLAN).addCharName(target));
 			return false;
 		}
 		
 		if (target.getClanJoinExpiryTime() > System.currentTimeMillis())
 		{
-			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_MUST_WAIT_BEFORE_JOINING_ANOTHER_CLAN).addPcName(target));
+			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_MUST_WAIT_BEFORE_JOINING_ANOTHER_CLAN).addCharName(target));
 			return false;
 		}
 		
 		if ((target.getLevel() > 40 || target.getClassId().level() >= 2) && pledgeType == -1)
 		{
-			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_DOESNOT_MEET_REQUIREMENTS_TO_JOIN_ACADEMY).addPcName(target));
+			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_DOESNOT_MEET_REQUIREMENTS_TO_JOIN_ACADEMY).addCharName(target));
 			activeChar.sendPacket(SystemMessageId.ACADEMY_REQUIREMENTS);
 			return false;
 		}
@@ -1691,7 +1693,7 @@ public class L2Clan
 		if (getSubPledgeMembersCount(pledgeType) >= getMaxNrOfMembers(pledgeType))
 		{
 			if (pledgeType == 0)
-				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CLAN_IS_FULL).addPcName(target));
+				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CLAN_IS_FULL).addCharName(target));
 			else
 				activeChar.sendPacket(SystemMessageId.SUBCLAN_IS_FULL);
 			return false;
@@ -1746,7 +1748,7 @@ public class L2Clan
 		
 		if (!target.isClanLeader())
 		{
-			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_NOT_A_CLAN_LEADER).addPcName(target));
+			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_NOT_A_CLAN_LEADER).addCharName(target));
 			return false;
 		}
 		
@@ -1885,8 +1887,9 @@ public class L2Clan
 			return;
 		}
 		
-		for (Siege siege : SiegeManager.getSieges())
+		for (Castle castle : CastleManager.getInstance().getCastles())
 		{
+			final Siege siege = castle.getSiege();
 			if (siege.getAttackerClan(this) != null || siege.getDefenderClan(this) != null || (!siege.isInProgress() && siege.getDefenderWaitingClan(this) != null))
 			{
 				player.sendPacket(SystemMessageId.NO_ALLY_CREATION_WHILE_SIEGE);
@@ -1917,8 +1920,9 @@ public class L2Clan
 			return;
 		}
 		
-		for (Siege siege : SiegeManager.getSieges())
+		for (Castle castle : CastleManager.getInstance().getCastles())
 		{
+			final Siege siege = castle.getSiege();
 			if (siege.getAttackerClan(this) != null || siege.getDefenderClan(this) != null || (!siege.isInProgress() && siege.getDefenderWaitingClan(this) != null))
 			{
 				player.sendPacket(SystemMessageId.CANNOT_DISSOLVE_ALLY_WHILE_IN_SIEGE);
@@ -2069,9 +2073,9 @@ public class L2Clan
 		{
 			L2PcInstance leader = _leader.getPlayerInstance();
 			if (3 < level)
-				SiegeManager.addSiegeSkills(leader);
+				leader.addSiegeSkills();
 			else if (4 > level)
-				SiegeManager.removeSiegeSkills(leader);
+				leader.removeSiegeSkills();
 			
 			if (4 < level)
 				leader.sendPacket(SystemMessageId.CLAN_CAN_ACCUMULATE_CLAN_REPUTATION_POINTS);
@@ -2215,5 +2219,37 @@ public class L2Clan
 				changeAllyCrest(0, true);
 			}
 		}
+	}
+	
+	/**
+	 * Verify if the clan is registered to any siege.
+	 * @return true if the clan is registered or owner of a castle
+	 */
+	public boolean isRegisteredOnSiege()
+	{
+		if (hasCastle())
+			return true;
+		
+		boolean register = false;
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		{
+			PreparedStatement st = con.prepareStatement("SELECT clan_id FROM siege_clans WHERE clan_id=?");
+			st.setInt(1, getClanId());
+			
+			ResultSet rs = st.executeQuery();
+			while (rs.next())
+			{
+				register = true;
+				break;
+			}
+			
+			rs.close();
+			st.close();
+		}
+		catch (Exception e)
+		{
+			_log.warning("Exception: checkIsRegistered(): " + e);
+		}
+		return register;
 	}
 }

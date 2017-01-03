@@ -65,7 +65,7 @@ public final class RequestExAskJoinMPCC extends L2GameClientPacket
 					{
 						// targets party already in a CChannel?
 						if (player.getParty().isInCommandChannel())
-							activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ALREADY_MEMBER_OF_COMMAND_CHANNEL).addPcName(player));
+							activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ALREADY_MEMBER_OF_COMMAND_CHANNEL).addCharName(player));
 						// ready to open a new CC, send request to targets Party's PartyLeader
 						else
 							askJoinMPCC(activeChar, player);
@@ -83,7 +83,7 @@ public final class RequestExAskJoinMPCC extends L2GameClientPacket
 					{
 						// target's party already in a CChannel?
 						if (player.getParty().isInCommandChannel())
-							activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ALREADY_MEMBER_OF_COMMAND_CHANNEL).addPcName(player));
+							activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ALREADY_MEMBER_OF_COMMAND_CHANNEL).addCharName(player));
 						// ready to open a new CC, send request to targets Party's PartyLeader
 						else
 							askJoinMPCC(activeChar, player);
@@ -119,10 +119,10 @@ public final class RequestExAskJoinMPCC extends L2GameClientPacket
 		if (!targetLeader.isProcessingRequest())
 		{
 			requestor.onTransactionRequest(targetLeader);
-			targetLeader.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.COMMAND_CHANNEL_CONFIRM_FROM_S1).addPcName(requestor));
+			targetLeader.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.COMMAND_CHANNEL_CONFIRM_FROM_S1).addCharName(requestor));
 			targetLeader.sendPacket(new ExAskJoinMPCC(requestor.getName()));
 		}
 		else
-			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addPcName(targetLeader));
+			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addCharName(targetLeader));
 	}
 }

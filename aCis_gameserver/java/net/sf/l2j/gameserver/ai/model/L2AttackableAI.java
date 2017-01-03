@@ -44,6 +44,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2RaidBossInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2RiftInvaderInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.AIType;
+import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.Quest;
@@ -201,7 +202,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			
 			if (target instanceof L2Npc)
 				return false;
-			
+				
 			// depending on config, do not allow mobs to attack _new_ players in peacezones,
 			// unless they are already following those players from outside the peacezone.
 			if (!Config.ALT_MOB_AGRO_IN_PEACEZONE && target.isInsideZone(ZoneId.PEACE))
@@ -550,7 +551,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			
 			// -------------------------------------------------------------------------------
 			// Suicide possibility if HPs are < 15%.
-			defaultList = npc.getTemplate().getSuicideSkills();
+			defaultList = npc.getTemplate().getSkills(SkillType.SUICIDE);
 			if (!defaultList.isEmpty() && (npc.getCurrentHp() / npc.getMaxHp() < 0.15))
 			{
 				final L2Skill skill = Rnd.get(defaultList);
@@ -560,7 +561,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			
 			// -------------------------------------------------------------------------------
 			// Heal
-			defaultList = npc.getTemplate().getHealSkills();
+			defaultList = npc.getTemplate().getSkills(SkillType.HEAL);
 			if (!defaultList.isEmpty())
 			{
 				// First priority is to heal leader (if npc is a minion).
@@ -650,7 +651,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			
 			// -------------------------------------------------------------------------------
 			// Buff
-			defaultList = npc.getTemplate().getBuffSkills();
+			defaultList = npc.getTemplate().getSkills(SkillType.BUFF);
 			if (!defaultList.isEmpty())
 			{
 				for (L2Skill sk : defaultList)
@@ -672,7 +673,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			
 			// -------------------------------------------------------------------------------
 			// Debuff - 10% luck to get debuffed.
-			defaultList = npc.getTemplate().getDebuffSkills();
+			defaultList = npc.getTemplate().getSkills(SkillType.DEBUFF);
 			if (Rnd.get(100) < 10 && !defaultList.isEmpty())
 			{
 				for (L2Skill sk : defaultList)
@@ -694,7 +695,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			
 			// -------------------------------------------------------------------------------
 			// General attack skill - short range is checked, then long range.
-			defaultList = npc.getTemplate().getShortRangeSkills();
+			defaultList = npc.getTemplate().getSkills(SkillType.SHORT_RANGE);
 			if (!defaultList.isEmpty() && dist <= 150)
 			{
 				final L2Skill skill = Rnd.get(defaultList);
@@ -703,7 +704,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			}
 			else
 			{
-				defaultList = npc.getTemplate().getLongRangeSkills();
+				defaultList = npc.getTemplate().getSkills(SkillType.LONG_RANGE);
 				if (!defaultList.isEmpty() && dist > 150)
 				{
 					final L2Skill skill = Rnd.get(defaultList);
@@ -1226,7 +1227,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 			case HEALER:
 			case MAGE:
 				return !getActiveChar().isMuted();
-				
+			
 			default:
 				if (getActiveChar().isPhysicalMuted())
 					return false;
@@ -1578,7 +1579,7 @@ public class L2AttackableAI extends L2CharacterAI implements Runnable
 		if (Rnd.get(RANDOM_WALK_RATE) != 0)
 			return false;
 		
-		for (L2Skill sk : getActiveChar().getTemplate().getBuffSkills())
+		for (L2Skill sk : getActiveChar().getTemplate().getSkills(SkillType.BUFF))
 		{
 			if (getActiveChar().getFirstEffect(sk) != null)
 				continue;

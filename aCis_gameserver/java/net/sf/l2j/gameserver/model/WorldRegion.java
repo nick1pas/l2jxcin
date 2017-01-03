@@ -110,31 +110,31 @@ public final class WorldRegion
 		return false;
 	}
 	
-	public boolean checkEffectRangeInsidePeaceZone(L2Skill skill, final int x, final int y, final int z)
+	public boolean checkEffectRangeInsidePeaceZone(L2Skill skill, Location loc)
 	{
 		final int range = skill.getEffectRange();
-		final int up = y + range;
-		final int down = y - range;
-		final int left = x + range;
-		final int right = x - range;
+		final int up = loc.getY() + range;
+		final int down = loc.getY() - range;
+		final int left = loc.getX() + range;
+		final int right = loc.getX() - range;
 		
 		for (L2ZoneType e : _zones)
 		{
 			if ((e instanceof L2TownZone && ((L2TownZone) e).isPeaceZone()) || e instanceof L2DerbyTrackZone || e instanceof L2PeaceZone)
 			{
-				if (e.isInsideZone(x, up, z))
+				if (e.isInsideZone(loc.getX(), up, loc.getZ()))
 					return false;
 				
-				if (e.isInsideZone(x, down, z))
+				if (e.isInsideZone(loc.getX(), down, loc.getZ()))
 					return false;
 				
-				if (e.isInsideZone(left, y, z))
+				if (e.isInsideZone(left, loc.getY(), loc.getZ()))
 					return false;
 				
-				if (e.isInsideZone(right, y, z))
+				if (e.isInsideZone(right, loc.getY(), loc.getZ()))
 					return false;
 				
-				if (e.isInsideZone(x, y, z))
+				if (e.isInsideZone(loc.getX(), loc.getY(), loc.getZ()))
 					return false;
 			}
 		}

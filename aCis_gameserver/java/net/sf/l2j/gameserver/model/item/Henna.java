@@ -98,7 +98,7 @@ public final class Henna
 		for (Henna henna : HennaTable.getInstance().getAvailableHenna(player.getClassId().getId()))
 			if (henna.equals(this))
 				return true;
-		
+			
 		return false;
 	}
 	

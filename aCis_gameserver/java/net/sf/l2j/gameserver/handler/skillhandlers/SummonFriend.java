@@ -69,7 +69,7 @@ public class SummonFriend implements ISkillHandler
 			// Check target teleport request status.
 			if (!target.teleportRequest(player, skill))
 			{
-				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ALREADY_SUMMONED).addPcName(target));
+				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ALREADY_SUMMONED).addCharName(target));
 				continue;
 			}
 			
@@ -77,8 +77,8 @@ public class SummonFriend implements ISkillHandler
 			if (skill.getId() == 1403)
 			{
 				final ConfirmDlg confirm = new ConfirmDlg(SystemMessageId.S1_WISHES_TO_SUMMON_YOU_FROM_S2_DO_YOU_ACCEPT.getId());
-				confirm.addPcName(player);
-				confirm.addZoneName(activeChar.getX(), activeChar.getY(), activeChar.getZ());
+				confirm.addCharName(player);
+				confirm.addZoneName(activeChar.getPosition());
 				confirm.addTime(30000);
 				confirm.addRequesterId(player.getObjectId());
 				target.sendPacket(confirm);

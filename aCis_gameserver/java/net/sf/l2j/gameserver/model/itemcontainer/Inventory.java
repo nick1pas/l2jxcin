@@ -30,6 +30,7 @@ import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemLocation;
+import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemState;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.item.type.ArmorType;
 import net.sf.l2j.gameserver.model.item.type.EtcItemType;
@@ -162,7 +163,7 @@ public abstract class Inventory extends ItemContainer
 			removeItem(item);
 			item.setOwnerId(process, 0, actor, reference);
 			item.setLocation(ItemLocation.VOID);
-			item.setLastChange(ItemInstance.REMOVED);
+			item.setLastChange(ItemState.REMOVED);
 			
 			item.updateDatabase();
 			refreshWeight();
@@ -189,13 +190,13 @@ public abstract class Inventory extends ItemContainer
 		{
 			if (!_items.contains(item))
 				return null;
-			
+				
 			// Adjust item quantity and create new instance to drop
 			// Directly drop entire item
 			if (item.getCount() > count)
 			{
 				item.changeCount(process, -count, actor, reference);
-				item.setLastChange(ItemInstance.MODIFIED);
+				item.setLastChange(ItemState.MODIFIED);
 				item.updateDatabase();
 				
 				item = ItemTable.getInstance().createItem(process, item.getItemId(), count, actor, reference);
@@ -391,7 +392,7 @@ public abstract class Inventory extends ItemContainer
 				_paperdoll[slot] = null;
 				// Put old item from paperdoll slot to base location
 				old.setLocation(getBaseLocation());
-				old.setLastChange(ItemInstance.MODIFIED);
+				old.setLastChange(ItemState.MODIFIED);
 				
 				// delete armor mask flag (in case of two-piece armor it does not matter, we need to deactivate mask too)
 				_wornMask &= ~old.getItem().getItemMask();
@@ -411,7 +412,7 @@ public abstract class Inventory extends ItemContainer
 			{
 				_paperdoll[slot] = item;
 				item.setLocation(getEquipLocation(), slot);
-				item.setLastChange(ItemInstance.MODIFIED);
+				item.setLastChange(ItemState.MODIFIED);
 				
 				// activate mask (check 2nd armor part for two-piece armors)
 				Item armor = item.getItem();
@@ -510,6 +511,26 @@ public abstract class Inventory extends ItemContainer
 		}
 		
 		return slot;
+	}
+	
+	/**
+	 * Unequips item in body slot and returns alterations.
+	 * @param item : the item used to find the slot back.
+	 * @return ItemInstance[] : list of changes
+	 */
+	public ItemInstance[] unEquipItemInBodySlotAndRecord(ItemInstance item)
+	{
+		Inventory.ChangeRecorder recorder = newRecorder();
+		
+		try
+		{
+			unEquipItemInBodySlot(getSlotFromItem(item));
+		}
+		finally
+		{
+			removePaperdollListener(recorder);
+		}
+		return recorder.getChangedItems();
 	}
 	
 	/**

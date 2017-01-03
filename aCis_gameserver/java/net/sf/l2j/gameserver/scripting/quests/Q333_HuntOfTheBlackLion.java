@@ -239,7 +239,7 @@ public class Q333_HuntOfTheBlackLion extends Quest
 			CARGO_BOX_4,
 			130000
 		}
-	// Marsh Stakato Drone
+		// Marsh Stakato Drone
 	};
 	
 	public Q333_HuntOfTheBlackLion()

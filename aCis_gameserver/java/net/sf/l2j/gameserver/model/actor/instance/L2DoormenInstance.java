@@ -20,6 +20,7 @@ import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.datatables.TeleportLocationTable;
 import net.sf.l2j.gameserver.model.L2TeleportLocation;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
@@ -28,65 +29,58 @@ import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
  */
 public class L2DoormenInstance extends L2NpcInstance
 {
-	public L2DoormenInstance(int objectID, NpcTemplate template)
+	public L2DoormenInstance(int objectId, NpcTemplate template)
 	{
-		super(objectID, template);
+		super(objectId, template);
 	}
 	
 	@Override
 	public void onBypassFeedback(L2PcInstance player, String command)
 	{
-		if (command.startsWith("Chat"))
-		{
-			showChatWindow(player);
-			return;
-		}
-		else if (command.startsWith("open_doors"))
+		if (command.startsWith("open_doors"))
 		{
 			if (isOwnerClan(player))
 			{
 				if (isUnderSiege())
+				{
 					cannotManageDoors(player);
+					player.sendPacket(SystemMessageId.GATES_NOT_OPENED_CLOSED_DURING_SIEGE);
+				}
 				else
 					openDoors(player, command);
 			}
-			return;
 		}
 		else if (command.startsWith("close_doors"))
 		{
 			if (isOwnerClan(player))
 			{
 				if (isUnderSiege())
+				{
 					cannotManageDoors(player);
+					player.sendPacket(SystemMessageId.GATES_NOT_OPENED_CLOSED_DURING_SIEGE);
+				}
 				else
 					closeDoors(player, command);
 			}
-			return;
 		}
 		else if (command.startsWith("tele"))
 		{
 			if (isOwnerClan(player))
 				doTeleport(player, command);
-			return;
 		}
-		
-		super.onBypassFeedback(player, command);
+		else
+			super.onBypassFeedback(player, command);
 	}
 	
 	@Override
 	public void showChatWindow(L2PcInstance player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
-		
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		
-		if (!isOwnerClan(player))
-			html.setFile("data/html/doormen/" + getTemplate().getNpcId() + "-no.htm");
-		else
-			html.setFile("data/html/doormen/" + getTemplate().getNpcId() + ".htm");
-		
+		html.setFile("data/html/doormen/" + getTemplate().getNpcId() + ((!isOwnerClan(player)) ? "-no.htm" : ".htm"));
 		html.replace("%objectId%", getObjectId());
 		player.sendPacket(html);
+		
+		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 	
 	protected void openDoors(L2PcInstance player, String command)
@@ -95,9 +89,7 @@ public class L2DoormenInstance extends L2NpcInstance
 		st.nextToken();
 		
 		while (st.hasMoreTokens())
-		{
 			DoorTable.getInstance().getDoor(Integer.parseInt(st.nextToken())).openMe();
-		}
 	}
 	
 	protected void closeDoors(L2PcInstance player, String command)
@@ -106,18 +98,16 @@ public class L2DoormenInstance extends L2NpcInstance
 		st.nextToken();
 		
 		while (st.hasMoreTokens())
-		{
 			DoorTable.getInstance().getDoor(Integer.parseInt(st.nextToken())).closeMe();
-		}
 	}
 	
 	protected void cannotManageDoors(L2PcInstance player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
-		
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		html.setFile("data/html/doormen/" + getTemplate().getNpcId() + "-busy.htm");
+		html.setFile("data/html/doormen/busy.htm");
 		player.sendPacket(html);
+		
+		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 	
 	protected void doTeleport(L2PcInstance player, String command)

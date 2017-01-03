@@ -22,9 +22,6 @@ import net.sf.l2j.gameserver.model.partymatching.PartyMatchRoom;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchRoomList;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchWaitingList;
 
-/**
- * @author Gnacik
- */
 public class ExListPartyMatchingWaitingRoom extends L2GameServerPacket
 {
 	private final L2PcInstance _activeChar;
@@ -55,8 +52,8 @@ public class ExListPartyMatchingWaitingRoom extends L2GameServerPacket
 		if (_mode == 0)
 		{
 			// Retrieve the activeChar PartyMatchRoom
-			PartyMatchRoom _room = PartyMatchRoomList.getInstance().getRoom(_activeChar.getPartyRoom());
-			if (!_room.getOwner().equals(_activeChar))
+			final PartyMatchRoom room = PartyMatchRoomList.getInstance().getRoom(_activeChar.getPartyRoom());
+			if (room == null || !room.getOwner().equals(_activeChar))
 			{
 				writeD(0);
 				writeD(0);
@@ -70,13 +67,7 @@ public class ExListPartyMatchingWaitingRoom extends L2GameServerPacket
 			if (cha == null || cha == _activeChar)
 				continue;
 			
-			if (!cha.isPartyWaiting())
-			{
-				PartyMatchWaitingList.getInstance().removePlayer(cha);
-				continue;
-			}
-			
-			if ((cha.getLevel() < _minlvl) || (cha.getLevel() > _maxlvl))
+			if (cha.getLevel() < _minlvl || cha.getLevel() > _maxlvl)
 				continue;
 			
 			_members.add(cha);

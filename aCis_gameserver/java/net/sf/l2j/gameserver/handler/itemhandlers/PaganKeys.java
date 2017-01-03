@@ -17,6 +17,7 @@ package net.sf.l2j.gameserver.handler.itemhandlers;
 import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -24,13 +25,8 @@ import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 
-/**
- * @author chris
- */
 public class PaganKeys implements IItemHandler
 {
-	public static final int INTERACTION_DISTANCE = 100;
-	
 	@Override
 	public void useItem(L2Playable playable, ItemInstance item, boolean forceUse)
 	{
@@ -49,7 +45,7 @@ public class PaganKeys implements IItemHandler
 		
 		final L2DoorInstance door = (L2DoorInstance) target;
 		
-		if (!(activeChar.isInsideRadius(door, INTERACTION_DISTANCE, false, false)))
+		if (!(activeChar.isInsideRadius(door, L2Npc.INTERACTION_DISTANCE, false, false)))
 		{
 			activeChar.sendPacket(SystemMessageId.DIST_TOO_FAR_CASTING_STOPPED);
 			activeChar.sendPacket(ActionFailed.STATIC_PACKET);

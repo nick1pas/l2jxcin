@@ -510,7 +510,7 @@ public final class RequestActionUse extends L2GameClientPacket
 		}
 		
 		// Verify if the launched skill is mastered by the summon.
-		final L2Skill skill = activeSummon.getTemplate().getSkills().get(skillId);
+		final L2Skill skill = activeSummon.getSkill(skillId);
 		if (skill == null)
 			return false;
 		

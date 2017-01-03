@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.commons.config.ExProperties;
 
-import net.sf.l2j.gameserver.model.holder.BuffSkillHolder;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 
 /**
@@ -75,8 +74,7 @@ public final class Config
 	public static int ALT_MANOR_REFRESH_MIN;
 	public static int ALT_MANOR_APPROVE_TIME;
 	public static int ALT_MANOR_APPROVE_MIN;
-	public static int ALT_MANOR_MAINTENANCE_PERIOD;
-	public static boolean ALT_MANOR_SAVE_ALL_ACTIONS;
+	public static int ALT_MANOR_MAINTENANCE_MIN;
 	public static int ALT_MANOR_SAVE_PERIOD_RATE;
 	
 	/** Clan Hall function */
@@ -177,7 +175,6 @@ public final class Config
 	public static long ALT_FESTIVAL_SECOND_SPAWN;
 	public static long ALT_FESTIVAL_SECOND_SWARM;
 	public static long ALT_FESTIVAL_CHEST_SPAWN;
-	public static boolean ALT_SEVENSIGNS_LAZY_UPDATE;
 	
 	/** Four Sepulchers */
 	public static int FS_TIME_ATTACK;
@@ -298,10 +295,7 @@ public final class Config
 	
 	/** Buffer */
 	public static int BUFFER_MAX_SCHEMES;
-	public static int BUFFER_MAX_SKILLS;
 	public static int BUFFER_STATIC_BUFF_COST;
-	public static String BUFFER_BUFFS;
-	public static Map<Integer, BuffSkillHolder> BUFFER_BUFFLIST;
 	
 	/** Misc */
 	public static boolean ALLOW_CLASS_MASTERS;
@@ -365,7 +359,6 @@ public final class Config
 	/** AI */
 	public static boolean GUARD_ATTACK_AGGRO_MOB;
 	public static int MAX_DRIFT_RANGE;
-	public static long KNOWNLIST_UPDATE_INTERVAL;
 	public static int MIN_NPC_ANIMATION;
 	public static int MAX_NPC_ANIMATION;
 	public static int MIN_MONSTER_ANIMATION;
@@ -376,7 +369,6 @@ public final class Config
 	// --------------------------------------------------
 	
 	/** Misc */
-	public static int STARTING_ADENA;
 	public static boolean EFFECT_CANCELING;
 	public static double HP_REGEN_MULTIPLIER;
 	public static double MP_REGEN_MULTIPLIER;
@@ -492,6 +484,17 @@ public final class Config
 	public static int BUFFS_MAX_AMOUNT;
 	
 	// --------------------------------------------------
+	// Sieges
+	// --------------------------------------------------
+	
+	public static int SIEGE_LENGTH;
+	public static int FLAGS_MAX_COUNT;
+	public static int MINIMUM_CLAN_LEVEL;
+	public static int MAX_ATTACKERS_NUMBER;
+	public static int MAX_DEFENDERS_NUMBER;
+	public static int ATTACKERS_RESPAWN_DELAY;
+	
+	// --------------------------------------------------
 	// Server
 	// --------------------------------------------------
 	
@@ -538,7 +541,6 @@ public final class Config
 	public static int EQUIPABLE_ITEM_AUTO_DESTROY_TIME;
 	public static Map<Integer, Integer> SPECIAL_ITEM_DESTROY_TIME;
 	public static int PLAYER_DROPPED_ITEM_MULTIPLIER;
-	public static boolean SAVE_DROPPED_ITEM;
 	
 	/** Rate control */
 	public static double RATE_XP;
@@ -761,9 +763,8 @@ public final class Config
 		ALT_MANOR_REFRESH_MIN = clans.getProperty("AltManorRefreshMin", 0);
 		ALT_MANOR_APPROVE_TIME = clans.getProperty("AltManorApproveTime", 6);
 		ALT_MANOR_APPROVE_MIN = clans.getProperty("AltManorApproveMin", 0);
-		ALT_MANOR_MAINTENANCE_PERIOD = clans.getProperty("AltManorMaintenancePeriod", 360000);
-		ALT_MANOR_SAVE_ALL_ACTIONS = clans.getProperty("AltManorSaveAllActions", false);
-		ALT_MANOR_SAVE_PERIOD_RATE = clans.getProperty("AltManorSavePeriodRate", 2);
+		ALT_MANOR_MAINTENANCE_MIN = clans.getProperty("AltManorMaintenanceMin", 6);
+		ALT_MANOR_SAVE_PERIOD_RATE = clans.getProperty("AltManorSavePeriodRate", 2) * 3600000;
 		
 		CH_TELE_FEE_RATIO = clans.getProperty("ClanHallTeleportFunctionFeeRatio", 86400000);
 		CH_TELE1_FEE = clans.getProperty("ClanHallTeleportFunctionFeeLvl1", 7000);
@@ -864,7 +865,6 @@ public final class Config
 		ALT_FESTIVAL_SECOND_SPAWN = events.getProperty("AltFestivalSecondSpawn", 540000);
 		ALT_FESTIVAL_SECOND_SWARM = events.getProperty("AltFestivalSecondSwarm", 720000);
 		ALT_FESTIVAL_CHEST_SPAWN = events.getProperty("AltFestivalChestSpawn", 900000);
-		ALT_SEVENSIGNS_LAZY_UPDATE = events.getProperty("AltSevenSignsLazyUpdate", true);
 		
 		FS_TIME_ATTACK = events.getProperty("TimeOfAttack", 50);
 		FS_TIME_ENTRY = events.getProperty("TimeOfEntry", 3);
@@ -996,16 +996,7 @@ public final class Config
 		CHAMPION_REWARD_QTY = npcs.getProperty("ChampionRewardItemQty", 1);
 		
 		BUFFER_MAX_SCHEMES = npcs.getProperty("BufferMaxSchemesPerChar", 4);
-		BUFFER_MAX_SKILLS = npcs.getProperty("BufferMaxSkillsPerScheme", 24);
 		BUFFER_STATIC_BUFF_COST = npcs.getProperty("BufferStaticCostPerBuff", -1);
-		BUFFER_BUFFS = npcs.getProperty("BufferBuffs");
-		
-		BUFFER_BUFFLIST = new HashMap<>();
-		for (String skillInfo : BUFFER_BUFFS.split(";"))
-		{
-			final String[] infos = skillInfo.split(",");
-			BUFFER_BUFFLIST.put(Integer.valueOf(infos[0]), new BuffSkillHolder(Integer.valueOf(infos[0]), Integer.valueOf(infos[1]), infos[2]));
-		}
 		
 		ALLOW_CLASS_MASTERS = npcs.getProperty("AllowClassMasters", false);
 		ALLOW_ENTIRE_TREE = npcs.getProperty("AllowEntireTree", false);
@@ -1066,7 +1057,6 @@ public final class Config
 		
 		GUARD_ATTACK_AGGRO_MOB = npcs.getProperty("GuardAttackAggroMob", false);
 		MAX_DRIFT_RANGE = npcs.getProperty("MaxDriftRange", 300);
-		KNOWNLIST_UPDATE_INTERVAL = npcs.getProperty("KnownListUpdateInterval", 1250);
 		MIN_NPC_ANIMATION = npcs.getProperty("MinNPCAnimation", 20);
 		MAX_NPC_ANIMATION = npcs.getProperty("MaxNPCAnimation", 40);
 		MIN_MONSTER_ANIMATION = npcs.getProperty("MinMonsterAnimation", 10);
@@ -1080,7 +1070,6 @@ public final class Config
 	private static final void loadPlayers()
 	{
 		final ExProperties players = initProperties(PLAYERS_FILE);
-		STARTING_ADENA = players.getProperty("StartingAdena", 100);
 		EFFECT_CANCELING = players.getProperty("CancelLesserEffect", true);
 		HP_REGEN_MULTIPLIER = players.getProperty("HpRegenMultiplier", 1.);
 		MP_REGEN_MULTIPLIER = players.getProperty("MpRegenMultiplier", 1.);
@@ -1199,6 +1188,21 @@ public final class Config
 	}
 	
 	/**
+	 * Loads siege settings.
+	 */
+	private static final void loadSieges()
+	{
+		final ExProperties sieges = initProperties(Config.SIEGE_FILE);
+		
+		SIEGE_LENGTH = sieges.getProperty("SiegeLength", 120);
+		FLAGS_MAX_COUNT = sieges.getProperty("MaxFlags", 1);
+		MINIMUM_CLAN_LEVEL = sieges.getProperty("SiegeClanMinLevel", 4);
+		MAX_ATTACKERS_NUMBER = sieges.getProperty("AttackerMaxClans", 10);
+		MAX_DEFENDERS_NUMBER = sieges.getProperty("DefenderMaxClans", 10);
+		ATTACKERS_RESPAWN_DELAY = sieges.getProperty("AttackerRespawn", 10000);
+	}
+	
+	/**
 	 * Loads gameserver settings.<br>
 	 * IP addresses, database, rates, feature enabled/disabled, misc.
 	 */
@@ -1259,7 +1263,6 @@ public final class Config
 			}
 		}
 		PLAYER_DROPPED_ITEM_MULTIPLIER = server.getProperty("PlayerDroppedItemMultiplier", 1);
-		SAVE_DROPPED_ITEM = server.getProperty("SaveDroppedItem", false);
 		
 		RATE_XP = server.getProperty("RateXp", 1.);
 		RATE_SP = server.getProperty("RateSp", 1.);
@@ -1416,6 +1419,9 @@ public final class Config
 		
 		// players settings
 		loadPlayers();
+		
+		// siege settings
+		loadSieges();
 		
 		// server settings
 		loadServer();

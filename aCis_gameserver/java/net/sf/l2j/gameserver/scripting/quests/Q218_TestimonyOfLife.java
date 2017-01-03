@@ -385,7 +385,7 @@ public class Q218_TestimonyOfLife extends Quest
 						else if (cond > 17)
 							htmltext = "30655-06.htm";
 						break;
-				
+					
 				}
 				break;
 			

@@ -86,17 +86,14 @@ import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
 import net.sf.l2j.gameserver.instancemanager.FishingChampionshipManager;
 import net.sf.l2j.gameserver.instancemanager.FourSepulchersManager;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
-import net.sf.l2j.gameserver.instancemanager.MercTicketManager;
 import net.sf.l2j.gameserver.instancemanager.MovieMakerManager;
 import net.sf.l2j.gameserver.instancemanager.PetitionManager;
 import net.sf.l2j.gameserver.instancemanager.RaidBossPointsManager;
 import net.sf.l2j.gameserver.instancemanager.RaidBossSpawnManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.instancemanager.games.MonsterRace;
-import net.sf.l2j.gameserver.model.L2Manor;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.model.olympiad.Olympiad;
@@ -227,20 +224,14 @@ public class GameServer
 		WaterTaskManager.getInstance();
 		
 		StringUtil.printSection("Castles");
-		CastleManager.getInstance().load();
+		CastleManager.getInstance();
 		
 		StringUtil.printSection("Seven Signs");
 		SevenSigns.getInstance().spawnSevenSignsNPC();
 		SevenSignsFestival.getInstance();
 		
-		StringUtil.printSection("Sieges");
-		SiegeManager.getInstance();
-		SiegeManager.getSieges();
-		MercTicketManager.getInstance();
-		
 		StringUtil.printSection("Manor Manager");
 		CastleManorManager.getInstance();
-		L2Manor.getInstance();
 		
 		StringUtil.printSection("NPCs");
 		BufferTable.getInstance();

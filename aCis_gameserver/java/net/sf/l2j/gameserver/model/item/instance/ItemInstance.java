@@ -32,13 +32,15 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
-import net.sf.l2j.gameserver.instancemanager.MercTicketManager;
+import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Augmentation;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.entity.Castle;
+import net.sf.l2j.gameserver.model.item.MercenaryTicket;
 import net.sf.l2j.gameserver.model.item.kind.Armor;
 import net.sf.l2j.gameserver.model.item.kind.EtcItem;
 import net.sf.l2j.gameserver.model.item.kind.Item;
@@ -59,11 +61,18 @@ import net.sf.l2j.gameserver.taskmanager.ItemsOnGroundTaskManager;
 /**
  * This class manages items.
  */
-public final class ItemInstance extends L2Object implements Runnable
+public final class ItemInstance extends L2Object implements Runnable, Comparable<ItemInstance>
 {
 	private static final Logger _logItems = Logger.getLogger("item");
 	
-	/** Enumeration of locations for item */
+	public static enum ItemState
+	{
+		UNCHANGED,
+		ADDED,
+		MODIFIED,
+		REMOVED
+	}
+	
 	public static enum ItemLocation
 	{
 		VOID,
@@ -111,11 +120,7 @@ public final class ItemInstance extends L2Object implements Runnable
 	
 	private boolean _destroyProtected;
 	
-	public static final int UNCHANGED = 0;
-	public static final int ADDED = 1;
-	public static final int MODIFIED = 2;
-	public static final int REMOVED = 3;
-	private int _lastChange = 2; // 1 added, 2 modified, 3 removed
+	private ItemState _lastChange = ItemState.MODIFIED;
 	
 	private boolean _existsInDb; // if a record exists in DB.
 	private boolean _storedInDb; // if DB data is up-to-date.
@@ -311,12 +316,6 @@ public final class ItemInstance extends L2Object implements Runnable
 		}
 	}
 	
-	// No logging (function designed for shots only)
-	public void changeCountWithoutTrace(int count, L2PcInstance creator, L2Object reference)
-	{
-		changeCount(null, count, creator, reference);
-	}
-	
 	/**
 	 * Returns if item is equipable
 	 * @return boolean
@@ -488,7 +487,7 @@ public final class ItemInstance extends L2Object implements Runnable
 	/**
 	 * @return the last change of the item.
 	 */
-	public int getLastChange()
+	public ItemState getLastChange()
 	{
 		return _lastChange;
 	}
@@ -497,7 +496,7 @@ public final class ItemInstance extends L2Object implements Runnable
 	 * Sets the last change of the item
 	 * @param lastChange : int
 	 */
-	public void setLastChange(int lastChange)
+	public void setLastChange(ItemState lastChange)
 	{
 		_lastChange = lastChange;
 	}
@@ -589,6 +588,12 @@ public final class ItemInstance extends L2Object implements Runnable
 	@Override
 	public void onAction(L2PcInstance player)
 	{
+		if (player.isFlying())
+		{
+			player.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
+		
 		// Mercenaries tickets case.
 		if (_item.getItemType() == EtcItemType.CASTLE_GUARD)
 		{
@@ -598,19 +603,26 @@ public final class ItemInstance extends L2Object implements Runnable
 				return;
 			}
 			
-			final int castleId = MercTicketManager.getTicketCastleId(_itemId);
-			if (castleId > 0 && !player.isCastleLord(castleId))
+			final Castle castle = CastleManager.getInstance().getCastle(player);
+			if (castle == null)
+			{
+				player.sendPacket(ActionFailed.STATIC_PACKET);
+				return;
+			}
+			
+			final MercenaryTicket ticket = castle.getTicket(_itemId);
+			if (ticket == null)
+			{
+				player.sendPacket(ActionFailed.STATIC_PACKET);
+				return;
+			}
+			
+			if (!player.isCastleLord(castle.getCastleId()))
 			{
 				player.sendPacket(SystemMessageId.THIS_IS_NOT_A_MERCENARY_OF_A_CASTLE_THAT_YOU_OWN_AND_SO_CANNOT_CANCEL_POSITIONING);
 				player.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
 			}
-		}
-		
-		if (player.isFlying())
-		{
-			player.sendPacket(ActionFailed.STATIC_PACKET);
-			return;
 		}
 		
 		player.getAI().setIntention(CtrlIntention.PICK_UP, this);
@@ -979,8 +991,10 @@ public final class ItemInstance extends L2Object implements Runnable
 	{
 		player.broadcastPacket(new GetItem(this, player.getObjectId()));
 		
-		if (MercTicketManager.getTicketCastleId(_itemId) > 0)
-			MercTicketManager.getInstance().removeTicket(this);
+		// Unregister dropped ticket from castle, if that item is on a castle area and is a valid ticket.
+		final Castle castle = CastleManager.getInstance().getCastle(player);
+		if (castle != null && castle.getTicket(_itemId) != null)
+			castle.removeDroppedTicket(this);
 		
 		if (!Config.DISABLE_TUTORIAL && (_itemId == 57 || _itemId == 6353))
 		{
@@ -1166,22 +1180,14 @@ public final class ItemInstance extends L2Object implements Runnable
 			_count = _initCount;
 	}
 	
-	public void setTime(int time)
-	{
-		if (time > 0)
-			_time = time;
-		else
-			_time = 0;
-	}
-	
 	public long getTime()
 	{
 		return _time;
 	}
 	
-	public long getRemainingTime()
+	public void actualizeTime()
 	{
-		return _time - System.currentTimeMillis();
+		_time = System.currentTimeMillis();
 	}
 	
 	public boolean isPetItem()
@@ -1259,5 +1265,15 @@ public final class ItemInstance extends L2Object implements Runnable
 	public void unChargeAllShots()
 	{
 		_shotsMask = 0;
+	}
+	
+	@Override
+	public int compareTo(ItemInstance item)
+	{
+		final int time = Long.compare(item.getTime(), _time);
+		if (time != 0)
+			return time;
+		
+		return Integer.compare(item.getObjectId(), getObjectId());
 	}
 }

@@ -14,7 +14,7 @@
  */
 package net.sf.l2j.gameserver.model.actor;
 
-import java.util.Map;
+import java.util.List;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
@@ -36,6 +36,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
 import net.sf.l2j.gameserver.model.actor.stat.SummonStat;
 import net.sf.l2j.gameserver.model.actor.status.SummonStatus;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
 import net.sf.l2j.gameserver.model.base.Experience;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Weapon;
@@ -69,7 +70,7 @@ public abstract class L2Summon extends L2Playable
 	{
 		super(objectId, template);
 		
-		for (L2Skill skill : template.getSkills().values())
+		for (L2Skill skill : template.getSkills(SkillType.PASSIVE))
 			addStatFuncs(skill.getStatFuncs(this));
 		
 		_showSummonAnimation = true;
@@ -480,7 +481,10 @@ public abstract class L2Summon extends L2Playable
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
-	 * <li>Check if the target is correct</li> <li>Check if the target is in the skill cast range</li> <li>Check if the summon owns enough HP and MP to cast the skill</li> <li>Check if all skills are enabled and this skill is enabled</li><BR>
+	 * <li>Check if the target is correct</li>
+	 * <li>Check if the target is in the skill cast range</li>
+	 * <li>Check if the summon owns enough HP and MP to cast the skill</li>
+	 * <li>Check if all skills are enabled and this skill is enabled</li><BR>
 	 * <BR>
 	 * <li>Check if the skill is active</li><BR>
 	 * <BR>
@@ -516,7 +520,7 @@ public abstract class L2Summon extends L2Playable
 		
 		switch (skill.getTargetType())
 		{
-		// OWNER_PET should be cast even if no target has been found
+			// OWNER_PET should be cast even if no target has been found
 			case TARGET_OWNER_PET:
 				target = getOwner();
 				break;
@@ -649,7 +653,7 @@ public abstract class L2Summon extends L2Playable
 					sendPacket(SystemMessageId.CRITICAL_HIT_BY_SUMMONED_MOB);
 				else
 					sendPacket(SystemMessageId.CRITICAL_HIT_BY_PET);
-			
+				
 			final SystemMessage sm;
 			
 			if (target.isInvul())
@@ -872,13 +876,27 @@ public abstract class L2Summon extends L2Playable
 		}
 	}
 	
-	/**
-	 * This method is overidden on L2PcInstance, L2Summon and L2Npc.
-	 * @return the skills list of this L2Character.
-	 */
 	@Override
-	public Map<Integer, L2Skill> getSkills()
+	public int getSkillLevel(int skillId)
 	{
-		return getTemplate().getSkills();
+		for (List<L2Skill> list : getTemplate().getSkills().values())
+		{
+			for (L2Skill skill : list)
+				if (skill.getId() == skillId)
+					return skill.getLevel();
+		}
+		return -1;
+	}
+	
+	@Override
+	public L2Skill getSkill(int skillId)
+	{
+		for (List<L2Skill> list : getTemplate().getSkills().values())
+		{
+			for (L2Skill skill : list)
+				if (skill.getId() == skillId)
+					return skill;
+		}
+		return null;
 	}
 }

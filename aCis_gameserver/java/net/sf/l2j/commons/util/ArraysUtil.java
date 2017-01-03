@@ -42,7 +42,7 @@ public class ArraysUtil
 		for (T element : array)
 			if (element.equals(obj))
 				return true;
-		
+			
 		return false;
 	}
 	
@@ -82,7 +82,7 @@ public class ArraysUtil
 		for (int element : array)
 			if (element == obj)
 				return true;
-		
+			
 		return false;
 	}
 	

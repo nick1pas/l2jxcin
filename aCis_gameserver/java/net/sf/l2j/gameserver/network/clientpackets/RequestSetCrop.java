@@ -18,66 +18,78 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
-import net.sf.l2j.gameserver.instancemanager.CastleManorManager.CropProcure;
+import net.sf.l2j.gameserver.model.L2Clan;
+import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.manor.CropProcure;
+import net.sf.l2j.gameserver.model.manor.Seed;
+import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 
-/**
- * Format: (ch) dd [dddc] d - manor id d - size [ d - crop id d - sales d - price c - reward type ]
- * @author l3x
- */
 public class RequestSetCrop extends L2GameClientPacket
 {
-	private int _size;
+	private static final int BATCH_LENGTH = 13;
+	
 	private int _manorId;
-	private int[] _items; // _size*4
+	private List<CropProcure> _items;
 	
 	@Override
 	protected void readImpl()
 	{
 		_manorId = readD();
-		_size = readD();
-		if (_size * 13 > _buf.remaining() || _size > 500)
-		{
-			_size = 0;
+		final int count = readD();
+		if (count <= 0 || count > Config.MAX_ITEM_IN_PACKET || (count * BATCH_LENGTH) != _buf.remaining())
 			return;
-		}
-		_items = new int[_size * 4];
-		for (int i = 0; i < _size; i++)
+		
+		_items = new ArrayList<>(count);
+		for (int i = 0; i < count; i++)
 		{
-			int itemId = readD();
-			_items[i * 4 + 0] = itemId;
-			int sales = readD();
-			_items[i * 4 + 1] = sales;
-			int price = readD();
-			_items[i * 4 + 2] = price;
-			int type = readC();
-			_items[i * 4 + 3] = type;
+			final int itemId = readD();
+			final int sales = readD();
+			final int price = readD();
+			final int type = readC();
+			
+			if (itemId < 1 || sales < 0 || price < 0)
+			{
+				_items.clear();
+				return;
+			}
+			
+			if (sales > 0)
+				_items.add(new CropProcure(itemId, sales, type, sales, price));
 		}
 	}
 	
 	@Override
 	protected void runImpl()
 	{
-		if (_size < 1)
+		if (_items.isEmpty())
 			return;
 		
-		List<CropProcure> crops = new ArrayList<>();
-		for (int i = 0; i < _size; i++)
+		final CastleManorManager manor = CastleManorManager.getInstance();
+		if (!manor.isModifiablePeriod())
 		{
-			int id = _items[i * 4 + 0];
-			int sales = _items[i * 4 + 1];
-			int price = _items[i * 4 + 2];
-			int type = _items[i * 4 + 3];
-			if (id > 0)
-			{
-				CropProcure s = CastleManorManager.getInstance().getNewCropProcure(id, sales, type, price, sales);
-				crops.add(s);
-			}
+			sendPacket(ActionFailed.STATIC_PACKET);
+			return;
 		}
 		
-		CastleManager.getInstance().getCastleById(_manorId).setCropProcure(crops, CastleManorManager.PERIOD_NEXT);
-		if (Config.ALT_MANOR_SAVE_ALL_ACTIONS)
-			CastleManager.getInstance().getCastleById(_manorId).saveCropData(CastleManorManager.PERIOD_NEXT);
+		// Check player privileges
+		final L2PcInstance player = getClient().getActiveChar();
+		if (player == null || player.getClan() == null || player.getClan().getCastleId() != _manorId || ((player.getClanPrivileges() & L2Clan.CP_CS_MANOR_ADMIN) != L2Clan.CP_CS_MANOR_ADMIN) || !player.getCurrentFolkNPC().canInteract(player))
+		{
+			sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		}
+		
+		// Filter crops with start amount lower than 0 and incorrect price
+		final List<CropProcure> list = new ArrayList<>(_items.size());
+		for (CropProcure cp : _items)
+		{
+			final Seed s = manor.getSeedByCrop(cp.getId(), _manorId);
+			if (s != null && cp.getStartAmount() <= s.getCropLimit() && cp.getPrice() >= s.getCropMinPrice() && cp.getPrice() <= s.getCropMaxPrice())
+				list.add(cp);
+		}
+		
+		// Save crop list
+		manor.setNextCropProcure(list, _manorId);
 	}
 }

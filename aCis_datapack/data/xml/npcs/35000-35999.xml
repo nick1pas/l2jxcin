@@ -1776,7 +1776,7 @@
 		<set name="height" val="24.5"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2SiegeGuard"/>
 		<set name="exp" val="722"/>
 		<set name="sp" val="1"/>
 		<set name="hp" val="596964.367482148"/>
@@ -1811,7 +1811,7 @@
 		<set name="height" val="21.957"/>
 		<set name="rHand" val="7"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2SiegeGuard"/>
 		<set name="exp" val="672"/>
 		<set name="sp" val="1"/>
 		<set name="hp" val="585703.507797897"/>

@@ -58,7 +58,7 @@ public final class RequestConfirmSiegeWaitingList extends L2GameClientPacket
 		if (clan == null)
 			return;
 		
-		if (!castle.getSiege().getIsRegistrationOver())
+		if (!castle.getSiege().isRegistrationOver())
 		{
 			if (_approved == 1)
 			{

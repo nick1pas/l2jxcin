@@ -40,7 +40,7 @@ public class ChannelLeave implements IUserCommandHandler
 				channel.removeParty(party);
 				
 				party.getLeader().sendPacket(SystemMessageId.LEFT_COMMAND_CHANNEL);
-				channel.broadcastToChannelMembers(SystemMessage.getSystemMessage(SystemMessageId.S1_PARTY_LEFT_COMMAND_CHANNEL).addPcName(party.getLeader()));
+				channel.broadcastToChannelMembers(SystemMessage.getSystemMessage(SystemMessageId.S1_PARTY_LEFT_COMMAND_CHANNEL).addCharName(party.getLeader()));
 				return true;
 			}
 		}

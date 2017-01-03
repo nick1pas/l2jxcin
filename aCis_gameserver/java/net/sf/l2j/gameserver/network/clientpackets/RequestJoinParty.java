@@ -54,7 +54,7 @@ public final class RequestJoinParty extends L2GameClientPacket
 		
 		if (BlockList.isBlocked(target, requestor))
 		{
-			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_ADDED_YOU_TO_IGNORE_LIST).addPcName(target));
+			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_HAS_ADDED_YOU_TO_IGNORE_LIST).addCharName(target));
 			return;
 		}
 		
@@ -66,16 +66,10 @@ public final class RequestJoinParty extends L2GameClientPacket
 		
 		if (target.isInParty())
 		{
-			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_ALREADY_IN_PARTY).addPcName(target));
+			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_ALREADY_IN_PARTY).addCharName(target));
 			return;
 		}
-        
-        if (target.isPartyInRefuse())
-        {
-            requestor.sendMessage("[Party Refuse]: Player in refusal party.");
-            return;
-        }
-  
+		
 		if (target.getClient().isDetached())
 		{
 			requestor.sendMessage("The player you tried to invite is in offline mode.");
@@ -136,13 +130,13 @@ public final class RequestJoinParty extends L2GameClientPacket
 			target.sendPacket(new AskJoinParty(requestor.getName(), party.getLootDistribution()));
 			party.setPendingInvitation(true);
 			
-			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_INVITED_S1_TO_PARTY).addPcName(target));
+			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_INVITED_S1_TO_PARTY).addCharName(target));
 			if (Config.DEBUG)
 				_log.fine("Sent out a party invitation to " + target.getName());
 		}
 		else
 		{
-			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addPcName(target));
+			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addCharName(target));
 			if (Config.DEBUG)
 				_log.warning(requestor.getName() + " already received a party invitation");
 		}
@@ -165,7 +159,7 @@ public final class RequestJoinParty extends L2GameClientPacket
 			if (Config.DEBUG)
 				_log.fine("Sent out a party invitation to " + target.getName());
 			
-			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_INVITED_S1_TO_PARTY).addPcName(target));
+			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_INVITED_S1_TO_PARTY).addCharName(target));
 		}
 		else
 		{

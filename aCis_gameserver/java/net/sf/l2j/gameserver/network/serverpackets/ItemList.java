@@ -14,7 +14,7 @@
  */
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import java.util.List;
+import java.util.Set;
 
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -22,7 +22,7 @@ import net.sf.l2j.gameserver.model.item.kind.Item;
 
 public class ItemList extends L2GameServerPacket
 {
-	private final List<ItemInstance> _items;
+	private final Set<ItemInstance> _items;
 	private final boolean _showWindow;
 	
 	public ItemList(L2PcInstance cha, boolean showWindow)
@@ -40,9 +40,6 @@ public class ItemList extends L2GameServerPacket
 		
 		for (ItemInstance temp : _items)
 		{
-			if (temp.getItem() == null)
-				continue;
-			
 			Item item = temp.getItem();
 			
 			writeH(item.getType1());

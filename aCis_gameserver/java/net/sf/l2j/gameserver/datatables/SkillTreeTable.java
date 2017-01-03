@@ -230,11 +230,11 @@ public class SkillTreeTable
 			for (L2SkillLearn skillLearn : parent.values())
 				if (skillLearn != null)
 					tmp.put(SkillTable.getSkillHashCode(skillLearn.getId(), skillLearn.getLevel()), skillLearn);
-		
+				
 		for (L2SkillLearn skillLearn : skills)
 			if (skillLearn != null)
 				tmp.put(SkillTable.getSkillHashCode(skillLearn.getId(), skillLearn.getLevel()), skillLearn);
-		
+			
 		if (!tmp.isEmpty())
 			_skillTrees.put(classId, tmp);
 	}

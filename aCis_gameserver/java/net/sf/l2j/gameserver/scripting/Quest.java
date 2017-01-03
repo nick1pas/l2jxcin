@@ -30,6 +30,7 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.NpcTable;
+import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2ClanMember;
@@ -41,6 +42,7 @@ import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
@@ -1392,6 +1394,17 @@ public class Quest
 	public String onTalk(L2Npc npc, L2PcInstance talker)
 	{
 		return null;
+	}
+	
+	public final Siege addSiegeNotify(int castleId)
+	{
+		final Siege siege = CastleManager.getInstance().getCastleById(castleId).getSiege();
+		siege.addQuestEvent(this);
+		return siege;
+	}
+	
+	public void onSiegeEvent()
+	{
 	}
 	
 	@Override

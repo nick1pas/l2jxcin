@@ -14,11 +14,14 @@
  */
 package net.sf.l2j.gameserver.model.actor.instance;
 
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.PcInventory;
@@ -27,10 +30,6 @@ import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
-/**
- * Dawn/Dusk Seven Signs Priest Instance
- * @author Tempy
- */
 public class L2SignsPriestInstance extends L2NpcInstance
 {
 	public L2SignsPriestInstance(int objectId, NpcTemplate template)
@@ -52,7 +51,7 @@ public class L2SignsPriestInstance extends L2NpcInstance
 		{
 			String path;
 			
-			int cabal = SevenSigns.CABAL_NULL;
+			CabalType cabal = CabalType.NORMAL;
 			int stoneType = 0;
 			
 			final long ancientAdenaAmount = player.getAncientAdena();
@@ -66,13 +65,13 @@ public class L2SignsPriestInstance extends L2NpcInstance
 			{
 				try
 				{
-					cabal = Integer.parseInt(command.substring(14, 15).trim());
+					cabal = CabalType.VALUES[Integer.parseInt(command.substring(14, 15).trim())];
 				}
 				catch (Exception e)
 				{
 					try
 					{
-						cabal = Integer.parseInt(command.substring(13, 14).trim());
+						cabal = CabalType.VALUES[Integer.parseInt(command.substring(13, 14).trim())];
 					}
 					catch (Exception e2)
 					{
@@ -80,7 +79,7 @@ public class L2SignsPriestInstance extends L2NpcInstance
 						{
 							StringTokenizer st = new StringTokenizer(command.trim());
 							st.nextToken();
-							cabal = Integer.parseInt(st.nextToken());
+							cabal = CabalType.VALUES[Integer.parseInt(st.nextToken())];
 						}
 						catch (Exception e3)
 						{
@@ -111,9 +110,9 @@ public class L2SignsPriestInstance extends L2NpcInstance
 					break;
 				
 				case 33: // "I want to participate" request
-					int oldCabal = SevenSigns.getInstance().getPlayerCabal(player.getObjectId());
+					CabalType oldCabal = SevenSigns.getInstance().getPlayerCabal(player.getObjectId());
 					
-					if (oldCabal != SevenSigns.CABAL_NULL)
+					if (oldCabal != CabalType.NORMAL)
 					{
 						if (this instanceof L2DawnPriestInstance)
 							showChatWindow(player, val, "dawn_member", false);
@@ -129,7 +128,7 @@ public class L2SignsPriestInstance extends L2NpcInstance
 							showChatWindow(player, val, "dusk_firstclass", false);
 						return;
 					}
-					else if (cabal == SevenSigns.CABAL_DUSK && Config.ALT_GAME_CASTLE_DUSK) // dusk
+					else if (cabal == CabalType.DUSK && Config.ALT_GAME_CASTLE_DUSK) // dusk
 					{
 						// castle owners cannot participate with dusk side
 						if (player.getClan() != null && player.getClan().hasCastle())
@@ -138,7 +137,7 @@ public class L2SignsPriestInstance extends L2NpcInstance
 							break;
 						}
 					}
-					else if (cabal == SevenSigns.CABAL_DAWN && Config.ALT_GAME_CASTLE_DAWN) // dawn
+					else if (cabal == CabalType.DAWN && Config.ALT_GAME_CASTLE_DAWN) // dawn
 					{
 						// clans without castle need to pay participation fee
 						if (player.getClan() == null || !player.getClan().hasCastle())
@@ -170,15 +169,15 @@ public class L2SignsPriestInstance extends L2NpcInstance
 				
 				case 3: // Join Cabal Intro 1
 				case 8: // Festival of Darkness Intro - SevenSigns x [0]1
-					showChatWindow(player, val, SevenSigns.getCabalShortName(cabal), false);
+					showChatWindow(player, val, cabal.getShortName(), false);
 					break;
 				
 				case 4: // Join a Cabal - SevenSigns 4 [0]1 x
-					int newSeal = Integer.parseInt(command.substring(15));
+					SealType newSeal = SealType.VALUES[Integer.parseInt(command.substring(15))];
 					
 					if (player.getClassId().level() >= 2)
 					{
-						if (cabal == SevenSigns.CABAL_DUSK && Config.ALT_GAME_CASTLE_DUSK)
+						if (cabal == CabalType.DUSK && Config.ALT_GAME_CASTLE_DUSK)
 						{
 							if (player.getClan() != null && player.getClan().hasCastle()) // even if in htmls is said that ally can have castle too, but its not
 							{
@@ -189,7 +188,7 @@ public class L2SignsPriestInstance extends L2NpcInstance
 						/*
 						 * If the player is trying to join the Lords of Dawn, check if they are carrying a Lord's certificate. If not then try to take the required amount of adena instead.
 						 */
-						if (Config.ALT_GAME_CASTLE_DAWN && cabal == SevenSigns.CABAL_DAWN)
+						if (Config.ALT_GAME_CASTLE_DAWN && cabal == CabalType.DAWN)
 						{
 							boolean allowJoinDawn = false;
 							
@@ -209,7 +208,7 @@ public class L2SignsPriestInstance extends L2NpcInstance
 					}
 					SevenSigns.getInstance().setPlayerInfo(player.getObjectId(), cabal, newSeal);
 					
-					if (cabal == SevenSigns.CABAL_DAWN)
+					if (cabal == CabalType.DAWN)
 						player.sendPacket(SystemMessageId.SEVENSIGNS_PARTECIPATION_DAWN); // Joined Dawn
 					else
 						player.sendPacket(SystemMessageId.SEVENSIGNS_PARTECIPATION_DUSK); // Joined Dusk
@@ -217,31 +216,33 @@ public class L2SignsPriestInstance extends L2NpcInstance
 					// Show a confirmation message to the user, indicating which seal they chose.
 					switch (newSeal)
 					{
-						case SevenSigns.SEAL_AVARICE:
+						case AVARICE:
 							player.sendPacket(SystemMessageId.FIGHT_FOR_AVARICE);
 							break;
-						case SevenSigns.SEAL_GNOSIS:
+						
+						case GNOSIS:
 							player.sendPacket(SystemMessageId.FIGHT_FOR_GNOSIS);
 							break;
-						case SevenSigns.SEAL_STRIFE:
+						
+						case STRIFE:
 							player.sendPacket(SystemMessageId.FIGHT_FOR_STRIFE);
 							break;
 					}
 					
-					showChatWindow(player, 4, SevenSigns.getCabalShortName(cabal), false);
+					showChatWindow(player, 4, cabal.getShortName(), false);
 					break;
 				
 				case 5:
 					if (this instanceof L2DawnPriestInstance)
 					{
-						if (SevenSigns.getInstance().getPlayerCabal(player.getObjectId()) == SevenSigns.CABAL_NULL)
+						if (SevenSigns.getInstance().getPlayerCabal(player.getObjectId()) == CabalType.NORMAL)
 							showChatWindow(player, val, "dawn_no", false);
 						else
 							showChatWindow(player, val, "dawn", false);
 					}
 					else
 					{
-						if (SevenSigns.getInstance().getPlayerCabal(player.getObjectId()) == SevenSigns.CABAL_NULL)
+						if (SevenSigns.getInstance().getPlayerCabal(player.getObjectId()) == CabalType.NORMAL)
 							showChatWindow(player, val, "dusk_no", false);
 						else
 							showChatWindow(player, val, "dusk", false);
@@ -481,12 +482,9 @@ public class L2SignsPriestInstance extends L2NpcInstance
 					break;
 				
 				case 9: // Receive Contribution Rewards
-					int playerCabal = SevenSigns.getInstance().getPlayerCabal(player.getObjectId());
-					int winningCabal = SevenSigns.getInstance().getCabalHighestScore();
-					
-					if (SevenSigns.getInstance().isSealValidationPeriod() && playerCabal == winningCabal)
+					if (SevenSigns.getInstance().isSealValidationPeriod() && SevenSigns.getInstance().getPlayerCabal(player.getObjectId()) == SevenSigns.getInstance().getCabalHighestScore())
 					{
-						int ancientAdenaReward = SevenSigns.getInstance().getAncientAdenaReward(player.getObjectId(), true);
+						int ancientAdenaReward = SevenSigns.getInstance().getAncientAdenaReward(player.getObjectId());
 						
 						if (ancientAdenaReward < 3)
 						{
@@ -693,9 +691,9 @@ public class L2SignsPriestInstance extends L2NpcInstance
 					break;
 				
 				case 19: // Seal Information (for when joining a cabal)
-					int chosenSeal = Integer.parseInt(command.substring(16));
+					SealType chosenSeal = SealType.VALUES[Integer.parseInt(command.substring(16))];
 					
-					String fileSuffix = SevenSigns.getSealName(chosenSeal, true) + "_" + SevenSigns.getCabalShortName(cabal);
+					String fileSuffix = chosenSeal.getShortName() + "_" + cabal.getShortName();
 					
 					showChatWindow(player, val, fileSuffix, false);
 					break;
@@ -708,14 +706,15 @@ public class L2SignsPriestInstance extends L2NpcInstance
 					else
 						sb.append("<html><body>Dusk Priestess:<br><font color=\"LEVEL\">[ Status of the Seals ]</font><br>");
 					
-					for (int i = 1; i < 4; i++)
+					for (Entry<SealType, CabalType> entry : SevenSigns.getInstance().getSealOwners().entrySet())
 					{
-						int sealOwner = SevenSigns.getInstance().getSealOwner(i);
+						final SealType seal = entry.getKey();
+						final CabalType sealOwner = entry.getValue();
 						
-						if (sealOwner != SevenSigns.CABAL_NULL)
-							sb.append("[" + SevenSigns.getSealName(i, false) + ": " + SevenSigns.getCabalName(sealOwner) + "]<br>");
+						if (sealOwner != CabalType.NORMAL)
+							sb.append("[" + seal.getFullName() + ": " + sealOwner.getFullName() + "]<br>");
 						else
-							sb.append("[" + SevenSigns.getSealName(i, false) + ": Nothingness]<br>");
+							sb.append("[" + seal.getFullName() + ": Nothingness]<br>");
 					}
 					
 					sb.append("<a action=\"bypass -h npc_" + getObjectId() + "_Chat 0\">Go back.</a></body></html>");
@@ -740,8 +739,8 @@ public class L2SignsPriestInstance extends L2NpcInstance
 		final int npcId = getTemplate().getNpcId();
 		String filename = SevenSigns.SEVEN_SIGNS_HTML_PATH;
 		
-		final int playerCabal = SevenSigns.getInstance().getPlayerCabal(player.getObjectId());
-		final int compWinner = SevenSigns.getInstance().getCabalHighestScore();
+		final CabalType playerCabal = SevenSigns.getInstance().getPlayerCabal(player.getObjectId());
+		final CabalType winningCabal = SevenSigns.getInstance().getCabalHighestScore();
 		
 		switch (npcId)
 		{
@@ -750,11 +749,11 @@ public class L2SignsPriestInstance extends L2NpcInstance
 				break;
 			
 			case 31113: // Merchant of Mammon
-				final int sealAvariceOwner = SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_AVARICE);
-				switch (compWinner)
+				final CabalType sealAvariceOwner = SevenSigns.getInstance().getSealOwner(SealType.AVARICE);
+				switch (winningCabal)
 				{
-					case SevenSigns.CABAL_DAWN:
-						if (playerCabal != compWinner || playerCabal != sealAvariceOwner)
+					case DAWN:
+						if (playerCabal != winningCabal || playerCabal != sealAvariceOwner)
 						{
 							player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DAWN);
 							player.sendPacket(ActionFailed.STATIC_PACKET);
@@ -762,8 +761,8 @@ public class L2SignsPriestInstance extends L2NpcInstance
 						}
 						break;
 					
-					case SevenSigns.CABAL_DUSK:
-						if (playerCabal != compWinner || playerCabal != sealAvariceOwner)
+					case DUSK:
+						if (playerCabal != winningCabal || playerCabal != sealAvariceOwner)
 						{
 							player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DUSK);
 							player.sendPacket(ActionFailed.STATIC_PACKET);
@@ -779,11 +778,11 @@ public class L2SignsPriestInstance extends L2NpcInstance
 				break;
 			
 			case 31126: // Blacksmith of Mammon
-				final int sealGnosisOwner = SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_GNOSIS);
-				switch (compWinner)
+				final CabalType sealGnosisOwner = SevenSigns.getInstance().getSealOwner(SealType.GNOSIS);
+				switch (winningCabal)
 				{
-					case SevenSigns.CABAL_DAWN:
-						if (playerCabal != compWinner || playerCabal != sealGnosisOwner)
+					case DAWN:
+						if (playerCabal != winningCabal || playerCabal != sealGnosisOwner)
 						{
 							player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DAWN);
 							player.sendPacket(ActionFailed.STATIC_PACKET);
@@ -791,8 +790,8 @@ public class L2SignsPriestInstance extends L2NpcInstance
 						}
 						break;
 					
-					case SevenSigns.CABAL_DUSK:
-						if (playerCabal != compWinner || playerCabal != sealGnosisOwner)
+					case DUSK:
+						if (playerCabal != winningCabal || playerCabal != sealGnosisOwner)
 						{
 							player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DUSK);
 							player.sendPacket(ActionFailed.STATIC_PACKET);

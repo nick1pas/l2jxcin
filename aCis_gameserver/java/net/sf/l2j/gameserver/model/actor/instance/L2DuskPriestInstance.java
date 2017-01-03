@@ -15,6 +15,8 @@
 package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -42,32 +44,25 @@ public class L2DuskPriestInstance extends L2SignsPriestInstance
 		
 		String filename = SevenSigns.SEVEN_SIGNS_HTML_PATH;
 		
-		int sealGnosisOwner = SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_GNOSIS);
-		int playerCabal = SevenSigns.getInstance().getPlayerCabal(player.getObjectId());
+		final CabalType winningCabal = SevenSigns.getInstance().getCabalHighestScore();
 		
-		boolean isSealValidationPeriod = SevenSigns.getInstance().isSealValidationPeriod();
-		boolean isCompResultsPeriod = SevenSigns.getInstance().isCompResultsPeriod();
-		
-		int recruitPeriod = SevenSigns.getInstance().getCurrentPeriod();
-		int compWinner = SevenSigns.getInstance().getCabalHighestScore();
-		
-		switch (playerCabal)
+		switch (SevenSigns.getInstance().getPlayerCabal(player.getObjectId()))
 		{
-			case SevenSigns.CABAL_DUSK:
-				if (isCompResultsPeriod)
+			case DUSK:
+				if (SevenSigns.getInstance().isCompResultsPeriod())
 					filename += "dusk_priest_5.htm";
-				else if (recruitPeriod == 0)
+				else if (SevenSigns.getInstance().isRecruitingPeriod())
 					filename += "dusk_priest_6.htm";
-				else if (isSealValidationPeriod)
+				else if (SevenSigns.getInstance().isSealValidationPeriod())
 				{
-					if (compWinner == SevenSigns.CABAL_DUSK)
+					if (winningCabal == CabalType.DUSK)
 					{
-						if (compWinner != sealGnosisOwner)
+						if (winningCabal != SevenSigns.getInstance().getSealOwner(SealType.GNOSIS))
 							filename += "dusk_priest_2c.htm";
 						else
 							filename += "dusk_priest_2a.htm";
 					}
-					else if (compWinner == SevenSigns.CABAL_NULL)
+					else if (winningCabal == CabalType.NORMAL)
 						filename += "dusk_priest_2d.htm";
 					else
 						filename += "dusk_priest_2b.htm";
@@ -76,23 +71,23 @@ public class L2DuskPriestInstance extends L2SignsPriestInstance
 					filename += "dusk_priest_1b.htm";
 				break;
 			
-			case SevenSigns.CABAL_DAWN:
-				if (isSealValidationPeriod)
+			case DAWN:
+				if (SevenSigns.getInstance().isSealValidationPeriod())
 					filename += "dusk_priest_3a.htm";
 				else
 					filename += "dusk_priest_3b.htm";
 				break;
 			
 			default:
-				if (isCompResultsPeriod)
+				if (SevenSigns.getInstance().isCompResultsPeriod())
 					filename += "dusk_priest_5.htm";
-				else if (recruitPeriod == 0)
+				else if (SevenSigns.getInstance().isRecruitingPeriod())
 					filename += "dusk_priest_6.htm";
-				else if (isSealValidationPeriod)
+				else if (SevenSigns.getInstance().isSealValidationPeriod())
 				{
-					if (compWinner == SevenSigns.CABAL_DUSK)
+					if (winningCabal == CabalType.DUSK)
 						filename += "dusk_priest_4.htm";
-					else if (compWinner == SevenSigns.CABAL_NULL)
+					else if (winningCabal == CabalType.NORMAL)
 						filename += "dusk_priest_2d.htm";
 					else
 						filename += "dusk_priest_2b.htm";

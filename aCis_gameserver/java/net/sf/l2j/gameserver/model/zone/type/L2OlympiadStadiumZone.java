@@ -53,7 +53,7 @@ public class L2OlympiadStadiumZone extends L2SpawnZone
 		final ExOlympiadUserInfo packet = new ExOlympiadUserInfo(player);
 		for (L2PcInstance plyr : getKnownTypeInside(L2PcInstance.class))
 		{
-			if (plyr.inObserverMode() || plyr.getOlympiadSide() != player.getOlympiadSide())
+			if (plyr.isInObserverMode() || plyr.getOlympiadSide() != player.getOlympiadSide())
 				plyr.sendPacket(packet);
 		}
 	}
@@ -62,7 +62,7 @@ public class L2OlympiadStadiumZone extends L2SpawnZone
 	{
 		for (L2PcInstance player : getKnownTypeInside(L2PcInstance.class))
 		{
-			if (player.inObserverMode())
+			if (player.isInObserverMode())
 				player.sendPacket(packet);
 		}
 	}
@@ -92,7 +92,7 @@ public class L2OlympiadStadiumZone extends L2SpawnZone
 			if (player != null)
 			{
 				// only participants, observers and GMs allowed
-				if (!player.isGM() && !player.isInOlympiadMode() && !player.inObserverMode())
+				if (!player.isGM() && !player.isInOlympiadMode() && !player.isInObserverMode())
 					ThreadPool.execute(new KickPlayer(player));
 			}
 		}

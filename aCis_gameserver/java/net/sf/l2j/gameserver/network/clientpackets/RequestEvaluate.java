@@ -79,8 +79,8 @@ public final class RequestEvaluate extends L2GameClientPacket
 		}
 		
 		activeChar.giveRecom(target);
-		activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_RECOMMENDED_S1_YOU_HAVE_S2_RECOMMENDATIONS_LEFT).addPcName(target).addNumber(activeChar.getRecomLeft()));
-		target.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_BEEN_RECOMMENDED_BY_S1).addPcName(activeChar));
+		activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_RECOMMENDED_S1_YOU_HAVE_S2_RECOMMENDATIONS_LEFT).addCharName(target).addNumber(activeChar.getRecomLeft()));
+		target.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_BEEN_RECOMMENDED_BY_S1).addCharName(activeChar));
 		
 		activeChar.sendPacket(new UserInfo(activeChar));
 		target.broadcastUserInfo();

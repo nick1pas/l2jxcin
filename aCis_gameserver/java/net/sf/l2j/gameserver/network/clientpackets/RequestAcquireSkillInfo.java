@@ -62,7 +62,7 @@ public class RequestAcquireSkillInfo extends L2GameClientPacket
 		
 		switch (_skillType)
 		{
-		// General skills
+			// General skills
 			case 0:
 				int skillLvl = activeChar.getSkillLevel(_skillId);
 				if (skillLvl >= _skillLevel)

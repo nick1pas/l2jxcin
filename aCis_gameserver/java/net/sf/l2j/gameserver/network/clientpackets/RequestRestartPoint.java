@@ -16,11 +16,11 @@ package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
 import net.sf.l2j.gameserver.model.L2SiegeClan;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -179,10 +179,10 @@ public final class RequestRestartPoint extends L2GameClientPacket
 			if (activeChar.getClan() != null && castle.getSiege().checkIsAttacker(activeChar.getClan()))
 			{
 				// Schedule respawn delay for attacker
-				ThreadPool.schedule(new DeathTask(activeChar), SiegeManager.ATTACKERS_RESPAWN_DELAY);
+				ThreadPool.schedule(new DeathTask(activeChar), Config.ATTACKERS_RESPAWN_DELAY);
 				
-				if (SiegeManager.ATTACKERS_RESPAWN_DELAY > 0)
-					activeChar.sendMessage("You will be teleported in " + SiegeManager.ATTACKERS_RESPAWN_DELAY / 1000 + " seconds.");
+				if (Config.ATTACKERS_RESPAWN_DELAY > 0)
+					activeChar.sendMessage("You will be teleported in " + Config.ATTACKERS_RESPAWN_DELAY / 1000 + " seconds.");
 				
 				return;
 			}

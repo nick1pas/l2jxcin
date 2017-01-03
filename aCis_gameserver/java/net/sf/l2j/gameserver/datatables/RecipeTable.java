@@ -365,8 +365,8 @@ public class RecipeTable
 			{
 				if (_target != _player)
 				{
-					_player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CREATION_OF_S2_FOR_S1_AT_S3_ADENA_FAILED).addPcName(_target).addItemName(_recipeList.getItemId()).addItemNumber(_price));
-					_target.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_FAILED_TO_CREATE_S2_FOR_S3_ADENA).addPcName(_player).addItemName(_recipeList.getItemId()).addItemNumber(_price));
+					_player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CREATION_OF_S2_FOR_S1_AT_S3_ADENA_FAILED).addCharName(_target).addItemName(_recipeList.getItemId()).addItemNumber(_price));
+					_target.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_FAILED_TO_CREATE_S2_FOR_S3_ADENA).addCharName(_player).addItemName(_recipeList.getItemId()).addItemNumber(_price));
 				}
 				else
 					_target.sendPacket(SystemMessageId.ITEM_MIXING_FAILED);

@@ -78,7 +78,7 @@ public class EffectConfusion extends L2Effect
 			if ((obj instanceof L2Attackable || obj instanceof L2Playable) && (obj != getEffected()))
 				// Don't put doors nor chests on it.
 				if (!(obj instanceof L2DoorInstance || obj instanceof L2ChestInstance))
-					targetList.add((L2Character) obj);
+				targetList.add((L2Character) obj);
 		}
 		
 		// if there is no target, exit function

@@ -78,7 +78,7 @@ public class L2TeleportLocation
 		_forNoble = val;
 	}
 	
-	public boolean getIsForNoble()
+	public boolean isForNoble()
 	{
 		return _forNoble;
 	}

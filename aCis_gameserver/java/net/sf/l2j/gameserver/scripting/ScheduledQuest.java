@@ -161,7 +161,7 @@ public abstract class ScheduledQuest extends Quest
 				calendar.set(Calendar.SECOND, Integer.valueOf(timeStamp[1]));
 				calendar.set(Calendar.MILLISECOND, 0);
 				return calendar;
-				
+			
 			case DAILY:
 				// DAILY, "16:20:10", "17:20:00"
 				timeStamp = value.split(":");

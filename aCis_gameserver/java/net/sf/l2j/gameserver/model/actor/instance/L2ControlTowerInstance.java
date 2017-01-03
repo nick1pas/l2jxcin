@@ -18,17 +18,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
+import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.entity.Siege;
+import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
+import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
 public class L2ControlTowerInstance extends L2Npc
 {
 	private final List<L2Spawn> _guards = new ArrayList<>();
+	
+	private boolean _isActive = true;
 	
 	public L2ControlTowerInstance(int objectId, NpcTemplate template)
 	{
@@ -39,14 +45,14 @@ public class L2ControlTowerInstance extends L2Npc
 	public boolean isAttackable()
 	{
 		// Attackable during siege by attacker only
-		return (getCastle() != null && getCastle().getSiege().isInProgress());
+		return getCastle() != null && getCastle().getSiege().isInProgress();
 	}
 	
 	@Override
 	public boolean isAutoAttackable(L2Character attacker)
 	{
 		// Attackable during siege by attacker only
-		return (attacker != null && attacker instanceof L2PcInstance && getCastle() != null && getCastle().getSiege().isInProgress() && getCastle().getSiege().checkIsAttacker(((L2PcInstance) attacker).getClan()));
+		return attacker instanceof L2PcInstance && getCastle() != null && getCastle().getSiege().isInProgress() && getCastle().getSiege().checkIsAttacker(((L2PcInstance) attacker).getClan());
 	}
 	
 	@Override
@@ -82,14 +88,38 @@ public class L2ControlTowerInstance extends L2Npc
 	@Override
 	public boolean doDie(L2Character killer)
 	{
-		if (getCastle().getSiege().isInProgress())
+		if (getCastle() != null)
 		{
-			getCastle().getSiege().killedCT();
-			
-			for (L2Spawn spawn : _guards)
-				spawn.setRespawnState(false);
-			
-			_guards.clear();
+			final Siege siege = getCastle().getSiege();
+			if (siege.isInProgress())
+			{
+				_isActive = false;
+				
+				for (L2Spawn spawn : _guards)
+					spawn.setRespawnState(false);
+				
+				_guards.clear();
+				
+				// If siege life controls reach 0, broadcast a message to defenders.
+				if (siege.getControlTowerCount() == 0)
+					siege.announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.TOWER_DESTROYED_NO_RESURRECTION), false);
+				
+				// Spawn a little version of it. This version is a simple NPC, cleaned on siege end.
+				try
+				{
+					final L2Spawn spawn = new L2Spawn(NpcTable.getInstance().getTemplate(13003));
+					spawn.setLoc(getPosition());
+					
+					final L2Npc tower = spawn.doSpawn(false);
+					tower.setCastle(getCastle());
+					
+					siege.getDestroyedTowers().add(tower);
+				}
+				catch (Exception e)
+				{
+					_log.warning(getClass().getName() + ": Cannot spawn control tower! " + e);
+				}
+			}
 		}
 		return super.doDie(killer);
 	}
@@ -102,5 +132,10 @@ public class L2ControlTowerInstance extends L2Npc
 	public final List<L2Spawn> getGuards()
 	{
 		return _guards;
+	}
+	
+	public final boolean isActive()
+	{
+		return _isActive;
 	}
 }

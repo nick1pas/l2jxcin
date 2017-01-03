@@ -14,6 +14,7 @@
  */
 package net.sf.l2j.gameserver.model.item.instance;
 
+import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemState;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 
 /**
@@ -47,7 +48,7 @@ public class ItemInfo
 	private int _equipped;
 	
 	/** The action to do clientside (1=ADD, 2=MODIFY, 3=REMOVE) */
-	private int _change;
+	private ItemState _change;
 	
 	/** The mana of this item */
 	private int _mana;
@@ -87,30 +88,13 @@ public class ItemInfo
 		_equipped = item.isEquipped() ? 1 : 0;
 		
 		// Get the action to do clientside
-		switch (item.getLastChange())
-		{
-			case (ItemInstance.ADDED):
-			{
-				_change = 1;
-				break;
-			}
-			case (ItemInstance.MODIFIED):
-			{
-				_change = 2;
-				break;
-			}
-			case (ItemInstance.REMOVED):
-			{
-				_change = 3;
-				break;
-			}
-		}
+		_change = item.getLastChange();
 		
 		// Get shadow item mana
 		_mana = item.getMana();
 	}
 	
-	public ItemInfo(ItemInstance item, int change)
+	public ItemInfo(ItemInstance item, ItemState change)
 	{
 		if (item == null)
 			return;
@@ -192,7 +176,7 @@ public class ItemInfo
 		return _equipped;
 	}
 	
-	public int getChange()
+	public ItemState getChange()
 	{
 		return _change;
 	}

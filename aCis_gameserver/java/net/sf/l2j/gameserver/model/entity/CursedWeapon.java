@@ -340,7 +340,7 @@ public class CursedWeapon
 		removeFromDb();
 		
 		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S2_WAS_DROPPED_IN_THE_S1_REGION);
-		sm.addZoneName(_player.getX(), _player.getY(), _player.getZ());
+		sm.addZoneName(_player.getPosition());
 		sm.addItemName(_itemId);
 		
 		Broadcast.toAllOnlinePlayers(sm);
@@ -373,7 +373,7 @@ public class CursedWeapon
 		_isDropped = true;
 		
 		SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.S2_WAS_DROPPED_IN_THE_S1_REGION);
-		sm.addZoneName(player.getX(), player.getY(), player.getZ());
+		sm.addZoneName(player.getPosition());
 		sm.addItemName(_itemId);
 		
 		Broadcast.toAllOnlinePlayers(sm);
@@ -389,7 +389,7 @@ public class CursedWeapon
 	public void cursedOnLogin()
 	{
 		SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.S2_OWNER_HAS_LOGGED_INTO_THE_S1_REGION);
-		msg.addZoneName(_player.getX(), _player.getY(), _player.getZ());
+		msg.addZoneName(_player.getPosition());
 		msg.addItemName(_player.getCursedWeaponEquippedId());
 		Broadcast.toAllOnlinePlayers(msg);
 		
@@ -531,7 +531,7 @@ public class CursedWeapon
 		_player.broadcastUserInfo();
 		
 		// _player.broadcastPacket(new SocialAction(_player, 17));
-		Broadcast.toAllOnlinePlayers(SystemMessage.getSystemMessage(SystemMessageId.THE_OWNER_OF_S2_HAS_APPEARED_IN_THE_S1_REGION).addZoneName(_player.getX(), _player.getY(), _player.getZ()).addItemName(_item.getItemId()));
+		Broadcast.toAllOnlinePlayers(SystemMessage.getSystemMessage(SystemMessageId.THE_OWNER_OF_S2_HAS_APPEARED_IN_THE_S1_REGION).addZoneName(_player.getPosition()).addItemName(_item.getItemId()));
 	}
 	
 	public void loadData()

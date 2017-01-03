@@ -25,6 +25,7 @@ import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.TowerSpawn;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
@@ -43,7 +44,6 @@ public class AdminSiege implements IAdminCommandHandler
 		"admin_siege",
 		"admin_add_attacker",
 		"admin_add_defender",
-		"admin_add_guard",
 		"admin_list_siege_clans",
 		"admin_clear_siege_list",
 		"admin_move_defenders",
@@ -73,7 +73,7 @@ public class AdminSiege implements IAdminCommandHandler
 		if (command.startsWith("admin_clanhall"))
 			clanhall = ClanHallManager.getInstance().getClanHallById(Integer.parseInt(st.nextToken()));
 		else if (st.hasMoreTokens())
-			castle = CastleManager.getInstance().getCastle(st.nextToken());
+			castle = CastleManager.getInstance().getCastleByName(st.nextToken());
 		
 		if (clanhall == null && (castle == null || castle.getCastleId() < 0))
 		{
@@ -101,18 +101,6 @@ public class AdminSiege implements IAdminCommandHandler
 					activeChar.sendPacket(SystemMessageId.TARGET_IS_INCORRECT);
 				else
 					castle.getSiege().registerDefender(player);
-			}
-			else if (command.equalsIgnoreCase("admin_add_guard"))
-			{
-				try
-				{
-					int npcId = Integer.parseInt(st.nextToken());
-					castle.getSiege().getSiegeGuardManager().addSiegeGuard(activeChar, npcId);
-				}
-				catch (Exception e)
-				{
-					activeChar.sendMessage("Usage: //add_guard npcId");
-				}
 			}
 			else if (command.equalsIgnoreCase("admin_clear_siege_list"))
 			{
@@ -156,7 +144,40 @@ public class AdminSiege implements IAdminCommandHandler
 			{
 				castle.getSiege().startSiege();
 			}
-			showSiegePage(activeChar, castle.getName());
+			
+			final NpcHtmlMessage html = new NpcHtmlMessage(0);
+			html.setFile("data/html/admin/castle.htm");
+			html.replace("%castleName%", castle.getName());
+			html.replace("%circletId%", castle.getCircletId());
+			html.replace("%artifactId%", castle.getArtifacts().toString());
+			html.replace("%ticketsNumber%", castle.getTickets().size());
+			html.replace("%droppedTicketsNumber%", castle.getDroppedTickets().size());
+			html.replace("%npcsNumber%", castle.getRelatedNpcIds().size());
+			
+			final StringBuilder sb = new StringBuilder();
+			
+			// Feed Control Tower infos.
+			for (TowerSpawn spawn : castle.getControlTowers())
+			{
+				final String teleLoc = spawn.getLocation().toString().replaceAll(",", "");
+				StringUtil.append(sb, "<a action=\"bypass -h admin_move_to ", teleLoc, "\">", teleLoc, "</a><br1>");
+			}
+			
+			html.replace("%ct%", sb.toString());
+			
+			// Cleanup the sb to reuse it.
+			sb.setLength(0);
+			
+			// Feed Flame Tower infos.
+			for (TowerSpawn spawn : castle.getFlameTowers())
+			{
+				final String teleLoc = spawn.getLocation().toString().replaceAll(",", "");
+				StringUtil.append(sb, "<a action=\"bypass -h admin_move_to ", teleLoc, "\">", teleLoc, "</a><br1>");
+			}
+			
+			html.replace("%ft%", sb.toString());
+			
+			activeChar.sendPacket(html);
 		}
 		else if (clanhall != null)
 		{
@@ -199,7 +220,15 @@ public class AdminSiege implements IAdminCommandHandler
 				if (zone != null)
 					activeChar.teleToLocation(zone.getSpawnLoc(), 0);
 			}
-			showClanHallPage(activeChar, clanhall);
+			
+			final L2Clan owner = ClanTable.getInstance().getClan(clanhall.getOwnerId());
+			
+			final NpcHtmlMessage html = new NpcHtmlMessage(0);
+			html.setFile("data/html/admin/clanhall.htm");
+			html.replace("%clanhallName%", clanhall.getName());
+			html.replace("%clanhallId%", clanhall.getId());
+			html.replace("%clanhallOwner%", (owner == null) ? "None" : owner.getName());
+			activeChar.sendPacket(html);
 		}
 		return true;
 	}
@@ -267,26 +296,6 @@ public class AdminSiege implements IAdminCommandHandler
 			}
 		}
 		html.replace("%freeclanhalls%", sb.toString());
-		activeChar.sendPacket(html);
-	}
-	
-	private static void showSiegePage(L2PcInstance activeChar, String castleName)
-	{
-		final NpcHtmlMessage html = new NpcHtmlMessage(0);
-		html.setFile("data/html/admin/castle.htm");
-		html.replace("%castleName%", castleName);
-		activeChar.sendPacket(html);
-	}
-	
-	private static void showClanHallPage(L2PcInstance activeChar, ClanHall clanhall)
-	{
-		final L2Clan owner = ClanTable.getInstance().getClan(clanhall.getOwnerId());
-		
-		final NpcHtmlMessage html = new NpcHtmlMessage(0);
-		html.setFile("data/html/admin/clanhall.htm");
-		html.replace("%clanhallName%", clanhall.getName());
-		html.replace("%clanhallId%", clanhall.getId());
-		html.replace("%clanhallOwner%", (owner == null) ? "None" : owner.getName());
 		activeChar.sendPacket(html);
 	}
 	

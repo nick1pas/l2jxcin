@@ -20,7 +20,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.Sex;
 
@@ -110,7 +109,7 @@ public class L2ClanMember
 		if (player != null)
 		{
 			if (_clan.getLevel() > 3 && player.isClanLeader())
-				SiegeManager.addSiegeSkills(player);
+				player.addSiegeSkills();
 			
 			if (_clan.getReputationScore() >= 0)
 			{

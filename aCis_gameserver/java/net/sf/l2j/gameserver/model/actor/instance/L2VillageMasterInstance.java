@@ -24,7 +24,7 @@ import net.sf.l2j.gameserver.datatables.CharTemplateTable;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SkillTreeTable;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
+import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Clan.SubPledge;
 import net.sf.l2j.gameserver.model.L2ClanMember;
@@ -33,6 +33,7 @@ import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.model.base.SubClass;
+import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadManager;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -411,7 +412,7 @@ public class L2VillageMasterInstance extends L2NpcInstance
 					
 					player.sendPacket(SystemMessageId.SUBCLASS_TRANSFER_COMPLETED); // Transfer completed.
 					return;
-					
+				
 				case 6: // Change/Cancel Subclass - Choice
 					// validity check
 					if (paramOne < 1 || paramOne > 3)
@@ -625,8 +626,9 @@ public class L2VillageMasterInstance extends L2NpcInstance
 			return;
 		}
 		
-		for (Siege siege : SiegeManager.getSieges())
+		for (Castle castle : CastleManager.getInstance().getCastles())
 		{
+			final Siege siege = castle.getSiege();
 			if (siege.isInProgress())
 			{
 				if (siege.getAttackerClan(clan) != null || siege.getDefenderClan(clan) != null)

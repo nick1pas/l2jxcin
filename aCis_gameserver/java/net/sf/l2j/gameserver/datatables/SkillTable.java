@@ -171,7 +171,7 @@ public class SkillTable
 		for (int id : _heroSkillsId)
 			if (id == skillid)
 				return true;
-		
+			
 		return false;
 	}
 	

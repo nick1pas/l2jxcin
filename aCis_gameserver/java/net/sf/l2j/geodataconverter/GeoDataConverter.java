@@ -319,7 +319,7 @@ public final class GeoDataConverter
 			for (int ix = 0; ix < GeoStructure.REGION_BLOCKS_X; ix++)
 				for (int iy = 0; iy < GeoStructure.REGION_BLOCKS_Y; iy++)
 					_blocks[ix][iy].saveBlock(bos);
-			
+				
 			// flush data to file
 			bos.flush();
 			

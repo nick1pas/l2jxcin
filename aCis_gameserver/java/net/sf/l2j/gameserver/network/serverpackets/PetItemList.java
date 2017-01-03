@@ -14,7 +14,7 @@
  */
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import java.util.List;
+import java.util.Set;
 
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -22,7 +22,7 @@ import net.sf.l2j.gameserver.model.item.kind.Item;
 
 public class PetItemList extends L2GameServerPacket
 {
-	private final List<ItemInstance> _items;
+	private final Set<ItemInstance> _items;
 	
 	public PetItemList(L2PetInstance character)
 	{
@@ -37,9 +37,6 @@ public class PetItemList extends L2GameServerPacket
 		
 		for (ItemInstance temp : _items)
 		{
-			if (temp.getItem() == null)
-				continue;
-			
 			Item item = temp.getItem();
 			
 			writeH(item.getType1());

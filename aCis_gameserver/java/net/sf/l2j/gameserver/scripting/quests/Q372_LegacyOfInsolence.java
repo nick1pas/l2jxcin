@@ -409,7 +409,7 @@ public class Q372_LegacyOfInsolence extends Quest
 		for (int item = itemsToCheck[0]; item <= itemsToCheck[1]; item++)
 			if (!st.hasQuestItems(item))
 				return npcId + ((npcId == WALDERAL) ? "-07a.htm" : "-01.htm");
-		
+			
 		// Remove set of items.
 		for (int item = itemsToCheck[0]; item <= itemsToCheck[1]; item++)
 			st.takeItems(item, 1);

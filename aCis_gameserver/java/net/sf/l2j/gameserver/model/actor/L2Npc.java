@@ -18,7 +18,6 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
@@ -31,12 +30,10 @@ import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.HelperBuffTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
-import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.MultisellData;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
-import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.games.Lottery;
@@ -56,11 +53,11 @@ import net.sf.l2j.gameserver.model.actor.status.NpcStatus;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.AIType;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.Race;
+import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.item.kind.Weapon;
-import net.sf.l2j.gameserver.model.zone.type.L2TownZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.AbstractNpcInfo.NpcInfo;
@@ -95,15 +92,12 @@ import net.sf.l2j.gameserver.util.Broadcast;
  */
 public class L2Npc extends L2Character
 {
-	public static final int INTERACTION_DISTANCE = 100;
+	public static final int INTERACTION_DISTANCE = 150;
 	private static final int SOCIAL_INTERVAL = 12000;
 	
 	private L2Spawn _spawn;
 	
 	volatile boolean _isDecayed = false;
-	
-	private int _castleIndex = -2;
-	private boolean _isInTown = false;
 	
 	private int _spoilerId = 0;
 	
@@ -121,6 +115,8 @@ public class L2Npc extends L2Character
 	private int _shotsMask = 0;
 	
 	private int _scriptValue = 0;
+	
+	private Castle _castle;
 	
 	/**
 	 * Send a packet SocialAction to all L2PcInstance in the _KnownPlayers of the L2Npc and create a new RandomAnimation Task.
@@ -161,8 +157,9 @@ public class L2Npc extends L2Character
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
-	 * <li>Call the L2Character constructor to set the _template of the L2Character (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li> <li>Set the name of the L2Character</li> <li>Create a RandomAnimation Task that will be launched after the calculated delay if
-	 * the server allow it</li><BR>
+	 * <li>Call the L2Character constructor to set the _template of the L2Character (copy skills from template to object and link _calculators to NPC_STD_CALCULATOR)</li>
+	 * <li>Set the name of the L2Character</li>
+	 * <li>Create a RandomAnimation Task that will be launched after the calculated delay if the server allow it</li><BR>
 	 * <BR>
 	 * @param objectId Identifier of the object to initialized
 	 * @param template The L2NpcTemplate to apply to the NPC
@@ -171,7 +168,7 @@ public class L2Npc extends L2Character
 	{
 		super(objectId, template);
 		
-		for (L2Skill skill : template.getSkills().values())
+		for (L2Skill skill : template.getSkills(SkillType.PASSIVE))
 			addStatFuncs(skill.getStatFuncs(this));
 		
 		initCharStatusUpdateValues();
@@ -187,6 +184,9 @@ public class L2Npc extends L2Character
 		
 		// Set the name of the L2Character
 		setName(template.getName());
+		setTitle(template.getTitle());
+		
+		_castle = template.getCastle();
 	}
 	
 	@Override
@@ -274,6 +274,19 @@ public class L2Npc extends L2Character
 			else
 				player.sendPacket(new NpcInfo(this, player));
 		}
+	}
+	
+	/**
+	 * Set the Title of the L2Character. Concatens it if length > 16.
+	 * @param value The String to test.
+	 */
+	@Override
+	public final void setTitle(String value)
+	{
+		if (value == null)
+			_title = "";
+		else
+			_title = value;
 	}
 	
 	@Override
@@ -379,9 +392,10 @@ public class L2Npc extends L2Character
 			html.replace("%class%", getClass().getSimpleName());
 			html.replace("%id%", getTemplate().getNpcId());
 			html.replace("%lvl%", getTemplate().getLevel());
-			html.replace("%name%", getTemplate().getName());
+			html.replace("%name%", getName());
 			html.replace("%race%", getTemplate().getRace().toString());
 			html.replace("%tmplid%", getTemplate().getIdTemplate());
+			html.replace("%castle%", (getCastle() != null) ? getCastle().getName() : "none");
 			html.replace("%aggro%", getTemplate().getAggroRange());
 			html.replace("%corpse%", StringUtil.getTimeStamp(getTemplate().getCorpseTime()));
 			html.replace("%enchant%", getTemplate().getEnchantEffect());
@@ -463,32 +477,12 @@ public class L2Npc extends L2Character
 	 */
 	public final Castle getCastle()
 	{
-		// Get castle this NPC belongs to (excluding L2Attackable)
-		if (_castleIndex < 0)
-		{
-			L2TownZone town = MapRegionTable.getTown(getX(), getY(), getZ());
-			
-			if (town != null)
-				_castleIndex = CastleManager.getInstance().getCastleIndex(town.getTaxById());
-			
-			if (_castleIndex < 0)
-				_castleIndex = CastleManager.getInstance().findNearestCastleIndex(this);
-			else
-				_isInTown = true; // Npc was spawned in town
-		}
-		
-		if (_castleIndex < 0)
-			return null;
-		
-		return CastleManager.getInstance().getCastles().get(_castleIndex);
+		return _castle;
 	}
 	
-	public final boolean getIsInTown()
+	public void setCastle(Castle castle)
 	{
-		if (_castleIndex < 0)
-			getCastle();
-		
-		return _isInTown;
+		_castle = castle;
 	}
 	
 	/**
@@ -822,8 +816,9 @@ public class L2Npc extends L2Character
 	/**
 	 * <B><U> Format of the pathfile </U> :</B><BR>
 	 * <BR>
-	 * <li>if the file exists on the server (page number = 0) : <B>data/html/default/12006.htm</B> (npcId-page number)</li> <li>if the file exists on the server (page number > 0) : <B>data/html/default/12006-1.htm</B> (npcId-page number)</li> <li>if the file doesn't exist on the server :
-	 * <B>data/html/npcdefault.htm</B> (message : "I have nothing to say to you")</li><BR>
+	 * <li>if the file exists on the server (page number = 0) : <B>data/html/default/12006.htm</B> (npcId-page number)</li>
+	 * <li>if the file exists on the server (page number > 0) : <B>data/html/default/12006-1.htm</B> (npcId-page number)</li>
+	 * <li>if the file doesn't exist on the server : <B>data/html/npcdefault.htm</B> (message : "I have nothing to say to you")</li><BR>
 	 * <BR>
 	 * <B><U> Overriden in </U> :</B><BR>
 	 * <BR>
@@ -921,7 +916,7 @@ public class L2Npc extends L2Character
 						player.setLoto(i, val);
 						break;
 					}
-			
+				
 			// setting pusshed buttons
 			count = 0;
 			for (int i = 0; i < 5; i++)
@@ -1093,7 +1088,7 @@ public class L2Npc extends L2Character
 		{
 			setTarget(player);
 			doCast(FrequentSkill.ARENA_CP_RECOVERY.getSkill());
-			player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CP_WILL_BE_RESTORED).addPcName(player));
+			player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CP_WILL_BE_RESTORED).addCharName(player));
 		}
 	}
 	
@@ -1276,8 +1271,13 @@ public class L2Npc extends L2Character
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
-	 * <li>Create a DecayTask to remove the corpse of the L2Npc after 7 seconds</li> <li>Set target to null and cancel Attack or Cast</li> <li>Stop movement</li> <li>Stop HP/MP/CP Regeneration task</li> <li>Stop all active skills effects in progress on the L2Character</li> <li>Send the
-	 * Server->Client packet StatusUpdate with current HP and MP to all other L2PcInstance to inform</li> <li>Notify L2Character AI</li><BR>
+	 * <li>Create a DecayTask to remove the corpse of the L2Npc after 7 seconds</li>
+	 * <li>Set target to null and cancel Attack or Cast</li>
+	 * <li>Stop movement</li>
+	 * <li>Stop HP/MP/CP Regeneration task</li>
+	 * <li>Stop all active skills effects in progress on the L2Character</li>
+	 * <li>Send the Server->Client packet StatusUpdate with current HP and MP to all other L2PcInstance to inform</li>
+	 * <li>Notify L2Character AI</li><BR>
 	 * <BR>
 	 * <B><U> Overriden in </U> :</B><BR>
 	 * <BR>
@@ -1290,7 +1290,7 @@ public class L2Npc extends L2Character
 	{
 		if (!super.doDie(killer))
 			return false;
-		
+			
 		// normally this wouldn't really be needed, but for those few exceptions,
 		// we do need to reset the weapons back to the initial templated weapon.
 		_currentLHandId = getTemplate().getLeftHand();
@@ -1339,7 +1339,7 @@ public class L2Npc extends L2Character
 		if (quests != null)
 			for (Quest quest : quests)
 				quest.notifyDecay(this);
-		
+			
 		// Remove the L2Npc from the world when the decay task is launched.
 		super.onDecay();
 		
@@ -1368,7 +1368,7 @@ public class L2Npc extends L2Character
 	@Override
 	public String toString()
 	{
-		return getTemplate().getName();
+		return getName();
 	}
 	
 	public boolean isDecayed()
@@ -1555,13 +1555,27 @@ public class L2Npc extends L2Character
 		}
 	}
 	
-	/**
-	 * This method is overidden on L2PcInstance, L2Summon and L2Npc.
-	 * @return the skills list of this L2Character.
-	 */
 	@Override
-	public Map<Integer, L2Skill> getSkills()
+	public int getSkillLevel(int skillId)
 	{
-		return getTemplate().getSkills();
+		for (List<L2Skill> list : getTemplate().getSkills().values())
+		{
+			for (L2Skill skill : list)
+				if (skill.getId() == skillId)
+					return skill.getLevel();
+		}
+		return -1;
+	}
+	
+	@Override
+	public L2Skill getSkill(int skillId)
+	{
+		for (List<L2Skill> list : getTemplate().getSkills().values())
+		{
+			for (L2Skill skill : list)
+				if (skill.getId() == skillId)
+					return skill;
+		}
+		return null;
 	}
 }

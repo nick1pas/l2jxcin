@@ -19,7 +19,9 @@ import java.util.List;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
+import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival.FestivalType;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Party.MessageType;
@@ -32,14 +34,11 @@ import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.templates.StatsSet;
 
-/**
- * Festival of Darkness Guide (Seven Signs)
- * @author Tempy
- */
 public final class L2FestivalGuideInstance extends L2NpcInstance
 {
-	protected int _festivalType;
-	protected int _festivalOracle;
+	protected FestivalType _festivalType;
+	protected CabalType _festivalOracle;
+	
 	protected int _blueStonesNeeded;
 	protected int _greenStonesNeeded;
 	protected int _redStonesNeeded;
@@ -52,40 +51,44 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 		{
 			case 31127:
 			case 31132:
-				_festivalType = SevenSignsFestival.FESTIVAL_LEVEL_MAX_31;
-				_festivalOracle = SevenSigns.CABAL_DAWN;
+				_festivalType = FestivalType.MAX_31;
+				_festivalOracle = CabalType.DAWN;
 				_blueStonesNeeded = 900;
 				_greenStonesNeeded = 540;
 				_redStonesNeeded = 270;
 				break;
+			
 			case 31128:
 			case 31133:
-				_festivalType = SevenSignsFestival.FESTIVAL_LEVEL_MAX_42;
-				_festivalOracle = SevenSigns.CABAL_DAWN;
+				_festivalType = FestivalType.MAX_42;
+				_festivalOracle = CabalType.DAWN;
 				_blueStonesNeeded = 1500;
 				_greenStonesNeeded = 900;
 				_redStonesNeeded = 450;
 				break;
+			
 			case 31129:
 			case 31134:
-				_festivalType = SevenSignsFestival.FESTIVAL_LEVEL_MAX_53;
-				_festivalOracle = SevenSigns.CABAL_DAWN;
+				_festivalType = FestivalType.MAX_53;
+				_festivalOracle = CabalType.DAWN;
 				_blueStonesNeeded = 3000;
 				_greenStonesNeeded = 1800;
 				_redStonesNeeded = 900;
 				break;
+			
 			case 31130:
 			case 31135:
-				_festivalType = SevenSignsFestival.FESTIVAL_LEVEL_MAX_64;
-				_festivalOracle = SevenSigns.CABAL_DAWN;
+				_festivalType = FestivalType.MAX_64;
+				_festivalOracle = CabalType.DAWN;
 				_blueStonesNeeded = 4500;
 				_greenStonesNeeded = 2700;
 				_redStonesNeeded = 1350;
 				break;
+			
 			case 31131:
 			case 31136:
-				_festivalType = SevenSignsFestival.FESTIVAL_LEVEL_MAX_NONE;
-				_festivalOracle = SevenSigns.CABAL_DAWN;
+				_festivalType = FestivalType.MAX_NONE;
+				_festivalOracle = CabalType.DAWN;
 				_blueStonesNeeded = 6000;
 				_greenStonesNeeded = 3600;
 				_redStonesNeeded = 1800;
@@ -93,40 +96,44 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 			
 			case 31137:
 			case 31142:
-				_festivalType = SevenSignsFestival.FESTIVAL_LEVEL_MAX_31;
-				_festivalOracle = SevenSigns.CABAL_DUSK;
+				_festivalType = FestivalType.MAX_31;
+				_festivalOracle = CabalType.DUSK;
 				_blueStonesNeeded = 900;
 				_greenStonesNeeded = 540;
 				_redStonesNeeded = 270;
 				break;
+			
 			case 31138:
 			case 31143:
-				_festivalType = SevenSignsFestival.FESTIVAL_LEVEL_MAX_42;
-				_festivalOracle = SevenSigns.CABAL_DUSK;
+				_festivalType = FestivalType.MAX_42;
+				_festivalOracle = CabalType.DUSK;
 				_blueStonesNeeded = 1500;
 				_greenStonesNeeded = 900;
 				_redStonesNeeded = 450;
 				break;
+			
 			case 31139:
 			case 31144:
-				_festivalType = SevenSignsFestival.FESTIVAL_LEVEL_MAX_53;
-				_festivalOracle = SevenSigns.CABAL_DUSK;
+				_festivalType = FestivalType.MAX_53;
+				_festivalOracle = CabalType.DUSK;
 				_blueStonesNeeded = 3000;
 				_greenStonesNeeded = 1800;
 				_redStonesNeeded = 900;
 				break;
+			
 			case 31140:
 			case 31145:
-				_festivalType = SevenSignsFestival.FESTIVAL_LEVEL_MAX_64;
-				_festivalOracle = SevenSigns.CABAL_DUSK;
+				_festivalType = FestivalType.MAX_64;
+				_festivalOracle = CabalType.DUSK;
 				_blueStonesNeeded = 4500;
 				_greenStonesNeeded = 2700;
 				_redStonesNeeded = 1350;
 				break;
+			
 			case 31141:
 			case 31146:
-				_festivalType = SevenSignsFestival.FESTIVAL_LEVEL_MAX_NONE;
-				_festivalOracle = SevenSigns.CABAL_DUSK;
+				_festivalType = FestivalType.MAX_NONE;
+				_festivalOracle = CabalType.DUSK;
 				_blueStonesNeeded = 6000;
 				_greenStonesNeeded = 3600;
 				_redStonesNeeded = 1800;
@@ -145,6 +152,8 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 		}
 		else if (command.startsWith("Festival"))
 		{
+			final int festivalIndex = _festivalType.ordinal();
+			
 			L2Party playerParty = player.getParty();
 			int val = Integer.parseInt(command.substring(9, 10));
 			
@@ -187,7 +196,7 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 					}
 					
 					// Check if all the party members are in the required level range.
-					if (playerParty.getLevel() > SevenSignsFestival.getMaxLevelForFestival(_festivalType))
+					if (playerParty.getLevel() > _festivalType.getMaxLevel())
 					{
 						showChatWindow(player, 2, "d", false);
 						return;
@@ -196,7 +205,7 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 					// Check to see if the player has already signed up, if they are then update the participant list providing all the required criteria has been met.
 					if (player.isFestivalParticipant())
 					{
-						SevenSignsFestival.getInstance().setParticipants(_festivalOracle, _festivalType, playerParty);
+						SevenSignsFestival.getInstance().setParticipants(_festivalOracle, festivalIndex, playerParty);
 						showChatWindow(player, 2, "f", false);
 						return;
 					}
@@ -223,8 +232,8 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 					if (!player.destroyItemByItemId("SevenSigns", stoneType, stonesNeeded, this, true))
 						return;
 					
-					SevenSignsFestival.getInstance().setParticipants(_festivalOracle, _festivalType, playerParty);
-					SevenSignsFestival.getInstance().addAccumulatedBonus(_festivalType, stoneType, stonesNeeded);
+					SevenSignsFestival.getInstance().setParticipants(_festivalOracle, festivalIndex, playerParty);
+					SevenSignsFestival.getInstance().addAccumulatedBonus(festivalIndex, stoneType, stonesNeeded);
 					
 					showChatWindow(player, 2, "e", false);
 					break;
@@ -250,7 +259,7 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 						return;
 					}
 					
-					final List<Integer> prevParticipants = SevenSignsFestival.getInstance().getPreviousParticipants(_festivalOracle, _festivalType);
+					final List<Integer> prevParticipants = SevenSignsFestival.getInstance().getPreviousParticipants(_festivalOracle, festivalIndex);
 					
 					// Check if there are any past participants.
 					if ((prevParticipants == null) || prevParticipants.isEmpty() || !prevParticipants.contains(player.getObjectId()))
@@ -292,14 +301,14 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 				case 4: // Current High Scores
 					final StringBuilder sb = new StringBuilder("<html><body>Festival Guide:<br>These are the top scores of the week, for the ");
 					
-					final StatsSet dawnData = SevenSignsFestival.getInstance().getHighestScoreData(SevenSigns.CABAL_DAWN, _festivalType);
-					final StatsSet duskData = SevenSignsFestival.getInstance().getHighestScoreData(SevenSigns.CABAL_DUSK, _festivalType);
-					final StatsSet overallData = SevenSignsFestival.getInstance().getOverallHighestScoreData(_festivalType);
+					final StatsSet dawnData = SevenSignsFestival.getInstance().getHighestScoreData(CabalType.DAWN, festivalIndex);
+					final StatsSet duskData = SevenSignsFestival.getInstance().getHighestScoreData(CabalType.DUSK, festivalIndex);
+					final StatsSet overallData = SevenSignsFestival.getInstance().getOverallHighestScoreData(festivalIndex);
 					
 					final int dawnScore = dawnData.getInteger("score");
 					final int duskScore = duskData.getInteger("score");
 					
-					sb.append(SevenSignsFestival.getFestivalName(_festivalType) + " festival.<br>");
+					sb.append(_festivalType.getName() + " festival.<br>");
 					
 					if (dawnScore > 0)
 						sb.append("Dawn: " + calculateDate(dawnData.getString("date")) + ". Score " + dawnScore + "<br>" + dawnData.getString("members") + "<br>");
@@ -343,7 +352,7 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 						break;
 					}
 					
-					if (SevenSignsFestival.getInstance().increaseChallenge(_festivalOracle, _festivalType))
+					if (SevenSignsFestival.getInstance().increaseChallenge(_festivalOracle, festivalIndex))
 						showChatWindow(player, 8, "b", false);
 					else
 						showChatWindow(player, 8, "c", false);
@@ -443,7 +452,7 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 		html.setFile(SevenSigns.SEVEN_SIGNS_HTML_PATH + "festival/" + ((isDescription) ? "desc_" : "festival_") + ((suffix != null) ? val + suffix : val) + ".htm");
 		html.replace("%objectId%", getObjectId());
-		html.replace("%festivalType%", SevenSignsFestival.getFestivalName(_festivalType));
+		html.replace("%festivalType%", _festivalType.getName());
 		html.replace("%cycleMins%", SevenSignsFestival.getInstance().getMinsToNextCycle());
 		if (!isDescription && "2b".equals(val + suffix))
 			html.replace("%minFestivalPartyMembers%", Config.ALT_FESTIVAL_MIN_PLAYER);
@@ -469,41 +478,31 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 	
 	private static final String getStatsTable()
 	{
-		StringBuilder tableHtml = new StringBuilder();
-		
-		// Get the scores for each of the festival level ranges (types).
+		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < 5; i++)
 		{
-			int dawnScore = SevenSignsFestival.getInstance().getHighestScore(SevenSigns.CABAL_DAWN, i);
-			int duskScore = SevenSignsFestival.getInstance().getHighestScore(SevenSigns.CABAL_DUSK, i);
-			String festivalName = SevenSignsFestival.getFestivalName(i);
-			String winningCabal = "Children of Dusk";
+			final int dawnScore = SevenSignsFestival.getInstance().getHighestScore(CabalType.DAWN, i);
+			final int duskScore = SevenSignsFestival.getInstance().getHighestScore(CabalType.DUSK, i);
 			
+			String winningCabal = "Children of Dusk";
 			if (dawnScore > duskScore)
 				winningCabal = "Children of Dawn";
 			else if (dawnScore == duskScore)
 				winningCabal = "None";
 			
-			tableHtml.append("<tr><td width=\"100\" align=\"center\">" + festivalName + "</td><td align=\"center\" width=\"35\">" + duskScore + "</td><td align=\"center\" width=\"35\">" + dawnScore + "</td><td align=\"center\" width=\"130\">" + winningCabal + "</td></tr>");
+			sb.append("<tr><td width=\"100\" align=\"center\">" + FestivalType.VALUES[i].getName() + "</td><td align=\"center\" width=\"35\">" + duskScore + "</td><td align=\"center\" width=\"35\">" + dawnScore + "</td><td align=\"center\" width=\"130\">" + winningCabal + "</td></tr>");
 		}
 		
-		return tableHtml.toString();
+		return sb.toString();
 	}
 	
 	private static final String getBonusTable()
 	{
-		StringBuilder tableHtml = new StringBuilder();
-		
-		// Get the accumulated scores for each of the festival level ranges (types).
+		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < 5; i++)
-		{
-			int accumScore = SevenSignsFestival.getInstance().getAccumulatedBonus(i);
-			String festivalName = SevenSignsFestival.getFestivalName(i);
-			
-			tableHtml.append("<tr><td align=\"center\" width=\"150\">" + festivalName + "</td><td align=\"center\" width=\"150\">" + accumScore + "</td></tr>");
-		}
+			sb.append("<tr><td align=\"center\" width=\"150\">" + FestivalType.VALUES[i].getName() + "</td><td align=\"center\" width=\"150\">" + SevenSignsFestival.getInstance().getAccumulatedBonus(i) + "</td></tr>");
 		
-		return tableHtml.toString();
+		return sb.toString();
 	}
 	
 	private static final String calculateDate(String milliFromEpoch)
@@ -525,6 +524,6 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 		
 		// Festival Witches are spawned inside festival, out of peace zone -> skip them
 		if (zone != null)
-			SevenSignsFestival.getInstance().addPeaceZone(zone, _festivalOracle == SevenSigns.CABAL_DAWN);
+			SevenSignsFestival.getInstance().addPeaceZone(zone, _festivalOracle == CabalType.DAWN);
 	}
 }

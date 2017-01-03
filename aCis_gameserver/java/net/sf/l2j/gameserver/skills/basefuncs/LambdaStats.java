@@ -43,13 +43,13 @@ public final class LambdaStats extends Lambda
 		{
 			case PLAYER_LEVEL:
 				return (env.getCharacter() == null) ? 1 : env.getCharacter().getLevel();
-				
+			
 			case TARGET_LEVEL:
 				return (env.getTarget() == null) ? 1 : env.getTarget().getLevel();
-				
+			
 			case PLAYER_MAX_HP:
 				return (env.getCharacter() == null) ? 1 : env.getCharacter().getMaxHp();
-				
+			
 			case PLAYER_MAX_MP:
 				return (env.getCharacter() == null) ? 1 : env.getCharacter().getMaxMp();
 		}

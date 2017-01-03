@@ -28,17 +28,20 @@ import net.sf.l2j.gameserver.datatables.AnnouncementTable;
 import net.sf.l2j.gameserver.datatables.GmListTable;
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
 import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
+import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.instancemanager.CoupleManager;
 import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
 import net.sf.l2j.gameserver.instancemanager.PetitionManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
-import net.sf.l2j.gameserver.instancemanager.SiegeManager;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
+import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Clan.SubPledge;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.ClassRace;
+import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
@@ -121,7 +124,7 @@ public class EnterWorld extends L2GameClientPacket
 			// Refresh player instance.
 			clan.getClanMember(objectId).setPlayerInstance(activeChar);
 			
-			final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.CLAN_MEMBER_S1_LOGGED_IN).addPcName(activeChar);
+			final SystemMessage msg = SystemMessage.getSystemMessage(SystemMessageId.CLAN_MEMBER_S1_LOGGED_IN).addCharName(activeChar);
 			final PledgeShowMemberListUpdate update = new PledgeShowMemberListUpdate(activeChar);
 			
 			// Send packets to others members.
@@ -139,13 +142,13 @@ public class EnterWorld extends L2GameClientPacket
 			{
 				final L2PcInstance sponsor = World.getInstance().getPlayer(activeChar.getSponsor());
 				if (sponsor != null)
-					sponsor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOUR_APPRENTICE_S1_HAS_LOGGED_IN).addPcName(activeChar));
+					sponsor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOUR_APPRENTICE_S1_HAS_LOGGED_IN).addCharName(activeChar));
 			}
 			else if (activeChar.getApprentice() != 0)
 			{
 				final L2PcInstance apprentice = World.getInstance().getPlayer(activeChar.getApprentice());
 				if (apprentice != null)
-					apprentice.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOUR_SPONSOR_S1_HAS_LOGGED_IN).addPcName(activeChar));
+					apprentice.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOUR_SPONSOR_S1_HAS_LOGGED_IN).addCharName(activeChar));
 			}
 			
 			// Add message at connexion if clanHall not paid.
@@ -153,8 +156,9 @@ public class EnterWorld extends L2GameClientPacket
 			if (clanHall != null && !clanHall.getPaid())
 				activeChar.sendPacket(SystemMessageId.PAYMENT_FOR_YOUR_CLAN_HALL_HAS_NOT_BEEN_MADE_PLEASE_MAKE_PAYMENT_TO_YOUR_CLAN_WAREHOUSE_BY_S1_TOMORROW);
 			
-			for (Siege siege : SiegeManager.getSieges())
+			for (Castle castle : CastleManager.getInstance().getCastles())
 			{
+				final Siege siege = castle.getSiege();
 				if (!siege.isInProgress())
 					continue;
 				
@@ -174,12 +178,12 @@ public class EnterWorld extends L2GameClientPacket
 		}
 		
 		// Updating Seal of Strife Buff/Debuff
-		if (SevenSigns.getInstance().isSealValidationPeriod() && SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE) != SevenSigns.CABAL_NULL)
+		if (SevenSigns.getInstance().isSealValidationPeriod() && SevenSigns.getInstance().getSealOwner(SealType.STRIFE) != CabalType.NORMAL)
 		{
-			int cabal = SevenSigns.getInstance().getPlayerCabal(objectId);
-			if (cabal != SevenSigns.CABAL_NULL)
+			CabalType cabal = SevenSigns.getInstance().getPlayerCabal(objectId);
+			if (cabal != CabalType.NORMAL)
 			{
-				if (cabal == SevenSigns.getInstance().getSealOwner(SevenSigns.SEAL_STRIFE))
+				if (cabal == SevenSigns.getInstance().getSealOwner(SealType.STRIFE))
 					activeChar.addSkill(FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
 				else
 					activeChar.addSkill(FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());
@@ -212,7 +216,7 @@ public class EnterWorld extends L2GameClientPacket
 		
 		// Announcements, welcome & Seven signs period messages
 		activeChar.sendPacket(SystemMessageId.WELCOME_TO_LINEAGE);
-		SevenSigns.getInstance().sendCurrentPeriodMsg(activeChar);
+		activeChar.sendPacket(SevenSigns.getInstance().getCurrentPeriod().getMessageId());
 		AnnouncementTable.getInstance().showAnnouncements(activeChar, false);
 		
 		// if player is DE, check for shadow sense skill at night

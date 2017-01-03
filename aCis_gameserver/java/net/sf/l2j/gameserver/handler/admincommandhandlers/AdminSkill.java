@@ -408,7 +408,7 @@ public class AdminSkill implements IAdminCommandHandler
 		
 		if (!player.isClanLeader())
 		{
-			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_NOT_A_CLAN_LEADER).addPcName(player));
+			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_NOT_A_CLAN_LEADER).addCharName(player));
 			showMainPage(activeChar);
 			return;
 		}

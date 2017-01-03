@@ -124,7 +124,7 @@ public abstract class Item
 	protected List<Condition> _preConditions;
 	private IntIntHolder[] _skillHolder;
 	
-	private final List<Quest> _questEvents = new ArrayList<>();
+	private List<Quest> _questEvents = Collections.emptyList();
 	
 	protected static final Logger _log = Logger.getLogger(Item.class.getName());
 	
@@ -294,10 +294,10 @@ public abstract class Item
 				case TYPE2_SHIELD_ARMOR:
 				case TYPE2_ACCESSORY:
 					return _crystalCount + getCrystalType().getCrystalEnchantBonusArmor() * (3 * enchantLevel - 6);
-					
+				
 				case TYPE2_WEAPON:
 					return _crystalCount + getCrystalType().getCrystalEnchantBonusWeapon() * (2 * enchantLevel - 3);
-					
+				
 				default:
 					return _crystalCount;
 			}
@@ -580,9 +580,12 @@ public abstract class Item
 		return _name + " (" + _itemId + ")";
 	}
 	
-	public void addQuestEvent(Quest q)
+	public void addQuestEvent(Quest quest)
 	{
-		_questEvents.add(q);
+		if (_questEvents.isEmpty())
+			_questEvents = new ArrayList<>(3);
+		
+		_questEvents.add(quest);
 	}
 	
 	public List<Quest> getQuestEvents()

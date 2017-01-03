@@ -14,9 +14,9 @@
  */
 package net.sf.l2j.gameserver.handler.itemhandlers;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.handler.IItemHandler;
-import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
@@ -24,9 +24,6 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
-/**
- * @author l3x
- */
 public class Harvester implements IItemHandler
 {
 	@Override
@@ -35,7 +32,7 @@ public class Harvester implements IItemHandler
 		if (!(playable instanceof L2PcInstance))
 			return;
 		
-		if (CastleManorManager.getInstance().isDisabled())
+		if (!Config.ALLOW_MANOR)
 			return;
 		
 		if (!(playable.getTarget() instanceof L2MonsterInstance))

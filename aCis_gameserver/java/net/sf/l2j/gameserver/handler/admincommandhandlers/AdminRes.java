@@ -126,7 +126,7 @@ public class AdminRes implements IAdminCommandHandler
 				for (L2Character knownChar : activeChar.getKnownTypeInRadius(L2Character.class, radius))
 					if (!(knownChar instanceof L2PcInstance))
 						doResurrect(knownChar);
-				
+					
 				activeChar.sendMessage("Resurrected all non-players within a " + radius + " unit radius.");
 			}
 		}

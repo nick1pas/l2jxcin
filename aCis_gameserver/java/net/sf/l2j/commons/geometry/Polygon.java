@@ -110,7 +110,7 @@ public class Polygon extends AShape
 		for (AShape shape : _shapes)
 			if (shape.isInside(x, y))
 				return true;
-		
+			
 		return false;
 	}
 	
@@ -120,7 +120,7 @@ public class Polygon extends AShape
 		for (AShape shape : _shapes)
 			if (shape.isInside(x, y, z))
 				return true;
-		
+			
 		return false;
 	}
 	

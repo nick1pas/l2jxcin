@@ -14,7 +14,6 @@
  */
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -30,6 +29,7 @@ import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2MerchantInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
 import net.sf.l2j.gameserver.model.buylist.NpcBuyList;
 import net.sf.l2j.gameserver.model.buylist.Product;
 import net.sf.l2j.gameserver.model.item.DropCategory;
@@ -39,9 +39,6 @@ import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 
-/**
- * @author terry
- */
 public class AdminEditNpc implements IAdminCommandHandler
 {
 	private static final int PAGE_LIMIT = 20;
@@ -267,15 +264,30 @@ public class AdminEditNpc implements IAdminCommandHandler
 			return;
 		}
 		
-		final Collection<L2Skill> skills = npcData.getSkills().values();
-		
 		final StringBuilder sb = new StringBuilder(500);
-		StringUtil.append(sb, "<html><body><center><font color=\"LEVEL\">", npcData.getName(), " (", npcId, "): ", skills.size(), " skills</font></center><table width=\"100%\">");
+		StringUtil.append(sb, "<html><body><center><font color=\"LEVEL\">", npcData.getName(), " (", npcId, ") skills</font></center><br>");
 		
-		for (L2Skill skill : skills)
-			StringUtil.append(sb, "<tr><td>", ((skill.getSkillType() == L2SkillType.NOTDONE) ? ("<font color=\"777777\">" + skill.getName() + "</font>") : skill.getName()), " [", skill.getId(), "-", skill.getLevel(), "]</td></tr>");
+		if (!npcData.getSkills().isEmpty())
+		{
+			SkillType type = null; // Used to see if we moved of type.
+			
+			// For any type of SkillType
+			for (Map.Entry<SkillType, List<L2Skill>> entry : npcData.getSkills().entrySet())
+			{
+				if (type != entry.getKey())
+				{
+					type = entry.getKey();
+					StringUtil.append(sb, "<br><font color=\"LEVEL\">", type.name(), "</font><br1>");
+				}
+				
+				for (L2Skill skill : entry.getValue())
+					StringUtil.append(sb, ((skill.getSkillType() == L2SkillType.NOTDONE) ? ("<font color=\"777777\">" + skill.getName() + "</font>") : skill.getName()), " [", skill.getId(), "-", skill.getLevel(), "]<br1>");
+			}
+		}
+		else
+			sb.append("This NPC doesn't hold any skill.");
 		
-		sb.append("</table></body></html>");
+		sb.append("</body></html>");
 		
 		final NpcHtmlMessage html = new NpcHtmlMessage(0);
 		html.setHtml(sb.toString());
@@ -298,7 +310,7 @@ public class AdminEditNpc implements IAdminCommandHandler
 		{
 			EventType type = null; // Used to see if we moved of type.
 			
-			// For any type of QuestEventType
+			// For any type of EventType
 			for (Map.Entry<EventType, List<Quest>> entry : npcData.getEventQuests().entrySet())
 			{
 				if (type != entry.getKey())

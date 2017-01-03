@@ -22,11 +22,9 @@ import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.L2Summon;
 import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2NpcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.model.zone.ZoneId;
 
 public abstract class AbstractNpcInfo extends L2GameServerPacket
 {
@@ -87,27 +85,14 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 				_collisionRadius = _npc.getCollisionRadius();
 			}
 			
-			if (_npc.getTemplate().isCustomNpc())
-				_name = _npc.getTemplate().getName();
-			
-			if (_npc.isChampion())
-				_title = ("Champion");
-			else if (_npc.getTemplate().isCustomNpc())
-				_title = _npc.getTemplate().getTitle();
-			else
-				_title = _npc.getTitle();
+			_name = _npc.getName();
+			_title = (_npc.isChampion()) ? "Champion" : _npc.getTitle();
 			
 			if (Config.SHOW_NPC_LVL && _npc instanceof L2MonsterInstance)
-			{
-				String t = "Lv " + _npc.getLevel() + (_npc.getTemplate().getAggroRange() > 0 ? "*" : "");
-				if (_title != null)
-					t += " " + _title;
-				
-				_title = t;
-			}
+				_title = "Lv " + _npc.getLevel() + (_npc.getTemplate().getAggroRange() > 0 ? "* " : " ") + _title;
 			
 			// NPC crest system
-			if (Config.SHOW_NPC_CREST && _npc instanceof L2NpcInstance && _npc.isInsideZone(ZoneId.TOWN) && _npc.getCastle().getOwnerId() != 0)
+			if (Config.SHOW_NPC_CREST && _npc.getCastle() != null && _npc.getCastle().getOwnerId() != 0)
 			{
 				L2Clan clan = ClanTable.getInstance().getClan(_npc.getCastle().getOwnerId());
 				_clanCrest = clan.getCrestId();

@@ -20,21 +20,15 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.zone.L2SpawnZone;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 
-/**
- * A Town zone
- * @author durgus
- */
 public class L2TownZone extends L2SpawnZone
 {
 	private int _townId;
-	private int _taxById;
+	private int _castleId;
 	private boolean _isPeaceZone;
 	
 	public L2TownZone(int id)
 	{
 		super(id);
-		
-		_taxById = 0;
 		
 		// Default peace zone
 		_isPeaceZone = true;
@@ -45,8 +39,8 @@ public class L2TownZone extends L2SpawnZone
 	{
 		if (name.equals("townId"))
 			_townId = Integer.parseInt(value);
-		else if (name.equals("taxById"))
-			_taxById = Integer.parseInt(value);
+		else if (name.equals("castleId"))
+			_castleId = Integer.parseInt(value);
 		else if (name.equals("isPeaceZone"))
 			_isPeaceZone = Boolean.parseBoolean(value);
 		else
@@ -90,8 +84,7 @@ public class L2TownZone extends L2SpawnZone
 	}
 	
 	/**
-	 * Returns this zones town id (if any)
-	 * @return
+	 * @return the zone town id (if any)
 	 */
 	public int getTownId()
 	{
@@ -99,12 +92,11 @@ public class L2TownZone extends L2SpawnZone
 	}
 	
 	/**
-	 * Returns this town zones castle id
-	 * @return
+	 * @return the castle id (used to retrieve taxes).
 	 */
-	public final int getTaxById()
+	public final int getCastleId()
 	{
-		return _taxById;
+		return _castleId;
 	}
 	
 	public final boolean isPeaceZone()

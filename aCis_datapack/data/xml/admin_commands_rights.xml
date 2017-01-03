@@ -125,8 +125,6 @@
 	<aCar name="admin_para_all_menu" accessLevel="1" />
 	<aCar name="admin_unpara_menu" accessLevel="1" />
 	<aCar name="admin_para_menu" accessLevel="1" />
-	<aCar name="admin_changename" accessLevel="1" />
-	<aCar name="admin_changename_menu" accessLevel="1" />
 	<aCar name="admin_social" accessLevel="1" />
 	<aCar name="admin_social_menu" accessLevel="1" />
 	<aCar name="admin_effect" accessLevel="1" />
@@ -215,12 +213,6 @@
 
 	<!-- MANOR -->
 	<aCar name="admin_manor" accessLevel="1" />
-	<aCar name="admin_manor_approve" accessLevel="1" />
-	<aCar name="admin_manor_setnext" accessLevel="1" />
-	<aCar name="admin_manor_reset" accessLevel="1" />
-	<aCar name="admin_manor_setmaintenance" accessLevel="1" />
-	<aCar name="admin_manor_save" accessLevel="1" />
-	<aCar name="admin_manor_disable" accessLevel="1" />
 
 	<!-- MENU -->
 	<aCar name="admin_char_manage" accessLevel="1" />
@@ -286,7 +278,6 @@
 	<aCar name="admin_siege" accessLevel="1" />
 	<aCar name="admin_add_attacker" accessLevel="1" />
 	<aCar name="admin_add_defender" accessLevel="1" />
-	<aCar name="admin_add_guard" accessLevel="1" />
 	<aCar name="admin_list_siege_clans" accessLevel="1" />
 	<aCar name="admin_clear_siege_list" accessLevel="1" />
 	<aCar name="admin_move_defenders" accessLevel="1" />

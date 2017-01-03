@@ -64,7 +64,7 @@ public class ZoneNPoly extends L2ZoneForm
 		// Or a point of the rectangle inside the polygon
 		if (isInsideZone(ax1, ay1, (_z2 - 1)))
 			return true;
-		
+			
 		// If the first point wasn't inside the rectangle it might still have any line crossing any side
 		// of the rectangle
 		

@@ -423,10 +423,10 @@ public class GeoEngine
 					if (ix > 0 && iy > 0)
 						if (inside[ix - 1][iy - 1] || inside[ix][iy - 1] || inside[ix - 1][iy])
 							nswe &= ~GeoStructure.CELL_FLAG_NW;
-					
+						
 					result[ix][iy] = nswe;
 				}
-		
+			
 		return result;
 	}
 	

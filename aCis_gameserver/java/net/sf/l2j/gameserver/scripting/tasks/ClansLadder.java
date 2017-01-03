@@ -17,9 +17,6 @@ package net.sf.l2j.gameserver.scripting.tasks;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.scripting.ScheduledQuest;
 
-/**
- * @author Hasha
- */
 public final class ClansLadder extends ScheduledQuest
 {
 	public ClansLadder()

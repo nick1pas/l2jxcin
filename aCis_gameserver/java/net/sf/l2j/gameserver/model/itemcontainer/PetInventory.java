@@ -40,7 +40,6 @@ public class PetInventory extends Inventory
 	@Override
 	public int getOwnerId()
 	{
-		// gets the L2PcInstance-owner's ID
 		int id;
 		try
 		{
@@ -53,13 +52,11 @@ public class PetInventory extends Inventory
 		return id;
 	}
 	
-	/**
-	 * Refresh the weight of equipment loaded
-	 */
 	@Override
 	protected void refreshWeight()
 	{
 		super.refreshWeight();
+		
 		getOwner().updateAndBroadcastStatus(1);
 		getOwner().sendPetInfosToOwner();
 	}
@@ -77,7 +74,7 @@ public class PetInventory extends Inventory
 	@Override
 	public boolean validateCapacity(int slots)
 	{
-		return (_items.size() + slots <= _owner.getInventoryLimit());
+		return _items.size() + slots <= _owner.getInventoryLimit();
 	}
 	
 	public boolean validateWeight(ItemInstance item, int count)
@@ -88,7 +85,7 @@ public class PetInventory extends Inventory
 	@Override
 	public boolean validateWeight(int weight)
 	{
-		return (_totalWeight + weight <= _owner.getMaxLoad());
+		return _totalWeight + weight <= _owner.getMaxLoad();
 	}
 	
 	@Override

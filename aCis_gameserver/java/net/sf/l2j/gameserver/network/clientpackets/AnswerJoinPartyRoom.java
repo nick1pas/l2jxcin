@@ -78,7 +78,7 @@ public final class AnswerJoinPartyRoom extends L2GameClientPacket
 						continue;
 					
 					_member.sendPacket(new ExManagePartyRoomMember(player, _room, 0));
-					_member.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ENTERED_PARTY_ROOM).addPcName(player));
+					_member.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ENTERED_PARTY_ROOM).addCharName(player));
 				}
 				_room.addMember(player);
 				

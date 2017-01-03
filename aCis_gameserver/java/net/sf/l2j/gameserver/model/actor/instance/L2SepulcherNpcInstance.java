@@ -23,7 +23,6 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.instancemanager.FourSepulchersManager;
-import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -34,11 +33,7 @@ import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.Quest;
-import net.sf.l2j.gameserver.util.Util;
 
-/**
- * @author sandman
- */
 public class L2SepulcherNpcInstance extends L2NpcInstance
 {
 	protected Future<?> _closeTask = null;
@@ -48,9 +43,10 @@ public class L2SepulcherNpcInstance extends L2NpcInstance
 	private static final String HTML_FILE_PATH = "data/html/sepulchers/";
 	private static final int HALLS_KEY = 7260;
 	
-	public L2SepulcherNpcInstance(int objectID, NpcTemplate template)
+	public L2SepulcherNpcInstance(int objectId, NpcTemplate template)
 	{
-		super(objectID, template);
+		super(objectId, template);
+		
 		setShowSummonAnimation(true);
 		
 		if (_closeTask != null)
@@ -311,15 +307,31 @@ public class L2SepulcherNpcInstance extends L2NpcInstance
 		_spawnNextMysteriousBoxTask = ThreadPool.schedule(new SpawnNextMysteriousBox(npcId), 0);
 	}
 	
+	public void sayInShout(String msg)
+	{
+		if (msg == null || msg.isEmpty())
+			return;
+		
+		final CreatureSay sm = new CreatureSay(getObjectId(), Say2.SHOUT, getName(), msg);
+		for (L2PcInstance player : getKnownType(L2PcInstance.class))
+			player.sendPacket(sm);
+	}
+	
+	public void showHtmlFile(L2PcInstance player, String file)
+	{
+		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
+		html.setFile("data/html/sepulchers/" + file);
+		html.replace("%npcname%", getName());
+		player.sendPacket(html);
+	}
+	
 	private static class CloseNextDoor implements Runnable
 	{
-		final DoorTable _DoorTable = DoorTable.getInstance();
-		
-		private final int _DoorId;
+		private final int _doorId;
 		
 		public CloseNextDoor(int doorId)
 		{
-			_DoorId = doorId;
+			_doorId = doorId;
 		}
 		
 		@Override
@@ -327,7 +339,7 @@ public class L2SepulcherNpcInstance extends L2NpcInstance
 		{
 			try
 			{
-				_DoorTable.getDoor(_DoorId).closeMe();
+				DoorTable.getInstance().getDoor(_doorId).closeMe();
 			}
 			catch (Exception e)
 			{
@@ -338,54 +350,33 @@ public class L2SepulcherNpcInstance extends L2NpcInstance
 	
 	private static class SpawnNextMysteriousBox implements Runnable
 	{
-		private final int _NpcId;
+		private final int _npcId;
 		
 		public SpawnNextMysteriousBox(int npcId)
 		{
-			_NpcId = npcId;
+			_npcId = npcId;
 		}
 		
 		@Override
 		public void run()
 		{
-			FourSepulchersManager.getInstance().spawnMysteriousBox(_NpcId);
+			FourSepulchersManager.getInstance().spawnMysteriousBox(_npcId);
 		}
 	}
 	
 	private static class SpawnMonster implements Runnable
 	{
-		private final int _NpcId;
+		private final int _npcId;
 		
 		public SpawnMonster(int npcId)
 		{
-			_NpcId = npcId;
+			_npcId = npcId;
 		}
 		
 		@Override
 		public void run()
 		{
-			FourSepulchersManager.getInstance().spawnMonster(_NpcId);
+			FourSepulchersManager.getInstance().spawnMonster(_npcId);
 		}
-	}
-	
-	public void sayInShout(String msg)
-	{
-		if (msg == null || msg.isEmpty())
-			return;// wrong usage
-			
-		final CreatureSay sm = new CreatureSay(0, Say2.SHOUT, getName(), msg);
-		for (L2PcInstance player : World.getInstance().getPlayers())
-		{
-			if (Util.checkIfInRange(15000, player, this, true))
-				player.sendPacket(sm);
-		}
-	}
-	
-	public void showHtmlFile(L2PcInstance player, String file)
-	{
-		final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
-		html.setFile("data/html/sepulchers/" + file);
-		html.replace("%npcname%", getName());
-		player.sendPacket(html);
 	}
 }

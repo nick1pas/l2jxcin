@@ -57,7 +57,7 @@ public final class RequestExAcceptJoinMPCC extends L2GameClientPacket
 				player.sendPacket(SystemMessageId.JOINED_COMMAND_CHANNEL);
 		}
 		else
-			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_DECLINED_CHANNEL_INVITATION).addPcName(player));
+			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_DECLINED_CHANNEL_INVITATION).addCharName(player));
 		
 		player.setActiveRequester(null);
 		requestor.onTransactionResponse();

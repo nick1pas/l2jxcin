@@ -268,12 +268,6 @@ public class Antharas extends L2AttackableAIScript
 		if (npc.isInvul())
 			return null;
 		
-		if (!ANTHARAS_LAIR.isInsideZone(attacker))
-		{
-			attacker.teleToLocation(82698, 148638, -3473, 0);
-			return null;
-		}
-		
 		// Debuff strider-mounted players.
 		if (attacker.getMountType() == 1)
 		{

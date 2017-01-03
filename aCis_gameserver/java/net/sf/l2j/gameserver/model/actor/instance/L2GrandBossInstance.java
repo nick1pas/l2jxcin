@@ -78,4 +78,10 @@ public final class L2GrandBossInstance extends L2MonsterInstance
 		
 		return true;
 	}
+	
+	@Override
+	public boolean returnHome(boolean cleanAggro)
+	{
+		return false;
+	}
 }

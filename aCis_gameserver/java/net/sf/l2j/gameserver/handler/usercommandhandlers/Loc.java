@@ -32,7 +32,7 @@ public class Loc implements IUserCommandHandler
 	{
 		SystemMessageId msg;
 		
-		switch (MapRegionTable.getMapRegion(activeChar.getX(), activeChar.getY()))
+		switch (MapRegionTable.getInstance().getMapRegion(activeChar.getX(), activeChar.getY()))
 		{
 			case 0:
 				msg = SystemMessageId.LOC_TI_S1_S2_S3;

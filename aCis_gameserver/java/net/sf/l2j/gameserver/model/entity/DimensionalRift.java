@@ -122,7 +122,7 @@ public class DimensionalRift
 					for (L2PcInstance p : _party.getPartyMembers())
 						if (!revivedInWaitingRoom.contains(p))
 							teleportToNextRoom(p, false);
-					
+						
 					createTeleporterTimer(true);
 					createSpawnTimer(_choosenRoom);
 				}
@@ -131,7 +131,7 @@ public class DimensionalRift
 					for (L2PcInstance p : _party.getPartyMembers())
 						if (!revivedInWaitingRoom.contains(p))
 							teleportToWaitingRoom(p);
-					
+						
 					killRift();
 					cancel();
 				}
@@ -403,7 +403,7 @@ public class DimensionalRift
 			for (L2PcInstance p : _party.getPartyMembers())
 				if (p != null && !revivedInWaitingRoom.contains(p))
 					teleportToWaitingRoom(p);
-			
+				
 			killRift();
 		}
 	}

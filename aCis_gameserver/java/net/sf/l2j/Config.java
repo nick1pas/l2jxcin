@@ -67,7 +67,6 @@ public final class Config
 	public static int ALT_CLAN_MEMBERS_FOR_WAR;
 	public static int ALT_CLAN_WAR_PENALTY_WHEN_ENDED;
 	public static boolean ALT_MEMBERS_CAN_WITHDRAW_FROM_CLANWH;
-	public static boolean REMOVE_CASTLE_CIRCLETS;
 	
 	/** Manor */
 	public static int ALT_MANOR_REFRESH_TIME;
@@ -424,7 +423,6 @@ public final class Config
 	public static boolean KARMA_PLAYER_CAN_USE_GK;
 	public static boolean KARMA_PLAYER_CAN_TELEPORT;
 	public static boolean KARMA_PLAYER_CAN_TRADE;
-	public static boolean KARMA_PLAYER_CAN_USE_WH;
 	
 	public static boolean KARMA_DROP_GM;
 	public static boolean KARMA_AWARD_PK_KILL;
@@ -444,7 +442,6 @@ public final class Config
 	public static double PARTY_XP_CUTOFF_PERCENT;
 	public static int ALT_PARTY_RANGE;
 	public static int ALT_PARTY_RANGE2;
-	public static boolean ALT_LEAVE_PARTY_LEADER;
 	
 	/** GMs & Admin Stuff */
 	public static boolean EVERYBODY_HAS_ADMIN_RIGHTS;
@@ -757,7 +754,6 @@ public final class Config
 		ALT_ACCEPT_CLAN_DAYS_WHEN_DISMISSED = clans.getProperty("DaysBeforeAcceptNewClanWhenDismissed", 1);
 		ALT_CREATE_ALLY_DAYS_WHEN_DISSOLVED = clans.getProperty("DaysBeforeCreateNewAllyWhenDissolved", 10);
 		ALT_MEMBERS_CAN_WITHDRAW_FROM_CLANWH = clans.getProperty("AltMembersCanWithdrawFromClanWH", false);
-		REMOVE_CASTLE_CIRCLETS = clans.getProperty("RemoveCastleCirclets", true);
 		
 		ALT_MANOR_REFRESH_TIME = clans.getProperty("AltManorRefreshTime", 20);
 		ALT_MANOR_REFRESH_MIN = clans.getProperty("AltManorRefreshMin", 0);
@@ -1121,7 +1117,6 @@ public final class Config
 		KARMA_PLAYER_CAN_USE_GK = players.getProperty("KarmaPlayerCanUseGK", false);
 		KARMA_PLAYER_CAN_TELEPORT = players.getProperty("KarmaPlayerCanTeleport", true);
 		KARMA_PLAYER_CAN_TRADE = players.getProperty("KarmaPlayerCanTrade", true);
-		KARMA_PLAYER_CAN_USE_WH = players.getProperty("KarmaPlayerCanUseWareHouse", true);
 		KARMA_DROP_GM = players.getProperty("CanGMDropEquipment", false);
 		KARMA_AWARD_PK_KILL = players.getProperty("AwardPKKillPVPPoint", true);
 		KARMA_PK_LIMIT = players.getProperty("MinimumPKRequiredToDrop", 5);
@@ -1152,7 +1147,6 @@ public final class Config
 		PARTY_XP_CUTOFF_LEVEL = players.getProperty("PartyXpCutoffLevel", 20);
 		ALT_PARTY_RANGE = players.getProperty("AltPartyRange", 1600);
 		ALT_PARTY_RANGE2 = players.getProperty("AltPartyRange2", 1400);
-		ALT_LEAVE_PARTY_LEADER = players.getProperty("AltLeavePartyLeader", false);
 		
 		EVERYBODY_HAS_ADMIN_RIGHTS = players.getProperty("EverybodyHasAdminRights", false);
 		MASTERACCESS_LEVEL = players.getProperty("MasterAccessLevel", 127);

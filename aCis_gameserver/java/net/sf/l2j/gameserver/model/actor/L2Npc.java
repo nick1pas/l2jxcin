@@ -47,7 +47,6 @@ import net.sf.l2j.gameserver.model.actor.instance.L2FishermanInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2MerchantInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2TeleporterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2WarehouseInstance;
 import net.sf.l2j.gameserver.model.actor.stat.NpcStat;
 import net.sf.l2j.gameserver.model.actor.status.NpcStatus;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -1200,11 +1199,6 @@ public class L2Npc extends L2Character
 			else if (!Config.KARMA_PLAYER_CAN_USE_GK && this instanceof L2TeleporterInstance)
 			{
 				if (showPkDenyChatWindow(player, "teleporter"))
-					return;
-			}
-			else if (!Config.KARMA_PLAYER_CAN_USE_WH && this instanceof L2WarehouseInstance)
-			{
-				if (showPkDenyChatWindow(player, "warehouse"))
 					return;
 			}
 			else if (!Config.KARMA_PLAYER_CAN_SHOP && this instanceof L2FishermanInstance)

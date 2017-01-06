@@ -94,11 +94,7 @@ public final class SendWarehouseWithdrawList extends L2GameClientPacket
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
 		}
-		
-		// Alt game - Karma punishment
-		if (!Config.KARMA_PLAYER_CAN_USE_WH && player.getKarma() > 0)
-			return;
-		
+
 		if (Config.ALT_MEMBERS_CAN_WITHDRAW_FROM_CLANWH)
 		{
 			if (warehouse instanceof ClanWarehouse && ((player.getClanPrivileges() & L2Clan.CP_CL_VIEW_WAREHOUSE) != L2Clan.CP_CL_VIEW_WAREHOUSE))

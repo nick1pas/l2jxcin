@@ -27,7 +27,6 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.NpcTable;
@@ -351,7 +350,7 @@ public class Castle
 		
 		if (getSiege().isInProgress())
 			getSiege().midVictory();
-		else if (Config.REMOVE_CASTLE_CIRCLETS && _formerOwner != null)
+		else if (_formerOwner != null)
 			removeCirclet(_formerOwner);
 	}
 	

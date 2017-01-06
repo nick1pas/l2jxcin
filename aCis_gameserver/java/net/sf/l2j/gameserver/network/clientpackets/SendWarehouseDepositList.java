@@ -95,11 +95,7 @@ public final class SendWarehouseDepositList extends L2GameClientPacket
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
 		}
-		
-		// Alt game - Karma punishment
-		if (!Config.KARMA_PLAYER_CAN_USE_WH && player.getKarma() > 0)
-			return;
-		
+
 		// Freight price from config or normal price per item slot (30)
 		final int fee = _items.length * 30;
 		int currentAdena = player.getAdena();

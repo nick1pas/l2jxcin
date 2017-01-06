@@ -112,8 +112,7 @@ public class Siege implements Siegable
 				// Delete circlets and crown's leader for initial castle's owner (if one was existing)
 				if (getCastle().getInitialCastleOwner() != null && clan != getCastle().getInitialCastleOwner())
 				{
-					if (Config.REMOVE_CASTLE_CIRCLETS)
-						getCastle().removeCirclet(getCastle().getInitialCastleOwner());
+					getCastle().removeCirclet(getCastle().getInitialCastleOwner());
 					
 					for (L2ClanMember member : clan.getMembers())
 					{

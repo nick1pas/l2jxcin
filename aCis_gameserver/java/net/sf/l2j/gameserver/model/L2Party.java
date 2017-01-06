@@ -378,7 +378,7 @@ public class L2Party
 		final boolean isLeader = isLeader(player);
 		if (!_disbanding)
 		{
-			if (_members.size() == 2 || (isLeader && !Config.ALT_LEAVE_PARTY_LEADER && type != MessageType.Disconnected))
+			if (_members.size() == 2)
 			{
 				_disbanding = true;
 				
@@ -430,7 +430,7 @@ public class L2Party
 		if (isInCommandChannel())
 			player.sendPacket(ExCloseMPCC.STATIC_PACKET);
 		
-		if (isLeader && _members.size() > 1 && (Config.ALT_LEAVE_PARTY_LEADER || type == MessageType.Disconnected))
+		if (isLeader && _members.size() > 1)
 			broadcastToPartyMembersNewLeader();
 		else if (_members.size() == 1)
 		{

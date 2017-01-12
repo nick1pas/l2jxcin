@@ -18,8 +18,12 @@ import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.handler.IUserCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
+import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 
 public class Escape implements IUserCommandHandler
@@ -37,7 +41,14 @@ public class Escape implements IUserCommandHandler
 			activeChar.sendPacket(SystemMessageId.NO_UNSTUCK_PLEASE_SEND_PETITION);
 			return false;
 		}
-		
+		// Thanks nbd
+		if (!TvTEvent.onEscapeUse(activeChar.getObjectId())
+				|| !DMEvent.onEscapeUse(activeChar.getObjectId())
+				|| !LMEvent.onEscapeUse(activeChar.getObjectId()))
+		{
+			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			return false;
+		}
 		activeChar.stopMove(null);
 		
 		// Official timer 5 minutes, for GM 1 second

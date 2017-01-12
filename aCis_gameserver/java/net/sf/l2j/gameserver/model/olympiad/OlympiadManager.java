@@ -22,6 +22,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -269,6 +272,15 @@ public class OlympiadManager
 			return false;
 		}
 		
+		
+		if (TvTEvent.isPlayerParticipant(player.getObjectId())
+				|| DMEvent.isPlayerParticipant(player)
+				|| LMEvent.isPlayerParticipant(player))
+		{
+			player.sendMessage("You can't join olympiad while participating on Event.");
+			return false;
+		}
+			
 		if (player.getInventoryLimit() * 0.8 <= player.getInventory().getSize())
 		{
 			player.sendPacket(SystemMessageId.SINCE_80_PERCENT_OR_MORE_OF_YOUR_INVENTORY_SLOTS_ARE_FULL_YOU_CANNOT_PARTICIPATE_IN_THE_OLYMPIAD);

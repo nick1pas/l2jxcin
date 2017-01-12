@@ -38,6 +38,9 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2SiegeFlagInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.kind.Armor;
 import net.sf.l2j.gameserver.model.item.type.ArmorType;
@@ -1674,6 +1677,11 @@ public abstract class L2Skill implements IChanceSkillTrigger
 						if (!player.checkPvpSkill(obj, this))
 							continue;
 						
+						if (!TvTEvent.checkForTvTSkill(player, obj, this)
+								|| !DMEvent.checkForDMSkill(player, obj, this)
+								|| !LMEvent.checkForLMSkill(player, obj, this))
+							continue;
+						
 						final L2Summon summon = obj.getPet();
 						if (summon != null && !summon.isDead())
 							targetList.add(summon);
@@ -1771,6 +1779,11 @@ public abstract class L2Skill implements IChanceSkillTrigger
 							}
 							
 							if (!player.checkPvpSkill(obj, this))
+								continue;
+							
+							if (!TvTEvent.checkForTvTSkill(player, obj, this)
+									|| !DMEvent.checkForDMSkill(player, obj, this)
+									|| !LMEvent.checkForLMSkill(player, obj, this))
 								continue;
 							
 							if (addSummon(activeChar, obj, radius, false))
@@ -2079,6 +2092,11 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				if (player.getParty().getCommandChannel() != null && player.getParty().getCommandChannel() == targetPlayer.getParty().getCommandChannel())
 					return false;
 			}
+			
+			if (!TvTEvent.checkForTvTSkill(player, targetPlayer, skill)
+					|| !DMEvent.checkForDMSkill(player, targetPlayer, skill)
+					|| !LMEvent.checkForLMSkill(player, targetPlayer, skill))
+				return false;
 			
 			if (!sourceInArena && !(targetPlayer.isInsideZone(ZoneId.PVP) && !targetPlayer.isInsideZone(ZoneId.SIEGE)))
 			{

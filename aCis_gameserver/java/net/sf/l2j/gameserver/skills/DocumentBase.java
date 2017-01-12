@@ -45,12 +45,14 @@ import net.sf.l2j.gameserver.skills.conditions.ConditionLogicOr;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerActiveEffectId;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerActiveSkillId;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerCharges;
+import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerDMEvent;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerHasCastle;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerHasClanHall;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerHp;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerHpPercentage;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerInvSize;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerIsHero;
+import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerLMEvent;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerLevel;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerMp;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerPkCount;
@@ -59,6 +61,7 @@ import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerRace;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerSex;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerState;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerState.PlayerState;
+import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerTvTEvent;
 import net.sf.l2j.gameserver.skills.conditions.ConditionPlayerWeight;
 import net.sf.l2j.gameserver.skills.conditions.ConditionSkillStats;
 import net.sf.l2j.gameserver.skills.conditions.ConditionTargetActiveSkillId;
@@ -550,6 +553,21 @@ abstract class DocumentBase
 				int skill_lvl = Integer.decode(getValue(val.split(",")[1], template));
 				cond = joinAnd(cond, new ConditionPlayerActiveSkillId(skill_id, skill_lvl));
 			}
+			else if ("onTvTEvent".equalsIgnoreCase(a.getNodeName()))
+			{
+				boolean val = Boolean.valueOf(a.getNodeValue());
+				cond = joinAnd(cond, new ConditionPlayerTvTEvent(val));
+			}
+            else if ("onDMEvent".equalsIgnoreCase(a.getNodeName()))
+            {
+            	boolean val = Boolean.valueOf(a.getNodeValue());
+                cond = joinAnd(cond, new ConditionPlayerDMEvent(val));
+            }
+            else if ("onLMEvent".equalsIgnoreCase(a.getNodeName()))
+            {
+            	boolean val = Boolean.valueOf(a.getNodeValue());
+                cond = joinAnd(cond, new ConditionPlayerLMEvent(val));
+            }
 			else if ("seed_fire".equalsIgnoreCase(a.getNodeName()))
 			{
 				ElementSeeds[0] = Integer.decode(getValue(a.getNodeValue(), null));

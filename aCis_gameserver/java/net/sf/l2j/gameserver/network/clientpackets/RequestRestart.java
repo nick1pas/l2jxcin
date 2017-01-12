@@ -16,6 +16,9 @@ package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.L2GameClient.GameClientState;
@@ -43,6 +46,27 @@ public final class RequestRestart extends L2GameClientPacket
 		{
 			sendPacket(RestartResponse.valueOf(false));
 			return;
+		}
+		  
+		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(player.getObjectId())) 
+		{ 
+			player.sendMessage("You can not restart when you registering in TvTEvent."); 
+			sendPacket(RestartResponse.valueOf(false));
+			return; 
+		}
+		
+		if (!DMEvent.isInactive() && DMEvent.isPlayerParticipant(player.getObjectId())) 
+		{ 
+			player.sendMessage("You can not restart when you registering in DMEvent."); 
+			sendPacket(RestartResponse.valueOf(false));
+			return; 
+		}
+		
+		if (!LMEvent.isInactive() && LMEvent.isPlayerParticipant(player.getObjectId())) 
+		{ 
+			player.sendMessage("You can not restart when you registering in LMEvent."); 
+			sendPacket(RestartResponse.valueOf(false));
+			return; 
 		}
 		
 		if (player.isInsideZone(ZoneId.NO_RESTART))

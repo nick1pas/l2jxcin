@@ -26,6 +26,9 @@ import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 
 public final class RequestRestartPoint extends L2GameClientPacket
 {
@@ -166,6 +169,15 @@ public final class RequestRestartPoint extends L2GameClientPacket
 			activeChar.stopFakeDeath(true);
 			return;
 		}
+		
+		if (TvTEvent.isStarted() && TvTEvent.isPlayerParticipant(activeChar.getObjectId())) 
+			return;
+		
+		if (DMEvent.isStarted() && DMEvent.isPlayerParticipant(activeChar)) 
+			return;
+		
+		if (LMEvent.isStarted() && LMEvent.isPlayerParticipant(activeChar)) 
+			return;
 		
 		if (!activeChar.isDead())
 		{

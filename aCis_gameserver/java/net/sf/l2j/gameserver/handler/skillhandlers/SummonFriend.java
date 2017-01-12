@@ -19,6 +19,9 @@ import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ConfirmDlg;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -40,9 +43,16 @@ public class SummonFriend implements ISkillHandler
 	{
 		if (!(activeChar instanceof L2PcInstance))
 			return;
-		
+
 		final L2PcInstance player = (L2PcInstance) activeChar;
 		
+		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(player.getObjectId())
+			|| !DMEvent.isInactive() && DMEvent.isPlayerParticipant(player.getObjectId())
+			|| !LMEvent.isInactive() && LMEvent.isPlayerParticipant(player.getObjectId())) 
+		{ 
+			player.sendMessage("You can not use this action when it is participating in this event.");
+			return;
+		}
 		// Check player status.
 		if (!L2PcInstance.checkSummonerStatus(player))
 			return;

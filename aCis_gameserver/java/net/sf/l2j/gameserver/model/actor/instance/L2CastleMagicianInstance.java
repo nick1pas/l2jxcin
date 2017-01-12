@@ -17,6 +17,9 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -147,7 +150,17 @@ public class L2CastleMagicianInstance extends L2NpcInstance
 				}
 			}
 		}
-		
+		if (!TvTEvent.onEscapeUse(player.getObjectId()) || !DMEvent.onEscapeUse(player.getObjectId()) || !LMEvent.onEscapeUse(player.getObjectId()))
+		{
+			player.sendMessage("You on Event, teleporting disabled.");
+			return false;
+		}
+		if (!TvTEvent.onEscapeUse(clanLeader.getObjectId()) || !DMEvent.onEscapeUse(clanLeader.getObjectId()) || !LMEvent.onEscapeUse(clanLeader.getObjectId()))
+		{
+			// Need retail message if there's one.
+			player.sendMessage("Couldn't teleport to clan leader. The requirements was not meet.");
+			return false;
+		}
 		return true;
 	}
 }

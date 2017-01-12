@@ -23,7 +23,11 @@ import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
+import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.templates.StatsSet;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 
@@ -55,6 +59,15 @@ public class L2SkillTeleport extends L2Skill
 			// Check invalid states.
 			if (activeChar.isAfraid() || ((L2PcInstance) activeChar).isInOlympiadMode() || ZoneManager.getInstance().getZone(activeChar, L2BossZone.class) != null)
 				return;
+			
+			// Thanks nbd
+			if (!TvTEvent.onEscapeUse(((L2PcInstance) activeChar).getObjectId())
+					|| !DMEvent.onEscapeUse(((L2PcInstance) activeChar).getObjectId())
+					|| !LMEvent.onEscapeUse(((L2PcInstance) activeChar).getObjectId()))
+			{
+				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+				return;
+			}
 		}
 		
 		boolean bsps = activeChar.isChargedShot(ShotType.BLESSED_SPIRITSHOT);
@@ -79,6 +92,11 @@ public class L2SkillTeleport extends L2Skill
 					if (targetChar.isInOlympiadMode())
 						continue;
 					
+					if (!TvTEvent.onEscapeUse(targetChar.getObjectId())
+						|| !DMEvent.onEscapeUse(targetChar.getObjectId())
+						|| !LMEvent.onEscapeUse(targetChar.getObjectId()))
+					continue;
+
 					if (ZoneManager.getInstance().getZone(targetChar, L2BossZone.class) != null)
 						continue;
 				}

@@ -36,6 +36,9 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2XmassTreeInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.model.item.SummonItem;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -53,6 +56,12 @@ public class SummonItems implements IItemHandler
 	{
 		if (!(playable instanceof L2PcInstance))
 			return;
+		
+		if (!TvTEvent.onItemSummon(playable.getObjectId())
+				|| !DMEvent.onItemSummon(playable.getObjectId())
+				|| !LMEvent.onItemSummon(playable.getObjectId()))
+			return;
+		
 		
 		final L2PcInstance activeChar = (L2PcInstance) playable;
 		

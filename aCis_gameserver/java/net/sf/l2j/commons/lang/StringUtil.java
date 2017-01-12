@@ -24,6 +24,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javolution.text.TextBuilder;
+
 public final class StringUtil
 {
 	public static final String DIGITS = "0123456789";
@@ -185,4 +187,29 @@ public final class StringUtil
 		
 		return result;
 	}
+	
+	/**
+	 * Concatenates strings.
+	 * 
+	 * @param strings
+	 *            strings to be concatenated
+	 * 
+	 * @return concatenated string
+	 * 
+	 * @see StringUtil
+	 */
+	public static String concat(final String... strings)
+	{
+		final TextBuilder sbString = TextBuilder.newInstance();
+		
+		for (final String string : strings)
+		{
+			sbString.append(string);
+		}
+		
+		String result = sbString.toString();
+		TextBuilder.recycle(sbString);
+		return result;
+	}
+	
 }

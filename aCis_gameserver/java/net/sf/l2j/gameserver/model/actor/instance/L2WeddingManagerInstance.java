@@ -26,6 +26,9 @@ import net.sf.l2j.gameserver.instancemanager.CoupleManager;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
@@ -132,7 +135,7 @@ public class L2WeddingManagerInstance extends L2NpcInstance
 			}
 			
 			// Simple checks to avoid exploits
-			if (partner.isInJail() || partner.isInOlympiadMode() || partner.isInDuel() || partner.isFestivalParticipant() || (partner.isInParty() && partner.getParty().isInDimensionalRift()) || partner.isInObserverMode())
+			if (!TvTEvent.onEscapeUse(partner.getObjectId()) || !DMEvent.onEscapeUse(partner.getObjectId())|| !LMEvent.onEscapeUse(partner.getObjectId()) || partner.isInJail() || partner.isInOlympiadMode() || partner.isInDuel() || partner.isFestivalParticipant() || (partner.isInParty() && partner.getParty().isInDimensionalRift()) || partner.isInObserverMode())
 			{
 				player.sendMessage("Due to the current partner's status, the teleportation failed.");
 				return;

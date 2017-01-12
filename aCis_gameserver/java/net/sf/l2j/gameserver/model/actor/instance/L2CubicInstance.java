@@ -36,6 +36,10 @@ import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEventTeam;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
@@ -211,6 +215,49 @@ public class L2CubicInstance
 			L2Object ownerTarget = _owner.getTarget();
 			if (ownerTarget == null)
 				return;
+			// TvT event targeting
+			if (TvTEvent.isStarted() && TvTEvent.isPlayerParticipant(_owner.getObjectId()))
+			{
+				TvTEventTeam enemyTeam = TvTEvent.getParticipantEnemyTeam(_owner.getObjectId());
+				
+				if (ownerTarget.getActingPlayer() != null)
+				{
+					L2PcInstance target = ownerTarget.getActingPlayer();
+					if (enemyTeam.containsPlayer(target.getObjectId()) && !(target.isDead()))
+					{
+						_target = (L2Character) ownerTarget;
+					}
+				}
+				return;
+			}
+			
+			// DM event targeting
+			if (DMEvent.isStarted() && DMEvent.isPlayerParticipant(_owner))
+			{				
+				if (ownerTarget.getActingPlayer() != null)
+				{
+					L2PcInstance target = ownerTarget.getActingPlayer();
+					if (DMEvent.isPlayerParticipant(target) && !(target.isDead()))
+					{
+						_target = (L2Character) ownerTarget;
+					}
+				}
+				return;
+			}
+			
+			// LM event targeting
+			if (LMEvent.isStarted() && LMEvent.isPlayerParticipant(_owner))
+			{				
+				if (ownerTarget.getActingPlayer() != null)
+				{
+					L2PcInstance target = ownerTarget.getActingPlayer();
+					if (LMEvent.isPlayerParticipant(target) && !(target.isDead()))
+					{
+						_target = (L2Character) ownerTarget;
+					}
+				}
+				return;
+			}
 			
 			// Duel targeting
 			if (_owner.isInDuel())

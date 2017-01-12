@@ -27,6 +27,7 @@ import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminCamera;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminChangeAccessLevel;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminCreateItem;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminCursedWeapons;
+import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminDMEvent;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminDelete;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminDoorControl;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminEditChar;
@@ -42,6 +43,7 @@ import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminHelpPage;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminInvul;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminKick;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminKnownlist;
+import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminLMEvent;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminLevel;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminMaintenance;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminMammon;
@@ -62,6 +64,7 @@ import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminSkill;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminSpawn;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminTarget;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminTeleport;
+import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminTvTEvent;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminZone;
 
 public class AdminCommandHandler
@@ -86,6 +89,7 @@ public class AdminCommandHandler
 		registerAdminCommandHandler(new AdminCreateItem());
 		registerAdminCommandHandler(new AdminCursedWeapons());
 		registerAdminCommandHandler(new AdminDelete());
+		registerAdminCommandHandler(new AdminDMEvent());	
 		registerAdminCommandHandler(new AdminDoorControl());
 		registerAdminCommandHandler(new AdminEditChar());
 		registerAdminCommandHandler(new AdminEditNpc());
@@ -101,6 +105,7 @@ public class AdminCommandHandler
 		registerAdminCommandHandler(new AdminKick());
 		registerAdminCommandHandler(new AdminKnownlist());
 		registerAdminCommandHandler(new AdminLevel());
+		registerAdminCommandHandler(new AdminLMEvent());
 		registerAdminCommandHandler(new AdminMaintenance());
 		registerAdminCommandHandler(new AdminMammon());
 		registerAdminCommandHandler(new AdminManor());
@@ -120,6 +125,7 @@ public class AdminCommandHandler
 		registerAdminCommandHandler(new AdminSpawn());
 		registerAdminCommandHandler(new AdminTarget());
 		registerAdminCommandHandler(new AdminTeleport());
+		registerAdminCommandHandler(new AdminTvTEvent());
 		registerAdminCommandHandler(new AdminZone());
 	}
 	

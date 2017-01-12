@@ -22,9 +22,13 @@ import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.entity.Castle;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
+import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 
 public class ScrollOfResurrection implements IItemHandler
 {
@@ -59,7 +63,13 @@ public class ScrollOfResurrection implements IItemHandler
 			activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 			return;
 		}
-		
+		if (!TvTEvent.onScrollUse(activeChar.getObjectId())
+			|| !DMEvent.onScrollUse(activeChar.getObjectId())
+			|| !LMEvent.onScrollUse(activeChar.getObjectId()))
+		{
+			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
+		} 
 		// Pickup player, or pet owner in case target is a pet.
 		final L2PcInstance targetPlayer = target.getActingPlayer();
 		

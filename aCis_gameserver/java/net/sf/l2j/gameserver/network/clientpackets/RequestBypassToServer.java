@@ -27,7 +27,10 @@ import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2OlympiadManagerInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
 import net.sf.l2j.gameserver.model.entity.Hero;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadManager;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
@@ -171,7 +174,21 @@ public final class RequestBypassToServer extends L2GameClientPacket
 					if (!activeChar.isInObserverMode() || activeChar.isInOlympiadMode() || activeChar.getOlympiadGameId() < 0)
 						return;
 				}
-				
+				if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(activeChar.getObjectId()))
+				{
+					activeChar.sendMessage("You can not observe games while registered for TvT");
+					return;
+				}
+				if (!DMEvent.isInactive() && DMEvent.isPlayerParticipant(activeChar.getObjectId()))
+				{
+					activeChar.sendMessage("You can not observe games while registered for DM");
+					return;
+				}
+				if (!LMEvent.isInactive() && LMEvent.isPlayerParticipant(activeChar.getObjectId()))
+				{
+					activeChar.sendMessage("You can not observe games while registered for LM");
+					return;
+				}
 				if (OlympiadManager.getInstance().isRegisteredInComp(activeChar))
 				{
 					activeChar.sendPacket(SystemMessageId.WHILE_YOU_ARE_ON_THE_WAITING_LIST_YOU_ARE_NOT_ALLOWED_TO_WATCH_THE_GAME);

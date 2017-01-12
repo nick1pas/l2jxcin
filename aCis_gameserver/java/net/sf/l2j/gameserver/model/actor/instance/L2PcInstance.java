@@ -123,9 +123,12 @@ import net.sf.l2j.gameserver.model.base.Experience;
 import net.sf.l2j.gameserver.model.base.Sex;
 import net.sf.l2j.gameserver.model.base.SubClass;
 import net.sf.l2j.gameserver.model.entity.Castle;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
 import net.sf.l2j.gameserver.model.entity.Duel.DuelState;
 import net.sf.l2j.gameserver.model.entity.Hero;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
 import net.sf.l2j.gameserver.model.entity.Siege;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.holder.SkillUseHolder;
 import net.sf.l2j.gameserver.model.item.Henna;
@@ -3185,7 +3188,13 @@ public final class L2PcInstance extends L2Playable
 	
 	@Override
 	public void onAction(L2PcInstance player)
-	{
+	{		
+		// See description in Events
+		if (!TvTEvent.onAction(player, player.getObjectId())
+				|| !DMEvent.onAction(player, player.getObjectId())
+				|| !LMEvent.onAction(player, player.getObjectId()))
+			return;
+		
 		// Set the target of the player
 		if (player.getTarget() != this)
 			player.setTarget(this);
@@ -3952,6 +3961,13 @@ public final class L2PcInstance extends L2Playable
 		if (killer != null)
 		{
 			L2PcInstance pk = killer.getActingPlayer();
+			
+			if (Config.TVT_EVENT_ENABLED && TvTEvent.isStarted())
+				TvTEvent.onKill(killer, this);
+			if (Config.DM_EVENT_ENABLED && DMEvent.isStarted())
+				DMEvent.onKill(killer, this);
+			if (Config.LM_EVENT_ENABLED && LMEvent.isStarted())
+				LMEvent.onKill(killer, this);
 			
 			// Clear resurrect xp calculation
 			setExpBeforeDeath(0);
@@ -6479,6 +6495,18 @@ public final class L2PcInstance extends L2Playable
 		if (getParty() != null && getParty().getPartyMembers().contains(attacker))
 			return false;
 		
+		// Check if the attacker is in TvT and TvT is started
+		if (TvTEvent.isStarted() && TvTEvent.isPlayerParticipant(getObjectId()))
+			return true;
+		
+		// Check if the attacker is in DM and DM is started
+		if (DMEvent.isStarted() && DMEvent.isPlayerParticipant(getObjectId()))
+			return true;
+		
+		// Check if the attacker is in LM and LM is started
+		if (LMEvent.isStarted() && LMEvent.isPlayerParticipant(getObjectId()))
+			return true;
+		
 		// Check if the attacker is a L2Playable
 		if (attacker instanceof L2Playable)
 		{
@@ -8741,6 +8769,9 @@ public final class L2PcInstance extends L2Playable
 			((L2SummonAI) pet.getAI()).setStartFollowController(true);
 			pet.setFollowStatus(true);
 		}
+		TvTEvent.onTeleported(this);
+		DMEvent.onTeleported(this);
+		LMEvent.onTeleported(this);
 	}
 	
 	@Override
@@ -9026,6 +9057,36 @@ public final class L2PcInstance extends L2Playable
 		catch (Exception e)
 		{
 			_log.log(Level.WARNING, "Exception on deleteMe()" + e.getMessage(), e);
+		}
+		
+		// TvT Event removal
+		try
+		{
+			TvTEvent.onLogout(this);
+		}
+		catch (Exception e)
+		{
+			_log.log(Level.SEVERE, "deleteMe()", e);
+		}
+		
+		// DM Event removal
+		try
+		{
+			DMEvent.onLogout(this);
+		}
+		catch (Exception e)
+		{
+			_log.log(Level.SEVERE, "deleteMe()", e);
+		}
+		
+		// LM Event removal
+		try
+		{
+			LMEvent.onLogout(this);
+		}
+		catch (Exception e)
+		{
+			_log.log(Level.SEVERE, "deleteMe()", e);
 		}
 	}
 	
@@ -9616,6 +9677,13 @@ public final class L2PcInstance extends L2Playable
 				if (OlympiadManager.getInstance().isRegisteredInComp(this))
 					OlympiadManager.getInstance().removeDisconnectedCompetitor(this);
 				
+				if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(getObjectId()))
+					TvTEvent.removeParticipant(getObjectId());
+				if (!DMEvent.isInactive() && DMEvent.isPlayerParticipant(getObjectId()))
+					DMEvent.removeParticipant(this);
+				if (!LMEvent.isInactive() && LMEvent.isPlayerParticipant(getObjectId()))
+					LMEvent.removeParticipant(this);
+				
 				// Open a Html message to inform the player
 				final NpcHtmlMessage html = new NpcHtmlMessage(0);
 				html.setFile("data/html/jail_in.htm");
@@ -9772,7 +9840,7 @@ public final class L2PcInstance extends L2Playable
 		if (_deathPenaltyBuffLevel >= 15) // maximum level reached
 			return;
 		
-		if ((getKarma() > 0 || Rnd.get(1, 100) <= Config.DEATH_PENALTY_CHANCE) && !(killer instanceof L2PcInstance) && !isGM() && !(getCharmOfLuck() && (killer == null || killer.isRaid())) && !isPhoenixBlessed() && !(isInsideZone(ZoneId.PVP) || isInsideZone(ZoneId.SIEGE)))
+		if ((getKarma() > 0 || Rnd.get(1, 100) <= Config.DEATH_PENALTY_CHANCE) && !(killer instanceof L2PcInstance) && !isGM() && !(getCharmOfLuck() && (killer == null || killer.isRaid())) && !isPhoenixBlessed() && !(isInsideZone(ZoneId.PVP) && !(TvTEvent.isStarted() && TvTEvent.isPlayerParticipant(getObjectId())) && !(DMEvent.isStarted() && DMEvent.isPlayerParticipant(getObjectId())) && !(LMEvent.isStarted() && LMEvent.isPlayerParticipant(getObjectId())) || isInsideZone(ZoneId.SIEGE)))
 		{
 			if (_deathPenaltyBuffLevel != 0)
 			{
@@ -10178,6 +10246,12 @@ public final class L2PcInstance extends L2Playable
 		if (summonerChar == null)
 			return false;
 		
+		if (!TvTEvent.onEscapeUse(summonerChar.getObjectId()) || !DMEvent.onEscapeUse(summonerChar.getObjectId()) || !LMEvent.onEscapeUse(summonerChar.getObjectId()))
+		{
+			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING));
+			return false;
+		}
+		
 		if (summonerChar.isInOlympiadMode() || summonerChar.isInObserverMode() || summonerChar.isInsideZone(ZoneId.NO_SUMMON_FRIEND) || summonerChar.isMounted())
 			return false;
 		
@@ -10200,6 +10274,12 @@ public final class L2PcInstance extends L2Playable
 		if (targetChar.isInStoreMode())
 		{
 			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CURRENTLY_TRADING_OR_OPERATING_PRIVATE_STORE_AND_CANNOT_BE_SUMMONED).addCharName(targetChar));
+			return false;
+		}
+		
+		if (!TvTEvent.onEscapeUse(targetChar.getObjectId()) || !DMEvent.onEscapeUse(targetChar.getObjectId()) || !LMEvent.onEscapeUse(targetChar.getObjectId()))
+		{
+			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOUR_TARGET_IS_IN_AN_AREA_WHICH_BLOCKS_SUMMONING));
 			return false;
 		}
 		
@@ -10606,5 +10686,26 @@ public final class L2PcInstance extends L2Playable
 					obj.getAI().describeStateToPlayer(this);
 			}
 		}
+	}
+	
+	public boolean onEvents()
+	{
+		if (TvTEvent.isPlayerParticipant(this.getObjectId()) ||
+				DMEvent.isPlayerParticipant(this.getObjectId()) ||
+				LMEvent.isPlayerParticipant(this.getObjectId()))
+			return true;
+		return false;
+	}
+	
+	private boolean _hideInfo = false;
+	public Integer _originalColorName, _originalColorTitle;
+	public boolean isHideInfo()
+	{
+		return _hideInfo;
+	}
+	
+	public void setHideInfo(boolean hideInfo)
+	{
+		_hideInfo = hideInfo;
 	}
 }

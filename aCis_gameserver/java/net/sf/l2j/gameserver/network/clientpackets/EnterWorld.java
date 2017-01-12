@@ -43,7 +43,10 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
+import net.sf.l2j.gameserver.model.entity.DMEvent;
+import net.sf.l2j.gameserver.model.entity.LMEvent;
 import net.sf.l2j.gameserver.model.entity.Siege;
+import net.sf.l2j.gameserver.model.entity.TvTEvent;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.olympiad.Olympiad;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -114,6 +117,13 @@ public class EnterWorld extends L2GameClientPacket
 		// Set dead status if applies
 		if (activeChar.getCurrentHp() < 0.5)
 			activeChar.setIsDead(true);
+		
+		if (Config.TVT_EVENT_ENABLED) 
+			TvTEvent.onLogin(activeChar);
+		if (Config.DM_EVENT_ENABLED) 
+			DMEvent.onLogin(activeChar);
+		if (Config.LM_EVENT_ENABLED) 
+			LMEvent.onLogin(activeChar);
 		
 		// Clan checks.
 		final L2Clan clan = activeChar.getClan();

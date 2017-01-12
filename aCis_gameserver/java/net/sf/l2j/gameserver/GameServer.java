@@ -72,6 +72,7 @@ import net.sf.l2j.gameserver.handler.ChatHandler;
 import net.sf.l2j.gameserver.handler.ItemHandler;
 import net.sf.l2j.gameserver.handler.SkillHandler;
 import net.sf.l2j.gameserver.handler.UserCommandHandler;
+import net.sf.l2j.gameserver.handler.VoicedCommandHandler;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.AuctionManager;
 import net.sf.l2j.gameserver.instancemanager.AutoSpawnManager;
@@ -95,7 +96,10 @@ import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.instancemanager.games.MonsterRace;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.entity.DMManager;
 import net.sf.l2j.gameserver.model.entity.Hero;
+import net.sf.l2j.gameserver.model.entity.LMManager;
+import net.sf.l2j.gameserver.model.entity.TvTManager;
 import net.sf.l2j.gameserver.model.olympiad.Olympiad;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadGameManager;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchRoomList;
@@ -269,6 +273,9 @@ public class GameServer
 		
 		StringUtil.printSection("Events");
 		MonsterRace.getInstance();
+		TvTManager.getInstance();
+		DMManager.getInstance();
+		LMManager.getInstance();
 		
 		if (Config.ALLOW_WEDDING)
 			CoupleManager.getInstance();
@@ -283,6 +290,7 @@ public class GameServer
 		_log.config("ItemHandler: Loaded " + ItemHandler.getInstance().size() + " handlers.");
 		_log.config("SkillHandler: Loaded " + SkillHandler.getInstance().size() + " handlers.");
 		_log.config("UserCommandHandler: Loaded " + UserCommandHandler.getInstance().size() + " handlers.");
+		_log.config("VoicedCommandHandler: Loaded " + VoicedCommandHandler.getInstance().size() + " handlers.");
 		
 		StringUtil.printSection("System");
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());

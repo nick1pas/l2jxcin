@@ -18,7 +18,6 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 
 /**
  * @author L0ngh0rn
- *
  */
 public class DMPlayer
 {
@@ -29,7 +28,7 @@ public class DMPlayer
 	
 	/**
 	 * @param player
-	 * @param hexCode 
+	 * @param hexCode
 	 */
 	public DMPlayer(L2PcInstance player, String hexCode)
 	{
@@ -38,7 +37,7 @@ public class DMPlayer
 		_death = 0;
 		_hexCode = hexCode;
 	}
-
+	
 	/**
 	 * @return the _player
 	 */
@@ -46,7 +45,7 @@ public class DMPlayer
 	{
 		return _player;
 	}
-
+	
 	/**
 	 * @param player the _player to set
 	 */
@@ -54,7 +53,7 @@ public class DMPlayer
 	{
 		_player = player;
 	}
-
+	
 	/**
 	 * @return the _points
 	 */
@@ -62,7 +61,7 @@ public class DMPlayer
 	{
 		return _points;
 	}
-
+	
 	/**
 	 * @param points the _points to set
 	 */
@@ -78,7 +77,7 @@ public class DMPlayer
 	{
 		++_points;
 	}
-
+	
 	/**
 	 * @return the _death
 	 */
@@ -86,7 +85,7 @@ public class DMPlayer
 	{
 		return _death;
 	}
-
+	
 	/**
 	 * @param death the _death to set
 	 */
@@ -102,7 +101,7 @@ public class DMPlayer
 	{
 		++_death;
 	}
-
+	
 	/**
 	 * @return the _hexCode
 	 */

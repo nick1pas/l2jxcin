@@ -32,8 +32,8 @@ public class TvTEventTeleporter implements Runnable
 	private boolean _adminRemove = false;
 	
 	/**
-	 * Initialize the teleporter and start the delayed task<br><br>
-	 *
+	 * Initialize the teleporter and start the delayed task<br>
+	 * <br>
 	 * @param playerInstance as L2PcInstance<br>
 	 * @param coordinates as int[]<br>
 	 * @param fastSchedule as boolean<br>
@@ -56,8 +56,8 @@ public class TvTEventTeleporter implements Runnable
 	 * 2. Remove all effects<br>
 	 * 3. Revive and full heal the player<br>
 	 * 4. Teleport the player<br>
-	 * 5. Broadcast status and user info<br><br>
-	 *
+	 * 5. Broadcast status and user info<br>
+	 * <br>
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
@@ -71,8 +71,7 @@ public class TvTEventTeleporter implements Runnable
 		if (summon != null)
 			summon.unSummon(_playerInstance);
 		
-		if (Config.TVT_EVENT_EFFECTS_REMOVAL == 0
-				|| (Config.TVT_EVENT_EFFECTS_REMOVAL == 1 && (_playerInstance.getTeam() == 0 || (_playerInstance.isInDuel() && _playerInstance.getDuelState() != DuelState.INTERRUPTED))))
+		if (Config.TVT_EVENT_EFFECTS_REMOVAL == 0 || (Config.TVT_EVENT_EFFECTS_REMOVAL == 1 && (_playerInstance.getTeam() == 0 || (_playerInstance.isInDuel() && _playerInstance.getDuelState() != DuelState.INTERRUPTED))))
 			_playerInstance.stopAllEffectsExceptThoseThatLastThroughDeath();
 		
 		if (_playerInstance.isInDuel())
@@ -80,7 +79,7 @@ public class TvTEventTeleporter implements Runnable
 		
 		_playerInstance.doRevive();
 		
-		_playerInstance.teleToLocation( _coordinates[ 0 ] + Rnd.get(101)-50, _coordinates[ 1 ] + Rnd.get(101)-50, _coordinates[ 2 ], 0 );
+		_playerInstance.teleToLocation(_coordinates[0] + Rnd.get(101) - 50, _coordinates[1] + Rnd.get(101) - 50, _coordinates[2], 0);
 		
 		if (TvTEvent.isStarted() && !_adminRemove)
 			_playerInstance.setTeam(TvTEvent.getParticipantTeamId(_playerInstance.getObjectId()) + 1);

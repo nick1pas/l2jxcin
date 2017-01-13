@@ -25,7 +25,6 @@ import net.sf.l2j.gameserver.util.Broadcast;
 
 /**
  * @author L0ngh0rn
- *
  */
 public class DMManager
 {
@@ -36,7 +35,7 @@ public class DMManager
 	private DMManager()
 	{
 		if (Config.DM_EVENT_ENABLED)
-		{	
+		{
 			this.scheduleEventStart();
 			_log.info("DMEventEngine[DMManager.DMManager()]: Started.");
 		}
@@ -67,6 +66,7 @@ public class DMManager
 				String[] splitTimeOfDay = timeOfDay.split(":");
 				testStartTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(splitTimeOfDay[0]));
 				testStartTime.set(Calendar.MINUTE, Integer.parseInt(splitTimeOfDay[1]));
+				testStartTime.set(Calendar.SECOND, 00);
 				// If the date is in the past, make it the next day (Example: Checking for "1:00", when the time is 23:57.)
 				if (testStartTime.getTimeInMillis() < currentTime.getTimeInMillis())
 					testStartTime.add(Calendar.DAY_OF_MONTH, 1);
@@ -94,9 +94,8 @@ public class DMManager
 		}
 		else
 		{
-			Broadcast.announceToOnlinePlayers("DM Event: Registration opened for " + Config.DM_EVENT_PARTICIPATION_TIME
-					+ " minute(s).");
-								
+			Broadcast.announceToOnlinePlayers("DM Event: Registration opened for " + Config.DM_EVENT_PARTICIPATION_TIME + " minute(s).");
+			
 			// schedule registration end
 			_task.setStartTime(System.currentTimeMillis() + 60000L * Config.DM_EVENT_PARTICIPATION_TIME);
 			ThreadPool.execute(_task);
@@ -114,8 +113,7 @@ public class DMManager
 		}
 		else
 		{
-			DMEvent.sysMsgToAllParticipants("DM Event: Teleporting participants to an arena in "
-					+ Config.DM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
+			DMEvent.sysMsgToAllParticipants("DM Event: Teleporting participants to an arena in " + Config.DM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
 			_task.setStartTime(System.currentTimeMillis() + 60000L * Config.DM_EVENT_RUNNING_TIME);
 			ThreadPool.execute(_task);
 		}
@@ -124,8 +122,7 @@ public class DMManager
 	public void endEvent()
 	{
 		Broadcast.announceToOnlinePlayers(DMEvent.calculateRewards());
-		DMEvent.sysMsgToAllParticipants("DM Event: Teleporting back to the registration npc in "
-				+ Config.DM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
+		DMEvent.sysMsgToAllParticipants("DM Event: Teleporting back to the registration npc in " + Config.DM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
 		DMEvent.stopFight();
 		
 		this.scheduleEventStart();
@@ -138,7 +135,7 @@ public class DMManager
 			_task.setStartTime(System.currentTimeMillis());
 			ThreadPool.execute(_task);
 		}
-	}	
+	}
 	
 	class DMStartTask implements Runnable
 	{

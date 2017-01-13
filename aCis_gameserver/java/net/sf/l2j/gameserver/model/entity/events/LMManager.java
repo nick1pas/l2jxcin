@@ -25,7 +25,6 @@ import net.sf.l2j.gameserver.util.Broadcast;
 
 /**
  * @author L0ngh0rn
- *
  */
 public class LMManager
 {
@@ -67,6 +66,7 @@ public class LMManager
 				String[] splitTimeOfDay = timeOfDay.split(":");
 				testStartTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(splitTimeOfDay[0]));
 				testStartTime.set(Calendar.MINUTE, Integer.parseInt(splitTimeOfDay[1]));
+				testStartTime.set(Calendar.SECOND, 00);
 				// If the date is in the past, make it the next day (Example: Checking for "1:00", when the time is 23:57.)
 				if (testStartTime.getTimeInMillis() < currentTime.getTimeInMillis())
 					testStartTime.add(Calendar.DAY_OF_MONTH, 1);
@@ -94,9 +94,8 @@ public class LMManager
 		}
 		else
 		{
-			Broadcast.announceToOnlinePlayers("LM Event: Registration opened for " + Config.LM_EVENT_PARTICIPATION_TIME
-					+ " minute(s).");
-								
+			Broadcast.announceToOnlinePlayers("LM Event: Registration opened for " + Config.LM_EVENT_PARTICIPATION_TIME + " minute(s).");
+			
 			// schedule registration end
 			_task.setStartTime(System.currentTimeMillis() + 60000L * Config.LM_EVENT_PARTICIPATION_TIME);
 			ThreadPool.execute(_task);
@@ -114,8 +113,7 @@ public class LMManager
 		}
 		else
 		{
-			LMEvent.sysMsgToAllParticipants("LM Event: Teleporting participants to an arena in "
-					+ Config.LM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
+			LMEvent.sysMsgToAllParticipants("LM Event: Teleporting participants to an arena in " + Config.LM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
 			_task.setStartTime(System.currentTimeMillis() + 60000L * Config.LM_EVENT_RUNNING_TIME);
 			ThreadPool.execute(_task);
 		}
@@ -124,8 +122,7 @@ public class LMManager
 	public void endEvent()
 	{
 		Broadcast.announceToOnlinePlayers(LMEvent.calculateRewards());
-		LMEvent.sysMsgToAllParticipants("LM Event: Teleporting back to the registration npc in "
-				+ Config.LM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
+		LMEvent.sysMsgToAllParticipants("LM Event: Teleporting back to the registration npc in " + Config.LM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
 		LMEvent.stopFight();
 		this.scheduleEventStart();
 	}
@@ -137,7 +134,7 @@ public class LMManager
 			_task.setStartTime(System.currentTimeMillis());
 			ThreadPool.execute(_task);
 		}
-	}	
+	}
 	
 	class LMStartTask implements Runnable
 	{

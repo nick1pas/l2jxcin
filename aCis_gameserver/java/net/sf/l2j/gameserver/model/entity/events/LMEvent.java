@@ -307,7 +307,7 @@ public class LMEvent
 			
 			// Cleanup of participants
 			_lmPlayer.clear();
-
+			
 			return false;
 		}
 		

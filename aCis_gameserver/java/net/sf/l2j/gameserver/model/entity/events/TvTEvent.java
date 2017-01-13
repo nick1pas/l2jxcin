@@ -217,7 +217,7 @@ public class TvTEvent
 					iter.remove();
 			}
 		}
-
+		
 		// Opens all doors specified in configs for tvt
 		openDoors(Config.TVT_DOORS_IDS_TO_OPEN);
 		// Closes all doors specified in configs for tvt
@@ -491,7 +491,7 @@ public class TvTEvent
 	
 	/**
 	 * Close doors specified in configs
-	 * @param doors 
+	 * @param doors
 	 */
 	private static void closeDoors(List<Integer> doors)
 	{
@@ -508,7 +508,7 @@ public class TvTEvent
 	
 	/**
 	 * Open doors specified in configs
-	 * @param doors 
+	 * @param doors
 	 */
 	private static void openDoors(List<Integer> doors)
 	{
@@ -522,6 +522,7 @@ public class TvTEvent
 			}
 		}
 	}
+	
 	/**
 	 * Called when a player logs in<br>
 	 * <br>

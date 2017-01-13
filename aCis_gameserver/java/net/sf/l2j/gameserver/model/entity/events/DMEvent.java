@@ -598,7 +598,7 @@ public class DMEvent
 	{
 		int itemId = Config.DM_EVENT_PARTICIPATION_FEE[0];
 		int itemNum = Config.DM_EVENT_PARTICIPATION_FEE[1];
-
+		
 		if (itemId == 0 || itemNum == 0)
 			return "-";
 		

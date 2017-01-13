@@ -24,7 +24,6 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 
 /**
  * @author L0ngh0rn
- *
  */
 public class EventConfig
 {

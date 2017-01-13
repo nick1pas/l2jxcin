@@ -19,7 +19,6 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 
 /**
  * @author L0ngh0rn
- *
  */
 public class LMPlayer
 {
@@ -30,7 +29,7 @@ public class LMPlayer
 	
 	/**
 	 * @param player
-	 * @param hexCode 
+	 * @param hexCode
 	 */
 	public LMPlayer(L2PcInstance player, String hexCode)
 	{
@@ -39,7 +38,7 @@ public class LMPlayer
 		_credits = Config.LM_EVENT_PLAYER_CREDITS;
 		_hexCode = hexCode;
 	}
-
+	
 	/**
 	 * @return the _player
 	 */
@@ -47,7 +46,7 @@ public class LMPlayer
 	{
 		return _player;
 	}
-
+	
 	/**
 	 * @param player the _player to set
 	 */
@@ -55,7 +54,7 @@ public class LMPlayer
 	{
 		_player = player;
 	}
-
+	
 	/**
 	 * @return the _credits
 	 */
@@ -63,7 +62,7 @@ public class LMPlayer
 	{
 		return _credits;
 	}
-
+	
 	/**
 	 * @param credits the _credits to set
 	 */
@@ -87,7 +86,7 @@ public class LMPlayer
 	{
 		return _points;
 	}
-
+	
 	/**
 	 * @param points the _points to set
 	 */

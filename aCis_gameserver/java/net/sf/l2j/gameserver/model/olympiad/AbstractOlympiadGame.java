@@ -446,4 +446,6 @@ public abstract class AbstractOlympiadGame
 	protected abstract int getDivider();
 	
 	protected abstract int[][] getReward();
+	
+	protected abstract boolean checkDualbox();
 }

@@ -188,6 +188,12 @@ public final class OlympiadGameTask implements Runnable
 				// Game start, port players to arena
 				case GAME_STARTED:
 				{
+					if (Config.ALT_OLY_DUAL_BOX && _game.checkDualbox())
+					{
+						_state = GameState.CLEANUP;
+						break;
+					}
+						   
 					if (!startGame())
 					{
 						_state = GameState.GAME_STOPPED;

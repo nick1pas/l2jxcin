@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.commons.util.ArraysUtil;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SkillTreeTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
@@ -541,6 +542,11 @@ public abstract class L2Skill implements IChanceSkillTrigger
 	public final boolean isStriderSkill()
 	{
 		return _isStriderSkill;
+	}
+ 	
+	public final boolean isAioSkill()
+	{
+		return Config.LIST_AIO_SKILLS.containsKey(getId());
 	}
 	
 	public final boolean isSiegeSummonSkill()

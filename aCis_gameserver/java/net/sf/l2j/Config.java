@@ -77,7 +77,24 @@ public final class Config
 	public static String RAID_BOSS_DATE_FORMAT;
 	public static String RAID_BOSS_IDS;
 	public static List<Integer> LIST_RAID_BOSS_IDS;
-	
+	/** Character Killing Monument settings */
+	public static boolean CKM_ENABLED;
+	public static long CKM_CYCLE_LENGTH;
+	public static String CKM_PVP_NPC_TITLE;
+	public static int CKM_PVP_NPC_TITLE_COLOR;
+	public static int CKM_PVP_NPC_NAME_COLOR;
+	public static String CKM_PK_NPC_TITLE;
+	public static int CKM_PK_NPC_TITLE_COLOR;
+	public static int CKM_PK_NPC_NAME_COLOR;
+	/** Aio System */
+	public static String AIO_TITLE;
+	public static int AIO_TITLE_COLOR;
+	public static String AIO_RESTRICTED_CLASSES;
+	public static List<Integer> LIST_AIO_RESTRICTED_CLASSES;
+	public static String AIO_ITEMS;
+	public static Map<Integer, Integer> LIST_AIO_ITEMS;
+	public static String AIO_SKILLS;
+	public static Map<Integer, Integer> LIST_AIO_SKILLS;
 	// --------------------------------------------------
 	// Clans settings
 	// --------------------------------------------------
@@ -187,6 +204,7 @@ public final class Config
 	public static int ALT_OLY_DIVIDER_CLASSED;
 	public static int ALT_OLY_DIVIDER_NON_CLASSED;
 	public static boolean ALT_OLY_ANNOUNCE_GAMES;
+	public static boolean ALT_OLY_DUAL_BOX;
 	
 	/** SevenSigns Festival */
 	public static boolean ALT_GAME_CASTLE_DAWN;
@@ -887,6 +905,41 @@ public final class Config
 		{
 			int npcId = Integer.parseInt(val);
 			LIST_RAID_BOSS_IDS.add(npcId);
+		}
+		CKM_ENABLED = custom.getProperty("CKMEnabled", false);
+		CKM_CYCLE_LENGTH = custom.getProperty("CKMCycleLength", 86400000);
+		CKM_PVP_NPC_TITLE = custom.getProperty("CKMPvPNpcTitle", "%kills% PvPs in the last 24h");
+		CKM_PVP_NPC_TITLE_COLOR = Integer.decode(StringUtil.concat("0x", custom.getProperty("CKMPvPNpcTitleColor", "00CCFF")));
+		CKM_PVP_NPC_NAME_COLOR = Integer.decode(StringUtil.concat("0x", custom.getProperty("CKMPvPNpcNameColor", "FFFFFF")));
+		CKM_PK_NPC_TITLE = custom.getProperty("CKMPKNpcTitle", "%kills% PKs in the last 24h");
+		CKM_PK_NPC_TITLE_COLOR = Integer.decode(StringUtil.concat("0x", custom.getProperty("CKMPKNpcTitleColor", "00CCFF")));
+		CKM_PK_NPC_NAME_COLOR = Integer.decode(StringUtil.concat("0x", custom.getProperty("CKMPKNpcNameColor", "FFFFFF")));
+		AIO_TITLE = custom.getProperty("AioTitle", "Aio");
+		AIO_TITLE_COLOR = Integer.decode("0x" + custom.getProperty("AioTitleColor", "606060"));
+		AIO_RESTRICTED_CLASSES = custom.getProperty("AioRestrictedClasses", "0,0");
+		LIST_AIO_RESTRICTED_CLASSES = new ArrayList<>();
+		for (String val : AIO_RESTRICTED_CLASSES.split(","))
+		{
+			int classId = Integer.parseInt(val);
+			LIST_AIO_RESTRICTED_CLASSES.add(classId);
+		}
+		AIO_ITEMS = custom.getProperty("AioItems", "0,0");
+		LIST_AIO_ITEMS = new HashMap<>();
+		for (String val : AIO_ITEMS.split(";"))
+		{
+			String[] valSplit = val.split(",");
+			int itemId = Integer.parseInt(valSplit[0]);
+			int amount = Integer.parseInt(valSplit[1]);
+			LIST_AIO_ITEMS.put(itemId, amount);
+		}
+		AIO_SKILLS = custom.getProperty("AioSkills", "0,0");
+		LIST_AIO_SKILLS = new HashMap<>();
+		for (String val : AIO_SKILLS.split(";"))
+		{
+			String[] valSplit = val.split(",");
+			int skillId = Integer.parseInt(valSplit[0]);
+			int skillLv = Integer.parseInt(valSplit[1]);
+			LIST_AIO_SKILLS.put(skillId, skillLv);
 		}		
 	}
 	/**
@@ -1000,6 +1053,7 @@ public final class Config
 		ALT_OLY_DIVIDER_CLASSED = events.getProperty("AltOlyDividerClassed", 3);
 		ALT_OLY_DIVIDER_NON_CLASSED = events.getProperty("AltOlyDividerNonClassed", 3);
 		ALT_OLY_ANNOUNCE_GAMES = events.getProperty("AltOlyAnnounceGames", true);
+		ALT_OLY_DUAL_BOX = events.getProperty("AltOlyDualBox", true);
 		
 		ALT_GAME_CASTLE_DAWN = events.getProperty("AltCastleForDawn", true);
 		ALT_GAME_CASTLE_DUSK = events.getProperty("AltCastleForDusk", true);

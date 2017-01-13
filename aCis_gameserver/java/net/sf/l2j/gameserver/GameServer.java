@@ -36,6 +36,7 @@ import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.communitybbs.Manager.ForumsBBSManager;
 import net.sf.l2j.gameserver.datatables.AccessLevels;
 import net.sf.l2j.gameserver.datatables.AdminCommandAccessRights;
+import net.sf.l2j.gameserver.datatables.AioManagerTable;
 import net.sf.l2j.gameserver.datatables.AnnouncementTable;
 import net.sf.l2j.gameserver.datatables.ArmorSetsTable;
 import net.sf.l2j.gameserver.datatables.AugmentationData;
@@ -75,11 +76,13 @@ import net.sf.l2j.gameserver.handler.SkillHandler;
 import net.sf.l2j.gameserver.handler.UserCommandHandler;
 import net.sf.l2j.gameserver.handler.VoicedCommandHandler;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
+import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.instancemanager.AuctionManager;
 import net.sf.l2j.gameserver.instancemanager.AutoSpawnManager;
 import net.sf.l2j.gameserver.instancemanager.BoatManager;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
+import net.sf.l2j.gameserver.instancemanager.CharacterKillingManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.instancemanager.CoupleManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
@@ -190,6 +193,7 @@ public class GameServer
 		PetitionManager.getInstance();
 		
 		StringUtil.printSection("Characters");
+		AioManager.getInstance();
 		CharTemplateTable.getInstance();
 		CharNameTable.getInstance();
 		HennaTable.getInstance();
@@ -240,6 +244,7 @@ public class GameServer
 		CastleManorManager.getInstance();
 		
 		StringUtil.printSection("NPCs");
+		AioManagerTable.getInstance();
 		RaidBossInfoManager.getInstance();
 		BufferTable.getInstance();
 		HerbDropTable.getInstance();
@@ -261,7 +266,10 @@ public class GameServer
 		StringUtil.printSection("Customs");
 		if ((Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) && Config.RESTORE_OFFLINERS)
 			OfflineTradersTable.getInstance().restoreOfflineTraders();
-
+		
+		if (Config.CKM_ENABLED)
+			CharacterKillingManager.getInstance().init();
+		
 		StringUtil.printSection("Four Sepulchers");
 		FourSepulchersManager.getInstance().init();
 		

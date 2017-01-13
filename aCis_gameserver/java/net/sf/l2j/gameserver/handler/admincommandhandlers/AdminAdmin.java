@@ -22,6 +22,7 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.cache.CrestCache;
 import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.datatables.AdminCommandAccessRights;
+import net.sf.l2j.gameserver.datatables.AioManagerTable;
 import net.sf.l2j.gameserver.datatables.AnnouncementTable;
 import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.datatables.GmListTable;
@@ -32,6 +33,7 @@ import net.sf.l2j.gameserver.datatables.NpcWalkerRoutesTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.TeleportLocationTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
+import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Object;
@@ -192,6 +194,12 @@ public class AdminAdmin implements IAdminCommandHandler
 						AnnouncementTable.getInstance().reload();
 						activeChar.sendMessage("The content of announcements.xml has been reloaded.");
 					}
+					else if (type.startsWith("aio"))
+					{
+						AioManagerTable.getInstance().reload();
+						AioManager.getInstance().reload();
+						activeChar.sendMessage("Aio's system have been reloaded.");
+					}
 					else if (type.startsWith("config"))
 					{
 						Config.loadGameServer();
@@ -254,7 +262,7 @@ public class AdminAdmin implements IAdminCommandHandler
 					}
 					else
 					{
-						activeChar.sendMessage("Usage : //reload <acar|announcement|config|crest|door>");
+						activeChar.sendMessage("Usage : //reload <acar|aio|announcement|config|crest|door>");
 						activeChar.sendMessage("Usage : //reload <htm|item|multisell|npc|npcwalker>");
 						activeChar.sendMessage("Usage : //reload <skill|teleport|zone>");
 					}

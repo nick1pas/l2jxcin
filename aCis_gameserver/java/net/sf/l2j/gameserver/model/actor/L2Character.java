@@ -5478,4 +5478,24 @@ public abstract class L2Character extends L2Object
 		if (object == getTarget())
 			setTarget(null);
 	}
+ 		    
+	public float getMovementSpeedMultiplier()
+	{
+		return getStat().getMovementSpeedMultiplier();
+	}
+	
+	public int getRunSpeed()
+	{
+		return getStat().getBaseRunSpeed();
+	}
+	
+	public final int getWalkSpeed()
+	{
+		return getStat().getBaseWalkSpeed();
+	}
+	
+	public final float getAttackSpeedMultiplier()
+	{
+		return getStat().getAttackSpeedMultiplier();
+	}	
 }

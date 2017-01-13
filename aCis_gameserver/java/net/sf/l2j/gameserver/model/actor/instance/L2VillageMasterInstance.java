@@ -24,6 +24,7 @@ import net.sf.l2j.gameserver.datatables.CharTemplateTable;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SkillTreeTable;
+import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Clan.SubPledge;
@@ -173,7 +174,13 @@ public class L2VillageMasterInstance extends L2NpcInstance
 				player.sendPacket(SystemMessageId.SUBCLASS_NO_CHANGE_OR_CREATE_WHILE_SKILL_IN_USE);
 				return;
 			}
-			
+ 			
+			if (AioManager.getInstance().hasAioPrivileges(player.getObjectId()))
+			{
+				player.sendMessage("You cannot manage a subclass under aio privileges.");
+				return;
+			}
+				
 			// Affecting subclasses (add/del/change) if registered in Olympiads makes you ineligible to compete.
 			if (OlympiadManager.getInstance().isRegisteredInComp(player))
 				OlympiadManager.getInstance().unRegisterNoble(player);

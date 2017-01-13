@@ -552,4 +552,20 @@ abstract public class OlympiadGameNormal extends AbstractOlympiadGame
 				_log.log(Level.SEVERE, "SQL exception while saving olympiad fight.", e);
 		}
 	}
+    
+    @Override
+    protected boolean checkDualbox()
+    {
+        String ip1 = _playerOne.player.getClient().getConnection().getInetAddress().getHostAddress();
+        String ip2 = _playerTwo.player.getClient().getConnection().getInetAddress().getHostAddress();
+        
+        if (ip1.equals(ip2))
+        {
+            _playerOne.player.sendMessage("[Duabox Protection]: Your opponent [" + _playerTwo.player.getName() + "] Has the same ip as your!");
+            _playerTwo.player.sendMessage("[Duabox Protection]: Your opponent [" + _playerOne.player.getName() + "] Has the same ip as your!");
+            return true;
+        }
+        
+        return false;
+    }
 }

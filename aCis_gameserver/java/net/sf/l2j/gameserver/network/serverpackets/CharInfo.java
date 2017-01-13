@@ -16,6 +16,7 @@ package net.sf.l2j.gameserver.network.serverpackets;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.NpcTable;
+import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -138,7 +139,7 @@ public class CharInfo extends L2GameServerPacket
 		if (gmSeeInvis)
 			writeS("Invisible");
 		else
-			writeS(_activeChar.getTitle());
+			writeS(AioManager.getInstance().hasAioPrivileges(_activeChar.getObjectId()) ? Config.AIO_TITLE : _activeChar.getTitle());
 		
 		writeD(_activeChar.getClanId());
 		writeD(_activeChar.getClanCrestId());
@@ -213,7 +214,7 @@ public class CharInfo extends L2GameServerPacket
 		writeD(_activeChar.getPledgeClass());
 		writeD(_activeChar.getPledgeType());
 		
-		writeD(_activeChar.getAppearance().getTitleColor());
+		writeD(AioManager.getInstance().hasAioPrivileges(_activeChar.getObjectId()) ? Config.AIO_TITLE_COLOR : _activeChar.getAppearance().getTitleColor());
 		
 		if (_activeChar.isCursedWeaponEquipped())
 			writeD(CursedWeaponsManager.getInstance().getCurrentStage(_activeChar.getCursedWeaponEquippedId()) - 1);

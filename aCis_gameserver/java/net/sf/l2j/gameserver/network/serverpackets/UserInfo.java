@@ -15,6 +15,7 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
 import net.sf.l2j.Config;
+import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.L2Object.PolyType;
 import net.sf.l2j.gameserver.model.Location;
@@ -196,8 +197,7 @@ public class UserInfo extends L2GameServerPacket
 		writeD(_activeChar.getAppearance().getHairColor());
 		writeD(_activeChar.getAppearance().getFace());
 		writeD(_activeChar.isGM() ? 1 : 0); // builder level
-		
-		writeS((_activeChar.getPolyType() != PolyType.DEFAULT) ? "Morphed" : _activeChar.getTitle());
+		writeS((_activeChar.getPolyType() != PolyType.DEFAULT) ? "Morphed" : AioManager.getInstance().hasAioPrivileges(_activeChar.getObjectId()) ? Config.AIO_TITLE : _activeChar.getTitle());
 		
 		writeD(_activeChar.getClanId());
 		writeD(_activeChar.getClanCrestId());
@@ -272,7 +272,7 @@ public class UserInfo extends L2GameServerPacket
 		writeD(_activeChar.getPledgeClass()); // changes the text above CP on Status Window
 		writeD(_activeChar.getPledgeType());
 		
-		writeD(_activeChar.getAppearance().getTitleColor());
+		writeD(AioManager.getInstance().hasAioPrivileges(_activeChar.getObjectId()) ? Config.AIO_TITLE_COLOR : _activeChar.getAppearance().getTitleColor());
 		
 		if (_activeChar.isCursedWeaponEquipped())
 			writeD(CursedWeaponsManager.getInstance().getCurrentStage(_activeChar.getCursedWeaponEquippedId()) - 1);

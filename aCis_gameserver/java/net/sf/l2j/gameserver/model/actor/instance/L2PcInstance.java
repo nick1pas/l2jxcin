@@ -17,10 +17,12 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -67,6 +69,7 @@ import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.handler.ItemHandler;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminEditChar;
+import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.CoupleManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
@@ -124,11 +127,11 @@ import net.sf.l2j.gameserver.model.base.Sex;
 import net.sf.l2j.gameserver.model.base.SubClass;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.Duel.DuelState;
+import net.sf.l2j.gameserver.model.entity.Hero;
+import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
-import net.sf.l2j.gameserver.model.entity.Hero;
-import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.holder.SkillUseHolder;
 import net.sf.l2j.gameserver.model.item.Henna;
@@ -176,6 +179,7 @@ import net.sf.l2j.gameserver.network.serverpackets.ExFishingEnd;
 import net.sf.l2j.gameserver.network.serverpackets.ExFishingStart;
 import net.sf.l2j.gameserver.network.serverpackets.ExOlympiadMode;
 import net.sf.l2j.gameserver.network.serverpackets.ExSetCompassZoneCode;
+import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
 import net.sf.l2j.gameserver.network.serverpackets.ExStorageMaxCount;
 import net.sf.l2j.gameserver.network.serverpackets.FriendList;
 import net.sf.l2j.gameserver.network.serverpackets.GetOnVehicle;
@@ -4364,6 +4368,7 @@ public final class L2PcInstance extends L2Playable
 		PvpFlagTaskManager.getInstance().remove(this);
 		GameTimeTaskManager.getInstance().remove(this);
 		ShadowItemTaskManager.getInstance().remove(this);
+		AioManager.getInstance().removeAioTask(getObjectId());
 	}
 	
 	/**
@@ -6646,7 +6651,16 @@ public final class L2PcInstance extends L2Playable
 			sendPacket(ActionFailed.STATIC_PACKET);
 			return false;
 		}
-		
+ 		
+		if (AioManager.getInstance().hasAioPrivileges(getObjectId()))
+		{
+			if (!isInsideZone(ZoneId.TOWN) ? true : !skill.isAioSkill())
+			{
+				sendPacket(ActionFailed.STATIC_PACKET);
+				return false;
+			}
+		}
+	
 		// Players wearing Formal Wear cannot use skills.
 		final ItemInstance formal = getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST);
 		if (formal != null && formal.getItem().getBodyPart() == Item.SLOT_ALLDRESS)
@@ -8180,6 +8194,8 @@ public final class L2PcInstance extends L2Playable
 				else if (getMountType() == 2) // Only Wyvern skills are available
 					isDisabled = !s.isFlyingSkill();
 			}
+			else if (AioManager.getInstance().hasAioPrivileges(getObjectId()))
+				isDisabled = !isInsideZone(ZoneId.TOWN) ? true : !s.isAioSkill();
 			
 			if (isWearingFormalWear)
 				isDisabled = true;
@@ -8545,7 +8561,14 @@ public final class L2PcInstance extends L2Playable
 			if (isInRefusalMode())
 				sendMessage("Entering world in Message Refusal mode.");
 		}
-		
+ 		
+		if (AioManager.getInstance().hasAioPrivileges(getObjectId()))
+		{
+			long duration = AioManager.getInstance().getAioDuration(getObjectId());
+			sendPacket(new ExShowScreenMessage("Your aio privileges ends at " + new SimpleDateFormat("MMM dd, yyyy HH:mm").format(new Date(duration)) + ".", 10000));
+			AioManager.getInstance().addAioTask(getObjectId(), duration);
+		}
+	
 		revalidateZone(true);
 		notifyFriends(true);
 	}

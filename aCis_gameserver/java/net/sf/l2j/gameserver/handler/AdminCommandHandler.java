@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminAdmin;
+import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminAio;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminAnnouncements;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminBan;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminBookmark;
@@ -79,6 +80,7 @@ public class AdminCommandHandler
 	protected AdminCommandHandler()
 	{
 		registerAdminCommandHandler(new AdminAdmin());
+		registerAdminCommandHandler(new AdminAio());
 		registerAdminCommandHandler(new AdminAnnouncements());
 		registerAdminCommandHandler(new AdminBan());
 		registerAdminCommandHandler(new AdminBookmark());

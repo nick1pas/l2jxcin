@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.sf.l2j.Config;
+import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
@@ -153,6 +154,12 @@ public class OlympiadManager
 		if (Olympiad.getInstance().getMillisToCompEnd() < 600000)
 		{
 			player.sendPacket(SystemMessageId.GAME_REQUEST_CANNOT_BE_MADE);
+			return false;
+		}
+ 		
+		if (AioManager.getInstance().hasAioPrivileges(player.getObjectId()))
+		{
+			player.sendMessage("You cannot participate in the Olympiad games under aio privileges.");
 			return false;
 		}
 		

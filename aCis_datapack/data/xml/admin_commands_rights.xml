@@ -13,6 +13,11 @@
 	<aCar name="admin_tradeoff" accessLevel="1" />
 	<aCar name="admin_reload" accessLevel="1" />
 
+	<!-- AIO -->
+	<aCar name="admin_add_aio" accessLevel="1" />
+	<aCar name="admin_update_aio" accessLevel="1" />
+	<aCar name="admin_remove_aio" accessLevel="1" />
+
 	<!-- ANNOUNCEMENTS -->
 	<aCar name="admin_announce" accessLevel="1" />
 	<aCar name="admin_ann" accessLevel="1" />

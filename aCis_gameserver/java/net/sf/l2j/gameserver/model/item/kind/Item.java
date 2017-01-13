@@ -378,7 +378,7 @@ public abstract class Item
 	 */
 	public final boolean isSellable()
 	{
-		return _sellable;
+		return Config.LIST_AIO_ITEMS.containsKey(_itemId) ? false : _sellable;
 	}
 	
 	/**
@@ -387,7 +387,7 @@ public abstract class Item
 	 */
 	public final boolean isDropable()
 	{
-		return _dropable;
+		return Config.LIST_AIO_ITEMS.containsKey(_itemId) ? false : _dropable;
 	}
 	
 	/**
@@ -396,7 +396,7 @@ public abstract class Item
 	 */
 	public final boolean isDestroyable()
 	{
-		return _destroyable;
+		return Config.LIST_AIO_ITEMS.containsKey(_itemId) ? false : _destroyable;
 	}
 	
 	/**
@@ -405,7 +405,7 @@ public abstract class Item
 	 */
 	public final boolean isTradable()
 	{
-		return _tradable;
+		return Config.LIST_AIO_ITEMS.containsKey(_itemId) ? false : _tradable;
 	}
 	
 	/**
@@ -414,7 +414,7 @@ public abstract class Item
 	 */
 	public final boolean isDepositable()
 	{
-		return _depositable;
+		return Config.LIST_AIO_ITEMS.containsKey(_itemId) ? false : _depositable;
 	}
 	
 	/**

@@ -33,6 +33,7 @@ import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
+import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.World;
@@ -670,6 +671,12 @@ public class DMEvent
 			if (activeChar.isCursedWeaponEquipped())
 			{
 				htmContent = HtmCache.getInstance().getHtm(htmlPath + "CursedWeaponEquipped.htm");
+				if (htmContent != null)
+					npcHtmlMessage.setHtml(htmContent);
+			}
+			else if (AioManager.getInstance().hasAioPrivileges(activeChar.getObjectId()))
+			{
+				htmContent = HtmCache.getInstance().getHtm(htmlPath + "Aio.htm");
 				if (htmContent != null)
 					npcHtmlMessage.setHtml(htmContent);
 			}

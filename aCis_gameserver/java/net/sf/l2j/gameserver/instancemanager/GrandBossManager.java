@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.model.actor.instance.L2GrandBossInstance;
@@ -131,6 +132,9 @@ public class GrandBossManager
 	{
 		_storedInfo.put(bossId, info);
 		updateDb(bossId, false);
+		
+		if (Config.LIST_RAID_BOSS_IDS.contains(bossId))
+			RaidBossInfoManager.getInstance().updateRaidBossInfo(bossId, info.getLong("respawn_time"));
 	}
 	
 	private void storeToDb()

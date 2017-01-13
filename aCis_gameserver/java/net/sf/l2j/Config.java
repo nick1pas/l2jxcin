@@ -54,7 +54,6 @@ public final class Config
 	public static final String SERVER_FILE = "./config/server.properties";
 	public static final String SIEGE_FILE = "./config/siege.properties";
 	
-	
 	// --------------------------------------------------
 	// Custom settings
 	// --------------------------------------------------
@@ -72,6 +71,12 @@ public final class Config
 	public static boolean OFFLINE_DISCONNECT_FINISHED;
 	public static boolean OFFLINE_SET_NAME_COLOR;
 	public static int OFFLINE_NAME_COLOR;
+	/** Raidboss Info */
+	public static int RAID_BOSS_INFO_PAGE_LIMIT;
+	public static int RAID_BOSS_DROP_PAGE_LIMIT;
+	public static String RAID_BOSS_DATE_FORMAT;
+	public static String RAID_BOSS_IDS;
+	public static List<Integer> LIST_RAID_BOSS_IDS;
 	
 	// --------------------------------------------------
 	// Clans settings
@@ -873,6 +878,16 @@ public final class Config
 		RESTORE_OFFLINERS = custom.getProperty("RestoreOffliners", false);
 		OFFLINE_MAX_DAYS = custom.getProperty("OfflineMaxDays", 10);
 		OFFLINE_DISCONNECT_FINISHED = custom.getProperty("OfflineDisconnectFinished", true);
+		RAID_BOSS_INFO_PAGE_LIMIT = custom.getProperty("RaidBossInfoPageLimit", 15);
+		RAID_BOSS_DROP_PAGE_LIMIT = custom.getProperty("RaidBossDropPageLimit", 15);
+		RAID_BOSS_DATE_FORMAT = custom.getProperty("RaidBossDateFormat", "MMM dd, HH:mm");
+		RAID_BOSS_IDS = custom.getProperty("RaidBossIds", "0,0");
+		LIST_RAID_BOSS_IDS = new ArrayList<>();
+		for (String val : RAID_BOSS_IDS.split(","))
+		{
+			int npcId = Integer.parseInt(val);
+			LIST_RAID_BOSS_IDS.add(npcId);
+		}		
 	}
 	/**
 	 * Loads clan and clan hall settings.

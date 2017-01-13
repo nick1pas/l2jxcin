@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
@@ -143,6 +144,9 @@ public class RaidBossSpawnManager
 			}
 			
 			_schedules.remove(bossId);
+						
+			if (Config.LIST_RAID_BOSS_IDS.contains(bossId))
+				RaidBossInfoManager.getInstance().updateRaidBossInfo(bossId, 0);
 		}
 	}
 	
@@ -171,7 +175,9 @@ public class RaidBossSpawnManager
 				
 				_schedules.put(boss.getNpcId(), ThreadPool.schedule(new spawnSchedule(boss.getNpcId()), respawnDelay * 3600000));
 				updateDb();
-			}
+			}			
+			if (Config.LIST_RAID_BOSS_IDS.contains(boss.getNpcId()))
+				RaidBossInfoManager.getInstance().updateRaidBossInfo(boss.getNpcId(), respawnTime);
 		}
 		else
 		{

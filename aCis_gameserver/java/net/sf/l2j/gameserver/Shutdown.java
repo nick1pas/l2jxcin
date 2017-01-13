@@ -23,6 +23,7 @@ import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.BufferTable;
+import net.sf.l2j.gameserver.datatables.OfflineTradersTable;
 import net.sf.l2j.gameserver.datatables.ServerMemo;
 import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
 import net.sf.l2j.gameserver.instancemanager.CoupleManager;
@@ -113,6 +114,19 @@ public class Shutdown extends Thread
 		if (this == SingletonHolder._instance)
 		{
 			StringUtil.printSection("Under " + MODE_TEXT[_shutdownMode] + " process");
+			
+			try
+			{
+				if ((Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) && Config.RESTORE_OFFLINERS)
+				{
+					OfflineTradersTable.getInstance().storeOffliners();
+					_log.info("Offline Traders Table: Offline shops stored.");
+				}
+			}
+			catch (Throwable t)
+			{
+				_log.log(Level.WARNING, "Error saving offline shops.", t);
+			}
 			
 			// disconnect players
 			try

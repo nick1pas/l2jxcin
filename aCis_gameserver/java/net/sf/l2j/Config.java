@@ -42,6 +42,7 @@ public final class Config
 {
 	private static final Logger _log = Logger.getLogger(Config.class.getName());
 	
+	public static final String CUSTOM_FILE = "./config/custom.properties";
 	public static final String CLANS_FILE = "./config/clans.properties";
 	public static final String CUSTOM_EVENTS_FILE = "./config/custom_events.properties";
 	public static final String EVENTS_FILE = "./config/events.properties";
@@ -52,6 +53,25 @@ public final class Config
 	public static final String PLAYERS_FILE = "./config/players.properties";
 	public static final String SERVER_FILE = "./config/server.properties";
 	public static final String SIEGE_FILE = "./config/siege.properties";
+	
+	
+	// --------------------------------------------------
+	// Custom settings
+	// --------------------------------------------------
+	/** Banking System */
+	public static boolean BANKING_SYSTEM_ENABLED;
+	public static int BANKING_SYSTEM_GOLDBARS;
+	public static int BANKING_SYSTEM_ADENA;
+	/** Offline Shop && Craft */
+	public static boolean OFFLINE_TRADE_ENABLE;
+	public static boolean OFFLINE_CRAFT_ENABLE;
+	public static boolean OFFLINE_MODE_IN_PEACE_ZONE;
+	public static boolean OFFLINE_MODE_NO_DAMAGE;
+	public static boolean RESTORE_OFFLINERS;
+	public static int OFFLINE_MAX_DAYS;
+	public static boolean OFFLINE_DISCONNECT_FINISHED;
+	public static boolean OFFLINE_SET_NAME_COLOR;
+	public static int OFFLINE_NAME_COLOR;
 	
 	// --------------------------------------------------
 	// Clans settings
@@ -835,6 +855,25 @@ public final class Config
 		return result;
 	}
 	
+	/**
+	 * Loads custom settings
+	 */
+	private static final void loadCustom()
+	{
+		final ExProperties custom = initProperties(CUSTOM_FILE);
+		BANKING_SYSTEM_ENABLED = custom.getProperty("BankingEnabled", false);
+		BANKING_SYSTEM_GOLDBARS = custom.getProperty("BankingGoldbarCount", 1);
+		BANKING_SYSTEM_ADENA = custom.getProperty("BankingAdenaCount", 500000000);
+		OFFLINE_TRADE_ENABLE = custom.getProperty("OfflineTradeEnable", false);
+		OFFLINE_CRAFT_ENABLE = custom.getProperty("OfflineCraftEnable", false);
+		OFFLINE_MODE_IN_PEACE_ZONE = custom.getProperty("OfflineModeInPeaceZone", false);
+		OFFLINE_MODE_NO_DAMAGE = custom.getProperty("OfflineModeNoDamage", false);
+		OFFLINE_SET_NAME_COLOR = custom.getProperty("OfflineSetNameColor", false);
+		OFFLINE_NAME_COLOR = Integer.decode("0x" + custom.getProperty("OfflineNameColor", 808080));
+		RESTORE_OFFLINERS = custom.getProperty("RestoreOffliners", false);
+		OFFLINE_MAX_DAYS = custom.getProperty("OfflineMaxDays", 10);
+		OFFLINE_DISCONNECT_FINISHED = custom.getProperty("OfflineDisconnectFinished", true);
+	}
 	/**
 	 * Loads clan and clan hall settings.
 	 */
@@ -2062,6 +2101,9 @@ public final class Config
 	public static final void loadGameServer()
 	{
 		_log.info("Loading gameserver configuration files.");
+		
+		// custom settings
+		loadCustom();
 		
 		// clans settings
 		loadClans();

@@ -640,6 +640,12 @@ public class AdminEditChar implements IAdminCommandHandler
 		final String clientInfo = player.getClient().toString();
 		final String account = clientInfo.substring(clientInfo.indexOf("Account: ") + 9, clientInfo.indexOf(" - IP: "));
 		final String ip = clientInfo.substring(clientInfo.indexOf(" - IP: ") + 7, clientInfo.lastIndexOf("]"));
+		final L2GameClient client = player.getClient();
+
+		if (client == null)
+			activeChar.sendMessage("Client is null.");
+		else if (client.isDetached())
+			activeChar.sendMessage("Client is detached.");
 		
 		final NpcHtmlMessage html = new NpcHtmlMessage(0);
 		html.setFile("data/html/admin/" + filename);

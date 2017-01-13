@@ -284,6 +284,15 @@ public final class L2PcInstance extends L2Playable
 		{
 			return _id;
 		}
+		public static StoreType findById(int id)
+		{
+			for (StoreType StoreType : values())
+			{
+				if (StoreType.getId() == id)
+					return StoreType;
+			}
+			return null;
+		}
 	}
 	
 	public enum PunishLevel
@@ -438,6 +447,7 @@ public final class L2PcInstance extends L2Playable
 	private int _teleMode;
 	private boolean _isCrystallizing;
 	private boolean _isCrafting;
+	private long _offlineShopStart = 0;
 	
 	private final Map<Integer, RecipeList> _dwarvenRecipeBook = new HashMap<>();
 	private final Map<Integer, RecipeList> _commonRecipeBook = new HashMap<>();
@@ -3050,9 +3060,16 @@ public final class L2PcInstance extends L2Playable
 	
 	public String getAccountName()
 	{
+		if (getClient() == null)
+			return getAccountNamePlayer();
 		return _client.getAccountName();
 	}
-	
+
+	public String getAccountNamePlayer()
+	{
+		return _accountName;
+	}
+
 	public Map<Integer, String> getAccountChars()
 	{
 		return _chars;
@@ -4605,8 +4622,21 @@ public final class L2PcInstance extends L2Playable
 	public void setStoreType(StoreType type)
 	{
 		_storeType = type;
+		
+		if (Config.OFFLINE_DISCONNECT_FINISHED && (type == StoreType.NONE) && ((getClient() == null) || getClient().isDetached()))
+			deleteMe();
 	}
-	
+
+	public long getOfflineStartTime()
+	{
+		return _offlineShopStart;
+	}
+
+	public void setOfflineStartTime(long time)
+	{
+		_offlineShopStart = time;
+	}
+
 	/**
 	 * @return The Store type of the L2PcInstance.
 	 */

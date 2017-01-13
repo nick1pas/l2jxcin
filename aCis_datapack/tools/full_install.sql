@@ -42,6 +42,7 @@ DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS items_on_ground;
 DROP TABLE IF EXISTS mdt_bets;
 DROP TABLE IF EXISTS mdt_history;
+DROP TABLE IF EXISTS offline_trade;
 DROP TABLE IF EXISTS olympiad_data;
 DROP TABLE IF EXISTS olympiad_fights;
 DROP TABLE IF EXISTS olympiad_nobles_eom;

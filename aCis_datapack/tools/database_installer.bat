@@ -7,14 +7,14 @@ REM MYSQL BIN PATH
 set mysqlBinPath=C:\Program Files\MySQL\MySQL Server 5.5\bin
 
 REM LOGINSERVER
-set lsuser=
-set lspass=
+set lsuser=root
+set lspass=1234
 set lsdb=acis
 set lshost=localhost
 
 REM GAMESERVER
-set gsuser=
-set gspass=
+set gsuser=root
+set gspass=1234
 set gsdb=acis
 set gshost=localhost
 REM ############################################
@@ -100,6 +100,7 @@ echo Installing empty character-related tables.
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/mdt_bets.sql
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/mdt_history.sql
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/mods_wedding.sql
+%mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/offline_trade.sql
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/olympiad_data.sql
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/olympiad_fights.sql
 %mysqlPath% -h %gshost% -u %gsuser% --password=%gspass% -D %gsdb% < ../sql/olympiad_nobles_eom.sql

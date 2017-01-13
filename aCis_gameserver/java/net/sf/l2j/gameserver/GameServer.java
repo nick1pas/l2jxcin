@@ -56,6 +56,7 @@ import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.MultisellData;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.NpcWalkerRoutesTable;
+import net.sf.l2j.gameserver.datatables.OfflineTradersTable;
 import net.sf.l2j.gameserver.datatables.RecipeTable;
 import net.sf.l2j.gameserver.datatables.ServerMemo;
 import net.sf.l2j.gameserver.datatables.SkillTable;
@@ -255,6 +256,10 @@ public class GameServer
 		Olympiad.getInstance();
 		Hero.getInstance();
 		
+		StringUtil.printSection("Customs");
+		if ((Config.OFFLINE_TRADE_ENABLE || Config.OFFLINE_CRAFT_ENABLE) && Config.RESTORE_OFFLINERS)
+			OfflineTradersTable.getInstance().restoreOfflineTraders();
+
 		StringUtil.printSection("Four Sepulchers");
 		FourSepulchersManager.getInstance().init();
 		

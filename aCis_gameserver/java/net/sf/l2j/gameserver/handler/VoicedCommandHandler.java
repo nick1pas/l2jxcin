@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.l2j.Config;
+import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Banking;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.DMVoicedInfo;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.LMVoicedInfo;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Online;
@@ -29,6 +30,8 @@ public class VoicedCommandHandler
 			registerHandler(new DMVoicedInfo());
 		if (Config.LM_ALLOW_VOICED_COMMAND)
 			registerHandler(new LMVoicedInfo());
+		if (Config.BANKING_SYSTEM_ENABLED)
+			registerHandler(new Banking());
 	}
 	
 	public void registerHandler(IVoicedCommandHandler handler)

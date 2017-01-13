@@ -120,6 +120,7 @@ $MYG < ../sql/items_on_ground.sql &> /dev/null
 $MYG < ../sql/mdt_bets.sql &> /dev/null
 $MYG < ../sql/mdt_history.sql &> /dev/null
 $MYG < ../sql/mods_wedding.sql &> /dev/null
+$MYG < ../sql/offline_trade.sql &> /dev/null
 $MYG < ../sql/olympiad_data.sql&> /dev/null
 $MYG < ../sql/olympiad_fights.sql&> /dev/null
 $MYG < ../sql/olympiad_nobles_eom.sql&> /dev/null

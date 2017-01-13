@@ -15,7 +15,7 @@ public class Online implements IVoicedCommandHandler
         {
             activeChar.sendMessage("====[Online Players]====");
             activeChar.sendMessage("Player(s): " + World.getInstance().getPlayers().size() + " Online.");        
-            activeChar.sendMessage("======[L2jFanatic]======");
+            activeChar.sendMessage("======[Project Interlude]======");
         }
         return true;
     }

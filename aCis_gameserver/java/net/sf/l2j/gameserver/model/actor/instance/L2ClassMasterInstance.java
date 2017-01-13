@@ -19,6 +19,7 @@ import java.util.List;
 import net.sf.l2j.commons.lang.StringUtil;
 
 import net.sf.l2j.Config;
+import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.datatables.CharTemplateTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -28,7 +29,12 @@ import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.HennaInfo;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
+import net.sf.l2j.gameserver.network.serverpackets.TutorialCloseHtml;
+import net.sf.l2j.gameserver.network.serverpackets.TutorialShowHtml;
+import net.sf.l2j.gameserver.network.serverpackets.TutorialShowQuestionMark;
 import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
+import net.sf.l2j.gameserver.util.FloodProtectors;
+import net.sf.l2j.gameserver.util.FloodProtectors.Action;
 
 /**
  * Custom class allowing you to choose your class.<br>
@@ -113,6 +119,74 @@ public final class L2ClassMasterInstance extends L2NpcInstance
 		}
 		else
 			super.onBypassFeedback(player, command);
+	}
+	
+	public static final void onTutorialLink(L2PcInstance player, String request)
+	{
+		if (!Config.ALTERNATE_CLASS_MASTER || request == null || !request.startsWith("CO"))
+			return;
+		
+		if (!FloodProtectors.performAction(player.getClient(), Action.SERVER_BYPASS))
+			return;
+		
+		try
+		{
+			int val = Integer.parseInt(request.substring(2));
+			checkAndChangeClass(player, val);
+		}
+		catch (NumberFormatException e)
+		{
+		}
+		player.sendPacket(TutorialCloseHtml.STATIC_PACKET);
+	}
+	
+	public static final void onTutorialQuestionMark(L2PcInstance player, int number)
+	{
+		if (!Config.ALTERNATE_CLASS_MASTER || number != 1001)
+			return;
+		
+		showTutorialHtml(player);
+	}
+	
+	public static final void showQuestionMark(L2PcInstance player)
+	{
+		if (!Config.ALLOW_CLASS_MASTERS)
+			return;
+		
+		if (!Config.ALTERNATE_CLASS_MASTER)
+			return;
+		
+		final ClassId classId = player.getClassId();
+		if (getMinLevel(classId.level()) > player.getLevel())
+			return;
+		
+		if (!Config.CLASS_MASTER_SETTINGS.isAllowed(classId.level() + 1))
+		{
+			return;
+		}
+		
+		player.sendPacket(new TutorialShowQuestionMark(1001));
+	}
+ 	
+	private static final void showTutorialHtml(L2PcInstance player)
+	{
+		final ClassId currentClassId = player.getClassId();
+		if (getMinLevel(currentClassId.level()) > player.getLevel() && !Config.ALLOW_ENTIRE_TREE)
+			return;
+		
+		String msg = HtmCache.getInstance().getHtm("data/html/classmaster/tutorialtemplate.htm");
+		msg = msg.replaceAll("%name%", CharTemplateTable.getInstance().getClassNameById(currentClassId.getId()));
+		
+		final StringBuilder menu = new StringBuilder(100);
+		for (ClassId cid : ClassId.values())
+		{
+			if (validateClassId(currentClassId, cid))
+				StringUtil.append(menu, "<a action=\"link CO", String.valueOf(cid.getId()), "\">", CharTemplateTable.getInstance().getClassNameById(cid.getId()), "</a><br>");
+		}
+		
+		msg = msg.replaceAll("%menu%", menu.toString());
+		msg = msg.replace("%req_items%", getRequiredItems(currentClassId.level() + 1));
+		player.sendPacket(new TutorialShowHtml(msg));
 	}
 	
 	private static final void showHtmlMenu(L2PcInstance player, int objectId, int level)
@@ -263,6 +337,9 @@ public final class L2ClassMasterInstance extends L2NpcInstance
 		
 		player.sendPacket(new HennaInfo(player));
 		player.broadcastUserInfo();
+				
+		if (Config.CLASS_MASTER_SETTINGS.isAllowed(player.getClassId().level() + 1) && Config.ALTERNATE_CLASS_MASTER && (((player.getClassId().level() == 1) && (player.getLevel() >= 40)) || ((player.getClassId().level() == 2) && (player.getLevel() >= 76))))
+			showQuestionMark(player);
 		return true;
 	}
 	

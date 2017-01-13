@@ -449,6 +449,7 @@ public final class Config
 	public static boolean ALLOW_CLASS_MASTERS;
 	public static ClassMasterSettings CLASS_MASTER_SETTINGS;
 	public static boolean ALLOW_ENTIRE_TREE;
+	public static boolean ALTERNATE_CLASS_MASTER;
 	public static boolean ANNOUNCE_MAMMON_SPAWN;
 	public static boolean ALT_MOB_AGRO_IN_PEACEZONE;
 	public static boolean ALT_GAME_FREE_TELEPORT;
@@ -1808,6 +1809,7 @@ public final class Config
 		if (ALLOW_CLASS_MASTERS)
 			CLASS_MASTER_SETTINGS = new ClassMasterSettings(npcs.getProperty("ConfigClassMaster"));
 		
+		ALTERNATE_CLASS_MASTER = npcs.getProperty("AlternateClassMaster", false);
 		ALT_GAME_FREE_TELEPORT = npcs.getProperty("AltFreeTeleporting", false);
 		ANNOUNCE_MAMMON_SPAWN = npcs.getProperty("AnnounceMammonSpawn", true);
 		ALT_MOB_AGRO_IN_PEACEZONE = npcs.getProperty("AltMobAgroInPeaceZone", true);

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<zone name="primeval_isle" type="MultiZone" shape="NPoly" minZ="-9999" maxZ="9999">
+		<stat name="isNoRestart" val="true" />
+		<stat name="isNoStore" val="true" />
+		<stat name="isNoSummonFriend" val="true" />
+		<stat name="isFlagEnabled" val="true" />
+		<stat name="isReviveEnabled" val="true" />
+		<stat name="isHealEnabled" val="true" />
+		<stat name="revivePower" val="90" />
+		<stat name="reviveDelay" val="10" />
+		<stat name="reviveLocations" val="38096,-46976,899;38608,-47168,899;38752,-47792,899;38848,-48640,899;38272,-49008,899;38112,-49792,899;43408,-51120,-800;43536,-50416,-800;44368,-50592,-800;44000,-49952,-800;45072,-49936,-800;45824,-49056,-800;45632,-47968,-800;44864,-47824,-800;43744,-47920,-800;43792,-48928,-800" />
+		<stat name="restrictedItems" val="6611,6612,6613,6614,6615,6616,6617,6618,6619,6620,6621,6842" />
+		<stat name="restrictedSkills" val="395,396,1374,1375,1376" />
+		<node X="0" Y="-32770" />
+		<node X="0" Y="0" />
+		<node X="32765" Y="0" />
+		<node X="32765" Y="-32770" />
+	</zone>
+</list>

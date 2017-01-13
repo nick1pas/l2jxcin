@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.zone.ZoneId;
+import net.sf.l2j.gameserver.model.zone.type.L2MultiZone;
 
 /**
  * Updates and clears PvP flag of {@link L2PcInstance} after specified time.
@@ -72,8 +74,14 @@ public final class PvpFlagTaskManager implements Runnable
 		// Loop all players.
 		for (Map.Entry<L2PcInstance, Long> entry : _players.entrySet())
 		{
-			// Get time left and check.
 			final L2PcInstance player = entry.getKey();
+			if (player.isInsideZone(ZoneId.MULTI) && L2MultiZone.isFlagEnabled())
+			{
+				_players.remove(player);
+				continue;
+			}
+				
+			// Get time left and check.
 			final long timeLeft = entry.getValue();
 			
 			// Time is running out, clear PvP flag and remove from list.

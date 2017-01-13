@@ -47,6 +47,7 @@ import net.sf.l2j.gameserver.model.item.kind.Armor;
 import net.sf.l2j.gameserver.model.item.type.ArmorType;
 import net.sf.l2j.gameserver.model.item.type.WeaponType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
+import net.sf.l2j.gameserver.model.zone.type.L2MultiZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.skills.Env;
@@ -2200,7 +2201,10 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		// doors and siege flags cannot receive any effects
 		if (effected instanceof L2DoorInstance || effected instanceof L2SiegeFlagInstance)
 			return Collections.emptyList();
-		
+ 		
+		if ((effected instanceof L2PcInstance || effected instanceof L2PetInstance) && effected.isInsideZone(ZoneId.MULTI) && L2MultiZone.isRestrictedSkill(getId()))
+			return Collections.emptyList();
+	
 		if (effector != effected)
 		{
 			if (isOffensive() || isDebuff())

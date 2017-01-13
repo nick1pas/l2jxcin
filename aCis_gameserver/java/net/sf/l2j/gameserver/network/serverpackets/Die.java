@@ -24,6 +24,8 @@ import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
+import net.sf.l2j.gameserver.model.zone.ZoneId;
+import net.sf.l2j.gameserver.model.zone.type.L2MultiZone;
 
 public class Die extends L2GameServerPacket
 {
@@ -51,7 +53,7 @@ public class Die extends L2GameServerPacket
         		(TvTEvent.isStarted() && TvTEvent.isPlayerParticipant(_charObjId)) ||
         		(DMEvent.isStarted() && DMEvent.isPlayerParticipant(_charObjId)) ||
         		(LMEvent.isStarted() && LMEvent.isPlayerParticipant(_charObjId))
-        		)));
+        		)) || _activeChar.isInsideZone(ZoneId.MULTI) && L2MultiZone.isReviveEnabled());
 			
 		}
 		else if (cha instanceof L2Attackable)

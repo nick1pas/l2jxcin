@@ -1054,14 +1054,4 @@
 		<spawn X="18054" Y="170263" Z="-3451" isChaotic="true" />
 		<spawn X="17931" Y="170381" Z="-3451" isChaotic="true" />
 	</zone>
-	<zone type="TownZone" shape="NPoly" minZ="-4290" maxZ="-1290"><!-- Primeval Isle (Town Zone) -->
-		<stat name="townId" val="19" />
-		<node X="10408" Y="-27395" />
-		<node X="12065" Y="-25334" />
-		<node X="12223" Y="-23159" />
-		<node X="10424" Y="-22340" />
-		<node X="9566" Y="-23131" />
-		<node X="9290" Y="-24261" />
-		<spawn X="10468" Y="-24569" Z="-3645" />
-	</zone>
 </list>

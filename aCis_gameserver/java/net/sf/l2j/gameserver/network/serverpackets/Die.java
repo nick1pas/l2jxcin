@@ -21,9 +21,9 @@ import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.entity.Castle;
-import net.sf.l2j.gameserver.model.entity.DMEvent;
-import net.sf.l2j.gameserver.model.entity.LMEvent;
-import net.sf.l2j.gameserver.model.entity.TvTEvent;
+import net.sf.l2j.gameserver.model.entity.events.DMEvent;
+import net.sf.l2j.gameserver.model.entity.events.LMEvent;
+import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
 
 public class Die extends L2GameServerPacket
 {

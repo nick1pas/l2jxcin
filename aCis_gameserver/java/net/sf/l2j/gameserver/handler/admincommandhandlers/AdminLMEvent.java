@@ -7,9 +7,9 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.entity.LMEvent;
-import net.sf.l2j.gameserver.model.entity.LMEventTeleporter;
-import net.sf.l2j.gameserver.model.entity.LMManager;
+import net.sf.l2j.gameserver.model.entity.events.LMEvent;
+import net.sf.l2j.gameserver.model.entity.events.LMEventTeleporter;
+import net.sf.l2j.gameserver.model.entity.events.LMManager;
 
 /**
  * @author L0ngh0rn

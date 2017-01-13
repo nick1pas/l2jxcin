@@ -12,31 +12,30 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.sf.l2j.gameserver.model.entity;
+package net.sf.l2j.gameserver.model.entity.events;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 
 /**
  * @author L0ngh0rn
  *
  */
-public class LMPlayer
+public class DMPlayer
 {
 	private L2PcInstance _player;
 	private short _points;
-	private short _credits;
+	private short _death;
 	private String _hexCode;
 	
 	/**
 	 * @param player
 	 * @param hexCode 
 	 */
-	public LMPlayer(L2PcInstance player, String hexCode)
+	public DMPlayer(L2PcInstance player, String hexCode)
 	{
 		_player = player;
 		_points = 0;
-		_credits = Config.LM_EVENT_PLAYER_CREDITS;
+		_death = 0;
 		_hexCode = hexCode;
 	}
 
@@ -57,30 +56,6 @@ public class LMPlayer
 	}
 
 	/**
-	 * @return the _credits
-	 */
-	public short getCredits()
-	{
-		return _credits;
-	}
-
-	/**
-	 * @param credits the _credits to set
-	 */
-	public void setCredits(short credits)
-	{
-		_credits = credits;
-	}
-	
-	/**
-	 * Decreases the credits of the player<br>
-	 */
-	public void decreaseCredits()
-	{
-		--_credits;
-	}
-	
-	/**
 	 * @return the _points
 	 */
 	public short getPoints()
@@ -97,13 +72,37 @@ public class LMPlayer
 	}
 	
 	/**
-	 * Decreases the credits of the player<br>
+	 * Increases the points of the player<br>
 	 */
 	public void increasePoints()
 	{
 		++_points;
 	}
+
+	/**
+	 * @return the _death
+	 */
+	public short getDeath()
+	{
+		return _death;
+	}
+
+	/**
+	 * @param death the _death to set
+	 */
+	public void setDeath(short death)
+	{
+		_death = death;
+	}
 	
+	/**
+	 * Increases the death of the player<br>
+	 */
+	public void increaseDeath()
+	{
+		++_death;
+	}
+
 	/**
 	 * @return the _hexCode
 	 */
@@ -111,4 +110,5 @@ public class LMPlayer
 	{
 		return _hexCode;
 	}
+	
 }

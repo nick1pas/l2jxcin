@@ -22,9 +22,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.entity.DMEvent;
-import net.sf.l2j.gameserver.model.entity.LMEvent;
-import net.sf.l2j.gameserver.model.entity.TvTEvent;
+import net.sf.l2j.gameserver.model.entity.events.DMEvent;
+import net.sf.l2j.gameserver.model.entity.events.LMEvent;
+import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;

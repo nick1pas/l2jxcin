@@ -26,9 +26,9 @@ import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
-import net.sf.l2j.gameserver.model.entity.DMEvent;
-import net.sf.l2j.gameserver.model.entity.LMEvent;
-import net.sf.l2j.gameserver.model.entity.TvTEvent;
+import net.sf.l2j.gameserver.model.entity.events.DMEvent;
+import net.sf.l2j.gameserver.model.entity.events.LMEvent;
+import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
 
 public final class RequestRestartPoint extends L2GameClientPacket
 {

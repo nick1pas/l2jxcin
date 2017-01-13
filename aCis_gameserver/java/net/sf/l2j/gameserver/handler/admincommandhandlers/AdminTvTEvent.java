@@ -18,9 +18,9 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.entity.TvTEvent;
-import net.sf.l2j.gameserver.model.entity.TvTEventTeleporter;
-import net.sf.l2j.gameserver.model.entity.TvTManager;
+import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
+import net.sf.l2j.gameserver.model.entity.events.TvTEventTeleporter;
+import net.sf.l2j.gameserver.model.entity.events.TvTManager;
 
 /**
  * @author FBIagent

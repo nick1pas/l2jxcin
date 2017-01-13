@@ -15,7 +15,7 @@
 package net.sf.l2j.gameserver.skills.conditions;
 
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.entity.TvTEvent;
+import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
 import net.sf.l2j.gameserver.skills.Env;
 
 /**

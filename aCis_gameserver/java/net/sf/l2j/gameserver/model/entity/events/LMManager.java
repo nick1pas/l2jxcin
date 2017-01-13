@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.sf.l2j.gameserver.model.entity;
+package net.sf.l2j.gameserver.model.entity.events;
 
 import java.util.Calendar;
 import java.util.concurrent.ScheduledFuture;
@@ -27,26 +27,26 @@ import net.sf.l2j.gameserver.util.Broadcast;
  * @author L0ngh0rn
  *
  */
-public class DMManager
+public class LMManager
 {
-	protected static final Logger _log = Logger.getLogger(DMManager.class.getName());
+	protected static final Logger _log = Logger.getLogger(LMManager.class.getName());
 	
-	private DMStartTask _task;
+	private LMStartTask _task;
 	
-	private DMManager()
+	private LMManager()
 	{
-		if (Config.DM_EVENT_ENABLED)
-		{	
+		if (Config.LM_EVENT_ENABLED)
+		{
+			LMEvent.init();
+			
 			this.scheduleEventStart();
-			_log.info("DMEventEngine[DMManager.DMManager()]: Started.");
+			_log.info("LMEventEngine[LMManager.LMManager()]: Started.");
 		}
 		else
-		{
-			_log.info("DMEventEngine[DMManager.DMManager()]: Engine is disabled.");
-		}
+			_log.info("LMEventEngine[LMManager.LMManager()]: Engine is disabled.");
 	}
 	
-	public static DMManager getInstance()
+	public static LMManager getInstance()
 	{
 		return SingletonHolder._instance;
 	}
@@ -59,7 +59,7 @@ public class DMManager
 			Calendar currentTime = Calendar.getInstance();
 			Calendar nextStartTime = null;
 			Calendar testStartTime = null;
-			for (String timeOfDay : Config.DM_EVENT_INTERVAL)
+			for (String timeOfDay : Config.LM_EVENT_INTERVAL)
 			{
 				// Creating a Calendar object from the specified interval value
 				testStartTime = Calendar.getInstance();
@@ -74,60 +74,59 @@ public class DMManager
 				if (nextStartTime == null || testStartTime.getTimeInMillis() < nextStartTime.getTimeInMillis())
 					nextStartTime = testStartTime;
 			}
-			_task = new DMStartTask(nextStartTime.getTimeInMillis());
+			_task = new LMStartTask(nextStartTime.getTimeInMillis());
 			ThreadPool.execute(_task);
 		}
 		catch (Exception e)
 		{
-			_log.warning("DMEventEngine[DMManager.scheduleEventStart()]: Error figuring out a start time. Check DMEventInterval in config file.");
+			_log.warning("LMEventEngine[LMManager.scheduleEventStart()]: Error figuring out a start time. Check LMEventInterval in config file.");
 		}
 	}
 	
 	public void startReg()
 	{
-		if (!DMEvent.startParticipation())
+		if (!LMEvent.startParticipation())
 		{
-			Broadcast.announceToOnlinePlayers("DM Event: Event was cancelled.");
-			_log.warning("DMEventEngine[DMManager.run()]: Error spawning event npc for participation.");
+			Broadcast.announceToOnlinePlayers("LM Event: Event was cancelled.");
+			_log.warning("LMEventEngine[LMManager.run()]: Error spawning event npc for participation.");
 			
 			this.scheduleEventStart();
 		}
 		else
 		{
-			Broadcast.announceToOnlinePlayers("DM Event: Registration opened for " + Config.DM_EVENT_PARTICIPATION_TIME
+			Broadcast.announceToOnlinePlayers("LM Event: Registration opened for " + Config.LM_EVENT_PARTICIPATION_TIME
 					+ " minute(s).");
 								
 			// schedule registration end
-			_task.setStartTime(System.currentTimeMillis() + 60000L * Config.DM_EVENT_PARTICIPATION_TIME);
+			_task.setStartTime(System.currentTimeMillis() + 60000L * Config.LM_EVENT_PARTICIPATION_TIME);
 			ThreadPool.execute(_task);
 		}
 	}
 	
 	public void startEvent()
 	{
-		if (!DMEvent.startFight())
+		if (!LMEvent.startFight())
 		{
-			Broadcast.announceToOnlinePlayers("DM Event: Event cancelled due to lack of Participation.");
-			_log.info("DMEventEngine[DMManager.run()]: Lack of registration, abort event.");
+			Broadcast.announceToOnlinePlayers("LM Event: Event cancelled due to lack of Participation.");
+			_log.info("LMEventEngine[LMManager.run()]: Lack of registration, abort event.");
 			
 			this.scheduleEventStart();
 		}
 		else
 		{
-			DMEvent.sysMsgToAllParticipants("DM Event: Teleporting participants to an arena in "
-					+ Config.DM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
-			_task.setStartTime(System.currentTimeMillis() + 60000L * Config.DM_EVENT_RUNNING_TIME);
+			LMEvent.sysMsgToAllParticipants("LM Event: Teleporting participants to an arena in "
+					+ Config.LM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
+			_task.setStartTime(System.currentTimeMillis() + 60000L * Config.LM_EVENT_RUNNING_TIME);
 			ThreadPool.execute(_task);
 		}
 	}
 	
 	public void endEvent()
 	{
-		Broadcast.announceToOnlinePlayers(DMEvent.calculateRewards());
-		DMEvent.sysMsgToAllParticipants("DM Event: Teleporting back to the registration npc in "
-				+ Config.DM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
-		DMEvent.stopFight();
-		
+		Broadcast.announceToOnlinePlayers(LMEvent.calculateRewards());
+		LMEvent.sysMsgToAllParticipants("LM Event: Teleporting back to the registration npc in "
+				+ Config.LM_EVENT_START_LEAVE_TELEPORT_DELAY + " second(s).");
+		LMEvent.stopFight();
 		this.scheduleEventStart();
 	}
 	
@@ -140,12 +139,12 @@ public class DMManager
 		}
 	}	
 	
-	class DMStartTask implements Runnable
+	class LMStartTask implements Runnable
 	{
 		private long _startTime;
 		public ScheduledFuture<?> nextRun;
 		
-		public DMStartTask(long startTime)
+		public LMStartTask(long startTime)
 		{
 			_startTime = startTime;
 		}
@@ -201,17 +200,17 @@ public class DMManager
 			else
 			{
 				// start
-				if (DMEvent.isInactive())
+				if (LMEvent.isInactive())
 				{
-					DMManager.this.startReg();
+					LMManager.this.startReg();
 				}
-				else if (DMEvent.isParticipating())
+				else if (LMEvent.isParticipating())
 				{
-					DMManager.this.startEvent();
+					LMManager.this.startEvent();
 				}
 				else
 				{
-					DMManager.this.endEvent();
+					LMManager.this.endEvent();
 				}
 			}
 			
@@ -225,35 +224,35 @@ public class DMManager
 		{
 			if (time >= 3600 && time % 3600 == 0)
 			{
-				if (DMEvent.isParticipating())
+				if (LMEvent.isParticipating())
 				{
-					Broadcast.announceToOnlinePlayers("DM Event: " + (time / 60 / 60) + " hour(s) until registration is closed!");
+					Broadcast.announceToOnlinePlayers("LM Event: " + (time / 60 / 60) + " hour(s) until registration is closed!");
 				}
-				else if (DMEvent.isStarted())
+				else if (LMEvent.isStarted())
 				{
-					DMEvent.sysMsgToAllParticipants("DM Event: " + (time / 60 / 60) + " hour(s) until event is finished!");
+					LMEvent.sysMsgToAllParticipants("LM Event: " + (time / 60 / 60) + " hour(s) until event is finished!");
 				}
 			}
 			else if (time >= 60)
 			{
-				if (DMEvent.isParticipating())
+				if (LMEvent.isParticipating())
 				{
-					Broadcast.announceToOnlinePlayers("DM Event: " + (time / 60) + " minute(s) until registration is closed!");
+					Broadcast.announceToOnlinePlayers("LM Event: " + (time / 60) + " minute(s) until registration is closed!");
 				}
-				else if (DMEvent.isStarted())
+				else if (LMEvent.isStarted())
 				{
-					DMEvent.sysMsgToAllParticipants("DM Event: " + (time / 60) + " minute(s) until the event is finished!");
+					LMEvent.sysMsgToAllParticipants("LM Event: " + (time / 60) + " minute(s) until the event is finished!");
 				}
 			}
 			else
 			{
-				if (DMEvent.isParticipating())
+				if (LMEvent.isParticipating())
 				{
-					Broadcast.announceToOnlinePlayers("DM Event: " + time + " second(s) until registration is closed!");
+					Broadcast.announceToOnlinePlayers("LM Event: " + time + " second(s) until registration is closed!");
 				}
-				else if (DMEvent.isStarted())
+				else if (LMEvent.isStarted())
 				{
-					DMEvent.sysMsgToAllParticipants("DM Event: " + time + " second(s) until the event is finished!");
+					LMEvent.sysMsgToAllParticipants("LM Event: " + time + " second(s) until the event is finished!");
 				}
 			}
 		}
@@ -262,6 +261,6 @@ public class DMManager
 	@SuppressWarnings("synthetic-access")
 	private static class SingletonHolder
 	{
-		protected static final DMManager _instance = new DMManager();
+		protected static final LMManager _instance = new LMManager();
 	}
 }

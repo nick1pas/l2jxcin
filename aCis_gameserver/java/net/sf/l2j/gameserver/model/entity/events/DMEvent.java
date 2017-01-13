@@ -71,19 +71,9 @@ public class DMEvent
 	}
 	
 	protected static final Logger _log = Logger.getLogger(DMEvent.class.getName());
-	/** html path **/
 	private static final String htmlPath = "data/html/mods/DMEvent/";
-	/**
-	 * The state of the DMEvent<br>
-	 */
 	private static EventState _state = EventState.INACTIVE;
-	/**
-	 * the npc instance of the participation npc<br>
-	 */
 	private static L2Npc _lastNpcSpawn = null;
-	
-	// private static List<DMPlayer> _dmPlayer = new ArrayList<DMPlayer>();
-	
 	private static Map<Integer, DMPlayer> _dmPlayer = new HashMap<>();
 	
 	public DMEvent()

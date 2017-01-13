@@ -817,7 +817,40 @@ public class TvTEvent
 			killerTeam.increasePoints();
 			
 			CreatureSay cs = new CreatureSay(killerPlayerInstance.getObjectId(), Say2.TELL, killerPlayerInstance.getName(), "I have killed " + killedPlayerInstance.getName() + "!");
-			
+
+			SystemMessage sysmsg = null;
+			for (int[] reward : Config.TVT_EVENT_REWARDS_KILL)
+			{	
+				if (ItemTable.getInstance().createDummyItem(reward[0]).isStackable())
+				{
+					killerPlayerInstance.addItem("TvT Kill", reward[0], reward[1], killedPlayerInstance, true);
+					
+					if (reward[1] > 1)
+					{
+						sysmsg = SystemMessage.getSystemMessage(SystemMessageId.EARNED_S2_S1_S);
+						sysmsg.addItemName(reward[0]);
+						sysmsg.addItemNumber(reward[1]);
+					}
+					else
+					{
+						sysmsg = SystemMessage.getSystemMessage(SystemMessageId.EARNED_ITEM_S1);
+						sysmsg.addItemName(reward[0]);
+					}
+					
+					killerPlayerInstance.sendPacket(sysmsg);
+				}
+				else
+				{
+					for (int i = 0; i < reward[1]; ++i)
+					{
+						killerPlayerInstance.addItem("TvT Kill", reward[0], reward[1], killedPlayerInstance, true);
+						sysmsg = SystemMessage.getSystemMessage(SystemMessageId.EARNED_ITEM_S1);
+						sysmsg.addItemName(reward[0]);
+						killerPlayerInstance.sendPacket(sysmsg);
+					}
+				}
+			}
+
 			for (L2PcInstance playerInstance : _teams[killerTeamId].getParticipatedPlayers().values())
 			{
 				if (playerInstance != null)

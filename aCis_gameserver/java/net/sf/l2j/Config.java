@@ -95,6 +95,13 @@ public final class Config
 	public static Map<Integer, Integer> LIST_AIO_ITEMS;
 	public static String AIO_SKILLS;
 	public static Map<Integer, Integer> LIST_AIO_SKILLS;
+	/** Clan Manager */
+	public static int CLAN_MANAGER_ITEM_ID;
+	public static int CLAN_MANAGER_LEVEL_UP_COUNT;
+	public static int CLAN_MANAGER_REPUTATION_COUNT;
+	public static int CLAN_MANAGER_CLAN_SKILLS_COUNT;
+	public static int CLAN_MANAGER_CLAN_LEVEL_REWARD;
+	public static int CLAN_MANAGER_CLAN_REPUTATION_REWARD;
 	// --------------------------------------------------
 	// Clans settings
 	// --------------------------------------------------
@@ -283,6 +290,7 @@ public final class Config
 	public static String TVT_EVENT_TEAM_2_NAME;
 	public static int[] TVT_EVENT_TEAM_2_COORDINATES = new int[3];
 	public static List<int[]> TVT_EVENT_REWARDS;
+	public static List<int[]> TVT_EVENT_REWARDS_KILL;
 	public static boolean TVT_EVENT_TARGET_TEAM_MEMBERS_ALLOWED;
 	public static boolean TVT_EVENT_SCROLL_ALLOWED;
 	public static boolean TVT_EVENT_POTIONS_ALLOWED;
@@ -941,6 +949,12 @@ public final class Config
 			int skillLv = Integer.parseInt(valSplit[1]);
 			LIST_AIO_SKILLS.put(skillId, skillLv);
 		}		
+		CLAN_MANAGER_ITEM_ID = custom.getProperty("ClanManagerItemId", 57);
+		CLAN_MANAGER_LEVEL_UP_COUNT = custom.getProperty("ClanManagerLevelUpCount", 10000);
+		CLAN_MANAGER_REPUTATION_COUNT = custom.getProperty("ClanManagerReputationCount", 100000);
+		CLAN_MANAGER_CLAN_SKILLS_COUNT = custom.getProperty("ClanManagerClanSkillsCouunt", 100000000);
+		CLAN_MANAGER_CLAN_LEVEL_REWARD = custom.getProperty("ClanManagerClanLevelReward", 1);
+		CLAN_MANAGER_CLAN_REPUTATION_REWARD = custom.getProperty("ClanManagerClanReputationReward", 1000);
 	}
 	/**
 	 * Loads clan and clan hall settings.
@@ -1136,6 +1150,7 @@ public final class Config
 			}
 			else
 			{
+				TVT_EVENT_REWARDS_KILL = new ArrayList<>();
 				TVT_EVENT_REWARDS = new ArrayList<>();
 				TVT_DOORS_IDS_TO_OPEN = new ArrayList<>();
 				TVT_DOORS_IDS_TO_CLOSE = new ArrayList<>();
@@ -1209,7 +1224,26 @@ public final class Config
 								}
 							}
 						}
-						
+						propertySplit = events_custom.getProperty("TvTEventRewardKill", "57,2").split(";");
+						for (String reward : propertySplit)
+						{
+							String[] rewardSplit = reward.split(",");
+							if (rewardSplit.length != 2)
+								_log.warning(StringUtil.concat("TvTEventEngine[Config.load()]: invalid config property -> TvTEventRewardKill \"", reward, "\""));
+							else
+							{
+								try
+								{
+									TVT_EVENT_REWARDS_KILL.add(new int[]{Integer.parseInt(rewardSplit[0]), Integer.parseInt(rewardSplit[1])});
+								}
+								catch (NumberFormatException nfe)
+								{
+									if (!reward.isEmpty())
+										_log.warning(StringUtil.concat("TvTEventEngine[Config.load()]: invalid config property -> TvTEventRewardKill \"", reward, "\""));
+								}
+							}
+						}
+
 						TVT_EVENT_TARGET_TEAM_MEMBERS_ALLOWED = events_custom.getProperty("TvTEventTargetTeamMembersAllowed", true);
 						TVT_EVENT_SCROLL_ALLOWED = events_custom.getProperty("TvTEventScrollsAllowed", false);
 						TVT_EVENT_POTIONS_ALLOWED = events_custom.getProperty("TvTEventPotionsAllowed", false);

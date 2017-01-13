@@ -85,13 +85,6 @@ public class LMEvent
 	}
 	
 	/**
-	 * LM initializing<br>
-	 */
-	public static void init()
-	{
-	}
-	
-	/**
 	 * Sets the LMEvent state<br>
 	 * <br>
 	 * @param state as EventState<br>

@@ -16,6 +16,7 @@ package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.commons.random.Rnd;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.instancemanager.RaidBossPointsManager;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -23,6 +24,7 @@ import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
+import net.sf.l2j.gameserver.util.Broadcast;
 
 /**
  * This class manages all Grand Bosses.
@@ -74,6 +76,9 @@ public final class L2GrandBossInstance extends L2MonsterInstance
 				if (player.isNoble())
 					Hero.getInstance().setRBkilled(player.getObjectId(), getNpcId());
 			}
+						
+			if (Config.ENABLE_RAID_BOSS_DEFEATED_MSG)
+				Broadcast.announceToOnlinePlayers(player.getClan() != null ? Config.RAID_BOSS_DEFEATED_BY_CLAN_MEMBER_MSG.replace("%raidboss%", getName()).replace("%player%", killer.getName()).replace("%clan%", player.getClan().getName()) : Config.RAID_BOSS_DEFEATED_BY_PLAYER_MSG.replace("%raidboss%", getName()).replace("%player%", killer.getName()));
 		}
 		
 		return true;

@@ -61,6 +61,8 @@ import net.sf.l2j.gameserver.datatables.HennaTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
 import net.sf.l2j.gameserver.datatables.NpcTable;
+import net.sf.l2j.gameserver.datatables.PvpColorTable;
+import net.sf.l2j.gameserver.datatables.PvpColorTable.PvpColor;
 import net.sf.l2j.gameserver.datatables.RecipeTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
@@ -1980,6 +1982,8 @@ public final class L2PcInstance extends L2Playable
 		
 		// Add Death Penalty Buff Level
 		restoreDeathPenaltyBuffLevel();
+
+		pvpColor();
 	}
 	
 	/**
@@ -4193,6 +4197,8 @@ public final class L2PcInstance extends L2Playable
 			{
 				// Add PvP point to attacker.
 				setPvpKills(getPvpKills() + 1);
+				
+				pvpColor();
 				
 				// Send UserInfo packet to attacker with its Karma and PK Counter
 				sendPacket(new UserInfo(this));
@@ -8571,6 +8577,8 @@ public final class L2PcInstance extends L2Playable
 	
 		revalidateZone(true);
 		notifyFriends(true);
+		
+		pvpColor();
 	}
 	
 	public long getLastAccess()
@@ -10761,4 +10769,24 @@ public final class L2PcInstance extends L2Playable
 	{
 		_hideInfo = hideInfo;
 	}
+		
+	private void pvpColor()
+	{
+		if (!Config.ENABLE_PVP_COLOR)
+			return;
+		
+		for (PvpColor pvpColor : PvpColorTable.getInstance().getPvpColorTable())
+		{
+			if (getPvpKills() >= pvpColor.getPvpAmount())
+			{
+				getAppearance().setNameColor(pvpColor.getNameColor());
+				getAppearance().setTitleColor(pvpColor.getTitleColor());
+				broadcastUserInfo();
+				
+				final L2Skill skill = SkillTable.getInstance().getInfo(pvpColor.getSkillId(), pvpColor.getSkillLv());
+				if (skill != null)
+					addSkill(skill, false);
+			}
+		}	
+	}	
 }

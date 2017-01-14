@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<list>
+	<!-- 
+		ENG:
+			No limit for templates.
+			Listed values below are used for examples.
+			If you want to edit or add new templates, do it by copying a line and replacing values.
+		
+		PT-BR:
+			Sem limites de modelos.
+			Valores listados abaixo sao usados como exemplos.
+			Se voce quizer editar ou adicionar novos modelos, faca isso copiando uma linha e substitua os valores.
+	 -->
+	<template pvpAmount="100" nameColor="FF9900" titleColor="FFFF77" skillId="3206" skillLv="10"/>
+	<template pvpAmount="200" nameColor="FF99FF" titleColor="FFFF77" skillId="3156" skillLv="1"/>
+	<template pvpAmount="300" nameColor="00FF00" titleColor="FFFF77" skillId="3157" skillLv="1"/>
+	<template pvpAmount="400" nameColor="00FFFF" titleColor="FFFF77" skillId="3147" skillLv="1"/>
+	<template pvpAmount="500" nameColor="FFFF00" titleColor="FFFF77" skillId="3158" skillLv="1"/>
+</list>

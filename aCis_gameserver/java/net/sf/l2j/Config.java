@@ -102,6 +102,27 @@ public final class Config
 	public static int CLAN_MANAGER_CLAN_SKILLS_COUNT;
 	public static int CLAN_MANAGER_CLAN_LEVEL_REWARD;
 	public static int CLAN_MANAGER_CLAN_REPUTATION_REWARD;
+	/** PvP Color System */
+	public static boolean ENABLE_PVP_COLOR;
+	/** Trade/Shout voice */
+	public static enum ShoutRestrictionType
+	{
+		PVP, LEVEL, NONE
+	}
+	
+	public static enum TradeRestrictionType
+	{
+		PVP, LEVEL, NONE
+	}
+	
+	public static ShoutRestrictionType SHOUT_RESTRICTION_TYPE;
+	public static TradeRestrictionType TRADE_RESTRICTION_TYPE;
+	public static int SHOUT_RESTRICTION_VALUE;
+	public static int TRADE_RESTRICTION_VALUE;
+	/** Raid Boss Defeated Message  */
+	public static boolean ENABLE_RAID_BOSS_DEFEATED_MSG;
+	public static String RAID_BOSS_DEFEATED_BY_CLAN_MEMBER_MSG;
+	public static String RAID_BOSS_DEFEATED_BY_PLAYER_MSG;
 	// --------------------------------------------------
 	// Clans settings
 	// --------------------------------------------------
@@ -956,6 +977,15 @@ public final class Config
 		CLAN_MANAGER_CLAN_SKILLS_COUNT = custom.getProperty("ClanManagerClanSkillsCouunt", 100000000);
 		CLAN_MANAGER_CLAN_LEVEL_REWARD = custom.getProperty("ClanManagerClanLevelReward", 1);
 		CLAN_MANAGER_CLAN_REPUTATION_REWARD = custom.getProperty("ClanManagerClanReputationReward", 1000);
+		ENABLE_PVP_COLOR = custom.getProperty("EnablePvpColor", false);
+		SHOUT_RESTRICTION_TYPE = ShoutRestrictionType.valueOf(custom.getProperty("ShoutRestrictionType", "NONE"));
+		TRADE_RESTRICTION_TYPE = TradeRestrictionType.valueOf(custom.getProperty("TradeRestrictionType", "NONE"));
+		SHOUT_RESTRICTION_VALUE = custom.getProperty("ShoutRestrictionValue", 0);
+		TRADE_RESTRICTION_VALUE = custom.getProperty("TradeRestrictionValue", 0);
+		ENABLE_RAID_BOSS_DEFEATED_MSG = custom.getProperty("EnableRaidBossDefeatedMsg", false);
+		RAID_BOSS_DEFEATED_BY_CLAN_MEMBER_MSG = custom.getProperty("RaidBossDefeatedByClanMemberMsg", "Raid Boss %raidboss% has been defeated by %player% of clan %clan%.");
+		RAID_BOSS_DEFEATED_BY_PLAYER_MSG = custom.getProperty("RaidBossDefeatedByPlayerMsg", "Raid Boss %raidboss% has been defeated by %player%.");
+			
 	}
 	/**
 	 * Loads clan and clan hall settings.

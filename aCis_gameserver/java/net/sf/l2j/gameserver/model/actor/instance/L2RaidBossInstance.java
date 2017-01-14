@@ -30,6 +30,7 @@ import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
+import net.sf.l2j.gameserver.util.Broadcast;
 
 /**
  * This class manages all RaidBoss. In a group mob, there are one master called RaidBoss and several slaves called Minions.
@@ -97,6 +98,9 @@ public class L2RaidBossInstance extends L2MonsterInstance
 					if (player.isNoble())
 						Hero.getInstance().setRBkilled(player.getObjectId(), getNpcId());
 				}
+								
+				if (Config.ENABLE_RAID_BOSS_DEFEATED_MSG)
+					Broadcast.announceToOnlinePlayers(player.getClan() != null ? Config.RAID_BOSS_DEFEATED_BY_CLAN_MEMBER_MSG.replace("%raidboss%", getName()).replace("%player%", killer.getName()).replace("%clan%", player.getClan().getName()) : Config.RAID_BOSS_DEFEATED_BY_PLAYER_MSG.replace("%raidboss%", getName()).replace("%player%", killer.getName()));
 			}
 		}
 		

@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.gameserver.handler.chathandlers;
 
+import net.sf.l2j.Config;
+import net.sf.l2j.Config.ShoutRestrictionType;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.handler.IChatHandler;
 import net.sf.l2j.gameserver.model.BlockList;
@@ -33,6 +35,19 @@ public class ChatShout implements IChatHandler
 	@Override
 	public void handleChat(int type, L2PcInstance activeChar, String target, String text)
 	{
+		int restrictionValue = Config.SHOUT_RESTRICTION_VALUE;
+		if (Config.SHOUT_RESTRICTION_TYPE == ShoutRestrictionType.PVP && activeChar.getPvpKills() < restrictionValue)
+		{
+			activeChar.sendMessage("You will gain shout voice at " + restrictionValue + " PVPs.");
+			return;
+		}
+		
+		if (Config.SHOUT_RESTRICTION_TYPE == ShoutRestrictionType.LEVEL && activeChar.getLevel() < restrictionValue)
+		{
+			activeChar.sendMessage("You will gain shout voice at level " + restrictionValue + ".");
+			return;
+		}
+		
 		if (!FloodProtectors.performAction(activeChar.getClient(), Action.GLOBAL_CHAT))
 			return;
 		

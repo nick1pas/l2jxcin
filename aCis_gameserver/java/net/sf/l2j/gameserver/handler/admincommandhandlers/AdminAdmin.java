@@ -30,6 +30,7 @@ import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.MultisellData;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.NpcWalkerRoutesTable;
+import net.sf.l2j.gameserver.datatables.PvpColorTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.TeleportLocationTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
@@ -260,11 +261,16 @@ public class AdminAdmin implements IAdminCommandHandler
 						ZoneManager.getInstance().reload();
 						activeChar.sendMessage("Zones have been reloaded.");
 					}
+					else if (type.startsWith("pvp"))
+					{
+						PvpColorTable.getInstance().reload();
+						activeChar.sendMessage("Pvp's colors have been reloaded.");
+					}
 					else
 					{
 						activeChar.sendMessage("Usage : //reload <acar|aio|announcement|config|crest|door>");
 						activeChar.sendMessage("Usage : //reload <htm|item|multisell|npc|npcwalker>");
-						activeChar.sendMessage("Usage : //reload <skill|teleport|zone>");
+						activeChar.sendMessage("Usage : //reload <pvp|skill|teleport|zone>");
 					}
 				}
 				while (st.hasMoreTokens());

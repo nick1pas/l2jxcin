@@ -22,8 +22,9 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.commons.random.Rnd;
+
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.instancemanager.RaidBossInfoManager;

@@ -58,6 +58,7 @@ import net.sf.l2j.gameserver.datatables.MultisellData;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.NpcWalkerRoutesTable;
 import net.sf.l2j.gameserver.datatables.OfflineTradersTable;
+import net.sf.l2j.gameserver.datatables.PvpColorTable;
 import net.sf.l2j.gameserver.datatables.RecipeTable;
 import net.sf.l2j.gameserver.datatables.ServerMemo;
 import net.sf.l2j.gameserver.datatables.SkillTable;
@@ -269,7 +270,10 @@ public class GameServer
 		
 		if (Config.CKM_ENABLED)
 			CharacterKillingManager.getInstance().init();
-		
+ 		
+		if (Config.ENABLE_PVP_COLOR)
+			PvpColorTable.getInstance();
+	
 		StringUtil.printSection("Four Sepulchers");
 		FourSepulchersManager.getInstance().init();
 		

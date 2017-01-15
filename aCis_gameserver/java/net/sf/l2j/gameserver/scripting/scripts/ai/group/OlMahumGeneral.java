@@ -32,7 +32,7 @@ public class OlMahumGeneral extends L2AttackableAIScript
 	private static final int NPC = 20438;
 	private static boolean _FirstAttacked;
 	
-	public OlMahumGeneral(int questId, String name, String descr)
+	public OlMahumGeneral()
 	{
 		super("ai/group");
 		

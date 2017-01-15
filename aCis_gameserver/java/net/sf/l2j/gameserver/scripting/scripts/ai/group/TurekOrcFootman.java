@@ -32,7 +32,7 @@ public class TurekOrcFootman extends L2AttackableAIScript
 	private static final int NPC = 20499;
 	private static boolean _FirstAttacked;
 	
-	public TurekOrcFootman(int questId, String name, String descr)
+	public TurekOrcFootman()
 	{
 		super("ai/group");
 		

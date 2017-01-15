@@ -41,7 +41,7 @@ public class SummonOnAttack extends L2AttackableAIScript
 		20973
 	};
 	
-	public SummonOnAttack(int questId, String name, String descr)
+	public SummonOnAttack()
 	{
 		super("ai/group");
 		for (int id : mobs)

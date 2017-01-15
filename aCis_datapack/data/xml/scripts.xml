@@ -360,7 +360,7 @@
 	<script path="scripts.ai.group.HotSpringDisease"/>
 	<script path="scripts.ai.group.KarulBugBear"/>
 	<script path="scripts.ai.group.Monastery"/>
-	<script path="scripts.ai.group.OIMahumGeneral"/>
+	<script path="scripts.ai.group.OlMahumGeneral"/>
 	<script path="scripts.ai.group.PlainsOfDion"/>
 	<script path="scripts.ai.group.PolymorphingAngel"/>
 	<script path="scripts.ai.group.PolymorphingOnAttack"/>

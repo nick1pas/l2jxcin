@@ -570,6 +570,8 @@ public final class Config
 	public static int FREIGHT_SLOTS;
 	public static boolean ALT_GAME_FREIGHTS;
 	public static int ALT_GAME_FREIGHT_PRICE;
+	public static int STARTING_ADENA;
+	public static int STARTING_AA;
 	
 	/** Augmentations */
 	public static int AUGMENTATION_NG_SKILL_CHANCE;
@@ -1953,7 +1955,9 @@ public final class Config
 		FREIGHT_SLOTS = players.getProperty("MaximumFreightSlots", 20);
 		ALT_GAME_FREIGHTS = players.getProperty("AltGameFreights", false);
 		ALT_GAME_FREIGHT_PRICE = players.getProperty("AltGameFreightPrice", 1000);
-
+		STARTING_ADENA = players.getProperty("StartingAdena", 100);
+		STARTING_AA = players.getProperty("StartingAncientAdena", 0);
+		
 		AUGMENTATION_NG_SKILL_CHANCE = players.getProperty("AugmentationNGSkillChance", 15);
 		AUGMENTATION_NG_GLOW_CHANCE = players.getProperty("AugmentationNGGlowChance", 0);
 		AUGMENTATION_MID_SKILL_CHANCE = players.getProperty("AugmentationMidSkillChance", 30);

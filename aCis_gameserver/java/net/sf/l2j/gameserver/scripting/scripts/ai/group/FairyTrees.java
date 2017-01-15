@@ -19,6 +19,7 @@
 package net.sf.l2j.gameserver.scripting.scripts.ai.group;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.l2j.commons.random.Rnd;
 
@@ -34,7 +35,7 @@ import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
 public class FairyTrees extends L2AttackableAIScript
 {
-	private ArrayList<mobs> _mobs = new ArrayList<>();
+	private List<mobs> _mobs = new ArrayList<>();
 	
 	private static final int[] MOBS =
 	{
@@ -59,7 +60,7 @@ public class FairyTrees extends L2AttackableAIScript
 		}
 	}
 	
-	public FairyTrees(int questId, String name, String descr)
+	public FairyTrees()
 	{
 		super("ai/group");
 		

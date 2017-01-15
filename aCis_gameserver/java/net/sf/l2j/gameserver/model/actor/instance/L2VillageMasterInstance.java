@@ -595,6 +595,9 @@ public class L2VillageMasterInstance extends L2NpcInstance
 	 */
 	public final boolean checkVillageMaster(int classId)
 	{
+		if (Config.ALT_GAME_SUBCLASS_EVERYWHERE)
+			return true;
+		
 		return checkVillageMaster(ClassId.VALUES[classId]);
 	}
 	

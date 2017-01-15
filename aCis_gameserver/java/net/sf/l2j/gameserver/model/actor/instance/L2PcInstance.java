@@ -542,6 +542,7 @@ public final class L2PcInstance extends L2Playable
 	private boolean _messageRefusal; // message refusal mode
 	private boolean _tradeRefusal; // Trade refusal
 	private boolean _exchangeRefusal; // Exchange refusal
+	private boolean _isPartyInRefuse; // Party Refusal Mode
 	
 	private L2Party _party;
 	
@@ -1605,6 +1606,9 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public void refreshExpertisePenalty()
 	{
+		if (!Config.EXPERTISE_PENALTY)
+			return;
+			 
 		int armorPenalty = 0;
 		boolean weaponPenalty = false;
 		
@@ -7933,6 +7937,16 @@ public final class L2PcInstance extends L2Playable
 	public boolean getExchangeRefusal()
 	{
 		return _exchangeRefusal;
+	}
+	
+	public boolean isPartyInRefuse()
+	{
+		return _isPartyInRefuse;
+	}
+		
+	public void setIsPartyInRefuse(boolean value)
+	{
+		_isPartyInRefuse = value;
 	}
 	
 	public BlockList getBlockList()

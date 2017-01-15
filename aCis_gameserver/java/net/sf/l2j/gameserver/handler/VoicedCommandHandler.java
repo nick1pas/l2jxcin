@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.l2j.Config;
+import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Augment;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Banking;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.DMVoicedInfo;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.LMVoicedInfo;
-import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Online;
+import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Menu;
+import net.sf.l2j.gameserver.handler.voicedcommandhandlers.SymbolMaker;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.TvTVoicedInfo;
 
 public class VoicedCommandHandler
@@ -21,9 +23,9 @@ public class VoicedCommandHandler
 	
 	protected VoicedCommandHandler()
 	{
-		// coloque aqui os comandos
-		registerHandler(new Online());
-		
+		registerHandler(new Menu());
+		registerHandler(new Augment());
+		registerHandler(new SymbolMaker());
 		if (Config.TVT_ALLOW_VOICED_COMMAND)
 			registerHandler(new TvTVoicedInfo());
 		if (Config.DM_ALLOW_VOICED_COMMAND)

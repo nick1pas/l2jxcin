@@ -571,17 +571,6 @@ public final class Config
 	public static boolean ALT_GAME_FREIGHTS;
 	public static int ALT_GAME_FREIGHT_PRICE;
 	
-	/** Enchant */
-	public static double ENCHANT_CHANCE_WEAPON_MAGIC;
-	public static double ENCHANT_CHANCE_WEAPON_MAGIC_15PLUS;
-	public static double ENCHANT_CHANCE_WEAPON_NONMAGIC;
-	public static double ENCHANT_CHANCE_WEAPON_NONMAGIC_15PLUS;
-	public static double ENCHANT_CHANCE_ARMOR;
-	public static int ENCHANT_MAX_WEAPON;
-	public static int ENCHANT_MAX_ARMOR;
-	public static int ENCHANT_SAFE_MAX;
-	public static int ENCHANT_SAFE_MAX_FULL;
-	
 	/** Augmentations */
 	public static int AUGMENTATION_NG_SKILL_CHANCE;
 	public static int AUGMENTATION_NG_GLOW_CHANCE;
@@ -651,11 +640,14 @@ public final class Config
 	public static boolean ES_SP_BOOK_NEEDED;
 	public static boolean DIVINE_SP_BOOK_NEEDED;
 	public static boolean ALT_GAME_SUBCLASS_WITHOUT_QUESTS;
+	public static boolean ALT_GAME_SUBCLASS_EVERYWHERE;
+	public static boolean EXPERTISE_PENALTY;
 	
 	/** Buffs */
 	public static boolean STORE_SKILL_COOLTIME;
 	public static int BUFFS_MAX_AMOUNT;
-	
+	public static boolean ENABLE_MODIFY_SKILL_DURATION;
+	public static Map<Integer, Integer> SKILL_DURATION_LIST;
 	// --------------------------------------------------
 	// Sieges
 	// --------------------------------------------------
@@ -1961,17 +1953,7 @@ public final class Config
 		FREIGHT_SLOTS = players.getProperty("MaximumFreightSlots", 20);
 		ALT_GAME_FREIGHTS = players.getProperty("AltGameFreights", false);
 		ALT_GAME_FREIGHT_PRICE = players.getProperty("AltGameFreightPrice", 1000);
-		
-		ENCHANT_CHANCE_WEAPON_MAGIC = players.getProperty("EnchantChanceMagicWeapon", 0.4);
-		ENCHANT_CHANCE_WEAPON_MAGIC_15PLUS = players.getProperty("EnchantChanceMagicWeapon15Plus", 0.2);
-		ENCHANT_CHANCE_WEAPON_NONMAGIC = players.getProperty("EnchantChanceNonMagicWeapon", 0.7);
-		ENCHANT_CHANCE_WEAPON_NONMAGIC_15PLUS = players.getProperty("EnchantChanceNonMagicWeapon15Plus", 0.35);
-		ENCHANT_CHANCE_ARMOR = players.getProperty("EnchantChanceArmor", 0.66);
-		ENCHANT_MAX_WEAPON = players.getProperty("EnchantMaxWeapon", 0);
-		ENCHANT_MAX_ARMOR = players.getProperty("EnchantMaxArmor", 0);
-		ENCHANT_SAFE_MAX = players.getProperty("EnchantSafeMax", 3);
-		ENCHANT_SAFE_MAX_FULL = players.getProperty("EnchantSafeMaxFull", 4);
-		
+
 		AUGMENTATION_NG_SKILL_CHANCE = players.getProperty("AugmentationNGSkillChance", 15);
 		AUGMENTATION_NG_GLOW_CHANCE = players.getProperty("AugmentationNGGlowChance", 0);
 		AUGMENTATION_MID_SKILL_CHANCE = players.getProperty("AugmentationMidSkillChance", 30);
@@ -2046,9 +2028,46 @@ public final class Config
 		ES_SP_BOOK_NEEDED = players.getProperty("EnchantSkillSpBookNeeded", true);
 		DIVINE_SP_BOOK_NEEDED = players.getProperty("DivineInspirationSpBookNeeded", true);
 		ALT_GAME_SUBCLASS_WITHOUT_QUESTS = players.getProperty("AltSubClassWithoutQuests", false);
-		
+		 ALT_GAME_SUBCLASS_EVERYWHERE = players.getProperty("AltSubclassEverywhere", false);
+		 
 		BUFFS_MAX_AMOUNT = players.getProperty("MaxBuffsAmount", 20);
 		STORE_SKILL_COOLTIME = players.getProperty("StoreSkillCooltime", true);
+		EXPERTISE_PENALTY = players.getProperty("ExpertisePenality", true);
+		
+		ENABLE_MODIFY_SKILL_DURATION = Boolean.parseBoolean(players.getProperty("EnableModifySkillDuration", "false"));
+		if(ENABLE_MODIFY_SKILL_DURATION)
+		{
+			SKILL_DURATION_LIST = new HashMap<>();
+			
+			String[] propertySplit;
+			propertySplit = players.getProperty("SkillDurationList", "").split(";");
+			
+			for(String skill : propertySplit)
+			{
+				String[] skillSplit = skill.split(",");
+				if(skillSplit.length != 2)
+				{
+					System.out.println("[SkillDurationList]: invalid config property -> SkillDurationList \"" + skill + "\"");
+				}
+				else
+				{
+					try
+					{
+						SKILL_DURATION_LIST.put(Integer.parseInt(skillSplit[0]), Integer.parseInt(skillSplit[1]));
+					}
+					catch(NumberFormatException nfe)
+					{
+						nfe.printStackTrace();
+						
+						if(!skill.equals(""))
+						{
+							System.out.println("[SkillDurationList]: invalid config property -> SkillList \"" + skillSplit[0] + "\"" + skillSplit[1]);
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	
 	/**

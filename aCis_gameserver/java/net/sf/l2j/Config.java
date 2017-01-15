@@ -123,6 +123,11 @@ public final class Config
 	public static boolean ENABLE_RAID_BOSS_DEFEATED_MSG;
 	public static String RAID_BOSS_DEFEATED_BY_CLAN_MEMBER_MSG;
 	public static String RAID_BOSS_DEFEATED_BY_PLAYER_MSG;
+	/** Global Drop Monsters */
+	public static Map<Integer, List<Integer>> GLOBAL_DROP_ITEMS = new HashMap<>();
+	public static Map<Integer, List<Integer>> GLOBAL_DROP_ITEMS_CHAMPION = new HashMap<>();
+	public static boolean ALLOW_GLOBAL_DROP_RANDOM;
+	public static boolean ALLOW_GLOBAL_DROP;
 	// --------------------------------------------------
 	// Clans settings
 	// --------------------------------------------------
@@ -985,7 +990,31 @@ public final class Config
 		ENABLE_RAID_BOSS_DEFEATED_MSG = custom.getProperty("EnableRaidBossDefeatedMsg", false);
 		RAID_BOSS_DEFEATED_BY_CLAN_MEMBER_MSG = custom.getProperty("RaidBossDefeatedByClanMemberMsg", "Raid Boss %raidboss% has been defeated by %player% of clan %clan%.");
 		RAID_BOSS_DEFEATED_BY_PLAYER_MSG = custom.getProperty("RaidBossDefeatedByPlayerMsg", "Raid Boss %raidboss% has been defeated by %player%.");
-			
+		String globalTemp = custom.getProperty("GlobalDropItems", "");
+		String[] globalTemp2 = globalTemp.split(";");
+		for (String s : globalTemp2)
+		{
+			List<Integer> list = new ArrayList<>();
+			String[] t = s.split(",");
+			list.add(Integer.parseInt(t[1]));
+			list.add(Integer.parseInt(t[2]));
+			list.add(Integer.parseInt(t[3]));
+			GLOBAL_DROP_ITEMS.put(Integer.parseInt(t[0]), list);
+		}
+		globalTemp = custom.getProperty("ChampionGlobalDropItems", "");
+		globalTemp2 = globalTemp.split(";");
+		for (String s : globalTemp2)
+		{
+			List<Integer> list = new ArrayList<>();
+			String[] t = s.split(",");
+			list.add(Integer.parseInt(t[1]));
+			list.add(Integer.parseInt(t[2]));
+			list.add(Integer.parseInt(t[3]));
+			GLOBAL_DROP_ITEMS_CHAMPION.put(Integer.parseInt(t[0]), list);
+		}
+		ALLOW_GLOBAL_DROP_RANDOM = custom.getProperty("AllowRandomQuantityDrop", true);
+		ALLOW_GLOBAL_DROP = custom.getProperty("AllowGlobalDrop", true);
+		
 	}
 	/**
 	 * Loads clan and clan hall settings.

@@ -516,6 +516,11 @@ public final class Config
 	public static int SPAWN_INTERVAL_FRINTEZZA;
 	public static int RANDOM_SPAWN_TIME_FRINTEZZA;
 	public static int WAIT_TIME_FRINTEZZA;
+	public static boolean BYPASS_FRINTEZZA_PARTIES_CHECK;
+	public static int FRINTEZZA_MIN_PARTIES;
+	public static int FRINTEZZA_MAX_PARTIES;
+	public static int FRINTEZZA_TIME_CHALLENGE;
+	public static int DESPAWN_TIME_FRINTEZZA;
 	
 	public static int SPAWN_INTERVAL_ORFEN;
 	public static int RANDOM_SPAWN_TIME_ORFEN;
@@ -1900,6 +1905,11 @@ public final class Config
 		SPAWN_INTERVAL_FRINTEZZA = npcs.getProperty("FrintezzaSpawnInterval", 48);
 		RANDOM_SPAWN_TIME_FRINTEZZA = npcs.getProperty("FrintezzaRandomSpawn", 8);
 		WAIT_TIME_FRINTEZZA = npcs.getProperty("FrintezzaWaitTime", 1) * 60000;
+		BYPASS_FRINTEZZA_PARTIES_CHECK = npcs.getProperty("BypassPartiesCheck", true);
+		FRINTEZZA_MIN_PARTIES = npcs.getProperty("FrintezzaMinParties", 4);
+		FRINTEZZA_MAX_PARTIES = npcs.getProperty("FrintezzaMaxParties", 5);
+		DESPAWN_TIME_FRINTEZZA = npcs.getProperty("FrintezzaDespawnTime", 1) * 60000;
+		FRINTEZZA_TIME_CHALLENGE = npcs.getProperty("FrintezzaTimeChallenge", 1) * 60000;
 		
 		SPAWN_INTERVAL_ORFEN = npcs.getProperty("OrfenSpawnInterval", 48);
 		RANDOM_SPAWN_TIME_ORFEN = npcs.getProperty("OrfenRandomSpawn", 20);

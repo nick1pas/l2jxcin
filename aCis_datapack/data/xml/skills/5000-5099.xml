@@ -258,19 +258,24 @@
 		</for>
 	</skill>
 	<skill id="5017" levels="1" name="Frintezza's Daemon Morph">
-		<set name="aggroPoints" val="100" />
-		<set name="coolTime" val="1000" />
-		<set name="hitTime" val="1000" />
-		<set name="magicLvl" val="85" />
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="power" val="20" />
-		<set name="skillType" val="HEAL_PERCENT" />
-		<set name="target" val="TARGET_SELF" />
-		<for>
-			<effect name="Grow" time="7200" val="0" stackOrder="1" stackType="big_body">
-				<mul order="0x30" stat="runSpd" val="1.22" />
-			</effect>
-		</for>
+	  <set name="mpConsume" val="300"/>
+	  <set name="target" val="TARGET_SELF"/>
+	  <set name="hitTime" val="2500"/>
+	  <set name="reuseDelay" val="2500"/>
+	  <set name="power" val="20" />
+	  <set name="skillType" val="HEAL_PERCENT" />
+	  <set name="operateType" val="OP_ACTIVE"/>
+	  <set name="castRange" val="-1"/>
+	  <set name="effectRange" val="-1"/>
+	  <for>
+		<effect count="1" name="Buff" time="7200" val="0">
+		  <mul order="0x30" stat="pAtk" val="1.1"/> 
+		  <mul order="0x30" stat="mAtk" val="1.1"/>
+		  <add order="0x40" stat="pDef" val="300"/>
+		  <add order="0x40" stat="mDef" val="300"/>
+		  <mul order="0x30" stat="runSpd" val="1.22" />
+		</effect>
+	  </for>
 	</skill>
 	<skill id="5018" levels="2" name="Frintezza's Daemon Field">
 		<table name="#power"> 607 754 </table>

@@ -1396,11 +1396,13 @@ public class L2Npc extends L2Character
 	public void setLHandId(int newWeaponId)
 	{
 		_currentLHandId = newWeaponId;
+		updateAbnormalEffect();
 	}
 	
 	public void setRHandId(int newWeaponId)
 	{
 		_currentRHandId = newWeaponId;
+		updateAbnormalEffect();
 	}
 	
 	public void setEnchant(int enchant)

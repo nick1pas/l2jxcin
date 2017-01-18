@@ -344,7 +344,7 @@
 	<script path="quests.Q662_AGameOfCards"/>
 	<script path="quests.Q663_SeductiveWhispers"/>
 	<script path="quests.Q688_DefeatTheElrokianRaiders"/>
-<!-- 	<script path="quests.Tutorial"/> -->
+	<script path="quests.Tutorial"/>
 
 	<!-- AI Section -->
 
@@ -382,14 +382,14 @@
 	<script path="scripts.ai.individual.Benom"/>
 	<script path="scripts.ai.individual.Core"/>
 	<script path="scripts.ai.individual.DrChaos"/>
-<!-- 	<script path="scripts.ai.individual.Frintezza"/> -->
+	<script path="scripts.ai.individual.Frintezza"/>
 	<script path="scripts.ai.individual.Gordon"/>
 <!-- 	<script path="scripts.ai.individual.IceFairySirra"/> -->
 	<script path="scripts.ai.individual.Orfen"/>
 	<script path="scripts.ai.individual.QueenAnt"/>
 	<script path="scripts.ai.individual.Sailren"/>
 	<script path="scripts.ai.individual.Valakas"/>
-<!-- 	<script path="scripts.ai.individual.Zaken"/> -->
+	<script path="scripts.ai.individual.Zaken"/>
 
 	<!-- Custom -->
 
@@ -403,7 +403,8 @@
 	<script path="scripts.custom.HeroCirclet"/>
 	<script path="scripts.custom.HeroWeapon"/>
 	<script path="scripts.custom.GlobalDropMonsters"/>
-
+	<script path="scripts.custom.NewbieHelper"/>
+	
 	<!-- Events -->
 
 <!-- 	<script path="scripts.events.GiftOfVitality"/> -->

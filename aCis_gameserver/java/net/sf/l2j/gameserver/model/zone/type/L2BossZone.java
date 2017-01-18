@@ -27,6 +27,7 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
+import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.L2Summon;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -298,6 +299,22 @@ public class L2BossZone extends L2ZoneType
 		}
 		_playerAllowEntry.clear();
 		_playerAllowed.clear();
+	}
+	
+	public void updateKnownList(L2Npc npc)
+	{
+		if (_characterList == null || _characterList.isEmpty())
+		{
+			return;
+		}
+		
+		for (L2Character character : _characterList)
+		{
+			if (character instanceof L2PcInstance)
+			{
+				npc.getStatus().addStatusListener(character);
+			}
+		}
 	}
 	
 	@Override

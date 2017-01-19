@@ -47,36 +47,40 @@ public class Core extends L2AttackableAIScript
 		super("ai/individual");
 		
 		final StatsSet info = GrandBossManager.getInstance().getStatsSet(CORE);
-		final int status = GrandBossManager.getInstance().getBossStatus(CORE);
-		if (status == DEAD)
+
+		switch (GrandBossManager.getInstance().getBossStatus(CORE))
 		{
-			// load the unlock date and time for Core from DB
-			final long temp = (info.getLong("respawn_time") - System.currentTimeMillis());
-			if (temp > 0)
-			{
-				// The time has not yet expired. Mark Core as currently locked (dead).
-				startQuestTimer("core_unlock", temp, null, null, false);
-			}
-			else
-			{
-				// The time has expired while the server was offline. Spawn Core.
-				final L2GrandBossInstance core = (L2GrandBossInstance) addSpawn(CORE, 17726, 108915, -6480, 0, false, 0, false);
-				GrandBossManager.getInstance().setBossStatus(CORE, ALIVE);
+			case DEAD:
+				// load the unlock date and time for Core from DB
+				final long temp = (info.getLong("respawn_time") - System.currentTimeMillis());
+				if (temp > 0)
+				{
+					// The time has not yet expired. Mark Core as currently locked (dead).
+					startQuestTimer("core_unlock", temp, null, null, false);
+				}
+				else
+				{
+					// The time has expired while the server was offline. Spawn Core.
+					final L2GrandBossInstance core = (L2GrandBossInstance) addSpawn(CORE, 17726, 108915, -6480, 0, false, 0, false);
+					GrandBossManager.getInstance().setBossStatus(CORE, ALIVE);
+					spawnBoss(core);
+				}
+				break;
+				
+				
+			case ALIVE:
+				final int loc_x = info.getInteger("loc_x");
+				final int loc_y = info.getInteger("loc_y");
+				final int loc_z = info.getInteger("loc_z");
+				final int heading = info.getInteger("heading");
+				final int hp = info.getInteger("currentHP");
+				final int mp = info.getInteger("currentMP");
+				
+				final L2GrandBossInstance core = (L2GrandBossInstance) addSpawn(CORE, loc_x, loc_y, loc_z, heading, false, 0, false);
+				core.setCurrentHpMp(hp, mp);
 				spawnBoss(core);
-			}
-		}
-		else
-		{
-			final int loc_x = info.getInteger("loc_x");
-			final int loc_y = info.getInteger("loc_y");
-			final int loc_z = info.getInteger("loc_z");
-			final int heading = info.getInteger("heading");
-			final int hp = info.getInteger("currentHP");
-			final int mp = info.getInteger("currentMP");
-			
-			final L2GrandBossInstance core = (L2GrandBossInstance) addSpawn(CORE, loc_x, loc_y, loc_z, heading, false, 0, false);
-			core.setCurrentHpMp(hp, mp);
-			spawnBoss(core);
+				break;
+				
 		}
 	}
 	
@@ -121,27 +125,30 @@ public class Core extends L2AttackableAIScript
 	@Override
 	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
-		if (event.equalsIgnoreCase("core_unlock"))
+		switch (event)
 		{
-			final L2GrandBossInstance core = (L2GrandBossInstance) addSpawn(CORE, 17726, 108915, -6480, 0, false, 0, false);
-			GrandBossManager.getInstance().setBossStatus(CORE, ALIVE);
-			spawnBoss(core);
-		}
-		else if (event.equalsIgnoreCase("spawn_minion"))
-		{
-			final L2Attackable mob = (L2Attackable) addSpawn(npc.getNpcId(), npc.getX(), npc.getY(), npc.getZ(), npc.getHeading(), false, 0, false);
-			mob.setIsRaidMinion(true);
-			_minions.add(mob);
-		}
-		else if (event.equalsIgnoreCase("despawn_minions"))
-		{
-			for (int i = 0; i < _minions.size(); i++)
-			{
-				final L2Attackable mob = _minions.get(i);
-				if (mob != null)
-					mob.decayMe();
-			}
-			_minions.clear();
+			case "core_unlock":
+				final L2GrandBossInstance core = (L2GrandBossInstance) addSpawn(CORE, 17726, 108915, -6480, 0, false, 0, false);
+				GrandBossManager.getInstance().setBossStatus(CORE, ALIVE);
+				spawnBoss(core);
+				break;
+				
+			case "spawn_minion":
+				final L2Attackable mob = (L2Attackable) addSpawn(npc.getNpcId(), npc.getX(), npc.getY(), npc.getZ(), npc.getHeading(), false, 0, false);
+				mob.setIsRaidMinion(true);
+				_minions.add(mob);
+				break;
+				
+			case "despawn_minions":
+				for (int i = 0; i < _minions.size(); i++)
+				{
+					final L2Attackable mob2 = _minions.get(i);
+					if (mob2 != null)
+						mob2.decayMe();
+				}
+				_minions.clear();
+				break;
+				
 		}
 		return super.onAdvEvent(event, npc, player);
 	}

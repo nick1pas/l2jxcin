@@ -112,6 +112,7 @@ public class Zaken extends L2AttackableAIScript
 	private static final int DAY_TO_NIGHT = 4224;
 	private static final int REGEN_NIGHT = 4227;
 	private static final int REGEN_DAY = 4242;
+	private static final int ANTI_STRIDER_SLOW = 4258;
 	
 	// Boss
 	private static final int ZAKEN = 29022;
@@ -165,33 +166,35 @@ public class Zaken extends L2AttackableAIScript
 		}, 2000L, 600000L);
 		
 		final StatsSet info = GrandBossManager.getInstance().getStatsSet(ZAKEN);
-		if (GrandBossManager.getInstance().getBossStatus(ZAKEN) == DEAD)
+		
+		switch (GrandBossManager.getInstance().getBossStatus(ZAKEN))
 		{
-			// Load the unlock date and time for Zaken from database.
-			long temp = info.getLong("respawn_time") - System.currentTimeMillis();
-			// If zaken is locked until a certain time, mark it so and start the unlock timer the unlock time has not yet expired.
-			if (temp > 0)
-				startQuestTimer("zaken_unlock", temp, null, null, false);
-			else
-			{
-				// The time has already expired while the server was offline. Immediately spawn Zaken.
-				int i1 = Rnd.get(15);
-				L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, Xcoords[i1], Ycoords[i1], Zcoords[i1], i1, false, 0, false);
-				GrandBossManager.getInstance().setBossStatus(ZAKEN, ALIVE);
+			case DEAD:
+				// Load the unlock date and time for Zaken from database.
+				long temp = info.getLong("respawn_time") - System.currentTimeMillis();
+				// If zaken is locked until a certain time, mark it so and start the unlock timer the unlock time has not yet expired.
+				if (temp > 0)
+					startQuestTimer("zaken_unlock", temp, null, null, false);
+				else
+				{
+					// The time has already expired while the server was offline. Immediately spawn Zaken.
+					int i1 = Rnd.get(15);
+					L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, Xcoords[i1], Ycoords[i1], Zcoords[i1], i1, false, 0, false);
+					GrandBossManager.getInstance().setBossStatus(ZAKEN, ALIVE);
+					spawnBoss(zaken);
+				}
+				break;
+			
+			case ALIVE:
+				int loc_x = info.getInteger("loc_x");
+				int loc_y = info.getInteger("loc_y");
+				int loc_z = info.getInteger("loc_z");
+				int heading = info.getInteger("heading");
+				int hp = info.getInteger("currentHP");
+				int mp = info.getInteger("currentMP");
+				L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, loc_x, loc_y, loc_z, heading, false, 0, false);
+				zaken.setCurrentHpMp(hp, mp);
 				spawnBoss(zaken);
-			}
-		}
-		else
-		{
-			int loc_x = info.getInteger("loc_x");
-			int loc_y = info.getInteger("loc_y");
-			int loc_z = info.getInteger("loc_z");
-			int heading = info.getInteger("heading");
-			int hp = info.getInteger("currentHP");
-			int mp = info.getInteger("currentMP");
-			L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, loc_x, loc_y, loc_z, heading, false, 0, false);
-			zaken.setCurrentHpMp(hp, mp);
-			spawnBoss(zaken);
 		}
 	}
 	
@@ -466,43 +469,40 @@ public class Zaken extends L2AttackableAIScript
 	@Override
 	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
 	{
+		int i1 = Rnd.get(15);
+		L2Character nextTarget = ((L2Attackable) npc).getMostHated();
 		if (npc.getNpcId() == ZAKEN)
 		{
-			int skillId = skill.getId();
-			if (skillId == SELF_TELEPORT)
+			switch (skill.getId())
 			{
-				int i1 = Rnd.get(15);
-				npc.teleToLocation(Xcoords[i1], Ycoords[i1], Zcoords[i1], 0);
-				npc.getAI().setIntention(CtrlIntention.IDLE);
-			}
-			else if (skillId == TELEPORT)
-			{
-				int i1 = Rnd.get(15);
-				player.teleToLocation(Xcoords[i1], Ycoords[i1], Zcoords[i1], i1);
-				((L2Attackable) npc).stopHating(player);
-				L2Character nextTarget = ((L2Attackable) npc).getMostHated();
-				if (nextTarget != null)
-					npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
-			}
-			else if (skillId == MASS_TELEPORT)
-			{
-				int i1 = Rnd.get(15);
-				player.teleToLocation(Xcoords[i1], Ycoords[i1], Zcoords[i1], i1);
-				((L2Attackable) npc).stopHating(player);
+				case SELF_TELEPORT:
+					npc.teleToLocation(Xcoords[i1], Ycoords[i1], Zcoords[i1], 0);
+					npc.getAI().setIntention(CtrlIntention.IDLE);
+					break;
 				
-				for (L2Character character : npc.getKnownType(L2MonsterInstance.class))
-				{
-					if ((character != player) && !Util.checkIfInRange(250, player, character, true))
+				case TELEPORT:
+					player.teleToLocation(Xcoords[i1], Ycoords[i1], Zcoords[i1], i1);
+					((L2Attackable) npc).stopHating(player);
+					if (nextTarget != null)
+						npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
+					break;
+				
+				case MASS_TELEPORT:
+					player.teleToLocation(Xcoords[i1], Ycoords[i1], Zcoords[i1], i1);
+					((L2Attackable) npc).stopHating(player);
+					
+					for (L2Character character : npc.getKnownType(L2MonsterInstance.class))
 					{
-						int r1 = Rnd.get(15);
-						character.teleToLocation(Xcoords[r1], Ycoords[r1], Zcoords[r1], r1);
-						((L2Attackable) npc).stopHating(character);
+						if ((character != player) && !Util.checkIfInRange(250, player, character, true))
+						{
+							int r1 = Rnd.get(15);
+							character.teleToLocation(Xcoords[r1], Ycoords[r1], Zcoords[r1], r1);
+							((L2Attackable) npc).stopHating(character);
+						}
 					}
-				}
-				
-				L2Character nextTarget = ((L2Attackable) npc).getMostHated();
-				if (nextTarget != null)
-					npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
+					if (nextTarget != null)
+						npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
+					break;
 			}
 		}
 		return super.onSpellFinished(npc, player, skill);
@@ -574,8 +574,7 @@ public class Zaken extends L2AttackableAIScript
 			((L2Attackable) npc).addDamageHate(target, 1, 200);
 		}
 		
-		int npcId = npc.getNpcId();
-		if (npcId == ZAKEN)
+		if (npc.getNpcId() == ZAKEN)
 		{
 			if (Rnd.get(15) < 1)
 			{
@@ -620,27 +619,28 @@ public class Zaken extends L2AttackableAIScript
 	@Override
 	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
 	{
-		if (npc.getNpcId() == ZAKEN)
+		switch (npc.getNpcId())
 		{
-			if (attacker.getMountType() == 1)
-			{
-				L2Skill skill2 = SkillTable.getInstance().getInfo(4258, 1);
-				if (attacker.getFirstEffect(skill2) == null)
+			case ZAKEN:
+				if (attacker.getMountType() == 1)
 				{
-					npc.setTarget(attacker);
-					npc.doCast(skill2);
+					L2Skill skill2 = SkillTable.getInstance().getInfo(ANTI_STRIDER_SLOW, 1);
+					if (attacker.getFirstEffect(skill2) == null)
+					{
+						npc.setTarget(attacker);
+						npc.doCast(skill2);
+					}
 				}
-			}
-			L2Character originalAttacker = isPet ? attacker.getPet() : attacker;
-			int hate = (int) ((damage / npc.getMaxHp() / 0.05) * 20000);
-			((L2Attackable) npc).addDamageHate(originalAttacker, 0, hate);
-			
-			if (Rnd.get(10) < 1)
-			{
-				_target = attacker;
-				CallSkills(npc);
-			}
-			
+				L2Character originalAttacker = isPet ? attacker.getPet() : attacker;
+				int hate = (int) ((damage / npc.getMaxHp() / 0.05) * 20000);
+				((L2Attackable) npc).addDamageHate(originalAttacker, 0, hate);
+				
+				if (Rnd.get(10) < 1)
+				{
+					_target = attacker;
+					CallSkills(npc);
+				}
+				break;
 		}
 		return super.onAttack(npc, attacker, damage, isPet, skill);
 	}

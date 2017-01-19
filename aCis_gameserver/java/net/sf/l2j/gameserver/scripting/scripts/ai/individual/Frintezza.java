@@ -83,6 +83,9 @@ public class Frintezza extends L2AttackableAIScript
 	private static final int EVIL_SPIRIT2 = 29049;
 	private static final int BREATH_OF_HALISHA = 29050;
 	private static final int BREATH_OF_HALISHA2 = 29051;
+	private static final int FOLLOWER_DUMMY = 29052;
+	private static final int FOLLOWER_DUMMY2 = 29053;
+
 	private static final int CUBE = 29061;
 	private static final int GUIDE = 32011;
 		
@@ -1335,21 +1338,21 @@ public class Frintezza extends L2AttackableAIScript
 		else if (event.equalsIgnoreCase("camera_1"))
 		{
 			GrandBossManager.getInstance().setBossStatus(FRINTEZZA, 2);
-			_frintezzaDummy = addSpawn(29052, 0x2a8a0, 0xfffea133, -5022, 16048, false, 0L, false);
+			_frintezzaDummy = addSpawn(FOLLOWER_DUMMY, 0x2a8a0, 0xfffea133, -5022, 16048, false, 0L, false);
 			_frintezzaDummy.setIsInvul(false);
 			_frintezzaDummy.setIsImmobilized(false);
-			_overheadDummy = addSpawn(29052, 0x2a898, 0xfffea82c, -5110, 16384, false, 0L, false);
+			_overheadDummy = addSpawn(FOLLOWER_DUMMY, 0x2a898, 0xfffea82c, -5110, 16384, false, 0L, false);
 			_overheadDummy.setIsInvul(false);
 			_overheadDummy.setIsImmobilized(false);
 			_overheadDummy.setCollisionHeight(600);
 			FRINTEZZA_LAIR.broadcastPacket(new NpcInfo(_overheadDummy, null));
-			_portraitDummy1 = addSpawn(29052, 0x2a1a2, 0xfffea8ae, -5100, 16048, false, 0L, false);
+			_portraitDummy1 = addSpawn(FOLLOWER_DUMMY, 0x2a1a2, 0xfffea8ae, -5100, 16048, false, 0L, false);
 			_portraitDummy1.setIsImmobilized(false);
 			_portraitDummy1.setIsInvul(false);
-			_portraitDummy3 = addSpawn(29052, 0x2af8c, 0xfffea8ae, -5100, 16048, false, 0L, false);
+			_portraitDummy3 = addSpawn(FOLLOWER_DUMMY, 0x2af8c, 0xfffea8ae, -5100, 16048, false, 0L, false);
 			_portraitDummy3.setIsImmobilized(false);
 			_portraitDummy3.setIsInvul(false);
-			_scarletDummy = addSpawn(29053, 0x2a898, 0xfffea82c, -5110, 16384, false, 0L, false);
+			_scarletDummy = addSpawn(FOLLOWER_DUMMY2, 0x2a898, 0xfffea82c, -5110, 16384, false, 0L, false);
 			_scarletDummy.setIsInvul(false);
 			_scarletDummy.setIsImmobilized(false);
 			startQuestTimer("stop_pc", 0L, npc, null, false);
@@ -2159,11 +2162,9 @@ public class Frintezza extends L2AttackableAIScript
 					_LastAction = System.currentTimeMillis();
 					
 					if (Config.BYPASS_FRINTEZZA_PARTIES_CHECK)
-					{
-						
+					{					
 						if (player.getParty() != null)
-						{
-							
+						{					
 							L2CommandChannel CC = player.getParty().getCommandChannel();
 							
 							if (CC != null)
@@ -2193,8 +2194,7 @@ public class Frintezza extends L2AttackableAIScript
 											member.teleToLocation(INVADE_LOC[_LocCycle][0] + Rnd.get(50), INVADE_LOC[_LocCycle][1] + Rnd.get(50), INVADE_LOC[_LocCycle][2], 0);
 										}
 										if (_PlayersInside.size() > 45)
-											break;
-										
+											break;	
 									}
 									
 									_LocCycle++;

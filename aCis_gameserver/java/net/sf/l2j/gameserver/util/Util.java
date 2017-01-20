@@ -202,4 +202,19 @@ public final class Util
 		
 		return (Math.round(val * exponent) / exponent);
 	}
+	
+	/**
+	 * @param text - the text to check
+	 * @return {@code true} if {@code text} contains only numbers, {@code false} otherwise
+	 */
+	public static boolean isDigit(String text)
+	{
+		if (text == null)
+		{
+			return false;
+		}
+		
+		return text.matches("[0-9]+");
+	}
+	
 }

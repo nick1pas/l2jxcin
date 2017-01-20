@@ -962,6 +962,35 @@ public class Quest
 		showResult((killer instanceof L2Npc) ? (L2Npc) killer : null, player, res);
 	}
 	
+	public final void notifyDeath(L2Character killer, L2Character victim, L2PcInstance player)
+	{
+		String res = null;
+		try
+		{
+			res = onDeath(killer, victim, player);
+		}
+		catch (Exception e)
+		{
+			showError(player, e);
+		}
+		if (killer instanceof L2Npc)
+		{
+			showResult((L2Npc) killer, player, res);
+		}
+		
+		showResult(null, player, res);
+	}
+	
+	public String onDeath(L2Character killer, L2Character victim, L2PcInstance player)
+	{
+		if (killer instanceof L2Npc)
+		{
+			return onAdvEvent("", (L2Npc) killer, player);
+		}
+		
+		return onAdvEvent("", null, player);
+	}
+	
 	public String onDeath(L2Character killer, L2PcInstance player)
 	{
 		return onAdvEvent("", (killer instanceof L2Npc) ? (L2Npc) killer : null, player);

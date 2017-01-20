@@ -14,7 +14,9 @@
  */
 package net.sf.l2j.gameserver.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -209,6 +211,28 @@ public final class World
 			}
 		}
 		_log.info("All visibles NPCs are now deleted.");
+	}
+	
+	public List<L2Npc> getAllByNpcId(int[] npc_ids, boolean justAlive)
+	{
+		List<L2Npc> result = new ArrayList<>();
+		for (L2Object _npc : _objects.values())
+		{
+			if (_npc instanceof L2Npc)
+			{
+				if (!justAlive || !((L2Npc) _npc).isDead())
+				{
+					for (int npc_id : npc_ids)
+					{
+						if (npc_id == ((L2Npc) _npc).getNpcId())
+						{
+							result.add(((L2Npc) _npc));
+						}
+					}
+				}
+			}
+		}
+		return result;
 	}
 	
 	public static World getInstance()

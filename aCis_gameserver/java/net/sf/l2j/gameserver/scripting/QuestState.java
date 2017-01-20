@@ -896,4 +896,136 @@ public final class QuestState
 	{
 		_player.sendPacket(new TutorialEnableClientEvent(number));
 	}
+	
+	public boolean rollAndGive(int itemId, int count, double calcChance)
+	{
+		if ((calcChance <= 0) || (count <= 0) || (itemId <= 0))
+		{
+			return false;
+		}
+		return rollAndGive(itemId, count, calcChance, false);
+	}
+	
+	public boolean rollAndGive(int itemId, int count, double calcChance, boolean prof)
+	{
+		if ((calcChance <= 0) || (count <= 0) || (itemId <= 0))
+		{
+			return false;
+		}
+		int countToDrop = rollDrop(count, calcChance, prof);
+		if (countToDrop > 0)
+		{
+			giveItems(itemId, countToDrop);
+			playSound("ItemSound.quest_itemget");
+			return true;
+		}
+		return false;
+	}
+	
+	public void rollAndGive(int itemId, int min, int max, double calcChance)
+	{
+		if ((calcChance <= 0) || (min <= 0) || (max <= 0) || (itemId <= 0))
+		{
+			return;
+		}
+		rollAndGive(itemId, min, max, calcChance, false);
+	}
+	
+	public void rollAndGive(int itemId, int min, int max, double calcChance, boolean prof)
+	{
+		if ((calcChance <= 0) || (min <= 0) || (max <= 0) || (itemId <= 0))
+		{
+			return;
+		}
+		int count = rollDrop(min, max, calcChance, prof);
+		if (count > 0)
+		{
+			giveItems(itemId, count);
+			playSound("ItemSound.quest_itemget");
+		}
+	}
+	
+	public boolean rollAndGive(int itemId, int min, int max, int limit, double calcChance)
+	{
+		if ((calcChance <= 0) || (min <= 0) || (max <= 0) || (limit <= 0) || (itemId <= 0))
+		{
+			return false;
+		}
+		return rollAndGive(itemId, min, max, limit, calcChance, false);
+	}
+	
+	public boolean rollAndGive(int itemId, int min, int max, int limit, double calcChance, boolean prof)
+	{
+		if ((calcChance <= 0) || (min <= 0) || (max <= 0) || (limit <= 0) || (itemId <= 0))
+		{
+			return false;
+		}
+		int count = rollDrop(min, max, calcChance, prof);
+		if (count > 0)
+		{
+			ItemInstance already = _player.getInventory().getItemByItemId(itemId);
+			int alreadyCount = 0;
+			if (already != null)
+			{
+				alreadyCount = already.getCount();
+			}
+			if ((alreadyCount + count) > limit)
+			{
+				count = limit - alreadyCount;
+			}
+			if (count > 0)
+			{
+				giveItems(itemId, count);
+				if ((count + alreadyCount) < limit)
+				{
+					playSound("ItemSound.quest_itemget");
+				}
+				else
+				{
+					playSound("ItemSound.quest_middle");
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static int rollDrop(int count, double calcChance, boolean prof)
+	{
+		if ((calcChance <= 0) || (count <= 0))
+		{
+			return 0;
+		}
+		return rollDrop(count, count, calcChance, prof);
+	}
+	
+	public static int rollDrop(int min, int max, double calcChance, boolean prof)
+	{
+		if ((calcChance <= 0) || (min <= 0) || (max <= 0))
+		{
+			return 0;
+		}
+		int dropmult = 1;
+		calcChance *= getRateQuestsDrop(prof);
+		if (calcChance > 100)
+		{
+			if ((int) Math.ceil(calcChance / 100) <= (calcChance / 100))
+			{
+				calcChance = Math.nextUp(calcChance);
+			}
+			dropmult = (int) Math.ceil(calcChance / 100);
+			calcChance = calcChance / dropmult;
+		}
+		return Rnd.chance(calcChance) ? Rnd.get(min * dropmult, max * dropmult) : 0;
+	}
+	
+	public static double getRateQuestsDrop(boolean prof)
+	{
+		if (prof)
+		{
+			return Config.RATE_QUEST_DROP_PROF;// * (float)_player.getBonus().getQuestDropRate();
+		}
+		return Config.RATE_QUEST_DROP;// * (float)_player.getBonus().getQuestDropRate();
+	}
+	
 }

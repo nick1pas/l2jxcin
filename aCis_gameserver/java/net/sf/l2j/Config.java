@@ -745,6 +745,7 @@ public final class Config
 	public static double RATE_QUEST_REWARD_XP;
 	public static double RATE_QUEST_REWARD_SP;
 	public static double RATE_QUEST_REWARD_ADENA;
+	public static double RATE_QUEST_DROP_PROF;
 	
 	public static double RATE_KARMA_EXP_LOST;
 	public static double RATE_SIEGE_GUARDS_PRICE;
@@ -2226,6 +2227,7 @@ public final class Config
 		RATE_DROP_SPOIL = server.getProperty("RateDropSpoil", 1.);
 		RATE_DROP_MANOR = server.getProperty("RateDropManor", 1);
 		RATE_QUEST_DROP = server.getProperty("RateQuestDrop", 1.);
+		RATE_QUEST_DROP_PROF = server.getProperty("RateQuestDropProf", 1.);
 		RATE_QUEST_REWARD = server.getProperty("RateQuestReward", 1.);
 		RATE_QUEST_REWARD_XP = server.getProperty("RateQuestRewardXP", 1.);
 		RATE_QUEST_REWARD_SP = server.getProperty("RateQuestRewardSP", 1.);

@@ -67,7 +67,6 @@ public class Core extends L2AttackableAIScript
 				}
 				break;
 				
-				
 			case ALIVE:
 				final int loc_x = info.getInteger("loc_x");
 				final int loc_y = info.getInteger("loc_y");
@@ -79,8 +78,7 @@ public class Core extends L2AttackableAIScript
 				final L2GrandBossInstance core = (L2GrandBossInstance) addSpawn(CORE, loc_x, loc_y, loc_z, heading, false, 0, false);
 				core.setCurrentHpMp(hp, mp);
 				spawnBoss(core);
-				break;
-				
+				break;	
 		}
 	}
 	

@@ -45,8 +45,10 @@ import net.sf.l2j.gameserver.model.item.kind.Armor;
 import net.sf.l2j.gameserver.model.item.kind.EtcItem;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.item.kind.Weapon;
+import net.sf.l2j.gameserver.model.item.type.CrystalType;
 import net.sf.l2j.gameserver.model.item.type.EtcItemType;
 import net.sf.l2j.gameserver.model.item.type.ItemType;
+import net.sf.l2j.gameserver.model.item.type.WeaponType;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.DropItem;
@@ -1276,4 +1278,44 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 		
 		return Integer.compare(item.getObjectId(), getObjectId());
 	}
+ 	
+ 	/**
+	 * Returns the reference grade of the item.
+	 *
+	 * @return int
+	 */
+	public final CrystalType getItemGrade()
+	{
+		return _item.getCrystalType();
+	}
+ 	
+	/**
+	 * @return true if item can be enchanted.
+	 */
+	public boolean isEnchantable()
+	{
+		if (isHeroItem() || isShadowItem() || isEtcItem() || (getItem().getItemType() == WeaponType.FISHINGROD))
+			return false;
+		
+		if (getItemGrade() == CrystalType.NONE)
+			return false;
+		
+		if (Config.nonEnchantableItemList.contains(_itemId))
+			return false;
+		
+		// only equipped items or in inventory can be enchanted
+		if ((getLocation() != ItemLocation.INVENTORY) && (getLocation() != ItemLocation.PAPERDOLL))
+			return false;
+		
+		return true;
+	}
+	
+	public boolean isAugmentable()
+	{
+		if(isAugmented() || isArmor() || getItem().getItemType() == WeaponType.NONE)
+			return false;
+		
+		return true;
+	}
+	
 }

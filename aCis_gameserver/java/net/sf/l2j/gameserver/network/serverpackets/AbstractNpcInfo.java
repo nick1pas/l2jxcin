@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.gameserver.network.serverpackets;
 
+import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.model.L2Clan;
@@ -160,7 +162,11 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 			writeD(_allyCrest);
 			
 			writeC(_npc.isFlying() ? 2 : 0);
-			writeC(0x00);
+			if (_npc.isChampion())
+				writeC((Config.CHAMPION_ENABLE_AURA == 3 ? Rnd.get(1, 2) : Config.CHAMPION_ENABLE_AURA));
+			else
+				writeC(0x00);
+			
 			
 			writeF(_collisionRadius);
 			writeF(_collisionHeight);

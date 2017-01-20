@@ -128,6 +128,19 @@ public final class Config
 	public static Map<Integer, List<Integer>> GLOBAL_DROP_ITEMS_CHAMPION = new HashMap<>();
 	public static boolean ALLOW_GLOBAL_DROP_RANDOM;
 	public static boolean ALLOW_GLOBAL_DROP;
+ 	/** Npc Enchant Items */
+	public static boolean npcEnchantItemsEnabled;
+	public static int weaponEnchantLevel;
+	public static int armorEnchantLevel;
+	public static int IngredientID;
+	public static int InAmountWeapon;
+	public static int InAmountArmor;
+	public static int augmentItemChance;
+	public static String nonEnchantableItems;
+	public static List<Integer> nonEnchantableItemList;
+	public static boolean modifyItemEnchant;
+	public static Map<Integer, Integer> modifyItemEnchantList;
+	
 	// --------------------------------------------------
 	// Clans settings
 	// --------------------------------------------------
@@ -466,6 +479,7 @@ public final class Config
 	public static int CHAMPION_REWARD;
 	public static int CHAMPION_REWARD_ID;
 	public static int CHAMPION_REWARD_QTY;
+	public static int CHAMPION_ENABLE_AURA;
 	
 	/** Buffer */
 	public static int BUFFER_MAX_SCHEMES;
@@ -649,7 +663,7 @@ public final class Config
 	public static boolean ALT_GAME_SUBCLASS_WITHOUT_QUESTS;
 	public static boolean ALT_GAME_SUBCLASS_EVERYWHERE;
 	public static boolean EXPERTISE_PENALTY;
-	
+
 	/** Buffs */
 	public static boolean STORE_SKILL_COOLTIME;
 	public static int BUFFS_MAX_AMOUNT;
@@ -1013,6 +1027,45 @@ public final class Config
 		}
 		ALLOW_GLOBAL_DROP_RANDOM = custom.getProperty("AllowRandomQuantityDrop", true);
 		ALLOW_GLOBAL_DROP = custom.getProperty("AllowGlobalDrop", true);
+			
+			npcEnchantItemsEnabled = custom.getProperty("EnableNpcEnchantItems", false);
+			weaponEnchantLevel = custom.getProperty("WeaponEnchantLevel", 20);
+			armorEnchantLevel = custom.getProperty("ArmorEnchantLevel", 16);
+			IngredientID = custom.getProperty("IngredientID", 57);
+			InAmountWeapon = custom.getProperty("IngredientAmountWeapon", 15000);
+			InAmountArmor = custom.getProperty("IngredientAmountArmor", 10000);
+			augmentItemChance = custom.getProperty("AugmentItemChane", 30);
+			nonEnchantableItems = custom.getProperty("NonEnchantableItemList", "");
+			nonEnchantableItemList = new ArrayList<>();
+			for(String itemId : nonEnchantableItems.split(","))
+				nonEnchantableItemList.add(Integer.parseInt(itemId));
+
+			modifyItemEnchant = custom.getProperty("ModifyItemEnchant", false);
+			if(modifyItemEnchant)
+			{
+				modifyItemEnchantList = new HashMap<>();
+				String[] propertySplit = custom.getProperty("ModifyItemEnchantList", "").split(";");
+				for(String item : propertySplit)
+				{
+					String[] itemEnchantSplit = item.split(",");
+					if(itemEnchantSplit.length != 2)
+					{
+						System.out.println("invalid config property -> ModifyItemEnchantList \"" + item + "\"");
+					}
+					else
+					{
+						try
+						{
+							modifyItemEnchantList.put(Integer.parseInt(itemEnchantSplit[0]), Integer.parseInt(itemEnchantSplit[1]));
+						}
+						catch(NumberFormatException nfe)
+						{
+								nfe.printStackTrace();
+						}
+					}
+				}
+			}
+	
 		
 	}
 	/**
@@ -1858,6 +1911,7 @@ public final class Config
 		CHAMPION_REWARD = npcs.getProperty("ChampionRewardItem", 0);
 		CHAMPION_REWARD_ID = npcs.getProperty("ChampionRewardItemID", 6393);
 		CHAMPION_REWARD_QTY = npcs.getProperty("ChampionRewardItemQty", 1);
+		CHAMPION_ENABLE_AURA = npcs.getProperty("ChampionEnableAura", 0);
 		
 		BUFFER_MAX_SCHEMES = npcs.getProperty("BufferMaxSchemesPerChar", 4);
 		BUFFER_STATIC_BUFF_COST = npcs.getProperty("BufferStaticCostPerBuff", -1);
@@ -2047,7 +2101,7 @@ public final class Config
 		BUFFS_MAX_AMOUNT = players.getProperty("MaxBuffsAmount", 20);
 		STORE_SKILL_COOLTIME = players.getProperty("StoreSkillCooltime", true);
 		EXPERTISE_PENALTY = players.getProperty("ExpertisePenality", true);
-		
+
 		ENABLE_MODIFY_SKILL_DURATION = Boolean.parseBoolean(players.getProperty("EnableModifySkillDuration", "false"));
 		if(ENABLE_MODIFY_SKILL_DURATION)
 		{

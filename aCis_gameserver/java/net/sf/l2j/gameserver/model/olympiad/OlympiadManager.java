@@ -279,7 +279,6 @@ public class OlympiadManager
 			return false;
 		}
 		
-		
 		if (TvTEvent.isPlayerParticipant(player.getObjectId())
 				|| DMEvent.isPlayerParticipant(player)
 				|| LMEvent.isPlayerParticipant(player))

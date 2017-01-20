@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -686,8 +687,60 @@ public class PcInventory extends Inventory
 	public boolean validateWeight(int weight)
 	{
 		return (_totalWeight + weight <= _owner.getMaxLoad());
+	}	
+	
+	public ItemInstance[] getWeaponsList()
+	{
+		List<ItemInstance> list = new ArrayList<>();
+		for (ItemInstance item : _items)
+		{
+			if ((item != null) && (item.isEnchantable()) && item.isWeapon())
+			{
+				int enchantLevel = Config.weaponEnchantLevel;
+				if (Config.modifyItemEnchant)
+				{
+					if (Config.modifyItemEnchantList.containsKey(item.getItemId()))
+					{
+						enchantLevel = Config.modifyItemEnchantList.get(item.getItemId());
+					}
+				}
+
+				if(item.getEnchantLevel() < enchantLevel)
+					list.add(item);
+			}
+		}
+		
+		ItemInstance[] result = list.toArray(new ItemInstance[list.size()]);
+		return result;
 	}
 	
+	public ItemInstance[] getArmorsList()
+	{
+		List<ItemInstance> list = new ArrayList<>();
+		for (ItemInstance item : _items)
+		{
+			if ((item != null) && (item.isEnchantable()) && item.isArmor())
+			{
+				int enchantLevel = Config.armorEnchantLevel;
+				if (Config.modifyItemEnchant)
+				{
+					if (Config.modifyItemEnchantList.containsKey(item.getItemId()))
+					{
+						enchantLevel = Config.modifyItemEnchantList.get(item.getItemId());
+					}
+				}
+
+				if(item.getEnchantLevel() < enchantLevel)
+				{
+					list.add(item);
+				}
+			}
+		}
+		
+		ItemInstance[] result = list.toArray(new ItemInstance[list.size()]);
+		return result;
+	}
+
 	@Override
 	public String toString()
 	{

@@ -53,6 +53,7 @@ import net.sf.l2j.gameserver.datatables.GmListTable;
 import net.sf.l2j.gameserver.datatables.HelperBuffTable;
 import net.sf.l2j.gameserver.datatables.HennaTable;
 import net.sf.l2j.gameserver.datatables.HerbDropTable;
+import net.sf.l2j.gameserver.datatables.IconTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.MultisellData;
@@ -174,6 +175,7 @@ public class GameServer
 		SkillTreeTable.getInstance();
 		
 		StringUtil.printSection("Items");
+		IconTable.getInstance();
 		ItemTable.getInstance();
 		SummonItemsData.getInstance();
 		BuyListTable.getInstance();

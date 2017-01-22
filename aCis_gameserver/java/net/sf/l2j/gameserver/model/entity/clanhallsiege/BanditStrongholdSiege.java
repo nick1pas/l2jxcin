@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
+import java.util.logging.Logger;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
@@ -47,7 +48,8 @@ import net.sf.l2j.gameserver.taskmanager.ExclusiveTask;
 
 public class BanditStrongholdSiege extends ClanHallSiege
 {
-	private static BanditStrongholdSiege _instance;
+	private static Logger _log = Logger.getLogger(BanditStrongholdSiege.class.getName());
+	
 	private boolean _registrationPeriod = false;
 	private int _clanCounter = 0;
 	Map<Integer, clanPlayersInfo> _clansInfo = new HashMap<>();
@@ -57,18 +59,19 @@ public class BanditStrongholdSiege extends ClanHallSiege
 	boolean _finalStage = false;
 	ScheduledFuture<?> _midTimer;
 
-	public static final BanditStrongholdSiege getInstance()
+	public static BanditStrongholdSiege getInstance()
 	{
-		if(_instance == null)
-		{
-			_instance = new BanditStrongholdSiege();
-		}
-
-		return _instance;
+		return SingletonHolder._instance;
 	}
-
-	private BanditStrongholdSiege()
+	
+	private static class SingletonHolder
 	{
+		protected static final BanditStrongholdSiege _instance = new BanditStrongholdSiege();
+	}
+	
+	protected BanditStrongholdSiege()
+	{
+		_log.info("Loaded Bandits Stronghold Siege");
 		long siegeDate = restoreSiegeDate(35);
 		Calendar tmpDate = Calendar.getInstance();
 		tmpDate.setTimeInMillis(siegeDate);

@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
+import java.util.logging.Logger;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
@@ -45,11 +46,10 @@ import net.sf.l2j.gameserver.model.zone.type.L2ClanHallZone;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.taskmanager.ExclusiveTask;
 
-import javolution.util.FastList;
-
 public class WildBeastFarmSiege extends ClanHallSiege
 {
-	private static WildBeastFarmSiege _instance;
+	private static Logger _log = Logger.getLogger(WildBeastFarmSiege.class.getName());
+	
 	private boolean _registrationPeriod = false;
 	private int _clanCounter = 0;
 	Map<Integer, clanPlayersInfo> _clansInfo = new HashMap<>();
@@ -59,18 +59,19 @@ public class WildBeastFarmSiege extends ClanHallSiege
 	ScheduledFuture<?> _midTimer;
 	private L2ClanHallZone zone;
 
-	public static final WildBeastFarmSiege getInstance()
+	public static WildBeastFarmSiege getInstance()
 	{
-		if(_instance == null)
-		{
-			_instance = new WildBeastFarmSiege();
-		}
-
-		return _instance;
+		return SingletonHolder._instance;
+	}
+	
+	private static class SingletonHolder
+	{
+		protected static final WildBeastFarmSiege _instance = new WildBeastFarmSiege();
 	}
 
-	private WildBeastFarmSiege()
+	protected WildBeastFarmSiege()
 	{
+		_log.info("Loaded Wild Beasts Farm Siege");
 		long siegeDate = restoreSiegeDate(63);
 		Calendar tmpDate = Calendar.getInstance();
 		tmpDate.setTimeInMillis(siegeDate);
@@ -444,9 +445,9 @@ public class WildBeastFarmSiege extends ClanHallSiege
 		return false;
 	}
 
-	public FastList<String> getRegisteredClans()
+	public List<String> getRegisteredClans()
 	{
-		FastList<String> clans = new FastList<>();
+		List<String> clans = new ArrayList<>();
 		for(clanPlayersInfo a : _clansInfo.values())
 		{
 			clans.add(a._clanName);

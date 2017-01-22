@@ -29,6 +29,8 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
+import net.sf.l2j.gameserver.model.entity.clanhallsiege.BanditStrongholdSiege;
+import net.sf.l2j.gameserver.model.entity.clanhallsiege.WildBeastFarmSiege;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.model.zone.type.L2ArenaZone;
 import net.sf.l2j.gameserver.model.zone.type.L2ClanHallZone;
@@ -289,6 +291,20 @@ public class MapRegionTable
 							return new Location(flag.getX(), flag.getY(), flag.getZ());
 						}
 					}
+				}
+
+				if (BanditStrongholdSiege.getInstance().isPlayerRegister(((L2PcInstance)activeChar).getClan(),activeChar.getName()))
+				{
+					L2Npc flag = BanditStrongholdSiege.getInstance().getSiegeFlag(((L2PcInstance)activeChar).getClan());
+					if (flag != null)
+						return new Location(flag.getX(), flag.getY(), flag.getZ());
+				}
+
+				if (WildBeastFarmSiege.getInstance().isPlayerRegister(((L2PcInstance)activeChar).getClan(),activeChar.getName()))
+				{
+					L2Npc flag = WildBeastFarmSiege.getInstance().getSiegeFlag(((L2PcInstance)activeChar).getClan());
+					if (flag != null)
+						return new Location(flag.getX(), flag.getY(), flag.getZ());
 				}
 			}
 			

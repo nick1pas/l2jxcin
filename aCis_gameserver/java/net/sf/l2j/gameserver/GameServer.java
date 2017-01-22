@@ -105,6 +105,8 @@ import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.instancemanager.games.MonsterRace;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.entity.Hero;
+import net.sf.l2j.gameserver.model.entity.clanhallsiege.BanditStrongholdSiege;
+import net.sf.l2j.gameserver.model.entity.clanhallsiege.WildBeastFarmSiege;
 import net.sf.l2j.gameserver.model.entity.events.DMManager;
 import net.sf.l2j.gameserver.model.entity.events.LMManager;
 import net.sf.l2j.gameserver.model.entity.events.TvTManager;
@@ -280,6 +282,10 @@ public class GameServer
 	
 		StringUtil.printSection("Four Sepulchers");
 		FourSepulchersManager.getInstance().init();
+		
+		StringUtil.printSection("Conquerable Halls");
+		BanditStrongholdSiege.getInstance();
+		WildBeastFarmSiege.getInstance();
 		
 		StringUtil.printSection("Quests & Scripts");
 		ScriptManager.getInstance();

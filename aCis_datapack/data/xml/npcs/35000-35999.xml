@@ -14499,7 +14499,7 @@
 		<set name="height" val="72"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2Deco"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="10"/>
 		<set name="hp" val="2676.65854"/>
@@ -14534,7 +14534,7 @@
 		<set name="height" val="55"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2Deco"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="10"/>
 		<set name="hp" val="2676.65854"/>
@@ -14569,7 +14569,7 @@
 		<set name="height" val="55"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2Deco"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="10"/>
 		<set name="hp" val="2676.65854"/>
@@ -14604,7 +14604,7 @@
 		<set name="height" val="55"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2Deco"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="10"/>
 		<set name="hp" val="2676.65854"/>
@@ -14639,7 +14639,7 @@
 		<set name="height" val="55"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2Deco"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="10"/>
 		<set name="hp" val="2676.65854"/>
@@ -14674,7 +14674,7 @@
 		<set name="height" val="55"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2Deco"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="10"/>
 		<set name="hp" val="2676.65854"/>
@@ -20929,7 +20929,7 @@
 		<set name="height" val="97.5"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2Deco"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="10"/>
 		<set name="hp" val="2676.65854"/>
@@ -20964,7 +20964,7 @@
 		<set name="height" val="108.25"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2Deco"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="10"/>
 		<set name="hp" val="2676.65854"/>
@@ -20999,7 +20999,7 @@
 		<set name="height" val="108.25"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2Deco"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="10"/>
 		<set name="hp" val="2676.65854"/>
@@ -21034,7 +21034,7 @@
 		<set name="height" val="108.25"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2Deco"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="10"/>
 		<set name="hp" val="2676.65854"/>
@@ -21659,7 +21659,7 @@
 		<set name="height" val="32"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Npc"/>
+		<set name="type" val="L2ClanHallSiegeIn"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="0"/>
 		<set name="hp" val="2676.65854"/>

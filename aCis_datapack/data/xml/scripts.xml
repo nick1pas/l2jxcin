@@ -280,7 +280,7 @@
 	<script path="quests.Q432_BirthdayPartySong"/>
 	<script path="quests.Q501_ProofOfClanAlliance"/>
 <!-- 	<script path="quests.Q503_PursuitOfClanAmbition"/> -->
-<!-- 	<script path="quests.Q504_CompetitionForTheBanditStronghold"/> -->
+	<script path="quests.Q504_CompetitionForTheBanditStronghold"/>
 <!-- 	<script path="quests.Q505_BloodOffering"/> -->
 	<script path="quests.Q508_AClansReputation"/>
 	<script path="quests.Q509_TheClansPrestige"/>

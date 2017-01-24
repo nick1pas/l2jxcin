@@ -24,6 +24,7 @@ import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
 /**
@@ -111,10 +112,11 @@ public class AdminTeleport implements IAdminCommandHandler
 					return false;
 				}
 				
-				if (player.isInParty())
+				final Party party = player.getParty();
+				if (party != null)
 				{
-					for (L2PcInstance pm : player.getParty().getPartyMembers())
-						teleportCharacter(pm, activeChar.getX(), activeChar.getY(), activeChar.getZ());
+					for (L2PcInstance member : party.getMembers())
+						teleportCharacter(member, activeChar.getX(), activeChar.getY(), activeChar.getZ());
 					
 					activeChar.sendMessage("You recall " + player.getName() + "'s party.");
 				}

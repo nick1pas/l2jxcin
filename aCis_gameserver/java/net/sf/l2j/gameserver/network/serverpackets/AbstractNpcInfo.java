@@ -87,8 +87,13 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 				_collisionRadius = _npc.getCollisionRadius();
 			}
 			
-			_name = _npc.getName();
-			_title = (_npc.isChampion()) ? "Champion" : _npc.getTitle();
+			if (_npc.getTemplate().isUsingServerSideName())
+				_name = _npc.getName();
+			
+			if (_npc.isChampion())
+				_title = "Champion";
+			else if (_npc.getTemplate().isUsingServerSideTitle())
+				_title = _npc.getTitle();
 			
 			if (Config.SHOW_NPC_LVL && _npc instanceof L2MonsterInstance)
 				_title = "Lv " + _npc.getLevel() + (_npc.getTemplate().getAggroRange() > 0 ? "* " : " ") + _title;
@@ -200,8 +205,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 			_lhand = 0;
 			_chest = _summon.getArmor();
 			_enchantEffect = _summon.getTemplate().getEnchantEffect();
-			_name = _summon.getName();
-			_title = _owner != null ? (!_owner.isOnline() ? "" : _owner.getName()) : "";
+			_title = (_owner == null || !_owner.isOnline()) ? "" : _owner.getName();
 			_idTemplate = _summon.getTemplate().getIdTemplate();
 			
 			_collisionHeight = _summon.getCollisionHeight();

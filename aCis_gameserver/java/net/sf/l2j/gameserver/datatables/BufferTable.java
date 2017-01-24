@@ -25,6 +25,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,7 +54,7 @@ public class BufferTable
 	private static final String INSERT_SCHEME = "INSERT INTO buffer_schemes (object_id, scheme_name, skills) VALUES (?,?,?)";
 	
 	private final Map<Integer, HashMap<String, ArrayList<Integer>>> _schemesTable = new ConcurrentHashMap<>();
-	private final Map<Integer, BuffSkillHolder> _availableBuffs = new HashMap<>();
+	private final Map<Integer, BuffSkillHolder> _availableBuffs = new LinkedHashMap<>();
 	
 	public BufferTable()
 	{
@@ -72,8 +73,15 @@ public class BufferTable
 				final String[] skills = rs.getString("skills").split(",");
 				
 				ArrayList<Integer> schemeList = new ArrayList<>();
+				
 				for (String skill : skills)
+				{
+					// Don't feed the skills list if the list is empty.
+					if (skill.isEmpty())
+						break;
+					
 					schemeList.add(Integer.valueOf(skill));
+				}
 				
 				setScheme(objectId, schemeName, schemeList);
 				count++;

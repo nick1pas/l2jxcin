@@ -27,6 +27,7 @@ import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.Hero;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -83,9 +84,10 @@ public class L2RaidBossInstance extends L2MonsterInstance
 				broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.RAID_WAS_SUCCESSFUL));
 				broadcastPacket(new PlaySound("systemmsg_e.1209"));
 				
-				if (player.isInParty())
+				final Party party = player.getParty();
+				if (party != null)
 				{
-					for (L2PcInstance member : player.getParty().getPartyMembers())
+					for (L2PcInstance member : party.getMembers())
 					{
 						RaidBossPointsManager.getInstance().addPoints(member, getNpcId(), (getLevel() / 2) + Rnd.get(-5, 5));
 						if (member.isNoble())

@@ -25,6 +25,7 @@ import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.PcInventory;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
@@ -300,13 +301,11 @@ public class VarkaSilenosSupport extends Quest
 	@Override
 	public String onKill(L2Npc npc, L2PcInstance player, boolean isPet)
 	{
-		if (player.isInParty())
+		final Party party = player.getParty();
+		if (party != null)
 		{
-			for (L2PcInstance partyMember : player.getParty().getPartyMembers())
-			{
-				if (partyMember != null)
-					testVarkaDemote(partyMember);
-			}
+			for (L2PcInstance member : party.getMembers())
+				testVarkaDemote(member);
 		}
 		else
 			testVarkaDemote(player);

@@ -36,7 +36,6 @@ import net.sf.l2j.gameserver.handler.ItemHandler;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.PetDataEntry;
 import net.sf.l2j.gameserver.model.World;
@@ -46,6 +45,8 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance.TimeStamp;
 import net.sf.l2j.gameserver.model.actor.stat.PetStat;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.actor.template.PetTemplate;
+import net.sf.l2j.gameserver.model.group.Party;
+import net.sf.l2j.gameserver.model.group.Party.LootRule;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.item.kind.Weapon;
@@ -414,8 +415,9 @@ public class L2PetInstance extends L2Summon
 				target.removeDropProtection();
 			
 			// If owner is in party and it isnt finders keepers, distribute the item instead of stealing it -.-
-			if (getOwner().isInParty() && getOwner().getParty().getLootDistribution() != L2Party.ITEM_LOOTER)
-				getOwner().getParty().distributeItem(getOwner(), target);
+			final Party party = getOwner().getParty();
+			if (party != null && party.getLootRule() != LootRule.ITEM_LOOTER)
+				party.distributeItem(getOwner(), target);
 			else
 				target.pickupMe(this);
 			

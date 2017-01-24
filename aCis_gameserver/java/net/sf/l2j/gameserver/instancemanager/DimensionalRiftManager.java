@@ -29,12 +29,12 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.DimensionalRift;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.xmlfactory.XMLDocumentFactory;
@@ -202,7 +202,7 @@ public class DimensionalRiftManager
 	
 	public synchronized void start(L2PcInstance player, byte type, L2Npc npc)
 	{
-		final L2Party party = player.getParty();
+		final Party party = player.getParty();
 		
 		// No party.
 		if (party == null)
@@ -223,7 +223,7 @@ public class DimensionalRiftManager
 			return;
 		
 		// Party members' count is lower than config.
-		if (party.getMemberCount() < Config.RIFT_MIN_PARTY_SIZE)
+		if (party.getMembersCount() < Config.RIFT_MIN_PARTY_SIZE)
 		{
 			final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 			html.setFile("data/html/seven_signs/rift/SmallParty.htm");
@@ -244,9 +244,9 @@ public class DimensionalRiftManager
 		}
 		
 		// One of teammates isn't on peace zone or hasn't required amount of items.
-		for (L2PcInstance p : party.getPartyMembers())
+		for (L2PcInstance member : party.getMembers())
 		{
-			if (!checkIfInPeaceZone(p.getX(), p.getY(), p.getZ()))
+			if (!checkIfInPeaceZone(member.getX(), member.getY(), member.getZ()))
 			{
 				showHtmlFile(player, "data/html/seven_signs/rift/NotInWaitingRoom.htm", npc);
 				return;
@@ -256,9 +256,9 @@ public class DimensionalRiftManager
 		ItemInstance i;
 		final int count = getNeededItems(type);
 		
-		for (L2PcInstance p : party.getPartyMembers())
+		for (L2PcInstance member : party.getMembers())
 		{
-			i = p.getInventory().getItemByItemId(DIMENSIONAL_FRAGMENT_ITEM_ID);
+			i = member.getInventory().getItemByItemId(DIMENSIONAL_FRAGMENT_ITEM_ID);
 			
 			if (i == null || i.getCount() < getNeededItems(type))
 			{
@@ -271,10 +271,10 @@ public class DimensionalRiftManager
 			}
 		}
 		
-		for (L2PcInstance p : party.getPartyMembers())
+		for (L2PcInstance member : party.getMembers())
 		{
-			i = p.getInventory().getItemByItemId(DIMENSIONAL_FRAGMENT_ITEM_ID);
-			if (!p.destroyItem("RiftEntrance", i, count, null, true))
+			i = member.getInventory().getItemByItemId(DIMENSIONAL_FRAGMENT_ITEM_ID);
+			if (!member.destroyItem("RiftEntrance", i, count, null, true))
 			{
 				final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 				html.setFile("data/html/seven_signs/rift/NoFragments.htm");
@@ -301,25 +301,6 @@ public class DimensionalRiftManager
 		
 		// Creates an instance of the rift.
 		new DimensionalRift(party, type, room);
-	}
-	
-	public void killRift(DimensionalRift d)
-	{
-		if (d.getTeleportTimerTask() != null)
-			d.getTeleportTimerTask().cancel();
-		d.setTeleportTimerTask(null);
-		
-		if (d.getTeleportTimer() != null)
-			d.getTeleportTimer().cancel();
-		d.setTeleportTimer(null);
-		
-		if (d.getSpawnTimerTask() != null)
-			d.getSpawnTimerTask().cancel();
-		d.setSpawnTimerTask(null);
-		
-		if (d.getSpawnTimer() != null)
-			d.getSpawnTimer().cancel();
-		d.setSpawnTimer(null);
 	}
 	
 	public static class DimensionalRiftRoom
@@ -411,7 +392,7 @@ public class DimensionalRiftManager
 			}
 		}
 		
-		public DimensionalRiftRoom unspawn()
+		public void unspawn()
 		{
 			for (L2Spawn spawn : _roomSpawns)
 			{
@@ -419,12 +400,9 @@ public class DimensionalRiftManager
 				if (spawn.getNpc() != null)
 					spawn.getNpc().deleteMe();
 			}
-			return this;
+			_partyInside = false;
 		}
 		
-		/**
-		 * @return the _partyInside
-		 */
 		public boolean isPartyInside()
 		{
 			return _partyInside;
@@ -485,6 +463,21 @@ public class DimensionalRiftManager
 				list.add(room._room);
 		}
 		return list;
+	}
+	
+	public void onPartyEdit(Party party)
+	{
+		if (party == null)
+			return;
+		
+		final DimensionalRift rift = party.getDimensionalRift();
+		if (rift != null)
+		{
+			for (L2PcInstance member : party.getMembers())
+				teleportToWaitingRoom(member);
+			
+			rift.killRift();
+		}
 	}
 	
 	private static class SingletonHolder

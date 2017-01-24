@@ -14,9 +14,9 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.gameserver.model.L2Party;
-import net.sf.l2j.gameserver.model.L2Party.MessageType;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
+import net.sf.l2j.gameserver.model.group.Party.MessageType;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchRoom;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchRoomList;
 import net.sf.l2j.gameserver.network.serverpackets.ExClosePartyRoom;
@@ -37,30 +37,25 @@ public final class RequestWithdrawParty extends L2GameClientPacket
 		if (player == null)
 			return;
 		
-		final L2Party party = player.getParty();
+		final Party party = player.getParty();
 		if (party == null)
 			return;
 		
-		if (party.isInDimensionalRift() && !party.getDimensionalRift().getRevivedAtWaitingRoom().contains(player))
-			player.sendMessage("You can't exit party when you are in Dimensional Rift.");
-		else
+		party.removePartyMember(player, MessageType.LEFT);
+		
+		if (player.isInPartyMatchRoom())
 		{
-			party.removePartyMember(player, MessageType.Left);
-			
-			if (player.isInPartyMatchRoom())
+			PartyMatchRoom room = PartyMatchRoomList.getInstance().getPlayerRoom(player);
+			if (room != null)
 			{
-				PartyMatchRoom _room = PartyMatchRoomList.getInstance().getPlayerRoom(player);
-				if (_room != null)
-				{
-					player.sendPacket(new PartyMatchDetail(_room));
-					player.sendPacket(new ExPartyRoomMember(_room, 0));
-					player.sendPacket(ExClosePartyRoom.STATIC_PACKET);
-					
-					_room.deleteMember(player);
-				}
-				player.setPartyRoom(0);
-				player.broadcastUserInfo();
+				player.sendPacket(new PartyMatchDetail(room));
+				player.sendPacket(new ExPartyRoomMember(room, 0));
+				player.sendPacket(ExClosePartyRoom.STATIC_PACKET);
+				
+				room.deleteMember(player);
 			}
+			player.setPartyRoom(0);
+			player.broadcastUserInfo();
 		}
 	}
 }

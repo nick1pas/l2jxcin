@@ -25,7 +25,6 @@ import net.sf.l2j.gameserver.network.L2GameClient.GameClientState;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.CharSelectInfo;
 import net.sf.l2j.gameserver.network.serverpackets.RestartResponse;
-import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.taskmanager.AttackStanceTaskManager;
 
 public final class RequestRestart extends L2GameClientPacket
@@ -83,17 +82,11 @@ public final class RequestRestart extends L2GameClientPacket
 			return;
 		}
 		
-		if (player.isFestivalParticipant())
+		if (player.isFestivalParticipant() && SevenSignsFestival.getInstance().isFestivalInitialized())
 		{
-			if (SevenSignsFestival.getInstance().isFestivalInitialized())
-			{
-				player.sendPacket(SystemMessageId.NO_RESTART_HERE);
-				sendPacket(RestartResponse.valueOf(false));
-				return;
-			}
-			
-			if (player.isInParty())
-				player.getParty().broadcastToPartyMembers(SystemMessage.sendString(player.getName() + " has been removed from the upcoming festival."));
+			player.sendPacket(SystemMessageId.NO_RESTART_HERE);
+			sendPacket(RestartResponse.valueOf(false));
+			return;
 		}
 		
 		player.removeFromBossZone();

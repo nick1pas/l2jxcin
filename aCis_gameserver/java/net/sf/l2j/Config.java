@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.commons.config.ExProperties;
 import net.sf.l2j.commons.lang.StringUtil;
+import net.sf.l2j.commons.math.MathUtil;
 
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 
@@ -1184,7 +1185,7 @@ public final class Config
 		
 		ALT_GAME_CASTLE_DAWN = events.getProperty("AltCastleForDawn", true);
 		ALT_GAME_CASTLE_DUSK = events.getProperty("AltCastleForDusk", true);
-		ALT_FESTIVAL_MIN_PLAYER = events.getProperty("AltFestivalMinPlayer", 5);
+		ALT_FESTIVAL_MIN_PLAYER = MathUtil.limit(events.getProperty("AltFestivalMinPlayer", 5), 2, 9);
 		ALT_MAXIMUM_PLAYER_CONTRIB = events.getProperty("AltMaxPlayerContrib", 1000000);
 		ALT_FESTIVAL_MANAGER_START = events.getProperty("AltFestivalManagerStart", 120000);
 		ALT_FESTIVAL_LENGTH = events.getProperty("AltFestivalLength", 1080000);
@@ -1198,7 +1199,7 @@ public final class Config
 		FS_TIME_ATTACK = events.getProperty("TimeOfAttack", 50);
 		FS_TIME_ENTRY = events.getProperty("TimeOfEntry", 3);
 		FS_TIME_WARMUP = events.getProperty("TimeOfWarmUp", 2);
-		FS_PARTY_MEMBER_COUNT = events.getProperty("NumberOfNecessaryPartyMembers", 4);
+		FS_PARTY_MEMBER_COUNT = MathUtil.limit(events.getProperty("NumberOfNecessaryPartyMembers", 4), 2, 9);
 		
 		RIFT_MIN_PARTY_SIZE = events.getProperty("RiftMinPartySize", 2);
 		RIFT_MAX_JUMPS = events.getProperty("MaxRiftJumps", 4);

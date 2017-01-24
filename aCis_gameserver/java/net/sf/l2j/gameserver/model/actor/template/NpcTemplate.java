@@ -91,7 +91,9 @@ public class NpcTemplate extends CharTemplate
 	private final int _idTemplate;
 	private final String _type;
 	private final String _name;
+	private boolean _usingServerSideName;
 	private final String _title;
+	private boolean _usingServerSideTitle;
 	private final boolean _cantBeChampionMonster;
 	private final byte _level;
 	private final int _exp;
@@ -135,7 +137,9 @@ public class NpcTemplate extends CharTemplate
 		_idTemplate = set.getInteger("idTemplate", _npcId);
 		_type = set.getString("type");
 		_name = set.getString("name");
+		_usingServerSideName = set.getBool("usingServerSideName", false);
 		_title = set.getString("title", "");
+		_usingServerSideTitle = set.getBool("usingServerSideTitle", false);
 		_cantBeChampionMonster = _title.equalsIgnoreCase("Quest Monster") || isType("L2Chest");
 		_level = set.getByte("level", (byte) 1);
 		_exp = set.getInteger("exp", 0);
@@ -230,9 +234,19 @@ public class NpcTemplate extends CharTemplate
 		return _name;
 	}
 	
+	public boolean isUsingServerSideName()
+	{
+		return _usingServerSideName;
+	}
+	
 	public String getTitle()
 	{
 		return _title;
+	}
+	
+	public boolean isUsingServerSideTitle()
+	{
+		return _usingServerSideTitle;
 	}
 	
 	public boolean cantBeChampion()
@@ -488,10 +502,7 @@ public class NpcTemplate extends CharTemplate
 				case GET_PLAYER:
 				case INSTANT_JUMP:
 				case AGGDAMAGE:
-					if (skill.getCastRange() > 150)
-						addSkill(SkillType.LONG_RANGE, skill);
-					else if (skill.getCastRange() > 0)
-						addSkill(SkillType.SHORT_RANGE, skill);
+					addSkill((skill.getCastRange() > 150) ? SkillType.LONG_RANGE : SkillType.SHORT_RANGE, skill);
 					continue;
 			}
 			// _log.warning(skill.getName() + " skill wasn't added due to specific logic."); TODO

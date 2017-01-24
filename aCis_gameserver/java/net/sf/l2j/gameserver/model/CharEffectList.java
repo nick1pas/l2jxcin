@@ -28,6 +28,7 @@ import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.L2Summon;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadGameManager;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadGameTask;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -960,18 +961,18 @@ public class CharEffectList
 		{
 			if (_owner instanceof L2Summon)
 			{
-				L2PcInstance summonOwner = ((L2Summon) _owner).getOwner();
-				
+				final L2PcInstance summonOwner = ((L2Summon) _owner).getOwner();
 				if (summonOwner != null)
 				{
-					if (summonOwner.isInParty())
-						summonOwner.getParty().broadcastToPartyMembers(ps);
+					final Party party = summonOwner.getParty();
+					if (party != null)
+						party.broadcastPacket(ps);
 					else
 						summonOwner.sendPacket(ps);
 				}
 			}
 			else if (_owner instanceof L2PcInstance && _owner.isInParty())
-				_owner.getParty().broadcastToPartyMembers(ps);
+				_owner.getParty().broadcastPacket(ps);
 		}
 		
 		if (os != null)

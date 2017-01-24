@@ -37,9 +37,7 @@ import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.AbsorbInfo;
 import net.sf.l2j.gameserver.model.AggroInfo;
-import net.sf.l2j.gameserver.model.L2CommandChannel;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.RewardInfo;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -47,14 +45,14 @@ import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
 import net.sf.l2j.gameserver.model.actor.status.AttackableStatus;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
+import net.sf.l2j.gameserver.model.group.CommandChannel;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.DropCategory;
 import net.sf.l2j.gameserver.model.item.DropData;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.manor.Seed;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.clientpackets.Say2;
-import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.Quest;
@@ -85,7 +83,7 @@ public class L2Attackable extends L2Npc
 	private double _overhitDamage;
 	private L2Character _overhitAttacker;
 	
-	private L2CommandChannel _firstCommandChannelAttacked;
+	private CommandChannel _firstCommandChannelAttacked;
 	private CommandChannelTimer _commandChannelTimer;
 	private long _commandChannelLastAttack;
 	
@@ -156,7 +154,6 @@ public class L2Attackable extends L2Npc
 							_commandChannelTimer = new CommandChannelTimer(this);
 							_commandChannelLastAttack = System.currentTimeMillis();
 							ThreadPool.schedule(_commandChannelTimer, 10000); // check for last attack
-							_firstCommandChannelAttacked.broadcastToChannelMembers(new CreatureSay(0, Say2.PARTYROOM_ALL, "", "You have looting rights!")); // TODO: retail msg
 						}
 					}
 				}
@@ -302,7 +299,7 @@ public class L2Attackable extends L2Npc
 			final int damage = reward.getDamage();
 			
 			// Get party.
-			final L2Party attackerParty = attacker.getParty();
+			final Party attackerParty = attacker.getParty();
 			
 			// Penalty applied to the attacker's XP
 			final float penalty = attacker.hasServitor() ? ((L2SummonInstance) attacker.getPet()).getExpPenalty() : 0;
@@ -352,7 +349,7 @@ public class L2Attackable extends L2Npc
 				final List<L2PcInstance> rewardedMembers = new ArrayList<>();
 				
 				// Go through all L2PcInstance in the party.
-				final List<L2PcInstance> groupMembers = (attackerParty.isInCommandChannel()) ? attackerParty.getCommandChannel().getMembers() : attackerParty.getPartyMembers();
+				final List<L2PcInstance> groupMembers = (attackerParty.isInCommandChannel()) ? attackerParty.getCommandChannel().getMembers() : attackerParty.getMembers();
 				
 				final Map<L2Character, RewardInfo> playersWithPets = new HashMap<>();
 				
@@ -1565,12 +1562,12 @@ public class L2Attackable extends L2Npc
 		return _commandChannelTimer;
 	}
 	
-	public L2CommandChannel getFirstCommandChannelAttacked()
+	public CommandChannel getFirstCommandChannelAttacked()
 	{
 		return _firstCommandChannelAttacked;
 	}
 	
-	public void setFirstCommandChannelAttacked(L2CommandChannel firstCommandChannelAttacked)
+	public void setFirstCommandChannelAttacked(CommandChannel firstCommandChannelAttacked)
 	{
 		_firstCommandChannelAttacked = firstCommandChannelAttacked;
 	}

@@ -17,42 +17,35 @@ package net.sf.l2j.gameserver.network.serverpackets;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
 
-/**
- * @author zabbix
- */
 public class PartyMemberPosition extends L2GameServerPacket
 {
-	Map<Integer, Location> locations = new HashMap<>();
+	Map<Integer, Location> _locations = new HashMap<>();
 	
-	public PartyMemberPosition(L2Party party)
+	public PartyMemberPosition(Party party)
 	{
 		reuse(party);
 	}
 	
-	public void reuse(L2Party party)
+	public void reuse(Party party)
 	{
-		locations.clear();
-		for (L2PcInstance member : party.getPartyMembers())
-		{
-			if (member == null)
-				continue;
-			
-			locations.put(member.getObjectId(), new Location(member.getX(), member.getY(), member.getZ()));
-		}
+		_locations.clear();
+		for (L2PcInstance member : party.getMembers())
+			_locations.put(member.getObjectId(), new Location(member.getX(), member.getY(), member.getZ()));
 	}
 	
 	@Override
 	protected void writeImpl()
 	{
 		writeC(0xa7);
-		writeD(locations.size());
-		for (Map.Entry<Integer, Location> entry : locations.entrySet())
+		writeD(_locations.size());
+		for (Map.Entry<Integer, Location> entry : _locations.entrySet())
 		{
-			Location loc = entry.getValue();
+			final Location loc = entry.getValue();
+			
 			writeD(entry.getKey());
 			writeD(loc.getX());
 			writeD(loc.getY());

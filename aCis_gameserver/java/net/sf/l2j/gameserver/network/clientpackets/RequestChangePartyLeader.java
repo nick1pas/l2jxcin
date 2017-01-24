@@ -15,6 +15,8 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
+import net.sf.l2j.gameserver.network.SystemMessageId;
 
 public final class RequestChangePartyLeader extends L2GameClientPacket
 {
@@ -29,11 +31,17 @@ public final class RequestChangePartyLeader extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final L2PcInstance activeChar = getClient().getActiveChar();
-		if (activeChar == null)
+		final L2PcInstance player = getClient().getActiveChar();
+		if (player == null)
 			return;
 		
-		if (activeChar.isInParty() && activeChar.getParty().isLeader(activeChar))
-			activeChar.getParty().changePartyLeader(_name);
+		final Party party = player.getParty();
+		if (party == null || !party.isLeader(player))
+		{
+			player.sendPacket(SystemMessageId.ONLY_A_PARTY_LEADER_CAN_TRANSFER_ONES_RIGHTS_TO_ANOTHER_PLAYER);
+			return;
+		}
+		
+		party.changePartyLeader(_name);
 	}
 }

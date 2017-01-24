@@ -38,57 +38,48 @@ public class FishingSkill implements ISkillHandler
 	@Override
 	public void useSkill(L2Character activeChar, L2Skill skill, L2Object[] targets)
 	{
-		if (activeChar == null || !(activeChar instanceof L2PcInstance))
+		if (!(activeChar instanceof L2PcInstance))
 			return;
 		
-		L2PcInstance player = (L2PcInstance) activeChar;
+		final L2PcInstance player = (L2PcInstance) activeChar;
+		final boolean isReelingSkill = skill.getSkillType() == L2SkillType.REELING;
 		
-		L2Fishing fish = player.getFishCombat();
+		final L2Fishing fish = player.getFishCombat();
 		if (fish == null)
 		{
-			if (skill.getSkillType() == L2SkillType.PUMPING)
-			{
-				// Pumping skill is available only while fishing
-				player.sendPacket(SystemMessageId.CAN_USE_PUMPING_ONLY_WHILE_FISHING);
-			}
-			else if (skill.getSkillType() == L2SkillType.REELING)
-			{
-				// Reeling skill is available only while fishing
-				player.sendPacket(SystemMessageId.CAN_USE_REELING_ONLY_WHILE_FISHING);
-			}
+			player.sendPacket((isReelingSkill) ? SystemMessageId.CAN_USE_REELING_ONLY_WHILE_FISHING : SystemMessageId.CAN_USE_PUMPING_ONLY_WHILE_FISHING);
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 			return;
 		}
-		Weapon weaponItem = player.getActiveWeaponItem();
-		ItemInstance weaponInst = activeChar.getActiveWeaponInstance();
+		
+		final Weapon weaponItem = player.getActiveWeaponItem();
+		final ItemInstance weaponInst = activeChar.getActiveWeaponInstance();
 		
 		if (weaponInst == null || weaponItem == null)
 			return;
 		
-		int SS = 1;
-		int pen = 0;
-		if (activeChar.isChargedShot(ShotType.FISH_SOULSHOT))
-			SS = 2;
-		double gradebonus = 1 + weaponItem.getCrystalType().getId() * 0.1;
-		int dmg = (int) (skill.getPower() * gradebonus * SS);
+		final int ssBonus = (activeChar.isChargedShot(ShotType.FISH_SOULSHOT)) ? 2 : 1;
+		final double gradeBonus = 1 + weaponItem.getCrystalType().getId() * 0.1;
 		
-		if (player.getSkillLevel(1315) <= skill.getLevel() - 2) // 1315 - Fish Expertise
+		int damage = (int) (skill.getPower() * gradeBonus * ssBonus);
+		int penalty = 0;
+		
+		// Fish expertise penalty if skill level is superior or equal to 3.
+		if (skill.getLevel() - player.getSkillLevel(1315) >= 3)
 		{
-			// Penalty
+			penalty = 50;
+			damage -= penalty;
+			
 			player.sendPacket(SystemMessageId.REELING_PUMPING_3_LEVELS_HIGHER_THAN_FISHING_PENALTY);
-			pen = 50;
-			int penatlydmg = dmg - pen;
-			dmg = penatlydmg;
 		}
 		
-		if (SS > 1)
+		if (ssBonus > 1)
 			weaponInst.setChargedShot(ShotType.FISH_SOULSHOT, false);
 		
-		if (skill.getSkillType() == L2SkillType.REELING) // Realing
-			fish.useRealing(dmg, pen);
+		if (isReelingSkill)
+			fish.useRealing(damage, penalty);
 		else
-			// Pumping
-			fish.usePomping(dmg, pen);
+			fish.usePomping(damage, penalty);
 	}
 	
 	@Override

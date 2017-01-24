@@ -14,17 +14,15 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.gameserver.model.L2Party;
+import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.CommandChannel;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ExAskJoinMPCC;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
-/**
- * Format: (ch) S
- * @author chris_00
- */
 public final class RequestExAskJoinMPCC extends L2GameClientPacket
 {
 	private String _name;
@@ -38,84 +36,52 @@ public final class RequestExAskJoinMPCC extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		L2PcInstance activeChar = getClient().getActiveChar();
-		if (activeChar == null)
+		final L2PcInstance requestor = getClient().getActiveChar();
+		if (requestor == null)
 			return;
 		
-		L2PcInstance player = World.getInstance().getPlayer(_name);
-		if (player == null)
+		final L2PcInstance target = World.getInstance().getPlayer(_name);
+		if (target == null)
 			return;
 		
-		// You can't invite yourself
-		if (activeChar.isInParty() && player.isInParty() && activeChar.getParty().equals(player.getParty()))
+		final Party requestorParty = requestor.getParty();
+		if (requestorParty == null)
 			return;
 		
-		// activeChar is in a Party?
-		if (activeChar.isInParty())
+		final Party targetParty = target.getParty();
+		if (targetParty == null || requestorParty.equals(targetParty))
+			return;
+		
+		if (!requestorParty.isLeader(requestor))
 		{
-			L2Party activeParty = activeChar.getParty();
-			// activeChar is PartyLeader? && activeChars Party is already in a CommandChannel?
-			if (activeParty.getLeader().equals(activeChar))
-			{
-				// if activeChars Party is in CC, is activeChar CCLeader?
-				if (activeParty.isInCommandChannel() && activeParty.getCommandChannel().getChannelLeader().equals(activeChar))
-				{
-					// target is in a party?
-					if (player.isInParty())
-					{
-						// targets party already in a CChannel?
-						if (player.getParty().isInCommandChannel())
-							activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ALREADY_MEMBER_OF_COMMAND_CHANNEL).addCharName(player));
-						// ready to open a new CC, send request to targets Party's PartyLeader
-						else
-							askJoinMPCC(activeChar, player);
-					}
-					else
-						activeChar.sendMessage(player.getName() + " doesn't have party and cannot be invited to Command Channel.");
-				}
-				// in CC, but not the CCLeader
-				else if (activeParty.isInCommandChannel() && !activeParty.getCommandChannel().getChannelLeader().equals(activeChar))
-					activeChar.sendPacket(SystemMessageId.CANNOT_INVITE_TO_COMMAND_CHANNEL);
-				else
-				{
-					// target in a party?
-					if (player.isInParty())
-					{
-						// target's party already in a CChannel?
-						if (player.getParty().isInCommandChannel())
-							activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ALREADY_MEMBER_OF_COMMAND_CHANNEL).addCharName(player));
-						// ready to open a new CC, send request to targets Party's PartyLeader
-						else
-							askJoinMPCC(activeChar, player);
-					}
-					else
-						activeChar.sendMessage(player.getName() + " doesn't have party and cannot be invited to Command Channel.");
-				}
-			}
-			else
-				activeChar.sendPacket(SystemMessageId.CANNOT_INVITE_TO_COMMAND_CHANNEL);
+			requestor.sendPacket(SystemMessageId.CANNOT_INVITE_TO_COMMAND_CHANNEL);
+			return;
 		}
-	}
-	
-	private static void askJoinMPCC(L2PcInstance requestor, L2PcInstance target)
-	{
-		boolean hasRight = false;
 		
-		if (requestor.getClan() != null && requestor.getClan().getLeaderId() == requestor.getObjectId() && requestor.getClan().getLevel() >= 5) // Clanleader of lvl5 Clan or higher
-			hasRight = true;
-		else if (requestor.getInventory().getItemByItemId(8871) != null) // 8871 Strategy Guide. Should destroyed after sucessfull invite?
-			hasRight = true;
-		else if (requestor.getPledgeClass() >= 5) // At least Baron or higher, check skill Clan Imperium
-			hasRight = requestor.getSkill(391) != null;
+		final CommandChannel requestorChannel = requestorParty.getCommandChannel();
+		if (requestorChannel != null && !requestorChannel.isLeader(requestor))
+		{
+			requestor.sendPacket(SystemMessageId.CANNOT_INVITE_TO_COMMAND_CHANNEL);
+			return;
+		}
 		
-		if (!hasRight)
+		final CommandChannel targetChannel = targetParty.getCommandChannel();
+		if (targetChannel != null)
+		{
+			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_ALREADY_MEMBER_OF_COMMAND_CHANNEL).addCharName(target));
+			return;
+		}
+		
+		// Requestor isn't a level 5 clan leader, or clan hasn't Clan Imperium skill.
+		final L2Clan requestorClan = requestor.getClan();
+		if (requestorClan == null || requestorClan.getLeaderId() != requestor.getObjectId() || requestorClan.getLevel() < 5 || requestor.getSkill(391) == null)
 		{
 			requestor.sendPacket(SystemMessageId.COMMAND_CHANNEL_ONLY_BY_LEVEL_5_CLAN_LEADER_PARTY_LEADER);
 			return;
 		}
 		
 		// Get the target's party leader, and do whole actions on him.
-		L2PcInstance targetLeader = target.getParty().getLeader();
+		final L2PcInstance targetLeader = targetParty.getLeader();
 		if (!targetLeader.isProcessingRequest())
 		{
 			requestor.onTransactionRequest(targetLeader);

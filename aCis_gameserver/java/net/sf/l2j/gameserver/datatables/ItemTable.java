@@ -161,7 +161,7 @@ public class ItemTable
 			{
 				final L2Attackable raid = (L2Attackable) reference;
 				if (raid.getFirstCommandChannelAttacked() != null && !Config.AUTO_LOOT_RAID)
-					item.setDropProtection(raid.getFirstCommandChannelAttacked().getChannelLeader().getObjectId(), true);
+					item.setDropProtection(raid.getFirstCommandChannelAttacked().getLeaderObjectId(), true);
 			}
 			else if (!Config.AUTO_LOOT)
 				item.setDropProtection(actor.getObjectId(), false);

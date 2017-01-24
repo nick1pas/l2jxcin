@@ -278,7 +278,7 @@ public class GrandBossTeleporters extends Quest
 						status = GrandBossManager.getInstance().getBossStatus(Sailren.SAILREN);
 						if (status == Sailren.DORMANT)
 						{
-							final List<L2PcInstance> party = player.getParty().getPartyMembers();
+							final List<L2PcInstance> party = player.getParty().getMembers();
 							
 							// Check players conditions.
 							for (L2PcInstance member : party)

@@ -100,14 +100,14 @@ public final class DuelManager
 	 * Removes player from duel.
 	 * @param player - the removed player
 	 */
-	public void onRemoveFromParty(L2PcInstance player)
+	public void onPartyEdit(L2PcInstance player)
 	{
 		if (player == null || !player.isInDuel())
 			return;
 		
 		final Duel duel = getDuel(player.getDuelId());
 		if (duel != null)
-			duel.onRemoveFromParty(player);
+			duel.onPartyEdit();
 	}
 	
 	/**
@@ -130,9 +130,9 @@ public final class DuelManager
 			duel.broadcastToTeam1(packet);
 		else if (duel.isPartyDuel())
 		{
-			if (duel.getPlayerA().getParty() != null && duel.getPlayerA().getParty().getPartyMembers().contains(player))
+			if (duel.getPlayerA().getParty() != null && duel.getPlayerA().getParty().containsPlayer(player))
 				duel.broadcastToTeam2(packet);
-			else if (duel.getPlayerB().getParty() != null && duel.getPlayerB().getParty().getPartyMembers().contains(player))
+			else if (duel.getPlayerB().getParty() != null && duel.getPlayerB().getParty().containsPlayer(player))
 				duel.broadcastToTeam1(packet);
 		}
 	}

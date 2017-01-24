@@ -16,6 +16,7 @@ package net.sf.l2j.gameserver.handler.chathandlers;
 
 import net.sf.l2j.gameserver.handler.IChatHandler;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 
 public class ChatParty implements IChatHandler
@@ -26,12 +27,13 @@ public class ChatParty implements IChatHandler
 	};
 	
 	@Override
-	public void handleChat(int type, L2PcInstance activeChar, String target, String text)
+	public void handleChat(int type, L2PcInstance player, String target, String text)
 	{
-		if (!activeChar.isInParty())
+		final Party party = player.getParty();
+		if (party == null)
 			return;
 		
-		activeChar.getParty().broadcastToPartyMembers(new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text));
+		party.broadcastPacket(new CreatureSay(player.getObjectId(), type, player.getName(), text));
 	}
 	
 	@Override

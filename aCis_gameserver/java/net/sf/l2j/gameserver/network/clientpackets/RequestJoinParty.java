@@ -14,18 +14,15 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.BlockList;
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
+import net.sf.l2j.gameserver.model.group.Party.LootRule;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.AskJoinParty;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
-/**
- * format cdd
- */
 public final class RequestJoinParty extends L2GameClientPacket
 {
 	private String _name;
@@ -91,88 +88,47 @@ public final class RequestJoinParty extends L2GameClientPacket
 		if (target.isInOlympiadMode() || requestor.isInOlympiadMode())
 			return;
 		
-		if (!requestor.isInParty())
-			createNewParty(target, requestor);
-		else
-		{
-			if (!requestor.getParty().isInDimensionalRift())
-				addTargetToParty(target, requestor);
-		}
-	}
-	
-	/**
-	 * @param target
-	 * @param requestor
-	 */
-	private static void addTargetToParty(L2PcInstance target, L2PcInstance requestor)
-	{
-		final L2Party party = requestor.getParty();
-		if (party == null)
-			return;
-		
-		if (!party.isLeader(requestor))
-		{
-			requestor.sendPacket(SystemMessageId.ONLY_LEADER_CAN_INVITE);
-			return;
-		}
-		
-		if (party.getMemberCount() >= 9)
-		{
-			requestor.sendPacket(SystemMessageId.PARTY_FULL);
-			return;
-		}
-		
-		if (party.getPendingInvitation() && !party.isInvitationRequestExpired())
+		if (requestor.isProcessingRequest())
 		{
 			requestor.sendPacket(SystemMessageId.WAITING_FOR_ANOTHER_REPLY);
 			return;
 		}
 		
-		if (!target.isProcessingRequest())
-		{
-			requestor.onTransactionRequest(target);
-			
-			// in case a leader change has happened, use party's mode
-			target.sendPacket(new AskJoinParty(requestor.getName(), party.getLootDistribution()));
-			party.setPendingInvitation(true);
-			
-			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_INVITED_S1_TO_PARTY).addCharName(target));
-			if (Config.DEBUG)
-				_log.fine("Sent out a party invitation to " + target.getName());
-		}
-		else
+		if (target.isProcessingRequest())
 		{
 			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_BUSY_TRY_LATER).addCharName(target));
-			if (Config.DEBUG)
-				_log.warning(requestor.getName() + " already received a party invitation");
+			return;
 		}
-	}
-	
-	/**
-	 * @param target
-	 * @param requestor
-	 */
-	private void createNewParty(L2PcInstance target, L2PcInstance requestor)
-	{
-		if (!target.isProcessingRequest())
+		
+		final Party party = requestor.getParty();
+		if (party != null)
 		{
-			requestor.setParty(new L2Party(requestor, _itemDistribution));
+			if (!party.isLeader(requestor))
+			{
+				requestor.sendPacket(SystemMessageId.ONLY_LEADER_CAN_INVITE);
+				return;
+			}
 			
-			requestor.onTransactionRequest(target);
-			target.sendPacket(new AskJoinParty(requestor.getName(), _itemDistribution));
-			requestor.getParty().setPendingInvitation(true);
+			if (party.getMembersCount() >= 9)
+			{
+				requestor.sendPacket(SystemMessageId.PARTY_FULL);
+				return;
+			}
 			
-			if (Config.DEBUG)
-				_log.fine("Sent out a party invitation to " + target.getName());
+			if (party.getPendingInvitation() && !party.isInvitationRequestExpired())
+			{
+				requestor.sendPacket(SystemMessageId.WAITING_FOR_ANOTHER_REPLY);
+				return;
+			}
 			
-			requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_INVITED_S1_TO_PARTY).addCharName(target));
+			party.setPendingInvitation(true);
 		}
 		else
-		{
-			requestor.sendPacket(SystemMessageId.WAITING_FOR_ANOTHER_REPLY);
-			
-			if (Config.DEBUG)
-				_log.warning(requestor.getName() + " already received a party invitation");
-		}
+			requestor.setLootRule(LootRule.VALUES[_itemDistribution]);
+		
+		requestor.onTransactionRequest(target);
+		requestor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_INVITED_S1_TO_PARTY).addCharName(target));
+		
+		target.sendPacket(new AskJoinParty(requestor.getName(), (party != null) ? party.getLootRule().ordinal() : _itemDistribution));
 	}
 }

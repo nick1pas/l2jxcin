@@ -15,6 +15,7 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchRoom;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchRoomList;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchWaitingList;
@@ -83,16 +84,17 @@ public class RequestPartyMatchList extends L2GameClientPacket
 			PartyMatchWaitingList.getInstance().removePlayer(activeChar);
 			PartyMatchRoomList.getInstance().addPartyMatchRoom(maxid, room);
 			
-			if (activeChar.isInParty())
+			final Party party = activeChar.getParty();
+			if (party != null)
 			{
-				for (L2PcInstance ptmember : activeChar.getParty().getPartyMembers())
+				for (L2PcInstance member : party.getMembers())
 				{
-					if (ptmember == null || ptmember == activeChar)
+					if (member == activeChar)
 						continue;
 					
-					ptmember.setPartyRoom(maxid);
+					member.setPartyRoom(maxid);
 					
-					room.addMember(ptmember);
+					room.addMember(member);
 				}
 			}
 			

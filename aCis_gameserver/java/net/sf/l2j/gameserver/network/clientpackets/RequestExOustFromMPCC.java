@@ -14,15 +14,13 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.CommandChannel;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
-/**
- * @author -Wooden-
- */
 public final class RequestExOustFromMPCC extends L2GameClientPacket
 {
 	private String _name;
@@ -36,36 +34,49 @@ public final class RequestExOustFromMPCC extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final L2PcInstance activeChar = getClient().getActiveChar();
-		if (activeChar == null)
+		final L2PcInstance requestor = getClient().getActiveChar();
+		if (requestor == null)
 			return;
 		
 		final L2PcInstance target = World.getInstance().getPlayer(_name);
 		if (target == null)
 		{
-			activeChar.sendPacket(SystemMessageId.TARGET_CANT_FOUND);
+			requestor.sendPacket(SystemMessageId.TARGET_CANT_FOUND);
 			return;
 		}
 		
-		if (activeChar.equals(target))
+		if (requestor.equals(target))
 		{
-			activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
+			requestor.sendPacket(SystemMessageId.INCORRECT_TARGET);
 			return;
 		}
 		
-		final L2Party playerParty = activeChar.getParty();
-		final L2Party targetParty = target.getParty();
+		final Party requestorParty = requestor.getParty();
+		final Party targetParty = target.getParty();
 		
-		if (playerParty != null && playerParty.isInCommandChannel() && targetParty != null && targetParty.isInCommandChannel() && playerParty.getCommandChannel().getChannelLeader().equals(activeChar))
+		if (requestorParty == null || targetParty == null)
 		{
-			targetParty.getCommandChannel().removeParty(targetParty);
-			targetParty.broadcastToPartyMembers(SystemMessage.getSystemMessage(SystemMessageId.DISMISSED_FROM_COMMAND_CHANNEL));
-			
-			// check if CC has not been canceled
-			if (playerParty.isInCommandChannel())
-				playerParty.getCommandChannel().broadcastToChannelMembers(SystemMessage.getSystemMessage(SystemMessageId.S1_PARTY_DISMISSED_FROM_COMMAND_CHANNEL).addCharName(targetParty.getLeader()));
+			requestor.sendPacket(SystemMessageId.INCORRECT_TARGET);
+			return;
 		}
-		else
-			activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
+		
+		final CommandChannel requestorChannel = requestorParty.getCommandChannel();
+		if (requestorChannel == null || !requestorChannel.isLeader(requestor))
+		{
+			requestor.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
+			return;
+		}
+		
+		if (!requestorChannel.removeParty(targetParty))
+		{
+			requestor.sendPacket(SystemMessageId.INCORRECT_TARGET);
+			return;
+		}
+		
+		targetParty.broadcastMessage(SystemMessageId.DISMISSED_FROM_COMMAND_CHANNEL);
+		
+		// check if CC has not been canceled
+		if (requestorParty.isInCommandChannel())
+			requestorParty.getCommandChannel().broadcastPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_PARTY_DISMISSED_FROM_COMMAND_CHANNEL).addCharName(targetParty.getLeader()));
 	}
 }

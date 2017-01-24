@@ -44,7 +44,7 @@ public final class RequestWithdrawPartyRoom extends L2GameClientPacket
 		if (room == null)
 			return;
 		
-		if ((activeChar.isInParty() && room.getOwner().isInParty()) && (activeChar.getParty().getPartyLeaderOID() == room.getOwner().getParty().getPartyLeaderOID()))
+		if (activeChar.isInParty() && room.getOwner().isInParty() && activeChar.getParty().getLeaderObjectId() == room.getOwner().getParty().getLeaderObjectId())
 		{
 			// If user is in party with Room Owner is not removed from Room
 		}

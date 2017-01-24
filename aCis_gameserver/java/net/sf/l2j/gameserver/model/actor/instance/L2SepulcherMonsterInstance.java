@@ -23,14 +23,14 @@ import net.sf.l2j.gameserver.instancemanager.FourSepulchersManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.serverpackets.NpcSay;
 import net.sf.l2j.gameserver.scripting.QuestState;
 
-/**
- * @author sandman
- */
 public class L2SepulcherMonsterInstance extends L2MonsterInstance
 {
+	private static final String QUEST_ID = "Q620_FourGoblets";
+	
 	public int mysteriousBoxId = 0;
 	
 	protected Future<?> _victimSpawnKeyBoxTask = null;
@@ -267,9 +267,7 @@ public class L2SepulcherMonsterInstance extends L2MonsterInstance
 	
 	private void giveCup(L2Character killer)
 	{
-		String questId = "Q620_FourGoblets";
 		int cupId = 0;
-		int oldBrooch = 7262;
 		
 		switch (getNpcId())
 		{
@@ -287,23 +285,24 @@ public class L2SepulcherMonsterInstance extends L2MonsterInstance
 				break;
 		}
 		
-		L2PcInstance player = killer.getActingPlayer();
+		final L2PcInstance player = killer.getActingPlayer();
 		if (player == null)
 			return;
 		
-		if (player.isInParty())
+		final Party party = player.getParty();
+		if (party != null)
 		{
-			for (L2PcInstance mem : player.getParty().getPartyMembers())
+			for (L2PcInstance member : party.getMembers())
 			{
-				QuestState qs = mem.getQuestState(questId);
-				if (qs != null && (qs.isStarted() || qs.isCompleted()) && mem.getInventory().getItemByItemId(oldBrooch) == null)
-					mem.addItem("Quest", cupId, 1, mem, true);
+				final QuestState qs = member.getQuestState(QUEST_ID);
+				if (qs != null && (qs.isStarted() || qs.isCompleted()) && member.getInventory().getItemByItemId(7262) == null)
+					member.addItem("Quest", cupId, 1, member, true);
 			}
 		}
 		else
 		{
-			QuestState qs = player.getQuestState(questId);
-			if (qs != null && (qs.isStarted() || qs.isCompleted()) && player.getInventory().getItemByItemId(oldBrooch) == null)
+			final QuestState qs = player.getQuestState(QUEST_ID);
+			if (qs != null && (qs.isStarted() || qs.isCompleted()) && player.getInventory().getItemByItemId(7262) == null)
 				player.addItem("Quest", cupId, 1, player, true);
 		}
 	}

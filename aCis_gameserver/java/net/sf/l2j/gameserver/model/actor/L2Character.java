@@ -43,7 +43,6 @@ import net.sf.l2j.gameserver.model.FusionSkill;
 import net.sf.l2j.gameserver.model.IChanceSkillTrigger;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.ShotType;
@@ -58,6 +57,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2RiftInvaderInstance;
 import net.sf.l2j.gameserver.model.actor.stat.CharStat;
 import net.sf.l2j.gameserver.model.actor.status.CharStatus;
 import net.sf.l2j.gameserver.model.actor.template.CharTemplate;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.holder.SkillUseHolder;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Armor;
@@ -4075,7 +4075,7 @@ public abstract class L2Character extends L2Object
 	/**
 	 * @return the L2Party object of the L2Character.
 	 */
-	public L2Party getParty()
+	public Party getParty()
 	{
 		return null;
 	}

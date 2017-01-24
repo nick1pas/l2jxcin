@@ -42,6 +42,7 @@ import net.sf.l2j.gameserver.model.CharSelectInfoPackage;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party.MessageType;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadManager;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
@@ -555,7 +556,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 					setDetached(true);
 					if (offlineMode(getActiveChar()))
 					{
-						getActiveChar().leaveParty();
+						getActiveChar().getParty().removePartyMember(getActiveChar(), MessageType.DISCONNECTED);
 						OlympiadManager.getInstance().unRegisterNoble(getActiveChar());
 						
 						// If the L2PcInstance has Pet, unsummon it

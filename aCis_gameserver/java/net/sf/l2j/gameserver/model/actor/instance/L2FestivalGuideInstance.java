@@ -23,9 +23,9 @@ import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival.FestivalType;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
-import net.sf.l2j.gameserver.model.L2Party;
-import net.sf.l2j.gameserver.model.L2Party.MessageType;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.group.Party;
+import net.sf.l2j.gameserver.model.group.Party.MessageType;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.zone.type.L2PeaceZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -154,7 +154,7 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 		{
 			final int festivalIndex = _festivalType.ordinal();
 			
-			L2Party playerParty = player.getParty();
+			Party playerParty = player.getParty();
 			int val = Integer.parseInt(command.substring(9, 10));
 			
 			switch (val)
@@ -189,7 +189,7 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 					}
 					
 					// Check to see if the party has at least 5 members.
-					if (playerParty.getMemberCount() < Config.ALT_FESTIVAL_MIN_PLAYER)
+					if (playerParty.getMembersCount() < Config.ALT_FESTIVAL_MIN_PLAYER)
 					{
 						showChatWindow(player, 2, "b", false);
 						return;
@@ -373,7 +373,7 @@ public final class L2FestivalGuideInstance extends L2NpcInstance
 					else
 					{
 						SevenSignsFestival.getInstance().updateParticipants(player, playerParty);
-						playerParty.removePartyMember(player, MessageType.Expelled);
+						playerParty.removePartyMember(player, MessageType.EXPELLED);
 					}
 					break;
 				case 0: // Distribute Accumulated Bonus

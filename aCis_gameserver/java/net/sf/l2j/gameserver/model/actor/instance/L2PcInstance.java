@@ -92,8 +92,6 @@ import net.sf.l2j.gameserver.model.L2Fishing;
 import net.sf.l2j.gameserver.model.L2Macro;
 import net.sf.l2j.gameserver.model.L2ManufactureList;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2Party;
-import net.sf.l2j.gameserver.model.L2Party.MessageType;
 import net.sf.l2j.gameserver.model.L2Radar;
 import net.sf.l2j.gameserver.model.L2Request;
 import net.sf.l2j.gameserver.model.L2ShortCut;
@@ -134,6 +132,10 @@ import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
+import net.sf.l2j.gameserver.model.group.CommandChannel;
+import net.sf.l2j.gameserver.model.group.Party;
+import net.sf.l2j.gameserver.model.group.Party.LootRule;
+import net.sf.l2j.gameserver.model.group.Party.MessageType;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.holder.SkillUseHolder;
 import net.sf.l2j.gameserver.model.item.Henna;
@@ -544,7 +546,8 @@ public final class L2PcInstance extends L2Playable
 	private boolean _exchangeRefusal; // Exchange refusal
 	private boolean _isPartyInRefuse; // Party Refusal Mode
 	
-	private L2Party _party;
+	private Party _party;
+	private LootRule _lootRule;
 	
 	private L2PcInstance _activeRequester;
 	private long _requestExpireTime;
@@ -1777,8 +1780,8 @@ public final class L2PcInstance extends L2Playable
 				sendPacket(SystemMessageId.CLASS_TRANSFER);
 			
 			// Update class icon in party and clan
-			if (isInParty())
-				getParty().broadcastToPartyMembers(new PartySmallWindowUpdate(this));
+			if (_party != null)
+				_party.broadcastPacket(new PartySmallWindowUpdate(this));
 			
 			if (getClan() != null)
 				getClan().broadcastToOnlineMembers(new PledgeShowMemberListUpdate(this));
@@ -3572,7 +3575,7 @@ public final class L2PcInstance extends L2Playable
 				return;
 			}
 			
-			if (((isInParty() && getParty().getLootDistribution() == L2Party.ITEM_LOOTER) || !isInParty()) && !_inventory.validateCapacity(item))
+			if (((isInParty() && getParty().getLootRule() == LootRule.ITEM_LOOTER) || !isInParty()) && !_inventory.validateCapacity(item))
 			{
 				sendPacket(SystemMessageId.SLOTS_FULL);
 				return;
@@ -3771,7 +3774,7 @@ public final class L2PcInstance extends L2Playable
 	{
 		if (newTarget != null)
 		{
-			boolean isParty = (((newTarget instanceof L2PcInstance) && isInParty() && getParty().getPartyMembers().contains(newTarget)));
+			boolean isParty = (((newTarget instanceof L2PcInstance) && isInParty() && _party.containsPlayer(newTarget)));
 			
 			// Check if the new target is visible
 			if (!isParty && (!newTarget.isVisible() || Math.abs(newTarget.getZ() - getZ()) > 1000))
@@ -4054,9 +4057,6 @@ public final class L2PcInstance extends L2Playable
 			if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == this)
 				character.abortCast();
 			
-		if (isInParty() && getParty().isInDimensionalRift())
-			getParty().getDimensionalRift().getDeadMemberList().add(this);
-		
 		// calculate death penalty buff
 		calculateDeathPenaltyBuffLevel(killer);
 		
@@ -5182,43 +5182,28 @@ public final class L2PcInstance extends L2Playable
 	 * Set the _party object of the L2PcInstance (without joining it).
 	 * @param party The object.
 	 */
-	public void setParty(L2Party party)
+	public void setParty(Party party)
 	{
 		_party = party;
-	}
-	
-	/**
-	 * Set the _party object of the L2PcInstance AND join it.
-	 * @param party
-	 */
-	public void joinParty(L2Party party)
-	{
-		if (party != null)
-		{
-			_party = party;
-			party.addPartyMember(this);
-		}
-	}
-	
-	/**
-	 * Manage the Leave Party task of the L2PcInstance.
-	 */
-	public void leaveParty()
-	{
-		if (isInParty())
-		{
-			_party.removePartyMember(this, MessageType.Disconnected);
-			_party = null;
-		}
 	}
 	
 	/**
 	 * Return the _party object of the L2PcInstance.
 	 */
 	@Override
-	public L2Party getParty()
+	public Party getParty()
 	{
 		return _party;
+	}
+	
+	public LootRule getLootRule()
+	{
+		return _lootRule;
+	}
+	
+	public void setLootRule(LootRule lootRule)
+	{
+		_lootRule = lootRule;
 	}
 	
 	/**
@@ -6537,7 +6522,7 @@ public final class L2PcInstance extends L2Playable
 			return true;
 		
 		// Check if the attacker is not in the same party
-		if (getParty() != null && getParty().getPartyMembers().contains(attacker))
+		if (getParty() != null && getParty().getMembers().contains(attacker))
 			return false;
 		
 		// Check if the attacker is in TvT and TvT is started
@@ -7099,6 +7084,7 @@ public final class L2PcInstance extends L2Playable
 			case TARGET_GROUND:
 			case TARGET_SELF:
 			case TARGET_CORPSE_ALLY:
+			case TARGET_AREA_SUMMON:
 				break;
 			default:
 				if (!checkPvpSkill(target, skill) && !getAccessLevel().allowPeaceAttack())
@@ -7204,14 +7190,11 @@ public final class L2PcInstance extends L2Playable
 		if (looter == null)
 			return false;
 		
-		final L2Party party = getParty();
-		if (party == null)
+		if (_party == null)
 			return false;
 		
-		if (party.isInCommandChannel())
-			return party.getCommandChannel().getMembers().contains(looter);
-		
-		return party.getPartyMembers().contains(looter);
+		final CommandChannel channel = _party.getCommandChannel();
+		return (channel != null) ? channel.containsPlayer(looter) : _party.containsPlayer(looter);
 	}
 	
 	/**
@@ -7766,7 +7749,7 @@ public final class L2PcInstance extends L2Playable
 		dropAllSummons();
 		
 		if (getParty() != null)
-			getParty().removePartyMember(this, MessageType.Expelled);
+			getParty().removePartyMember(this, MessageType.EXPELLED);
 		
 		standUp();
 		
@@ -7791,7 +7774,7 @@ public final class L2PcInstance extends L2Playable
 		dropAllSummons();
 		
 		if (getParty() != null)
-			getParty().removePartyMember(this, MessageType.Expelled);
+			getParty().removePartyMember(this, MessageType.EXPELLED);
 		
 		_olympiadGameId = id;
 		
@@ -8461,8 +8444,8 @@ public final class L2PcInstance extends L2Playable
 			}
 			_classIndex = classIndex;
 			
-			if (isInParty())
-				getParty().recalculatePartyLevel();
+			if (_party != null)
+				_party.recalculateLevel();
 			
 			if (getPet() instanceof L2SummonInstance)
 				getPet().unSummon(this);
@@ -8674,12 +8657,6 @@ public final class L2PcInstance extends L2Playable
 		
 		if (isMounted())
 			startFeed(_mountNpcId);
-		
-		if (isInParty() && getParty().isInDimensionalRift())
-		{
-			if (!DimensionalRiftManager.getInstance().checkIfInPeaceZone(getX(), getY(), getZ()))
-				getParty().getDimensionalRift().memberRessurected(this);
-		}
 		
 		// Schedule a paralyzed task to wait for the animation to finish
 		ThreadPool.schedule(new Runnable()
@@ -9062,8 +9039,8 @@ public final class L2PcInstance extends L2Playable
 			decayMe();
 			
 			// If a party is in progress, leave it
-			if (isInParty())
-				leaveParty();
+			if (_party != null)
+				_party.removePartyMember(this, MessageType.DISCONNECTED);
 			
 			// If the L2PcInstance has Pet, unsummon it
 			if (getPet() != null)

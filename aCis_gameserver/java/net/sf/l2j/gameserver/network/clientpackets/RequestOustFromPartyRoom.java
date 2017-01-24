@@ -45,18 +45,18 @@ public final class RequestOustFromPartyRoom extends L2GameClientPacket
 		if (member == null)
 			return;
 		
-		final PartyMatchRoom _room = PartyMatchRoomList.getInstance().getPlayerRoom(member);
-		if (_room == null)
+		final PartyMatchRoom room = PartyMatchRoomList.getInstance().getPlayerRoom(member);
+		if (room == null)
 			return;
 		
-		if (_room.getOwner() != activeChar)
+		if (room.getOwner() != activeChar)
 			return;
 		
-		if (activeChar.isInParty() && member.isInParty() && activeChar.getParty().getPartyLeaderOID() == member.getParty().getPartyLeaderOID())
+		if (activeChar.isInParty() && member.isInParty() && activeChar.getParty().getLeaderObjectId() == member.getParty().getLeaderObjectId())
 			activeChar.sendPacket(SystemMessageId.CANNOT_DISMISS_PARTY_MEMBER);
 		else
 		{
-			_room.deleteMember(member);
+			room.deleteMember(member);
 			member.setPartyRoom(0);
 			
 			// Close the PartyRoom window

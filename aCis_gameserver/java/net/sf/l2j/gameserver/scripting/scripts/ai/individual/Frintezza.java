@@ -26,8 +26,6 @@ import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
-import net.sf.l2j.gameserver.model.L2CommandChannel;
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
@@ -35,6 +33,8 @@ import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2GrandBossInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.CommandChannel;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
@@ -2129,12 +2129,12 @@ public class Frintezza extends L2AttackableAIScript
 			if (!Config.BYPASS_FRINTEZZA_PARTIES_CHECK)
 			{
 				
-				if ((!player.isInParty() || !player.getParty().isLeader(player)) || (player.getParty().getCommandChannel() == null) || (player.getParty().getCommandChannel().getChannelLeader() != player))
+				if ((!player.isInParty() || !player.getParty().isLeader(player)) || (player.getParty().getCommandChannel() == null) || (player.getParty().getCommandChannel().getLeader() != player))
 				{
 					htmltext = "<html><body>No reaction. Contact must be initiated by the Command Channel Leader.</body></html>";
 					party_check_success = false;
 				}
-				else if (player.getParty().getCommandChannel().getPartys().size() < Config.FRINTEZZA_MIN_PARTIES || player.getParty().getCommandChannel().getPartys().size() > Config.FRINTEZZA_MAX_PARTIES)
+				else if (player.getParty().getCommandChannel().getParties().size() < Config.FRINTEZZA_MIN_PARTIES || player.getParty().getCommandChannel().getParties().size() > Config.FRINTEZZA_MAX_PARTIES)
 				{
 					htmltext = "<html><body>Your command channel needs to have at least " + Config.FRINTEZZA_MIN_PARTIES + " parties and a maximum of " + Config.FRINTEZZA_MAX_PARTIES + ".</body></html>";
 					party_check_success = false;
@@ -2165,12 +2165,12 @@ public class Frintezza extends L2AttackableAIScript
 					{					
 						if (player.getParty() != null)
 						{					
-							L2CommandChannel CC = player.getParty().getCommandChannel();
+							CommandChannel CC = player.getParty().getCommandChannel();
 							
 							if (CC != null)
 							{ // teleport all parties into CC reb12
 								
-								for (L2Party party : CC.getPartys())
+								for (Party party : CC.getParties())
 								{
 									if (party == null)
 										continue;
@@ -2178,7 +2178,7 @@ public class Frintezza extends L2AttackableAIScript
 									synchronized (_PlayersInside)
 									{
 										
-										for (L2PcInstance member : party.getPartyMembers())
+										for (L2PcInstance member : party.getMembers())
 										{
 											if (member == null || member.getLevel() < 74)
 												continue;
@@ -2206,9 +2206,9 @@ public class Frintezza extends L2AttackableAIScript
 							else
 							{ // teleport just actual party reb12
 								
-								L2Party party = player.getParty();
+								Party party = player.getParty();
 								
-								for (L2PcInstance member : party.getPartyMembers())
+								for (L2PcInstance member : party.getMembers())
 								{
 									if (member == null || member.getLevel() < 74)
 										continue;
@@ -2257,16 +2257,16 @@ public class Frintezza extends L2AttackableAIScript
 					else
 					{
 						
-						L2CommandChannel CC = player.getParty().getCommandChannel();
+						CommandChannel CC = player.getParty().getCommandChannel();
 						
-						for (L2Party party : CC.getPartys())
+						for (Party party : CC.getParties())
 						{
 							if (party == null)
 								continue;
 							
 							synchronized (_PlayersInside)
 							{
-								for (L2PcInstance member : party.getPartyMembers())
+								for (L2PcInstance member : party.getMembers())
 								{
 									if (member == null || member.getLevel() < 74)
 										continue;

@@ -42,6 +42,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.model.base.Sex;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.AbstractNpcInfo.NpcInfo;
@@ -487,15 +488,34 @@ public class AdminEditChar implements IAdminCommandHandler
 				target = activeChar.getTarget();
 			}
 			
-			if (target instanceof L2PcInstance)
+			if (!(target instanceof L2PcInstance))
 			{
-				if (((L2PcInstance) target).isInParty())
-					gatherPartyInfo((L2PcInstance) target, activeChar);
-				else
-					activeChar.sendMessage(((L2PcInstance) target).getName() + " isn't in a party.");
-			}
-			else
 				activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
+				return false;
+			}
+			
+			final L2PcInstance player = ((L2PcInstance) target);
+			
+			final Party party = player.getParty();
+			if (party == null)
+			{
+				activeChar.sendMessage(player.getName() + " isn't in a party.");
+				return false;
+			}
+			
+			final StringBuilder sb = new StringBuilder(400);
+			for (L2PcInstance member : party.getMembers())
+			{
+				if (!party.isLeader(member))
+					StringUtil.append(sb, "<tr><td width=150><a action=\"bypass -h admin_character_info ", member.getName(), "\">", member.getName(), " (", member.getLevel(), ")</a></td><td width=120 align=right>", member.getClassId().toString(), "</td></tr>");
+				else
+					StringUtil.append(sb, "<tr><td width=150><a action=\"bypass -h admin_character_info ", member.getName(), "\"><font color=\"LEVEL\">", member.getName(), " (", member.getLevel(), ")</font></a></td><td width=120 align=right>", member.getClassId().toString(), "</td></tr>");
+			}
+			
+			final NpcHtmlMessage html = new NpcHtmlMessage(0);
+			html.setFile("data/html/admin/partyinfo.htm");
+			html.replace("%party%", sb.toString());
+			activeChar.sendPacket(html);
 		}
 		else if (command.startsWith("admin_clan_info"))
 		{
@@ -956,23 +976,6 @@ public class AdminEditChar implements IAdminCommandHandler
 			html.replace("%food%", "N/A");
 			html.replace("%load%", "N/A");
 		}
-		activeChar.sendPacket(html);
-	}
-	
-	private static void gatherPartyInfo(L2PcInstance target, L2PcInstance activeChar)
-	{
-		final StringBuilder sb = new StringBuilder(400);
-		for (L2PcInstance member : target.getParty().getPartyMembers())
-		{
-			if (member.getParty().getPartyLeaderOID() != member.getObjectId())
-				StringUtil.append(sb, "<tr><td><table width=270 border=0 cellpadding=2><tr><td width=30 align=right>", member.getLevel(), "</td><td width=130><a action=\"bypass -h admin_character_info ", member.getName(), "\">", member.getName(), "</a></td><td width=110 align=right>", member.getClassId().toString(), "</td></tr></table></td></tr>");
-			else
-				StringUtil.append(sb, "<tr><td><table width=270 border=0 cellpadding=2><tr><td width=30 align=right><font color=\"LEVEL\">", member.getLevel(), "</td><td width=130><a action=\"bypass -h admin_character_info ", member.getName(), "\">", member.getName(), " (Party leader)</a></td><td width=110 align=right>", member.getClassId().toString(), "</font></td></tr></table></td></tr>");
-		}
-		
-		final NpcHtmlMessage html = new NpcHtmlMessage(0);
-		html.setFile("data/html/admin/partyinfo.htm");
-		html.replace("%party%", sb.toString());
 		activeChar.sendPacket(html);
 	}
 	

@@ -60,6 +60,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		npcDat.set("type", "");
 		
 		npcDat.set("name", player.getClan().getName());
+		npcDat.set("usingServerSideName", true);
 		
 		npcDat.set("hp", (_isAdvanced) ? 100000 : 50000);
 		npcDat.set("mp", 0);

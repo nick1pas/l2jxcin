@@ -19,7 +19,6 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
-import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.taskmanager.AttackStanceTaskManager;
 
 public final class Logout extends L2GameClientPacket
@@ -56,17 +55,11 @@ public final class Logout extends L2GameClientPacket
 			return;
 		}
 		
-		if (player.isFestivalParticipant())
+		if (player.isFestivalParticipant() && SevenSignsFestival.getInstance().isFestivalInitialized())
 		{
-			if (SevenSignsFestival.getInstance().isFestivalInitialized())
-			{
-				player.sendPacket(SystemMessageId.NO_LOGOUT_HERE);
-				player.sendPacket(ActionFailed.STATIC_PACKET);
-				return;
-			}
-			
-			if (player.isInParty())
-				player.getParty().broadcastToPartyMembers(SystemMessage.sendString(player.getName() + " has been removed from the upcoming festival."));
+			player.sendPacket(SystemMessageId.NO_LOGOUT_HERE);
+			player.sendPacket(ActionFailed.STATIC_PACKET);
+			return;
 		}
 		
 		player.removeFromBossZone();

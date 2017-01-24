@@ -30,11 +30,11 @@ import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Effect;
-import net.sf.l2j.gameserver.model.L2Party.MessageType;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party.MessageType;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.Earthquake;
@@ -508,7 +508,7 @@ public class CursedWeapon
 		_player.setPkKills(0);
 		
 		if (_player.isInParty())
-			_player.getParty().removePartyMember(_player, MessageType.Expelled);
+			_player.getParty().removePartyMember(_player, MessageType.EXPELLED);
 		
 		// Disable active toggles
 		for (L2Effect effect : _player.getAllEffects())

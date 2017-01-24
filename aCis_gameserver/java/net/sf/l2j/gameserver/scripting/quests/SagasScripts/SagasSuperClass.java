@@ -24,13 +24,13 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
@@ -851,11 +851,11 @@ public class SagasSuperClass extends Quest
 		{
 			if (npcId == Archon_Minion)
 			{
-				L2Party party = player.getParty();
+				Party party = player.getParty();
 				if (party != null)
 				{
 					List<QuestState> PartyQuestMembers = new ArrayList<>();
-					for (L2PcInstance player1 : party.getPartyMembers())
+					for (L2PcInstance player1 : party.getMembers())
 					{
 						QuestState st1 = findQuest(player1);
 						if (st1 != null && player1.isInsideRadius(player, Config.ALT_PARTY_RANGE2, false, false))

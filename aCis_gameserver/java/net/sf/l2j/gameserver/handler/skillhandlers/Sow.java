@@ -23,10 +23,10 @@ import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.manor.Seed;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
-import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.scripting.QuestState;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 
@@ -61,20 +61,21 @@ public class Sow implements ISkillHandler
 		if (!activeChar.destroyItemByItemId("Consume", seed.getSeedId(), 1, target, false))
 			return;
 		
-		SystemMessage sm;
+		SystemMessageId smId;
 		if (calcSuccess(activeChar, target, seed))
 		{
 			player.sendPacket(new PlaySound(QuestState.SOUND_ITEMGET));
 			target.setSeeded(activeChar.getObjectId());
-			sm = SystemMessage.getSystemMessage(SystemMessageId.THE_SEED_WAS_SUCCESSFULLY_SOWN);
+			smId = SystemMessageId.THE_SEED_WAS_SUCCESSFULLY_SOWN;
 		}
 		else
-			sm = SystemMessage.getSystemMessage(SystemMessageId.THE_SEED_WAS_NOT_SOWN);
+			smId = SystemMessageId.THE_SEED_WAS_NOT_SOWN;
 		
-		if (!player.isInParty())
-			player.sendPacket(sm);
+		final Party party = player.getParty();
+		if (party == null)
+			player.sendPacket(smId);
 		else
-			player.getParty().broadcastToPartyMembers(sm);
+			party.broadcastMessage(smId);
 		
 		target.getAI().setIntention(CtrlIntention.IDLE);
 	}

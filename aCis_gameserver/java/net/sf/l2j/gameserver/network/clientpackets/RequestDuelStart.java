@@ -14,10 +14,10 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.gameserver.model.L2CommandChannel;
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.CommandChannel;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ExDuelAskStart;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -72,15 +72,15 @@ public final class RequestDuelStart extends L2GameClientPacket
 		if (_partyDuel == 1)
 		{
 			// Player must be a party leader, the target can't be of the same party.
-			final L2Party activeCharParty = activeChar.getParty();
-			if (activeCharParty == null || !activeCharParty.isLeader(activeChar) || activeCharParty.getPartyMembers().contains(targetChar))
+			final Party activeCharParty = activeChar.getParty();
+			if (activeCharParty == null || !activeCharParty.isLeader(activeChar) || activeCharParty.containsPlayer(targetChar))
 			{
 				activeChar.sendPacket(SystemMessageId.YOU_ARE_UNABLE_TO_REQUEST_A_DUEL_AT_THIS_TIME);
 				return;
 			}
 			
 			// Target must be in a party.
-			final L2Party targetCharParty = targetChar.getParty();
+			final Party targetCharParty = targetChar.getParty();
 			if (targetCharParty == null)
 			{
 				activeChar.sendPacket(SystemMessageId.SINCE_THE_PERSON_YOU_CHALLENGED_IS_NOT_CURRENTLY_IN_A_PARTY_THEY_CANNOT_DUEL_AGAINST_YOUR_PARTY);
@@ -88,18 +88,18 @@ public final class RequestDuelStart extends L2GameClientPacket
 			}
 			
 			// Check if every player is ready for a duel.
-			for (L2PcInstance partyMember : activeCharParty.getPartyMembers())
+			for (L2PcInstance member : activeCharParty.getMembers())
 			{
-				if (partyMember != activeChar && !partyMember.canDuel())
+				if (member != activeChar && !member.canDuel())
 				{
 					activeChar.sendPacket(SystemMessageId.YOU_ARE_UNABLE_TO_REQUEST_A_DUEL_AT_THIS_TIME);
 					return;
 				}
 			}
 			
-			for (L2PcInstance partyMember : targetCharParty.getPartyMembers())
+			for (L2PcInstance member : targetCharParty.getMembers())
 			{
-				if (partyMember != targetChar && !partyMember.canDuel())
+				if (member != targetChar && !member.canDuel())
 				{
 					activeChar.sendPacket(SystemMessageId.THE_OPPOSING_PARTY_IS_CURRENTLY_UNABLE_TO_ACCEPT_A_CHALLENGE_TO_A_DUEL);
 					return;
@@ -112,20 +112,20 @@ public final class RequestDuelStart extends L2GameClientPacket
 			if (!partyLeader.isProcessingRequest())
 			{
 				// Drop command channels, for both requestor && player parties.
-				final L2CommandChannel activeCharChannel = activeCharParty.getCommandChannel();
+				final CommandChannel activeCharChannel = activeCharParty.getCommandChannel();
 				if (activeCharChannel != null)
 					activeCharChannel.removeParty(activeCharParty);
 				
-				final L2CommandChannel targetCharChannel = targetCharParty.getCommandChannel();
+				final CommandChannel targetCharChannel = targetCharParty.getCommandChannel();
 				if (targetCharChannel != null)
 					targetCharChannel.removeParty(targetCharParty);
 				
 				// Partymatching
-				for (L2PcInstance partyMember : activeCharParty.getPartyMembers())
-					partyMember.removeMeFromPartyMatch();
+				for (L2PcInstance member : activeCharParty.getMembers())
+					member.removeMeFromPartyMatch();
 				
-				for (L2PcInstance partyMember : targetCharParty.getPartyMembers())
-					partyMember.removeMeFromPartyMatch();
+				for (L2PcInstance member : targetCharParty.getMembers())
+					member.removeMeFromPartyMatch();
 				
 				activeChar.onTransactionRequest(partyLeader);
 				partyLeader.sendPacket(new ExDuelAskStart(activeChar.getName(), _partyDuel));

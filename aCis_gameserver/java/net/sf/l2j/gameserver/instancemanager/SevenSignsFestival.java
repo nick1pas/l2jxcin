@@ -38,8 +38,6 @@ import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.L2Party;
-import net.sf.l2j.gameserver.model.L2Party.MessageType;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.World;
@@ -48,6 +46,8 @@ import net.sf.l2j.gameserver.model.actor.instance.L2FestivalMonsterInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.base.Experience;
+import net.sf.l2j.gameserver.model.group.Party;
+import net.sf.l2j.gameserver.model.group.Party.MessageType;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.zone.type.L2PeaceZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -3614,20 +3614,15 @@ public class SevenSignsFestival
 		return _duskPreviousParticipants.get(festivalId);
 	}
 	
-	public void setParticipants(CabalType oracle, int festivalId, L2Party festivalParty)
+	public void setParticipants(CabalType oracle, int festivalId, Party festivalParty)
 	{
 		List<Integer> participants = null;
 		
 		if (festivalParty != null)
 		{
-			participants = new ArrayList<>(festivalParty.getMemberCount());
-			for (L2PcInstance player : festivalParty.getPartyMembers())
-			{
-				if (player == null)
-					continue;
-				
+			participants = new ArrayList<>(festivalParty.getMembersCount());
+			for (L2PcInstance player : festivalParty.getMembers())
 				participants.add(player.getObjectId());
-			}
 		}
 		
 		if (oracle == CabalType.DAWN)
@@ -3636,7 +3631,7 @@ public class SevenSignsFestival
 			_duskFestivalParticipants.put(festivalId, participants);
 	}
 	
-	public void updateParticipants(L2PcInstance player, L2Party festivalParty)
+	public void updateParticipants(L2PcInstance player, Party festivalParty)
 	{
 		if (!isParticipant(player))
 			return;
@@ -3670,10 +3665,10 @@ public class SevenSignsFestival
 			setParticipants(oracle, festivalId, festivalParty);
 			
 			// Check on disconnect if min player in party
-			if (festivalParty != null && festivalParty.getMemberCount() < Config.ALT_FESTIVAL_MIN_PLAYER)
+			if (festivalParty != null && festivalParty.getMembersCount() < Config.ALT_FESTIVAL_MIN_PLAYER)
 			{
 				updateParticipants(player, null); // under minimum count
-				festivalParty.removePartyMember(player, MessageType.Expelled);
+				festivalParty.removePartyMember(player, MessageType.EXPELLED);
 			}
 		}
 	}

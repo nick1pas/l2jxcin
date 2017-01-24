@@ -30,7 +30,6 @@ import net.sf.l2j.gameserver.handler.SkillHandler;
 import net.sf.l2j.gameserver.instancemanager.DuelManager;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.L2Party;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
@@ -40,6 +39,7 @@ import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEventTeam;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
@@ -267,13 +267,13 @@ public class L2CubicInstance
 				
 				if (DuelManager.getInstance().getDuel(_owner.getDuelId()).isPartyDuel())
 				{
-					L2Party partyA = PlayerA.getParty();
-					L2Party partyB = PlayerB.getParty();
-					L2Party partyEnemy = null;
+					Party partyA = PlayerA.getParty();
+					Party partyB = PlayerB.getParty();
+					Party partyEnemy = null;
 					
 					if (partyA != null)
 					{
-						if (partyA.getPartyMembers().contains(_owner))
+						if (partyA.containsPlayer(_owner))
 							if (partyB != null)
 								partyEnemy = partyB;
 							else
@@ -291,26 +291,32 @@ public class L2CubicInstance
 						else
 							_target = PlayerA;
 					}
+					
 					if (_target == PlayerA || _target == PlayerB)
 						if (_target == ownerTarget)
 							return;
+						
 					if (partyEnemy != null)
 					{
-						if (partyEnemy.getPartyMembers().contains(ownerTarget))
+						if (partyEnemy.containsPlayer(ownerTarget))
 							_target = (L2Character) ownerTarget;
+						
 						return;
 					}
 				}
+				
 				if (PlayerA != _owner && ownerTarget == PlayerA)
 				{
 					_target = PlayerA;
 					return;
 				}
+				
 				if (PlayerB != _owner && ownerTarget == PlayerB)
 				{
 					_target = PlayerB;
 					return;
 				}
+				
 				_target = null;
 				return;
 			}
@@ -364,32 +370,39 @@ public class L2CubicInstance
 					{
 						boolean targetIt = true;
 						
-						if (_owner.getParty() != null)
+						final Party ownerParty = _owner.getParty();
+						if (ownerParty != null)
 						{
-							if (_owner.getParty().getPartyMembers().contains(enemy))
+							if (ownerParty.containsPlayer(enemy))
 								targetIt = false;
-							else if (_owner.getParty().getCommandChannel() != null)
+							else if (ownerParty.getCommandChannel() != null)
 							{
-								if (_owner.getParty().getCommandChannel().getMembers().contains(enemy))
+								if (ownerParty.getCommandChannel().containsPlayer(enemy))
 									targetIt = false;
 							}
 						}
+						
 						if (_owner.getClan() != null && !_owner.isInsideZone(ZoneId.PVP))
 						{
 							if (_owner.getClan().isMember(enemy.getObjectId()))
 								targetIt = false;
+							
 							if (_owner.getAllyId() > 0 && enemy.getAllyId() > 0)
 							{
 								if (_owner.getAllyId() == enemy.getAllyId())
 									targetIt = false;
 							}
 						}
+						
 						if (enemy.getPvpFlag() == 0 && !enemy.isInsideZone(ZoneId.PVP))
 							targetIt = false;
+						
 						if (enemy.isInsideZone(ZoneId.PEACE))
 							targetIt = false;
+						
 						if (_owner.getSiegeState() > 0 && _owner.getSiegeState() == enemy.getSiegeState())
 							targetIt = false;
+						
 						if (!enemy.isVisible())
 							targetIt = false;
 						
@@ -668,7 +681,7 @@ public class L2CubicInstance
 	{
 		L2Character target = null;
 		double percentleft = 100.0;
-		L2Party party = _owner.getParty();
+		Party party = _owner.getParty();
 		
 		// if owner is in a duel but not in a party duel, then it is the same as he does not have a party
 		if (_owner.isInDuel())
@@ -678,7 +691,7 @@ public class L2CubicInstance
 		if (party != null && !_owner.isInOlympiadMode())
 		{
 			// Get all Party Members in a spheric area near the L2Character
-			for (L2Character partyMember : party.getPartyMembers())
+			for (L2Character partyMember : party.getMembers())
 			{
 				if (!partyMember.isDead())
 				{

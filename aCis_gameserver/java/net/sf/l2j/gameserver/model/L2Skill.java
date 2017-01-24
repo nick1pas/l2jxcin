@@ -42,6 +42,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.kind.Armor;
 import net.sf.l2j.gameserver.model.item.type.ArmorType;
@@ -1570,12 +1571,13 @@ public abstract class L2Skill implements IChanceSkillTrigger
 						targetList.add(player.getPet());
 				}
 				
-				if (activeChar.isInParty())
+				final Party party = activeChar.getParty();
+				if (party != null)
 				{
 					// Get a list of Party Members
-					for (L2PcInstance partyMember : activeChar.getParty().getPartyMembers())
+					for (L2PcInstance partyMember : party.getMembers())
 					{
-						if (partyMember == null || partyMember == player)
+						if (partyMember == player)
 							continue;
 						
 						if (addCharacter(activeChar, partyMember, radius, false))
@@ -1589,7 +1591,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			}
 			case TARGET_PARTY_MEMBER:
 			{
-				if (target != null && (target == activeChar || (activeChar.isInParty() && target.isInParty() && activeChar.getParty().getPartyLeaderOID() == target.getParty().getPartyLeaderOID()) || (activeChar instanceof L2PcInstance && target instanceof L2Summon && activeChar.getPet() == target) || (activeChar instanceof L2Summon && target instanceof L2PcInstance && activeChar == target.getPet())))
+				if (target != null && (target == activeChar || (activeChar.isInParty() && target.isInParty() && activeChar.getParty().getLeaderObjectId() == target.getParty().getLeaderObjectId()) || (activeChar instanceof L2PcInstance && target instanceof L2Summon && activeChar.getPet() == target) || (activeChar instanceof L2Summon && target instanceof L2PcInstance && activeChar == target.getPet())))
 				{
 					if (!target.isDead())
 					{
@@ -1607,7 +1609,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			}
 			case TARGET_PARTY_OTHER:
 			{
-				if (target != null && target != activeChar && activeChar.isInParty() && target.isInParty() && activeChar.getParty().getPartyLeaderOID() == target.getParty().getPartyLeaderOID())
+				if (target != null && target != activeChar && activeChar.isInParty() && target.isInParty() && activeChar.getParty().getLeaderObjectId() == target.getParty().getLeaderObjectId())
 				{
 					if (!target.isDead())
 					{
@@ -1677,7 +1679,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 							if (player.getDuelId() != obj.getDuelId())
 								continue;
 							
-							if (player.isInParty() && obj.isInParty() && player.getParty().getPartyLeaderOID() != obj.getParty().getPartyLeaderOID())
+							if (player.isInParty() && obj.isInParty() && player.getParty().getLeaderObjectId() != obj.getParty().getLeaderObjectId())
 								continue;
 						}
 						
@@ -1731,7 +1733,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 							if (player.getDuelId() != obj.getDuelId())
 								continue;
 							
-							if (player.isInParty() && obj.isInParty() && player.getParty().getPartyLeaderOID() != obj.getParty().getPartyLeaderOID())
+							if (player.isInParty() && obj.isInParty() && player.getParty().getLeaderObjectId() != obj.getParty().getLeaderObjectId())
 								continue;
 						}
 						
@@ -1781,7 +1783,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 								if (player.getDuelId() != obj.getDuelId())
 									continue;
 								
-								if (player.isInParty() && obj.isInParty() && player.getParty().getPartyLeaderOID() != obj.getParty().getPartyLeaderOID())
+								if (player.isInParty() && obj.isInParty() && player.getParty().getLeaderObjectId() != obj.getParty().getLeaderObjectId())
 									continue;
 							}
 							
@@ -2092,7 +2094,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			if (player.isInParty() && targetPlayer.isInParty())
 			{
 				// Same party
-				if (player.getParty().getPartyLeaderOID() == targetPlayer.getParty().getPartyLeaderOID())
+				if (player.getParty().getLeaderObjectId() == targetPlayer.getParty().getLeaderObjectId())
 					return false;
 				
 				// Same commandchannel

@@ -18,9 +18,9 @@ import java.math.BigInteger;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.model.L2Party;
-import net.sf.l2j.gameserver.model.L2Party.MessageType;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.group.Party;
+import net.sf.l2j.gameserver.model.group.Party.MessageType;
 
 /**
  * @author L0ngh0rn
@@ -31,8 +31,8 @@ public class EventConfig
 	{
 		if (activeChar.getParty() != null)
 		{
-			L2Party party = activeChar.getParty();
-			party.removePartyMember(activeChar, MessageType.Disconnected);
+			Party party = activeChar.getParty();
+			party.removePartyMember(activeChar, MessageType.DISCONNECTED);
 		}
 	}
 	

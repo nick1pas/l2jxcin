@@ -217,7 +217,7 @@ public class PcStat extends PlayableStat
 		}
 		
 		if (getActiveChar().isInParty())
-			getActiveChar().getParty().recalculatePartyLevel(); // Recalculate the party level
+			getActiveChar().getParty().recalculateLevel(); // Recalculate the party level
 			
 		// Update the overloaded status of the L2PcInstance
 		getActiveChar().refreshOverloaded();

@@ -25,6 +25,7 @@ import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.instancemanager.FourSepulchersManager;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
@@ -266,7 +267,7 @@ public class L2SepulcherNpcInstance extends L2NpcInstance
 		}
 		else if (command.startsWith("open_gate"))
 		{
-			ItemInstance hallsKey = player.getInventory().getItemByItemId(HALLS_KEY);
+			final ItemInstance hallsKey = player.getInventory().getItemByItemId(HALLS_KEY);
 			if (hallsKey == null)
 				showHtmlFile(player, "Gatekeeper-no.htm");
 			else if (FourSepulchersManager.getInstance().isAttackTime())
@@ -281,12 +282,15 @@ public class L2SepulcherNpcInstance extends L2NpcInstance
 					default:
 					{
 						openNextDoor(getNpcId());
-						if (player.isInParty())
+						
+						final Party party = player.getParty();
+						if (party != null)
 						{
-							for (L2PcInstance mem : player.getParty().getPartyMembers())
+							for (L2PcInstance member : player.getParty().getMembers())
 							{
-								if (mem != null && mem.getInventory().getItemByItemId(HALLS_KEY) != null)
-									mem.destroyItemByItemId("Quest", HALLS_KEY, mem.getInventory().getItemByItemId(HALLS_KEY).getCount(), mem, true);
+								final ItemInstance key = member.getInventory().getItemByItemId(HALLS_KEY);
+								if (key != null)
+									member.destroyItemByItemId("Quest", HALLS_KEY, key.getCount(), member, true);
 							}
 						}
 						else

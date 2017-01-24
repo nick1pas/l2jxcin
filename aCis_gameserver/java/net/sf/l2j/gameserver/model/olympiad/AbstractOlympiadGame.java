@@ -21,8 +21,6 @@ import java.util.logging.Logger;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
-import net.sf.l2j.gameserver.model.L2Party;
-import net.sf.l2j.gameserver.model.L2Party.MessageType;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.L2Character;
@@ -32,6 +30,8 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
+import net.sf.l2j.gameserver.model.group.Party;
+import net.sf.l2j.gameserver.model.group.Party.MessageType;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.zone.type.L2OlympiadStadiumZone;
 import net.sf.l2j.gameserver.model.zone.type.L2TownZone;
@@ -222,9 +222,9 @@ public abstract class AbstractOlympiadGame
 			// Remove player from his party
 			if (removeParty)
 			{
-				final L2Party party = player.getParty();
+				final Party party = player.getParty();
 				if (party != null)
-					party.removePartyMember(player, MessageType.Expelled);
+					party.removePartyMember(player, MessageType.EXPELLED);
 			}
 			
 			player.checkItemRestriction();

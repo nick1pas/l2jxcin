@@ -144,4 +144,11 @@
 		<stat name="oustZ" val="-1272" />
 		<node X="27513" Y="-6772" />
 	</zone>
+	 <zone id="110016" type="BossZone" shape="Cylinder" minZ="-10380" maxZ="16407" rad="960"><!-- IceFairy -->
+        <stat name="EnabledByDefault" val="true" />
+        <stat name="oustX" val="113533" />
+        <stat name="oustY" val="-126159" />
+        <stat name="oustZ" val="-3488" />
+        <node X="102722" Y="-125681" />
+    </zone>
 </list>

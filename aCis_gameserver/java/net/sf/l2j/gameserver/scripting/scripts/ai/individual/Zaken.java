@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.DoorTable;
@@ -39,17 +40,17 @@ import net.sf.l2j.gameserver.util.Util;
 public class Zaken extends L2AttackableAIScript
 {
 	static final Logger _log = Logger.getLogger(Zaken.class.getName());
-	private static final L2BossZone ZAKEN_LAIR = ZoneManager.getInstance().getZoneById(110000, L2BossZone.class);
-	private int hate = 0; // Used for most hated players progress
-	private int _minionStatus = 0; // Used for spawning minions cycles
+	static final L2BossZone ZAKEN_LAIR = ZoneManager.getInstance().getZoneById(110000, L2BossZone.class);
+	int hate = 0; // Used for most hated players progress
+	int _minionStatus = 0; // Used for spawning minions cycles
 	int _telecheck; // Used for zakens self teleportings
-	private L2Object _target; // Used for CallSkills
+	L2Object _target; // Used for CallSkills
 	
-	// Coords
+	// Coords	
 	private static final int[] X_COORDS = { 53950, 55980, 54950, 55970, 53930, 55970, 55980, 54960, 53950, 53930, 55970, 55980, 54960, 53950, 53930 };
 	private static final int[] Y_COORDS = { 219860, 219820, 218790, 217770, 217760, 217770, 219920, 218790, 219860, 217760, 217770, 219920, 218790, 219860, 217760 };
 	private static final int[] Z_COORDS = { -3488, -3488, -3488, -3488, -3488, -3216, -3216, -3216, -3216, -3216, -2944, -2944, -2944, -2944, -2944 };
-	
+
 	// Skills
 	private static final int TELEPORT = 4216;
 	private static final int MASS_TELEPORT = 4217;
@@ -426,11 +427,10 @@ public class Zaken extends L2AttackableAIScript
 	@Override
 	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
 	{
-		int i1 = Rnd.get(15);
 		L2Character nextTarget = ((L2Attackable) npc).getMostHated();
-		switch (npc.getNpcId())
+		if (npc.getNpcId() == ZAKEN)
 		{
-			case ZAKEN:
+			int i1 = Rnd.get(15);
 			switch (skill.getId())
 			{
 				case SELF_TELEPORT:
@@ -462,7 +462,6 @@ public class Zaken extends L2AttackableAIScript
 						npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
 					break;
 			}
-			break;
 		}
 		return super.onSpellFinished(npc, player, skill);
 	}

@@ -240,7 +240,16 @@ public class L2SepulcherNpcInstance extends L2NpcInstance
 	@Override
 	public void onBypassFeedback(L2PcInstance player, String command)
 	{
-		if (command.startsWith("Chat"))
+		if (isBusy())
+		{
+			NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
+			html.setFile("data/html/npcbusy.htm");
+			html.replace("%busymessage%", getBusyMessage());
+			html.replace("%npcname%", getName());
+			html.replace("%playername%", player.getName());
+			player.sendPacket(html);
+		}
+		else if (command.startsWith("Chat"))
 		{
 			int val = 0;
 			try

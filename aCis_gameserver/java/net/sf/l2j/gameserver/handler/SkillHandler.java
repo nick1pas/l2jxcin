@@ -48,6 +48,8 @@ import net.sf.l2j.gameserver.handler.skillhandlers.SummonFriend;
 import net.sf.l2j.gameserver.handler.skillhandlers.Sweep;
 import net.sf.l2j.gameserver.handler.skillhandlers.TakeCastle;
 import net.sf.l2j.gameserver.handler.skillhandlers.Unlock;
+import net.sf.l2j.gameserver.handler.skillhandlers.ZakenPlayer;
+import net.sf.l2j.gameserver.handler.skillhandlers.ZakenSelf;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 
 public class SkillHandler
@@ -92,6 +94,8 @@ public class SkillHandler
 		registerSkillHandler(new Sweep());
 		registerSkillHandler(new TakeCastle());
 		registerSkillHandler(new Unlock());
+		registerSkillHandler(new ZakenPlayer());
+		registerSkillHandler(new ZakenSelf());
 	}
 	
 	public void registerSkillHandler(ISkillHandler handler)

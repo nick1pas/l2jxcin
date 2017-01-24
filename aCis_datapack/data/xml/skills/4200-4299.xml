@@ -283,100 +283,125 @@
 		</for>
 	</skill>
 	<skill id="4216" levels="1" name="Scatter Enemy">
-		<set name="castRange" val="800" />
-		<set name="coolTime" val="100" />
-		<set name="effectRange" val="1300" />
-		<set name="hitTime" val="2900" />
-		<set name="magicLvl" val="60" />
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="skillType" val="DUMMY" />
-		<set name="target" val="TARGET_ONE" />
+		<set name="magicLvl" val="60"/>
+		<set name="reuseDelay" val="8000"/>
+		<set name="target" val="TARGET_ONE"/>
+		<set name="coolTime" val="100"/>
+		<set name="hitTime" val="2900"/>
+		<set name="mpConsume" val="100"/>
+		<set name="skillType" val="ZAKENPLAYER"/>
+		<set name="operateType" val="OP_ACTIVE"/>
+		<set name="castRange" val="800"/>
+		<set name="effectRange" val="1300"/>
+		<set name="reuseDelay" val="15000"/>
 	</skill>
 	<skill id="4217" levels="1" name="None">
-		<set name="castRange" val="800" />
-		<set name="coolTime" val="100" />
-		<set name="effectRange" val="1300" />
-		<set name="hitTime" val="2900" />
-		<set name="magicLvl" val="60" />
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="skillRadius" val="300" />
-		<set name="skillType" val="DUMMY" />
-		<set name="target" val="TARGET_AREA" />
+		<set name="magicLvl" val="60"/>
+		<set name="reuseDelay" val="8000"/>
+		<set name="target" val="TARGET_AURA"/>
+		<set name="coolTime" val="100"/>
+		<set name="hitTime" val="2900"/>
+		<set name="skillRadius" val="300"/>
+		<set name="skillType" val="ZAKENPLAYER"/>
+		<set name="operateType" val="OP_ACTIVE"/>
+		<set name="castRange" val="800"/>
+		<set name="effectRange" val="1300"/>
+		<set name="reuseDelay" val="30000"/>
+		<set name="mpConsume" val="100"/>
 	</skill>
 	<skill id="4218" levels="1" name="Absorb HP MP">
-		<set name="absorbPart" val="0.4" />
-		<set name="castRange" val="600" />
-		<set name="coolTime" val="2000" />
-		<set name="effectRange" val="1100" />
-		<set name="element" val="6" /> <!-- Dark -->
-		<set name="hitTime" val="2000" />
-		<set name="magicLvl" val="60" />
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="power" val="57" />
-		<set name="skillRadius" val="100" />
-		<set name="skillType" val="DRAIN" />
-		<set name="target" val="TARGET_AREA" />
+		<!-- Zaken skills -->
+		<set name="magicLvl" val="60"/>
+		<set name="element" val="6"/><!-- Dark -->
+		<set name="lvlDepend" val="1"/>
+		<set name="target" val="TARGET_AURA"/>
+		<set name="coolTime" val="2000"/>
+		<set name="hitTime" val="2000"/>
+		<set name="skillRadius" val="100"/>
+		<set name="skillType" val="DRAIN"/>
+		<set name="operateType" val="OP_ACTIVE"/>
+		<set name="power" val="57"/>
+		<set name="castRange" val="600"/>
+		<set name="effectRange" val="1100"/>
+		<set name="absorbPart" val="0.8"/><!-- absorbs 80% of damage -->
+		<set name="mpConsume" val="274"/>
 		<for>
-			<effect name="ManaDamOverTime" noicon="1" val="274" />
+			<effect name="ManaDamOverTime" noicon="1" val="274"/>
 		</for>
 	</skill>
 	<skill id="4219" levels="1" name="Hold">
-		<set name="castRange" val="800" />
-		<set name="coolTime" val="2000" />
-		<set name="effectRange" val="1300" />
-		<set name="hitTime" val="2000" />
-		<set name="isDebuff" val="true" />
-		<set name="magicLvl" val="60" />
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="power" val="95" />
-		<set name="skillType" val="ROOT" />
-		<set name="target" val="TARGET_ONE" />
+		<!-- Zaken skills -->
+		<set name="magicLvl" val="60"/>
+		<set name="lvlDepend" val="1"/>
+		<set name="target" val="TARGET_ONE"/>
+		<set name="coolTime" val="2000"/>
+		<set name="hitTime" val="2000"/>
+		<set name="power" val="95"/>
+		<set name="skillType" val="ROOT"/>
+		<set name="isDebuff" val="true"/>
+		<set name="operateType" val="OP_ACTIVE"/>
+		<set name="castRange" val="800"/>
+		<set name="effectRange" val="1300"/>
 		<for>
-			<effect name="Root" time="30" val="0" stackOrder="1" stackType="root_magically" />
+			<effect count="1" name="Root" time="30" val="0"/>
 		</for>
 	</skill>
 	<skill id="4220" levels="1" name="Deadly Dual-Sword Weapon">
-		<set name="castRange" val="50" />
-		<set name="coolTime" val="900" />
-		<set name="effectRange" val="200" />
-		<set name="hitTime" val="2100" />
-		<set name="magicLvl" val="60" />
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="power" val="9390" />
-		<set name="skillType" val="PDAM" />
-		<set name="target" val="TARGET_ONE" />
+		<!-- Zaken skills -->
+		<set name="magicLvl" val="60"/>
+		<set name="lvlDepend" val="1"/>
+		<set name="power" val="7224"/>
+		<set name="target" val="TARGET_ONE"/>
+		<set name="coolTime" val="900"/>
+		<set name="hitTime" val="2100"/>
+		<set name="reuseDelay" val="0"/>
+		<set name="skillType" val="PDAM"/>
+		<set name="operateType" val="OP_ACTIVE"/>
+		<set name="castRange" val="50"/>
+		<set name="effectRange" val="200"/>
 	</skill>
 	<skill id="4221" levels="1" name="Deadly Dual-Sword Weapon: Range Attack">
-		<set name="coolTime" val="1500" />
-		<set name="hitTime" val="1500" />
-		<set name="magicLvl" val="60" />
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="power" val="5164" />
-		<set name="skillRadius" val="100" />
-		<set name="skillType" val="PDAM" />
-		<set name="target" val="TARGET_AREA" />
+		<!-- Zaken skills -->
+		<set name="magicLvl" val="60"/>
+		<set name="lvlDepend" val="1"/>
+		<set name="power" val="7224"/>
+		<set name="target" val="TARGET_AURA"/>
+		<set name="skillRadius" val="250"/>
+		<set name="coolTime" val="1500"/>
+		<set name="hitTime" val="1500"/>
+		<set name="skillType" val="PDAM"/>
+		<set name="operateType" val="OP_ACTIVE"/>
 	</skill>
 	<skill id="4222" levels="1" name="Instant Move">
-		<set name="hitTime" val="500" />
-		<set name="magicLvl" val="60" />
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="target" val="TARGET_SELF" />
-		<set name="skillType" val="DUMMY" />
+		<!-- Zaken skills - teleport -->
+		<set name="magicLvl" val="60"/>
+		<set name="target" val="TARGET_SELF"/>
+		<set name="hitTime" val="500"/>
+		<set name="skillType" val="ZAKENSELF"/>
+		<set name="reuseDelay" val="30000"/>
+		<set name="mpConsume" val="100"/>
+		<set name="operateType" val="OP_ACTIVE"/>
 	</skill>
 	<skill id="4223" levels="1" name="Face Chance: Night to Day">
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="skillType" val="BUFF" />
-		<set name="target" val="TARGET_SELF" />
+		<!-- Zaken skills - change face -->
+		<set name="target" val="TARGET_SELF"/>
+		<set name="coolTime" val="1900"/>
+		<set name="hitTime" val="1100"/>
+		<set name="skillType" val="BUFF"/>
+		<set name="operateType" val="OP_PASSIVE"/>
 		<for>
-		<effect name="Buff" time="10800" abnormal="unknown16" val="0" stackOrder="1" stackType="public_slot" />
+			<effect count="1" name="Buff" time="14400" val="0"/><!-- TODO: abnormal change texture O.o -->
 		</for>
 	</skill>
 	<skill id="4224" levels="1" name="Face Chance: Day to Night">
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="skillType" val="BUFF" />
-		<set name="target" val="TARGET_SELF" />
+		<!-- Zaken skills - change face -->
+		<set name="target" val="TARGET_SELF"/>
+		<set name="coolTime" val="1900"/>
+		<set name="hitTime" val="1100"/>
+		<set name="skillType" val="BUFF"/>
+		<set name="operateType" val="OP_PASSIVE"/>
 		<for>
-			 <effect name="Buff" time="3600" val="0" stackOrder="1" stackType="public_slot" />
+			<effect count="1" name="Buff" time="14400" val="0"/><!-- TODO: abnormal change texture O.o -->
 		</for>
 	</skill>
 	<skill id="4225" levels="5" name="Resist Shock">
@@ -399,12 +424,14 @@
 		</for>
 	</skill>
 	<skill id="4227" levels="1" name="Zaken Regeneration">
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="skillType" val="BUFF" />
-		<set name="target" val="TARGET_SELF" />
+		<!-- NOT USED IN C4 -->
+		<set name="target" val="TARGET_SELF"/>
+		<set name="skillType" val="BUFF"/>
+		<set name="operateType" val="OP_PASSIVE"/>
+		<set name="bestowed" val="true"/>
 		<for>
-			<effect name="Buff" time="14400" val="0" stackOrder="11" stackType="hp_regen_up">
-				<mul order="0x30" stat="regHp" val="20" />
+			<effect count="1" name="Buff" time="14400" val="0" stackOrder="1" stackType="hp_regen_up">
+				<add order="0x40" stat="regHp" val="1900"/>
 			</effect>
 		</for>
 	</skill>
@@ -601,11 +628,15 @@
 		</for>
 	</skill>
 	<skill id="4242" levels="1" name="Zaken Regeneration">
-		<set name="operateType" val="OP_ACTIVE" />
-		<set name="skillType" val="BUFF" />
-		<set name="target" val="TARGET_SELF" />
+		<!-- NOT USED IN C4 -->
+		<set name="target" val="TARGET_SELF"/>
+		<set name="skillType" val="BUFF"/>
+		<set name="operateType" val="OP_PASSIVE"/>
+		<set name="bestowTriggered" val="true"/>
+		<set name="triggeredId" val="4227"/>
+		<set name="triggeredLevel" val="1"/>
 		<for>
-			<effect name="Buff" time="10" val="0" stackOrder="12" stackType="hp_regen_up" />
+			<effect count="1" name="Buff" time="10" val="0" stackOrder="1" stackType="hp_regen_up"/>
 		</for>
 	</skill>
 	<skill id="4243" levels="1" name="Venomous Poison">

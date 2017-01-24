@@ -23,4 +23,5 @@ INSERT IGNORE INTO `grandboss_data` VALUES
 (29045, 0, 0, 0, 0, 0, 0, 0, 0),					-- Frintezza
 (29046, 174231, -88006, -5115, 0, 0, 0, 0, 0),		-- Scarlet Van Halisha (85)
 (29047, 174231, -88006, -5115, 0, 0, 0, 0, 0),		-- Scarlet Van Halisha (85)
+(29062, 0, 0, 0, 0,0, 0, 0, 1),                     -- IceFairySirra
 (29065, 27549, -6638, -2008, 0, 0, 0, 0, 0);		-- Sailren

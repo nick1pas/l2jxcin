@@ -229,6 +229,15 @@ public abstract class AbstractOlympiadGame
 			
 			player.checkItemRestriction();
 			
+			// reuse skills under 15minutes timer
+			for (L2Skill skill : player.getSkills().values())
+			{
+				if (skill.getReuseDelay() <= 900000)
+				{
+					player.enableSkill(skill);
+				}
+			}
+			
 			// Remove shot automation
 			player.disableAutoShotsAll();
 			
@@ -258,6 +267,16 @@ public abstract class AbstractOlympiadGame
 			player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_FEEL_S1_EFFECT).addSkillName(1204));
 		}
 		
+		if (player.isMageClass())
+		{
+			skill = SkillTable.getInstance().getInfo(1085, 1); // acumen 1
+			if (skill != null)
+			{
+				skill.getEffects(player, player);
+				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_FEEL_S1_EFFECT).addSkillName(1085));
+			}
+		}
+			 		
 		if (!player.isMageClass())
 		{
 			skill = SkillTable.getInstance().getInfo(1086, 1); // Haste 1

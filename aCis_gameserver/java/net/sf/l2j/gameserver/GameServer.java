@@ -39,6 +39,7 @@ import net.sf.l2j.gameserver.datatables.AdminCommandAccessRights;
 import net.sf.l2j.gameserver.datatables.AioManagerTable;
 import net.sf.l2j.gameserver.datatables.AnnouncementTable;
 import net.sf.l2j.gameserver.datatables.ArmorSetsTable;
+import net.sf.l2j.gameserver.datatables.AuctionTable;
 import net.sf.l2j.gameserver.datatables.AugmentationData;
 import net.sf.l2j.gameserver.datatables.BookmarkTable;
 import net.sf.l2j.gameserver.datatables.BufferTable;
@@ -190,6 +191,7 @@ public class GameServer
 		AugmentationData.getInstance();
 		CursedWeaponsManager.getInstance();
 		EnchantTable.getInstance();
+		AuctionTable.getInstance();
 		
 		StringUtil.printSection("Admins");
 		AccessLevels.getInstance();

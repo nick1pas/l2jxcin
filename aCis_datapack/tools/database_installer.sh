@@ -77,6 +77,7 @@ $MYL < ../sql/gameservers.sql &> /dev/null
 
 $MYG < ../sql/auction.sql &> /dev/null
 $MYG < ../sql/auction_bid.sql &> /dev/null
+$MYG < ../sql/auction_table.sql &> /dev/null
 $MYG < ../sql/augmentations.sql &> /dev/null
 $MYG < ../sql/bookmarks.sql &> /dev/null
 $MYG < ../sql/buffer_schemes.sql &> /dev/null

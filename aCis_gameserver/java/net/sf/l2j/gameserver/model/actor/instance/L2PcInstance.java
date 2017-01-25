@@ -2942,6 +2942,8 @@ public final class L2PcInstance extends L2Playable
 			return null;
 		}
 		
+		item.setInstanceId(getInstanceId());
+		
 		item.dropMe(this, x, y, z);
 		
 		// Send inventory update packet

@@ -26,6 +26,8 @@ import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
+import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
+import net.sf.l2j.gameserver.model.actor.instance.L2FenceInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -55,6 +57,7 @@ public abstract class L2Object
 	
 	private SpawnLocation _position = new SpawnLocation(0, 0, 0, 0);
 	private WorldRegion _region;
+	private int _instance = 0;
 	
 	private boolean _isVisible;
 	
@@ -221,6 +224,18 @@ public abstract class L2Object
 	public L2PcInstance getActingPlayer()
 	{
 		return null;
+	}
+ 	
+	public void setInstanceId(int val)
+	{
+		_instance = val;
+		decayMe();
+		spawnMe();
+	}
+	
+	public int getInstanceId()
+	{
+		return _instance;
 	}
 	
 	/**
@@ -409,6 +424,12 @@ public abstract class L2Object
 		}
 		
 		_region = newRegion;
+				
+		for (L2Object object : getDifferentInstanceObjects())
+		{
+			object.removeKnownObject(this);
+			removeKnownObject(object);
+		}
 	}
 	
 	/**
@@ -425,6 +446,28 @@ public abstract class L2Object
 	 */
 	public void removeKnownObject(L2Object object)
 	{
+	}
+ 	
+	private final List<L2Object> getDifferentInstanceObjects()
+	{
+		final WorldRegion region = _region;
+		if (region == null)
+			return Collections.emptyList();
+		
+		final List<L2Object> result = new ArrayList<>();
+		
+		for (WorldRegion reg : region.getSurroundingRegions())
+		{
+			for (L2Object obj : reg.getObjects())
+			{
+				if (obj == this || obj.getInstanceId() == getInstanceId() || obj instanceof L2DoorInstance || obj instanceof L2FenceInstance)
+					continue;
+				
+				result.add(obj);
+			}
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -448,7 +491,10 @@ public abstract class L2Object
 			{
 				if (obj == this || !type.isAssignableFrom(obj.getClass()))
 					continue;
-				
+ 				
+				if (obj.getInstanceId() != getInstanceId() && !(obj instanceof L2DoorInstance || obj instanceof L2FenceInstance))
+					continue;
+	
 				result.add((A) obj);
 			}
 		}
@@ -478,7 +524,10 @@ public abstract class L2Object
 			{
 				if (obj == this || !type.isAssignableFrom(obj.getClass()) || !Util.checkIfInRange(radius, this, obj, true))
 					continue;
-				
+ 				
+				if (obj.getInstanceId() != getInstanceId() && !(obj instanceof L2DoorInstance || obj instanceof L2FenceInstance))
+					continue;
+	
 				result.add((A) obj);
 			}
 		}

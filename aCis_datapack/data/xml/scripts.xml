@@ -337,7 +337,7 @@
 	<script path="quests.Q652_AnAgedExAdventurer"/>
 	<script path="quests.Q653_WildMaiden"/>
 	<script path="quests.Q654_JourneyToASettlement"/>
-<!-- 	<script path="quests.Q655_AGrandPlanForTamingWildBeasts"/> -->
+	<script path="quests.Q655_AGrandPlanForTamingWildBeasts"/>
 	<script path="quests.Q659_IdRatherBeCollectingFairyBreath"/>
 	<script path="quests.Q660_AidingTheFloranVillage"/>
 	<script path="quests.Q661_MakingTheHarvestGroundsSafe"/>

@@ -1983,7 +1983,7 @@ public class Frintezza extends L2AttackableAIScript
 					{
 						if (cha instanceof L2PcInstance)
 						{
-							if (cha.getFirstEffect(5016) != null)
+							if (cha.getFirstEffect(YOKE_OF_SCARLET) != null)
 							{
 								cha.abortAttack();
 								cha.abortCast();

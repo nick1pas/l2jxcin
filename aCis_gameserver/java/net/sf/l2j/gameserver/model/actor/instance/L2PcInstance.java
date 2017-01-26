@@ -2454,7 +2454,12 @@ public final class L2PcInstance extends L2Playable
 			_inventory.addAdena(process, count, this, reference);
 			
 			InventoryUpdate iu = new InventoryUpdate();
-			iu.addItem(_inventory.getAdenaInstance());
+						
+			if (_inventory.getAdenaInstance() != null)
+				iu.addModifiedItem(_inventory.getAdenaInstance());
+			else
+				iu.addItem(_inventory.getAdenaInstance());
+			
 			sendPacket(iu);
 		}
 	}

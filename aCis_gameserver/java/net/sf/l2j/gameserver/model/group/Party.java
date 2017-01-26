@@ -637,7 +637,12 @@ public class Party extends AbstractGroup
 		
 		final int count = adena / toReward.size();
 		for (L2PcInstance member : toReward)
-			member.addAdena("Party", count, player, true);
+		{
+			if (member.getInventory().getAdenaInstance() != null)
+				member.addAdena("Party", count, player, true);
+			else
+				member.addItem("Party", 57, count, player, true);
+		}
 	}
 	
 	/**

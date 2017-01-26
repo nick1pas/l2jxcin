@@ -99,8 +99,7 @@ public class OlympiadManager
 		if (_nonClassBasedRegisters.contains(objId))
 		{
 			if (showMessage)
-				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_BEEN_REGISTERED_IN_A_WAITING_LIST_OF_NO_CLASS_GAMES));
-			
+				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_ARE_ALREADY_ON_THE_WAITING_LIST_FOR_ALL_CLASSES_WAITING_TO_PARTICIPATE_IN_THE_GAME)); 			
 			return true;
 		}
 		
@@ -108,7 +107,7 @@ public class OlympiadManager
 		if (classed != null && classed.contains(objId))
 		{
 			if (showMessage)
-				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_BEEN_REGISTERED_IN_A_WAITING_LIST_OF_CLASSIFIED_GAMES));
+				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_ARE_ALREADY_ON_THE_WAITING_LIST_TO_PARTICIPATE_IN_THE_GAME_FOR_YOUR_CLASS));
 			
 			return true;
 		}
@@ -135,8 +134,21 @@ public class OlympiadManager
 			if (game.containsParticipant(player.getObjectId()))
 			{
 				if (showMessage)
-					player.sendPacket(SystemMessageId.YOU_HAVE_ALREADY_BEEN_REGISTERED_IN_A_WAITING_LIST_OF_AN_EVENT);
-				
+				{
+					switch (game.getType())
+					{
+						case CLASSED:
+						{
+							player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_ARE_ALREADY_ON_THE_WAITING_LIST_TO_PARTICIPATE_IN_THE_GAME_FOR_YOUR_CLASS));
+							break;
+						}
+						case NON_CLASSED:
+						{
+							player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_ARE_ALREADY_ON_THE_WAITING_LIST_FOR_ALL_CLASSES_WAITING_TO_PARTICIPATE_IN_THE_GAME));
+							break;
+						}
+					}
+				}
 				return true;
 			}
 		}

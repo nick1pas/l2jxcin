@@ -1430,4 +1430,8 @@ public class Quest
 		
 		return false;
 	}
+	public void setQuestTimerShared() 
+	{ 
+		_eventTimers.values(); 
+	}
 }

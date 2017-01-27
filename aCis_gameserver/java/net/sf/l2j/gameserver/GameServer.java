@@ -107,6 +107,7 @@ import net.sf.l2j.gameserver.instancemanager.games.MonsterRace;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.model.entity.clanhallsiege.BanditStrongholdSiege;
+import net.sf.l2j.gameserver.model.entity.clanhallsiege.FortressOfResistance;
 import net.sf.l2j.gameserver.model.entity.clanhallsiege.WildBeastFarmSiege;
 import net.sf.l2j.gameserver.model.entity.events.DMManager;
 import net.sf.l2j.gameserver.model.entity.events.LMManager;
@@ -288,6 +289,7 @@ public class GameServer
 		StringUtil.printSection("Conquerable Halls");
 		BanditStrongholdSiege.getInstance();
 		WildBeastFarmSiege.getInstance();
+		FortressOfResistance.getInstance();
 		
 		StringUtil.printSection("Quests & Scripts");
 		ScriptManager.getInstance();

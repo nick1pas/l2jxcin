@@ -292,6 +292,16 @@ public final class L2Spawn implements Runnable
 	{
 		return _respawnMaxDelay;
 	}
+
+	public L2Npc spawnOne()
+	{
+		return doSpawn();
+	}
+
+	public L2Npc doSpawn()
+	{
+		return doSpawn(false);
+	}
 	
 	/**
 	 * Create the {@link L2Npc}, add it to the world and launch its onSpawn() action.<BR>

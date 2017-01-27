@@ -104,7 +104,7 @@ public class TvTEvent
 		}
 		catch (Exception e)
 		{
-			System.out.println("TvTEventEngine[DMEvent.startParticipation()]: exception: " + e);
+			System.out.println("TvTEventEngine[TvTEvent.startParticipation()]: exception: " + e);
 			return false;
 		}
 		setState(EventState.PARTICIPATING);

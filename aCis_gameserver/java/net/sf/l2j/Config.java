@@ -54,6 +54,8 @@ public final class Config
 	public static final String PLAYERS_FILE = "./config/players.properties";
 	public static final String SERVER_FILE = "./config/server.properties";
 	public static final String SIEGE_FILE = "./config/siege.properties";
+
+	public static final int DEVASTATED_DAY = 0;
 	
 	// --------------------------------------------------
 	// Custom settings

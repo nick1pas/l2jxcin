@@ -52,12 +52,12 @@ public class BanditStrongholdSiege extends ClanHallSiege
 	
 	private boolean _registrationPeriod = false;
 	private int _clanCounter = 0;
-	Map<Integer, clanPlayersInfo> _clansInfo = new HashMap<>();
+	protected Map<Integer, clanPlayersInfo> _clansInfo = new HashMap<>();
 	private L2ClanHallZone zone;
 	public ClanHall clanhall = ClanHallManager.getInstance().getClanHallById(35);
-	clanPlayersInfo _ownerClanInfo = new clanPlayersInfo();
+	protected clanPlayersInfo _ownerClanInfo = new clanPlayersInfo();
 	boolean _finalStage = false;
-	ScheduledFuture<?> _midTimer;
+	protected ScheduledFuture<?> _midTimer;
 	
 	public static BanditStrongholdSiege getInstance()
 	{
@@ -173,32 +173,30 @@ public class BanditStrongholdSiege extends ClanHallSiege
 			L2DecoInstance flag = getSiegeFlag(clan);
 			
 			if (mob != null)
-			{
 				mob.deleteMe();
-			}
-			
+
 			if (flag != null)
-			{
 				flag.deleteMe();
-			}
 		}
 	}
 	
 	public void gateControl(int val)
 	{
-		if (val == 1)
+		switch (val)
 		{
-			DoorTable.getInstance().getDoor(22170001).openMe();
-			DoorTable.getInstance().getDoor(22170002).openMe();
-			DoorTable.getInstance().getDoor(22170003).closeMe();
-			DoorTable.getInstance().getDoor(22170004).closeMe();
-		}
-		else if (val == 2)
-		{
-			DoorTable.getInstance().getDoor(22170001).closeMe();
-			DoorTable.getInstance().getDoor(22170002).closeMe();
-			DoorTable.getInstance().getDoor(22170003).closeMe();
-			DoorTable.getInstance().getDoor(22170004).closeMe();
+			case 1:
+				DoorTable.getInstance().getDoor(22170001).openMe();
+				DoorTable.getInstance().getDoor(22170002).openMe();
+				DoorTable.getInstance().getDoor(22170003).closeMe();
+				DoorTable.getInstance().getDoor(22170004).closeMe();
+				break;
+				
+			case 2:
+				DoorTable.getInstance().getDoor(22170001).closeMe();
+				DoorTable.getInstance().getDoor(22170002).closeMe();
+				DoorTable.getInstance().getDoor(22170003).closeMe();
+				DoorTable.getInstance().getDoor(22170004).closeMe();
+				break;
 		}
 	}
 	
@@ -233,10 +231,8 @@ public class BanditStrongholdSiege extends ClanHallSiege
 		}
 		
 		if (questMobCount > 1)
-		{
 			return null;
-		}
-		
+
 		return res;
 	}
 	
@@ -267,7 +263,7 @@ public class BanditStrongholdSiege extends ClanHallSiege
 		}
 	}
 	
-	class startFirstStep implements Runnable
+	protected class startFirstStep implements Runnable
 	{
 		@Override
 		public void run()
@@ -287,25 +283,28 @@ public class BanditStrongholdSiege extends ClanHallSiege
 				L2MonsterInstance questMob = new L2MonsterInstance(IdFactory.getInstance().getNextId(), template);
 				questMob.setHeading(100);
 				questMob.getStatus().setCurrentHpMp(questMob.getMaxHp(), questMob.getMaxMp());
-				if (mobCounter == 1)
+				switch (mobCounter)
 				{
-					questMob.spawnMe(83752, -17354, -1828);
-				}
-				else if (mobCounter == 2)
-				{
-					questMob.spawnMe(82018, -15126, -1829);
-				}
-				else if (mobCounter == 3)
-				{
-					questMob.spawnMe(85320, -16191, -1823);
-				}
-				else if (mobCounter == 4)
-				{
-					questMob.spawnMe(81522, -16503, -1829);
-				}
-				else if (mobCounter == 5)
-				{
-					questMob.spawnMe(83786, -15369, -1828);
+					case 1:
+						questMob.spawnMe(83752, -17354, -1828);
+						break;
+						
+					case 2:
+						questMob.spawnMe(82018, -15126, -1829);
+						break;
+						
+					case 3:
+						questMob.spawnMe(85320, -16191, -1823);
+						break;
+						
+					case 4:
+						questMob.spawnMe(81522, -16503, -1829);
+						break;
+						
+					case 5:
+						questMob.spawnMe(83786, -15369, -1828);
+						break;
+					
 				}
 				clanPlayersInfo regPlayers = _clansInfo.get(clan.getClanId());
 				regPlayers._mob = questMob;
@@ -342,25 +341,28 @@ public class BanditStrongholdSiege extends ClanHallSiege
 				regPlayers._flag = flag;
 				continue;
 			}
-			if (flagCounter == 1)
+			switch (flagCounter)
 			{
-				flag.spawnMe(83452, -17654, -1828);
-			}
-			else if (flagCounter == 2)
-			{
-				flag.spawnMe(81718, -14826, -1829);
-			}
-			else if (flagCounter == 3)
-			{
-				flag.spawnMe(85020, -15891, -1823);
-			}
-			else if (flagCounter == 4)
-			{
-				flag.spawnMe(81222, -16803, -1829);
-			}
-			else if (flagCounter == 5)
-			{
-				flag.spawnMe(83486, -15069, -1828);
+				case 1:
+					flag.spawnMe(83452, -17654, -1828);
+					break;
+					
+				case 2:
+					flag.spawnMe(81718, -14826, -1829);
+					break;
+					
+				case 3:
+					flag.spawnMe(85020, -15891, -1823);
+					break;
+					
+				case 4:
+					flag.spawnMe(81222, -16803, -1829);
+					break;
+					
+				case 5:
+					flag.spawnMe(83486, -15069, -1828);
+					break;
+				
 			}
 			clanPlayersInfo regPlayers = _clansInfo.get(clan.getClanId());
 			regPlayers._flag = flag;
@@ -381,17 +383,13 @@ public class BanditStrongholdSiege extends ClanHallSiege
 	public boolean isPlayerRegister(L2Clan playerClan, String playerName)
 	{
 		if (playerClan == null)
-		{
 			return false;
-		}
 		
 		clanPlayersInfo regPlayers = _clansInfo.get(playerClan.getClanId());
 		if (regPlayers != null)
 		{
 			if (regPlayers._players.contains(playerName))
-			{
 				return true;
-			}
 		}
 		
 		return false;
@@ -400,16 +398,12 @@ public class BanditStrongholdSiege extends ClanHallSiege
 	public boolean isClanOnSiege(L2Clan playerClan)
 	{
 		if (playerClan == clanhall.getOwnerClan())
-		{
 			return true;
-		}
-		
+
 		clanPlayersInfo regPlayers = _clansInfo.get(playerClan.getClanId());
 		if (regPlayers == null)
-		{
 			return false;
-		}
-		
+
 		return true;
 	}
 	
@@ -635,7 +629,7 @@ public class BanditStrongholdSiege extends ClanHallSiege
 		
 	}
 	
-	final ExclusiveTask _endSiegeTask = new ExclusiveTask()
+	protected final ExclusiveTask _endSiegeTask = new ExclusiveTask()
 	{
 		@Override
 		protected void onElapsed()
@@ -657,7 +651,7 @@ public class BanditStrongholdSiege extends ClanHallSiege
 		}
 	};
 	
-	final ExclusiveTask _mobControlTask = new ExclusiveTask()
+	protected final ExclusiveTask _mobControlTask = new ExclusiveTask()
 	{
 		@Override
 		protected void onElapsed()
@@ -697,7 +691,7 @@ public class BanditStrongholdSiege extends ClanHallSiege
 		}
 	};
 	
-	class clanPlayersInfo
+	protected class clanPlayersInfo
 	{
 		public String _clanName;
 		public L2DecoInstance _flag = null;

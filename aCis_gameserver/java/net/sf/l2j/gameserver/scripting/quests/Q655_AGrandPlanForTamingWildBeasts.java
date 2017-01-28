@@ -19,8 +19,6 @@ import net.sf.l2j.gameserver.scripting.QuestState;
 
 public class Q655_AGrandPlanForTamingWildBeasts extends Quest
 {
-	private static final String qn = "Q655_AGrandPlanForTamingWildBeasts";
-	
 	// npcId
 	private static final int Messenger = 35627;
 	
@@ -40,19 +38,19 @@ public class Q655_AGrandPlanForTamingWildBeasts extends Quest
 	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		String htmltext = event;
-		QuestState st = player.getQuestState(qn);
+		QuestState st = player.getQuestState(getName());
 		if (st == null)
 			return htmltext;
 		
 		switch (event)
 		{
-			case "a2.htm":
+			case "35627-02.htm":
 				st.set("cond", "1");
 				st.setState(STATE_STARTED);
 				st.playSound(QuestState.SOUND_ACCEPT);
 				break;
 			
-			case "a4.htm":
+			case "35627-04.htm":
 				if (st.getQuestItemsCount(CrystalPurity) == 10)
 				{
 					st.takeItems(CrystalPurity, -10);
@@ -60,7 +58,7 @@ public class Q655_AGrandPlanForTamingWildBeasts extends Quest
 					st.set("cond", "3");
 				}
 				else
-					htmltext = "a5.htm";
+					htmltext = "35627-05.htm";
 				break;
 		}
 		return htmltext;
@@ -70,32 +68,30 @@ public class Q655_AGrandPlanForTamingWildBeasts extends Quest
 	public String onTalk(L2Npc npc, L2PcInstance player)
 	{
 		String htmltext = getNoQuestMsg();
-		QuestState st = player.getQuestState(qn);
+		QuestState st = player.getQuestState(getName());
 		if (st == null)
 			return htmltext;
 		
-		int cond = st.getInt("cond");
-		
-		if (player.getClan() == null || player.getClan().getLevel() < 4 || !(player.getClan().getLeaderName() == player.getName()))
+		switch (st.getState())
 		{
-			htmltext = "a6.htm";
-		}
-		if (npc.getNpcId() == Messenger)
-		{
-			if (cond == 0)
-			{
-				htmltext = "a1.htm";
-			}
-			else if (cond > 1)
-			{
-				htmltext = "a3.htm";
-			}
-			else
-			{
-				htmltext = null;
-				npc.showChatWindow(player, 3);
-			}
+			case STATE_CREATED:
+				htmltext = ((player.getClan() == null || player.getClan().getLevel() < 4 || !(player.getClan().getLeaderName() == player.getName()))) ? "35627-06.htm" : "35627-01.htm";
+				break;
 			
+			case STATE_STARTED:
+				final int cond = st.getInt("cond");
+				switch (npc.getNpcId())
+				{
+					case Messenger:						
+						if (cond == 0)
+							htmltext = "35627-01.htm";
+						else if (cond > 1)
+							htmltext = "35627-03.htm";
+						else
+							npc.showChatWindow(player, 3);
+						break;
+				}
+				break;
 		}
 		return htmltext;
 	}

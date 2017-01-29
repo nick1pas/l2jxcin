@@ -31,7 +31,6 @@ import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
-import net.sf.l2j.gameserver.model.zone.L2ZoneType;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
@@ -44,35 +43,34 @@ public class IceFairySirra extends L2AttackableAIScript
 	private static final Logger _log = Logger.getLogger(IceFairySirra.class.getName());
 	private static final int STEWARD = 32029;
 	private static final int SILVER_HEMOCYTE = 8057;
-	L2ZoneType _Zone;
+	
+	private static final L2BossZone ICEFAIRY_ZONE = ZoneManager.getInstance().getZoneById(110016, L2BossZone.class);
+	
 	private static L2PcInstance _player = null;
 	protected List<L2Npc> _allMobs = new ArrayList<>();
 	protected Future<?> _onDeadEventTask = null;
-
+	
 	public IceFairySirra()
 	{
 		super("ai/individual");
-		registerNpcs();
 		init();
 	}
-
+	
 	@Override
 	protected void registerNpcs()
 	{
-		addEventIds(STEWARD, EventType.QUEST_START, EventType.ON_TALK, EventType.ON_FIRST_TALK );
+		addEventIds(STEWARD, EventType.QUEST_START, EventType.ON_TALK, EventType.ON_FIRST_TALK);
 		addKillId(22100, 22102, 22104);
 	}
 	
 	public void init()
 	{
-		_Zone = ZoneManager.getInstance().getZoneById(110016);
-
 		L2Npc steward = findSpawn(STEWARD);
 		if (steward != null)
 			steward.setBusy(false);
 		openGates();
 	}
-
+	
 	public void cleanUp()
 	{
 		init();
@@ -95,7 +93,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		}
 		_allMobs.clear();
 	}
-
+	
 	private static L2Npc findSpawn(int npcId)
 	{
 		for (L2Spawn spawn : SpawnTable.getInstance().getSpawnTable())
@@ -105,7 +103,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		}
 		return null;
 	}
-
+	
 	protected void openGates()
 	{
 		for (int i = 23140001; i < 23140003; i++)
@@ -128,7 +126,7 @@ public class IceFairySirra extends L2AttackableAIScript
 			}
 		}
 	}
-
+	
 	protected void closeGates()
 	{
 		for (int i = 23140001; i < 23140003; i++)
@@ -151,7 +149,7 @@ public class IceFairySirra extends L2AttackableAIScript
 			}
 		}
 	}
-
+	
 	public boolean checkItems(L2PcInstance player)
 	{
 		if (player.getParty() != null)
@@ -169,7 +167,7 @@ public class IceFairySirra extends L2AttackableAIScript
 			return false;
 		return true;
 	}
-
+	
 	public void destroyItems(L2PcInstance player)
 	{
 		if (player.getParty() != null)
@@ -183,7 +181,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		else
 			cleanUp();
 	}
-
+	
 	public void teleportInside(L2PcInstance player)
 	{
 		if (player.getParty() != null)
@@ -191,14 +189,14 @@ public class IceFairySirra extends L2AttackableAIScript
 			for (L2PcInstance pc : player.getParty().getMembers())
 			{
 				pc.teleToLocation(113533, -126159, -3488, 0);
-
-				((L2BossZone) _Zone).allowPlayerEntry(pc, 2103);
+				
+				ICEFAIRY_ZONE.allowPlayerEntry(pc, 2103);
 			}
 		}
 		else
 			cleanUp();
 	}
-
+	
 	public void screenMessage(L2PcInstance player, String text, int time)
 	{
 		if (player.getParty() != null)
@@ -211,18 +209,43 @@ public class IceFairySirra extends L2AttackableAIScript
 		else
 			cleanUp();
 	}
-
+	
 	public void doSpawns()
 	{
 		int[][] mobs =
+		{
 			{
-				{ 29060, 102722-50, -127892-50, -2768+30 },
-				{ 29056, 102722, -127892, -2768 },
-				{ 22100, 102722+50, -127892+50, -2768+30 },
-				{ 22102, 102722-100, -127892-100, -2768+30 },
-				{ 22104, 102722+100, -127892+100, -2768+30 }
-			};
-
+				29060,
+				102722 - 50,
+				-127892 - 50,
+				-2768 + 30
+			},
+			{
+				29056,
+				102722,
+				-127892,
+				-2768
+			},
+			{
+				22100,
+				102722 + 50,
+				-127892 + 50,
+				-2768 + 30
+			},
+			{
+				22102,
+				102722 - 100,
+				-127892 - 100,
+				-2768 + 30
+			},
+			{
+				22104,
+				102722 + 100,
+				-127892 + 100,
+				-2768 + 30
+			}
+		};
+		
 		try
 		{
 			for (int i = 0; i < 5; i++)
@@ -251,7 +274,7 @@ public class IceFairySirra extends L2AttackableAIScript
 				e.printStackTrace();
 		}
 	}
-
+	
 	public String getHtmlPath(int val)
 	{
 		String pom = "";
@@ -265,7 +288,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		// "I have nothing to say to you" is returned
 		return "data/html/npcdefault.htm";
 	}
-
+	
 	public void sendHtml(L2Npc npc, L2PcInstance player, String filename)
 	{
 		NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
@@ -274,7 +297,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		player.sendPacket(html);
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
-
+	
 	@Override
 	public String onFirstTalk(L2Npc npc, L2PcInstance player)
 	{
@@ -289,7 +312,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		sendHtml(npc, player, filename);
 		return null;
 	}
-
+	
 	@Override
 	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
@@ -302,7 +325,7 @@ public class IceFairySirra extends L2AttackableAIScript
 			{
 				if (checkItems(player) == true)
 				{
-					startQuestTimer("start", 100000, null, player,false);
+					startQuestTimer("start", 100000, null, player, false);
 					_player = player;
 					destroyItems(player);
 					player.getInventory().addItem("Scroll", 8379, 3, player, null);
@@ -323,7 +346,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("start"))
 		{
-			if (_Zone == null)
+			if (ICEFAIRY_ZONE == null)
 			{
 				_log.warning(IceFairySirra.class.getName() + ": Failed to load zone");
 				cleanUp();
@@ -331,24 +354,24 @@ public class IceFairySirra extends L2AttackableAIScript
 			}
 			closeGates();
 			doSpawns();
-			startQuestTimer("Party_Port", 2000, null, player,false);
-			startQuestTimer("End", 1802000, null, player,false);
+			startQuestTimer("Party_Port", 2000, null, player, false);
+			startQuestTimer("End", 1802000, null, player, false);
 		}
 		else if (event.equalsIgnoreCase("Party_Port"))
 		{
 			teleportInside(player);
 			screenMessage(player, "Steward: Please restore the Queen's appearance!", 10000);
-			startQuestTimer("30MinutesRemaining", 300000, null, player,false);
+			startQuestTimer("30MinutesRemaining", 300000, null, player, false);
 		}
 		else if (event.equalsIgnoreCase("30MinutesRemaining"))
 		{
 			screenMessage(player, "30 minute(s) are remaining.", 10000);
-			startQuestTimer("20minutesremaining", 600000, null, player,false);
+			startQuestTimer("20minutesremaining", 600000, null, player, false);
 		}
 		else if (event.equalsIgnoreCase("20MinutesRemaining"))
 		{
 			screenMessage(player, "20 minute(s) are remaining.", 10000);
-			startQuestTimer("10minutesremaining", 600000, null, player,false);
+			startQuestTimer("10minutesremaining", 600000, null, player, false);
 		}
 		else if (event.equalsIgnoreCase("10MinutesRemaining"))
 		{

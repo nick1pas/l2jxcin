@@ -1817,41 +1817,45 @@ public class Frintezza extends L2AttackableAIScript
 				if (skill2 == null)
 					return null;
 				
-				if (_OnSong == 1 || _OnSong == 2 || _OnSong == 3)
+				switch (_OnSong)
 				{
-					if (frintezza != null && !frintezza.isDead() && activeScarlet != null && !activeScarlet.isDead())
-						skill2.getEffects(frintezza, activeScarlet);
-				}
-				else if (_OnSong == 4)
-				{
-					for (L2Character cha : FRINTEZZA_LAIR.getCharactersInside())
-					{
-						if (cha instanceof L2PcInstance && Rnd.get(100) < 80)
+					case 1:
+					case 2:
+					case 3:
+						if (frintezza != null && !frintezza.isDead() && activeScarlet != null && !activeScarlet.isDead())
+							skill2.getEffects(frintezza, activeScarlet);
+						break;
+						
+					case 4:
+						for (L2Character cha : FRINTEZZA_LAIR.getCharactersInside())
 						{
-							skill2.getEffects(frintezza, cha);
-							cha.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_FEEL_S1_EFFECT).addSkillName(FRINTEZZA_SONGS, 4));
+							if (cha instanceof L2PcInstance && Rnd.get(100) < 80)
+							{
+								skill2.getEffects(frintezza, cha);
+								cha.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_FEEL_S1_EFFECT).addSkillName(FRINTEZZA_SONGS, 4));
+							}
 						}
-					}
-				}
-				else if (_OnSong == 5)
-				{
-					for (L2Character cha : FRINTEZZA_LAIR.getCharactersInside())
-					{
-						if (cha instanceof L2PcInstance && Rnd.get(100) < 70)
+						break;
+						
+					case 5:
+						for (L2Character cha : FRINTEZZA_LAIR.getCharactersInside())
 						{
-							cha.abortAttack();
-							cha.abortCast();
-							cha.disableAllSkills();
-							cha.stopMove(null);
-							cha.setIsParalyzed(true);
-							cha.setIsImmobilized(true);
-							cha.getAI().setIntention(CtrlIntention.IDLE);
-							skill2.getEffects(frintezza, cha);
-							cha.startAbnormalEffect(AbnormalEffect.DANCE_STUNNED);
-							cha.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_FEEL_S1_EFFECT).addSkillName(FRINTEZZA_SONGS, 5));
+							if (cha instanceof L2PcInstance && Rnd.get(100) < 70)
+							{
+								cha.abortAttack();
+								cha.abortCast();
+								cha.disableAllSkills();
+								cha.stopMove(null);
+								cha.setIsParalyzed(true);
+								cha.setIsImmobilized(true);
+								cha.getAI().setIntention(CtrlIntention.IDLE);
+								skill2.getEffects(frintezza, cha);
+								cha.startAbnormalEffect(AbnormalEffect.DANCE_STUNNED);
+								cha.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_FEEL_S1_EFFECT).addSkillName(FRINTEZZA_SONGS, 5));
+							}
 						}
-					}
-					startQuestTimer("stop_effect", 25000, frintezza, null, false);
+						startQuestTimer("stop_effect", 25000, frintezza, null, false);
+						break;
 				}
 				break;
 			

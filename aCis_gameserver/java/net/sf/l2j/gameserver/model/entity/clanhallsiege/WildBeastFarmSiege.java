@@ -185,19 +185,21 @@ public class WildBeastFarmSiege extends ClanHallSiege
 	
 	public void gateControl(int val)
 	{
-		if (val == 1)
+		switch (val)
 		{
-			DoorTable.getInstance().getDoor(21150003).openMe();
-			DoorTable.getInstance().getDoor(21150004).openMe();
-			DoorTable.getInstance().getDoor(21150001).closeMe();
-			DoorTable.getInstance().getDoor(21150002).closeMe();
-		}
-		else if (val == 2)
-		{
-			DoorTable.getInstance().getDoor(21150001).closeMe();
-			DoorTable.getInstance().getDoor(21150002).closeMe();
-			DoorTable.getInstance().getDoor(21150003).closeMe();
-			DoorTable.getInstance().getDoor(21150004).closeMe();
+			case 1:
+				DoorTable.getInstance().getDoor(21150003).openMe();
+				DoorTable.getInstance().getDoor(21150004).openMe();
+				DoorTable.getInstance().getDoor(21150001).closeMe();
+				DoorTable.getInstance().getDoor(21150002).closeMe();
+				break;
+				
+			case 2:
+				DoorTable.getInstance().getDoor(21150001).closeMe();
+				DoorTable.getInstance().getDoor(21150002).closeMe();
+				DoorTable.getInstance().getDoor(21150003).closeMe();
+				DoorTable.getInstance().getDoor(21150004).closeMe();
+				break;
 		}
 	}
 	
@@ -281,25 +283,28 @@ public class WildBeastFarmSiege extends ClanHallSiege
 				L2MonsterInstance questMob = new L2MonsterInstance(IdFactory.getInstance().getNextId(), template);
 				questMob.setHeading(100);
 				questMob.getStatus().setCurrentHpMp(questMob.getMaxHp(), questMob.getMaxMp());
-				if (mobCounter == 1)
+				
+				switch (mobCounter)
 				{
-					questMob.spawnMe(57069, -91797, -1360);
-				}
-				else if (mobCounter == 2)
-				{
-					questMob.spawnMe(58838, -92232, -1354);
-				}
-				else if (mobCounter == 3)
-				{
-					questMob.spawnMe(57327, -93373, -1365);
-				}
-				else if (mobCounter == 4)
-				{
-					questMob.spawnMe(57820, -91740, -1354);
-				}
-				else if (mobCounter == 5)
-				{
-					questMob.spawnMe(58728, -93487, -1360);
+					case 1:
+						questMob.spawnMe(57069, -91797, -1360);
+						break;
+						
+					case 2:
+						questMob.spawnMe(58838, -92232, -1354);
+						break;
+						
+					case 3:
+						questMob.spawnMe(57327, -93373, -1365);
+						break;
+						
+					case 4:
+						questMob.spawnMe(57327, -93373, -1365);
+						break;
+						
+					case 5:
+						questMob.spawnMe(58728, -93487, -1360);
+						break;
 				}
 				clanPlayersInfo regPlayers = _clansInfo.get(clan.getClanId());
 				regPlayers._mob = questMob;
@@ -336,25 +341,23 @@ public class WildBeastFarmSiege extends ClanHallSiege
 				regPlayers._flag = flag;
 				continue;
 			}
-			if (flagCounter == 1)
+			switch (flagCounter)
 			{
-				flag.spawnMe(56769, -92097, -1360);
-			}
-			else if (flagCounter == 2)
-			{
-				flag.spawnMe(59138, -92532, -1354);
-			}
-			else if (flagCounter == 3)
-			{
-				flag.spawnMe(57027, -93673, -1365);
-			}
-			else if (flagCounter == 4)
-			{
-				flag.spawnMe(58120, -91440, -1354);
-			}
-			else if (flagCounter == 5)
-			{
-				flag.spawnMe(58428, -93787, -1360);
+				case 1:
+					flag.spawnMe(56769, -92097, -1360);
+					break;
+				case 2:
+					flag.spawnMe(59138, -92532, -1354);
+					break;
+				case 3:
+					flag.spawnMe(57027, -93673, -1365);
+					break;
+				case 4:
+					flag.spawnMe(58120, -91440, -1354);
+					break;
+				case 5:
+					flag.spawnMe(58428, -93787, -1360);
+					break;
 			}
 			clanPlayersInfo regPlayers = _clansInfo.get(clan.getClanId());
 			regPlayers._flag = flag;
@@ -394,10 +397,8 @@ public class WildBeastFarmSiege extends ClanHallSiege
 	public boolean isClanOnSiege(L2Clan playerClan)
 	{
 		if (playerClan == clanhall.getOwnerClan())
-		{
 			return true;
-		}
-		
+
 		clanPlayersInfo regPlayers = _clansInfo.get(playerClan.getClanId());
 		if (regPlayers == null)
 		{

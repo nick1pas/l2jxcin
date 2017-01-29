@@ -123,14 +123,12 @@ public class Q501_ProofOfClanAlliance extends Quest
 			st.exitQuest(true);
 			return;
 		}
-		
-		int clan = st.getPlayer().getClan().getClanId();
-		
+
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			PreparedStatement offline = con.prepareStatement("DELETE FROM character_quests WHERE name = ? AND char_id IN (SELECT obj_id FROM characters WHERE clanId = ? AND online = 0)");
 			offline.setString(1, getName());
-			offline.setInt(2, clan);
+			offline.setInt(2, st.getPlayer().getClan().getClanId());
 			offline.executeUpdate();
 			offline.close();
 		}
@@ -181,11 +179,11 @@ public class Q501_ProofOfClanAlliance extends Quest
 	@Override
 	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
-		QuestState st = player.getQuestState(qn);
+		QuestState st = player.getQuestState(getName());
 		if ((st.getPlayer() == null) || (st.getPlayer().getClan() == null))
 		{
 			st.exitQuest(true);
-			return "noquest";
+			return getNoQuestMsg();
 		}
 		
 		QuestState leader = getLeader(st);
@@ -523,7 +521,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 		if ((st.getPlayer() == null) || (st.getPlayer().getClan() == null))
 		{
 			st.exitQuest(true);
-			return "noquest";
+			return getNoQuestMsg();
 		}
 		
 		QuestState leader = getLeader(st);

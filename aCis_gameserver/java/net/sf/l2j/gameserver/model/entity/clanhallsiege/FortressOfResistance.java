@@ -38,6 +38,7 @@ import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
+import net.sf.l2j.gameserver.taskmanager.GameTimeTaskManager;
 import net.sf.l2j.gameserver.util.Broadcast;
 
 public class FortressOfResistance
@@ -101,14 +102,11 @@ public class FortressOfResistance
 				break;
 		}
 		if (HOUR < 0 || HOUR > 23)
-		{
 			HOUR = 21;
-		}
-		if (MINUTES < 0 || MINUTES > 59)
-		{
-			MINUTES = 0;
-		}
 		
+		if (MINUTES < 0 || MINUTES > 59)
+			MINUTES = 0;
+
 		_clansDamageInfo = new HashMap<>();
 		
 		synchronized (this)
@@ -209,7 +207,8 @@ public class FortressOfResistance
 		@Override
 		public void run()
 		{
-			BossSpawn();
+			if (GameTimeTaskManager.getInstance().isNight())
+				BossSpawn();
 		}
 	}
 	

@@ -8,13 +8,6 @@
 		<node X="57669" Y="221683" />
 		<node X="50773" Y="221632" />
 	</zone>
-		<!-- Boss zone Lair of Zaken -->
-	<zone id='12011' type='BossZone' shape='Cuboid' minZ='-3775' maxZ='-2690' bossId='29022'>
-		<stat name='name' val='Lair of Zaken'/>
-		<stat name='Flying' val='false'/>
-		<stat name='EnabledByDefault' val='false'/>
-		<stat name='InvadeTime' val='0'/>
-	</zone>
 	<zone id="110001" type="BossZone" shape="NPoly" minZ="-8380" maxZ="-4880"><!-- Antharas Boss -->
 		<stat name="InvadeTime" val="1800000" />
 		<node X="173469" Y="110431" />

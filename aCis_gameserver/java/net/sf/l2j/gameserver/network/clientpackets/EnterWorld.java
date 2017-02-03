@@ -61,6 +61,7 @@ import net.sf.l2j.gameserver.network.serverpackets.FriendList;
 import net.sf.l2j.gameserver.network.serverpackets.HennaInfo;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
+import net.sf.l2j.gameserver.network.serverpackets.OpenUrl;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeShowMemberListAll;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeShowMemberListUpdate;
@@ -250,6 +251,9 @@ public class EnterWorld extends L2GameClientPacket
 		activeChar.updateEffectIcons();
 		activeChar.sendPacket(new EtcStatusUpdate(activeChar));
 		activeChar.sendSkillList();
+		
+		if (Config.OPEN_URL_ENABLE)
+			activeChar.sendPacket(new OpenUrl(Config.OPEN_URL_SITE));
 		
 		// Load quests.
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())

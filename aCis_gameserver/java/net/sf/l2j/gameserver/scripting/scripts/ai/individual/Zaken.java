@@ -46,11 +46,62 @@ public class Zaken extends L2AttackableAIScript
 	int _telecheck; // Used for zakens self teleportings
 	L2Object _target; // Used for CallSkills
 	
-	// Coords	
-	private static final int[] X_COORDS = { 53950, 55980, 54950, 55970, 53930, 55970, 55980, 54960, 53950, 53930, 55970, 55980, 54960, 53950, 53930 };
-	private static final int[] Y_COORDS = { 219860, 219820, 218790, 217770, 217760, 217770, 219920, 218790, 219860, 217760, 217770, 219920, 218790, 219860, 217760 };
-	private static final int[] Z_COORDS = { -3488, -3488, -3488, -3488, -3488, -3216, -3216, -3216, -3216, -3216, -2944, -2944, -2944, -2944, -2944 };
-
+	// Coords
+	private static final int[] X_COORDS =
+	{
+		53950,
+		55980,
+		54950,
+		55970,
+		53930,
+		55970,
+		55980,
+		54960,
+		53950,
+		53930,
+		55970,
+		55980,
+		54960,
+		53950,
+		53930
+	};
+	private static final int[] Y_COORDS =
+	{
+		219860,
+		219820,
+		218790,
+		217770,
+		217760,
+		217770,
+		219920,
+		218790,
+		219860,
+		217760,
+		217770,
+		219920,
+		218790,
+		219860,
+		217760
+	};
+	private static final int[] Z_COORDS =
+	{
+		-3488,
+		-3488,
+		-3488,
+		-3488,
+		-3488,
+		-3216,
+		-3216,
+		-3216,
+		-3216,
+		-3216,
+		-2944,
+		-2944,
+		-2944,
+		-2944,
+		-2944
+	};
+	
 	// Skills
 	private static final int TELEPORT = 4216;
 	private static final int MASS_TELEPORT = 4217;
@@ -106,7 +157,7 @@ public class Zaken extends L2AttackableAIScript
 								}
 								catch (Throwable e)
 								{
-									_log.log(Level.WARNING,"Cannot close door ID: " + DOOR + e);
+									_log.log(Level.WARNING, "Cannot close door ID: " + DOOR + e);
 								}
 							}
 						}, 300000L);
@@ -114,7 +165,7 @@ public class Zaken extends L2AttackableAIScript
 				}
 				catch (Throwable e)
 				{
-					_log.log(Level.WARNING,"Cannot open door ID: " + DOOR + e);
+					_log.log(Level.WARNING, "Cannot open door ID: " + DOOR + e);
 				}
 			}
 		}, 2000L, 600000L);
@@ -144,9 +195,12 @@ public class Zaken extends L2AttackableAIScript
 				int loc_y = info.getInteger("loc_y");
 				int loc_z = info.getInteger("loc_z");
 				int heading = info.getInteger("heading");
+				int hp = info.getInteger("currentHP");
+				int mp = info.getInteger("currentMP");
 				L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, loc_x, loc_y, loc_z, heading, false, 0, false);
-				zaken.setCurrentHpMp(zaken.getMaxHp(), zaken.getMaxMp());
+				zaken.setCurrentHpMp(hp, mp);
 				spawnBoss(zaken);
+				break;
 		}
 	}
 	
@@ -164,7 +218,7 @@ public class Zaken extends L2AttackableAIScript
 	{
 		if (npc == null)
 		{
-			_log.log(Level.WARNING,"Zaken AI failed to load, missing Zaken in grandboss_data.sql");
+			_log.log(Level.WARNING, "Zaken AI failed to load, missing Zaken in grandboss_data.sql");
 			return;
 		}
 		
@@ -263,7 +317,7 @@ public class Zaken extends L2AttackableAIScript
 				
 				startQuestTimer("timer", 30000, npc, null, true);
 				break;
-				
+			
 			case "minion_cycle":
 				int rr = Rnd.get(15);
 				switch (_minionStatus)
@@ -272,18 +326,18 @@ public class Zaken extends L2AttackableAIScript
 						addSpawn(PIRATECAPTAIN, X_COORDS[rr], Y_COORDS[rr], Z_COORDS[rr], Rnd.get(65536), false, 0, true);
 						_minionStatus = 2;
 						break;
-						
+					
 					case 2:
 						addSpawn(DOLLBLADER, X_COORDS[rr], Y_COORDS[rr], Z_COORDS[rr], Rnd.get(65536), false, 0, true);
 						_minionStatus = 3;
 						break;
-						
+					
 					case 3:
 						addSpawn(VALEMASTER, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
 						addSpawn(VALEMASTER, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
 						_minionStatus = 4;
 						break;
-						
+					
 					case 4:
 						addSpawn(PIRATEZOMBIE, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
 						addSpawn(PIRATEZOMBIE, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
@@ -292,7 +346,7 @@ public class Zaken extends L2AttackableAIScript
 						addSpawn(PIRATEZOMBIE, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
 						_minionStatus = 5;
 						break;
-						
+					
 					case 5:
 						addSpawn(DOLLBLADER, 52675, 219371, -3290, Rnd.get(65536), false, 0, true);
 						addSpawn(DOLLBLADER, 52687, 219596, -3368, Rnd.get(65536), false, 0, true);
@@ -324,7 +378,7 @@ public class Zaken extends L2AttackableAIScript
 						addSpawn(DOLLBLADER, 54262, 219480, -3488, Rnd.get(65536), false, 0, true);
 						_minionStatus = 6;
 						break;
-						
+					
 					case 6:
 						addSpawn(PIRATEZOMBIE, 53412, 218077, -3488, Rnd.get(65536), false, 0, true);
 						addSpawn(VALEMASTER, 54413, 217132, -3488, Rnd.get(65536), false, 0, true);
@@ -356,7 +410,7 @@ public class Zaken extends L2AttackableAIScript
 						addSpawn(PIRATEZOMBIE, 54973, 218075, -3216, Rnd.get(65536), false, 0, true);
 						_minionStatus = 7;
 						break;
-						
+					
 					case 7:
 						addSpawn(PIRATEZOMBIE, 54228, 217504, -3216, Rnd.get(65536), false, 0, true);
 						addSpawn(VALEMASTER, 54181, 217168, -3216, Rnd.get(65536), false, 0, true);
@@ -391,17 +445,17 @@ public class Zaken extends L2AttackableAIScript
 						break;
 				}
 				break;
-				
+			
 			case "zaken_unlock":
 				int i1 = Rnd.get(15);
 				L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, X_COORDS[i1], Y_COORDS[i1], Z_COORDS[i1], i1, false, 0, false);
 				GrandBossManager.getInstance().setBossStatus(ZAKEN, ALIVE);
 				spawnBoss(zaken);
 				break;
-				
+			
 			case "CreateOnePrivateEx":
 				addSpawn(npc.getNpcId(), npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, true);
-				break;		
+				break;
 		}
 		return super.onAdvEvent(event, npc, player);
 	}
@@ -427,10 +481,10 @@ public class Zaken extends L2AttackableAIScript
 	@Override
 	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
 	{
+		int i1 = Rnd.get(15);
 		L2Character nextTarget = ((L2Attackable) npc).getMostHated();
 		if (npc.getNpcId() == ZAKEN)
 		{
-			int i1 = Rnd.get(15);
 			switch (skill.getId())
 			{
 				case SELF_TELEPORT:
@@ -549,18 +603,40 @@ public class Zaken extends L2AttackableAIScript
 			return;
 		
 		int chance = Rnd.get(225);
-		npc.setTarget(_target);
 		if (chance < 1)
+		{
+			npc.setTarget(_target);
 			npc.doCast(SkillTable.getInstance().getInfo(TELEPORT, 1));
+		}
 		else if (chance < 2)
+		{
+			npc.setTarget(_target);
 			npc.doCast(SkillTable.getInstance().getInfo(MASS_TELEPORT, 1));
+		}
 		else if (chance < 4)
+		{
+			npc.setTarget(_target);
 			npc.doCast(SkillTable.getInstance().getInfo(HOLD, 1));
+		}
 		else if (chance < 8)
+		{
+			npc.setTarget(_target);
 			npc.doCast(SkillTable.getInstance().getInfo(DRAIN, 1));
+		}
 		else if (chance < 15)
-			npc.doCast(SkillTable.getInstance().getInfo(MASS_DUAL_ATTACK, 1));
-		
+		{
+			for (L2Character character : npc.getKnownTypeInRadius(L2Character.class, 100))
+			{
+				if (character != _target)
+					continue;
+				
+				if (_target != ((L2Attackable) npc).getMostHated())
+				{
+					npc.setTarget(_target);
+					npc.doCast(SkillTable.getInstance().getInfo(MASS_DUAL_ATTACK, 1));
+				}
+			}
+		}
 		if (Rnd.get(2) < 1)
 		{
 			if (_target == ((L2Attackable) npc).getMostHated())

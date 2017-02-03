@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import net.sf.l2j.gameserver.datatables.CharNameTable;
+import net.sf.l2j.gameserver.datatables.GmListTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -234,7 +235,17 @@ public final class World
 		}
 		return result;
 	}
-	
+    
+    /**
+     * Return a table containing all GMs.<BR>
+     * <BR>
+     * @return the all g ms
+     */
+    public static List<L2PcInstance> getAllGMs()
+    {
+        return GmListTable.getInstance().getAllGms(true);
+    }
+  
 	public static World getInstance()
 	{
 		return SingletonHolder._instance;

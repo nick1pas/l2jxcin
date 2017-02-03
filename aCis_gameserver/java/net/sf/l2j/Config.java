@@ -55,8 +55,6 @@ public final class Config
 	public static final String SERVER_FILE = "./config/server.properties";
 	public static final String SIEGE_FILE = "./config/siege.properties";
 
-	public static final int DEVASTATED_DAY = 0;
-	
 	// --------------------------------------------------
 	// Custom settings
 	// --------------------------------------------------
@@ -143,7 +141,9 @@ public final class Config
 	public static List<Integer> nonEnchantableItemList;
 	public static boolean modifyItemEnchant;
 	public static Map<Integer, Integer> modifyItemEnchantList;
-	
+	/** Open Url */
+	public static boolean OPEN_URL_ENABLE;
+	public static String OPEN_URL_SITE;
 	// --------------------------------------------------
 	// Clans settings
 	// --------------------------------------------------
@@ -1035,44 +1035,45 @@ public final class Config
 		ALLOW_GLOBAL_DROP_RANDOM = custom.getProperty("AllowRandomQuantityDrop", true);
 		ALLOW_GLOBAL_DROP = custom.getProperty("AllowGlobalDrop", true);
 			
-			npcEnchantItemsEnabled = custom.getProperty("EnableNpcEnchantItems", false);
-			weaponEnchantLevel = custom.getProperty("WeaponEnchantLevel", 20);
-			armorEnchantLevel = custom.getProperty("ArmorEnchantLevel", 16);
-			IngredientID = custom.getProperty("IngredientID", 57);
-			InAmountWeapon = custom.getProperty("IngredientAmountWeapon", 15000);
-			InAmountArmor = custom.getProperty("IngredientAmountArmor", 10000);
-			augmentItemChance = custom.getProperty("AugmentItemChane", 30);
-			nonEnchantableItems = custom.getProperty("NonEnchantableItemList", "");
-			nonEnchantableItemList = new ArrayList<>();
-			for(String itemId : nonEnchantableItems.split(","))
-				nonEnchantableItemList.add(Integer.parseInt(itemId));
-
-			modifyItemEnchant = custom.getProperty("ModifyItemEnchant", false);
-			if(modifyItemEnchant)
+		npcEnchantItemsEnabled = custom.getProperty("EnableNpcEnchantItems", false);
+		weaponEnchantLevel = custom.getProperty("WeaponEnchantLevel", 20);
+		armorEnchantLevel = custom.getProperty("ArmorEnchantLevel", 16);
+		IngredientID = custom.getProperty("IngredientID", 57);
+		InAmountWeapon = custom.getProperty("IngredientAmountWeapon", 15000);
+		InAmountArmor = custom.getProperty("IngredientAmountArmor", 10000);
+		augmentItemChance = custom.getProperty("AugmentItemChane", 30);
+		nonEnchantableItems = custom.getProperty("NonEnchantableItemList", "");
+		nonEnchantableItemList = new ArrayList<>();
+		for(String itemId : nonEnchantableItems.split(","))
+			nonEnchantableItemList.add(Integer.parseInt(itemId));
+		
+		modifyItemEnchant = custom.getProperty("ModifyItemEnchant", false);
+		if(modifyItemEnchant)
+		{
+			modifyItemEnchantList = new HashMap<>();
+			String[] propertySplit = custom.getProperty("ModifyItemEnchantList", "").split(";");
+			for(String item : propertySplit)
 			{
-				modifyItemEnchantList = new HashMap<>();
-				String[] propertySplit = custom.getProperty("ModifyItemEnchantList", "").split(";");
-				for(String item : propertySplit)
+				String[] itemEnchantSplit = item.split(",");
+				if(itemEnchantSplit.length != 2)
 				{
-					String[] itemEnchantSplit = item.split(",");
-					if(itemEnchantSplit.length != 2)
+					System.out.println("invalid config property -> ModifyItemEnchantList \"" + item + "\"");
+				}
+				else
+				{
+					try
 					{
-						System.out.println("invalid config property -> ModifyItemEnchantList \"" + item + "\"");
+						modifyItemEnchantList.put(Integer.parseInt(itemEnchantSplit[0]), Integer.parseInt(itemEnchantSplit[1]));
 					}
-					else
+					catch(NumberFormatException nfe)
 					{
-						try
-						{
-							modifyItemEnchantList.put(Integer.parseInt(itemEnchantSplit[0]), Integer.parseInt(itemEnchantSplit[1]));
-						}
-						catch(NumberFormatException nfe)
-						{
-								nfe.printStackTrace();
-						}
+						nfe.printStackTrace();
 					}
 				}
 			}
-	
+		}
+		OPEN_URL_ENABLE = custom.getProperty("OpenUrlEnable", true);
+		OPEN_URL_SITE = custom.getProperty("OpenUrlSite", "");
 		
 	}
 	/**

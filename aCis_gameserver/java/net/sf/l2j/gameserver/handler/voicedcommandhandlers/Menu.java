@@ -77,6 +77,14 @@ public class Menu implements IVoicedCommandHandler
                 activeChar.setIsBuffProtected(true);
             showHtml(activeChar);
         }
+        else if (command.equals("setXpRefuse"))
+        {        
+            if (activeChar.isBuffProtected())
+                activeChar.cantGainXP(true);
+            else
+                activeChar.cantGainXP(false);
+            showHtml(activeChar);
+        }
         return true;
     }
     
@@ -88,7 +96,8 @@ public class Menu implements IVoicedCommandHandler
         html.replace("%partyRefusal%", activeChar.isPartyInRefuse() ? ACTIVED : DESATIVED);
         html.replace("%tradeRefusal%", activeChar.getTradeRefusal() ? ACTIVED : DESATIVED);
         html.replace("%buffsRefusal%", activeChar.isBuffProtected() ? ACTIVED : DESATIVED);
-        html.replace("%messageRefusal%", activeChar.isInRefusalMode() ? ACTIVED : DESATIVED);    
+        html.replace("%messageRefusal%", activeChar.isInRefusalMode() ? ACTIVED : DESATIVED);   
+        html.replace("%XpRefusal%", activeChar.cantGainXP() ? ACTIVED : DESATIVED);
         activeChar.sendPacket(html);
     }
     

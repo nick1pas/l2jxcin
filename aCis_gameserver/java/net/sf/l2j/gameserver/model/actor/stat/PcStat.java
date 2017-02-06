@@ -54,7 +54,10 @@ public class PcStat extends PlayableStat
 		// Allowed to gain exp?
 		if (!getActiveChar().getAccessLevel().canGainExp())
 			return false;
-		
+	       
+		if (!getActiveChar().cantGainXP())
+			return false;
+		     
 		if (!super.addExp(value))
 			return false;
 		

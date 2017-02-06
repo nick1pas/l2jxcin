@@ -545,6 +545,7 @@ public final class L2PcInstance extends L2Playable
 	private boolean _tradeRefusal; // Trade refusal
 	private boolean _exchangeRefusal; // Exchange refusal
 	private boolean _isPartyInRefuse; // Party Refusal Mode
+	private boolean _XpRefuse; // XP Refusal mode
 	
 	private Party _party;
 	private LootRule _lootRule;
@@ -7938,6 +7939,16 @@ public final class L2PcInstance extends L2Playable
 	{
 		_isPartyInRefuse = value;
 	}
+	
+	public void cantGainXP(boolean value)
+	{
+		_XpRefuse = value;
+	}      
+	
+	public boolean cantGainXP()
+	{	
+		return _XpRefuse;
+	}  
 	
 	public BlockList getBlockList()
 	{

@@ -364,23 +364,19 @@
 		<set name="skillType" val="DUMMY" />
 	</skill>
 	<skill id="4223" levels="1" name="Face Chance: Night to Day">
-		<set name="coolTime" val="1900" />
-		<set name="hitTime" val="1100" />
 		<set name="operateType" val="OP_ACTIVE" />
 		<set name="skillType" val="BUFF" />
 		<set name="target" val="TARGET_SELF" />
 		<for>
-			<effect name="Buff" time="14400" val="0" stackOrder="1" stackType="public_slot" />
+			<effect name="Buff" time="10800" abnormal="unknown16" val="0" stackOrder="1" stackType="public_slot" />
 		</for>
 	</skill>
 	<skill id="4224" levels="1" name="Face Chance: Day to Night">
-		<set name="coolTime" val="1900" />
-		<set name="hitTime" val="1100" />
 		<set name="operateType" val="OP_ACTIVE" />
 		<set name="skillType" val="BUFF" />
 		<set name="target" val="TARGET_SELF" />
 		<for>
-			<effect name="Buff" time="10" val="0" stackOrder="2" stackType="public_slot" />
+		<effect name="Buff" time="3600" val="0" stackOrder="1" stackType="public_slot" />
 		</for>
 	</skill>
 	<skill id="4225" levels="5" name="Resist Shock">
@@ -407,7 +403,7 @@
 		<set name="skillType" val="BUFF" />
 		<set name="target" val="TARGET_SELF" />
 		<for>
-			<effect name="Buff" time="14400" val="0" stackOrder="11" stackType="hp_regen_up">
+			<effect name="Buff" time="3600" val="0" stackOrder="1" stackType="hp_regen_up">
 				<mul order="0x30" stat="regHp" val="20" />
 			</effect>
 		</for>
@@ -609,7 +605,7 @@
 		<set name="skillType" val="BUFF" />
 		<set name="target" val="TARGET_SELF" />
 		<for>
-			<effect name="Buff" time="10" val="0" stackOrder="12" stackType="hp_regen_up" />
+			<effect name="Buff" time="10800" val="0" stackOrder="2" stackType="hp_regen_up" />
 		</for>
 	</skill>
 	<skill id="4243" levels="1" name="Venomous Poison">

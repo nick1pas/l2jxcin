@@ -177,9 +177,7 @@ public class FortressOfResistance
 	public void MessengerSpawn()
 	{
 		if (!ClanHallManager.getInstance().isFree(21))
-		{
 			ClanHallManager.getInstance().setFree(21);
-		}
 		
 		Announce("Capture registration of Partisan Hideout has begun!");
 		Announce("Now its open for 1 hours!");
@@ -215,9 +213,7 @@ public class FortressOfResistance
 	public void BossSpawn()
 	{
 		if (!_clansDamageInfo.isEmpty())
-		{
 			_clansDamageInfo.clear();
-		}
 		
 		try
 		{
@@ -319,7 +315,6 @@ public class FortressOfResistance
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			PreparedStatement statement;
-			
 			statement = con.prepareStatement("UPDATE clanhall SET paidUntil = ?, paid = ? WHERE id = ?");
 			statement.setLong(1, System.currentTimeMillis() + 59760000);
 			statement.setInt(2, 1);
@@ -329,7 +324,7 @@ public class FortressOfResistance
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "", e);
+			_log.log(Level.WARNING, "", e);
 		}
 	}
 }

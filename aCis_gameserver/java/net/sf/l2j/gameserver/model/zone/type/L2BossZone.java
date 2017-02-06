@@ -312,7 +312,7 @@ public class L2BossZone extends L2ZoneType
 		{
 			if (character instanceof L2PcInstance)
 			{
-				npc.getStatus().addStatusListener(character);
+				npc.addKnownObject(character);
 			}
 		}
 	}

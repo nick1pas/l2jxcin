@@ -1,6 +1,19 @@
+/*
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package net.sf.l2j.gameserver.scripting.scripts.ai.individual;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
@@ -35,19 +48,18 @@ import net.sf.l2j.gameserver.util.Util;
 /**
  * Zaken AI
  * @author dEvilKinG, Trance
- * @reword by Leonardo Holanda(BossForever)
  */
 public class Zaken extends L2AttackableAIScript
 {
 	static final Logger _log = Logger.getLogger(Zaken.class.getName());
-	static final L2BossZone ZAKEN_LAIR = ZoneManager.getInstance().getZoneById(110000, L2BossZone.class);
-	int hate = 0; // Used for most hated players progress
-	int _minionStatus = 0; // Used for spawning minions cycles
+	private static final L2BossZone _zakenLair = ZoneManager.getInstance().getZoneById(110000, L2BossZone.class);
+	private int hate = 0; // Used for most hated players progress
+	private int _minionStatus = 0; // Used for spawning minions cycles
 	int _telecheck; // Used for zakens self teleportings
-	L2Object _target; // Used for CallSkills
+	private L2Object _target; // Used for CallSkills
 	
 	// Coords
-	private static final int[] X_COORDS =
+	private static final int[] Xcoords =
 	{
 		53950,
 		55980,
@@ -65,7 +77,7 @@ public class Zaken extends L2AttackableAIScript
 		53950,
 		53930
 	};
-	private static final int[] Y_COORDS =
+	private static final int[] Ycoords =
 	{
 		219860,
 		219820,
@@ -83,7 +95,7 @@ public class Zaken extends L2AttackableAIScript
 		219860,
 		217760
 	};
-	private static final int[] Z_COORDS =
+	private static final int[] Zcoords =
 	{
 		-3488,
 		-3488,
@@ -114,7 +126,6 @@ public class Zaken extends L2AttackableAIScript
 	private static final int DAY_TO_NIGHT = 4224;
 	private static final int REGEN_NIGHT = 4227;
 	private static final int REGEN_DAY = 4242;
-	private static final int ANTI_STRIDER_SLOW = 4258;
 	
 	// Boss
 	private static final int ZAKEN = 29022;
@@ -129,9 +140,6 @@ public class Zaken extends L2AttackableAIScript
 	private static final byte ALIVE = 0; // Zaken is spawned.
 	private static final byte DEAD = 1; // Zaken has been killed.
 	
-	// Door
-	private static final int DOOR = 21240006;
-	
 	public Zaken()
 	{
 		super("ai/individual");
@@ -145,7 +153,7 @@ public class Zaken extends L2AttackableAIScript
 				{
 					if (GetTimeHour() == 0)
 					{
-						DoorTable.getInstance().getDoor(DOOR).openMe();
+						DoorTable.getInstance().getDoor(21240006).openMe();
 						ThreadPool.schedule(new Runnable()
 						{
 							@Override
@@ -153,11 +161,11 @@ public class Zaken extends L2AttackableAIScript
 							{
 								try
 								{
-									DoorTable.getInstance().getDoor(DOOR).closeMe();
+									DoorTable.getInstance().getDoor(21240006).closeMe();
 								}
 								catch (Throwable e)
 								{
-									_log.log(Level.WARNING, "Cannot close door ID: " + DOOR + e);
+									_log.warning("Cannot close door ID: 21240006 " + e);
 								}
 							}
 						}, 300000L);
@@ -165,42 +173,40 @@ public class Zaken extends L2AttackableAIScript
 				}
 				catch (Throwable e)
 				{
-					_log.log(Level.WARNING, "Cannot open door ID: " + DOOR + e);
+					_log.warning("Cannot open door ID: 21240006 " + e);
 				}
 			}
 		}, 2000L, 600000L);
 		
 		final StatsSet info = GrandBossManager.getInstance().getStatsSet(ZAKEN);
-		
-		switch (GrandBossManager.getInstance().getBossStatus(ZAKEN))
+		final int status = GrandBossManager.getInstance().getBossStatus(ZAKEN);
+		if (status == DEAD)
 		{
-			case DEAD:
-				// Load the unlock date and time for Zaken from database.
-				long temp = info.getLong("respawn_time") - System.currentTimeMillis();
-				// If zaken is locked until a certain time, mark it so and start the unlock timer the unlock time has not yet expired.
-				if (temp > 0)
-					startQuestTimer("zaken_unlock", temp, null, null, false);
-				else
-				{
-					// The time has already expired while the server was offline. Immediately spawn Zaken.
-					int i1 = Rnd.get(15);
-					L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, X_COORDS[i1], Y_COORDS[i1], Z_COORDS[i1], i1, false, 0, false);
-					GrandBossManager.getInstance().setBossStatus(ZAKEN, ALIVE);
-					spawnBoss(zaken);
-				}
-				break;
-			
-			case ALIVE:
-				int loc_x = info.getInteger("loc_x");
-				int loc_y = info.getInteger("loc_y");
-				int loc_z = info.getInteger("loc_z");
-				int heading = info.getInteger("heading");
-				int hp = info.getInteger("currentHP");
-				int mp = info.getInteger("currentMP");
-				L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, loc_x, loc_y, loc_z, heading, false, 0, false);
-				zaken.setCurrentHpMp(hp, mp);
+			// Load the unlock date and time for Zaken from database.
+			long temp = info.getLong("respawn_time") - System.currentTimeMillis();
+			// If zaken is locked until a certain time, mark it so and start the unlock timer the unlock time has not yet expired.
+			if (temp > 0)
+				startQuestTimer("zaken_unlock", temp, null, null, false);
+			else
+			{
+				// The time has already expired while the server was offline. Immediately spawn Zaken.
+				int i1 = Rnd.get(15);
+				L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, Xcoords[i1], Ycoords[i1], Zcoords[i1], i1, false, 0, false);
+				GrandBossManager.getInstance().setBossStatus(ZAKEN, ALIVE);
 				spawnBoss(zaken);
-				break;
+			}
+		}
+		else
+		{
+			int loc_x = info.getInteger("loc_x");
+			int loc_y = info.getInteger("loc_y");
+			int loc_z = info.getInteger("loc_z");
+			int heading = info.getInteger("heading");
+			int hp = info.getInteger("currentHP");
+			int mp = info.getInteger("currentMP");
+			L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, loc_x, loc_y, loc_z, heading, false, 0, false);
+			zaken.setCurrentHpMp(hp, mp);
+			spawnBoss(zaken);
 		}
 	}
 	
@@ -218,7 +224,7 @@ public class Zaken extends L2AttackableAIScript
 	{
 		if (npc == null)
 		{
-			_log.log(Level.WARNING, "Zaken AI failed to load, missing Zaken in grandboss_data.sql");
+			_log.warning("Zaken AI failed to load, missing Zaken in grandboss_data.sql");
 			return;
 		}
 		
@@ -226,13 +232,13 @@ public class Zaken extends L2AttackableAIScript
 		npc.broadcastPacket(new PlaySound(1, "BS01_A", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
 		hate = 0;
 		
-		if (ZAKEN_LAIR == null)
+		if (_zakenLair == null)
 		{
-			_log.log(Level.WARNING, "Zaken AI failed to load, missing zone for Zaken");
+			_log.warning("Zaken AI failed to load, missing zone for Zaken");
 			return;
 		}
 		
-		if (ZAKEN_LAIR.isInsideZone(npc))
+		if (_zakenLair.isInsideZone(npc))
 		{
 			_minionStatus = 1;
 			startQuestTimer("minion_cycle", 1700, null, null, true);
@@ -245,218 +251,212 @@ public class Zaken extends L2AttackableAIScript
 	@Override
 	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
-		switch (GrandBossManager.getInstance().getBossStatus(ZAKEN))
+		int status = GrandBossManager.getInstance().getBossStatus(ZAKEN);
+		if ((status == DEAD) && !event.equalsIgnoreCase("zaken_unlock"))
+			return super.onAdvEvent(event, npc, player);
+		
+		if (event.equalsIgnoreCase("timer"))
 		{
-			case DEAD:
-				if (!event.equalsIgnoreCase("zaken_unlock"))
-					return super.onAdvEvent(event, npc, player);
-				break;
-		}
-		switch (event)
-		{
-			case "timer":
-				L2Character _mostHated = null;
-				if (GetTimeHour() < 5)
+			if (GetTimeHour() < 5)
+			{
+				L2Skill skill = SkillTable.getInstance().getInfo(DAY_TO_NIGHT, 1);
+				if (npc.getFirstEffect(skill) == null)
 				{
-					L2Skill skill = SkillTable.getInstance().getInfo(DAY_TO_NIGHT, 1);
-					if (npc.getFirstEffect(skill) == null)
-					{
-						npc.doCast(SkillTable.getInstance().getInfo(DAY_TO_NIGHT, 1));
-						npc.doCast(SkillTable.getInstance().getInfo(REGEN_NIGHT, 1));
-						
-					}
+					npc.doCast(SkillTable.getInstance().getInfo(DAY_TO_NIGHT, 1));
+					npc.doCast(SkillTable.getInstance().getInfo(REGEN_NIGHT, 1));
+					
 				}
-				else if (GetTimeHour() > 5)
+			}
+			else if (GetTimeHour() > 5)
+			{
+				L2Skill skill = SkillTable.getInstance().getInfo(NIGHT_TO_DAY, 1);
+				if (npc.getFirstEffect(skill) == null)
 				{
-					L2Skill skill = SkillTable.getInstance().getInfo(NIGHT_TO_DAY, 1);
-					if (npc.getFirstEffect(skill) == null)
-					{
-						_telecheck = 3;
-						npc.doCast(SkillTable.getInstance().getInfo(NIGHT_TO_DAY, 1));
-						npc.doCast(SkillTable.getInstance().getInfo(REGEN_DAY, 1));
-					}
+					_telecheck = 3;
+					npc.doCast(SkillTable.getInstance().getInfo(NIGHT_TO_DAY, 1));
+					npc.doCast(SkillTable.getInstance().getInfo(REGEN_DAY, 1));
 				}
-				
-				if ((npc.getAI().getIntention() == CtrlIntention.ATTACK) && (hate == 0))
+			}
+			
+			L2Character _mostHated = null;
+			if ((npc.getAI().getIntention() == CtrlIntention.ATTACK) && (hate == 0))
+			{
+				if (((L2Attackable) npc).getMostHated() != null)
 				{
-					if (((L2Attackable) npc).getMostHated() != null)
+					_mostHated = ((L2Attackable) npc).getMostHated();
+					hate = 1;
+				}
+			}
+			else if ((npc.getAI().getIntention() == CtrlIntention.ATTACK) && (hate != 0))
+			{
+				if (((L2Attackable) npc).getMostHated() != null)
+				{
+					if (_mostHated == ((L2Attackable) npc).getMostHated())
+						hate = hate + 1;
+					else
 					{
-						_mostHated = ((L2Attackable) npc).getMostHated();
 						hate = 1;
+						_mostHated = ((L2Attackable) npc).getMostHated();
 					}
 				}
-				else if ((npc.getAI().getIntention() == CtrlIntention.ATTACK) && (hate != 0))
-				{
-					if (((L2Attackable) npc).getMostHated() != null)
-					{
-						if (_mostHated == ((L2Attackable) npc).getMostHated())
-							hate = hate + 1;
-						else
-						{
-							hate = 1;
-							_mostHated = ((L2Attackable) npc).getMostHated();
-						}
-					}
-				}
-				
-				if (npc.getAI().getIntention() == CtrlIntention.IDLE)
-					hate = 0;
-				
-				if (hate > 5)
-				{
-					((L2Attackable) npc).stopHating(_mostHated);
-					L2Character nextTarget = ((L2Attackable) npc).getMostHated();
-					if (nextTarget != null)
-						npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
-					
-					hate = 0;
-				}
-				
-				if (getPlayersCountInRadius(1500, npc, true) == 0)
-					npc.doCast(SkillTable.getInstance().getInfo(SELF_TELEPORT, 1));
-				
-				startQuestTimer("timer", 30000, npc, null, true);
-				break;
+			}
 			
-			case "minion_cycle":
-				int rr = Rnd.get(15);
-				switch (_minionStatus)
-				{
-					case 1:
-						addSpawn(PIRATECAPTAIN, X_COORDS[rr], Y_COORDS[rr], Z_COORDS[rr], Rnd.get(65536), false, 0, true);
-						_minionStatus = 2;
-						break;
-					
-					case 2:
-						addSpawn(DOLLBLADER, X_COORDS[rr], Y_COORDS[rr], Z_COORDS[rr], Rnd.get(65536), false, 0, true);
-						_minionStatus = 3;
-						break;
-					
-					case 3:
-						addSpawn(VALEMASTER, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
-						_minionStatus = 4;
-						break;
-					
-					case 4:
-						addSpawn(PIRATEZOMBIE, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, X_COORDS[Rnd.get(15)], Y_COORDS[Rnd.get(15)], Z_COORDS[Rnd.get(15)], Rnd.get(65536), false, 0, true);
-						_minionStatus = 5;
-						break;
-					
-					case 5:
-						addSpawn(DOLLBLADER, 52675, 219371, -3290, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 52687, 219596, -3368, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 52672, 219740, -3418, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 52857, 219992, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 52959, 219997, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 53381, 220151, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 54236, 220948, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 54885, 220144, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55264, 219860, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 55399, 220263, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55679, 220129, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 56276, 220783, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 57173, 220234, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 56267, 218826, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 56294, 219482, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 56094, 219113, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 56364, 218967, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 57113, 218079, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 56186, 217153, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55440, 218081, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 55202, 217940, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55225, 218236, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 54973, 218075, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 53412, 218077, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 54226, 218797, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 54394, 219067, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 54139, 219253, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 54262, 219480, -3488, Rnd.get(65536), false, 0, true);
-						_minionStatus = 6;
-						break;
-					
-					case 6:
-						addSpawn(PIRATEZOMBIE, 53412, 218077, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 54413, 217132, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 54841, 217132, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 55372, 217128, -3343, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 55893, 217122, -3488, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 56282, 217237, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 56963, 218080, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 56267, 218826, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 56294, 219482, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 56094, 219113, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 56364, 218967, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 56276, 220783, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 57173, 220234, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 54885, 220144, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55264, 219860, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 55399, 220263, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55679, 220129, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 54236, 220948, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 54464, 219095, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 54226, 218797, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 54394, 219067, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 54139, 219253, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 54262, 219480, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 53412, 218077, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55440, 218081, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 55202, 217940, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55225, 218236, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 54973, 218075, -3216, Rnd.get(65536), false, 0, true);
-						_minionStatus = 7;
-						break;
-					
-					case 7:
-						addSpawn(PIRATEZOMBIE, 54228, 217504, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 54181, 217168, -3216, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 54714, 217123, -3168, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 55298, 217127, -3073, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 55787, 217130, -2993, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 56284, 217216, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 56963, 218080, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 56267, 218826, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 56294, 219482, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 56094, 219113, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 56364, 218967, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 56276, 220783, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 57173, 220234, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 54885, 220144, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55264, 219860, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 55399, 220263, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55679, 220129, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 54236, 220948, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 54464, 219095, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 54226, 218797, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(VALEMASTER, 54394, 219067, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 54139, 219253, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(DOLLBLADER, 54262, 219480, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 53412, 218077, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 54280, 217200, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55440, 218081, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATECAPTAIN, 55202, 217940, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 55225, 218236, -2944, Rnd.get(65536), false, 0, true);
-						addSpawn(PIRATEZOMBIE, 54973, 218075, -2944, Rnd.get(65536), false, 0, true);
-						cancelQuestTimer("minion_cycle", null, null);
-						break;
-				}
-				break;
+			if (npc.getAI().getIntention() == CtrlIntention.IDLE)
+				hate = 0;
 			
-			case "zaken_unlock":
-				int i1 = Rnd.get(15);
-				L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, X_COORDS[i1], Y_COORDS[i1], Z_COORDS[i1], i1, false, 0, false);
-				GrandBossManager.getInstance().setBossStatus(ZAKEN, ALIVE);
-				spawnBoss(zaken);
-				break;
+			if (hate > 5)
+			{
+				((L2Attackable) npc).stopHating(_mostHated);
+				L2Character nextTarget = ((L2Attackable) npc).getMostHated();
+				if (nextTarget != null)
+					npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
+				
+				hate = 0;
+			}
 			
-			case "CreateOnePrivateEx":
-				addSpawn(npc.getNpcId(), npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, true);
-				break;
+			if (getPlayersCountInRadius(1500, npc, true) == 0)
+				npc.doCast(SkillTable.getInstance().getInfo(SELF_TELEPORT, 1));
+			
+			startQuestTimer("timer", 30000, npc, null, true);
 		}
+		
+		if (event.equalsIgnoreCase("minion_cycle"))
+		{
+			if (_minionStatus == 1)
+			{
+				int rr = Rnd.get(15);
+				addSpawn(PIRATECAPTAIN, Xcoords[rr], Ycoords[rr], Zcoords[rr], Rnd.get(65536), false, 0, true);
+				_minionStatus = 2;
+			}
+			else if (_minionStatus == 2)
+			{
+				int rr = Rnd.get(15);
+				addSpawn(DOLLBLADER, Xcoords[rr], Ycoords[rr], Zcoords[rr], Rnd.get(65536), false, 0, true);
+				_minionStatus = 3;
+			}
+			else if (_minionStatus == 3)
+			{
+				addSpawn(VALEMASTER, Xcoords[Rnd.get(15)], Ycoords[Rnd.get(15)], Zcoords[Rnd.get(15)], Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, Xcoords[Rnd.get(15)], Ycoords[Rnd.get(15)], Zcoords[Rnd.get(15)], Rnd.get(65536), false, 0, true);
+				_minionStatus = 4;
+			}
+			else if (_minionStatus == 4)
+			{
+				addSpawn(PIRATEZOMBIE, Xcoords[Rnd.get(15)], Ycoords[Rnd.get(15)], Zcoords[Rnd.get(15)], Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, Xcoords[Rnd.get(15)], Ycoords[Rnd.get(15)], Zcoords[Rnd.get(15)], Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, Xcoords[Rnd.get(15)], Ycoords[Rnd.get(15)], Zcoords[Rnd.get(15)], Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, Xcoords[Rnd.get(15)], Ycoords[Rnd.get(15)], Zcoords[Rnd.get(15)], Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, Xcoords[Rnd.get(15)], Ycoords[Rnd.get(15)], Zcoords[Rnd.get(15)], Rnd.get(65536), false, 0, true);
+				_minionStatus = 5;
+			}
+			else if (_minionStatus == 5)
+			{
+				addSpawn(DOLLBLADER, 52675, 219371, -3290, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 52687, 219596, -3368, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 52672, 219740, -3418, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 52857, 219992, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 52959, 219997, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 53381, 220151, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 54236, 220948, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 54885, 220144, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55264, 219860, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 55399, 220263, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55679, 220129, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 56276, 220783, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 57173, 220234, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 56267, 218826, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 56294, 219482, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 56094, 219113, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 56364, 218967, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 57113, 218079, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 56186, 217153, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55440, 218081, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 55202, 217940, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55225, 218236, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 54973, 218075, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 53412, 218077, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 54226, 218797, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 54394, 219067, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 54139, 219253, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 54262, 219480, -3488, Rnd.get(65536), false, 0, true);
+				_minionStatus = 6;
+			}
+			else if (_minionStatus == 6)
+			{
+				addSpawn(PIRATEZOMBIE, 53412, 218077, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 54413, 217132, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 54841, 217132, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 55372, 217128, -3343, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 55893, 217122, -3488, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 56282, 217237, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 56963, 218080, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 56267, 218826, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 56294, 219482, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 56094, 219113, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 56364, 218967, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 56276, 220783, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 57173, 220234, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 54885, 220144, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55264, 219860, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 55399, 220263, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55679, 220129, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 54236, 220948, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 54464, 219095, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 54226, 218797, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 54394, 219067, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 54139, 219253, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 54262, 219480, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 53412, 218077, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55440, 218081, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 55202, 217940, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55225, 218236, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 54973, 218075, -3216, Rnd.get(65536), false, 0, true);
+				_minionStatus = 7;
+			}
+			else if (_minionStatus == 7)
+			{
+				addSpawn(PIRATEZOMBIE, 54228, 217504, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 54181, 217168, -3216, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 54714, 217123, -3168, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 55298, 217127, -3073, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 55787, 217130, -2993, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 56284, 217216, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 56963, 218080, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 56267, 218826, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 56294, 219482, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 56094, 219113, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 56364, 218967, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 56276, 220783, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 57173, 220234, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 54885, 220144, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55264, 219860, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 55399, 220263, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55679, 220129, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 54236, 220948, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 54464, 219095, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 54226, 218797, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(VALEMASTER, 54394, 219067, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 54139, 219253, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(DOLLBLADER, 54262, 219480, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 53412, 218077, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 54280, 217200, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55440, 218081, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATECAPTAIN, 55202, 217940, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 55225, 218236, -2944, Rnd.get(65536), false, 0, true);
+				addSpawn(PIRATEZOMBIE, 54973, 218075, -2944, Rnd.get(65536), false, 0, true);
+				cancelQuestTimer("minion_cycle", null, null);
+			}
+		}
+		else if (event.equalsIgnoreCase("zaken_unlock"))
+		{
+			int i1 = Rnd.get(15);
+			L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, Xcoords[i1], Ycoords[i1], Zcoords[i1], i1, false, 0, false);
+			GrandBossManager.getInstance().setBossStatus(ZAKEN, ALIVE);
+			spawnBoss(zaken);
+		}
+		else if (event.equalsIgnoreCase("CreateOnePrivateEx"))
+			addSpawn(npc.getNpcId(), npc.getX(), npc.getY(), npc.getZ(), 0, false, 0, true);
+		
 		return super.onAdvEvent(event, npc, player);
 	}
 	
@@ -481,40 +481,43 @@ public class Zaken extends L2AttackableAIScript
 	@Override
 	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
 	{
-		int i1 = Rnd.get(15);
-		L2Character nextTarget = ((L2Attackable) npc).getMostHated();
 		if (npc.getNpcId() == ZAKEN)
 		{
-			switch (skill.getId())
+			int skillId = skill.getId();
+			if (skillId == SELF_TELEPORT)
 			{
-				case SELF_TELEPORT:
-					npc.teleToLocation(X_COORDS[i1], Y_COORDS[i1], Z_COORDS[i1], 0);
-					npc.getAI().setIntention(CtrlIntention.IDLE);
-					break;
+				int i1 = Rnd.get(15);
+				npc.teleToLocation(Xcoords[i1], Ycoords[i1], Zcoords[i1], 0);
+				npc.getAI().setIntention(CtrlIntention.IDLE);
+			}
+			else if (skillId == TELEPORT)
+			{
+				int i1 = Rnd.get(15);
+				player.teleToLocation(Xcoords[i1], Ycoords[i1], Zcoords[i1], i1);
+				((L2Attackable) npc).stopHating(player);
+				L2Character nextTarget = ((L2Attackable) npc).getMostHated();
+				if (nextTarget != null)
+					npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
+			}
+			else if (skillId == MASS_TELEPORT)
+			{
+				int i1 = Rnd.get(15);
+				player.teleToLocation(Xcoords[i1], Ycoords[i1], Zcoords[i1], i1);
+				((L2Attackable) npc).stopHating(player);
 				
-				case TELEPORT:
-					player.teleToLocation(X_COORDS[i1], Y_COORDS[i1], Z_COORDS[i1], i1);
-					((L2Attackable) npc).stopHating(player);
-					if (nextTarget != null)
-						npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
-					break;
-				
-				case MASS_TELEPORT:
-					player.teleToLocation(X_COORDS[i1], Y_COORDS[i1], Z_COORDS[i1], i1);
-					((L2Attackable) npc).stopHating(player);
-					
-					for (L2Character character : npc.getKnownType(L2MonsterInstance.class))
+				for (L2Character character : npc.getKnownType(L2MonsterInstance.class))
+				{
+					if ((character != player) && !Util.checkIfInRange(250, player, character, true))
 					{
-						if ((character != player) && !Util.checkIfInRange(250, player, character, true))
-						{
-							int r1 = Rnd.get(15);
-							character.teleToLocation(X_COORDS[r1], Y_COORDS[r1], Z_COORDS[r1], r1);
-							((L2Attackable) npc).stopHating(character);
-						}
+						int r1 = Rnd.get(15);
+						character.teleToLocation(Xcoords[r1], Ycoords[r1], Zcoords[r1], r1);
+						((L2Attackable) npc).stopHating(character);
 					}
-					if (nextTarget != null)
-						npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
-					break;
+				}
+				
+				L2Character nextTarget = ((L2Attackable) npc).getMostHated();
+				if (nextTarget != null)
+					npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
 			}
 		}
 		return super.onSpellFinished(npc, player, skill);
@@ -580,13 +583,14 @@ public class Zaken extends L2AttackableAIScript
 			return null;
 		}
 		
-		if (ZAKEN_LAIR.isInsideZone(npc))
+		if (_zakenLair.isInsideZone(npc))
 		{
 			L2Character target = isPet ? player.getPet() : player;
 			((L2Attackable) npc).addDamageHate(target, 1, 200);
 		}
 		
-		if (npc.getNpcId() == ZAKEN)
+		int npcId = npc.getNpcId();
+		if (npcId == ZAKEN)
 		{
 			if (Rnd.get(15) < 1)
 			{
@@ -603,40 +607,18 @@ public class Zaken extends L2AttackableAIScript
 			return;
 		
 		int chance = Rnd.get(225);
+		npc.setTarget(_target);
 		if (chance < 1)
-		{
-			npc.setTarget(_target);
 			npc.doCast(SkillTable.getInstance().getInfo(TELEPORT, 1));
-		}
 		else if (chance < 2)
-		{
-			npc.setTarget(_target);
 			npc.doCast(SkillTable.getInstance().getInfo(MASS_TELEPORT, 1));
-		}
 		else if (chance < 4)
-		{
-			npc.setTarget(_target);
 			npc.doCast(SkillTable.getInstance().getInfo(HOLD, 1));
-		}
 		else if (chance < 8)
-		{
-			npc.setTarget(_target);
 			npc.doCast(SkillTable.getInstance().getInfo(DRAIN, 1));
-		}
 		else if (chance < 15)
-		{
-			for (L2Character character : npc.getKnownTypeInRadius(L2Character.class, 100))
-			{
-				if (character != _target)
-					continue;
-				
-				if (_target != ((L2Attackable) npc).getMostHated())
-				{
-					npc.setTarget(_target);
-					npc.doCast(SkillTable.getInstance().getInfo(MASS_DUAL_ATTACK, 1));
-				}
-			}
-		}
+			npc.doCast(SkillTable.getInstance().getInfo(MASS_DUAL_ATTACK, 1));
+		
 		if (Rnd.get(2) < 1)
 		{
 			if (_target == ((L2Attackable) npc).getMostHated())
@@ -653,28 +635,28 @@ public class Zaken extends L2AttackableAIScript
 	@Override
 	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
 	{
-		switch (npc.getNpcId())
+		int npcId = npc.getNpcId();
+		if (npcId == ZAKEN)
 		{
-			case ZAKEN:
-				if (attacker.getMountType() == 1)
+			if (attacker.getMountType() == 1)
+			{
+				L2Skill skill2 = SkillTable.getInstance().getInfo(4258, 1);
+				if (attacker.getFirstEffect(skill2) == null)
 				{
-					L2Skill skill2 = SkillTable.getInstance().getInfo(ANTI_STRIDER_SLOW, 1);
-					if (attacker.getFirstEffect(skill2) == null)
-					{
-						npc.setTarget(attacker);
-						npc.doCast(skill2);
-					}
+					npc.setTarget(attacker);
+					npc.doCast(skill2);
 				}
-				L2Character originalAttacker = isPet ? attacker.getPet() : attacker;
-				int hate = (int) ((damage / npc.getMaxHp() / 0.05) * 20000);
-				((L2Attackable) npc).addDamageHate(originalAttacker, 0, hate);
-				
-				if (Rnd.get(10) < 1)
-				{
-					_target = attacker;
-					CallSkills(npc);
-				}
-				break;
+			}
+			L2Character originalAttacker = isPet ? attacker.getPet() : attacker;
+			int hate = (int) ((damage / npc.getMaxHp() / 0.05) * 20000);
+			((L2Attackable) npc).addDamageHate(originalAttacker, 0, hate);
+			
+			if (Rnd.get(10) < 1)
+			{
+				_target = attacker;
+				CallSkills(npc);
+			}
+			
 		}
 		return super.onAttack(npc, attacker, damage, isPet, skill);
 	}
@@ -682,7 +664,8 @@ public class Zaken extends L2AttackableAIScript
 	@Override
 	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
 	{
-		if (npc.getNpcId() == ZAKEN)
+		int npcId = npc.getNpcId();
+		if (npcId == ZAKEN)
 		{
 			cancelQuestTimer("timer", npc, null);
 			cancelQuestTimer("minion_cycle", npc, null);
@@ -698,7 +681,7 @@ public class Zaken extends L2AttackableAIScript
 		}
 		else if (GrandBossManager.getInstance().getBossStatus(ZAKEN) == ALIVE)
 		{
-			if (npc.getNpcId() != ZAKEN)
+			if (npcId != ZAKEN)
 				startQuestTimer("CreateOnePrivateEx", ((30 + Rnd.get(60)) * 1000), npc, null, false);
 		}
 		return super.onKill(npc, killer, isPet);

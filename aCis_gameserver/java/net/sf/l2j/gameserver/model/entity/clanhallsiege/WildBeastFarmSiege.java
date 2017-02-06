@@ -172,14 +172,10 @@ public class WildBeastFarmSiege extends ClanHallSiege
 			L2MonsterInstance mob = getQuestMob(clan);
 			L2DecoInstance flag = getSiegeFlag(clan);
 			if (mob != null)
-			{
 				mob.deleteMe();
-			}
 			
 			if (flag != null)
-			{
 				flag.deleteMe();
-			}
 		}
 	}
 	

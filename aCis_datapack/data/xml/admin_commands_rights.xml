@@ -244,6 +244,12 @@
 	<aCar name="admin_sethero" accessLevel="1" />
 	<aCar name="admin_setnoble" accessLevel="1" />
 	
+	 <!-- OLYMPIADS POINTS -->
+	 <aCar name="admin_addolypoints" accessLevel="1" />
+	 <aCar name="admin_removeolypoints" accessLevel="1" />
+	 <aCar name="admin_setolypoints" accessLevel="1" />
+	 <aCar name="admin_getolypoints" accessLevel="1" />
+
 	<!-- PETITION -->
 	<aCar name="admin_view_petitions" accessLevel="1" />
 	<aCar name="admin_view_petition" accessLevel="1" />

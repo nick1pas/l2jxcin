@@ -53,6 +53,7 @@ import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminMenu;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminMonsterRace;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminMovieMaker;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminOlympiad;
+import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminOlympiadPoints;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminPForge;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminPetition;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminPledge;
@@ -115,6 +116,7 @@ public class AdminCommandHandler
 		registerAdminCommandHandler(new AdminMonsterRace());
 		registerAdminCommandHandler(new AdminMovieMaker());
 		registerAdminCommandHandler(new AdminOlympiad());
+		registerAdminCommandHandler(new AdminOlympiadPoints());
 		registerAdminCommandHandler(new AdminPetition());
 		registerAdminCommandHandler(new AdminPForge());
 		registerAdminCommandHandler(new AdminPledge());

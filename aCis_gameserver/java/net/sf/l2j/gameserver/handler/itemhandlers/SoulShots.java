@@ -77,6 +77,7 @@ public class SoulShots implements IItemHandler
 		
 		weaponInst.setChargedShot(ShotType.SOULSHOT, true);
 		activeChar.sendPacket(SystemMessageId.ENABLED_SOULSHOT);
-		Broadcast.toSelfAndKnownPlayersInRadius(activeChar, new MagicSkillUse(activeChar, activeChar, skills[0].getId(), 1, 0, 0), 600);
+		if (!activeChar.isSSDisabled())
+			Broadcast.toSelfAndKnownPlayersInRadius(activeChar, new MagicSkillUse(activeChar, activeChar, skills[0].getId(), 1, 0, 0), 600);
 	}
 }

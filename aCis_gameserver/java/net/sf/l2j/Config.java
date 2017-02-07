@@ -144,6 +144,19 @@ public final class Config
 	/** Open Url */
 	public static boolean OPEN_URL_ENABLE;
 	public static String OPEN_URL_SITE;
+	/** Grandboss Info*/
+	public static String GRAND_BOSS;
+	public static List<Integer> GRAND_BOSS_LIST;
+	/** Clan Full */
+	public static boolean ENABLE_CLAN_SYSTEM;
+	public static byte CLAN_LEVEL;
+	public static int REPUTATION_QUANTITY;
+	public static int CLAN_ITEM_ID;
+	public static long CLAN_ITEM_COUNT;
+	/** Buff Command */
+	public static String LIST_BUFF_COMMAND;
+	public static int[] BUFF_COMMAND_FIGHT_IDBUFFS;
+	public static int[] BUFF_COMMAND_MAGE_IDBUFFS;
 	// --------------------------------------------------
 	// Clans settings
 	// --------------------------------------------------
@@ -1071,6 +1084,30 @@ public final class Config
 		}
 		OPEN_URL_ENABLE = custom.getProperty("OpenUrlEnable", true);
 		OPEN_URL_SITE = custom.getProperty("OpenUrlSite", "");
+		GRAND_BOSS = custom.getProperty("GrandBossList");
+		GRAND_BOSS_LIST = new ArrayList<>();
+		for (String id : GRAND_BOSS.trim().split(","))
+		{
+			GRAND_BOSS_LIST.add(Integer.parseInt(id.trim()));
+		}
+		ENABLE_CLAN_SYSTEM = custom.getProperty("EnableClanSystem", true);
+		CLAN_LEVEL = (byte)custom.getProperty("ClanLevel", 8);
+		REPUTATION_QUANTITY = custom.getProperty("ClanReputation", 10000);
+		CLAN_ITEM_ID = custom.getProperty("ClanItemId", 57);
+		CLAN_ITEM_COUNT = custom.getProperty("ClanItemCount", 10000);
+		LIST_BUFF_COMMAND = custom.getProperty("buffCommandFightBuffsID", "123,456");
+		
+		String[] buffCommand = LIST_BUFF_COMMAND.split(",");            
+		BUFF_COMMAND_FIGHT_IDBUFFS = new int[buffCommand.length];        
+		for (int i = 0; i < buffCommand.length; i++)
+			BUFF_COMMAND_FIGHT_IDBUFFS[i] = Integer.parseInt(buffCommand[i]);
+		
+		LIST_BUFF_COMMAND = custom.getProperty("buffCommandMageBuffsID", "789,1011112");
+		
+		buffCommand = LIST_BUFF_COMMAND.split(",");            
+		BUFF_COMMAND_MAGE_IDBUFFS = new int[buffCommand.length];            
+		for (int i = 0; i < buffCommand.length; i++)
+			BUFF_COMMAND_MAGE_IDBUFFS[i] = Integer.parseInt(buffCommand[i]);
 		
 	}
 	/**

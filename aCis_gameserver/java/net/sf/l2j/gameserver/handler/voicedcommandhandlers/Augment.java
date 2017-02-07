@@ -27,13 +27,13 @@ public class Augment implements IVoicedCommandHandler
 {
 	private static final String[] _voicedCommands =
 	{
-		"voiced_augment"
+		"augment",
 	};
 	
 	@Override
 	public boolean useVoicedCommand(String command, L2PcInstance activeChar, String target)
 	{
-		if (command.startsWith("voiced_augment"))
+		if (command.startsWith("augment"))
 		{
 			int cmdChoice = Integer.parseInt(command.substring(15, 16).trim());
 			switch (cmdChoice)

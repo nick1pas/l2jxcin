@@ -20,10 +20,12 @@ import java.util.logging.Level;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.communitybbs.CommunityBoard;
 import net.sf.l2j.gameserver.datatables.AdminCommandAccessRights;
+import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.handler.AdminCommandHandler;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
 import net.sf.l2j.gameserver.handler.VoicedCommandHandler;
+import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Buff;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
@@ -214,6 +216,26 @@ public final class RequestBypassToServer extends L2GameClientPacket
 				
 				final int arenaId = Integer.parseInt(_command.substring(12).trim());
 				activeChar.enterOlympiadObserverMode(arenaId);
+			}
+			else if (_command.startsWith("buffCommandFight"))
+			{
+				Buff.getFullBuff(activeChar, false);
+			}            
+			else if (_command.startsWith("buffCommandMage"))
+			{
+				Buff.getFullBuff(activeChar, true);
+			}
+			else if (_command.startsWith("buffCommand") && Buff.check(activeChar))
+			{
+				String idBuff = _command.substring(12);
+				int parseIdBuff = Integer.parseInt(idBuff);
+				SkillTable.getInstance().getInfo(parseIdBuff, SkillTable.getInstance().getMaxLevel(parseIdBuff)).getEffects(activeChar, activeChar);
+				Buff.showHtml(activeChar);
+			}
+			else if (_command.startsWith("cancelBuffs") && Buff.check(activeChar))
+			{
+				activeChar.stopAllEffectsExceptThoseThatLastThroughDeath();
+				Buff.showHtml(activeChar);
 			}
 		}
 		catch (Exception e)

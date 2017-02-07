@@ -34,6 +34,8 @@ public class Menu implements IVoicedCommandHandler
         "setTradeRefuse",    
         "setbuffsRefuse",
         "setMessageRefuse",
+        "setXpRefuse",
+        "setSsprot",
     };
     
     private static final String ACTIVED = "<font color=00FF00>ON</font>";
@@ -79,25 +81,34 @@ public class Menu implements IVoicedCommandHandler
         }
         else if (command.equals("setXpRefuse"))
         {        
-            if (activeChar.isBuffProtected())
-                activeChar.cantGainXP(true);
+            if (activeChar.getGainXpSpEnable())
+                activeChar.setGainXpSpEnable(false);
             else
-                activeChar.cantGainXP(false);
+                activeChar.setGainXpSpEnable(true);
             showHtml(activeChar);
         }
+        else if (command.equals("setSsprot"))
+        {        
+        	if (activeChar.isSSDisabled())
+        		activeChar.setIsSSDisabled(false);
+        	else
+        		activeChar.setIsSSDisabled(true);
+        	showHtml(activeChar);
+        }     
         return true;
     }
     
     private static void showHtml(L2PcInstance activeChar)
     {
         NpcHtmlMessage html = new NpcHtmlMessage(0);
-        html.setFile("data/html/mods/menu.htm");
+        html.setFile("data/html/mods/Menu.htm");
         html.replace("%online%", World.getInstance().getPlayers().size());    
         html.replace("%partyRefusal%", activeChar.isPartyInRefuse() ? ACTIVED : DESATIVED);
         html.replace("%tradeRefusal%", activeChar.getTradeRefusal() ? ACTIVED : DESATIVED);
         html.replace("%buffsRefusal%", activeChar.isBuffProtected() ? ACTIVED : DESATIVED);
         html.replace("%messageRefusal%", activeChar.isInRefusalMode() ? ACTIVED : DESATIVED);   
-        html.replace("%XpRefusal%", activeChar.cantGainXP() ? ACTIVED : DESATIVED);
+        html.replace("%XpRefusal%", activeChar.getGainXpSpEnable() ? ACTIVED : DESATIVED);
+        html.replace("%Eff.Ss%", activeChar.isSSDisabled() ? ACTIVED : DESATIVED);    
         activeChar.sendPacket(html);
     }
     

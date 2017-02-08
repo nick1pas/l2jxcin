@@ -39,7 +39,6 @@ public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 	private static final int SILVERCROSS = 7153;
 	private static final int BROKENSILVERCROSS = 7154;
 	private static final int SUSPICIOUSTOTEM = 7156;
-
 	
 	public Q024_InhabitantsOfTheForestOfTheDead()
 	{

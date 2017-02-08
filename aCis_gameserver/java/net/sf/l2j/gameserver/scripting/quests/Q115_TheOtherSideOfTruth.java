@@ -22,12 +22,11 @@ import net.sf.l2j.gameserver.scripting.QuestState;
 
 /**
  * @author Demon
+ * @rework by Leonardo Holanda
  */
 
 public class Q115_TheOtherSideOfTruth extends Quest
 {
-	private static final String qn = "Q115_TheOtherSideOfTruth";
-	
 	private static final int MISA = 32018;
 	private static final int SUSPICIOUS = 32019;
 	private static final int RAFFORTY = 32020;
@@ -55,12 +54,10 @@ public class Q115_TheOtherSideOfTruth extends Quest
 	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		String htmltext = getNoQuestMsg();
-		QuestState st = player.getQuestState(qn);
+		QuestState st = player.getQuestState(getName());
 		if (st == null)
 			return htmltext;
-		
-		final int npcId = npc.getNpcId();
-		
+
 		switch (event)
 		{
 			case "32020-02.htm":
@@ -119,7 +116,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 			case "Sculpture-04.htm":
 				st.set("talk", "1");
 				htmltext = "Sculpture-05.htm";
-				st.set(String.valueOf(npcId), "1");
+				st.set(String.valueOf(npc.getNpcId()), "1");
 				break;
 				
 			case "Sculpture-04a.htm":
@@ -133,7 +130,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 				break;
 				
 			case "Sculpture-05.htm":
-				st.set(String.valueOf(npcId), "1");
+				st.set(String.valueOf(npc.getNpcId()), "1");
 				break;
 				
 			case "1":
@@ -179,234 +176,173 @@ public class Q115_TheOtherSideOfTruth extends Quest
 	public String onTalk(L2Npc npc, L2PcInstance player)
 	{
 		String htmltext = getNoQuestMsg();
-		final QuestState st = player.getQuestState(qn);
-		final int state = st.getState();
-		final int npcId = npc.getNpcId();
-		final int cond = st.getInt("cond");
+		final QuestState st = player.getQuestState(getName());
+		if (st == null)
+			return htmltext;
 		
-		if (state == Quest.STATE_COMPLETED)
+		switch (st.getState())
 		{
-			htmltext = getAlreadyCompletedMsg();
-		}
-		else if (npcId == RAFFORTY)
-		{
-			if (state == Quest.STATE_CREATED)
-			{
-				if (st.getPlayer().getLevel() >= 53)
-				{
+			case STATE_CREATED:
+				if (player.getLevel() >= 53)
 					htmltext = "32020-01.htm";
-				}
 				else
-				{
 					htmltext = "32020-00.htm";
-					st.exitQuest(true);
-				}
-			}
-			else if (cond == 1)
-			{
-				htmltext = "32020-03.htm";
-			}
-			else if (cond == 2)
-			{
-				htmltext = "32020-04.htm";
-			}
-			else if (cond == 3)
-			{
-				htmltext = "32020-05.htm";
-			}
-			else if (cond == 4)
-			{
-				htmltext = "32020-11.htm";
-			}
-			else if (cond == 5)
-			{
-				htmltext = "32020-13.htm";
-				st.playSound(QuestState.SOUND_MIDDLE);
-				st.giveItems(LETTER2, 1);
-				st.set("cond", "6");
-			}
-			else if (cond == 6)
-			{
-				htmltext = "32020-14.htm";
-			}
-			else if (cond == 9)
-			{
-				htmltext = "32020-15.htm";
-			}
-			else if (cond == 10)
-			{
-				htmltext = "32020-17.htm";
-			}
-			else if (cond == 11)
-			{
-				htmltext = "32020-20.htm";
-			}
-			else if (cond == 12)
-			{
-				htmltext = "32020-18.htm";
-				st.exitQuest(false);
-				st.playSound("ItemSound.quest_finish");
-				st.giveItems(57, 60044);
-			}
-		}
-		else if (npcId == MISA)
-		{
-			if (cond == 1)
-			{
-				htmltext = "32018-01.htm";
-				st.giveItems(LETTER, 1);
-				st.playSound(QuestState.SOUND_MIDDLE);
-				st.set("cond", "2");
-			}
-			else if (cond == 2)
-			{
-				htmltext = "32018-02.htm";
-			}
-			else if (cond == 6)
-			{
-				htmltext = "32018-03.htm";
-			}
-			else if (cond == 7)
-			{
-				htmltext = "32018-05.htm";
-			}
-		}
-		else if (npcId == SCULPTURE1)
-		{
-			if (cond == 7)
-			{
-				if (npcId == 1)
+			break;
+			
+			case STATE_STARTED:
+				int cond = st.getInt("cond");
+				switch (npc.getNpcId())
 				{
-					htmltext = "Sculpture-02.htm";
+					case RAFFORTY:
+						if (cond == 1)
+							htmltext = "32020-03.htm";
+						else if (cond == 2)
+							htmltext = "32020-04.htm";
+						else if (cond == 3)
+							htmltext = "32020-05.htm";
+						else if (cond == 4)
+							htmltext = "32020-11.htm";
+						else if (cond == 5)
+						{
+							htmltext = "32020-13.htm";
+							st.playSound(QuestState.SOUND_MIDDLE);
+							st.giveItems(LETTER2, 1);
+							st.set("cond", "6");
+						}
+						else if (cond == 6)
+							htmltext = "32020-14.htm";
+						else if (cond == 9)
+							htmltext = "32020-15.htm";
+						else if (cond == 10)
+							htmltext = "32020-17.htm";
+						else if (cond == 11)
+							htmltext = "32020-20.htm";
+						else if (cond == 12)
+						{
+							htmltext = "32020-18.htm";
+							st.exitQuest(false);
+							st.playSound(QuestState.SOUND_FINISH);
+							st.giveItems(57, 60044);
+						}
+						break;
+						
+					case MISA:
+						if (cond == 1)
+						{
+							htmltext = "32018-01.htm";
+							st.giveItems(LETTER, 1);
+							st.playSound(QuestState.SOUND_MIDDLE);
+							st.set("cond", "2");
+						}
+						else if (cond == 2)
+							htmltext = "32018-02.htm";
+						else if (cond == 6)
+							htmltext = "32018-03.htm";
+						else if (cond == 7)
+							htmltext = "32018-05.htm";
+						break;
+						
+					case SCULPTURE1:
+						if (cond == 7)
+						{
+							if (npc.getNpcId() == 1)
+								htmltext = "Sculpture-02.htm";
+							else if (st.getInt("talk") == 1)
+								htmltext = "Sculpture-06.htm";
+							else
+								htmltext = "Sculpture-03.htm";
+						}
+						else if (cond == 8)
+							htmltext = "Sculpture-04.htm";
+						else if (cond == 11)
+						{
+							st.giveItems(TABLET, 1);
+							st.playSound(QuestState.SOUND_MIDDLE);
+							st.set("cond", "12");
+							htmltext = "Sculpture-07.htm";
+						}
+						else if (cond == 12)
+							htmltext = "Sculpture-08.htm";
+						break;
+						
+					case SCULPTURE2:
+						if (cond == 7)
+						{
+							if (npc.getNpcId() == 1)
+								htmltext = "Sculpture-02.htm";
+							else if (st.getInt("talk") == 1)
+								htmltext = "Sculpture-06.htm";
+							else
+								htmltext = "Sculpture-03.htm";
+						}
+						else if (cond == 8)
+							htmltext = "Sculpture-04.htm";
+						else if (cond == 11)
+						{
+							st.giveItems(TABLET, 1);
+							st.playSound(QuestState.SOUND_MIDDLE);
+							st.set("cond", "12");
+							htmltext = "Sculpture-07.htm";
+						}
+						else if (cond == 12)
+							htmltext = "Sculpture-08.htm";
+						break;
+						
+					case SCULPTURE3:
+						if (cond == 7)
+						{
+							if (npc.getNpcId() == 1)
+								htmltext = "Sculpture-02.htm";
+							else
+								htmltext = "Sculpture-01.htm";
+								st.set(String.valueOf(npc.getNpcId()), "1");
+						}
+						else if (cond == 8)
+							htmltext = "Sculpture-04.htm";
+						else if (cond == 11)
+						{
+							st.giveItems(TABLET, 1);
+							st.playSound(QuestState.SOUND_MIDDLE);
+							st.set("cond", "12");
+							htmltext = "Sculpture-07.htm";
+						}
+						else if (cond == 12)
+							htmltext = "Sculpture-08.htm";
+						break;
+						
+					case SCULPTURE4:
+						if (cond == 7)
+						{
+							if (npc.getNpcId() == 1)
+								htmltext = "Sculpture-02.htm";
+							else
+								htmltext = "Sculpture-01.htm";
+							st.set(String.valueOf(npc.getNpcId()), "1");
+						}
+						else if (cond == 8)
+							htmltext = "Sculpture-04.htm";
+						else if (cond == 11)
+						{
+							st.giveItems(TABLET, 1);
+							st.playSound(QuestState.SOUND_MIDDLE);
+							st.set("cond", "12");
+							htmltext = "Sculpture-07.htm";
+						}
+						else if (cond == 12)
+							htmltext = "Sculpture-08.htm";
+						break;
+						
+					case KIERRE:
+						if (cond == 8)
+							htmltext = "32022-01.htm";						
+						else if (cond == 9)						
+							htmltext = "32022-03.htm";						
+						break;
 				}
-				else if (st.getInt("talk") == 1)
-				{
-					htmltext = "Sculpture-06.htm";
-				}
-				else
-				{
-					htmltext = "Sculpture-03.htm";
-				}
-			}
-			else if (cond == 8)
-			{
-				htmltext = "Sculpture-04.htm";
-			}
-			else if (cond == 11)
-			{
-				st.giveItems(TABLET, 1);
-				st.playSound(QuestState.SOUND_MIDDLE);
-				st.set("cond", "12");
-				htmltext = "Sculpture-07.htm";
-			}
-			else if (cond == 12)
-			{
-				htmltext = "Sculpture-08.htm";
-			}
-		}
-		else if (npcId == SCULPTURE2)
-		{
-			if (cond == 7)
-			{
-				if (npcId == 1)
-				{
-					htmltext = "Sculpture-02.htm";
-				}
-				else if (st.getInt("talk") == 1)
-				{
-					htmltext = "Sculpture-06.htm";
-				}
-				else
-				{
-					htmltext = "Sculpture-03.htm";
-				}
-			}
-			else if (cond == 8)
-			{
-				htmltext = "Sculpture-04.htm";
-			}
-			else if (cond == 11)
-			{
-				st.giveItems(TABLET, 1);
-				st.playSound(QuestState.SOUND_MIDDLE);
-				st.set("cond", "12");
-				htmltext = "Sculpture-07.htm";
-			}
-			else if (cond == 12)
-			{
-				htmltext = "Sculpture-08.htm";
-			}
-		}
-		else if (npcId == SCULPTURE3)
-		{
-			if (cond == 7)
-			{
-				if (npcId == 1)
-				{
-					htmltext = "Sculpture-02.htm";
-				}
-				else
-				{
-					htmltext = "Sculpture-01.htm";
-					st.set(String.valueOf(npcId), "1");
-				}
-			}
-			else if (cond == 8)
-			{
-				htmltext = "Sculpture-04.htm";
-			}
-			else if (cond == 11)
-			{
-				st.giveItems(TABLET, 1);
-				st.playSound(QuestState.SOUND_MIDDLE);
-				st.set("cond", "12");
-				htmltext = "Sculpture-07.htm";
-			}
-			else if (cond == 12)
-			{
-				htmltext = "Sculpture-08.htm";
-			}
-		}
-		else if (npcId == SCULPTURE4)
-		{
-			if (cond == 7)
-			{
-				if (npcId == 1)
-				{
-					htmltext = "Sculpture-02.htm";
-				}
-				else
-				{
-					htmltext = "Sculpture-01.htm";
-				}
-				st.set(String.valueOf(npcId), "1");
-			}
-			else if (cond == 8)
-			{
-				htmltext = "Sculpture-04.htm";
-			}
-			else if (cond == 11)
-			{
-				st.giveItems(TABLET, 1);
-				st.playSound(QuestState.SOUND_MIDDLE);
-				st.set("cond", "12");
-				htmltext = "Sculpture-07.htm";
-			}
-			else if (cond == 12)
-			{
-				htmltext = "Sculpture-08.htm";
-			}
-		}
-		else if (npcId == KIERRE)
-		{
-			if (cond == 8)
-			{
-				htmltext = "32022-01.htm";
-			}
-			else if (cond == 9)
-			{
-				htmltext = "32022-03.htm";
-			}
+				break;
+			case STATE_COMPLETED:
+			htmltext = getAlreadyCompletedMsg();
+			break;
 		}
 		return htmltext;
 	}

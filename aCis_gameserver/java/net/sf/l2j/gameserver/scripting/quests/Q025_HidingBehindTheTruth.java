@@ -7,8 +7,6 @@ import net.sf.l2j.gameserver.scripting.QuestState;
 
 public class Q025_HidingBehindTheTruth extends Quest
 {
-	private static final String qn = "Q025_HidingBehindTheTruth";
-	
 	private static final int AGRIPEL = 31348;
 	private static final int BENEDICT = 31349;
 	private static final int BROKEN_BOOK_SHELF = 31534;
@@ -44,10 +42,10 @@ public class Q025_HidingBehindTheTruth extends Quest
 	@Override
 	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
-		QuestState st = player.getQuestState(qn);
-		
+		String htmltext = event;
+		QuestState st = player.getQuestState(getName());
 		if (st == null)
-			return event;
+			return htmltext;
 		
 		if (event.equalsIgnoreCase("StartQuest"))
 		{
@@ -55,7 +53,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 			{
 				st.setState(Quest.STATE_STARTED);
 			}
-			QuestState qs_24 = st.getPlayer().getQuestState("Q024_InhabitantsOfTheForrestOfTheDead");
+			QuestState qs_24 = st.getPlayer().getQuestState("Q024_InhabitantsOfTheForestOfTheDead");
 			if ((qs_24 == null) || !qs_24.isCompleted())
 			{
 				st.set("cond", "1");
@@ -190,7 +188,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 			st.giveItems(NECKLACE_OF_BLESSING, 1);
 			st.giveItems(EARRING_OF_BLESSING, 1);
 			st.rewardExpAndSp(572277, 53750);
-			st.playSound("ItemSound.quest_finish");
+			st.playSound(QuestState.SOUND_FINISH);
 			st.exitQuest(false);
 			st.unset("cond");
 			return "31522-16.htm";
@@ -199,36 +197,26 @@ public class Q025_HidingBehindTheTruth extends Quest
 	}
 	
 	@Override
-	public String onTalk(final L2Npc npc, final L2PcInstance player)
+	public String onTalk(L2Npc npc, L2PcInstance player)
 	{
 		String htmltext = getNoQuestMsg();
-		QuestState st = player.getQuestState(qn);
-		
+		final QuestState st = player.getQuestState(getName());
 		if (st == null)
-			return htmltext;
+			return htmltext;		
 		
-		int npcId = npc.getNpcId();
-		int cond = st.getInt("cond");
 		int IntId = st.getInt("id");
-		switch (npcId)
+		int cond = st.getInt("cond");
+		switch (npc.getNpcId())
 		{
 			case BENEDICT:
 				if ((cond == 0) || (cond == 1))
-				{
 					return "31349-01.htm";
-				}
-				if (cond == 2)
-				{
-					return st.getQuestItemsCount(SUSPICIOUS_TOTEM_DOLL_1) == 0 ? "31349-03a.htm" : "31349-03.htm";
-				}
-				if (cond == 3)
-				{
-					return "31349-03.htm";
-				}
-				if (cond == 4)
-				{
-					return "31349-11.htm";
-				}
+				else if (cond == 2)
+					return st.getQuestItemsCount(SUSPICIOUS_TOTEM_DOLL_1) == 0 ? "31349-03a.htm" : "31349-03.htm";				
+				else if (cond == 3)				
+					return "31349-03.htm";			
+				else if (cond == 4)			
+					return "31349-11.htm";				
 				break;
 			
 			case MYSTERIOUS_WIZARD:
@@ -238,19 +226,13 @@ public class Q025_HidingBehindTheTruth extends Quest
 					st.giveItems(SUSPICIOUS_TOTEM_DOLL_2, 1);
 					return "31522-01.htm";
 				}
-				if (cond == 3)
-				{
-					return "31522-02.htm";
-				}
-				if (cond == 5)
-				{
-					return "31522-03.htm";
-				}
-				if (cond == 6)
-				{
-					return "31522-05.htm";
-				}
-				if (cond == 8)
+				else if (cond == 3)			
+					return "31522-02.htm";				
+				else if (cond == 5)				
+					return "31522-03.htm";				
+				else if (cond == 6)				
+					return "31522-05.htm";				
+				else if (cond == 8)
 				{
 					if (IntId != 8)
 					{
@@ -260,19 +242,13 @@ public class Q025_HidingBehindTheTruth extends Quest
 					st.playSound(QuestState.SOUND_MIDDLE);
 					return "31522-06.htm";
 				}
-				if (cond == 15)
-				{
-					return "31522-06a.htm";
-				}
-				if (cond == 16)
-				{
-					return "31522-12.htm";
-				}
-				if (cond == 17)
-				{
-					return "31522-15a.htm";
-				}
-				if (cond == 18)
+				else if (cond == 15)				
+					return "31522-06a.htm";				
+				else if (cond == 16)				
+					return "31522-12.htm";				
+				else if (cond == 17)				
+					return "31522-15a.htm";				
+				else if (cond == 18)
 				{
 					st.set("id", "18");
 					return "31522-15.htm";
@@ -280,49 +256,32 @@ public class Q025_HidingBehindTheTruth extends Quest
 				break;
 			
 			case AGRIPEL:
-				if (cond == 4)
-				{
-					return "31348-01.htm";
-				}
-				if (cond == 5)
-				{
-					return "31348-03.htm";
-				}
-				if (cond == 16)
-				{
-					return IntId == 16 ? "31348-15.htm" : "31348-09.htm";
-				}
-				if ((cond == 17) || (cond == 18))
-				{
+				if (cond == 4)			
+					return "31348-01.htm";			
+				else if (cond == 5)				
+					return "31348-03.htm";				
+				else if (cond == 16)			
+					return IntId == 16 ? "31348-15.htm" : "31348-09.htm";				
+				else if ((cond == 17) || (cond == 18))				
 					return "31348-15.htm";
-				}
+				
 				break;
 			
 			case BROKEN_BOOK_SHELF:
 				if (cond == 6)
-				{
 					return "31534-01.htm";
-				}
-				if (cond == 7)
-				{
+				else if (cond == 7)
 					return "31534-08.htm";
-				}
-				if (cond == 8)
-				{
+				else if (cond == 8)
 					return IntId == 8 ? "31534-06.htm" : "31534-10.htm";
-				}
 				break;
 			
 			case MAID_OF_LIDIA:
 				if (cond == 9)
-				{
 					return st.getQuestItemsCount(CONTRACT) > 0 ? "31532-01.htm" : "You have no Contract...";
-				}
-				if ((cond == 11) || (cond == 12))
-				{
+				else if ((cond == 11) || (cond == 12))
 					return "31532-08.htm";
-				}
-				if (cond == 13)
+				else if (cond == 13)
 				{
 					if (st.getQuestItemsCount(LIDIAS_DRESS) == 0)
 					{
@@ -334,34 +293,24 @@ public class Q025_HidingBehindTheTruth extends Quest
 					st.takeItems(LIDIAS_DRESS, 1);
 					return "31532-09.htm";
 				}
-				if (cond == 14)
-				{
+				else if (cond == 14)
 					return IntId == 14 ? "31532-10.htm" : "31532-09.htm";
-				}
-				if (cond == 17)
+				else if (cond == 17)
 				{
 					st.set("id", "17");
 					return "31532-23.htm";
 				}
-				if (cond == 18)
-				{
+				else if (cond == 18)
 					return "31532-24.htm";
-				}
 				break;
 			
 			case TOMBSTONE:
-				if (cond == 11)
-				{
+				if (cond == 11)			
 					return "31531-01.htm";
-				}
-				if (cond == 12)
-				{
-					return "31531-02.htm";
-				}
-				if (cond == 13)
-				{
-					return "31531-03.htm";
-				}
+				else if (cond == 12)				
+					return "31531-02.htm";				
+				else if (cond == 13)
+					return "31531-03.htm";	
 				break;
 			
 			case COFFIN:
@@ -372,32 +321,23 @@ public class Q025_HidingBehindTheTruth extends Quest
 					st.giveItems(LIDIAS_DRESS, 1);
 					return "31536-01.htm";
 				}
-				if (cond == 13)
-				{
+				else if (cond == 13)
 					return "31531-03.htm";
-				}
 				break;
 		}
-		return getNoQuestMsg();
+		return htmltext;
 	}
 	
 	@Override
-	public final String onKill(final L2Npc npc, final L2PcInstance player, final boolean isPet)
+	public final String onKill(L2Npc npc, L2PcInstance player, boolean isPet)
 	{
-		QuestState st = player.getQuestState(qn);
+		QuestState st = checkPlayerState(player, npc, STATE_STARTED);
 		if (st == null)
-		{
 			return null;
-		}
-		if (st.getState() != Quest.STATE_STARTED)
-		{
-			return null;
-		}
 		
-		int npcId = npc.getNpcId();
 		int cond = st.getInt("cond");
 		
-		if ((npcId == TRIOLS_PAWN) && (cond == 7))
+		if ((npc.getNpcId() == TRIOLS_PAWN) && (cond == 7))
 		{
 			st.giveItems(SUSPICIOUS_TOTEM_DOLL_3, 1);
 			st.playSound(QuestState.SOUND_MIDDLE);

@@ -27,42 +27,41 @@ import net.sf.l2j.gameserver.scripting.QuestState;
 
 public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 {
-	private static final String qn = "Q024_InhabitantsOfTheForestOfTheDead";
+	private static final int DORIAN = 31389;
+	private static final int WIZARD = 31522;
+	private static final int TOMBSTONE = 31531;
+	private static final int MAIDOFLIDIA = 31532;
 	
-	private static final int Dorian = 31389;
-	private static final int Wizard = 31522;
-	private static final int Tombstone = 31531;
-	private static final int MaidOfLidia = 31532;
-	
-	private static final int Letter = 7065;
-	private static final int Hairpin = 7148;
-	private static final int Totem = 7151;
-	private static final int Flower = 7152;
-	private static final int SilverCross = 7153;
-	private static final int BrokenSilverCross = 7154;
-	private static final int SuspiciousTotem = 7156;
+	private static final int LETTER = 7065;
+	private static final int HAIRPIN = 7148;
+	private static final int TOTEM = 7151;
+	private static final int FLOWER = 7152;
+	private static final int SILVERCROSS = 7153;
+	private static final int BROKENSILVERCROSS = 7154;
+	private static final int SUSPICIOUSTOTEM = 7156;
+
 	
 	public Q024_InhabitantsOfTheForestOfTheDead()
 	{
 		super(24, "Inhabitants Of The Forrest Of The Dead");
-		addStartNpc(Dorian);
-		addTalkId(Dorian, Tombstone, MaidOfLidia, Wizard);
+		addStartNpc(DORIAN);
+		addTalkId(DORIAN, TOMBSTONE, MAIDOFLIDIA, WIZARD);
 		addKillId(21557, 21558, 21560, 21563, 21564, 21565, 21566, 21567);
 		addAggroRangeEnterId(25332);
-		setItemsIds(Flower, SilverCross, BrokenSilverCross, Letter, Hairpin, Totem);
+		setItemsIds(FLOWER, SILVERCROSS, BROKENSILVERCROSS, LETTER, HAIRPIN, TOTEM);
 	}
 	
 	@Override
-	public String onAdvEvent(final String event, final L2Npc npc, final L2PcInstance player)
+	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
 	{
 		String htmltext = event;
-		QuestState st = player.getQuestState(qn);
+		QuestState st = player.getQuestState(getName());
 		if (st == null)
 			return htmltext;
 		
 		if (event.equalsIgnoreCase("31389-02.htm"))
 		{
-			st.giveItems(Flower, 1);
+			st.giveItems(FLOWER, 1);
 			st.set("cond", "1");
 			st.playSound(QuestState.SOUND_ACCEPT);
 			st.setState(Quest.STATE_STARTED);
@@ -71,7 +70,7 @@ public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 		{
 			st.set("cond", "3");
 			st.playSound(QuestState.SOUND_MIDDLE);
-			st.giveItems(SilverCross, 1);
+			st.giveItems(SILVERCROSS, 1);
 		}
 		else if (event.equalsIgnoreCase("31389-16.htm"))
 		{
@@ -79,160 +78,141 @@ public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 		}
 		else if (event.equalsIgnoreCase("31389-17.htm"))
 		{
-			st.takeItems(BrokenSilverCross, -1);
-			st.giveItems(Hairpin, 1);
+			st.takeItems(BROKENSILVERCROSS, -1);
+			st.giveItems(HAIRPIN, 1);
 			st.set("cond", "5");
 		}
 		else if (event.equalsIgnoreCase("31522-03.htm"))
 		{
-			st.takeItems(Totem, -1);
+			st.takeItems(TOTEM, -1);
 		}
 		else if (event.equalsIgnoreCase("31522-07.htm"))
 		{
 			st.set("cond", "11");
 		}
-		else if (event.equalsIgnoreCase("31522-19.htm"))
-		{
-			st.giveItems(SuspiciousTotem, 1);
-			st.rewardExpAndSp(242105, 22529);
-			st.exitQuest(false);
-			st.unset("cond");
-			st.playSound(QuestState.SOUND_FINISH);
-		}
 		else if (event.equalsIgnoreCase("31531-02.htm"))
 		{
 			st.playSound(QuestState.SOUND_MIDDLE);
 			st.set("cond", "2");
-			st.takeItems(Flower, -1);
+			st.takeItems(FLOWER, -1);
 		}
 		else if (event.equalsIgnoreCase("31532-04.htm"))
 		{
 			st.playSound(QuestState.SOUND_MIDDLE);
-			st.giveItems(Letter, 1);
+			st.giveItems(LETTER, 1);
 			st.set("cond", "6");
 		}
 		else if (event.equalsIgnoreCase("31532-06.htm"))
 		{
-			st.takeItems(Hairpin, -1);
-			st.takeItems(Letter, -1);
+			st.takeItems(HAIRPIN, -1);
+			st.takeItems(LETTER, -1);
 		}
 		else if (event.equalsIgnoreCase("31532-16.htm"))
 		{
 			st.playSound(QuestState.SOUND_MIDDLE);
 			st.set("cond", "9");
 		}
-		
+		else if (event.equalsIgnoreCase("31522-19.htm"))
+		{
+			st.giveItems(SUSPICIOUSTOTEM, 1);
+			st.rewardExpAndSp(242105, 22529);
+			st.exitQuest(false);
+			st.unset("cond");
+			st.playSound(QuestState.SOUND_FINISH);
+		}
 		return htmltext;
 	}
 	
 	@Override
-	public String onTalk(final L2Npc npc, final L2PcInstance player)
+	public String onTalk(L2Npc npc, L2PcInstance player)
 	{
 		String htmltext = getNoQuestMsg();
-		final QuestState st = player.getQuestState(qn);
+		final QuestState st = player.getQuestState(getName());
 		if (st == null)
 			return htmltext;
 		
-		final int npcId = npc.getNpcId();
-		final int state = st.getState();
-		final int cond = st.getInt("cond");
-		if (state == Quest.STATE_COMPLETED)
+		switch (st.getState())
 		{
-			htmltext = npcId == Wizard ? "31522-20.htm" : "<html><body>This quest has already been completed.</body></html>";
-		}
-		if (npcId == Dorian)
-		{
-			if (state == Quest.STATE_CREATED)
+			case STATE_CREATED:
+			QuestState st2 = player.getQuestState("Q023_LidiasHeart");
+			if (st2 != null && st2.isCompleted())
 			{
-				final QuestState st2 = player.getQuestState("Q023_LidiasHeart");
-				if (st2 != null)
-				{
-					htmltext = st2.isCompleted() && (player.getLevel() >= 65) ? "31389-01.htm" : "31389-00.htm";
-				}
+				if (player.getLevel() >= 65)
+					htmltext = "31389-01.htm";
 				else
-				{
 					htmltext = "31389-00.htm";
+			}
+			else
+				htmltext = "31328-00.htm";
+			break;
+			
+			case STATE_STARTED:
+				int cond = st.getInt("cond");
+				switch (npc.getNpcId())
+				{
+					case DORIAN:
+						if (cond == 1)	
+							htmltext = "31389-03.htm";						
+						else if (cond == 2)							
+							htmltext = "31389-04.htm";							
+						else if (cond == 3)							
+							htmltext = "31389-12.htm";							
+						else if (cond == 4)							
+							htmltext = "31389-13.htm";							
+						else if (cond == 5)							
+							htmltext = "31389-18.htm";
+						break;
+						
+					case TOMBSTONE:
+						if (cond == 1)
+						{
+							st.playSound("AmdSound.d_wind_loot_02");
+							htmltext = "31531-01.htm";
+						}
+						else if (cond == 2)
+							htmltext = "31531-03.htm";
+						break;
+						
+					case MAIDOFLIDIA:
+						if (cond == 5)
+							htmltext = "31532-01.htm";
+						else if (cond == 6)						
+							htmltext = (st.getQuestItemsCount(LETTER) > 0) && (st.getQuestItemsCount(HAIRPIN) > 0) ? "31532-05.htm" : "31532-07.htm";				
+						else if (cond == 9)
+							htmltext = "31532-16.htm";
+						break;
+						
+					case WIZARD:
+						if (cond == 10)	
+							htmltext = "31522-01.htm";						
+						else if (cond == 11)
+							htmltext = "31522-08.htm";
+						break;
 				}
-			}
-			else if (cond == 1)
-			{
-				htmltext = "31389-03.htm";
-			}
-			else if (cond == 2)
-			{
-				htmltext = "31389-04.htm";
-			}
-			else if (cond == 3)
-			{
-				htmltext = "31389-12.htm";
-			}
-			else if (cond == 4)
-			{
-				htmltext = "31389-13.htm";
-			}
-			else if (cond == 5)
-			{
-				htmltext = "31389-18.htm";
-			}
+				break;
+			case STATE_COMPLETED:
+				if (npc.getNpcId() == WIZARD)
+					htmltext = "31522-20.htm";
+				else
+					htmltext = getAlreadyCompletedMsg();
+				break;
 		}
-		else if (npcId == Tombstone)
-		{
-			if (cond == 1)
-			{
-				st.playSound("AmdSound.d_wind_loot_02");
-				htmltext = "31531-01.htm";
-			}
-			else if (cond == 2)
-			{
-				htmltext = "31531-03.htm";
-			}
-		}
-		else if (npcId == MaidOfLidia)
-		{
-			if (cond == 5)
-			{
-				htmltext = "31532-01.htm";
-			}
-			else if (cond == 6)
-			{
-				htmltext = (st.getQuestItemsCount(Letter) > 0) && (st.getQuestItemsCount(Hairpin) > 0) ? "31532-05.htm" : "31532-07.htm";
-			}
-			else if (cond == 9)
-			{
-				htmltext = "31532-16.htm";
-			}
-		}
-		else if (npcId == Wizard)
-		{
-			if (cond == 10)
-			{
-				htmltext = "31522-01.htm";
-			}
-			else if (cond == 11)
-			{
-				htmltext = "31522-08.htm";
-			}
-		}
-		
 		return htmltext;
 	}
 	
 	@Override
-	public String onKill(final L2Npc npc, final L2PcInstance player, final boolean isPet)
+	public String onKill(L2Npc npc, L2PcInstance player, boolean isPet)
 	{
-		final QuestState st = player.getQuestState(qn);
+		QuestState st = checkPlayerState(player, npc, STATE_STARTED);
 		if (st == null)
 			return null;
 		
-		if (st.getState() != Quest.STATE_STARTED)
-			return null;
-		
 		final int npcId = npc.getNpcId();
-		if ((st.getQuestItemsCount(Totem) < 0) && (st.getInt("cond") == 9))
+		if ((st.getQuestItemsCount(TOTEM) < 0) && (st.getInt("cond") == 9))
 		{
 			if (((npcId == 21557) || (npcId == 21558) || (npcId == 21560) || (npcId == 21563) || (npcId == 21564) || (npcId == 21565) || (npcId == 21566) || (npcId == 21567)) && (Rnd.get(100) <= 30))
 			{
-				st.giveItems(Totem, 1);
+				st.giveItems(TOTEM, 1);
 				st.set("cond", "10");
 				st.playSound(QuestState.SOUND_ITEMGET);
 			}

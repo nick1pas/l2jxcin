@@ -24,6 +24,7 @@ import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
+import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Character;
@@ -189,7 +190,23 @@ abstract public class OlympiadGameNormal extends AbstractOlympiadGame
 			return false;
 		
 		_playerOne.player.setOlympiadStart(true);
+		if (Config.ALT_OLY_SKILL_PROTECT) {
+			for (L2Skill skill : _playerOne.player.getSkills().values()) {
+				if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId())) {
+					_playerOne.player.enableSkill(skill);
+				}
+				_playerOne.player.updateEffectIcons();
+			}
+		}
 		_playerTwo.player.setOlympiadStart(true);
+		if (Config.ALT_OLY_SKILL_PROTECT) {
+			for (L2Skill skill : _playerTwo.player.getSkills().values()) {
+				if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId())) {
+					_playerTwo.player.enableSkill(skill);
+				}
+				_playerTwo.player.updateEffectIcons();
+			}
+		}
 		return true;
 	}
 	

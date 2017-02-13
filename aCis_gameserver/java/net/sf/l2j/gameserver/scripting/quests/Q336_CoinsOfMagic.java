@@ -453,8 +453,7 @@ public class Q336_CoinsOfMagic extends Quest
 			addKillId(mob[0]);
 		}
 		
-		addKillId(HARIT_LIZARDMAN_MATRIARCH);
-		addKillId(HARIT_LIZARDMAN_SHAMAN);
+		addKillId(HARIT_LIZARDMAN_MATRIARCH,HARIT_LIZARDMAN_SHAMAN);
 	}
 	
 	@Override
@@ -629,9 +628,7 @@ public class Q336_CoinsOfMagic extends Quest
 		String htmltext = getNoQuestMsg();
 		QuestState st = player.getQuestState(qn);
 		if (st == null)
-		{
 			return htmltext;
-		}
 		
 		switch (st.getState())
 		{
@@ -664,33 +661,21 @@ public class Q336_CoinsOfMagic extends Quest
 								htmltext = "30232-07.htm";
 							}
 							else
-							{
 								htmltext = "30232-06.htm";
-							}
 						}
 						else if (st.getInt("grade") == 3)
-						{
 							htmltext = "30232-12.htm";
-						}
 						else if (st.getInt("grade") == 2)
-						{
 							htmltext = "30232-11.htm";
-						}
 						else if (st.getInt("grade") == 1)
-						{
 							htmltext = "30232-10.htm";
-						}
 						break;
 					
 					case BERNARD:
 						if ((st.getQuestItemsCount(COIN_DIAGRAM) > 0) && (st.getInt("grade") == 0))
-						{
 							htmltext = "30702-01.htm";
-						}
 						else if (st.getInt("grade") == 3)
-						{
 							htmltext = "30702-05.htm";
-						}
 						break;
 					
 					case PAGE:

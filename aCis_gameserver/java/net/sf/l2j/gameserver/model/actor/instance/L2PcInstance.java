@@ -3103,7 +3103,7 @@ public final class L2PcInstance extends L2Playable
 	 * Close the active connection with the client.
 	 * @param closeClient
 	 */
-	private void closeNetConnection(boolean closeClient)
+	public void closeNetConnection(boolean closeClient)
 	{
 		L2GameClient client = _client;
 		if (client != null)

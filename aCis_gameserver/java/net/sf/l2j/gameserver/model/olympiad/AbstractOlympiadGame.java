@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
@@ -37,6 +38,7 @@ import net.sf.l2j.gameserver.model.zone.type.L2OlympiadStadiumZone;
 import net.sf.l2j.gameserver.model.zone.type.L2TownZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ExOlympiadMode;
+import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
 import net.sf.l2j.gameserver.network.serverpackets.InventoryUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -174,6 +176,15 @@ public abstract class AbstractOlympiadGame
 		{
 			if (player == null)
 				return;
+ 			
+			if (Config.ALT_OLY_SKILL_PROTECT) {
+				for (L2Skill skill : player.getSkills().values()) {
+					if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId())) {
+						player.removeSkill(skill, false);
+					}
+					player.sendPacket(new ExShowScreenMessage("This skill can not be used", 4000));
+				}
+			}
 			
 			// Remove Buffs
 			player.stopAllEffectsExceptThoseThatLastThroughDeath();
@@ -359,6 +370,16 @@ public abstract class AbstractOlympiadGame
 				player.setCurrentCp(player.getMaxCp());
 				player.setCurrentHp(player.getMaxHp());
 				player.setCurrentMp(player.getMaxMp());
+			}
+ 			
+			if (Config.ALT_OLY_SKILL_PROTECT) {
+				for (L2Skill skill : player.getSkills().values()) {
+					if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId())) {
+						player.enableSkill(skill);
+					}
+					player.updateEffectIcons();
+					player.sendPacket(new ExShowScreenMessage("His skill can be used normally", 5000));
+				}
 			}
 			
 			// Add Hero Skills

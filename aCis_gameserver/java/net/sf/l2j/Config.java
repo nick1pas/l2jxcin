@@ -270,6 +270,8 @@ public final class Config
 	public static int ALT_OLY_DIVIDER_NON_CLASSED;
 	public static boolean ALT_OLY_ANNOUNCE_GAMES;
 	public static boolean ALT_OLY_DUAL_BOX;
+	public static boolean ALT_OLY_SKILL_PROTECT;
+	public static List<Integer> ALT_OLY_SKILL_LIST = new ArrayList<>();
 	
 	/** SevenSigns Festival */
 	public static boolean ALT_GAME_CASTLE_DAWN;
@@ -1225,6 +1227,11 @@ public final class Config
 		ALT_OLY_DIVIDER_NON_CLASSED = events.getProperty("AltOlyDividerNonClassed", 3);
 		ALT_OLY_ANNOUNCE_GAMES = events.getProperty("AltOlyAnnounceGames", true);
 		ALT_OLY_DUAL_BOX = events.getProperty("AltOlyDualBox", true);
+		ALT_OLY_SKILL_PROTECT = events.getProperty("AltOlySkillProtect", true);
+		for (String id : events.getProperty("AltOllySkillId","0").split(","))
+	   	{
+			ALT_OLY_SKILL_LIST.add(Integer.parseInt(id));
+	   	}
 		
 		ALT_GAME_CASTLE_DAWN = events.getProperty("AltCastleForDawn", true);
 		ALT_GAME_CASTLE_DUSK = events.getProperty("AltCastleForDusk", true);

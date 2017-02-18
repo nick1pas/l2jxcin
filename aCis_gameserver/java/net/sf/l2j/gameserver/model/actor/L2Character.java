@@ -36,6 +36,7 @@ import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.handler.ISkillHandler;
 import net.sf.l2j.gameserver.handler.SkillHandler;
+import net.sf.l2j.gameserver.instancemanager.BotsPreventionManager;
 import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
 import net.sf.l2j.gameserver.model.ChanceSkillList;
 import net.sf.l2j.gameserver.model.CharEffectList;
@@ -1509,6 +1510,10 @@ public abstract class L2Character extends L2Object
 		stopAllEffectsExceptThoseThatLastThroughDeath();
 		
 		calculateRewards(killer);
+		if (Config.BOTS_PREVENTION)
+		{
+			BotsPreventionManager.getInstance().updatecounter(killer,this);
+		}
 		
 		// Send the Server->Client packet StatusUpdate with current HP and MP to all other L2PcInstance to inform
 		broadcastStatusUpdate();

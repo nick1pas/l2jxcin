@@ -25,13 +25,17 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
+import net.sf.l2j.gameserver.model.item.kind.Weapon;
 import net.sf.l2j.gameserver.model.item.type.ActionType;
+import net.sf.l2j.gameserver.model.item.type.ArmorType;
 import net.sf.l2j.gameserver.model.item.type.EtcItemType;
 import net.sf.l2j.gameserver.model.item.type.WeaponType;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.model.zone.type.L2MultiZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
+import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
+import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
 import net.sf.l2j.gameserver.network.serverpackets.PetItemList;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -120,7 +124,121 @@ public final class UseItem extends L2GameClientPacket
 			activeChar.sendPacket(SystemMessageId.CANNOT_DO_WHILE_FISHING_3);
 			return;
 		}
+		if (!Config.ALLOW_HEAVY_USE_LIGHT && Config.NOTALLOWEDUSELIGHT.contains(activeChar.getClassId().getId()))
+		{
+			if (item.getItemType() == ArmorType.LIGHT)
+			{
+				CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Armor Protection System", " " + activeChar.getName() + " esta classe nao usa equipes light!");
+				activeChar.sendPacket(cs);
+				return;
+			}
+		}
+		if (!Config.ALLOW_LIGHT_USE_HEAVY && Config.NOTALLOWEDUSEHEAVY.contains(activeChar.getClassId().getId()))
+		{
+			if (item.getItemType() == ArmorType.HEAVY)
+			{
+				CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Armor Protection System", " " + activeChar.getName() + " esta classe nao usa equipes heavy!");
+				activeChar.sendPacket(cs);
+				return;
+			}
+		}
+		if (Config.ALT_DISABLE_BOW_CLASSES)
+		{
+			if (item.getItem() instanceof Weapon && ((Weapon) item.getItem()).getItemType() == WeaponType.BOW)
+			{
+				if (Config.DISABLE_BOW_CLASSES.contains(activeChar.getClassId().getId()))
+				{
+					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
+					activeChar.sendPacket(cs);
+					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+			}
+		}
 		
+		if (Config.ALT_DISABLE_DAGGER_CLASSES)
+		{
+			if (item.getItem() instanceof Weapon && ((Weapon) item.getItem()).getItemType() == WeaponType.DAGGER)
+			{
+				if (Config.DISABLE_DAGGER_CLASSES.contains(activeChar.getClassId().getId()))
+				{
+					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
+					activeChar.sendPacket(cs);
+					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+			}
+		}
+		
+		if (Config.ALT_DISABLE_SWORD_CLASSES)
+		{
+			if (item.getItem() instanceof Weapon && ((Weapon) item.getItem()).getItemType() == WeaponType.SWORD)
+			{
+				if (Config.DISABLE_SWORD_CLASSES.contains(activeChar.getClassId().getId()))
+				{
+					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
+					activeChar.sendPacket(cs);
+					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+			}
+		}
+		
+		if (Config.ALT_DISABLE_BLUNT_CLASSES)
+		{
+			if (item.getItem() instanceof Weapon && ((Weapon) item.getItem()).getItemType() == WeaponType.BLUNT)
+			{
+				if (Config.DISABLE_BLUNT_CLASSES.contains(activeChar.getClassId().getId()))
+				{
+					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
+					activeChar.sendPacket(cs);
+					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+			}
+		}
+		
+		if (Config.ALT_DISABLE_DUAL_CLASSES)
+		{
+			if (item.getItem() instanceof Weapon && ((Weapon) item.getItem()).getItemType() == WeaponType.DUAL)
+			{
+				if (Config.DISABLE_DUAL_CLASSES.contains(activeChar.getClassId().getId()))
+				{
+					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
+					activeChar.sendPacket(cs);
+					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+			}
+		}
+		
+		if (Config.ALT_DISABLE_POLE_CLASSES)
+		{
+			if (item.getItem() instanceof Weapon && ((Weapon) item.getItem()).getItemType() == WeaponType.POLE)
+			{
+				if (Config.DISABLE_POLE_CLASSES.contains(activeChar.getClassId().getId()))
+				{
+					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
+					activeChar.sendPacket(cs);
+					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+			}
+		}
+		
+		if (Config.ALT_DISABLE_BIGSWORD_CLASSES)
+		{
+			if (item.getItem() instanceof Weapon && ((Weapon) item.getItem()).getItemType() == WeaponType.BIGSWORD)
+			{
+				if (Config.DISABLE_BIGSWORD_CLASSES.contains(activeChar.getClassId().getId()))
+				{
+					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
+					activeChar.sendPacket(cs);
+					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					return;
+				}
+			}
+		}
 		/*
 		 * The player can't use pet items if no pet is currently summoned. If a pet is summoned and player uses the item directly, it will be used by the pet.
 		 */
@@ -183,13 +301,13 @@ public final class UseItem extends L2GameClientPacket
 			if (!item.getItem().checkCondition(activeChar, activeChar, true))
 				return;
 		}
- 		
+		
 		if (activeChar.isInsideZone(ZoneId.MULTI) && L2MultiZone.isRestrictedItem(item.getItemId()))
 		{
 			activeChar.sendMessage(item.getName() + " cannot be used inside multi zone.");
 			return;
 		}
-	
+		
 		if (item.isEquipable())
 		{
 			if (activeChar.isCastingNow() || activeChar.isCastingSimultaneouslyNow())

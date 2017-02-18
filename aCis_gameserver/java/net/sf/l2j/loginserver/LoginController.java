@@ -30,6 +30,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.crypto.Cipher;
 
@@ -178,6 +181,11 @@ public class LoginController
 	{
 		try
 		{
+			if (!isValidLogin(login))
+			{
+				return null;
+			}
+			
 			MessageDigest md = MessageDigest.getInstance("SHA");
 			byte[] raw = password.getBytes(StandardCharsets.UTF_8);
 			String hashBase64 = Base64.getEncoder().encodeToString(md.digest(raw));
@@ -482,5 +490,26 @@ public class LoginController
 	public static LoginController getInstance()
 	{
 		return _instance;
+	}
+		
+	public static boolean isValidLogin(String text)
+	{
+		return isValidPattern(text, "^[A-Za-z0-9]{1,16}$");
+	}
+	
+	public static boolean isValidPattern(String text, String regex)
+	{
+		Pattern pattern;
+		
+		try
+		{
+			pattern = Pattern.compile(regex);
+		}
+		catch (PatternSyntaxException e)
+		{
+			pattern = Pattern.compile(".*");
+		}
+		Matcher regexp = pattern.matcher(text);
+		return regexp.matches();
 	}
 }

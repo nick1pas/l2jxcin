@@ -26,6 +26,7 @@ import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
 import net.sf.l2j.gameserver.handler.VoicedCommandHandler;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Buff;
+import net.sf.l2j.gameserver.instancemanager.BotsPreventionManager;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
@@ -152,6 +153,10 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			else if (_command.startsWith("bbs_") || _command.startsWith("_bbs") || _command.startsWith("_friend") || _command.startsWith("_mail") || _command.startsWith("_block"))
 			{
 				CommunityBoard.getInstance().handleCommands(getClient(), _command);
+			}
+			else if (_command.startsWith("report"))
+			{
+				BotsPreventionManager.getInstance().AnalyseBypass(_command,activeChar);
 			}
 			else if (_command.startsWith("Quest "))
 			{

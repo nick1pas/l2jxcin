@@ -54,7 +54,7 @@ public final class Config
 	public static final String PLAYERS_FILE = "./config/players.properties";
 	public static final String SERVER_FILE = "./config/server.properties";
 	public static final String SIEGE_FILE = "./config/siege.properties";
-
+	
 	// --------------------------------------------------
 	// Custom settings
 	// --------------------------------------------------
@@ -105,22 +105,27 @@ public final class Config
 	public static int CLAN_MANAGER_CLAN_REPUTATION_REWARD;
 	/** PvP Color System */
 	public static boolean ENABLE_PVP_COLOR;
+	
 	/** Trade/Shout voice */
 	public static enum ShoutRestrictionType
 	{
-		PVP, LEVEL, NONE
+		PVP,
+		LEVEL,
+		NONE
 	}
 	
 	public static enum TradeRestrictionType
 	{
-		PVP, LEVEL, NONE
+		PVP,
+		LEVEL,
+		NONE
 	}
 	
 	public static ShoutRestrictionType SHOUT_RESTRICTION_TYPE;
 	public static TradeRestrictionType TRADE_RESTRICTION_TYPE;
 	public static int SHOUT_RESTRICTION_VALUE;
 	public static int TRADE_RESTRICTION_VALUE;
-	/** Raid Boss Defeated Message  */
+	/** Raid Boss Defeated Message */
 	public static boolean ENABLE_RAID_BOSS_DEFEATED_MSG;
 	public static String RAID_BOSS_DEFEATED_BY_CLAN_MEMBER_MSG;
 	public static String RAID_BOSS_DEFEATED_BY_PLAYER_MSG;
@@ -129,7 +134,7 @@ public final class Config
 	public static Map<Integer, List<Integer>> GLOBAL_DROP_ITEMS_CHAMPION = new HashMap<>();
 	public static boolean ALLOW_GLOBAL_DROP_RANDOM;
 	public static boolean ALLOW_GLOBAL_DROP;
- 	/** Npc Enchant Items */
+	/** Npc Enchant Items */
 	public static boolean npcEnchantItemsEnabled;
 	public static int weaponEnchantLevel;
 	public static int armorEnchantLevel;
@@ -144,7 +149,7 @@ public final class Config
 	/** Open Url */
 	public static boolean OPEN_URL_ENABLE;
 	public static String OPEN_URL_SITE;
-	/** Grandboss Info*/
+	/** Grandboss Info */
 	public static String GRAND_BOSS;
 	public static List<Integer> GRAND_BOSS_LIST;
 	/** Clan Full */
@@ -157,6 +162,35 @@ public final class Config
 	public static String LIST_BUFF_COMMAND;
 	public static int[] BUFF_COMMAND_FIGHT_IDBUFFS;
 	public static int[] BUFF_COMMAND_MAGE_IDBUFFS;
+	/** Armor e Weapon Protection */
+	public static boolean ALLOW_LIGHT_USE_HEAVY;
+	public static String NOTALLOWCLASS;
+	public static List<Integer> NOTALLOWEDUSEHEAVY;
+	public static boolean ALLOW_HEAVY_USE_LIGHT;
+	public static String NOTALLOWCLASSE;
+	public static List<Integer> NOTALLOWEDUSELIGHT;
+	public static boolean ALT_DISABLE_BOW_CLASSES;
+	public static String DISABLE_BOW_CLASSES_STRING;
+	public static List<Integer> DISABLE_BOW_CLASSES;
+	public static boolean ALT_DISABLE_DAGGER_CLASSES;
+	public static String DISABLE_DAGGER_CLASSES_STRING;
+	public static List<Integer> DISABLE_DAGGER_CLASSES;
+	public static boolean ALT_DISABLE_SWORD_CLASSES;
+	public static String DISABLE_SWORD_CLASSES_STRING;
+	public static List<Integer> DISABLE_SWORD_CLASSES;
+	public static boolean ALT_DISABLE_BLUNT_CLASSES;
+	public static String DISABLE_BLUNT_CLASSES_STRING;
+	public static List<Integer> DISABLE_BLUNT_CLASSES;
+	public static boolean ALT_DISABLE_DUAL_CLASSES;
+	public static String DISABLE_DUAL_CLASSES_STRING;
+	public static List<Integer> DISABLE_DUAL_CLASSES;
+	public static boolean ALT_DISABLE_POLE_CLASSES;
+	public static String DISABLE_POLE_CLASSES_STRING;
+	public static List<Integer> DISABLE_POLE_CLASSES;
+	public static boolean ALT_DISABLE_BIGSWORD_CLASSES;
+	public static String DISABLE_BIGSWORD_CLASSES_STRING;
+	public static List<Integer> DISABLE_BIGSWORD_CLASSES;
+	
 	// --------------------------------------------------
 	// Clans settings
 	// --------------------------------------------------
@@ -395,7 +429,7 @@ public final class Config
 	public static int DM_EVENT_EFFECTS_REMOVAL;
 	public static Map<Integer, Integer> DM_EVENT_FIGHTER_BUFFS;
 	public static Map<Integer, Integer> DM_EVENT_MAGE_BUFFS;
-	public static boolean DM_ALLOW_VOICED_COMMAND;	
+	public static boolean DM_ALLOW_VOICED_COMMAND;
 	/** LM Event */
 	public static boolean LM_EVENT_ENABLED;
 	public static String[] LM_EVENT_INTERVAL;
@@ -425,7 +459,7 @@ public final class Config
 	public static int LM_EVENT_EFFECTS_REMOVAL;
 	public static Map<Integer, Integer> LM_EVENT_FIGHTER_BUFFS;
 	public static Map<Integer, Integer> LM_EVENT_MAGE_BUFFS;
-	public static boolean LM_ALLOW_VOICED_COMMAND;	
+	public static boolean LM_ALLOW_VOICED_COMMAND;
 	
 	// --------------------------------------------------
 	// GeoEngine
@@ -552,7 +586,7 @@ public final class Config
 	public static int RANDOM_SPAWN_TIME_FRINTEZZA;
 	public static int WAIT_TIME_FRINTEZZA;
 	public static int FRINTEZZA_MIN_PARTIES;
-	public static int FRINTEZZA_MAX_PARTIES;	 
+	public static int FRINTEZZA_MAX_PARTIES;
 	
 	public static int SPAWN_INTERVAL_ORFEN;
 	public static int RANDOM_SPAWN_TIME_ORFEN;
@@ -681,7 +715,7 @@ public final class Config
 	public static boolean ALT_GAME_SUBCLASS_WITHOUT_QUESTS;
 	public static boolean ALT_GAME_SUBCLASS_EVERYWHERE;
 	public static boolean EXPERTISE_PENALTY;
-
+	
 	/** Buffs */
 	public static boolean STORE_SKILL_COOLTIME;
 	public static int BUFFS_MAX_AMOUNT;
@@ -845,6 +879,12 @@ public final class Config
 	
 	/** Misc */
 	public static boolean L2WALKER_PROTECTION;
+	public static boolean BOTS_PREVENTION;
+	public static int KILLS_COUNTER;
+	public static int KILLS_COUNTER_RANDOMIZATION;
+	public static int VALIDATION_TIME;
+	public static int PUNISHMENT;
+	public static int PUNISHMENT_TIME;
 	public static boolean SERVER_NEWS;
 	public static int ZONE_TOWN;
 	public static boolean DISABLE_TUTORIAL;
@@ -1007,7 +1047,7 @@ public final class Config
 			int skillId = Integer.parseInt(valSplit[0]);
 			int skillLv = Integer.parseInt(valSplit[1]);
 			LIST_AIO_SKILLS.put(skillId, skillLv);
-		}		
+		}
 		CLAN_MANAGER_ITEM_ID = custom.getProperty("ClanManagerItemId", 57);
 		CLAN_MANAGER_LEVEL_UP_COUNT = custom.getProperty("ClanManagerLevelUpCount", 10000);
 		CLAN_MANAGER_REPUTATION_COUNT = custom.getProperty("ClanManagerReputationCount", 100000);
@@ -1046,7 +1086,7 @@ public final class Config
 		}
 		ALLOW_GLOBAL_DROP_RANDOM = custom.getProperty("AllowRandomQuantityDrop", true);
 		ALLOW_GLOBAL_DROP = custom.getProperty("AllowGlobalDrop", true);
-			
+		
 		npcEnchantItemsEnabled = custom.getProperty("EnableNpcEnchantItems", false);
 		weaponEnchantLevel = custom.getProperty("WeaponEnchantLevel", 20);
 		armorEnchantLevel = custom.getProperty("ArmorEnchantLevel", 16);
@@ -1056,18 +1096,18 @@ public final class Config
 		augmentItemChance = custom.getProperty("AugmentItemChane", 30);
 		nonEnchantableItems = custom.getProperty("NonEnchantableItemList", "");
 		nonEnchantableItemList = new ArrayList<>();
-		for(String itemId : nonEnchantableItems.split(","))
+		for (String itemId : nonEnchantableItems.split(","))
 			nonEnchantableItemList.add(Integer.parseInt(itemId));
 		
 		modifyItemEnchant = custom.getProperty("ModifyItemEnchant", false);
-		if(modifyItemEnchant)
+		if (modifyItemEnchant)
 		{
 			modifyItemEnchantList = new HashMap<>();
 			String[] propertySplit = custom.getProperty("ModifyItemEnchantList", "").split(";");
-			for(String item : propertySplit)
+			for (String item : propertySplit)
 			{
 				String[] itemEnchantSplit = item.split(",");
-				if(itemEnchantSplit.length != 2)
+				if (itemEnchantSplit.length != 2)
 				{
 					System.out.println("invalid config property -> ModifyItemEnchantList \"" + item + "\"");
 				}
@@ -1077,7 +1117,7 @@ public final class Config
 					{
 						modifyItemEnchantList.put(Integer.parseInt(itemEnchantSplit[0]), Integer.parseInt(itemEnchantSplit[1]));
 					}
-					catch(NumberFormatException nfe)
+					catch (NumberFormatException nfe)
 					{
 						nfe.printStackTrace();
 					}
@@ -1093,25 +1133,97 @@ public final class Config
 			GRAND_BOSS_LIST.add(Integer.parseInt(id.trim()));
 		}
 		ENABLE_CLAN_SYSTEM = custom.getProperty("EnableClanSystem", true);
-		CLAN_LEVEL = (byte)custom.getProperty("ClanLevel", 8);
+		CLAN_LEVEL = (byte) custom.getProperty("ClanLevel", 8);
 		REPUTATION_QUANTITY = custom.getProperty("ClanReputation", 10000);
 		CLAN_ITEM_ID = custom.getProperty("ClanItemId", 57);
 		CLAN_ITEM_COUNT = custom.getProperty("ClanItemCount", 10000);
 		LIST_BUFF_COMMAND = custom.getProperty("buffCommandFightBuffsID", "123,456");
 		
-		String[] buffCommand = LIST_BUFF_COMMAND.split(",");            
-		BUFF_COMMAND_FIGHT_IDBUFFS = new int[buffCommand.length];        
+		String[] buffCommand = LIST_BUFF_COMMAND.split(",");
+		BUFF_COMMAND_FIGHT_IDBUFFS = new int[buffCommand.length];
 		for (int i = 0; i < buffCommand.length; i++)
 			BUFF_COMMAND_FIGHT_IDBUFFS[i] = Integer.parseInt(buffCommand[i]);
 		
 		LIST_BUFF_COMMAND = custom.getProperty("buffCommandMageBuffsID", "789,1011112");
 		
-		buffCommand = LIST_BUFF_COMMAND.split(",");            
-		BUFF_COMMAND_MAGE_IDBUFFS = new int[buffCommand.length];            
+		buffCommand = LIST_BUFF_COMMAND.split(",");
+		BUFF_COMMAND_MAGE_IDBUFFS = new int[buffCommand.length];
 		for (int i = 0; i < buffCommand.length; i++)
 			BUFF_COMMAND_MAGE_IDBUFFS[i] = Integer.parseInt(buffCommand[i]);
 		
+		ALLOW_HEAVY_USE_LIGHT = custom.getProperty("AllowHeavyUseLight", false);
+		NOTALLOWCLASSE = custom.getProperty("NotAllowedUseLight", "");
+		NOTALLOWEDUSELIGHT = new ArrayList<>();
+		for (String classId : NOTALLOWCLASSE.split(","))
+		{
+			NOTALLOWEDUSELIGHT.add(Integer.parseInt(classId));
+		}
+		ALLOW_LIGHT_USE_HEAVY = custom.getProperty("AllowLightUseHeavy", false);
+		NOTALLOWCLASS = custom.getProperty("NotAllowedUseHeavy", "");
+		NOTALLOWEDUSEHEAVY = new ArrayList<>();
+		for (String classId : NOTALLOWCLASS.split(","))
+		{
+			NOTALLOWEDUSEHEAVY.add(Integer.parseInt(classId));
+		}
+		ALT_DISABLE_BOW_CLASSES = custom.getProperty("AltDisableBow", false);
+		DISABLE_BOW_CLASSES_STRING = custom.getProperty("DisableBowForClasses", "");
+		DISABLE_BOW_CLASSES = new ArrayList<>();
+		for (String class_id : DISABLE_BOW_CLASSES_STRING.split(","))
+		{
+			if (!class_id.equals(""))
+				DISABLE_BOW_CLASSES.add(Integer.parseInt(class_id));
+		}
+		ALT_DISABLE_DAGGER_CLASSES = custom.getProperty("AltDisableDagger", false);
+		DISABLE_DAGGER_CLASSES_STRING = custom.getProperty("DisableDaggerForClasses", "");
+		DISABLE_DAGGER_CLASSES = new ArrayList<>();
+		for (String class_id : DISABLE_DAGGER_CLASSES_STRING.split(","))
+		{
+			if (!class_id.equals(""))
+				DISABLE_DAGGER_CLASSES.add(Integer.parseInt(class_id));
+		}
+		ALT_DISABLE_SWORD_CLASSES = custom.getProperty("AltDisableSword", false);
+		DISABLE_SWORD_CLASSES_STRING = custom.getProperty("DisableSwordForClasses", "");
+		DISABLE_SWORD_CLASSES = new ArrayList<>();
+		for (String class_id : DISABLE_SWORD_CLASSES_STRING.split(","))
+		{
+			if (!class_id.equals(""))
+				DISABLE_SWORD_CLASSES.add(Integer.parseInt(class_id));
+		}
+		ALT_DISABLE_BLUNT_CLASSES = custom.getProperty("AltDisableBlunt", false);
+		DISABLE_BLUNT_CLASSES_STRING = custom.getProperty("DisableBluntForClasses", "");
+		DISABLE_BLUNT_CLASSES = new ArrayList<>();
+		for (String class_id : DISABLE_BLUNT_CLASSES_STRING.split(","))
+		{
+			if (!class_id.equals(""))
+				DISABLE_BLUNT_CLASSES.add(Integer.parseInt(class_id));
+		}
+		ALT_DISABLE_DUAL_CLASSES = custom.getProperty("AltDisableDual", false);
+		DISABLE_DUAL_CLASSES_STRING = custom.getProperty("DisableDualForClasses", "");
+		DISABLE_DUAL_CLASSES = new ArrayList<>();
+		for (String class_id : DISABLE_DUAL_CLASSES_STRING.split(","))
+		{
+			if (!class_id.equals(""))
+				DISABLE_DUAL_CLASSES.add(Integer.parseInt(class_id));
+		}
+		ALT_DISABLE_POLE_CLASSES = custom.getProperty("AltDisablePolle", false);
+		DISABLE_POLE_CLASSES_STRING = custom.getProperty("DisablePolleForClasses", "");
+		DISABLE_POLE_CLASSES = new ArrayList<>();
+		for (String class_id : DISABLE_POLE_CLASSES_STRING.split(","))
+		{
+			if (!class_id.equals(""))
+				DISABLE_POLE_CLASSES.add(Integer.parseInt(class_id));
+		}
+		ALT_DISABLE_BIGSWORD_CLASSES = custom.getProperty("AltDisableBigSword", false);
+		DISABLE_BIGSWORD_CLASSES_STRING = custom.getProperty("DisableBigSwordForClasses", "");
+		DISABLE_BIGSWORD_CLASSES = new ArrayList<>();
+		for (String class_id : DISABLE_BIGSWORD_CLASSES_STRING.split(","))
+		{
+			if (!class_id.equals(""))
+				DISABLE_BIGSWORD_CLASSES.add(Integer.parseInt(class_id));
+		}
+		
 	}
+	
 	/**
 	 * Loads clan and clan hall settings.
 	 */
@@ -1228,10 +1340,10 @@ public final class Config
 		ALT_OLY_ANNOUNCE_GAMES = events.getProperty("AltOlyAnnounceGames", true);
 		ALT_OLY_DUAL_BOX = events.getProperty("AltOlyDualBox", true);
 		ALT_OLY_SKILL_PROTECT = events.getProperty("AltOlySkillProtect", true);
-		for (String id : events.getProperty("AltOllySkillId","0").split(","))
-	   	{
+		for (String id : events.getProperty("AltOllySkillId", "0").split(","))
+		{
 			ALT_OLY_SKILL_LIST.add(Integer.parseInt(id));
-	   	}
+		}
 		
 		ALT_GAME_CASTLE_DAWN = events.getProperty("AltCastleForDawn", true);
 		ALT_GAME_CASTLE_DUSK = events.getProperty("AltCastleForDusk", true);
@@ -1328,8 +1440,8 @@ public final class Config
 					TVT_EVENT_PARTICIPATION_NPC_COORDINATES[3] = Integer.parseInt(propertySplit[3]);
 				TVT_EVENT_MIN_PLAYERS_IN_TEAMS = events_custom.getProperty("TvTEventMinPlayersInTeams", 1);
 				TVT_EVENT_MAX_PLAYERS_IN_TEAMS = events_custom.getProperty("TvTEventMaxPlayersInTeams", 2);
-				TVT_EVENT_MIN_LVL = (byte)events_custom.getProperty("TvTEventMinPlayerLevel", 1);
-				TVT_EVENT_MAX_LVL = (byte)events_custom.getProperty("TvTEventMaxPlayerLevel", 80);
+				TVT_EVENT_MIN_LVL = (byte) events_custom.getProperty("TvTEventMinPlayerLevel", 1);
+				TVT_EVENT_MAX_LVL = (byte) events_custom.getProperty("TvTEventMaxPlayerLevel", 80);
 				TVT_EVENT_RESPAWN_TELEPORT_DELAY = events_custom.getProperty("TvTEventRespawnTeleportDelay", 20);
 				TVT_EVENT_START_LEAVE_TELEPORT_DELAY = events_custom.getProperty("TvTEventStartLeaveTeleportDelay", 20);
 				TVT_EVENT_EFFECTS_REMOVAL = events_custom.getProperty("TvTEventEffectsRemoval", 0);
@@ -1350,7 +1462,7 @@ public final class Config
 					propertySplit = events_custom.getProperty("TvTEventTeam2Coordinates", "0,0,0").split(",");
 					if (propertySplit.length < 3)
 					{
-						TVT_EVENT_ENABLED= false;
+						TVT_EVENT_ENABLED = false;
 						_log.warning("TvTEventEngine[Config.load()]: invalid config property -> TvTEventTeam2Coordinates");
 					}
 					else
@@ -1379,7 +1491,11 @@ public final class Config
 							{
 								try
 								{
-									TVT_EVENT_REWARDS.add(new int[]{Integer.parseInt(rewardSplit[0]), Integer.parseInt(rewardSplit[1])});
+									TVT_EVENT_REWARDS.add(new int[]
+									{
+										Integer.parseInt(rewardSplit[0]),
+										Integer.parseInt(rewardSplit[1])
+									});
 								}
 								catch (NumberFormatException nfe)
 								{
@@ -1398,7 +1514,11 @@ public final class Config
 							{
 								try
 								{
-									TVT_EVENT_REWARDS_KILL.add(new int[]{Integer.parseInt(rewardSplit[0]), Integer.parseInt(rewardSplit[1])});
+									TVT_EVENT_REWARDS_KILL.add(new int[]
+									{
+										Integer.parseInt(rewardSplit[0]),
+										Integer.parseInt(rewardSplit[1])
+									});
 								}
 								catch (NumberFormatException nfe)
 								{
@@ -1407,7 +1527,7 @@ public final class Config
 								}
 							}
 						}
-
+						
 						TVT_EVENT_TARGET_TEAM_MEMBERS_ALLOWED = events_custom.getProperty("TvTEventTargetTeamMembersAllowed", true);
 						TVT_EVENT_SCROLL_ALLOWED = events_custom.getProperty("TvTEventScrollsAllowed", false);
 						TVT_EVENT_POTIONS_ALLOWED = events_custom.getProperty("TvTEventPotionsAllowed", false);
@@ -1528,7 +1648,8 @@ public final class Config
 					DM_EVENT_PARTICIPATION_NPC_COORDINATES[1] = Integer.parseInt(propertySplit[1]);
 					DM_EVENT_PARTICIPATION_NPC_COORDINATES[2] = Integer.parseInt(propertySplit[2]);
 					
-					if (propertySplit.length == 4) DM_EVENT_PARTICIPATION_NPC_COORDINATES[3] = Integer.parseInt(propertySplit[3]);
+					if (propertySplit.length == 4)
+						DM_EVENT_PARTICIPATION_NPC_COORDINATES[3] = Integer.parseInt(propertySplit[3]);
 					DM_EVENT_MIN_PLAYERS = events_custom.getProperty("DMEventMinPlayers", 1);
 					DM_EVENT_MAX_PLAYERS = events_custom.getProperty("DMEventMaxPlayers", 20);
 					DM_EVENT_MIN_LVL = (byte) events_custom.getProperty("DMEventMinPlayerLevel", 1);
@@ -1546,14 +1667,16 @@ public final class Config
 					}
 					catch (NumberFormatException nfe)
 					{
-						if (propertySplit.length > 0) _log.warning("DMEventEngine[Config.load()]: invalid config property -> DMEventParticipationFee");
+						if (propertySplit.length > 0)
+							_log.warning("DMEventEngine[Config.load()]: invalid config property -> DMEventParticipationFee");
 					}
 					
 					DM_REWARD_FIRST_PLAYERS = events_custom.getProperty("DMRewardFirstPlayers", 3);
 					
 					propertySplit = events_custom.getProperty("DMEventReward", "57,100000;5575,5000|57,50000|57,25000").split("\\|");
 					int i = 1;
-					if (DM_REWARD_FIRST_PLAYERS < propertySplit.length) _log.warning("DMEventEngine[Config.load()]: invalid config property -> DMRewardFirstPlayers < DMEventReward");
+					if (DM_REWARD_FIRST_PLAYERS < propertySplit.length)
+						_log.warning("DMEventEngine[Config.load()]: invalid config property -> DMRewardFirstPlayers < DMEventReward");
 					else
 					{
 						for (String pos : propertySplit)
@@ -1563,12 +1686,17 @@ public final class Config
 							for (String rewards : rewardSplit)
 							{
 								String[] reward = rewards.split("\\,");
-								if (reward.length != 2) System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventReward \"" + pos + "\"");
+								if (reward.length != 2)
+									System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventReward \"" + pos + "\"");
 								else
 								{
 									try
 									{
-										value.add(new int[] { Integer.parseInt(reward[0]), Integer.parseInt(reward[1]) });
+										value.add(new int[]
+										{
+											Integer.parseInt(reward[0]),
+											Integer.parseInt(reward[1])
+										});
 									}
 									catch (NumberFormatException nfe)
 									{
@@ -1578,8 +1706,10 @@ public final class Config
 								
 								try
 								{
-									if (value.isEmpty()) DM_EVENT_REWARDS.put(i, DM_EVENT_REWARDS.get(i - 1));
-									else DM_EVENT_REWARDS.put(i, value);
+									if (value.isEmpty())
+										DM_EVENT_REWARDS.put(i, DM_EVENT_REWARDS.get(i - 1));
+									else
+										DM_EVENT_REWARDS.put(i, value);
 								}
 								catch (Exception e)
 								{
@@ -1612,16 +1742,23 @@ public final class Config
 					for (String coordPlayer : propertySplit)
 					{
 						String[] coordSplit = coordPlayer.split(",");
-						if (coordSplit.length != 3) System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventPlayerCoordinates \"" + coordPlayer + "\"");
+						if (coordSplit.length != 3)
+							System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventPlayerCoordinates \"" + coordPlayer + "\"");
 						else
 						{
 							try
 							{
-								DM_EVENT_PLAYER_COORDINATES.add(new int[] { Integer.parseInt(coordSplit[0]), Integer.parseInt(coordSplit[1]), Integer.parseInt(coordSplit[2]) });
+								DM_EVENT_PLAYER_COORDINATES.add(new int[]
+								{
+									Integer.parseInt(coordSplit[0]),
+									Integer.parseInt(coordSplit[1]),
+									Integer.parseInt(coordSplit[2])
+								});
 							}
 							catch (NumberFormatException nfe)
 							{
-								if (!coordPlayer.isEmpty()) System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventPlayerCoordinates \""+ coordPlayer + "\"");
+								if (!coordPlayer.isEmpty())
+									System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventPlayerCoordinates \"" + coordPlayer + "\"");
 							}
 						}
 					}
@@ -1643,7 +1780,8 @@ public final class Config
 						}
 						catch (NumberFormatException nfe)
 						{
-							if (!door.isEmpty()) System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMDoorsToOpen \""+ door + "\"");
+							if (!door.isEmpty())
+								System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMDoorsToOpen \"" + door + "\"");
 						}
 					}
 					
@@ -1656,7 +1794,8 @@ public final class Config
 						}
 						catch (NumberFormatException nfe)
 						{
-							if (!door.isEmpty()) System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMDoorsToClose \""+ door + "\"");
+							if (!door.isEmpty())
+								System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMDoorsToClose \"" + door + "\"");
 						}
 					}
 					
@@ -1667,7 +1806,8 @@ public final class Config
 						for (String skill : propertySplit)
 						{
 							String[] skillSplit = skill.split(",");
-							if (skillSplit.length != 2) System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventFighterBuffs \"" + skill + "\"");
+							if (skillSplit.length != 2)
+								System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventFighterBuffs \"" + skill + "\"");
 							else
 							{
 								try
@@ -1676,7 +1816,8 @@ public final class Config
 								}
 								catch (NumberFormatException nfe)
 								{
-									if (!skill.isEmpty()) System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventFighterBuffs \"" + skill + "\"");
+									if (!skill.isEmpty())
+										System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventFighterBuffs \"" + skill + "\"");
 								}
 							}
 						}
@@ -1689,7 +1830,8 @@ public final class Config
 						for (String skill : propertySplit)
 						{
 							String[] skillSplit = skill.split(",");
-							if (skillSplit.length != 2) System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventMageBuffs \"" + skill + "\"");
+							if (skillSplit.length != 2)
+								System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventMageBuffs \"" + skill + "\"");
 							else
 							{
 								try
@@ -1698,7 +1840,8 @@ public final class Config
 								}
 								catch (NumberFormatException nfe)
 								{
-									if (!skill.isEmpty()) System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventMageBuffs \"" + skill + "\"");
+									if (!skill.isEmpty())
+										System.out.println("DMEventEngine[Config.load()]: invalid config property -> DMEventMageBuffs \"" + skill + "\"");
 								}
 							}
 						}
@@ -1740,7 +1883,8 @@ public final class Config
 					LM_EVENT_PARTICIPATION_NPC_COORDINATES[1] = Integer.parseInt(propertySplit[1]);
 					LM_EVENT_PARTICIPATION_NPC_COORDINATES[2] = Integer.parseInt(propertySplit[2]);
 					
-					if (propertySplit.length == 4) LM_EVENT_PARTICIPATION_NPC_COORDINATES[3] = Integer.parseInt(propertySplit[3]);
+					if (propertySplit.length == 4)
+						LM_EVENT_PARTICIPATION_NPC_COORDINATES[3] = Integer.parseInt(propertySplit[3]);
 					LM_EVENT_MIN_PLAYERS = events_custom.getProperty("LMEventMinPlayers", 1);
 					LM_EVENT_MAX_PLAYERS = events_custom.getProperty("LMEventMaxPlayers", 20);
 					LM_EVENT_MIN_LVL = (byte) events_custom.getProperty("LMEventMinPlayerLevel", 1);
@@ -1749,7 +1893,7 @@ public final class Config
 					LM_EVENT_START_LEAVE_TELEPORT_DELAY = events_custom.getProperty("LMEventStartLeaveTeleportDelay", 20);
 					LM_EVENT_EFFECTS_REMOVAL = events_custom.getProperty("LMEventEffectsRemoval", 0);
 					LM_ALLOW_VOICED_COMMAND = events_custom.getProperty("LMAllowVoicedInfoCommand", true);
-
+					
 					propertySplit = events_custom.getProperty("LMEventParticipationFee", "0,0").split(",");
 					try
 					{
@@ -1758,7 +1902,8 @@ public final class Config
 					}
 					catch (NumberFormatException nfe)
 					{
-						if (propertySplit.length > 0) _log.warning("LMEventEngine[Config.load()]: invalid config property -> LMEventParticipationFee");
+						if (propertySplit.length > 0)
+							_log.warning("LMEventEngine[Config.load()]: invalid config property -> LMEventParticipationFee");
 					}
 					
 					propertySplit = events_custom.getProperty("LMEventReward", "57,100000;5575,5000").split("\\;");
@@ -1767,7 +1912,11 @@ public final class Config
 						String[] rewardSplit = reward.split("\\,");
 						try
 						{
-							LM_EVENT_REWARDS.add(new int[] { Integer.parseInt(rewardSplit[0]), Integer.parseInt(rewardSplit[1]) });
+							LM_EVENT_REWARDS.add(new int[]
+							{
+								Integer.parseInt(rewardSplit[0]),
+								Integer.parseInt(rewardSplit[1])
+							});
 						}
 						catch (NumberFormatException nfe)
 						{
@@ -1779,16 +1928,23 @@ public final class Config
 					for (String coordPlayer : propertySplit)
 					{
 						String[] coordSplit = coordPlayer.split(",");
-						if (coordSplit.length != 3) _log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventPlayerCoordinates \"", coordPlayer, "\""));
+						if (coordSplit.length != 3)
+							_log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventPlayerCoordinates \"", coordPlayer, "\""));
 						else
 						{
 							try
 							{
-								LM_EVENT_PLAYER_COORDINATES.add(new int[] { Integer.parseInt(coordSplit[0]), Integer.parseInt(coordSplit[1]), Integer.parseInt(coordSplit[2]) });
+								LM_EVENT_PLAYER_COORDINATES.add(new int[]
+								{
+									Integer.parseInt(coordSplit[0]),
+									Integer.parseInt(coordSplit[1]),
+									Integer.parseInt(coordSplit[2])
+								});
 							}
 							catch (NumberFormatException nfe)
 							{
-								if (!coordPlayer.isEmpty()) _log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventPlayerCoordinates \"", coordPlayer, "\""));
+								if (!coordPlayer.isEmpty())
+									_log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventPlayerCoordinates \"", coordPlayer, "\""));
 							}
 						}
 					}
@@ -1810,7 +1966,8 @@ public final class Config
 						}
 						catch (NumberFormatException nfe)
 						{
-							if (!door.isEmpty()) _log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMDoorsToOpen \"", door, "\""));
+							if (!door.isEmpty())
+								_log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMDoorsToOpen \"", door, "\""));
 						}
 					}
 					
@@ -1823,7 +1980,8 @@ public final class Config
 						}
 						catch (NumberFormatException nfe)
 						{
-							if (!door.isEmpty()) _log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMDoorsToClose \"", door, "\""));
+							if (!door.isEmpty())
+								_log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMDoorsToClose \"", door, "\""));
 						}
 					}
 					
@@ -1834,7 +1992,8 @@ public final class Config
 						for (String skill : propertySplit)
 						{
 							String[] skillSplit = skill.split(",");
-							if (skillSplit.length != 2) _log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventFighterBuffs \"", skill, "\""));
+							if (skillSplit.length != 2)
+								_log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventFighterBuffs \"", skill, "\""));
 							else
 							{
 								try
@@ -1843,7 +2002,8 @@ public final class Config
 								}
 								catch (NumberFormatException nfe)
 								{
-									if (!skill.isEmpty()) _log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventFighterBuffs \"", skill, "\""));
+									if (!skill.isEmpty())
+										_log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventFighterBuffs \"", skill, "\""));
 								}
 							}
 						}
@@ -1856,7 +2016,8 @@ public final class Config
 						for (String skill : propertySplit)
 						{
 							String[] skillSplit = skill.split(",");
-							if (skillSplit.length != 2) _log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventMageBuffs \"", skill, "\""));
+							if (skillSplit.length != 2)
+								_log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventMageBuffs \"", skill, "\""));
 							else
 							{
 								try
@@ -1865,7 +2026,8 @@ public final class Config
 								}
 								catch (NumberFormatException nfe)
 								{
-									if (!skill.isEmpty()) _log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventMageBuffs \"", skill, "\""));
+									if (!skill.isEmpty())
+										_log.warning(StringUtil.concat("LMEventEngine[Config.load()]: invalid config property -> LMEventMageBuffs \"", skill, "\""));
 								}
 							}
 						}
@@ -1874,6 +2036,7 @@ public final class Config
 			}
 		}
 	}
+	
 	/**
 	 * Loads geoengine settings.
 	 */
@@ -2145,24 +2308,24 @@ public final class Config
 		ES_SP_BOOK_NEEDED = players.getProperty("EnchantSkillSpBookNeeded", true);
 		DIVINE_SP_BOOK_NEEDED = players.getProperty("DivineInspirationSpBookNeeded", true);
 		ALT_GAME_SUBCLASS_WITHOUT_QUESTS = players.getProperty("AltSubClassWithoutQuests", false);
-		 ALT_GAME_SUBCLASS_EVERYWHERE = players.getProperty("AltSubclassEverywhere", false);
-		 
+		ALT_GAME_SUBCLASS_EVERYWHERE = players.getProperty("AltSubclassEverywhere", false);
+		
 		BUFFS_MAX_AMOUNT = players.getProperty("MaxBuffsAmount", 20);
 		STORE_SKILL_COOLTIME = players.getProperty("StoreSkillCooltime", true);
 		EXPERTISE_PENALTY = players.getProperty("ExpertisePenality", true);
-
-		ENABLE_MODIFY_SKILL_DURATION = Boolean.parseBoolean(players.getProperty("EnableModifySkillDuration", "false"));
-		if(ENABLE_MODIFY_SKILL_DURATION)
+		
+		ENABLE_MODIFY_SKILL_DURATION = players.getProperty("EnableModifySkillDuration", false);
+		if (ENABLE_MODIFY_SKILL_DURATION)
 		{
 			SKILL_DURATION_LIST = new HashMap<>();
 			
 			String[] propertySplit;
 			propertySplit = players.getProperty("SkillDurationList", "").split(";");
 			
-			for(String skill : propertySplit)
+			for (String skill : propertySplit)
 			{
 				String[] skillSplit = skill.split(",");
-				if(skillSplit.length != 2)
+				if (skillSplit.length != 2)
 				{
 					System.out.println("[SkillDurationList]: invalid config property -> SkillDurationList \"" + skill + "\"");
 				}
@@ -2172,11 +2335,11 @@ public final class Config
 					{
 						SKILL_DURATION_LIST.put(Integer.parseInt(skillSplit[0]), Integer.parseInt(skillSplit[1]));
 					}
-					catch(NumberFormatException nfe)
+					catch (NumberFormatException nfe)
 					{
 						nfe.printStackTrace();
 						
-						if(!skill.equals(""))
+						if (!skill.equals(""))
 						{
 							System.out.println("[SkillDurationList]: invalid config property -> SkillList \"" + skillSplit[0] + "\"" + skillSplit[1]);
 						}
@@ -2349,6 +2512,12 @@ public final class Config
 		THREADS_PER_INSTANT_THREAD_POOL = server.getProperty("ThreadsPerInstantThreadPool", 2);
 		
 		L2WALKER_PROTECTION = server.getProperty("L2WalkerProtection", false);
+		BOTS_PREVENTION = server.getProperty("EnableBotsPrevention", false);
+		KILLS_COUNTER = server.getProperty("KillsCounter", 60);
+		KILLS_COUNTER_RANDOMIZATION = server.getProperty("KillsCounterRandomization", 50);
+		VALIDATION_TIME = server.getProperty("ValidationTime", 60);
+		PUNISHMENT = server.getProperty("Punishment", 0);
+		PUNISHMENT_TIME = server.getProperty("PunishmentTime", 60);
 		ZONE_TOWN = server.getProperty("ZoneTown", 0);
 		SERVER_NEWS = server.getProperty("ShowServerNews", false);
 		DISABLE_TUTORIAL = server.getProperty("DisableTutorial", false);

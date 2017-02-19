@@ -42,6 +42,7 @@ import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
+import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.NpcSay;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.templates.StatsSet;
@@ -90,15 +91,15 @@ public class Olympiad
 	public static final String COMP_LOST = "competitions_lost";
 	public static final String COMP_DRAWN = "competitions_drawn";
 	
-	protected long _olympiadEnd;
-	protected long _validationEnd;
+	protected static long _olympiadEnd;
+	protected static long _validationEnd;
 	
 	/**
 	 * The current period of the olympiad.<br>
 	 * <b>0 -</b> Competition period<br>
 	 * <b>1 -</b> Validation Period
 	 */
-	protected int _period;
+	protected static int _period;
 	protected long _nextWeeklyChange;
 	protected int _currentCycle;
 	private long _compEnd;
@@ -457,8 +458,30 @@ public class Olympiad
 			}
 		}, getMillisToCompBegin());
 	}
-	
-	private long getMillisToOlympiadEnd()
+	public static void olympiadEnd(L2PcInstance player)
+	{
+	        long milliToEnd;
+	        if(_period == 0)
+	        {
+	            milliToEnd = getMillisToOlympiadEnd();
+	        }
+	        else
+	        {
+	            milliToEnd = getMillisToValidationEnd();
+	        }
+
+	        double numSecs = milliToEnd / 1000 % 60;
+	        double countDown = (milliToEnd / 1000 - numSecs) / 60;
+	        int numMins = (int) Math.floor(countDown % 60);
+	        countDown = (countDown - numMins) / 60;
+	        int numHours = (int) Math.floor(countDown % 24);
+	        int numDays = (int) Math.floor((countDown - numHours) / 24);
+
+	        CreatureSay cs = new CreatureSay(0, Say2.ANNOUNCEMENT, "", "Olympiad period ends in " + numDays + " days, " + numHours + " hours and " + numMins + " mins.");
+	        player.sendPacket(cs);
+	}
+
+	private static long getMillisToOlympiadEnd()
 	{
 		return (_olympiadEnd - Calendar.getInstance().getTimeInMillis());
 	}
@@ -471,7 +494,7 @@ public class Olympiad
 		_scheduledOlympiadEnd = ThreadPool.schedule(new OlympiadEndTask(), 0);
 	}
 	
-	protected long getMillisToValidationEnd()
+	protected static long getMillisToValidationEnd()
 	{
 		if (_validationEnd > Calendar.getInstance().getTimeInMillis())
 			return (_validationEnd - Calendar.getInstance().getTimeInMillis());

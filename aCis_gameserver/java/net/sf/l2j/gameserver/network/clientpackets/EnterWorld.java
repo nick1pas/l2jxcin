@@ -255,6 +255,9 @@ public class EnterWorld extends L2GameClientPacket
 		if (Config.OPEN_URL_ENABLE)
 			activeChar.sendPacket(new OpenUrl(Config.OPEN_URL_SITE));
 		
+		if (Config.ALT_OLY_END_ANNOUNCE && activeChar.isNoble() || activeChar.isGM())
+			Olympiad.olympiadEnd(activeChar);
+		
 		// Load quests.
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{

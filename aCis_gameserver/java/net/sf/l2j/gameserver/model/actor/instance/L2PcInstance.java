@@ -387,6 +387,7 @@ public final class L2PcInstance extends L2Playable
 	};
 	
 	private L2GameClient _client;
+	private String _hwid;
 	private final Map<Integer, String> _chars = new HashMap<>();
 	
 	private String _accountName;
@@ -10808,5 +10809,20 @@ public final class L2PcInstance extends L2Playable
 					addSkill(skill, false);
 			}
 		}	
-	}	
+	}
+	
+	public String getHWid()
+	{
+		if (getClient() == null)
+		{
+			return _hwid;
+		}
+		_hwid = getClient().getHWid();
+		return _hwid;
+	}
+	
+	public String getLastHwId()
+	{
+		return _hwid;
+	}
 }

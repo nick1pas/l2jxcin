@@ -12,23 +12,18 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.sf.l2j.gameserver.network.serverpackets;
+package net.sf.l2j.protection;
 
-/**
- * @author zabbix Lets drink to code!
- */
-public class GameGuardQuery extends L2GameServerPacket
+import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+
+public class LameHandler
 {
-	public static final GameGuardQuery STATIC_PACKET = new GameGuardQuery();
-	
-	@Override
-	public void runImpl()
+	public void runCommand(L2PcInstance admin, String[] params)
 	{
 	}
 	
-	@Override
-	public void writeImpl()
+	public String[] getCommandList()
 	{
-		writeC(0xf9);
+		return null;
 	}
 }

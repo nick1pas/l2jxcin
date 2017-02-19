@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.gameserver;
 
+import com.lameguard.LameGuard;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -134,6 +136,7 @@ import net.sf.l2j.gameserver.taskmanager.RandomAnimationTaskManager;
 import net.sf.l2j.gameserver.taskmanager.ShadowItemTaskManager;
 import net.sf.l2j.gameserver.taskmanager.WaterTaskManager;
 import net.sf.l2j.gameserver.xmlfactory.XMLDocumentFactory;
+import net.sf.l2j.protection.CatsGuard;
 import net.sf.l2j.util.DeadLockDetector;
 import net.sf.l2j.util.IPv4Filter;
 
@@ -157,7 +160,7 @@ public class GameServer
 		return _selectorThread;
 	}
 	
-	public GameServer() throws Exception
+	public GameServer() throws Throwable
 	{
 		gameServer = this;
 		new File("./data/crests").mkdirs();
@@ -325,6 +328,31 @@ public class GameServer
 		_log.config("UserCommandHandler: Loaded " + UserCommandHandler.getInstance().size() + " handlers.");
 		_log.config("VoicedCommandHandler: Loaded " + VoicedCommandHandler.getInstance().size() + " handlers.");
 		
+		StringUtil.printSection("Protection System [Cats Guard]");
+		CatsGuard.getInstance();
+		if (!CatsGuard.getInstance().isEnabled())
+		{
+			try
+			{
+				Class<?> clazz = Class.forName("com.lameguard.LameGuard");
+				if (clazz != null)
+				{
+					File f = new File("./lameguard/lameguard.properties");
+					if (f.exists())
+					{
+						StringUtil.printSection("LameGuard");
+						LameGuard.main(new String[]
+						{
+							"net.sf.l2j.protection.LameStub"
+						});
+					}
+				}
+			}
+			catch (Exception ignored)
+			{
+			}
+		}
+		
 		StringUtil.printSection("System");
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		ForumsBBSManager.getInstance();
@@ -389,7 +417,7 @@ public class GameServer
 		_selectorThread.start();
 	}
 	
-	public static void main(String[] args) throws Exception
+	public static void main(String[] args) throws Throwable
 	{
 		final String LOG_FOLDER = "./log"; // Name of folder for log file
 		final String LOG_NAME = "config/log.cfg"; // Name of log file

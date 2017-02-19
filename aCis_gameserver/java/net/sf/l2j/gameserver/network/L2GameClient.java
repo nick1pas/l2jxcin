@@ -49,6 +49,7 @@ import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
 import net.sf.l2j.gameserver.network.serverpackets.ServerClose;
 import net.sf.l2j.gameserver.util.FloodProtectors;
+import net.sf.l2j.protection.CatsGuard;
 
 /**
  * Represents a client connected on Game Server
@@ -72,6 +73,8 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	private SessionKey _sessionId;
 	private L2PcInstance _activeChar;
 	private final ReentrantLock _activeCharLock = new ReentrantLock();
+	private String _hwid = null;
+	public IExReader _reader;
 	
 	@SuppressWarnings("unused")
 	private boolean _isAuthedGG;
@@ -159,6 +162,11 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	public void setActiveChar(L2PcInstance pActiveChar)
 	{
 		_activeChar = pActiveChar;
+		
+		if ((_reader != null) && (_activeChar != null))
+		{
+			_reader.checkChar(_activeChar);
+		}
 	}
 	
 	public ReentrantLock getActiveCharLock()
@@ -179,6 +187,11 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	public void setAccountName(String pAccountName)
 	{
 		_accountName = pAccountName;
+		
+		if (_reader == null)
+		{
+			CatsGuard.getInstance().initSession(this);
+		}
 	}
 	
 	public String getAccountName()
@@ -493,6 +506,11 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		catch (RejectedExecutionException e)
 		{
 			// server is closing
+		}
+		
+		if (_reader != null)
+		{
+			CatsGuard.getInstance().doneSession(this);
 		}
 	}
 	
@@ -858,4 +876,21 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	
 		return canSetShop;
 	 }
+	
+	public void setHWID(String hwid)
+	{
+		_hwid = hwid;
+	}
+	
+	public String getHWid()
+	{
+		return _hwid;
+	}
+	
+	public static abstract interface IExReader
+	{
+		public abstract int read(ByteBuffer paramByteBuffer);
+		
+		public abstract void checkChar(L2PcInstance paramL2PcInstance);
+	}
 }

@@ -12,23 +12,19 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.sf.l2j.gameserver.network.serverpackets;
+package net.sf.l2j.protection;
 
-/**
- * @author zabbix Lets drink to code!
- */
-public class GameGuardQuery extends L2GameServerPacket
+import net.sf.l2j.gameserver.network.BlowFishKeygen;
+import net.sf.l2j.gameserver.network.GameCrypt;
+
+public class LameStub
 {
-	public static final GameGuardQuery STATIC_PACKET = new GameGuardQuery();
+	public static boolean ISLAME = false;
 	
-	@Override
-	public void runImpl()
+	public static void main(String[] args)
 	{
-	}
-	
-	@Override
-	public void writeImpl()
-	{
-		writeC(0xf9);
+		BlowFishKeygen._ISLAME = true;
+		GameCrypt._ISLAME = true;
+		ISLAME = true;
 	}
 }

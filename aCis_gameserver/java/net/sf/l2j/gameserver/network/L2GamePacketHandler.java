@@ -44,9 +44,17 @@ public final class L2GamePacketHandler implements IPacketHandler<L2GameClient>, 
 		if (client.dropPacket())
 			return null;
 		
-		int opcode = buf.get() & 0xFF;
+		int opcode = 0;
+		if (client._reader != null)
+		{
+			opcode = client._reader.read(buf);
+		}
+		else
+		{
+			opcode = buf.get() & 0xff;
+		}
 		
-		ReceivablePacket<L2GameClient> msg = null;
+		L2GameClientPacket msg = null;
 		GameClientState state = client.getState();
 		
 		switch (state)
@@ -59,6 +67,9 @@ public final class L2GamePacketHandler implements IPacketHandler<L2GameClient>, 
 						break;
 					case 0x08:
 						msg = new AuthLogin();
+						break;
+					case 0xCA:
+						msg = new GameGuardReply();
 						break;
 					default:
 						printDebug(opcode, buf, state, client);
@@ -88,6 +99,9 @@ public final class L2GamePacketHandler implements IPacketHandler<L2GameClient>, 
 						break;
 					case 0x68:
 						msg = new RequestPledgeCrest();
+						break;
+					case 0xCA:
+						msg = new GameGuardReply();
 						break;
 					default:
 						printDebug(opcode, buf, state, client);

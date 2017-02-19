@@ -511,6 +511,8 @@ public final class Config
 	public static boolean SHOW_LICENCE;
 	
 	public static boolean AUTO_CREATE_ACCOUNTS;
+	public static boolean FORCE_GGAUTH;
+	public static boolean CRYPT_TOKEN;
 	
 	public static boolean FLOOD_PROTECTION;
 	public static int FAST_CONNECTION_LIMIT;
@@ -900,6 +902,17 @@ public final class Config
 	public static boolean SERVER_NEWS;
 	public static int ZONE_TOWN;
 	public static boolean DISABLE_TUTORIAL;
+	
+	/**Protection Settings */
+	public static boolean ENABLED;
+	public static int SERVER_KEY;
+	public static String LOG_OPTION;
+	public static int MAX_SESSIONS;
+	public static int MAX_PREMIUM_SESSIONS;
+	public static boolean ANNOUNCE_HACK;
+	public static String ON_HACK_ATTEMP;
+	public static boolean ALLOW_GM_FROM_BANNED_HWID;
+	public static boolean LOG_SESSIONS;
 	
 	// --------------------------------------------------
 	// Those "hidden" settings haven't configs to avoid admins to fuck their server
@@ -2541,6 +2554,15 @@ public final class Config
 		ZONE_TOWN = server.getProperty("ZoneTown", 0);
 		SERVER_NEWS = server.getProperty("ShowServerNews", false);
 		DISABLE_TUTORIAL = server.getProperty("DisableTutorial", false);
+		ENABLED = server.getProperty("Enabled", true);
+		SERVER_KEY = server.getProperty("ServerKey", 7958915);
+		LOG_OPTION = server.getProperty("LogOption", "NOSPS HACK");
+		MAX_SESSIONS = server.getProperty("MaxSessionsFromHWID", -1);
+		MAX_PREMIUM_SESSIONS = server.getProperty("MaxSessionsForPremium", -1);
+		ANNOUNCE_HACK = server.getProperty("AnnounceHackAttempt", true);
+		ON_HACK_ATTEMP = server.getProperty("OnHackAttempt", "kick");
+		ALLOW_GM_FROM_BANNED_HWID = server.getProperty("AllowGMFromBannedHWID", false);
+		LOG_SESSIONS = server.getProperty("LogSessions", false);
 	}
 	
 	/**
@@ -2578,9 +2600,11 @@ public final class Config
 		DATABASE_MAX_IDLE_TIME = server.getProperty("MaximumDbIdleTime", 0);
 		
 		SHOW_LICENCE = server.getProperty("ShowLicence", true);
+		FORCE_GGAUTH = server.getProperty("ForceGGAuth", false);
 		
 		AUTO_CREATE_ACCOUNTS = server.getProperty("AutoCreateAccounts", true);
 		
+		CRYPT_TOKEN = server.getProperty("CryptToken", true);
 		FLOOD_PROTECTION = server.getProperty("EnableFloodProtection", true);
 		FAST_CONNECTION_LIMIT = server.getProperty("FastConnectionLimit", 15);
 		NORMAL_CONNECTION_TIME = server.getProperty("NormalConnectionTime", 700);

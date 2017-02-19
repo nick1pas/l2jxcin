@@ -41,6 +41,7 @@ import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminGm;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminGmChat;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminHeal;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminHelpPage;
+import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminHwidBan;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminInvul;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminKick;
 import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminKnownlist;
@@ -104,6 +105,7 @@ public class AdminCommandHandler
 		registerAdminCommandHandler(new AdminGmChat());
 		registerAdminCommandHandler(new AdminHeal());
 		registerAdminCommandHandler(new AdminHelpPage());
+		registerAdminCommandHandler(new AdminHwidBan());
 		registerAdminCommandHandler(new AdminInvul());
 		registerAdminCommandHandler(new AdminKick());
 		registerAdminCommandHandler(new AdminKnownlist());

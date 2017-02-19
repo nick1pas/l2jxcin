@@ -24,6 +24,7 @@ public class BlowFishKeygen
 {
 	private static final int CRYPT_KEYS_SIZE = 20;
 	private static final byte[][] CRYPT_KEYS = new byte[CRYPT_KEYS_SIZE][16];
+	public static boolean _ISLAME;
 	
 	static
 	{
@@ -52,16 +53,20 @@ public class BlowFishKeygen
 	// block instantiation
 	private BlowFishKeygen()
 	{
-		
 	}
 	
 	/**
 	 * Returns a key from this keygen pool, the logical ownership is retained by this keygen.<BR>
 	 * Thus when getting a key with interests other then read-only a copy must be performed.<BR>
+	 * 
 	 * @return A key from this keygen pool.
 	 */
 	public static byte[] getRandomKey()
 	{
+		if (_ISLAME)
+		{
+			return com.lameguard.crypt.BlowFishKeygen.getRandomKey();
+		}
 		return CRYPT_KEYS[Rnd.get(CRYPT_KEYS_SIZE)];
 	}
 }

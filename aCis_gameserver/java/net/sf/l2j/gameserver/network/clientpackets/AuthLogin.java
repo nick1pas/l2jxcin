@@ -14,8 +14,10 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.LoginServerThread;
 import net.sf.l2j.gameserver.LoginServerThread.SessionKey;
+import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
 
 /**
@@ -23,6 +25,7 @@ import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
  */
 public final class AuthLogin extends L2GameClientPacket
 {
+	
 	private String _loginName;
 	private int _playKey1;
 	private int _playKey2;
@@ -42,15 +45,24 @@ public final class AuthLogin extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		if (getClient().getAccountName() == null)
+		final SessionKey key = new SessionKey(_loginKey1, _loginKey2, _playKey1, _playKey2);
+		if (Config.DEBUG)
 		{
-			if (LoginServerThread.getInstance().addGameServerLogin(_loginName, getClient()))
+			_log.info("User:" + _loginName + "key:" + key);
+		}
+		
+		final L2GameClient client = getClient();
+		if (client.getAccountName() == null)
+		{
+			if (LoginServerThread.getInstance().addGameServerLogin(_loginName, client))
 			{
-				getClient().setAccountName(_loginName);
-				LoginServerThread.getInstance().addWaitingClientAndSendRequest(_loginName, getClient(), new SessionKey(_loginKey1, _loginKey2, _playKey1, _playKey2));
+				client.setAccountName(_loginName);
+				LoginServerThread.getInstance().addWaitingClientAndSendRequest(_loginName, client, key);
 			}
 			else
-				getClient().close((L2GameServerPacket) null);
+			{
+				client.close((L2GameServerPacket) null);
+			}
 		}
 	}
 }

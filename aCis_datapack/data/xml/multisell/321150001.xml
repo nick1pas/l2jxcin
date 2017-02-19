@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!-- NpcId: 32115 Asamah (Dino Island Territory) -->
+
+<list>
+
+    <!-- Trap Stone -->
+    <item id="1">
+        <production id="8764" count="1"/>
+        <ingredient id="57" count="500"/>
+    </item>
+
+</list>

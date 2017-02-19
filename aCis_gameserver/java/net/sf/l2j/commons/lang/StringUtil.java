@@ -24,6 +24,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import net.sf.l2j.Config;
+
 import javolution.text.TextBuilder;
 
 public final class StringUtil
@@ -147,7 +149,7 @@ public final class StringUtil
 	 */
 	public static boolean isValidPlayerName(String text)
 	{
-		return isValidName(text, "^[A-Za-z0-9]{3,16}$");
+		return isValidName(text, Config.CHAR_NAME_TEMPLATE);
 	}
 	
 	/**

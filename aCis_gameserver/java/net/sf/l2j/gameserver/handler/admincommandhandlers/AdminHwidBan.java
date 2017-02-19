@@ -48,11 +48,11 @@ public class AdminHwidBan implements IAdminCommandHandler
 			if (hwid != null)
 			{
 				CatsGuard.getInstance().ban(hwid);
-				activeChar.sendMessage("Игрок �? HWID'ом: " + hwid + " был забанен.");
+				activeChar.sendMessage("The player with HWID'om:" + hwid + "was banned.");
 			}
 			else
 			{
-				activeChar.sendMessage("Такого HWID'а не �?уще�?твует.");
+				activeChar.sendMessage("This HWID'a does not exist.");
 			}
 		}
 		else if (command.equals("admin_hwidunban"))
@@ -61,11 +61,11 @@ public class AdminHwidBan implements IAdminCommandHandler
 			if (hwid != null)
 			{
 				CatsGuard.getInstance().unban(hwid);
-				activeChar.sendMessage("Игрок �? HWID'ом: " + hwid + " был разбанен.");
+				activeChar.sendMessage("The player with HWID'om:" + hwid + "was unban.");
 			}
 			else
 			{
-				activeChar.sendMessage("Такого HWID'а не �?уще�?твует.");
+				activeChar.sendMessage("This HWID'a does not exist.");
 			}
 		}
 		return true;

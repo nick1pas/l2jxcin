@@ -213,6 +213,7 @@ import net.sf.l2j.gameserver.network.serverpackets.RecipeShopManageList;
 import net.sf.l2j.gameserver.network.serverpackets.RecipeShopMsg;
 import net.sf.l2j.gameserver.network.serverpackets.RecipeShopSellList;
 import net.sf.l2j.gameserver.network.serverpackets.RelationChanged;
+import net.sf.l2j.gameserver.network.serverpackets.RestartResponse;
 import net.sf.l2j.gameserver.network.serverpackets.Ride;
 import net.sf.l2j.gameserver.network.serverpackets.SendTradeDone;
 import net.sf.l2j.gameserver.network.serverpackets.ServerClose;
@@ -264,6 +265,7 @@ import net.sf.l2j.gameserver.templates.skills.L2EffectType;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 import net.sf.l2j.gameserver.util.Broadcast;
 import net.sf.l2j.gameserver.util.Util;
+
 
 /**
  * This class represents a player in the world.<br>
@@ -10337,6 +10339,11 @@ public final class L2PcInstance extends L2Playable
 		if (summonerChar.isInOlympiadMode() || summonerChar.isInObserverMode() || summonerChar.isInsideZone(ZoneId.NO_SUMMON_FRIEND) || summonerChar.isMounted())
 			return false;
 		
+		if (summonerChar.isCastingNow() || summonerChar.isTeleporting())
+			return false;
+		if (summonerChar.isInCombat() || summonerChar.isInDuel())
+			return false;
+		
 		return true;
 	}
 	
@@ -10365,9 +10372,15 @@ public final class L2PcInstance extends L2Playable
 			return false;
 		}
 		
-		if (targetChar.isRooted() || targetChar.isInCombat())
+		if (targetChar.isRooted() || targetChar.isInCombat()  || targetChar.isInDuel())
 		{
 			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_ENGAGED_IN_COMBAT_AND_CANNOT_BE_SUMMONED).addCharName(targetChar));
+			return false;
+		}
+		
+		if (targetChar.isCastingNow() || targetChar.isTeleporting())
+		{
+			summonerChar.sendMessage("Player is casting skill/teleporting can't summoning.");
 			return false;
 		}
 		
@@ -10825,4 +10838,170 @@ public final class L2PcInstance extends L2Playable
 	{
 		return _hwid;
 	}
+	
+    // Reworked by L2R-Project
+    public boolean canRestart() {
+        if (getActiveEnchantItem() != null) {
+            sendPacket(RestartResponse.valueOf(false));
+            return false;
+        }
+
+        if (isLocked()) {
+            sendPacket(RestartResponse.valueOf(false));
+            return false;
+        }
+
+        if (isInsideZone(ZoneId.NO_RESTART)) {
+            sendPacket(SystemMessageId.NO_RESTART_HERE);
+            sendPacket(RestartResponse.valueOf(false));
+            return false;
+        }
+
+        if (isInStoreMode()) {
+            sendPacket(RestartResponse.valueOf(false));
+            return false;
+        }
+
+        if ((isInCombat()) && !isGM()) {
+            if (Config.DEBUG) {
+                _log.log(Level.FINE, getName() + " tried to restart while fighting.");
+            }
+
+            sendPacket(SystemMessageId.CANT_RESTART_WHILE_FIGHTING);
+            sendPacket(RestartResponse.valueOf(false));
+            return false;
+        }
+
+        if (isInOlympiadMode() || OlympiadManager.getInstance().isRegistered(this) || getOlympiadGameId() != -1) {
+            sendMessage("You cant restart in olympiad mode.");
+            return false;
+        }
+        
+		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(getObjectId())) 
+		{ 
+			sendMessage("You can not restart when you registering in TvTEvent."); 
+			sendPacket(RestartResponse.valueOf(false));
+			return false;
+		}
+		
+		if (!DMEvent.isInactive() && DMEvent.isPlayerParticipant(getObjectId())) 
+		{ 
+			sendMessage("You can not restart when you registering in DMEvent."); 
+			sendPacket(RestartResponse.valueOf(false));
+			return false;
+		}
+		
+		if (!LMEvent.isInactive() && LMEvent.isPlayerParticipant(getObjectId())) 
+		{ 
+			sendMessage("You can not restart when you registering in LMEvent."); 
+			sendPacket(RestartResponse.valueOf(false));
+			return false;
+		}
+		
+        // Prevent player from restarting if they are a festival participant and it is in progress,
+        // otherwise notify party members that the player is not longer a participant.
+        if (isFestivalParticipant()) 
+        {
+            if (SevenSignsFestival.getInstance().isFestivalInitialized()) 
+            {
+                sendPacket(RestartResponse.valueOf(false));
+                return false;
+            }
+
+            final Party playerParty = getParty();
+            if (playerParty != null) 
+            {
+                getParty().broadcastToPartyMembers(SystemMessage.sendString(getName() + " has been removed from the upcoming festival."));
+            }
+        }
+
+        return true;
+    }
+	// Reworked by L2R-Project
+	public boolean canLogout()
+	{
+		if (getActiveEnchantItem() != null)
+		{
+			return false;
+		}
+		
+		if (isLocked())
+		{
+			if (Config.DEBUG)
+			{
+				_log.warning(getName() + " tried to logout during class change.");
+			}
+			return false;
+		}
+		
+		if (isInsideZone(ZoneId.NO_RESTART))
+		{
+			sendPacket(SystemMessageId.NO_LOGOUT_HERE);
+			return false;
+		}
+		
+		if ((isInCombat()) && !isGM())
+		{
+			if (Config.DEBUG)
+			{
+				_log.log(Level.FINE, getName() + " tried to logout while fighting.");
+			}
+			
+			sendPacket(SystemMessageId.CANT_LOGOUT_WHILE_FIGHTING);
+			return false;
+		}
+		
+		if (isInOlympiadMode() || OlympiadManager.getInstance().isRegistered(this) || getOlympiadGameId() != -1)
+		{
+			sendMessage("You cant logout in olympiad mode.");
+			return false;
+		}
+		
+		// Prevent player from logging out if they are a festival participant and it is in progress,
+		// otherwise notify party members that the player is not longer a participant.
+		if (isFestivalParticipant())
+		{
+			if (SevenSignsFestival.getInstance().isFestivalInitialized())
+			{
+				sendMessage("You cannot log out while you are a participant in a festival.");
+				return false;
+			}
+			
+			Party playerParty = getParty();
+			if (playerParty != null)
+			{
+				getParty().broadcastToPartyMembers(SystemMessage.sendString(getName() + " has been removed from the upcoming festival."));
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * This method is used to include all active skills Resets values
+	 * Pre-training to use.
+	 *
+	 * @param ssl
+	 */
+	public void reuseAllSkills(boolean ssl)
+	{
+		for (L2Skill skill : getSkills().values())
+		{
+			if (skill != null)
+			{
+				if (skill.isActive())
+				{
+					enableSkill(skill);
+				}
+			}
+		}
+		
+		if (ssl)
+		{
+			sendSkillList();
+		}
+		
+		sendPacket(new SkillCoolTime(this));
+	}
+	
 }

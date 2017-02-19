@@ -119,6 +119,13 @@ public final class RequestEnchantItem extends L2GameClientPacket
 			return;
 		}
 		
+        // attempting to destroy scroll
+        if (Config.ENCH_SCROLLS_STACK) { 
+            scroll = activeChar.getInventory().destroyItem("Enchant", scroll.getObjectId(), 1, activeChar, item);
+        } else {
+            scroll = activeChar.getInventory().destroyItem("Enchant", scroll, activeChar, item);
+        }
+        
 		// attempting to destroy scroll
 		scroll = activeChar.getInventory().destroyItem("Enchant", scroll.getObjectId(), 1, activeChar, item);
 		if (scroll == null)

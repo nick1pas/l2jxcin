@@ -41,7 +41,7 @@ public class MultiSellChoose extends L2GameClientPacket
 	
 	private int _listId;
 	private int _entryId;
-	private int _amount;
+	private long _amount;
 	private int _transactionTax; // local handling of taxation
 	
 	@Override
@@ -217,10 +217,10 @@ public class MultiSellChoose extends L2GameClientPacket
 				{
 					if (e.getItemId() == CLAN_REPUTATION)
 					{
-						final int amount = e.getItemCount() * _amount;
+						final long amount = e.getItemCount() * _amount;
 						
-						player.getClan().takeReputationScore(amount);
-						player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_DEDUCTED_FROM_CLAN_REP).addNumber(amount));
+						player.getClan().takeReputationScore((int) amount);
+						player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_DEDUCTED_FROM_CLAN_REP).addNumber((int) amount));
 					}
 					else
 					{
@@ -236,7 +236,7 @@ public class MultiSellChoose extends L2GameClientPacket
 							// if it's a stackable item, just reduce the amount from the first (only) instance that is found in the inventory
 							if (itemToTake.isStackable())
 							{
-								if (!player.destroyItem("Multisell", itemToTake.getObjectId(), (e.getItemCount() * _amount), player.getTarget(), true))
+								if (!player.destroyItem("Multisell", itemToTake.getObjectId(), (int) (e.getItemCount() * _amount), player.getTarget(), true))
 								{
 									player.setMultiSell(null);
 									return;
@@ -305,11 +305,11 @@ public class MultiSellChoose extends L2GameClientPacket
 				for (Ingredient e : entry.getProducts())
 				{
 					if (e.getItemId() == CLAN_REPUTATION)
-						player.getClan().addReputationScore(e.getItemCount() * _amount);
+						player.getClan().addReputationScore((int) (e.getItemCount() * _amount));
 					else
 					{
 						if (e.isStackable())
-							inv.addItem("Multisell", e.getItemId(), e.getItemCount() * _amount, player, player.getTarget());
+							inv.addItem("Multisell", e.getItemId(), (int) (e.getItemCount() * _amount), player, player.getTarget());
 						else
 						{
 							for (int i = 0; i < (e.getItemCount() * _amount); i++)
@@ -330,7 +330,7 @@ public class MultiSellChoose extends L2GameClientPacket
 						SystemMessage sm;
 						
 						if (e.getItemCount() * _amount > 1)
-							sm = SystemMessage.getSystemMessage(SystemMessageId.EARNED_S2_S1_S).addItemName(e.getItemId()).addNumber(e.getItemCount() * _amount);
+							sm = SystemMessage.getSystemMessage(SystemMessageId.EARNED_S2_S1_S).addItemName(e.getItemId()).addNumber((int) (e.getItemCount() * _amount));
 						else
 						{
 							if (list.getMaintainEnchantment() && e.getEnchantLevel() > 0)
@@ -352,7 +352,7 @@ public class MultiSellChoose extends L2GameClientPacket
 				
 				// finally, give the tax to the castle...
 				if (npc != null && entry.getTaxAmount() > 0)
-					npc.getCastle().addToTreasury(_transactionTax * _amount);
+					npc.getCastle().addToTreasury((int) (_transactionTax * _amount));
 				
 				break;
 			}

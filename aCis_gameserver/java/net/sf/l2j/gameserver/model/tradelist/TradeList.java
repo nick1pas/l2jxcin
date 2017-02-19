@@ -395,14 +395,14 @@ public class TradeList
 	private boolean validate()
 	{
 		// Check for Owner validity
-		if (_owner == null || World.getInstance().getPlayer(_owner.getObjectId()) == null)
+		if (_owner == null || World.getInstance().findObject(_owner.getObjectId()) == null)
 			return false;
 		
 		// Check for Item validity
 		for (TradeItem titem : _items)
 		{
 			ItemInstance item = _owner.checkItemManipulation(titem.getObjectId(), titem.getCount());
-			if (item == null)
+			if (item == null || titem.getCount() < 1)
 				return false;
 		}
 		return true;

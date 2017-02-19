@@ -14,6 +14,9 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import net.sf.l2j.commons.lang.StringUtil;
+
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2ClanMember;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -42,9 +45,16 @@ public class RequestGiveNickName extends L2GameClientPacket
 		// Noblesse can bestow a title to themselves
 		if (activeChar.isNoble() && _target.matches(activeChar.getName()))
 		{
-			activeChar.setTitle(_title);
-			activeChar.sendPacket(SystemMessageId.TITLE_CHANGED);
-			activeChar.broadcastTitleInfo();
+			if (!StringUtil.isValidName(_title, Config.CHAR_TITLE_NAME_TEMPLATE))
+			{
+				activeChar.sendMessage("Incorrect title.");
+			}
+			else
+			{
+				activeChar.setTitle(_title);
+				activeChar.sendPacket(SystemMessageId.TITLE_CHANGED);
+				activeChar.broadcastUserInfo();
+			}
 		}
 		else
 		{
@@ -67,13 +77,20 @@ public class RequestGiveNickName extends L2GameClientPacket
 				final L2PcInstance playerMember = member.getPlayerInstance();
 				if (playerMember != null)
 				{
-					playerMember.setTitle(_title);
-					
-					playerMember.sendPacket(SystemMessageId.TITLE_CHANGED);
-					if (activeChar != playerMember)
-						activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CLAN_MEMBER_S1_TITLE_CHANGED_TO_S2).addCharName(playerMember).addString(_title));
-					
-					playerMember.broadcastTitleInfo();
+					if (!StringUtil.isValidName(_title, Config.CHAR_TITLE_NAME_TEMPLATE))
+					{
+						activeChar.sendMessage("Incorrect title.");
+					}
+					else
+					{
+						playerMember.setTitle(_title);
+						
+						playerMember.sendPacket(SystemMessageId.TITLE_CHANGED);
+						if (activeChar != playerMember)
+							activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CLAN_MEMBER_S1_TITLE_CHANGED_TO_S2).addCharName(playerMember).addString(_title));
+						
+						playerMember.broadcastTitleInfo();
+					}
 				}
 				else
 					activeChar.sendPacket(SystemMessageId.TARGET_IS_NOT_FOUND_IN_THE_GAME);

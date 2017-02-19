@@ -417,13 +417,9 @@ public class LoginServerThread extends Thread
 		}
 	}
 	
-	public boolean addGameServerLogin(String account, L2GameClient client)
-	{
-		if (_accountsInGameServer.containsKey(account))
-			return false;
-		
-		return _accountsInGameServer.put(account, client) == null;
-	}
+    public boolean addGameServerLogin(String account, L2GameClient client) {
+        return _accountsInGameServer.put(account, client) == null;
+    }
 	
 	public void sendAccessLevel(String account, int level)
 	{

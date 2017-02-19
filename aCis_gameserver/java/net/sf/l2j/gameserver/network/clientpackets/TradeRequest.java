@@ -59,13 +59,21 @@ public final class TradeRequest extends L2GameClientPacket
 			player.sendMessage("You or your target cannot trade during Olympiad.");
 			return;
 		}
- 		
-		if (target.isInCombat() || player.isInCombat())
-		{
-			player.sendMessage("You or your target can't trade in Combat.");
-			return;
-		}
-	
+
+        if (player.isCastingNow() || target.isCastingNow() || player.isTeleporting() || target.isTeleporting()) {
+            player.sendMessage("Player is busy.");
+            return;
+        }
+
+        if (player.isInCombat() || target.isInCombat() || player.isInDuel() ||target.isInDuel()) {
+            player.sendMessage("Players is combat/fighting/duel can't trade.");
+            return;
+        }
+
+        if (target.isCursedWeaponEquipped() || player.isCursedWeaponEquipped()) {
+            ActionF();
+            return;
+        }
 		// Alt game - Karma punishment
 		if (!Config.KARMA_PLAYER_CAN_TRADE && (player.getKarma() > 0 || target.getKarma() > 0))
 		{

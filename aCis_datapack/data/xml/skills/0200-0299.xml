@@ -1440,6 +1440,9 @@
 		<set name="hitTime" val="1500"/>
 		<set name="skillType" val="AGGDAMAGE"/>
 		<set name="operateType" val="OP_ACTIVE"/>
+		<for>
+            <effect name="TargetMe" val="0"/>
+        </for>
 	</skill>
 	<skill id="287" levels="3" name="Lionheart">
 		<table name="#mpConsume"> 16 22 29 </table>

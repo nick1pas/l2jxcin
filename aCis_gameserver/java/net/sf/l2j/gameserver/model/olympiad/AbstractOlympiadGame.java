@@ -389,6 +389,11 @@ public abstract class AbstractOlympiadGame
 					player.addSkill(skill, false);
 			}
 			player.sendSkillList();
+
+            // Update all timer skills in port back
+            if (Config.ALT_OLY_BACK_REUSE_SKILLS) {
+                player.reuseAllSkills(true);
+            }
 		}
 		catch (Exception e)
 		{

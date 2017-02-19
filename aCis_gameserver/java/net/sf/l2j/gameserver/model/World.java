@@ -87,7 +87,11 @@ public final class World
 	{
 		_objects.putIfAbsent(object.getObjectId(), object);
 	}
-	
+
+    public L2Object findObject(int oID) {
+        return _objects.get(Integer.valueOf(oID));
+    }
+
 	public void removeObject(L2Object object)
 	{
 		_objects.remove(object.getObjectId());

@@ -78,7 +78,7 @@ public class MultiSellList extends L2GameServerPacket
 					writeD(0);
 					writeH(65535);
 				}
-				writeD(ing.getItemCount());
+				writeD((int) ing.getItemCount());
 				writeH(ing.getEnchantLevel());
 				writeD(0x00); // TODO: i.getAugmentId()
 				writeD(0x00); // TODO: i.getManaLeft()
@@ -88,7 +88,7 @@ public class MultiSellList extends L2GameServerPacket
 			{
 				writeH(ing.getItemId());
 				writeH(ing.getTemplate() != null ? ing.getTemplate().getType2() : 65535);
-				writeD(ing.getItemCount());
+				writeD((int) ing.getItemCount());
 				writeH(ing.getEnchantLevel());
 				writeD(0x00); // TODO: i.getAugmentId()
 				writeD(0x00); // TODO: i.getManaLeft()

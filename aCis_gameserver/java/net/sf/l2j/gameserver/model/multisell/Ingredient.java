@@ -23,7 +23,7 @@ import net.sf.l2j.gameserver.templates.StatsSet;
 public class Ingredient
 {
 	private int _itemId;
-	private int _itemCount;
+	private long _itemCount;
 	private int _enchantmentLevel;
 	
 	private boolean _isTaxIngredient;
@@ -36,7 +36,7 @@ public class Ingredient
 		this(set.getInteger("id"), set.getInteger("count"), set.getBool("isTaxIngredient", false), set.getBool("maintainIngredient", false));
 	}
 	
-	public Ingredient(int itemId, int itemCount, boolean isTaxIngredient, boolean maintainIngredient)
+	public Ingredient(int itemId, long itemCount, boolean isTaxIngredient, boolean maintainIngredient)
 	{
 		_itemId = itemId;
 		_itemCount = itemCount;
@@ -65,12 +65,12 @@ public class Ingredient
 		_itemId = itemId;
 	}
 	
-	public final int getItemCount()
+	public final long getItemCount()
 	{
 		return _itemCount;
 	}
 	
-	public final void setItemCount(int itemCount)
+	public final void setItemCount(long itemCount)
 	{
 		_itemCount = itemCount;
 	}

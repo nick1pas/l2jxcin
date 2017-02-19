@@ -36,7 +36,7 @@ public class MoveBackwardToLocation extends L2GameClientPacket
 	private int _originZ;
 	
 	@SuppressWarnings("unused")
-	private int _moveMovement;
+	private Integer _moveMovement;
 	
 	@Override
 	protected void readImpl()
@@ -57,6 +57,7 @@ public class MoveBackwardToLocation extends L2GameClientPacket
 			if (Config.L2WALKER_PROTECTION)
 			{
 				L2PcInstance activeChar = getClient().getActiveChar();
+				activeChar.sendPacket(SystemMessageId.ENCHANT_SCROLL_CANCELLED);
 				Util.handleIllegalPlayerAction(activeChar, activeChar.getName() + " is trying to use L2Walker.", Config.DEFAULT_PUNISH);
 			}
 		}
@@ -82,8 +83,7 @@ public class MoveBackwardToLocation extends L2GameClientPacket
 			activeChar.sendPacket(SystemMessageId.ENCHANT_SCROLL_CANCELLED);
 		}
 		
-		if (_targetX == _originX && _targetY == _originY && _targetZ == _originZ)
-		{
+		if (_targetX == _originX && _targetY == _originY && _targetZ == _originZ) {
 			activeChar.sendPacket(new StopMove(activeChar));
 			return;
 		}

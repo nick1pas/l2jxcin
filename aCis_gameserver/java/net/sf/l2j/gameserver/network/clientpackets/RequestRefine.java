@@ -14,6 +14,7 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.AugmentationData;
 import net.sf.l2j.gameserver.model.L2Augmentation;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
@@ -97,7 +98,22 @@ public final class RequestRefine extends AbstractRefinePacket
 			activeChar.sendPacket(SystemMessageId.AUGMENTATION_FAILED_DUE_TO_INAPPROPRIATE_CONDITIONS);
 			return;
 		}
-		
+
+        // Consume the life stone
+        if (Config.LIFE_STONES_STACK) { // L2R-Project Supported
+            if (!activeChar.destroyItem("RequestRefine", refinerItem.getObjectId(), 1, null, false)) {
+                activeChar.sendPacket(new ExVariationResult(0, 0, 0));
+                activeChar.sendPacket(SystemMessageId.AUGMENTATION_FAILED_DUE_TO_INAPPROPRIATE_CONDITIONS);
+                return;
+            }
+        } else {
+            if (!activeChar.destroyItem("RequestRefine", refinerItem, 1, null, false)) {
+                activeChar.sendPacket(new ExVariationResult(0, 0, 0));
+                activeChar.sendPacket(SystemMessageId.AUGMENTATION_FAILED_DUE_TO_INAPPROPRIATE_CONDITIONS);
+                return;
+            }
+        }
+        
 		// unequip item
 		if (targetItem.isEquipped())
 		{

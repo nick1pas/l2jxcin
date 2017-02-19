@@ -14,18 +14,11 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.entity.events.DMEvent;
-import net.sf.l2j.gameserver.model.entity.events.LMEvent;
-import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
-import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.L2GameClient.GameClientState;
-import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.CharSelectInfo;
 import net.sf.l2j.gameserver.network.serverpackets.RestartResponse;
-import net.sf.l2j.gameserver.taskmanager.AttackStanceTaskManager;
 
 public final class RequestRestart extends L2GameClientPacket
 {
@@ -34,61 +27,19 @@ public final class RequestRestart extends L2GameClientPacket
 	{
 	}
 	
-	@Override
-	protected void runImpl()
-	{
-		final L2PcInstance player = getClient().getActiveChar();
-		if (player == null)
-			return;
-		
-		if (player.getActiveEnchantItem() != null || player.isLocked() || player.isInStoreMode())
-		{
-			sendPacket(RestartResponse.valueOf(false));
-			return;
-		}
-		  
-		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(player.getObjectId())) 
-		{ 
-			player.sendMessage("You can not restart when you registering in TvTEvent."); 
-			sendPacket(RestartResponse.valueOf(false));
-			return; 
-		}
-		
-		if (!DMEvent.isInactive() && DMEvent.isPlayerParticipant(player.getObjectId())) 
-		{ 
-			player.sendMessage("You can not restart when you registering in DMEvent."); 
-			sendPacket(RestartResponse.valueOf(false));
-			return; 
-		}
-		
-		if (!LMEvent.isInactive() && LMEvent.isPlayerParticipant(player.getObjectId())) 
-		{ 
-			player.sendMessage("You can not restart when you registering in LMEvent."); 
-			sendPacket(RestartResponse.valueOf(false));
-			return; 
-		}
-		
-		if (player.isInsideZone(ZoneId.NO_RESTART))
-		{
-			player.sendPacket(SystemMessageId.NO_RESTART_HERE);
-			sendPacket(RestartResponse.valueOf(false));
-			return;
-		}
-		
-		if (AttackStanceTaskManager.getInstance().isInAttackStance(player))
-		{
-			player.sendPacket(SystemMessageId.CANT_RESTART_WHILE_FIGHTING);
-			sendPacket(RestartResponse.valueOf(false));
-			return;
-		}
-		
-		if (player.isFestivalParticipant() && SevenSignsFestival.getInstance().isFestivalInitialized())
-		{
-			player.sendPacket(SystemMessageId.NO_RESTART_HERE);
-			sendPacket(RestartResponse.valueOf(false));
-			return;
-		}
-		
+    @Override
+    protected void runImpl() 
+    {
+        final L2PcInstance player = getClient().getActiveChar();
+        if (player == null) {
+            return;
+        }
+
+        if (!player.canRestart()) 
+        {
+            ActionF();
+            return;
+        }
 		player.removeFromBossZone();
 		
 		final L2GameClient client = getClient();

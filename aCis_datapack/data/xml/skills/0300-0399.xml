@@ -1330,7 +1330,7 @@
 				<mul order="0x30" stat="pDef" val="0.7"/>
 				<mul order="0x30" stat="mDef" val="0.7"/>
 			</effect>
-			<effect name="RemoveTarget" noicon="1" val="0" effectPower="60" effectType="DEBUFF" />
+			<effect name="RemoveTarget" noicon="1" val="0" effectPower="100" effectType="DEBUFF" />
 		</for>
 	</skill>
 	<skill id="362" levels="1" name="Armor Crush">

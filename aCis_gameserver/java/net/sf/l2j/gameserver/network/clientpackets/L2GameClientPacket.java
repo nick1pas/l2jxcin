@@ -14,6 +14,8 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import static net.sf.l2j.gameserver.network.serverpackets.ActionFailed.STATIC_PACKET;
+
 import java.nio.BufferUnderflowException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -107,4 +109,8 @@ public abstract class L2GameClientPacket extends ReceivablePacket<L2GameClient>
 	{
 		return true;
 	}
+
+    protected final void ActionF() {
+        sendPacket(STATIC_PACKET);
+    }
 }

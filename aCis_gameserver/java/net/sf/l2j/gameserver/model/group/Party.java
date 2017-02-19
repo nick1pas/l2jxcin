@@ -378,7 +378,23 @@ public class Party extends AbstractGroup
 				member.sendPacket(msg);
 		}
 	}
-	
+
+    /**
+     * Broadcasts packet to every party member.
+     *
+     * @param packet The packet to broadcast.
+     */
+    public void broadcastToPartyMembers(L2GameServerPacket packet) 
+    {
+        for (L2PcInstance member : _members) 
+        {
+            if (member != null) 
+            {
+                member.sendPacket(packet);
+            }
+        }
+    }
+    
 	/**
 	 * Add a new member to the party.
 	 * @param player : the player to add to the party.

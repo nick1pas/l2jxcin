@@ -307,7 +307,9 @@ public final class Config
 	public static boolean ALT_OLY_SKILL_PROTECT;
 	public static List<Integer> ALT_OLY_SKILL_LIST = new ArrayList<>();
 	public static boolean ALT_OLY_END_ANNOUNCE;
-	
+    public static boolean ALT_OLY_BACK_REUSE_SKILLS;
+    public static int ALT_OLY_ENCHANT_LIMIT;
+    
 	/** SevenSigns Festival */
 	public static boolean ALT_GAME_CASTLE_DAWN;
 	public static boolean ALT_GAME_CASTLE_DUSK;
@@ -631,6 +633,14 @@ public final class Config
 	public static boolean ALT_GAME_DELEVEL;
 	public static int DEATH_PENALTY_CHANCE;
 	
+	/** Others - Enchant/Augmentations */
+	public static boolean ENCH_SCROLLS_STACK;
+	public static boolean LIFE_STONES_STACK;
+	
+    // Templates all names
+    public static String CHAR_NAME_TEMPLATE;
+    public static String CHAR_TITLE_NAME_TEMPLATE;
+    
 	/** Inventory & WH */
 	public static int INVENTORY_MAXIMUM_NO_DWARF;
 	public static int INVENTORY_MAXIMUM_DWARF;
@@ -1370,7 +1380,12 @@ public final class Config
 			ALT_OLY_SKILL_LIST.add(Integer.parseInt(id));
 		}
 		ALT_OLY_END_ANNOUNCE = events.getProperty("AltOlyEndAnnounce", false);
-		
+        ALT_OLY_BACK_REUSE_SKILLS = events.getProperty("AltOlyBackReuseSkills", false);
+        ALT_OLY_ENCHANT_LIMIT = events.getProperty("AltOlyEnchantLimit", -1);
+        if (ALT_OLY_ENCHANT_LIMIT > 65535) {
+            ALT_OLY_ENCHANT_LIMIT = 65535;
+        }
+        
 		ALT_GAME_CASTLE_DAWN = events.getProperty("AltCastleForDawn", true);
 		ALT_GAME_CASTLE_DUSK = events.getProperty("AltCastleForDusk", true);
 		ALT_FESTIVAL_MIN_PLAYER = MathUtil.limit(events.getProperty("AltFestivalMinPlayer", 5), 2, 9);
@@ -2244,6 +2259,10 @@ public final class Config
 		DEEPBLUE_DROP_RULES = players.getProperty("UseDeepBlueDropRules", true);
 		ALT_GAME_DELEVEL = players.getProperty("Delevel", true);
 		DEATH_PENALTY_CHANCE = players.getProperty("DeathPenaltyChance", 20);
+        CHAR_NAME_TEMPLATE = players.getProperty("CharNameTemplate", "[A-Za-z0-9]{3,16}");
+        CHAR_TITLE_NAME_TEMPLATE = players.getProperty("CharTitleNameTemplate", "[A-Za-z0-9]{1,16}");
+		ENCH_SCROLLS_STACK = players.getProperty("EnchScrollsStack", false);
+		LIFE_STONES_STACK = players.getProperty("LifeStonesStack", false);
 		
 		INVENTORY_MAXIMUM_NO_DWARF = players.getProperty("MaximumSlotsForNoDwarf", 80);
 		INVENTORY_MAXIMUM_DWARF = players.getProperty("MaximumSlotsForDwarf", 100);

@@ -136,6 +136,7 @@ public abstract class L2Character extends L2Object
 	private boolean _isImmobilized = false;
 	private boolean _isOverloaded = false;
 	private boolean _isParalyzed = false;
+	private boolean _isSleeping = false;
 	private boolean _isDead = false;
 	private boolean _isRunning = false;
 	protected boolean _isTeleporting = false;
@@ -1697,9 +1698,13 @@ public abstract class L2Character extends L2Object
 	
 	public final boolean isSleeping()
 	{
-		return isAffected(L2EffectFlag.SLEEP);
+		return _isSleeping || isAffected(L2EffectFlag.SLEEP);
 	}
 	
+    public final void setIsSleeping(boolean value) {
+        _isSleeping = value;
+    }
+    
 	public final boolean isStunned()
 	{
 		return isAffected(L2EffectFlag.STUNNED);

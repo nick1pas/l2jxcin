@@ -721,6 +721,17 @@ public final class Config
 	public static int BUFFS_MAX_AMOUNT;
 	public static boolean ENABLE_MODIFY_SKILL_DURATION;
 	public static Map<Integer, Integer> SKILL_DURATION_LIST;
+	
+	/** Limits */
+	public static int RUN_SPD_BOOST;
+	public static int MAX_RUN_SPEED;
+	public static int MAX_PCRIT_RATE;
+	public static int MAX_MCRIT_RATE;
+	public static int MAX_PATK_SPEED;
+	public static int MAX_MATK_SPEED;
+	public static int MAX_EVASION;
+	public static int MAX_ACCURACY;
+	
 	// --------------------------------------------------
 	// Sieges
 	// --------------------------------------------------
@@ -2347,7 +2358,14 @@ public final class Config
 				}
 			}
 		}
-		
+		RUN_SPD_BOOST = players.getProperty("RunSpeedBoost", 0);
+		MAX_RUN_SPEED = players.getProperty("MaxRunSpeed", 250);
+		MAX_PCRIT_RATE = players.getProperty("MaxPCritRate", 500);
+		MAX_MCRIT_RATE = players.getProperty("MaxMCritRate", 200);
+		MAX_PATK_SPEED = players.getProperty("MaxPAtkSpeed", 1500);
+		MAX_MATK_SPEED = players.getProperty("MaxMAtkSpeed", 1999);
+		MAX_EVASION = players.getProperty("MaxEvasion", 250);
+		MAX_ACCURACY = players.getProperty("MaxAccuracy", 300);
 	}
 	
 	/**

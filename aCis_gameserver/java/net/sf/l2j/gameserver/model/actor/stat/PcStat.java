@@ -412,8 +412,14 @@ public class PcStat extends PlayableStat
 		if (penalty > 0)
 			baseValue *= Math.pow(0.84, penalty);
 		
+		int val = (int) calcStat(Stats.RUN_SPEED, baseValue, null, null) + Config.RUN_SPD_BOOST;
+		if (val > Config.MAX_RUN_SPEED && !getActiveChar().isGM())
+		{
+			val = Config.MAX_RUN_SPEED;
+		}
+		
 		// calculate speed
-		return (float) calcStat(Stats.RUN_SPEED, baseValue, null, null);
+		return val;
 	}
 	
 	@Override
@@ -447,6 +453,12 @@ public class PcStat extends PlayableStat
 		if (penalty > 0)
 			base *= Math.pow(0.84, penalty);
 		
+		int val = super.getMAtkSpd();
+		if ((val > Config.MAX_MATK_SPEED) && (!getActiveChar().isGM()))
+		{
+			return Config.MAX_MATK_SPEED;
+		}
+		
 		return (int) calcStat(Stats.MAGIC_ATTACK_SPEED, base, null, null);
 	}
 	
@@ -462,7 +474,6 @@ public class PcStat extends PlayableStat
 			
 			return (int) calcStat(Stats.POWER_ATTACK, base, null, null);
 		}
-		
 		return super.getPAtk(target);
 	}
 	
@@ -478,7 +489,12 @@ public class PcStat extends PlayableStat
 			
 			return (int) calcStat(Stats.POWER_ATTACK_SPEED, base, null, null);
 		}
+		int val = super.getPAtkSpd();
 		
+		if ((val > Config.MAX_PATK_SPEED) && (!getActiveChar().isGM()))
+		{
+			return Config.MAX_PATK_SPEED;
+		}
 		return super.getPAtkSpd();
 	}
 	
@@ -491,6 +507,10 @@ public class PcStat extends PlayableStat
 		if (penalty > 0)
 			val -= (2 * penalty);
 		
+		if ((val > Config.MAX_EVASION) && (!getActiveChar().isGM()))
+		{
+			return Config.MAX_EVASION;
+		}
 		return val;
 	}
 	
@@ -498,6 +518,11 @@ public class PcStat extends PlayableStat
 	public int getAccuracy()
 	{
 		int val = super.getAccuracy();
+		
+		if ((val > Config.MAX_ACCURACY) && (!getActiveChar().isGM()))
+		{
+			return Config.MAX_ACCURACY;
+		}
 		
 		if (getActiveChar().getExpertiseWeaponPenalty())
 			val -= 20;

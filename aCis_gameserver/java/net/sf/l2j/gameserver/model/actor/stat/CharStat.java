@@ -155,7 +155,18 @@ public class CharStat
 	 */
 	public int getCriticalHit(L2Character target, L2Skill skill)
 	{
-		return Math.min((int) calcStat(Stats.CRITICAL_RATE, _activeChar.getTemplate().getBaseCritRate(), target, skill), 500);
+		if (_activeChar == null)
+		{
+			return 1;
+		}
+		
+		int criticalHit = Math.min((int) calcStat(Stats.CRITICAL_RATE, _activeChar.getTemplate().getBaseCritRate(), target, skill), 500);
+		
+		if (criticalHit > Config.MAX_PCRIT_RATE)
+		{
+			criticalHit = Config.MAX_PCRIT_RATE;
+		}
+		return criticalHit;
 	}
 	
 	/**
@@ -165,7 +176,18 @@ public class CharStat
 	 */
 	public final int getMCriticalHit(L2Character target, L2Skill skill)
 	{
-		return (int) calcStat(Stats.MCRITICAL_RATE, 8, target, skill);
+		if (_activeChar == null)
+		{
+			return 1;
+		}
+		
+		double mrate = calcStat(Stats.MCRITICAL_RATE, 8.0D, target, skill);
+		
+		if (mrate > Config.MAX_MCRIT_RATE)
+		{
+			mrate = Config.MAX_MCRIT_RATE;
+		}
+		return (int) mrate;
 	}
 	
 	/**
@@ -174,7 +196,17 @@ public class CharStat
 	 */
 	public int getEvasionRate(L2Character target)
 	{
-		return (int) calcStat(Stats.EVASION_RATE, 0, target, null);
+		if (_activeChar == null)
+		{
+			return 1;
+		}
+		int val = (int) Math.round(calcStat(Stats.EVASION_RATE, 0.0D, target, null));
+		
+		if ((val > Config.MAX_EVASION) && (!_activeChar.isGM()))
+		{
+			val = Config.MAX_EVASION;
+		}
+		return val;
 	}
 	
 	/**
@@ -182,7 +214,17 @@ public class CharStat
 	 */
 	public int getAccuracy()
 	{
-		return (int) calcStat(Stats.ACCURACY_COMBAT, 0, null, null);
+		if (_activeChar == null)
+		{
+			return 1;
+		}
+		int val = (int) Math.round(calcStat(Stats.ACCURACY_COMBAT, 0.0D, null, null));
+		
+		if ((val > Config.MAX_ACCURACY) && (!_activeChar.isGM()))
+		{
+			val = Config.MAX_ACCURACY;
+		}
+		return val;
 	}
 	
 	public int getMaxHp()

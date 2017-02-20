@@ -1,0 +1,29 @@
+Fix: closed hole with multisel-sheets.
+Add: new config CharNameTemplate, customization template character's name. (Added at the request Zod'a)
+Add: new config CharNameTemplate, customization of the title name of the template.
+Fix: relog can be done if you are a member of the Olympiad. (Off-like)
+Fix: Now if the player is in combat condition (eg: after a fight with someone) then relog he can not leave until you finish have called in this very state. (Off-like)
+Upd: separate canRestart () method checks to the player relogom. (I had to divide canLogout () and canRestart ())
+Fix: the ability to throw the trade is closed character with demonic weapon and vice versa.
+Add: method simplifies the call Action Failed.
+Add: spawn list for review of crystals. (Interlude-Like)
+Add: Missing teleport to rk in the Church Rune (Rune Township Store).
+Add: additional check in the trade list for the number of items that would not just polminili iron case.
+Fix: Now if the character uses skills, teleport, the duel can not use Summon Friend or sumonit character in this state.
+Fix: Now if the character uses skills, teleport in combat or duel trade can not be used.
+Impl: full implementation of the pre-work skill and mechanics Mass Ressurection. (Works without target with and raises both parties clan and alliance members if it is full of off-like in general)
+Fix: skill Force Meditation. (Activities off-like effect of time)
+Fix: Decay skill. (Now absorbs only Hp)
+Fix: skill Shock Blast. (Knocks Target player 100%, even if he has not passed the skill)
+Fix: skill Provoke.
+Fix: skill Shock Stomp
+Fix: Judgment skill. (Do not aggro)
+Other: Fixed a problem with the compilation of the assembly due to imports.
+Upd: separate canLogout () method to check before going out / relogom player. (So far only involved the exit of the game)
+Fix: Now if the player is in combat condition (eg: after a fight with someone) the game he can not leave until you finish have called in this very state. (Off-like)
+Upd: small marafet and completion MoveBackwardToLocation.
+Upd: enchant control system at the Olympics, and now things are not removed, and are not prohibited to the dressing - (withdrawn attack / defense, herself visually sharpening remains).
+Fix: Asamah HTML
+Upd: Sleep effect has finished mechanics call.
+Fix: time the effect Angelic Icon. (Off-like)
+Add: Configuration LS stones and Enchant scrolls count as stopkovye items - (Permission MissCraft on request)

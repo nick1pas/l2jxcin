@@ -1,3 +1,21 @@
+Add: TvT, DM, LM Event.
+Add: Fortress of Resistence.
+Add: Bandit Stronghold Siege.
+Add: Wild Beast Farm Siege.
+Add: Cats Guard Protected.
+Add: Announce Olympiad End.
+Add: Settings for the following limits:
+- Running Speed.
+- Physical Critical Rate.
+- Magic Critical.
+- Attack Speed.
+- Cast Speed.
+- Evasion.
+- Accuracy.
+Add: Bot Protected.
+Add: Amor and Weapon Protection.
+Add: Restriction Login.
+Fix: Login restrictions.
 Fix: closed hole with multisel-sheets.
 Add: new config CharNameTemplate, customization template character's name. (Added at the request Zod'a)
 Add: new config CharNameTemplate, customization of the title name of the template.
@@ -27,3 +45,96 @@ Fix: Asamah HTML
 Upd: Sleep effect has finished mechanics call.
 Fix: time the effect Angelic Icon. (Off-like)
 Add: Configuration LS stones and Enchant scrolls count as stopkovye items - (Permission MissCraft on request)
+Add NPCS: 
+- GM Shop 
+- SymbolMaker
+- GK
+- Warehouse
+- Bug Report
+- Auction
+- Item Enchanter
+- Clan Manager
+Add: Block skills in Olympiad
+Fix: LM Voiced
+Add Quests:
+- Q024_InhabitantsOfTheForestOfTheDead
+- Q025_HidingBehindTheTruth
+- Q115_TheOtherSideOfTruth
+- Q120_PavelsResearch
+- Q334_TheWishingPotion
+- Q335_SongOfTheHunter
+- Q336_CoinsOfMagic
+- Q343_UnderTheShadowOfTheIvoryTower
+- Q386_StolenDignity
+- Q501_ProofOfClanAlliance
+- Q504_CompetitionForTheBanditStronghold
+- Q655_AGrandPlanForTamingWildBeasts
+- Tutorial
+Add: Newbie Helper
+Add: .menu with the following command.
+- Castle Manager
+- Buff
+- Clan Full
+- XP Command
+- Soulshots Effects
+- BossInfo
+- Party Refuse
+- Trade Refuse
+- Message Refuse	
+- Buffs Refuse
+Add: AI 
+- Zaken
+- Frintezza
+- IceFairySirra
+- Nurka
+- FairyTrees
+- KarulBugBear
+- OlMahumGeneral
+- ScarletStokateNoble
+- Splendor
+- SummonOnAttack
+- TimakOrcOverlord
+- TimakOrcTroopLeader
+- TurekOrcFootman
+- TurekOrcSupplier
+- TurekOrcWarlord
+- ArimanesOfDestruction
+- AshurasOfDestruction
+- AssasinBeetle
+- BrekaOrcOverlord
+- CatsEyeBandit
+- DeluLizardmanSpecialAgent
+- DeluLizardmanSpecialCommander
+- Elpy
+- MagmaDrake
+- MasterToma
+- NecromancerOfDestruction
+- AncientEgg
+- Splendor
+Add: Olympiad Points
+Add: Open Url 
+Fix: Adena visual double icon
+Fix: Reuse skills after match Skills over 15min timer in olympiad
+Fix: Messages when players is registered in olympiad
+Fix: Trade Check in Combat(if player is in combat cant trade anyone now)
+Add: Added acumen buff in olympiad
+Add: support for Instance
+Add: Support for icons
+Add: Config for aura Champion
+Fix: Add config for start adena and start AA
+Impl: Change enchant configs for Enchants.xml
+Add: Buffs Time config
+Add: Expertise Penality config
+Add: Global Drop Monsters
+Add: Raid Boss Defeated Message 
+Impl: Class Master remote
+Add: MultiZone
+Add: Aio System
+Add: Rank PvP and PK
+Add: Dual Box Olympiad config
+Add: Raidboss Info
+Add: Offline trade
+Fix: Dropped this option because all HTML *-pk.htm not exists. And retail like PK character can use WH.
+Fix: Dropped AltLeavePartyLeader. Retail like always True
+Fix: Dropped config RemoveCastleCirclets because circle can't be used when castle was lost.
+Fix: Dropped all debug configs. Unused.

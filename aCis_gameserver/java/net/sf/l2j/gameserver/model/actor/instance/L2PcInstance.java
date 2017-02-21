@@ -459,7 +459,8 @@ public final class L2PcInstance extends L2Playable
 	private boolean _isCrystallizing;
 	private boolean _isCrafting;
 	private long _offlineShopStart = 0;
-	
+	private boolean _isVoting;
+
 	private final Map<Integer, RecipeList> _dwarvenRecipeBook = new HashMap<>();
 	private final Map<Integer, RecipeList> _commonRecipeBook = new HashMap<>();
 	
@@ -4663,7 +4664,17 @@ public final class L2PcInstance extends L2Playable
 	{
 		_offlineShopStart = time;
 	}
-
+	
+	public final boolean isVoting()		
+	{
+		return _isVoting;
+	}
+	
+	public final void setIsVoting(boolean value)
+	{
+		_isVoting = value;
+	}
+	
 	/**
 	 * @return The Store type of the L2PcInstance.
 	 */

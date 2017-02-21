@@ -54,6 +54,7 @@ Add NPCS:
 - Auction
 - Item Enchanter
 - Clan Manager
+- Vote
 Add: Block skills in Olympiad
 Fix: LM Voiced
 Add Quests:
@@ -118,7 +119,7 @@ Fix: Reuse skills after match Skills over 15min timer in olympiad
 Fix: Messages when players is registered in olympiad
 Fix: Trade Check in Combat(if player is in combat cant trade anyone now)
 Add: Added acumen buff in olympiad
-Add: support for Instance
+Impl: Support for Instance
 Add: Support for icons
 Add: Config for aura Champion
 Fix: Add config for start adena and start AA

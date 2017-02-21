@@ -190,6 +190,14 @@ public final class Config
 	public static boolean ALT_DISABLE_BIGSWORD_CLASSES;
 	public static String DISABLE_BIGSWORD_CLASSES_STRING;
 	public static List<Integer> DISABLE_BIGSWORD_CLASSES;
+	/** VoteManager Settings */
+	public static boolean VOTE_MANAGER_ENABLED;
+	public static String VOTES_SITE_TOPZONE_URL;
+	public static String VOTES_SITE_HOPZONE_URL;
+	public static String VOTES_SITE_L2NETWORK_URL;
+	public static int VOTE_REWARD_ID;
+	public static int VOTE_REWARD_ID_COUNT;
+	public static int TIME_TO_VOTE;
 	
 	// --------------------------------------------------
 	// Clans settings
@@ -1256,7 +1264,13 @@ public final class Config
 			if (!class_id.equals(""))
 				DISABLE_BIGSWORD_CLASSES.add(Integer.parseInt(class_id));
 		}
-		
+		VOTE_MANAGER_ENABLED = custom.getProperty("EnableVoteManager", false);
+		VOTES_SITE_HOPZONE_URL = custom.getProperty("HopzoneUrl", "");
+		VOTES_SITE_TOPZONE_URL = custom.getProperty("TopzoneUrl", "");
+		VOTES_SITE_L2NETWORK_URL = custom.getProperty("NetworkUrl", "");
+		VOTE_REWARD_ID = custom.getProperty("VoteRewardId", 57);
+		VOTE_REWARD_ID_COUNT = custom.getProperty("VoteRewardCount", 20);
+		TIME_TO_VOTE = custom.getProperty("TimeToVote", 60);
 	}
 	
 	/**

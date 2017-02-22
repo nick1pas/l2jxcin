@@ -139,3 +139,15 @@ Fix: Dropped this option because all HTML *-pk.htm not exists. And retail like P
 Fix: Dropped AltLeavePartyLeader. Retail like always True
 Fix: Dropped config RemoveCastleCirclets because circle can't be used when castle was lost.
 Fix: Dropped all debug configs. Unused.
+Fix: Necklace of Valakas now gives 80% to the protection of sleep (Sleep), previously 40% gave. (Off-like)
+Fix: Earring of Antharas now gives 80% to the protection from bleeding (Bleed), previously 40% gave. (Off-like)
+Fix: Earring of Antharas now gives 40% to the imposition of and protection against shock / fat (Stun / Silence), previously 30% / 30% gave. (Off-like)
+Fix: Earring of Zaken now gives 60% to the protection from bleeding (Bleed), previously 30% gave. (Off-like)
+Fix: Earring of Zaken now gives 40% to protect against shock / obnormala and mental states (Stun / Abnormal mental state), previously 20% / 20% gave. (Off-like)
+Fix: Earring of Orfen now gives 40% to the imposition of and protection from bleeding (Bleed), previously 20% gave. (Off-like)
+Fix: Ring of Baium now gives 80% to the imposition and protection to poison (Poison), 60% in the imposition of and protection from root (Root), previously 40% / 30% gave. (Off-like)
+Impl: Invocation animation effect. (Off-like)
+Fix: skill (Invocation). (Off-like)
+Fix: If a character in the attack misses the report about it (Slip / Miss). (Off-like - run around the world, to kill a couple of mobs I noticed that not informed at all about the blunders)
+Fix: Ring of Ant Queen now gives 60% to the imposition and protection to poison (Poison), 40% in the imposition of and protection from root (Root), previously at 20% gave. (Off-like)
+Fix: Ring of Core now gives 40% to the imposition and protection to otralveniyu (Poison), previously 20% gave. (Off-like)

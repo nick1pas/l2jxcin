@@ -3805,6 +3805,11 @@ public abstract class L2Character extends L2Object
 			
 			if (target instanceof L2PcInstance)
 				((L2PcInstance) target).sendPacket(SystemMessage.getSystemMessage(SystemMessageId.AVOIDED_S1_ATTACK).addCharName(this));
+			
+            if (this instanceof L2PcInstance) {
+                SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.MISSED_TARGET);
+                ((L2PcInstance) this).sendPacket(sm);
+            }
 		}
 		
 		// Send message about damage/crit or miss

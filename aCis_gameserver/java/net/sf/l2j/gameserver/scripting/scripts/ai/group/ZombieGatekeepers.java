@@ -29,7 +29,7 @@ import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
 public class ZombieGatekeepers extends L2AttackableAIScript
 {	
-	public ZombieGatekeepers(String name, String descr)
+	public ZombieGatekeepers()
 	{
 		super("ai/group");
 		addAttackId(22136);

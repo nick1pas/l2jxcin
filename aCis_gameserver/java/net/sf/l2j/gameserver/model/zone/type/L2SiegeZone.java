@@ -15,21 +15,22 @@
 package net.sf.l2j.gameserver.model.zone.type;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
-import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2SiegeSummonInstance;
-import net.sf.l2j.gameserver.model.zone.L2ZoneType;
+import net.sf.l2j.gameserver.model.zone.L2SpawnZone;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.taskmanager.PvpFlagTaskManager;
 
 /**
- * A siege zone
- * @author durgus
+ * A siege zone handles following spawns type :
+ * <ul>
+ * <li>Generic spawn locs : other_restart_village_list (spawns used on siege, to respawn on second closest town.</li>
+ * <li>Chaotic spawn locs : chao_restart_point_list (spawns used on siege, to respawn PKs on second closest town.</li>
+ * </ul>
  */
-public class L2SiegeZone extends L2ZoneType
+public class L2SiegeZone extends L2SpawnZone
 {
 	private static final int DISMOUNT_DELAY = 5;
 	
@@ -121,15 +122,12 @@ public class L2SiegeZone extends L2ZoneType
 	{
 		if (_isActiveSiege)
 		{
-			for (L2Character character : _characterList)
-			{
-				if (character != null)
-					onEnter(character);
-			}
+			for (L2Character character : _characterList.values())
+				onEnter(character);
 		}
 		else
 		{
-			for (L2Character character : _characterList)
+			for (L2Character character : _characterList.values())
 			{
 				if (character == null)
 					continue;
@@ -180,16 +178,19 @@ public class L2SiegeZone extends L2ZoneType
 	
 	/**
 	 * Removes all foreigners from the zone
-	 * @param owningClan
+	 * @param owningClanId
 	 */
-	public void banishForeigners(L2Clan owningClan)
+	public void banishForeigners(int owningClanId)
 	{
+		if (_characterList.isEmpty())
+			return;
+			
 		for (L2PcInstance player : getKnownTypeInside(L2PcInstance.class))
 		{
-			if (player.getClan() == owningClan || player.isGM())
+			if (player.getClanId() == owningClanId)
 				continue;
 			
-			player.teleToLocation(TeleportWhereType.TOWN);
+			player.teleToLocation((player.getKarma() > 0) ? getChaoticSpawnLoc() : getSpawnLoc(), 20);
 		}
 	}
 }

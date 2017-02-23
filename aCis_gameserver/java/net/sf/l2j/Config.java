@@ -560,7 +560,6 @@ public final class Config
 	public static boolean ALTERNATE_CLASS_MASTER;
 	public static boolean ANNOUNCE_MAMMON_SPAWN;
 	public static boolean ALT_MOB_AGRO_IN_PEACEZONE;
-	public static boolean ALT_GAME_FREE_TELEPORT;
 	public static boolean SHOW_NPC_LVL;
 	public static boolean SHOW_NPC_CREST;
 	public static boolean SHOW_SUMMON_CREST;
@@ -758,7 +757,6 @@ public final class Config
 	// --------------------------------------------------
 	
 	public static int SIEGE_LENGTH;
-	public static int FLAGS_MAX_COUNT;
 	public static int MINIMUM_CLAN_LEVEL;
 	public static int MAX_ATTACKERS_NUMBER;
 	public static int MAX_DEFENDERS_NUMBER;
@@ -2192,7 +2190,6 @@ public final class Config
 			CLASS_MASTER_SETTINGS = new ClassMasterSettings(npcs.getProperty("ConfigClassMaster"));
 		
 		ALTERNATE_CLASS_MASTER = npcs.getProperty("AlternateClassMaster", false);
-		ALT_GAME_FREE_TELEPORT = npcs.getProperty("AltFreeTeleporting", false);
 		ANNOUNCE_MAMMON_SPAWN = npcs.getProperty("AnnounceMammonSpawn", true);
 		ALT_MOB_AGRO_IN_PEACEZONE = npcs.getProperty("AltMobAgroInPeaceZone", true);
 		SHOW_NPC_LVL = npcs.getProperty("ShowNpcLevel", false);
@@ -2424,7 +2421,6 @@ public final class Config
 		final ExProperties sieges = initProperties(Config.SIEGE_FILE);
 		
 		SIEGE_LENGTH = sieges.getProperty("SiegeLength", 120);
-		FLAGS_MAX_COUNT = sieges.getProperty("MaxFlags", 1);
 		MINIMUM_CLAN_LEVEL = sieges.getProperty("SiegeClanMinLevel", 4);
 		MAX_ATTACKERS_NUMBER = sieges.getProperty("AttackerMaxClans", 10);
 		MAX_DEFENDERS_NUMBER = sieges.getProperty("DefenderMaxClans", 10);

@@ -85,7 +85,7 @@ public class Castle
 	private double _taxRate;
 	private long _treasury;
 	
-	private L2SiegeZone _zone;
+	private L2SiegeZone _siegeZone;
 	private L2CastleZone _castleZone;
 	private L2CastleTeleportZone _teleZone;
 	
@@ -93,6 +93,36 @@ public class Castle
 	{
 		_castleId = id;
 		_name = name;
+		
+		// Feed _siegeZone.
+		for (L2SiegeZone zone : ZoneManager.getInstance().getAllZones(L2SiegeZone.class))
+		{
+			if (zone.getSiegeObjectId() == _castleId)
+			{
+				_siegeZone = zone;
+				break;
+			}
+		}
+		
+		// Feed _castleZone.
+		for (L2CastleZone zone : ZoneManager.getInstance().getAllZones(L2CastleZone.class))
+		{
+			if (zone.getCastleId() == _castleId)
+			{
+				_castleZone = zone;
+				break;
+			}
+		}
+		
+		// Feed _teleZone.
+		for (L2CastleTeleportZone zone : ZoneManager.getInstance().getAllZones(L2CastleTeleportZone.class))
+		{
+			if (zone.getCastleId() == _castleId)
+			{
+				_teleZone = zone;
+				break;
+			}
+		}
 	}
 	
 	public synchronized void engrave(L2Clan clan, L2Object target)
@@ -198,54 +228,21 @@ public class Castle
 	 */
 	public boolean checkIfInZone(int x, int y, int z)
 	{
-		return getZone().isInsideZone(x, y, z);
+		return getSiegeZone().isInsideZone(x, y, z);
 	}
 	
-	public L2SiegeZone getZone()
+	public L2SiegeZone getSiegeZone()
 	{
-		if (_zone == null)
-		{
-			for (L2SiegeZone zone : ZoneManager.getInstance().getAllZones(L2SiegeZone.class))
-			{
-				if (zone.getSiegeObjectId() == _castleId)
-				{
-					_zone = zone;
-					break;
-				}
-			}
-		}
-		return _zone;
+		return _siegeZone;
 	}
 	
 	public L2CastleZone getCastleZone()
 	{
-		if (_castleZone == null)
-		{
-			for (L2CastleZone zone : ZoneManager.getInstance().getAllZones(L2CastleZone.class))
-			{
-				if (zone.getCastleId() == _castleId)
-				{
-					_castleZone = zone;
-					break;
-				}
-			}
-		}
 		return _castleZone;
 	}
 	
 	public L2CastleTeleportZone getTeleZone()
 	{
-		if (_teleZone == null)
-		{
-			for (L2CastleTeleportZone zone : ZoneManager.getInstance().getAllZones(L2CastleTeleportZone.class))
-			{
-				if (zone.getCastleId() == _castleId)
-				{
-					_teleZone = zone;
-					break;
-				}
-			}
-		}
 		return _teleZone;
 	}
 	
@@ -261,7 +258,7 @@ public class Castle
 	 */
 	public double getDistance(L2Object obj)
 	{
-		return getZone().getDistanceToZone(obj);
+		return getSiegeZone().getDistanceToZone(obj);
 	}
 	
 	public void closeDoor(L2PcInstance activeChar, int doorId)
@@ -793,24 +790,30 @@ public class Castle
 	{
 		_treasury = treasury;
 	}
-	
+ 	
+	/**
+	 * Update clan reputation points over siege end, as following :
+	 * <ul>
+	 * <li>The former clan failed to defend the castle : 1000 points for new owner, -1000 for former clan.</li>
+	 * <li>The former clan successfully defended the castle, ending in a draw : 500 points for former clan.</li>
+	 * <li>No former clan, which means players successfully attacked over NPCs : 1000 points for new owner.</li>
+	 * </ul>
+	 */
 	public void updateClansReputation()
 	{
+		final L2Clan owner = ClanTable.getInstance().getClan(getOwnerId());
 		if (_formerOwner != null)
 		{
 			// Defenders fail
-			if (_formerOwner != ClanTable.getInstance().getClan(getOwnerId()))
-			{
-				int maxreward = Math.max(0, _formerOwner.getReputationScore());
-				
+			if (_formerOwner != owner)
+			{	
 				_formerOwner.takeReputationScore(1000);
 				_formerOwner.broadcastToOnlineMembers(SystemMessage.getSystemMessage(SystemMessageId.CLAN_WAS_DEFEATED_IN_SIEGE_AND_LOST_S1_REPUTATION_POINTS).addNumber(1000));
 				
 				// Attackers succeed over defenders
-				final L2Clan owner = ClanTable.getInstance().getClan(getOwnerId());
 				if (owner != null)
 				{
-					owner.addReputationScore(Math.min(1000, maxreward));
+					owner.addReputationScore(1000);
 					owner.broadcastToOnlineMembers(SystemMessage.getSystemMessage(SystemMessageId.CLAN_VICTORIOUS_IN_SIEGE_AND_GAINED_S1_REPUTATION_POINTS).addNumber(1000));
 				}
 			}
@@ -822,14 +825,10 @@ public class Castle
 			}
 		}
 		// Attackers win over NPCs
-		else
+		else if (owner != null)
 		{
-			L2Clan owner = ClanTable.getInstance().getClan(getOwnerId());
-			if (owner != null)
-			{
-				owner.addReputationScore(1000);
-				owner.broadcastToOnlineMembers(SystemMessage.getSystemMessage(SystemMessageId.CLAN_VICTORIOUS_IN_SIEGE_AND_GAINED_S1_REPUTATION_POINTS).addNumber(1000));
-			}
+			owner.addReputationScore(1000);
+			owner.broadcastToOnlineMembers(SystemMessage.getSystemMessage(SystemMessageId.CLAN_VICTORIOUS_IN_SIEGE_AND_GAINED_S1_REPUTATION_POINTS).addNumber(1000));
 		}
 	}
 	

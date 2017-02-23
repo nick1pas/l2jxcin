@@ -15,10 +15,11 @@
 package net.sf.l2j.gameserver.model.zone;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import net.sf.l2j.gameserver.model.L2Object;
@@ -30,24 +31,36 @@ import net.sf.l2j.gameserver.scripting.Quest;
 
 /**
  * Abstract base class for any zone type.
- * @author durgus
  */
 public abstract class L2ZoneType
 {
 	protected static final Logger _log = Logger.getLogger(L2ZoneType.class.getName());
 	
 	private final int _id;
-	protected L2ZoneForm _zone;
-	protected List<L2Character> _characterList;
+	protected final Map<Integer, L2Character> _characterList = new ConcurrentHashMap<>();
 	
 	private Map<EventType, List<Quest>> _questEvents;
+	private L2ZoneForm _zone;
 	
 	protected L2ZoneType(int id)
 	{
-		_id = id;
-		_characterList = new CopyOnWriteArrayList<>();
+		_id = id;	
 	}
+ 	
+	protected abstract void onEnter(L2Character character);
 	
+	protected abstract void onExit(L2Character character);
+	
+	public abstract void onDieInside(L2Character character);
+	
+	public abstract void onReviveInside(L2Character character);
+	
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName() + "[" + _id + "]";
+	}
+
 	/**
 	 * @return Returns the id.
 	 */
@@ -57,25 +70,13 @@ public abstract class L2ZoneType
 	}
 	
 	/**
-	 * Setup new parameters for this zone
-	 * @param name parameter name.
-	 * @param value new parameter value.
+	 * @return this zone form.
 	 */
-	public void setParameter(String name, String value)
+	public L2ZoneForm getZone()
 	{
-		_log.info(getClass().getSimpleName() + ": Unknown parameter - " + name + " in zone: " + getId());
+		return _zone;
 	}
-	
-	/**
-	 * @param character The character to test.
-	 * @return True if the given character is affected by this zone.
-	 */
-	protected boolean isAffected(L2Character character)
-	{
-		// Overriden in children classes.
-		return true;
-	}
-	
+
 	/**
 	 * Set the zone for this L2ZoneType Instance
 	 * @param zone
@@ -85,14 +86,6 @@ public abstract class L2ZoneType
 		if (_zone != null)
 			throw new IllegalStateException("Zone already set");
 		_zone = zone;
-	}
-	
-	/**
-	 * @return this zone form.
-	 */
-	public L2ZoneForm getZone()
-	{
-		return _zone;
 	}
 	
 	/**
@@ -142,53 +135,50 @@ public abstract class L2ZoneType
 			return;
 		
 		// If the object is inside the zone...
-		if (isInsideZone(character.getX(), character.getY(), character.getZ()))
+		if (isInsideZone(character))
 		{
 			// Was the character not yet inside this zone?
-			if (!_characterList.contains(character))
+			if (!_characterList.containsKey(character.getObjectId()))
 			{
-				List<Quest> quests = getQuestByEvent(EventType.ON_ENTER_ZONE);
+				// Notify to scripts.
+				final List<Quest> quests = getQuestByEvent(EventType.ON_ENTER_ZONE);
 				if (quests != null)
 				{
 					for (Quest quest : quests)
 						quest.notifyEnterZone(character, this);
 				}
-				_characterList.add(character);
+				// Register player.
+				_characterList.put(character.getObjectId(), character);
+				
+				// Notify Zone implementation.
 				onEnter(character);
 			}
 		}
 		else
-		{
-			// Was the character inside this zone?
-			if (_characterList.contains(character))
-			{
-				List<Quest> quests = getQuestByEvent(EventType.ON_EXIT_ZONE);
-				if (quests != null)
-				{
-					for (Quest quest : quests)
-						quest.notifyExitZone(character, this);
-				}
-				_characterList.remove(character);
-				onExit(character);
-			}
-		}
+			removeCharacter(character);
 	}
 	
 	/**
-	 * Force fully removes a character from the zone Should use during teleport / logoff
-	 * @param character
+	 * Removes a character from the zone.
+	 * @param character : The character to remove.
 	 */
 	public void removeCharacter(L2Character character)
 	{
-		if (_characterList.contains(character))
+		// Was the character inside this zone?
+		if (_characterList.containsKey(character.getObjectId()))
 		{
-			List<Quest> quests = getQuestByEvent(EventType.ON_EXIT_ZONE);
+			// Notify to scripts.
+			final List<Quest> quests = getQuestByEvent(EventType.ON_EXIT_ZONE);
 			if (quests != null)
 			{
 				for (Quest quest : quests)
 					quest.notifyExitZone(character, this);
 			}
-			_characterList.remove(character);
+						
+			// Unregister player.
+			_characterList.remove(character.getObjectId());
+			
+			// Notify Zone implementation.
 			onExit(character);
 		}
 	}
@@ -199,33 +189,25 @@ public abstract class L2ZoneType
 	 */
 	public boolean isCharacterInZone(L2Character character)
 	{
-		return _characterList.contains(character);
+		return _characterList.containsKey(character.getObjectId());
 	}
 	
-	protected abstract void onEnter(L2Character character);
-	
-	protected abstract void onExit(L2Character character);
-	
-	public abstract void onDieInside(L2Character character);
-	
-	public abstract void onReviveInside(L2Character character);
-	
-	public List<L2Character> getCharactersInside()
+	public Collection<L2Character> getCharactersInside()
 	{
-		return _characterList;
+		return _characterList.values();
 	}
 	
 	/**
-	 * @param <A>
-	 * @param type
-	 * @return a list of given instances within this zone.
+	 * @param <A> : The generic type.
+	 * @param type : The instance type to filter.
+	 * @return a List of filtered type characters within this zone. Generate a temporary List.
 	 */
 	@SuppressWarnings("unchecked")
 	public final <A> List<A> getKnownTypeInside(Class<A> type)
 	{
 		List<A> result = new ArrayList<>();
 		
-		for (L2Object obj : _characterList)
+		for (L2Object obj : _characterList.values())
 		{
 			if (type.isAssignableFrom(obj.getClass()))
 				result.add((A) obj);
@@ -263,24 +245,35 @@ public abstract class L2ZoneType
 	 */
 	public void broadcastPacket(L2GameServerPacket packet)
 	{
-		if (_characterList.isEmpty())
-			return;
-		
-		for (L2Character character : _characterList)
+		for (L2Character character : _characterList.values())
 		{
-			if (character != null && character instanceof L2PcInstance)
+			if (character instanceof L2PcInstance)
 				character.sendPacket(packet);
 		}
 	}
 	
-	@Override
-	public String toString()
+	/**
+	 * Setup new parameters for this zone
+	 * @param name parameter name.
+	 * @param value new parameter value.
+	 */
+	public void setParameter(String name, String value)
 	{
-		return getClass().getSimpleName() + "[" + _id + "]";
+		_log.info(getClass().getSimpleName() + ": Unknown parameter - " + name + " in zone: " + getId());
 	}
-	
+ 	
+	/**
+	 * @param character The character to test.
+	 * @return True if the given character is affected by this zone.
+	 */
+	protected boolean isAffected(L2Character character)
+	{
+		// Overriden in children classes.
+		return true;
+	}
+
 	public void visualizeZone(int z)
 	{
-		getZone().visualizeZone(z);
+		getZone().visualizeZone(_id, z);
 	}
 }

@@ -18,6 +18,7 @@ import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.network.SystemMessageId;
+import net.sf.l2j.gameserver.network.serverpackets.SiegeInfo;
 
 /**
  * @author KenM
@@ -39,13 +40,13 @@ public final class RequestJoinSiege extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final L2PcInstance activeChar = getClient().getActiveChar();
-		if (activeChar == null)
+		final L2PcInstance player = getClient().getActiveChar();
+		if (player == null)
 			return;
 		
-		if (!activeChar.isClanLeader())
+		if (!player.isClanLeader())
 		{
-			activeChar.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
+			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
 		}
 		
@@ -55,20 +56,20 @@ public final class RequestJoinSiege extends L2GameClientPacket
 		
 		if (_isJoining == 1)
 		{
-			if (System.currentTimeMillis() < activeChar.getClan().getDissolvingExpiryTime())
+			if (System.currentTimeMillis() < player.getClan().getDissolvingExpiryTime())
 			{
-				activeChar.sendPacket(SystemMessageId.CANT_PARTICIPATE_IN_SIEGE_WHILE_DISSOLUTION_IN_PROGRESS);
+				player.sendPacket(SystemMessageId.CANT_PARTICIPATE_IN_SIEGE_WHILE_DISSOLUTION_IN_PROGRESS);
 				return;
 			}
 			
 			if (_isAttacker == 1)
-				castle.getSiege().registerAttacker(activeChar);
+				castle.getSiege().registerAttacker(player);
 			else
-				castle.getSiege().registerDefender(activeChar);
+				castle.getSiege().registerDefender(player);
 		}
 		else
-			castle.getSiege().removeSiegeClan(activeChar);
+			castle.getSiege().unregisterClan(player.getClan());
 		
-		castle.getSiege().listRegisterClan(activeChar);
+		player.sendPacket(new SiegeInfo(castle));
 	}
 }

@@ -33,7 +33,7 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.CharNameTable;
 import net.sf.l2j.gameserver.datatables.ClanTable;
-import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
@@ -4483,7 +4483,7 @@ public class SevenSignsFestival
 			catch (Exception e)
 			{
 				// If an exception occurs, just move the player to the nearest town.
-				participant.teleToLocation(TeleportWhereType.TOWN);
+				participant.teleToLocation(TeleportType.TOWN);
 				participant.sendMessage("You have been removed from the festival arena.");
 			}
 		}

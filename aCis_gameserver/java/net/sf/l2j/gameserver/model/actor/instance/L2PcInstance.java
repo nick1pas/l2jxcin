@@ -59,7 +59,7 @@ import net.sf.l2j.gameserver.datatables.FishTable;
 import net.sf.l2j.gameserver.datatables.GmListTable;
 import net.sf.l2j.gameserver.datatables.HennaTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
-import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.PvpColorTable;
 import net.sf.l2j.gameserver.datatables.PvpColorTable.PvpColor;
@@ -95,7 +95,6 @@ import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Radar;
 import net.sf.l2j.gameserver.model.L2Request;
 import net.sf.l2j.gameserver.model.L2ShortCut;
-import net.sf.l2j.gameserver.model.L2SiegeClan;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
 import net.sf.l2j.gameserver.model.L2SkillLearn;
@@ -129,6 +128,7 @@ import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.Duel.DuelState;
 import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.model.entity.Siege;
+import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
@@ -3165,38 +3165,31 @@ public final class L2PcInstance extends L2Playable
 		// Can't use ressurect skills on siege if you are defender and control towers is not alive, if you are attacker and flag isn't spawned or if you aren't part of that siege.
 		else if (skill.getSkillType() == L2SkillType.RESURRECT)
 		{
-			final Castle castle = CastleManager.getInstance().getCastle(this);
-			if (castle != null && castle.getSiege().isInProgress())
+			final Siege siege = CastleManager.getInstance().getSiege(this);
+			if (siege != null)
 			{
-				if (getClan() != null)
+				switch (siege.getSide(getClan()))
 				{
-					if (castle.getSiege().checkIsDefender(getClan()))
-					{
-						if (castle.getSiege().getControlTowerCount() == 0)
+					case DEFENDER:
+					case OWNER:
+						if (siege.getControlTowerCount() == 0)
 						{
 							sendPacket(SystemMessage.getSystemMessage(SystemMessageId.TOWER_DESTROYED_NO_RESURRECTION));
 							return false;
 						}
-					}
-					else if (castle.getSiege().checkIsAttacker(getClan()))
-					{
-						final L2SiegeClan siegeClan = castle.getSiege().getAttackerClan(getClan());
-						if (siegeClan.getFlags().isEmpty())
+						break;
+					
+					case ATTACKER:
+						if (getClan().getFlag() == null)
 						{
 							sendPacket(SystemMessage.getSystemMessage(SystemMessageId.NO_RESURRECTION_WITHOUT_BASE_CAMP));
 							return false;
 						}
-					}
-					else
-					{
+						break;
+					
+					default:
 						sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CANNOT_BE_RESURRECTED_DURING_SIEGE));
 						return false;
-					}
-				}
-				else
-				{
-					sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CANNOT_BE_RESURRECTED_DURING_SIEGE));
-					return false;
 				}
 			}
 		}
@@ -4744,10 +4737,7 @@ public final class L2PcInstance extends L2Playable
 	 */
 	public boolean isClanLeader()
 	{
-		if (getClan() == null)
-			return false;
-		
-		return getObjectId() == getClan().getLeaderId();
+		return _clan != null && getObjectId() == _clan.getLeaderId();
 	}
 	
 	/**
@@ -6588,11 +6578,11 @@ public final class L2PcInstance extends L2Playable
 				if (siege != null)
 				{
 					// Check if a siege is in progress and if attacker and the L2PcInstance aren't in the Defender clan
-					if (siege.checkIsDefender(cha.getClan()) && siege.checkIsDefender(getClan()))
+					if (siege.checkSides(cha.getClan(), SiegeSide.DEFENDER, SiegeSide.OWNER) && siege.checkSides(getClan(), SiegeSide.DEFENDER, SiegeSide.OWNER))
 						return false;
 					
 					// Check if a siege is in progress and if attacker and the L2PcInstance aren't in the Attacker clan
-					if (siege.checkIsAttacker(cha.getClan()) && siege.checkIsAttacker(getClan()))
+					if (siege.checkSide(cha.getClan(), SiegeSide.ATTACKER) && siege.checkSide(getClan(), SiegeSide.ATTACKER))
 						return false;
 				}
 				
@@ -6622,7 +6612,7 @@ public final class L2PcInstance extends L2Playable
 			if (getClan() != null)
 			{
 				final Siege siege = CastleManager.getInstance().getSiege(this);
-				return (siege != null && siege.checkIsAttacker(getClan()));
+				return (siege != null && siege.checkSide(getClan(), SiegeSide.ATTACKER));
 			}
 		}
 		
@@ -6897,8 +6887,8 @@ public final class L2PcInstance extends L2Playable
 		// Siege summon checks. Both checks send a message to the player if it return false.
 		if (skill.isSiegeSummonSkill())
 		{
-			final Castle castle = CastleManager.getInstance().getCastle(this);
-			if (castle == null || !castle.getSiege().isInProgress() || (getClanId() != 0 && castle.getSiege().getAttackerClan(getClanId()) == null) || (isInSiege() && isInsideZone(ZoneId.CASTLE)))
+			final Siege siege = CastleManager.getInstance().getSiege(this);
+			if (siege == null || !siege.checkSide(getClan(), SiegeSide.ATTACKER) || (isInSiege() && isInsideZone(ZoneId.CASTLE)))
 			{
 				sendPacket(SystemMessage.getSystemMessage(SystemMessageId.NOT_CALL_PET_FROM_THIS_LOCATION));
 				return false;
@@ -7153,16 +7143,15 @@ public final class L2PcInstance extends L2Playable
 	
 	public boolean checkIfOkToUseStriderSiegeAssault(L2Skill skill)
 	{
+		final Siege siege = CastleManager.getInstance().getSiege(this);
+		
 		SystemMessage sm;
-		Castle castle = CastleManager.getInstance().getCastle(this);
 		
 		if (!isRiding())
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill);
 		else if (!(getTarget() instanceof L2DoorInstance))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.INCORRECT_TARGET);
-		else if (castle == null || castle.getCastleId() <= 0)
-			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill);
-		else if (!castle.getSiege().isInProgress() || castle.getSiege().getAttackerClan(getClan()) == null)
+		else if (siege == null || !siege.checkSide(getClan(), SiegeSide.ATTACKER))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill);
 		else
 			return true;
@@ -7185,7 +7174,7 @@ public final class L2PcInstance extends L2Playable
 			sm = SystemMessage.getSystemMessage(SystemMessageId.DIST_TOO_FAR_CASTING_STOPPED);
 		else if (!isInsideZone(ZoneId.CAST_ON_ARTIFACT))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill);
-		else if (castle.getSiege().getAttackerClan(getClan()) == null)
+		else if (!castle.getSiege().checkSide(getClan(), SiegeSide.ATTACKER))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill);
 		else
 		{
@@ -8584,13 +8573,13 @@ public final class L2PcInstance extends L2Playable
 			{
 				if (SevenSigns.getInstance().getPlayerCabal(getObjectId()) != SevenSigns.getInstance().getCabalHighestScore())
 				{
-					teleToLocation(TeleportWhereType.TOWN);
+					teleToLocation(TeleportType.TOWN);
 					setIsIn7sDungeon(false);
 				}
 			}
 			else if (SevenSigns.getInstance().getPlayerCabal(getObjectId()) == CabalType.NORMAL)
 			{
-				teleToLocation(TeleportWhereType.TOWN);
+				teleToLocation(TeleportType.TOWN);
 				setIsIn7sDungeon(false);
 			}
 		}

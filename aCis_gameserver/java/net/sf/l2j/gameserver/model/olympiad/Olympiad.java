@@ -40,6 +40,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2OlympiadManagerInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.model.entity.Hero;
+import net.sf.l2j.gameserver.model.zone.type.L2OlympiadStadiumZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
@@ -604,7 +605,7 @@ public class Olympiad
 	
 	public boolean playerInStadia(L2PcInstance player)
 	{
-		return ZoneManager.getOlympiadStadium(player) != null;
+		return ZoneManager.getInstance().getZone(player, L2OlympiadStadiumZone.class) != null;
 	}
 	
 	/**

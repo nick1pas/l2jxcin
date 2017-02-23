@@ -99,9 +99,9 @@ public class AdminPledge implements IAdminCommandHandler
 					
 					if (action.equals("dismiss"))
 					{
-						ClanTable.getInstance().destroyClan(player.getClanId());
-						L2Clan clan = player.getClan();
-						if (clan == null)
+						ClanTable.getInstance().destroyClan(player.getClan());
+						
+						if (player.getClan() == null)
 							activeChar.sendMessage("The clan is now disbanded.");
 						else
 							activeChar.sendMessage("There was a problem while destroying the clan.");

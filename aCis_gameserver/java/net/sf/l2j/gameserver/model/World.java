@@ -80,7 +80,7 @@ public final class World
 				}
 			}
 		}
-		_log.info("World: WorldRegion grid (" + REGIONS_X + " by " + REGIONS_Y + ") is now setted up.");
+		_log.info("World: WorldRegion grid (" + REGIONS_X + " by " + REGIONS_Y + ") is now set up.");
 	}
 	
 	public void addObject(L2Object object)

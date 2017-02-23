@@ -15,7 +15,7 @@
 package net.sf.l2j.gameserver.skills.l2skills;
 
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
-import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
@@ -114,11 +114,11 @@ public class L2SkillTeleport extends L2Skill
 			else
 			{
 				if (_recallType.equalsIgnoreCase("Castle"))
-					loc = MapRegionTable.getInstance().getTeleToLocation(target, TeleportWhereType.CASTLE);
+					loc = MapRegionTable.getInstance().getLocationToTeleport(target, TeleportType.CASTLE);
 				else if (_recallType.equalsIgnoreCase("ClanHall"))
-					loc = MapRegionTable.getInstance().getTeleToLocation(target, TeleportWhereType.CLAN_HALL);
+					loc = MapRegionTable.getInstance().getLocationToTeleport(target, TeleportType.CLAN_HALL);
 				else
-					loc = MapRegionTable.getInstance().getTeleToLocation(target, TeleportWhereType.TOWN);
+					loc = MapRegionTable.getInstance().getLocationToTeleport(target, TeleportType.TOWN);
 			}
 			
 			if (loc != null)

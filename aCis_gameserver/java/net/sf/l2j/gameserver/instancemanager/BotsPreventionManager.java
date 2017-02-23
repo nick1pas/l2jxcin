@@ -243,7 +243,7 @@ public class BotsPreventionManager
 		// 3 = ban character from the server.
 			case 0:
 				player.stopMove(null);
-				player.teleToLocation(MapRegionTable.TeleportWhereType.TOWN);
+				player.teleToLocation(MapRegionTable.TeleportType.TOWN);
 				punishmentnwindow(player);
 				break;
 			case 1:

@@ -94,7 +94,7 @@ public final class L2TeleporterInstance extends L2NpcInstance
 						price /= 2;
 				}
 				
-				if (Config.ALT_GAME_FREE_TELEPORT || player.destroyItemByItemId("Teleport " + (list.isForNoble() ? " nobless" : ""), 57, price, this, true))
+				if (player.destroyItemByItemId("Teleport ", (list.isForNoble()) ? 6651 : 57, price, this, true))
 					player.teleToLocation(list.getLocX(), list.getLocY(), list.getLocZ(), 20);
 				
 				player.sendPacket(ActionFailed.STATIC_PACKET);

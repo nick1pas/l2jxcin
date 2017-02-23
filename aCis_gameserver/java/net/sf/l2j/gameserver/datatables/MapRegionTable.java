@@ -1,21 +1,6 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.datatables;
 
 import java.io.File;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,6 +14,8 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
+import net.sf.l2j.gameserver.model.entity.Siege;
+import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.entity.clanhallsiege.BanditStrongholdSiege;
 import net.sf.l2j.gameserver.model.entity.clanhallsiege.WildBeastFarmSiege;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -43,7 +30,7 @@ import org.w3c.dom.Node;
 
 public class MapRegionTable
 {
-	public static enum TeleportWhereType
+	public static enum TeleportType
 	{
 		CASTLE,
 		CLAN_HALL,
@@ -55,6 +42,8 @@ public class MapRegionTable
 	
 	private static final int REGIONS_X = 11;
 	private static final int REGIONS_Y = 16;
+	
+	private static final Location MDT_LOCATION = new Location(12661, 181687, -3560);
 	
 	private final int[][] _regions = new int[REGIONS_X][REGIONS_Y];
 	
@@ -231,124 +220,111 @@ public class MapRegionTable
 		}
 	}
 	
-	public Location getTeleToLocation(L2Character activeChar, TeleportWhereType teleportWhere)
+	/**
+	 * @param character : The type of character to check.
+	 * @param teleportType : The type of teleport to check.
+	 * @return a Location based on character and teleport types.
+	 */
+	public Location getLocationToTeleport(L2Character character, TeleportType teleportType)
 	{
-		if (activeChar instanceof L2PcInstance)
+		// The character isn't a player, bypass all checks and retrieve a random spawn location on closest town.
+		if (!(character instanceof L2PcInstance))
+			return getClosestTown(character.getX(), character.getY()).getSpawnLoc();
+		
+		final L2PcInstance player = ((L2PcInstance) character);
+		
+		// The player is in MDT, move him out.
+		if (player.isInsideZone(ZoneId.MONSTER_TRACK))
+			return MDT_LOCATION;
+		
+		if (teleportType != TeleportType.TOWN && player.getClan() != null)
 		{
-			L2PcInstance player = ((L2PcInstance) activeChar);
-			
-			// If in Monster Derby Track
-			if (player.isInsideZone(ZoneId.MONSTER_TRACK))
-				return new Location(12661, 181687, -3560);
-			
-			Castle castle = null;
-			ClanHall clanhall = null;
-			
-			if (player.getClan() != null)
+			if (teleportType == TeleportType.CLAN_HALL)
 			{
-				// If teleport to clan hall
-				if (teleportWhere == TeleportWhereType.CLAN_HALL)
+				final ClanHall ch = ClanHallManager.getInstance().getClanHallByOwner(player.getClan());
+				if (ch != null)
 				{
-					clanhall = ClanHallManager.getInstance().getClanHallByOwner(player.getClan());
-					if (clanhall != null)
-					{
-						L2ClanHallZone zone = clanhall.getZone();
-						if (zone != null)
-							return zone.getSpawnLoc();
-					}
-				}
-				
-				// If teleport to castle
-				if (teleportWhere == TeleportWhereType.CASTLE)
-				{
-					castle = CastleManager.getInstance().getCastleByOwner(player.getClan());
-					
-					// check if player is on castle and player's clan is defender
-					if (castle == null)
-					{
-						castle = CastleManager.getInstance().getCastle(player);
-						if (!(castle != null && castle.getSiege().isInProgress() && castle.getSiege().getDefenderClan(player.getClan()) != null))
-							castle = null;
-					}
-					
-					if (castle != null && castle.getCastleId() > 0)
-						return castle.getCastleZone().getSpawnLoc();
-				}
-				
-				// If teleport to SiegeHQ
-				if (teleportWhere == TeleportWhereType.SIEGE_FLAG)
-				{
-					castle = CastleManager.getInstance().getCastle(player);
-					
-					if (castle != null && castle.getSiege().isInProgress())
-					{
-						// Check if player's clan is attacker
-						List<L2Npc> flags = castle.getSiege().getFlag(player.getClan());
-						if (flags != null && !flags.isEmpty())
-						{
-							// Spawn to flag - Need more work to get player to the nearest flag
-							L2Npc flag = flags.get(0);
-							return new Location(flag.getX(), flag.getY(), flag.getZ());
-						}
-					}
-				}
-
-				if (BanditStrongholdSiege.getInstance().isPlayerRegister(((L2PcInstance)activeChar).getClan(),activeChar.getName()))
-				{
-					L2Npc flag = BanditStrongholdSiege.getInstance().getSiegeFlag(((L2PcInstance)activeChar).getClan());
-					if (flag != null)
-						return new Location(flag.getX(), flag.getY(), flag.getZ());
-				}
-
-				if (WildBeastFarmSiege.getInstance().isPlayerRegister(((L2PcInstance)activeChar).getClan(),activeChar.getName()))
-				{
-					L2Npc flag = WildBeastFarmSiege.getInstance().getSiegeFlag(((L2PcInstance)activeChar).getClan());
-					if (flag != null)
-						return new Location(flag.getX(), flag.getY(), flag.getZ());
+					final L2ClanHallZone zone = ch.getZone();
+					if (zone != null)
+						return zone.getSpawnLoc();
 				}
 			}
-			
-			// Karma player land out of city
-			if (player.getKarma() > 0)
-				return getClosestTown(player.getTemplate().getRace(), activeChar.getX(), activeChar.getY()).getChaoticSpawnLoc();
-			
-			// Checking if in arena
-			L2ArenaZone arena = ZoneManager.getArena(player);
-			if (arena != null)
-				return arena.getSpawnLoc();
-			
-			// Checking if needed to be respawned in "far" town from the castle;
-			castle = CastleManager.getInstance().getCastle(player);
-			if (castle != null && castle.getSiege().isInProgress())
-				return getSecondClosestTown(activeChar.getX(), activeChar.getY()).getSpawnLoc();
-			
-			// Get the nearest town
-			return getClosestTown(player.getTemplate().getRace(), activeChar.getX(), activeChar.getY()).getSpawnLoc();
+			else if (teleportType == TeleportType.CASTLE)
+			{
+				// Check if the player is part of a castle owning clan.
+				Castle castle = CastleManager.getInstance().getCastleByOwner(player.getClan());
+				if (castle == null)
+				{
+					// If not, check if he is in defending side.
+					castle = CastleManager.getInstance().getCastle(player);
+					if (!(castle != null && castle.getSiege().isInProgress() && castle.getSiege().checkSides(player.getClan(), SiegeSide.DEFENDER, SiegeSide.OWNER)))
+						castle = null;
+				}
+				
+				if (castle != null && castle.getCastleId() > 0)
+					return castle.getCastleZone().getSpawnLoc();
+			}
+			else if (teleportType == TeleportType.SIEGE_FLAG)
+			{
+				final Siege siege = CastleManager.getInstance().getSiege(player);
+				if (siege != null)
+				{
+					final L2Npc flag = siege.getFlag(player.getClan());
+					if (flag != null)
+						return flag.getPosition();
+				}
+			}
+		}
+
+		if (BanditStrongholdSiege.getInstance().isPlayerRegister(player.getClan(),player.getName()))
+		{
+			L2Npc flag = BanditStrongholdSiege.getInstance().getSiegeFlag(player.getClan());
+			if (flag != null)
+				return new Location(flag.getX(), flag.getY(), flag.getZ());
+		}
+
+		if (WildBeastFarmSiege.getInstance().isPlayerRegister(player.getClan(),player.getName()))
+		{
+			L2Npc flag = WildBeastFarmSiege.getInstance().getSiegeFlag(player.getClan());
+			if (flag != null)
+				return new Location(flag.getX(), flag.getY(), flag.getZ());
 		}
 		
-		// Get the nearest town
-		return getClosestTown(activeChar.getX(), activeChar.getY()).getSpawnLoc();
+		// Check if the player needs to be teleported in second closest town, during an active siege.
+		final Castle castle = CastleManager.getInstance().getCastle(player);
+		if (castle != null && castle.getSiege().isInProgress())
+			return (player.getKarma() > 0) ? castle.getSiegeZone().getChaoticSpawnLoc() : castle.getSiegeZone().getSpawnLoc();
+		
+		// Karma player lands out of city.
+		if (player.getKarma() > 0)
+			return getClosestTown(player).getChaoticSpawnLoc();
+		
+		// Check if player is in arena.
+		final L2ArenaZone arena = ZoneManager.getInstance().getZone(player, L2ArenaZone.class);
+		if (arena != null)
+			return arena.getSpawnLoc();
+		
+		// Retrieve a random spawn location of the nearest town.
+		return getClosestTown(player).getSpawnLoc();
 	}
 	
 	/**
 	 * A specific method, used ONLY by players. There's a Race condition.
-	 * @param race : The Race of the player, got an effect for Elf and Dark Elf.
-	 * @param x : The current player's X location.
-	 * @param y : The current player's Y location.
+	 * @param player : The player used to find race, x and y.
 	 * @return the closest L2TownZone based on a X/Y location.
 	 */
-	private final L2TownZone getClosestTown(ClassRace race, int x, int y)
+	private final L2TownZone getClosestTown(L2PcInstance player)
 	{
-		switch (getMapRegion(x, y))
+		switch (getMapRegion(player.getX(), player.getY()))
 		{
 			case 0: // TI
 				return getTown(2);
 			
 			case 1:// Elven
-				return getTown((race == ClassRace.DARK_ELF) ? 1 : 3);
+				return getTown((player.getTemplate().getRace() == ClassRace.DARK_ELF) ? 1 : 3);
 			
 			case 2:// DE
-				return getTown((race == ClassRace.ELF) ? 3 : 1);
+				return getTown((player.getTemplate().getRace() == ClassRace.ELF) ? 3 : 1);
 			
 			case 3: // Orc
 				return getTown(4);

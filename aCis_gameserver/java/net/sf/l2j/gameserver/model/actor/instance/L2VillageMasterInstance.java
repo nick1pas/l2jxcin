@@ -35,7 +35,6 @@ import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.model.base.SubClass;
 import net.sf.l2j.gameserver.model.entity.Castle;
-import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadManager;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.AcquireSkillList;
@@ -638,18 +637,9 @@ public class L2VillageMasterInstance extends L2NpcInstance
 		
 		for (Castle castle : CastleManager.getInstance().getCastles())
 		{
-			final Siege siege = castle.getSiege();
-			if (siege.isInProgress())
+			if (castle.getSiege().checkSides(clan))
 			{
-				if (siege.getAttackerClan(clan) != null || siege.getDefenderClan(clan) != null)
-				{
-					player.sendPacket(SystemMessageId.CANNOT_DISSOLVE_WHILE_IN_SIEGE);
-					return;
-				}
-			}
-			else if (siege.getAttackerClan(clan) != null || siege.getDefenderClan(clan) != null || siege.getDefenderWaitingClan(clan) != null)
-			{
-				player.sendPacket(SystemMessageId.CANNOT_DISSOLVE_CAUSE_CLAN_WILL_PARTICIPATE_IN_CASTLE_SIEGE);
+				player.sendPacket((castle.getSiege().isInProgress()) ? SystemMessageId.CANNOT_DISSOLVE_WHILE_IN_SIEGE : SystemMessageId.CANNOT_DISSOLVE_CAUSE_CLAN_WILL_PARTICIPATE_IN_CASTLE_SIEGE);
 				return;
 			}
 		}
@@ -668,7 +658,7 @@ public class L2VillageMasterInstance extends L2NpcInstance
 			ClanTable.getInstance().scheduleRemoveClan(clan);
 		}
 		else
-			ClanTable.getInstance().destroyClan(clan.getClanId());
+			ClanTable.getInstance().destroyClan(clan);
 		
 		// The clan leader should take the XP penalty of a full death.
 		player.deathPenalty(false, false, false);

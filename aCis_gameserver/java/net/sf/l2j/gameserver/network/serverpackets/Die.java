@@ -16,11 +16,11 @@ package net.sf.l2j.gameserver.network.serverpackets;
 
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.L2SiegeClan;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.entity.Castle;
+import net.sf.l2j.gameserver.model.entity.Siege;
+import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
@@ -29,13 +29,13 @@ import net.sf.l2j.gameserver.model.zone.type.L2MultiZone;
 
 public class Die extends L2GameServerPacket
 {
+	private final L2Character _activeChar;
 	private final int _charObjId;
 	private final boolean _fake;
 	private boolean _canTeleport;
 	private boolean _sweepable;
 	private boolean _allowFixedRes;
 	private L2Clan _clan;
-	L2Character _activeChar;
 	
 	public Die(L2Character cha)
 	{
@@ -71,30 +71,24 @@ public class Die extends L2GameServerPacket
 		writeD(_canTeleport ? 0x01 : 0);
 		if (_canTeleport && _clan != null)
 		{
-			L2SiegeClan siegeClan = null;
-			boolean isInDefense = false;
+			SiegeSide side = null;
 			
-			Castle castle = CastleManager.getInstance().getCastle(_activeChar);
-			if (castle != null && castle.getSiege().isInProgress())
-			{
-				// siege in progress
-				siegeClan = castle.getSiege().getAttackerClan(_clan);
-				if (siegeClan == null && castle.getSiege().checkIsDefender(_clan))
-					isInDefense = true;
-			}
+			final Siege siege = CastleManager.getInstance().getSiege(_activeChar);
+			if (siege != null)
+				side = siege.getSide(_clan);
 			
-			writeD(_clan.hasHideout() ? 0x01 : 0x00); // to hide away
-			writeD(_clan.hasCastle() || isInDefense ? 0x01 : 0x00); // to castle
-			writeD(siegeClan != null && !isInDefense && !siegeClan.getFlags().isEmpty() ? 0x01 : 0x00); // to siege HQ
+			writeD((_clan.hasHideout()) ? 0x01 : 0x00); // to clanhall
+			writeD((_clan.hasCastle() || side == SiegeSide.OWNER || side == SiegeSide.DEFENDER) ? 0x01 : 0x00); // to castle
+			writeD((side == SiegeSide.ATTACKER && _clan.getFlag() != null) ? 0x01 : 0x00); // to siege HQ
 		}
 		else
 		{
-			writeD(0x00); // to hide away
+			writeD(0x00); // to clanhall
 			writeD(0x00); // to castle
 			writeD(0x00); // to siege HQ
 		}
 		
-		writeD(_sweepable ? 0x01 : 0x00); // sweepable (blue glow)
-		writeD(_allowFixedRes ? 0x01 : 0x00); // FIXED
+		writeD((_sweepable) ? 0x01 : 0x00); // sweepable (blue glow)
+		writeD((_allowFixedRes) ? 0x01 : 0x00); // FIXED
 	}
 }

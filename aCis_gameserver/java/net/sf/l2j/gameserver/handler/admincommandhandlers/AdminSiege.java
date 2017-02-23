@@ -32,6 +32,7 @@ import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.zone.type.L2ClanHallZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
+import net.sf.l2j.gameserver.network.serverpackets.SiegeInfo;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
 /**
@@ -104,7 +105,7 @@ public class AdminSiege implements IAdminCommandHandler
 			}
 			else if (command.equalsIgnoreCase("admin_clear_siege_list"))
 			{
-				castle.getSiege().clearSiegeClan();
+				castle.getSiege().clearAllClans();
 			}
 			else if (command.equalsIgnoreCase("admin_endsiege"))
 			{
@@ -112,7 +113,7 @@ public class AdminSiege implements IAdminCommandHandler
 			}
 			else if (command.equalsIgnoreCase("admin_list_siege_clans"))
 			{
-				castle.getSiege().listRegisterClan(activeChar);
+				activeChar.sendPacket(new SiegeInfo(castle));
 				return true;
 			}
 			else if (command.equalsIgnoreCase("admin_move_defenders"))

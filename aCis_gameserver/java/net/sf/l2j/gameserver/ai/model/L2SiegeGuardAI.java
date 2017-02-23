@@ -32,6 +32,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2SiegeGuardInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.AIType;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
+import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.util.Util;
 
@@ -271,7 +272,7 @@ public class L2SiegeGuardAI extends L2AttackableAI
 						continue;
 					
 					// Will affect only defenders or NPCs from same faction.
-					if (!actor.isAttackingDisabled() && (cha instanceof L2PcInstance && actor.getCastle().getSiege().checkIsDefender(((L2PcInstance) cha).getClan())) || (cha instanceof L2Npc && ArraysUtil.contains(clans, ((L2Npc) cha).getTemplate().getClans())))
+					if (!actor.isAttackingDisabled() && (cha instanceof L2PcInstance && actor.getCastle().getSiege().checkSides(((L2PcInstance) cha).getClan(), SiegeSide.DEFENDER, SiegeSide.OWNER)) || (cha instanceof L2Npc && ArraysUtil.contains(clans, ((L2Npc) cha).getTemplate().getClans())))
 					{
 						for (L2Skill sk : defaultList)
 						{

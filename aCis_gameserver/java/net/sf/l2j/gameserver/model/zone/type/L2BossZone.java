@@ -24,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.model.actor.L2Attackable;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
@@ -125,7 +125,7 @@ public class L2BossZone extends L2ZoneType
 				if (_oustLoc[0] != 0 && _oustLoc[1] != 0 && _oustLoc[2] != 0)
 					player.teleToLocation(_oustLoc[0], _oustLoc[1], _oustLoc[2], 0);
 				else
-					player.teleToLocation(TeleportWhereType.TOWN);
+					player.teleToLocation(TeleportType.TOWN);
 			}
 			else if (character instanceof L2Summon)
 			{
@@ -139,7 +139,7 @@ public class L2BossZone extends L2ZoneType
 					if (_oustLoc[0] != 0 && _oustLoc[1] != 0 && _oustLoc[2] != 0)
 						player.teleToLocation(_oustLoc[0], _oustLoc[1], _oustLoc[2], 0);
 					else
-						player.teleToLocation(TeleportWhereType.TOWN);
+						player.teleToLocation(TeleportType.TOWN);
 				}
 				
 				// Remove summon.
@@ -294,7 +294,7 @@ public class L2BossZone extends L2ZoneType
 				if (_oustLoc[0] != 0 && _oustLoc[1] != 0 && _oustLoc[2] != 0)
 					player.teleToLocation(_oustLoc[0], _oustLoc[1], _oustLoc[2], 0);
 				else
-					player.teleToLocation(TeleportWhereType.TOWN);
+					player.teleToLocation(TeleportType.TOWN);
 			}
 		}
 		_playerAllowEntry.clear();
@@ -308,7 +308,7 @@ public class L2BossZone extends L2ZoneType
 			return;
 		}
 		
-		for (L2Character character : _characterList)
+		for (L2Character character : _characterList.values())
 		{
 			if (character instanceof L2PcInstance)
 			{

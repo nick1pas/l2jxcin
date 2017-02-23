@@ -31,7 +31,7 @@ import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.model.L2AttackableAI;
 import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
-import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.handler.ISkillHandler;
@@ -503,9 +503,9 @@ public abstract class L2Character extends L2Object
 		teleToLocation(x, y, z, randomOffset);
 	}
 	
-	public void teleToLocation(TeleportWhereType teleportWhere)
+	public void teleToLocation(TeleportType teleportWhere)
 	{
-		teleToLocation(MapRegionTable.getInstance().getTeleToLocation(this, teleportWhere), 20);
+		teleToLocation(MapRegionTable.getInstance().getLocationToTeleport(this, teleportWhere), 20);
 	}
 	
 	// =========================================================

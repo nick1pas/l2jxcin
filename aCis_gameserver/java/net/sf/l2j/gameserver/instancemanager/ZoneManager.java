@@ -24,10 +24,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
@@ -39,19 +39,13 @@ import net.sf.l2j.gameserver.model.zone.L2ZoneType;
 import net.sf.l2j.gameserver.model.zone.form.ZoneCuboid;
 import net.sf.l2j.gameserver.model.zone.form.ZoneCylinder;
 import net.sf.l2j.gameserver.model.zone.form.ZoneNPoly;
-import net.sf.l2j.gameserver.model.zone.type.L2ArenaZone;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
-import net.sf.l2j.gameserver.model.zone.type.L2OlympiadStadiumZone;
 import net.sf.l2j.gameserver.xmlfactory.XMLDocumentFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-/**
- * This class manages the zones
- * @author durgus
- */
 public class ZoneManager
 {
 	private static final Logger _log = Logger.getLogger(ZoneManager.class.getName());
@@ -61,12 +55,7 @@ public class ZoneManager
 	
 	private final Map<Class<? extends L2ZoneType>, Map<Integer, ? extends L2ZoneType>> _classZones = new HashMap<>();
 	private int _lastDynamicId = 0;
-	private final List<ItemInstance> _debugItems = new ArrayList<>();
-	
-	public static final ZoneManager getInstance()
-	{
-		return SingletonHolder._instance;
-	}
+	private final Map<Integer, ItemInstance> _debugItems = new ConcurrentHashMap<>();
 	
 	protected ZoneManager()
 	{
@@ -220,11 +209,8 @@ public class ZoneManager
 								continue;
 							}
 							
-							// Create this zone. Parsing for cuboids is a
-							// bit different than for other polygons
-							// cuboids need exactly 2 points to be defined.
-							// Other polygons need at least 3 (one per
-							// vertex)
+							// Create this zone. Parsing for cuboids is a bit different than for other polygons cuboids need exactly 2 points to be defined.
+							// Other polygons need at least 3 (one per vertex)
 							if (zoneShape.equalsIgnoreCase("Cuboid"))
 							{
 								if (coords.length == 2)
@@ -257,8 +243,7 @@ public class ZoneManager
 							}
 							else if (zoneShape.equalsIgnoreCase("Cylinder"))
 							{
-								// A Cylinder zone requires a center point
-								// at x,y and a radius
+								// A Cylinder zone requires a center point at x,y and a radius
 								attrs = d.getAttributes();
 								final int zoneRad = Integer.parseInt(attrs.getNamedItem("rad").getNodeValue());
 								if (coords.length == 1 && zoneRad > 0)
@@ -305,23 +290,15 @@ public class ZoneManager
 									((L2SpawnZone) temp).addSpawn(spawnX, spawnY, spawnZ);
 							}
 						}
-						if (checkId(zoneId))
-							_log.config("Caution: Zone (" + zoneId + ") from file: " + f.getName() + " overrides previos definition.");
-						
 						addZone(zoneId, temp);
 						
-						// Register the zone into any world region it
-						// intersects with...
-						// currently 11136 test for each zone :>
+						// Register the zone into any world region it intersects with...
 						for (int x = 0; x < worldRegions.length; x++)
 						{
 							for (int y = 0; y < worldRegions[x].length; y++)
 							{
 								if (temp.getZone().intersectsRectangle(World.getRegionX(x), World.getRegionX(x + 1), World.getRegionY(y), World.getRegionY(y + 1)))
 								{
-									if (Config.DEBUG)
-										_log.info("Zone (" + zoneId + ") added to: " + x + " " + y);
-									
 									worldRegions[x][y].addZone(temp);
 								}
 							}
@@ -361,16 +338,6 @@ public class ZoneManager
 		{
 			_log.log(Level.WARNING, "ZoneManager: Couldn't store boss zones to database: " + e.getMessage(), e);
 		}
-	}
-	
-	public boolean checkId(int id)
-	{
-		for (Map<Integer, ? extends L2ZoneType> map : _classZones.values())
-		{
-			if (map.containsKey(id))
-				return true;
-		}
-		return false;
 	}
 	
 	/**
@@ -514,83 +481,34 @@ public class ZoneManager
 		}
 		return null;
 	}
-	
-	public static final L2ArenaZone getArena(L2Character character)
-	{
-		if (character == null)
-			return null;
-		
-		for (L2ZoneType temp : ZoneManager.getInstance().getZones(character.getX(), character.getY(), character.getZ()))
-		{
-			if (temp instanceof L2ArenaZone && temp.isCharacterInZone(character))
-				return ((L2ArenaZone) temp);
-		}
-		
-		return null;
-	}
-	
-	public static final L2OlympiadStadiumZone getOlympiadStadium(L2Character character)
-	{
-		if (character == null)
-			return null;
-		
-		for (L2ZoneType temp : ZoneManager.getInstance().getZones(character.getX(), character.getY(), character.getZ()))
-		{
-			if (temp instanceof L2OlympiadStadiumZone && temp.isCharacterInZone(character))
-				return ((L2OlympiadStadiumZone) temp);
-		}
-		return null;
-	}
-	
+
 	/**
-	 * For testing purposes only
-	 * @param <T>
-	 * @param obj
-	 * @param type
-	 * @return
+	 * Add an item on debug list. Used to visualize zones.
+	 * @param item : The item to add.
 	 */
-	@SuppressWarnings("unchecked")
-	public <T extends L2ZoneType> T getClosestZone(L2Object obj, Class<T> type)
+	public void addDebugItem(ItemInstance item)
 	{
-		T zone = getZone(obj, type);
-		if (zone == null)
-		{
-			double closestdis = Double.MAX_VALUE;
-			for (T temp : (Collection<T>) _classZones.get(type).values())
-			{
-				double distance = temp.getDistanceToZone(obj);
-				if (distance < closestdis)
-				{
-					closestdis = distance;
-					zone = temp;
-				}
-			}
-		}
-		return zone;
+		_debugItems.put(item.getObjectId(), item);
 	}
-	
-	/**
-	 * General storage for debug items used for visualizing zones.
-	 * @return list of items
-	 */
-	public List<ItemInstance> getDebugItems()
-	{
-		return _debugItems;
-	}
-	
+
 	/**
 	 * Remove all debug items from the world.
 	 */
 	public void clearDebugItems()
 	{
-		for (ItemInstance item : _debugItems)
+		for (ItemInstance item : _debugItems.values())
 			item.decayMe();
 		
 		_debugItems.clear();
 	}
-	
-	private static class SingletonHolder
+ 	
+	public static final ZoneManager getInstance()
 	{
-		protected static final ZoneManager _instance = new ZoneManager();
+		return SingletonHolder.INSTANCE;
 	}
+		
+ 	private static class SingletonHolder
+ 	{
+		protected static final ZoneManager INSTANCE = new ZoneManager();
+ 	}
 }

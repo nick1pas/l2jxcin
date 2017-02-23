@@ -121,7 +121,7 @@ public class ZoneNPoly extends L2ZoneForm
 	}
 	
 	@Override
-	public void visualizeZone(int z)
+	public void visualizeZone(int id, int z)
 	{
 		for (int i = 0; i < _x.length; i++)
 		{
@@ -136,7 +136,7 @@ public class ZoneNPoly extends L2ZoneForm
 			for (int o = 1; o <= lenght; o++)
 			{
 				float k = o / lenght;
-				dropDebugItem(57, 1, (int) (_x[i] + k * vx), (int) (_y[i] + k * vy), z);
+				dropDebugItem(id, (int) (_x[i] + k * vx), (int) (_y[i] + k * vy), z);
 			}
 		}
 	}

@@ -245,9 +245,9 @@ public final class CastleManager
 		_castles.values().stream().filter(c -> c.getTaxPercent() > maxTax).forEach(c -> c.setTaxPercent(maxTax, true));
 	}
 	
-	public Siege getSiege(L2Object activeObject)
+	public Siege getSiege(L2Object object)
 	{
-		return getSiege(activeObject.getX(), activeObject.getY(), activeObject.getZ());
+		return getSiege(object.getX(), object.getY(), object.getZ());
 	}
 	
 	public Siege getSiege(int x, int y, int z)

@@ -52,7 +52,7 @@ public final class RequestJoinAlly extends L2GameClientPacket
 			return;
 		}
 		
-		if (!clan.checkAllyJoinCondition(activeChar, target))
+		if (!L2Clan.checkAllyJoinCondition(activeChar, target))
 			return;
 		
 		if (!activeChar.getRequest().setRequest(target, this))

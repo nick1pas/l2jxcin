@@ -75,7 +75,7 @@ public class L2TownPetInstance extends L2NpcInstance
 		@Override
 		public void run()
 		{
-			if (!hasAI() || getSpawn() == null)
+			if (getSpawn() == null)
 				return;
 			
 			getAI().setIntention(CtrlIntention.MOVE_TO, GeoEngine.getInstance().canMoveToTargetLoc(getX(), getY(), getZ(), getSpawn().getLocX() + Rnd.get(-75, 75), getSpawn().getLocY() + Rnd.get(-75, 75), getZ()));

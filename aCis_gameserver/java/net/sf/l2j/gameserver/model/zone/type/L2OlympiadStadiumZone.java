@@ -16,7 +16,7 @@ package net.sf.l2j.gameserver.model.zone.type;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
-import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.L2Summon;
@@ -130,11 +130,8 @@ public class L2OlympiadStadiumZone extends L2SpawnZone
 		else
 			sm = SystemMessage.getSystemMessage(SystemMessageId.LEFT_COMBAT_ZONE);
 		
-		for (L2Character character : _characterList)
+		for (L2Character character : _characterList.values())
 		{
-			if (character == null)
-				continue;
-			
 			if (battleStarted)
 			{
 				character.setInsideZone(ZoneId.PVP, true);
@@ -181,7 +178,7 @@ public class L2OlympiadStadiumZone extends L2SpawnZone
 				if (summon != null)
 					summon.unSummon(_player);
 				
-				_player.teleToLocation(TeleportWhereType.TOWN);
+				_player.teleToLocation(TeleportType.TOWN);
 				_player = null;
 			}
 		}

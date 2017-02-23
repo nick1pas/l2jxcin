@@ -29,7 +29,7 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.AutoSpawnManager.AutoSpawnInstance;
 import net.sf.l2j.gameserver.model.World;
@@ -1106,7 +1106,7 @@ public class SevenSigns
 					continue;
 			}
 			
-			player.teleToLocation(TeleportWhereType.TOWN);
+			player.teleToLocation(TeleportType.TOWN);
 			player.setIsIn7sDungeon(false);
 		}
 	}

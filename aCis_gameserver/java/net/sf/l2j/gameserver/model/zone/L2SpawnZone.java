@@ -22,8 +22,8 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.model.Location;
 
 /**
- * Abstract zone with spawn locations
- * @author DS
+ * Abstract zone with spawn locations.<br>
+ * It inherits regular L2ZoneType behavior, with the possible addition of 2 Lists holding Locations.
  */
 public abstract class L2SpawnZone extends L2ZoneType
 {

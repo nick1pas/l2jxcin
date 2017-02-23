@@ -113,7 +113,7 @@ public class L2CastleMagicianInstance extends L2NpcInstance
 	{
 		if (getCastle() != null && player.getClan() != null)
 		{
-			if (getCastle().getZone().isActive())
+			if (getCastle().getSiegeZone().isActive())
 				return COND_BUSY_BECAUSE_OF_SIEGE;
 			
 			if (getCastle().getOwnerId() == player.getClanId())

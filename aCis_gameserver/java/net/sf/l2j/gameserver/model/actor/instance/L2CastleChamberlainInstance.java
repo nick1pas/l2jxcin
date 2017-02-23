@@ -36,6 +36,7 @@ import net.sf.l2j.gameserver.network.serverpackets.ExShowManorDefaultInfo;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowSeedInfo;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowSeedSetting;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
+import net.sf.l2j.gameserver.network.serverpackets.SiegeInfo;
 
 /**
  * Castle Chamberlains implementation, used for:
@@ -122,7 +123,7 @@ public class L2CastleChamberlainInstance extends L2MerchantInstance
 			if (!validatePrivileges(player, L2Clan.CP_CS_MANAGE_SIEGE))
 				return;
 			
-			castle.getSiege().listRegisterClan(player); // List current register clan
+			player.sendPacket(new SiegeInfo(castle));
 		}
 		else if (actualCommand.equalsIgnoreCase("receive_report"))
 		{
@@ -202,7 +203,7 @@ public class L2CastleChamberlainInstance extends L2MerchantInstance
 			if (!validatePrivileges(player, L2Clan.CP_CS_MANAGE_SIEGE))
 				return;
 			
-			castle.getSiege().listRegisterClan(player);
+			player.sendPacket(new SiegeInfo(castle));
 		}
 		else if (actualCommand.equalsIgnoreCase("manage_vault"))
 		{

@@ -14,7 +14,6 @@
  */
 package net.sf.l2j.gameserver.skills.l2skills;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Object;
@@ -23,7 +22,8 @@ import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2SiegeFlagInstance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.model.entity.Castle;
+import net.sf.l2j.gameserver.model.entity.Siege;
+import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -46,9 +46,6 @@ public class L2SkillSiegeFlag extends L2Skill
 			return;
 		
 		final L2PcInstance player = activeChar.getActingPlayer();
-		
-		if (!player.isClanLeader())
-			return;
 		
 		if (!checkIfOkToPlaceFlag(player, true))
 			return;
@@ -83,24 +80,19 @@ public class L2SkillSiegeFlag extends L2Skill
 	}
 	
 	/**
-	 * @param activeChar The L2Character of the character placing the flag
-	 * @param isCheckOnly if false, it will send a notification to the player telling him why it failed
-	 * @return true if character clan place a flag
+	 * @param player : The player placing the flag.
+	 * @param isCheckOnly : If false, send a notification to the player telling him why it failed.
+	 * @return true if the player can place a flag.
 	 */
-	public static boolean checkIfOkToPlaceFlag(L2Character activeChar, boolean isCheckOnly)
+	public static boolean checkIfOkToPlaceFlag(L2PcInstance player, boolean isCheckOnly)
 	{
-		if (!(activeChar instanceof L2PcInstance))
-			return false;
-		
-		final L2PcInstance player = activeChar.getActingPlayer();
-		final Castle castle = CastleManager.getInstance().getCastle(activeChar);
-		
+		final Siege siege = CastleManager.getInstance().getSiege(player);
 		SystemMessage sm;
-		if (castle == null || !castle.getSiege().isInProgress() || castle.getSiege().getAttackerClan(player.getClan()) == null)
+		if (siege == null || !siege.checkSide(player.getClan(), SiegeSide.ATTACKER))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(247);
 		else if (!player.isClanLeader())
 			sm = SystemMessage.getSystemMessage(SystemMessageId.ONLY_CLAN_LEADER_CAN_ISSUE_COMMANDS);
-		else if (castle.getSiege().getAttackerClan(player.getClan()).getFlags().size() >= Config.FLAGS_MAX_COUNT)
+		else if (player.getClan().getFlag() != null)
 			sm = SystemMessage.getSystemMessage(SystemMessageId.NOT_ANOTHER_HEADQUARTERS);
 		else if (!player.isInsideZone(ZoneId.HQ))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.NOT_SET_UP_BASE_HERE);

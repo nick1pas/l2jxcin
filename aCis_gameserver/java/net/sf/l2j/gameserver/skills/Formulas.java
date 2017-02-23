@@ -24,7 +24,6 @@ import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
-import net.sf.l2j.gameserver.model.L2SiegeClan;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Npc;
@@ -34,6 +33,7 @@ import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.entity.Siege;
+import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.item.kind.Armor;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.item.kind.Weapon;
@@ -414,19 +414,10 @@ public final class Formulas
 			return false;
 		
 		final Siege siege = CastleManager.getInstance().getSiege(activeChar);
-		if (siege == null || !siege.isInProgress())
+		if (siege == null || !siege.checkSide(activeChar.getClan(), SiegeSide.ATTACKER))
 			return false;
 		
-		final L2SiegeClan siegeClan = siege.getAttackerClan(activeChar.getClan().getClanId());
-		if (siegeClan == null)
-			return false;
-		
-		for (L2Npc flag : siegeClan.getFlags())
-		{
-			if (Util.checkIfInRange(200, activeChar, flag, true))
-				return true;
-		}
-		return false;
+		return Util.checkIfInRange(200, activeChar, activeChar.getClan().getFlag(), true);
 	}
 	
 	/**

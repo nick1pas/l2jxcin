@@ -77,6 +77,6 @@ public class L2CastleDoormenInstance extends L2DoormenInstance
 		 * SiegableHall hall = getConquerableHall(); if (hall != null) return hall.isInSiege();
 		 */
 		
-		return getCastle().getZone().isActive();
+		return getCastle().getSiegeZone().isActive();
 	}
 }

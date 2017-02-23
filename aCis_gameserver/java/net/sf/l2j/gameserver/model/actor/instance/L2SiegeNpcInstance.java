@@ -17,19 +17,20 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
+import net.sf.l2j.gameserver.network.serverpackets.SiegeInfo;
 
 public class L2SiegeNpcInstance extends L2NpcInstance
 {
-	public L2SiegeNpcInstance(int objectID, NpcTemplate template)
+	public L2SiegeNpcInstance(int objectId, NpcTemplate template)
 	{
-		super(objectID, template);
+		super(objectId, template);
 	}
 	
 	@Override
 	public void showChatWindow(L2PcInstance player)
 	{
-		if (validateCondition())
-			getCastle().getSiege().listRegisterClan(player);
+		if (!getCastle().getSiege().isInProgress())
+			player.sendPacket(new SiegeInfo(getCastle()));
 		else
 		{
 			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
@@ -39,13 +40,5 @@ public class L2SiegeNpcInstance extends L2NpcInstance
 			player.sendPacket(html);
 			player.sendPacket(ActionFailed.STATIC_PACKET);
 		}
-	}
-	
-	private boolean validateCondition()
-	{
-		if (getCastle().getSiege().isInProgress())
-			return false; // Busy because of siege
-			
-		return true;
 	}
 }

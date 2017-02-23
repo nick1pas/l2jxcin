@@ -26,7 +26,7 @@ import net.sf.l2j.gameserver.communitybbs.Manager.MailBBSManager;
 import net.sf.l2j.gameserver.datatables.AdminCommandAccessRights;
 import net.sf.l2j.gameserver.datatables.AnnouncementTable;
 import net.sf.l2j.gameserver.datatables.GmListTable;
-import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
@@ -45,6 +45,7 @@ import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.entity.Siege;
+import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
@@ -174,9 +175,10 @@ public class EnterWorld extends L2GameClientPacket
 				if (!siege.isInProgress())
 					continue;
 				
-				if (siege.checkIsAttacker(clan))
+				final SiegeSide type = siege.getSide(clan);
+				if (type == SiegeSide.ATTACKER)
 					activeChar.setSiegeState((byte) 1);
-				else if (siege.checkIsDefender(clan))
+				else if (type == SiegeSide.DEFENDER || type == SiegeSide.OWNER)
 					activeChar.setSiegeState((byte) 2);
 			}
 			
@@ -342,7 +344,7 @@ public class EnterWorld extends L2GameClientPacket
 		
 		// If player logs back in a stadium, port him in nearest town.
 		if (Olympiad.getInstance().playerInStadia(activeChar))
-			activeChar.teleToLocation(TeleportWhereType.TOWN);
+			activeChar.teleToLocation(TeleportType.TOWN);
 		
 		if (DimensionalRiftManager.getInstance().checkIfInRiftZone(activeChar.getX(), activeChar.getY(), activeChar.getZ(), false))
 			DimensionalRiftManager.getInstance().teleportToWaitingRoom(activeChar);
@@ -352,7 +354,7 @@ public class EnterWorld extends L2GameClientPacket
 		
 		// Attacker or spectator logging into a siege zone will be ported at town.
 		if (!activeChar.isGM() && (!activeChar.isInSiege() || activeChar.getSiegeState() < 2) && activeChar.isInsideZone(ZoneId.SIEGE))
-			activeChar.teleToLocation(TeleportWhereType.TOWN);
+			activeChar.teleToLocation(TeleportType.TOWN);
 		
 		L2ClassMasterInstance.showQuestionMark(activeChar);
 		

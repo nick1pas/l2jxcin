@@ -21,7 +21,7 @@ import net.sf.l2j.gameserver.model.actor.L2Character;
 import net.sf.l2j.gameserver.model.actor.L2Playable;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
-import net.sf.l2j.gameserver.model.entity.Castle;
+import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
@@ -74,8 +74,8 @@ public class ScrollOfResurrection implements IItemHandler
 		final L2PcInstance targetPlayer = target.getActingPlayer();
 		
 		// Check if target isn't in a active siege zone.
-		final Castle castle = CastleManager.getInstance().getCastle(targetPlayer.getX(), targetPlayer.getY(), targetPlayer.getZ());
-		if (castle != null && castle.getSiege().isInProgress())
+		final Siege siege = CastleManager.getInstance().getSiege(targetPlayer);
+		if (siege != null)
 		{
 			activeChar.sendPacket(SystemMessageId.CANNOT_BE_RESURRECTED_DURING_SIEGE);
 			return;

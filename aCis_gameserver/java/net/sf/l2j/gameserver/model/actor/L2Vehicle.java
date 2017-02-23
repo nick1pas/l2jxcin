@@ -23,7 +23,7 @@ import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
 import net.sf.l2j.gameserver.ai.model.L2VehicleAI;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
-import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportWhereType;
+import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.VehiclePathPoint;
@@ -201,7 +201,7 @@ public class L2Vehicle extends L2Character
 		player.setInsideZone(ZoneId.PEACE, false);
 		player.sendPacket(SystemMessageId.EXIT_PEACEFUL_ZONE);
 		
-		final Location loc = (location.equals(Location.DUMMY_LOC)) ? MapRegionTable.getInstance().getTeleToLocation(this, TeleportWhereType.TOWN) : location;
+		final Location loc = (location.equals(Location.DUMMY_LOC)) ? MapRegionTable.getInstance().getLocationToTeleport(this, TeleportType.TOWN) : location;
 		if (player.isOnline())
 			player.teleToLocation(loc.getX(), loc.getY(), loc.getZ(), 0);
 		else

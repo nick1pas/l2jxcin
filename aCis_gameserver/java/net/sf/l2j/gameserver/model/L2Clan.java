@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.sf.l2j.commons.lang.StringUtil;
+import net.sf.l2j.commons.math.MathUtil;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
@@ -36,13 +37,14 @@ import net.sf.l2j.gameserver.communitybbs.Manager.ForumsBBSManager;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
+import net.sf.l2j.gameserver.model.actor.L2Npc;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
 import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance.TimeStamp;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.Siege;
+import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.itemcontainer.ClanWarehouse;
 import net.sf.l2j.gameserver.model.itemcontainer.ItemContainer;
-import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
@@ -145,6 +147,7 @@ public class L2Clan
 	
 	private int _siegeKills;
 	private int _siegeDeaths;
+	private L2Npc _flag;
 	
 	/**
 	 * Called if a clan is referenced only by id. In this case all other data needs to be fetched from db
@@ -329,9 +332,9 @@ public class L2Clan
 			if (!siege.isInProgress())
 				continue;
 			
-			if (siege.checkIsAttacker(this))
+			if (siege.checkSide(this, SiegeSide.ATTACKER))
 				player.setSiegeState((byte) 1);
-			else if (siege.checkIsDefender(this))
+			else if (siege.checkSides(this, SiegeSide.DEFENDER, SiegeSide.OWNER))
 				player.setSiegeState((byte) 2);
 		}
 		
@@ -914,6 +917,20 @@ public class L2Clan
 	public void setSiegeDeaths(int value)
 	{
 		_siegeDeaths = value;
+	}
+ 	
+	public L2Npc getFlag()
+	{
+		return _flag;
+	}
+	
+	public void setFlag(L2Npc flag)
+	{
+		// If we set flag as null and clan flag is currently existing, delete it.
+		if (flag == null && _flag != null)
+			_flag.deleteMe();
+		
+		_flag = flag;
 	}
 	
 	/**
@@ -1541,7 +1558,7 @@ public class L2Clan
 		// Store the online members (used in 2 positions, can't merge)
 		final L2PcInstance[] members = getOnlineMembers();
 		
-		_reputationScore = Math.min(100000000, Math.max(-100000000, value));
+		_reputationScore = MathUtil.limit(value, -100000000, 100000000);
 		
 		// Refresh clan windows of all clan members, and reward/remove skills.
 		if (needRefresh)
@@ -1702,60 +1719,56 @@ public class L2Clan
 	}
 	
 	/**
-	 * Checks if activeChar and target meet various conditions to join a clan
-	 * @param activeChar
-	 * @param target
-	 * @return
+	 * @param player : The player alliance launching the invitation.
+	 * @param target : The target clan to recruit.
+	 * @return true if target's clan meet conditions to join player's alliance.
 	 */
-	public boolean checkAllyJoinCondition(L2PcInstance activeChar, L2PcInstance target)
+	public static boolean checkAllyJoinCondition(L2PcInstance player, L2PcInstance target)
 	{
-		if (activeChar == null)
+		if (player == null)
 			return false;
 		
-		if (activeChar.getAllyId() == 0 || !activeChar.isClanLeader() || activeChar.getClanId() != activeChar.getAllyId())
+		if (player.getAllyId() == 0 || !player.isClanLeader() || player.getClanId() != player.getAllyId())
 		{
-			activeChar.sendPacket(SystemMessageId.FEATURE_ONLY_FOR_ALLIANCE_LEADER);
+			player.sendPacket(SystemMessageId.FEATURE_ONLY_FOR_ALLIANCE_LEADER);
 			return false;
 		}
 		
-		L2Clan leaderClan = activeChar.getClan();
-		if (leaderClan.getAllyPenaltyExpiryTime() > System.currentTimeMillis())
+		final L2Clan leaderClan = player.getClan();
+		if (leaderClan.getAllyPenaltyType() == PENALTY_TYPE_DISMISS_CLAN && leaderClan.getAllyPenaltyExpiryTime() > System.currentTimeMillis())
 		{
-			if (leaderClan.getAllyPenaltyType() == PENALTY_TYPE_DISMISS_CLAN)
-			{
-				activeChar.sendPacket(SystemMessageId.CANT_INVITE_CLAN_WITHIN_1_DAY);
-				return false;
-			}
+			player.sendPacket(SystemMessageId.CANT_INVITE_CLAN_WITHIN_1_DAY);
+			return false;
 		}
 		
 		if (target == null)
 		{
-			activeChar.sendPacket(SystemMessageId.SELECT_USER_TO_INVITE);
+			player.sendPacket(SystemMessageId.SELECT_USER_TO_INVITE);
 			return false;
 		}
 		
-		if (activeChar.getObjectId() == target.getObjectId())
+		if (player.getObjectId() == target.getObjectId())
 		{
-			activeChar.sendPacket(SystemMessageId.CANNOT_INVITE_YOURSELF);
+			player.sendPacket(SystemMessageId.CANNOT_INVITE_YOURSELF);
 			return false;
 		}
 		
 		if (target.getClan() == null)
 		{
-			activeChar.sendPacket(SystemMessageId.TARGET_MUST_BE_IN_CLAN);
+			player.sendPacket(SystemMessageId.TARGET_MUST_BE_IN_CLAN);
 			return false;
 		}
 		
 		if (!target.isClanLeader())
 		{
-			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_NOT_A_CLAN_LEADER).addCharName(target));
+			player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_NOT_A_CLAN_LEADER).addCharName(target));
 			return false;
 		}
 		
-		L2Clan targetClan = target.getClan();
+		final L2Clan targetClan = target.getClan();
 		if (target.getAllyId() != 0)
 		{
-			activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CLAN_ALREADY_MEMBER_OF_S2_ALLIANCE).addString(targetClan.getName()).addString(targetClan.getAllyName()));
+			player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CLAN_ALREADY_MEMBER_OF_S2_ALLIANCE).addString(targetClan.getName()).addString(targetClan.getAllyName()));
 			return false;
 		}
 		
@@ -1763,32 +1776,36 @@ public class L2Clan
 		{
 			if (targetClan.getAllyPenaltyType() == PENALTY_TYPE_CLAN_LEAVED)
 			{
-				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CANT_ENTER_ALLIANCE_WITHIN_1_DAY).addString(targetClan.getName()));
+				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_CANT_ENTER_ALLIANCE_WITHIN_1_DAY).addString(targetClan.getName()));
 				return false;
 			}
 			
 			if (targetClan.getAllyPenaltyType() == PENALTY_TYPE_CLAN_DISMISSED)
 			{
-				activeChar.sendPacket(SystemMessageId.CANT_ENTER_ALLIANCE_WITHIN_1_DAY);
+				player.sendPacket(SystemMessageId.CANT_ENTER_ALLIANCE_WITHIN_1_DAY);
 				return false;
 			}
 		}
 		
-		if (activeChar.isInsideZone(ZoneId.SIEGE) && target.isInsideZone(ZoneId.SIEGE))
+		// Check if clans are registered as opponents on the same siege.
+		for (Castle castle : CastleManager.getInstance().getCastles())
 		{
-			activeChar.sendPacket(SystemMessageId.OPPOSING_CLAN_IS_PARTICIPATING_IN_SIEGE);
-			return false;
+			if (castle.getSiege().isOnOppositeSide(leaderClan, targetClan))
+			{
+				player.sendPacket(SystemMessageId.OPPOSING_CLAN_IS_PARTICIPATING_IN_SIEGE);
+				return false;
+			}
 		}
 		
 		if (leaderClan.isAtWarWith(targetClan.getClanId()))
 		{
-			activeChar.sendPacket(SystemMessageId.MAY_NOT_ALLY_CLAN_BATTLE);
+			player.sendPacket(SystemMessageId.MAY_NOT_ALLY_CLAN_BATTLE);
 			return false;
 		}
 		
-		if (ClanTable.getInstance().getClanAllies(activeChar.getAllyId()).size() >= Config.ALT_MAX_NUM_OF_CLANS_IN_ALLY)
+		if (ClanTable.getInstance().getClanAllies(player.getAllyId()).size() >= Config.ALT_MAX_NUM_OF_CLANS_IN_ALLY)
 		{
-			activeChar.sendPacket(SystemMessageId.YOU_HAVE_EXCEEDED_THE_LIMIT);
+			player.sendPacket(SystemMessageId.YOU_HAVE_EXCEEDED_THE_LIMIT);
 			return false;
 		}
 		
@@ -1854,13 +1871,10 @@ public class L2Clan
 			return;
 		}
 		
-		if (_allyPenaltyExpiryTime > System.currentTimeMillis())
+		if (_allyPenaltyType == L2Clan.PENALTY_TYPE_DISSOLVE_ALLY && _allyPenaltyExpiryTime > System.currentTimeMillis())
 		{
-			if (_allyPenaltyType == L2Clan.PENALTY_TYPE_DISSOLVE_ALLY)
-			{
-				player.sendPacket(SystemMessageId.CANT_CREATE_ALLIANCE_10_DAYS_DISOLUTION);
-				return;
-			}
+			player.sendPacket(SystemMessageId.CANT_CREATE_ALLIANCE_10_DAYS_DISOLUTION);
+			return;
 		}
 		
 		if (_dissolvingExpiryTime > System.currentTimeMillis())
@@ -1889,8 +1903,7 @@ public class L2Clan
 		
 		for (Castle castle : CastleManager.getInstance().getCastles())
 		{
-			final Siege siege = castle.getSiege();
-			if (siege.getAttackerClan(this) != null || siege.getDefenderClan(this) != null || (!siege.isInProgress() && siege.getDefenderWaitingClan(this) != null))
+			if (castle.getSiege().isInProgress() && castle.getSiege().checkSides(this))
 			{
 				player.sendPacket(SystemMessageId.NO_ALLY_CREATION_WHILE_SIEGE);
 				return;
@@ -1903,7 +1916,6 @@ public class L2Clan
 		updateClanInDB();
 		
 		player.sendPacket(new UserInfo(player));
-		player.sendMessage("Alliance " + allyName + " has been created.");
 	}
 	
 	public void dissolveAlly(L2PcInstance player)
@@ -1920,13 +1932,16 @@ public class L2Clan
 			return;
 		}
 		
-		for (Castle castle : CastleManager.getInstance().getCastles())
+		// For every clan in alliance, check if it is currently registered on siege.
+		for (L2Clan clan : ClanTable.getInstance().getClanAllies(_allyId))
 		{
-			final Siege siege = castle.getSiege();
-			if (siege.getAttackerClan(this) != null || siege.getDefenderClan(this) != null || (!siege.isInProgress() && siege.getDefenderWaitingClan(this) != null))
+			for (Castle castle : CastleManager.getInstance().getCastles())
 			{
-				player.sendPacket(SystemMessageId.CANNOT_DISSOLVE_ALLY_WHILE_IN_SIEGE);
-				return;
+				if (castle.getSiege().isInProgress() && castle.getSiege().checkSides(clan))
+				{
+					player.sendPacket(SystemMessageId.CANNOT_DISSOLVE_ALLY_WHILE_IN_SIEGE);
+					return;
+				}
 			}
 		}
 		
@@ -2227,29 +2242,10 @@ public class L2Clan
 	 */
 	public boolean isRegisteredOnSiege()
 	{
-		if (hasCastle())
-			return true;
+		for (Castle castle : CastleManager.getInstance().getCastles())
+			if (castle.getSiege().checkSides(this))
+				return true;
 		
-		boolean register = false;
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
-		{
-			PreparedStatement st = con.prepareStatement("SELECT clan_id FROM siege_clans WHERE clan_id=?");
-			st.setInt(1, getClanId());
-			
-			ResultSet rs = st.executeQuery();
-			while (rs.next())
-			{
-				register = true;
-				break;
-			}
-			
-			rs.close();
-			st.close();
-		}
-		catch (Exception e)
-		{
-			_log.warning("Exception: checkIsRegistered(): " + e);
-		}
-		return register;
+		return false;
 	}
 }

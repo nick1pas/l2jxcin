@@ -22,8 +22,7 @@ import net.sf.l2j.gameserver.model.zone.L2ZoneType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 
 /**
- * A castle teleporter zone used for Mass Gatekeepers
- * @author Kerberos
+ * A castle teleporter zone used for Mass Gatekeepers.
  */
 public class L2CastleTeleportZone extends L2ZoneType
 {
@@ -85,22 +84,12 @@ public class L2CastleTeleportZone extends L2ZoneType
 		
 		for (L2PcInstance player : getKnownTypeInside(L2PcInstance.class))
 		{
-			if (player.isOnline())
-				player.teleToLocation(Rnd.get(_spawnLoc[0], _spawnLoc[1]), Rnd.get(_spawnLoc[2], _spawnLoc[3]), _spawnLoc[4], 0);
+			player.teleToLocation(Rnd.get(_spawnLoc[0], _spawnLoc[1]), Rnd.get(_spawnLoc[2], _spawnLoc[3]), _spawnLoc[4], 0);
 		}
 	}
 	
 	public int getCastleId()
 	{
 		return _castleId;
-	}
-	
-	/**
-	 * Get the spawn locations
-	 * @return
-	 */
-	public int[] getSpawn()
-	{
-		return _spawnLoc;
 	}
 }

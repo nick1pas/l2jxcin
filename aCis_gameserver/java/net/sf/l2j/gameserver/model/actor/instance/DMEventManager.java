@@ -16,7 +16,6 @@ package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.cache.HtmCache;
-import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
@@ -25,7 +24,7 @@ import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 /**
  * @author L0ngh0rn
  */
-public class DMEventManager extends Npc
+public class DMEventManager extends Folk
 {
 	private static final String htmlPath = "data/html/mods/DMEvent/";
 	

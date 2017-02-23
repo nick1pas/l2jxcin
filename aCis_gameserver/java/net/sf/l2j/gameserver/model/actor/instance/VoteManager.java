@@ -19,7 +19,6 @@ package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.VoteHandler;
-import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -28,7 +27,7 @@ import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
  * @author Reborn12
  */
 
-public class VoteManager extends Npc
+public class VoteManager extends Folk
 {
 	public VoteManager(int objectId, NpcTemplate template)
 	{

@@ -21,7 +21,6 @@ import java.util.StringTokenizer;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
@@ -35,7 +34,7 @@ import net.sf.l2j.gameserver.network.serverpackets.ValidateLocation;
  * @author squallcs
  * @rework by Leonardo Holanda
  */
-public class BugReport extends Npc
+public class BugReport extends Folk
 {
     private static String _type;
     

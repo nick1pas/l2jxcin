@@ -20,10 +20,9 @@ package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.Character;
-import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 
-public class Deco extends Npc
+public class Deco extends Folk
 {
 	public Deco(int objectId, NpcTemplate template)
 	{

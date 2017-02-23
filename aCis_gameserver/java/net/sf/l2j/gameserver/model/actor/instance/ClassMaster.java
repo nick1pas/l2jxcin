@@ -22,7 +22,6 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.datatables.CharTemplateTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
-import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
@@ -50,7 +49,7 @@ import net.sf.l2j.gameserver.util.FloodProtectors.Action;
  * </ul>
  * Added to the "change class" function, this NPC can noblesse and give available skills (related to your current class and level).
  */
-public final class ClassMaster extends Npc
+public final class ClassMaster extends Folk
 {
 	public ClassMaster(int objectId, NpcTemplate template)
 	{

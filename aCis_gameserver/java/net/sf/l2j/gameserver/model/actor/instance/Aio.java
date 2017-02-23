@@ -17,7 +17,6 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.AioManagerTable;
 import net.sf.l2j.gameserver.instancemanager.AioManager;
-import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
@@ -27,7 +26,7 @@ import net.sf.l2j.gameserver.templates.L2Aio;
 /**
  * @author rapfersan92
  */
-public class Aio extends Npc
+public class Aio extends Folk
 {
 	public Aio(int objectId, NpcTemplate template)
 	{

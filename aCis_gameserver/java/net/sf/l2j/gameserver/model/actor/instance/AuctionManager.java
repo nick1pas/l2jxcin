@@ -27,7 +27,6 @@ import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.model.AuctionItem;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.serverpackets.InventoryUpdate;
@@ -37,7 +36,7 @@ import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
  * @author Anarchy
  *
  */
-public class AuctionManager extends Npc
+public class AuctionManager extends Folk
 {
 	public AuctionManager(int objectId, NpcTemplate template)
 	{

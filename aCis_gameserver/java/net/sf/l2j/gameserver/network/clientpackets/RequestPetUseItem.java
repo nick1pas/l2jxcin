@@ -18,8 +18,8 @@ import net.sf.l2j.commons.util.ArraysUtil;
 
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.handler.ItemHandler;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.model.zone.type.L2MultiZone;
@@ -50,11 +50,11 @@ public final class RequestPetUseItem extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final L2PcInstance activeChar = getClient().getActiveChar();
+		final Player activeChar = getClient().getActiveChar();
 		if (activeChar == null || !activeChar.hasPet())
 			return;
 		
-		final L2PetInstance pet = (L2PetInstance) activeChar.getPet();
+		final Pet pet = (Pet) activeChar.getPet();
 		
 		final ItemInstance item = pet.getInventory().getItemByObjectId(_objectId);
 		if (item == null)

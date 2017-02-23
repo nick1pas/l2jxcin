@@ -20,12 +20,12 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Object.PolyType;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.instance.Monster;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 
 public abstract class AbstractNpcInfo extends L2GameServerPacket
@@ -41,7 +41,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 	
 	protected String _name = "", _title = "";
 	
-	public AbstractNpcInfo(L2Character cha)
+	public AbstractNpcInfo(Character cha)
 	{
 		_isSummoned = cha.isShowSummonAnimation();
 		_x = cha.getX();
@@ -59,9 +59,9 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 	 */
 	public static class NpcInfo extends AbstractNpcInfo
 	{
-		private final L2Npc _npc;
+		private final Npc _npc;
 		
-		public NpcInfo(L2Npc cha, L2Character attacker)
+		public NpcInfo(Npc cha, Character attacker)
 		{
 			super(cha);
 			_npc = cha;
@@ -95,7 +95,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 			else if (_npc.getTemplate().isUsingServerSideTitle())
 				_title = _npc.getTitle();
 			
-			if (Config.SHOW_NPC_LVL && _npc instanceof L2MonsterInstance)
+			if (Config.SHOW_NPC_LVL && _npc instanceof Monster)
 				_title = "Lv " + _npc.getLevel() + (_npc.getTemplate().getAggroRange() > 0 ? "* " : " ") + _title;
 			
 			// NPC crest system
@@ -186,11 +186,11 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 	 */
 	public static class SummonInfo extends AbstractNpcInfo
 	{
-		private final L2Summon _summon;
-		private final L2PcInstance _owner;
+		private final Summon _summon;
+		private final Player _owner;
 		private int _summonAnimation = 0;
 		
-		public SummonInfo(L2Summon cha, L2PcInstance attacker, int val)
+		public SummonInfo(Summon cha, Player attacker, int val)
 		{
 			super(cha);
 			_summon = cha;
@@ -271,7 +271,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 			writeS(_name);
 			writeS(_title);
 			
-			writeD(_summon instanceof L2PetInstance ? 0x00 : 0x01);
+			writeD(_summon instanceof Pet ? 0x00 : 0x01);
 			writeD(_summon.getPvpFlag());
 			writeD(_summon.getKarma());
 			
@@ -298,11 +298,11 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 	 */
 	public static class PcMorphInfo extends AbstractNpcInfo
 	{
-		private final L2PcInstance _pc;
+		private final Player _pc;
 		private final NpcTemplate _template;
 		private final int _swimSpd;
 		
-		public PcMorphInfo(L2PcInstance cha, NpcTemplate template)
+		public PcMorphInfo(Player cha, NpcTemplate template)
 		{
 			super(cha);
 			_pc = cha;

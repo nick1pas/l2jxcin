@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.datatables;
 
 import java.util.ArrayList;
@@ -19,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
@@ -30,7 +16,7 @@ import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
  */
 public class GmListTable
 {
-	private final Map<L2PcInstance, Boolean> _gmList = new ConcurrentHashMap<>();
+	private final Map<Player, Boolean> _gmList = new ConcurrentHashMap<>();
 	
 	protected GmListTable()
 	{
@@ -42,11 +28,11 @@ public class GmListTable
 		return SingletonHolder._instance;
 	}
 	
-	public List<L2PcInstance> getAllGms(boolean includeHidden)
+	public List<Player> getAllGms(boolean includeHidden)
 	{
-		List<L2PcInstance> tmpGmList = new ArrayList<>();
+		List<Player> tmpGmList = new ArrayList<>();
 		
-		for (Map.Entry<L2PcInstance, Boolean> entry : _gmList.entrySet())
+		for (Map.Entry<Player, Boolean> entry : _gmList.entrySet())
 		{
 			if (includeHidden || !entry.getValue())
 				tmpGmList.add(entry.getKey());
@@ -59,7 +45,7 @@ public class GmListTable
 	{
 		List<String> tmpGmList = new ArrayList<>();
 		
-		for (Map.Entry<L2PcInstance, Boolean> entry : _gmList.entrySet())
+		for (Map.Entry<Player, Boolean> entry : _gmList.entrySet())
 		{
 			String name = entry.getKey().getName();
 			if (!entry.getValue())
@@ -72,16 +58,16 @@ public class GmListTable
 	}
 	
 	/**
-	 * Add a L2PcInstance player to the Set _gmList
+	 * Add a Player player to the Set _gmList
 	 * @param player
 	 * @param hidden
 	 */
-	public void addGm(L2PcInstance player, boolean hidden)
+	public void addGm(Player player, boolean hidden)
 	{
 		_gmList.put(player, hidden);
 	}
 	
-	public void deleteGm(L2PcInstance player)
+	public void deleteGm(Player player)
 	{
 		_gmList.remove(player);
 	}
@@ -91,20 +77,20 @@ public class GmListTable
 	 * @param player : The GM to affect.
 	 * @param showOrHide : The option to set.
 	 */
-	public void showOrHideGm(L2PcInstance player, boolean showOrHide)
+	public void showOrHideGm(Player player, boolean showOrHide)
 	{
 		if (_gmList.containsKey(player))
 			_gmList.put(player, showOrHide);
 	}
 	
-	public boolean isGmVisible(L2PcInstance player)
+	public boolean isGmVisible(Player player)
 	{
 		return _gmList.get(player);
 	}
 	
 	public boolean isGmOnline(boolean includeHidden)
 	{
-		for (Map.Entry<L2PcInstance, Boolean> entry : _gmList.entrySet())
+		for (Map.Entry<Player, Boolean> entry : _gmList.entrySet())
 		{
 			if (includeHidden || !entry.getValue())
 				return true;
@@ -113,7 +99,7 @@ public class GmListTable
 		return false;
 	}
 	
-	public void sendListToPlayer(L2PcInstance player)
+	public void sendListToPlayer(Player player)
 	{
 		if (isGmOnline(player.isGM()))
 		{
@@ -131,13 +117,13 @@ public class GmListTable
 	
 	public static void broadcastToGMs(L2GameServerPacket packet)
 	{
-		for (L2PcInstance gm : getInstance().getAllGms(true))
+		for (Player gm : getInstance().getAllGms(true))
 			gm.sendPacket(packet);
 	}
 	
 	public static void broadcastMessageToGMs(String message)
 	{
-		for (L2PcInstance gm : getInstance().getAllGms(true))
+		for (Player gm : getInstance().getAllGms(true))
 			gm.sendMessage(message);
 	}
 	

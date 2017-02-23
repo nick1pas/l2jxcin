@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.ai.model;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
@@ -20,9 +6,9 @@ import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2StaticObjectInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.StaticObject;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -32,7 +18,7 @@ public class L2PlayerAI extends L2PlayableAI
 	private boolean _thinking; // to prevent recursive thinking
 	private IntentionCommand _nextIntention = null;
 	
-	public L2PlayerAI(L2PcInstance player)
+	public L2PlayerAI(Player player)
 	{
 		super(player);
 	}
@@ -159,7 +145,7 @@ public class L2PlayerAI extends L2PlayableAI
 	{
 		if (getIntention() == CtrlIntention.REST)
 		{
-			// Cancel action client side by sending Server->Client packet ActionFailed to the L2PcInstance actor
+			// Cancel action client side by sending Server->Client packet ActionFailed to the Player actor
 			clientActionFailed();
 			return;
 		}
@@ -177,7 +163,7 @@ public class L2PlayerAI extends L2PlayableAI
 		// Stop the actor auto-attack client side by sending Server->Client packet AutoAttackStop (broadcast)
 		clientStopAutoAttack();
 		
-		// Abort the attack of the L2Character and send Server->Client ActionFailed packet
+		// Abort the attack of the Character and send Server->Client ActionFailed packet
 		_actor.abortAttack();
 		
 		// Move the actor to Location (x,y,z) server side AND client side by sending Server->Client packet MoveToLocation (broadcast)
@@ -195,7 +181,7 @@ public class L2PlayerAI extends L2PlayableAI
 	
 	private void thinkAttack()
 	{
-		final L2Character target = (L2Character) getTarget();
+		final Character target = (Character) getTarget();
 		if (target == null)
 		{
 			setTarget(null);
@@ -208,7 +194,7 @@ public class L2PlayerAI extends L2PlayableAI
 		
 		if (target.isAlikeDead())
 		{
-			if (target instanceof L2PcInstance && ((L2PcInstance) target).isFakeDeath())
+			if (target instanceof Player && ((Player) target).isFakeDeath())
 				target.stopFakeDeath(true);
 			else
 			{
@@ -223,11 +209,11 @@ public class L2PlayerAI extends L2PlayableAI
 	
 	private void thinkCast()
 	{
-		L2Character target = (L2Character) getTarget();
+		Character target = (Character) getTarget();
 		
-		if (_skill.getTargetType() == SkillTargetType.TARGET_GROUND && _actor instanceof L2PcInstance)
+		if (_skill.getTargetType() == SkillTargetType.TARGET_GROUND && _actor instanceof Player)
 		{
-			if (maybeMoveToPosition(((L2PcInstance) _actor).getCurrentSkillWorldPosition(), _skill.getCastRange()))
+			if (maybeMoveToPosition(((Player) _actor).getCurrentSkillWorldPosition(), _skill.getCastRange()))
 			{
 				_actor.setIsCastingNow(false);
 				return;
@@ -289,8 +275,8 @@ public class L2PlayerAI extends L2PlayableAI
 		if (maybeMoveToPawn(target, 36))
 			return;
 		
-		if (!(target instanceof L2StaticObjectInstance))
-			_actor.getActingPlayer().doInteract((L2Character) target);
+		if (!(target instanceof StaticObject))
+			_actor.getActingPlayer().doInteract((Character) target);
 		
 		setIntention(CtrlIntention.IDLE);
 	}

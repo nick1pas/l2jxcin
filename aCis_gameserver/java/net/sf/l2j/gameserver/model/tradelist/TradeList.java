@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.tradelist;
 
 import java.util.ArrayList;
@@ -24,7 +10,7 @@ import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.model.ItemRequest;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.itemcontainer.PcInventory;
@@ -36,32 +22,32 @@ import net.sf.l2j.gameserver.util.Util;
 
 public class TradeList
 {
-	private final L2PcInstance _owner;
+	private final Player _owner;
 	private final List<TradeItem> _items = new CopyOnWriteArrayList<>();
 	
-	private L2PcInstance _partner;
+	private Player _partner;
 	private String _title;
 	
 	private boolean _packaged;
 	private boolean _confirmed;
 	private boolean _locked;
 	
-	public TradeList(L2PcInstance owner)
+	public TradeList(Player owner)
 	{
 		_owner = owner;
 	}
 	
-	public L2PcInstance getOwner()
+	public Player getOwner()
 	{
 		return _owner;
 	}
 	
-	public void setPartner(L2PcInstance partner)
+	public void setPartner(Player partner)
 	{
 		_partner = partner;
 	}
 	
-	public L2PcInstance getPartner()
+	public Player getPartner()
 	{
 		return _partner;
 	}
@@ -415,7 +401,7 @@ public class TradeList
 	 * @param partnerIU
 	 * @return true if ok, false otherwise.
 	 */
-	private boolean transferItems(L2PcInstance partner, InventoryUpdate ownerIU, InventoryUpdate partnerIU)
+	private boolean transferItems(Player partner, InventoryUpdate ownerIU, InventoryUpdate partnerIU)
 	{
 		for (TradeItem titem : _items)
 		{
@@ -452,7 +438,7 @@ public class TradeList
 	 * @param partner
 	 * @return
 	 */
-	public int countItemsSlots(L2PcInstance partner)
+	public int countItemsSlots(Player partner)
 	{
 		int slots = 0;
 		
@@ -548,7 +534,7 @@ public class TradeList
 	 * @param items
 	 * @return int: result of trading. 0 - ok, 1 - canceled (no adena), 2 - failed (item error)
 	 */
-	public synchronized int privateStoreBuy(L2PcInstance player, Set<ItemRequest> items)
+	public synchronized int privateStoreBuy(Player player, Set<ItemRequest> items)
 	{
 		if (_locked)
 			return 1;
@@ -748,7 +734,7 @@ public class TradeList
 	 * @param items
 	 * @return : boolean true if success
 	 */
-	public synchronized boolean privateStoreSell(L2PcInstance player, ItemRequest[] items)
+	public synchronized boolean privateStoreSell(Player player, ItemRequest[] items)
 	{
 		if (_locked)
 			return false;

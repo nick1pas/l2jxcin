@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.vehicles;
 
 import java.util.logging.Level;
@@ -22,7 +8,7 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.gameserver.instancemanager.BoatManager;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.VehiclePathPoint;
-import net.sf.l2j.gameserver.model.actor.L2Vehicle;
+import net.sf.l2j.gameserver.model.actor.Vehicle;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
@@ -104,7 +90,7 @@ public class BoatGludinRune implements Runnable
 		new VehiclePathPoint(-95686, 150514, -3610, 150, 800)
 	};
 	
-	private final L2Vehicle _boat;
+	private final Vehicle _boat;
 	private int _cycle = 0;
 	private int _shoutCount = 0;
 	
@@ -140,7 +126,7 @@ public class BoatGludinRune implements Runnable
 	private final PlaySound RUNE_SOUND_LEAVE_5MIN;
 	private final PlaySound RUNE_SOUND_LEAVE_1MIN;
 	
-	public BoatGludinRune(L2Vehicle boat)
+	public BoatGludinRune(Vehicle boat)
 	{
 		_boat = boat;
 		
@@ -312,7 +298,7 @@ public class BoatGludinRune implements Runnable
 	
 	public static void load()
 	{
-		final L2Vehicle boat = BoatManager.getInstance().getNewBoat(3, -95686, 150514, -3610, 16723);
+		final Vehicle boat = BoatManager.getInstance().getNewBoat(3, -95686, 150514, -3610, 16723);
 		if (boat != null)
 		{
 			boat.registerEngine(new BoatGludinRune(boat));

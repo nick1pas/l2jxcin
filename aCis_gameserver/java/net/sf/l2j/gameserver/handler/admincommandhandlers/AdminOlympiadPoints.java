@@ -16,7 +16,7 @@ package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.olympiad.Olympiad;
 import net.sf.l2j.gameserver.templates.StatsSet;
 
@@ -31,7 +31,7 @@ public class AdminOlympiadPoints implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		if (command.startsWith("admin_addolypoints"))
 		{
@@ -39,10 +39,10 @@ public class AdminOlympiadPoints implements IAdminCommandHandler
 			{
 				String val = command.substring(19);
 				L2Object target = activeChar.getTarget();
-				L2PcInstance player = null;
-				if (target instanceof L2PcInstance)
+				Player player = null;
+				if (target instanceof Player)
 				{
-					player = (L2PcInstance) target;
+					player = (Player) target;
 					if (player.isNoble())
 					{
 						StatsSet playerStat = Olympiad.getNobleStats(player.getObjectId());
@@ -86,10 +86,10 @@ public class AdminOlympiadPoints implements IAdminCommandHandler
 			{
 				String val = command.substring(22);
 				L2Object target = activeChar.getTarget();
-				L2PcInstance player = null;
-				if (target instanceof L2PcInstance)
+				Player player = null;
+				if (target instanceof Player)
 				{
-					player = (L2PcInstance) target;
+					player = (Player) target;
 					if (player.isNoble())
 					{
 						StatsSet playerStat = Olympiad.getNobleStats(player.getObjectId());
@@ -129,10 +129,10 @@ public class AdminOlympiadPoints implements IAdminCommandHandler
 			{
 				String val = command.substring(19);
 				L2Object target = activeChar.getTarget();
-				L2PcInstance player = null;
-				if (target instanceof L2PcInstance)
+				Player player = null;
+				if (target instanceof Player)
 				{
-					player = (L2PcInstance) target;
+					player = (Player) target;
 					if (player.isNoble())
 					{
 						StatsSet playerStat = Olympiad.getNobleStats(player.getObjectId());
@@ -172,10 +172,10 @@ public class AdminOlympiadPoints implements IAdminCommandHandler
 			try
 			{
 				L2Object target = activeChar.getTarget();
-				L2PcInstance player = null;
-				if (target instanceof L2PcInstance)
+				Player player = null;
+				if (target instanceof Player)
 				{
-					player = (L2PcInstance) target;
+					player = (Player) target;
 					if (player.isNoble())
 					{
 						activeChar.sendMessage(">=========>>" + player.getName() + "<<=========");

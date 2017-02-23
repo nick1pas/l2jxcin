@@ -1,24 +1,10 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.games.MonsterRace;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.DeleteObject;
 import net.sf.l2j.gameserver.network.serverpackets.MonRaceInfo;
@@ -35,7 +21,7 @@ public class AdminMonsterRace implements IAdminCommandHandler
 	protected static int state = -1;
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		if (command.equalsIgnoreCase("admin_mons"))
 		{
@@ -88,9 +74,9 @@ public class AdminMonsterRace implements IAdminCommandHandler
 	{
 		
 		private final int[][] codes;
-		private final L2PcInstance activeChar;
+		private final Player activeChar;
 		
-		public RunRace(int[][] pCodes, L2PcInstance pActiveChar)
+		public RunRace(int[][] pCodes, Player pActiveChar)
 		{
 			codes = pCodes;
 			activeChar = pActiveChar;
@@ -106,9 +92,9 @@ public class AdminMonsterRace implements IAdminCommandHandler
 	
 	class RunEnd implements Runnable
 	{
-		private final L2PcInstance activeChar;
+		private final Player activeChar;
 		
-		public RunEnd(L2PcInstance pActiveChar)
+		public RunEnd(Player pActiveChar)
 		{
 			activeChar = pActiveChar;
 		}

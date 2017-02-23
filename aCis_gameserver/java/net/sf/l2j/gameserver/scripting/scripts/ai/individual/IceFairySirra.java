@@ -26,9 +26,9 @@ import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Spawn;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Door;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
@@ -46,8 +46,8 @@ public class IceFairySirra extends L2AttackableAIScript
 	
 	private static final L2BossZone ICEFAIRY_ZONE = ZoneManager.getInstance().getZoneById(110016, L2BossZone.class);
 	
-	private static L2PcInstance _player = null;
-	protected List<L2Npc> _allMobs = new ArrayList<>();
+	private static Player _player = null;
+	protected List<Npc> _allMobs = new ArrayList<>();
 	protected Future<?> _onDeadEventTask = null;
 	
 	public IceFairySirra()
@@ -65,7 +65,7 @@ public class IceFairySirra extends L2AttackableAIScript
 	
 	public void init()
 	{
-		L2Npc steward = findSpawn(STEWARD);
+		Npc steward = findSpawn(STEWARD);
 		if (steward != null)
 			steward.setBusy(false);
 		openGates();
@@ -78,7 +78,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		cancelQuestTimer("20MinutesRemaining", null, _player);
 		cancelQuestTimer("10MinutesRemaining", null, _player);
 		cancelQuestTimer("End", null, _player);
-		for (L2Npc mob : _allMobs)
+		for (Npc mob : _allMobs)
 		{
 			try
 			{
@@ -94,7 +94,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		_allMobs.clear();
 	}
 	
-	private static L2Npc findSpawn(int npcId)
+	private static Npc findSpawn(int npcId)
 	{
 		for (L2Spawn spawn : SpawnTable.getInstance().getSpawnTable())
 		{
@@ -110,7 +110,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		{
 			try
 			{
-				L2DoorInstance door = DoorTable.getInstance().getDoor(i);
+				Door door = DoorTable.getInstance().getDoor(i);
 				if (door != null)
 				{
 					door.openMe();
@@ -133,7 +133,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		{
 			try
 			{
-				L2DoorInstance door = DoorTable.getInstance().getDoor(i);
+				Door door = DoorTable.getInstance().getDoor(i);
 				if (door != null)
 				{
 					door.closeMe();
@@ -150,11 +150,11 @@ public class IceFairySirra extends L2AttackableAIScript
 		}
 	}
 	
-	public boolean checkItems(L2PcInstance player)
+	public boolean checkItems(Player player)
 	{
 		if (player.getParty() != null)
 		{
-			for (L2PcInstance pc : player.getParty().getMembers())
+			for (Player pc : player.getParty().getMembers())
 			{
 				ItemInstance i = pc.getInventory().getItemByItemId(SILVER_HEMOCYTE);
 				if (i == null || i.getCount() < 10)
@@ -168,11 +168,11 @@ public class IceFairySirra extends L2AttackableAIScript
 		return true;
 	}
 	
-	public void destroyItems(L2PcInstance player)
+	public void destroyItems(Player player)
 	{
 		if (player.getParty() != null)
 		{
-			for (L2PcInstance pc : player.getParty().getMembers())
+			for (Player pc : player.getParty().getMembers())
 			{
 				ItemInstance i = pc.getInventory().getItemByItemId(SILVER_HEMOCYTE);
 				pc.destroyItem("Hemocytes", i.getObjectId(), 10, null, false);
@@ -182,11 +182,11 @@ public class IceFairySirra extends L2AttackableAIScript
 			cleanUp();
 	}
 	
-	public void teleportInside(L2PcInstance player)
+	public void teleportInside(Player player)
 	{
 		if (player.getParty() != null)
 		{
-			for (L2PcInstance pc : player.getParty().getMembers())
+			for (Player pc : player.getParty().getMembers())
 			{
 				pc.teleToLocation(113533, -126159, -3488, 0);
 				
@@ -197,11 +197,11 @@ public class IceFairySirra extends L2AttackableAIScript
 			cleanUp();
 	}
 	
-	public void screenMessage(L2PcInstance player, String text, int time)
+	public void screenMessage(Player player, String text, int time)
 	{
 		if (player.getParty() != null)
 		{
-			for (L2PcInstance pc : player.getParty().getMembers())
+			for (Player pc : player.getParty().getMembers())
 			{
 				pc.sendPacket(new ExShowScreenMessage(text, time));
 			}
@@ -257,7 +257,7 @@ public class IceFairySirra extends L2AttackableAIScript
 					spawnDat.setLoc(mobs[i][1], mobs[i][2], mobs[i][3], 0);
 					spawnDat.setRespawnDelay(60);
 					SpawnTable.getInstance().addNewSpawn(spawnDat, false);
-					final L2Npc npc = spawnDat.doSpawn(true);
+					final Npc npc = spawnDat.doSpawn(true);
 					_allMobs.add(spawnDat.doSpawn(false));
 					npc.scheduleDespawn(mobs[i][0]);
 				}
@@ -289,7 +289,7 @@ public class IceFairySirra extends L2AttackableAIScript
 		return "data/html/npcdefault.htm";
 	}
 	
-	public void sendHtml(L2Npc npc, L2PcInstance player, String filename)
+	public void sendHtml(Npc npc, Player player, String filename)
 	{
 		NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 		html.setFile(filename);
@@ -299,7 +299,7 @@ public class IceFairySirra extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onFirstTalk(L2Npc npc, L2PcInstance player)
+	public String onFirstTalk(Npc npc, Player player)
 	{
 		if (player.getQuestState("IceFairySirra") == null)
 			newQuestState(player);
@@ -314,7 +314,7 @@ public class IceFairySirra extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		if (event.equalsIgnoreCase("check_condition"))
 		{

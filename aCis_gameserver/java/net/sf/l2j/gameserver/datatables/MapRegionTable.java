@@ -8,9 +8,9 @@ import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
@@ -225,13 +225,13 @@ public class MapRegionTable
 	 * @param teleportType : The type of teleport to check.
 	 * @return a Location based on character and teleport types.
 	 */
-	public Location getLocationToTeleport(L2Character character, TeleportType teleportType)
+	public Location getLocationToTeleport(Character character, TeleportType teleportType)
 	{
 		// The character isn't a player, bypass all checks and retrieve a random spawn location on closest town.
-		if (!(character instanceof L2PcInstance))
+		if (!(character instanceof Player))
 			return getClosestTown(character.getX(), character.getY()).getSpawnLoc();
 		
-		final L2PcInstance player = ((L2PcInstance) character);
+		final Player player = ((Player) character);
 		
 		// The player is in MDT, move him out.
 		if (player.isInsideZone(ZoneId.MONSTER_TRACK))
@@ -269,7 +269,7 @@ public class MapRegionTable
 				final Siege siege = CastleManager.getInstance().getSiege(player);
 				if (siege != null)
 				{
-					final L2Npc flag = siege.getFlag(player.getClan());
+					final Npc flag = siege.getFlag(player.getClan());
 					if (flag != null)
 						return flag.getPosition();
 				}
@@ -278,14 +278,14 @@ public class MapRegionTable
 
 		if (BanditStrongholdSiege.getInstance().isPlayerRegister(player.getClan(),player.getName()))
 		{
-			L2Npc flag = BanditStrongholdSiege.getInstance().getSiegeFlag(player.getClan());
+			Npc flag = BanditStrongholdSiege.getInstance().getSiegeFlag(player.getClan());
 			if (flag != null)
 				return new Location(flag.getX(), flag.getY(), flag.getZ());
 		}
 
 		if (WildBeastFarmSiege.getInstance().isPlayerRegister(player.getClan(),player.getName()))
 		{
-			L2Npc flag = WildBeastFarmSiege.getInstance().getSiegeFlag(player.getClan());
+			Npc flag = WildBeastFarmSiege.getInstance().getSiegeFlag(player.getClan());
 			if (flag != null)
 				return new Location(flag.getX(), flag.getY(), flag.getZ());
 		}
@@ -313,7 +313,7 @@ public class MapRegionTable
 	 * @param player : The player used to find race, x and y.
 	 * @return the closest L2TownZone based on a X/Y location.
 	 */
-	private final L2TownZone getClosestTown(L2PcInstance player)
+	private final L2TownZone getClosestTown(Player player)
 	{
 		switch (getMapRegion(player.getX(), player.getY()))
 		{

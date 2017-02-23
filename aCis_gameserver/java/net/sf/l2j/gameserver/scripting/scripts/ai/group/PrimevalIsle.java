@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.scripting.scripts.ai.group;
 
 import net.sf.l2j.commons.util.ArraysUtil;
@@ -22,10 +8,10 @@ import net.sf.l2j.gameserver.datatables.SpawnTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Spawn;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
@@ -63,8 +49,8 @@ public class PrimevalIsle extends L2AttackableAIScript
 		super("ai/group");
 		
 		for (L2Spawn npc : SpawnTable.getInstance().getSpawnTable())
-			if (ArraysUtil.contains(MOBIDS, npc.getNpcId()) && npc.getNpc() != null && npc.getNpc() instanceof L2Attackable)
-				((L2Attackable) npc.getNpc()).seeThroughSilentMove(true);
+			if (ArraysUtil.contains(MOBIDS, npc.getNpcId()) && npc.getNpc() != null && npc.getNpc() instanceof Attackable)
+				((Attackable) npc.getNpc()).seeThroughSilentMove(true);
 	}
 	
 	@Override
@@ -76,15 +62,15 @@ public class PrimevalIsle extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
-		if (!(npc instanceof L2Attackable))
+		if (!(npc instanceof Attackable))
 			return null;
 		
 		if (event.equalsIgnoreCase("skill"))
 		{
 			int playableCounter = 0;
-			for (L2Playable playable : npc.getKnownTypeInRadius(L2Playable.class, npc.getTemplate().getAggroRange()))
+			for (Playable playable : npc.getKnownTypeInRadius(Playable.class, npc.getTemplate().getAggroRange()))
 			{
 				if (!playable.isDead())
 					playableCounter++;
@@ -104,7 +90,7 @@ public class PrimevalIsle extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAggro(L2Npc npc, L2PcInstance player, boolean isPet)
+	public String onAggro(Npc npc, Player player, boolean isPet)
 	{
 		if (player == null)
 			return null;
@@ -121,7 +107,7 @@ public class PrimevalIsle extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
 		if (getQuestTimer("skill", npc, null) != null)
 			cancelQuestTimer("skill", npc, null);
@@ -130,13 +116,13 @@ public class PrimevalIsle extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		// Retrieve the attacker.
-		final L2Playable originalAttacker = (isPet ? attacker.getPet() : attacker);
+		final Playable originalAttacker = (isPet ? attacker.getPet() : attacker);
 		
 		// Make all mobs found in a radius 2k aggressive towards attacker.
-		for (L2Attackable called : attacker.getKnownTypeInRadius(L2Attackable.class, 2000))
+		for (Attackable called : attacker.getKnownTypeInRadius(Attackable.class, 2000))
 		{
 			// Caller hasn't AI or is dead.
 			if (!called.hasAI() || called.isDead())
@@ -152,10 +138,10 @@ public class PrimevalIsle extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onSpawn(L2Npc npc)
+	public String onSpawn(Npc npc)
 	{
-		if (npc instanceof L2Attackable)
-			((L2Attackable) npc).seeThroughSilentMove(true);
+		if (npc instanceof Attackable)
+			((Attackable) npc).seeThroughSilentMove(true);
 		
 		return super.onSpawn(npc);
 	}

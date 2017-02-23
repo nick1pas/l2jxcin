@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.handler.skillhandlers;
 
 import net.sf.l2j.commons.random.Rnd;
@@ -22,7 +8,7 @@ import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
-import net.sf.l2j.gameserver.model.actor.L2Character;
+import net.sf.l2j.gameserver.model.actor.Character;
 import net.sf.l2j.gameserver.skills.Formulas;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 
@@ -39,7 +25,7 @@ public class Cancel implements ISkillHandler
 	};
 	
 	@Override
-	public void useSkill(L2Character activeChar, L2Skill skill, L2Object[] targets)
+	public void useSkill(Character activeChar, L2Skill skill, L2Object[] targets)
 	{
 		// Delimit min/max % success.
 		final int minRate = (skill.getSkillType() == L2SkillType.CANCEL) ? 25 : 40;
@@ -50,10 +36,10 @@ public class Cancel implements ISkillHandler
 		
 		for (L2Object obj : targets)
 		{
-			if (!(obj instanceof L2Character))
+			if (!(obj instanceof Character))
 				continue;
 			
-			final L2Character target = (L2Character) obj;
+			final Character target = (Character) obj;
 			if (target.isDead())
 				continue;
 			

@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.scripting;
 
 import java.sql.Connection;
@@ -26,7 +12,7 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.cache.HtmCache;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.DropData;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.PcInventory;
@@ -68,7 +54,7 @@ public final class QuestState
 	public static final byte DROP_FIXED_COUNT = 2;
 	public static final byte DROP_FIXED_BOTH = 3;
 	
-	private final L2PcInstance _player;
+	private final Player _player;
 	private final Quest _quest;
 	private byte _state;
 	private final Map<String, String> _vars = new HashMap<>();
@@ -81,10 +67,10 @@ public final class QuestState
 	 * <LI>Add the QuestState in the player's list of quests by using setQuestState()</LI>
 	 * <LI>Add drops gotten by the quest</LI> <BR/>
 	 * @param quest : quest associated with the QuestState
-	 * @param player : L2PcInstance pointing out the player
+	 * @param player : Player pointing out the player
 	 * @param state : state of the quest
 	 */
-	public QuestState(L2PcInstance player, Quest quest, byte state)
+	public QuestState(Player player, Quest quest, byte state)
 	{
 		_player = player;
 		_quest = quest;
@@ -94,10 +80,10 @@ public final class QuestState
 	}
 	
 	/**
-	 * Return the L2PcInstance
-	 * @return L2PcInstance
+	 * Return the Player
+	 * @return Player
 	 */
-	public L2PcInstance getPlayer()
+	public Player getPlayer()
 	{
 		return _player;
 	}

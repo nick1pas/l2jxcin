@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.instancemanager;
 
 import java.sql.Connection;
@@ -37,11 +23,11 @@ import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
 import net.sf.l2j.gameserver.model.L2Spawn;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2SepulcherMonsterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2SepulcherNpcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Door;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.SepulcherMonster;
+import net.sf.l2j.gameserver.model.actor.instance.SepulcherNpc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -224,7 +210,7 @@ public class FourSepulchersManager
 	
 	protected Map<Integer, Boolean> _archonSpawned = new HashMap<>();
 	protected Map<Integer, Boolean> _hallInUse = new HashMap<>();
-	protected Map<Integer, L2PcInstance> _challengers = new HashMap<>();
+	protected Map<Integer, Player> _challengers = new HashMap<>();
 	protected Map<Integer, int[]> _startHallSpawns = new HashMap<>();
 	protected Map<Integer, Integer> _hallGateKeepers = new HashMap<>();
 	protected Map<Integer, Integer> _keyBoxNpc = new HashMap<>();
@@ -234,18 +220,18 @@ public class FourSepulchersManager
 	protected Map<Integer, L2Spawn> _mysteriousBoxSpawns = new HashMap<>();
 	protected Map<Integer, L2Spawn> _shadowSpawns = new HashMap<>();
 	protected Map<Integer, List<L2Spawn>> _dukeFinalMobs = new HashMap<>();
-	protected Map<Integer, List<L2SepulcherMonsterInstance>> _dukeMobs = new HashMap<>();
+	protected Map<Integer, List<SepulcherMonster>> _dukeMobs = new HashMap<>();
 	protected Map<Integer, List<L2Spawn>> _emperorsGraveNpcs = new HashMap<>();
 	protected Map<Integer, List<L2Spawn>> _magicalMonsters = new HashMap<>();
 	protected Map<Integer, List<L2Spawn>> _physicalMonsters = new HashMap<>();
-	protected Map<Integer, List<L2SepulcherMonsterInstance>> _viscountMobs = new HashMap<>();
+	protected Map<Integer, List<SepulcherMonster>> _viscountMobs = new HashMap<>();
 	
 	protected List<L2Spawn> _physicalSpawns;
 	protected List<L2Spawn> _magicalSpawns;
 	protected List<L2Spawn> _managers;
 	protected List<L2Spawn> _dukeFinalSpawns;
 	protected List<L2Spawn> _emperorsGraveSpawns;
-	protected List<L2Npc> _allMobs = new ArrayList<>();
+	protected List<Npc> _allMobs = new ArrayList<>();
 	
 	protected long _attackTimeEnd = 0;
 	protected long _coolDownTimeEnd = 0;
@@ -903,7 +889,7 @@ public class FourSepulchersManager
 		return _inAttackTime;
 	}
 	
-	public synchronized void tryEntry(L2Npc npc, L2PcInstance player)
+	public synchronized void tryEntry(Npc npc, Player player)
 	{
 		final int npcId = npc.getNpcId();
 		
@@ -938,7 +924,7 @@ public class FourSepulchersManager
 			return;
 		}
 		
-		for (L2PcInstance member : party.getMembers())
+		for (Player member : party.getMembers())
 		{
 			QuestState qs = member.getQuestState(QUEST_ID);
 			if (qs == null || (!qs.isStarted() && !qs.isCompleted()))
@@ -970,7 +956,7 @@ public class FourSepulchersManager
 		
 		final int[] location = _startHallSpawns.get(npcId);
 		
-		for (L2PcInstance member : party.getMembers().stream().filter(m -> !m.isDead() && Util.checkIfInRange(700, player, m, true)).collect(Collectors.toList()))
+		for (Player member : party.getMembers().stream().filter(m -> !m.isDead() && Util.checkIfInRange(700, player, m, true)).collect(Collectors.toList()))
 		{
 			ZoneManager.getInstance().getZone(location[0], location[1], location[2], L2BossZone.class).allowPlayerEntry(member, 30);
 			
@@ -1015,7 +1001,7 @@ public class FourSepulchersManager
 		
 		if (monsterList != null)
 		{
-			final List<L2SepulcherMonsterInstance> mobs = new ArrayList<>();
+			final List<SepulcherMonster> mobs = new ArrayList<>();
 			
 			boolean spawnKeyBoxMob = false;
 			boolean spawnedKeyBoxMob = false;
@@ -1041,7 +1027,7 @@ public class FourSepulchersManager
 					}
 				}
 				
-				L2SepulcherMonsterInstance mob = null;
+				SepulcherMonster mob = null;
 				
 				if (spawnKeyBoxMob)
 				{
@@ -1054,7 +1040,7 @@ public class FourSepulchersManager
 							keyBoxMobSpawn.setLoc(spawn.getLoc());
 							keyBoxMobSpawn.setRespawnDelay(3600);
 							SpawnTable.getInstance().addNewSpawn(keyBoxMobSpawn, false);
-							mob = (L2SepulcherMonsterInstance) keyBoxMobSpawn.doSpawn(false);
+							mob = (SepulcherMonster) keyBoxMobSpawn.doSpawn(false);
 							keyBoxMobSpawn.setRespawnState(false);
 						}
 						else
@@ -1069,7 +1055,7 @@ public class FourSepulchersManager
 				}
 				else
 				{
-					mob = (L2SepulcherMonsterInstance) spawn.doSpawn(false);
+					mob = (SepulcherMonster) spawn.doSpawn(false);
 					spawn.setRespawnState(false);
 				}
 				
@@ -1113,11 +1099,11 @@ public class FourSepulchersManager
 	
 	public synchronized boolean isViscountMobsAnnihilated(int npcId)
 	{
-		List<L2SepulcherMonsterInstance> mobs = _viscountMobs.get(npcId);
+		List<SepulcherMonster> mobs = _viscountMobs.get(npcId);
 		if (mobs == null)
 			return true;
 		
-		for (L2SepulcherMonsterInstance mob : mobs)
+		for (SepulcherMonster mob : mobs)
 		{
 			if (!mob.isDead())
 				return false;
@@ -1128,11 +1114,11 @@ public class FourSepulchersManager
 	
 	public synchronized boolean isDukeMobsAnnihilated(int npcId)
 	{
-		List<L2SepulcherMonsterInstance> mobs = _dukeMobs.get(npcId);
+		List<SepulcherMonster> mobs = _dukeMobs.get(npcId);
 		if (mobs == null)
 			return true;
 		
-		for (L2SepulcherMonsterInstance mob : mobs)
+		for (SepulcherMonster mob : mobs)
 		{
 			if (!mob.isDead())
 				return false;
@@ -1141,7 +1127,7 @@ public class FourSepulchersManager
 		return true;
 	}
 	
-	public void spawnKeyBox(L2Npc activeChar)
+	public void spawnKeyBox(Npc activeChar)
 	{
 		if (!isAttackTime())
 			return;
@@ -1157,7 +1143,7 @@ public class FourSepulchersManager
 		}
 	}
 	
-	public void spawnExecutionerOfHalisha(L2Npc activeChar)
+	public void spawnExecutionerOfHalisha(Npc activeChar)
 	{
 		if (!isAttackTime())
 			return;
@@ -1186,7 +1172,7 @@ public class FourSepulchersManager
 		{
 			for (L2Spawn spawn : monsterList)
 			{
-				L2SepulcherMonsterInstance mob = (L2SepulcherMonsterInstance) spawn.doSpawn(false);
+				SepulcherMonster mob = (SepulcherMonster) spawn.doSpawn(false);
 				spawn.setRespawnState(false);
 				
 				if (mob != null)
@@ -1245,7 +1231,7 @@ public class FourSepulchersManager
 		final L2Spawn spawn = _shadowSpawns.get(npcId);
 		if (spawn != null)
 		{
-			L2SepulcherMonsterInstance mob = (L2SepulcherMonsterInstance) spawn.doSpawn(false);
+			SepulcherMonster mob = (SepulcherMonster) spawn.doSpawn(false);
 			spawn.setRespawnState(false);
 			
 			if (mob != null)
@@ -1258,7 +1244,7 @@ public class FourSepulchersManager
 	
 	public void deleteAllMobs()
 	{
-		for (L2Npc mob : _allMobs)
+		for (Npc mob : _allMobs)
 		{
 			if (mob == null)
 				continue;
@@ -1284,7 +1270,7 @@ public class FourSepulchersManager
 		{
 			try
 			{
-				L2DoorInstance door = DoorTable.getInstance().getDoor(doorId);
+				Door door = DoorTable.getInstance().getDoor(doorId);
 				if (door != null)
 					door.closeMe();
 				else
@@ -1406,7 +1392,7 @@ public class FourSepulchersManager
 					continue;
 				}
 				
-				if (!(temp.getNpc() instanceof L2SepulcherNpcInstance))
+				if (!(temp.getNpc() instanceof SepulcherNpc))
 				{
 					_log.warning("FourSepulchersManager: managerSay(): manager is not Sepulcher instance");
 					continue;
@@ -1416,7 +1402,7 @@ public class FourSepulchersManager
 				if (!_hallInUse.get(temp.getNpcId()).booleanValue())
 					continue;
 				
-				((L2SepulcherNpcInstance) temp.getNpc()).sayInShout(msg);
+				((SepulcherNpc) temp.getNpc()).sayInShout(msg);
 			}
 		}
 		
@@ -1432,14 +1418,14 @@ public class FourSepulchersManager
 					continue;
 				}
 				
-				if (!(temp.getNpc() instanceof L2SepulcherNpcInstance))
+				if (!(temp.getNpc() instanceof SepulcherNpc))
 				{
 					_log.warning("FourSepulchersManager: Something goes wrong in managerSay()...");
 					continue;
 				}
 				
-				((L2SepulcherNpcInstance) temp.getNpc()).sayInShout(msg1);
-				((L2SepulcherNpcInstance) temp.getNpc()).sayInShout(msg2);
+				((SepulcherNpc) temp.getNpc()).sayInShout(msg1);
+				((SepulcherNpc) temp.getNpc()).sayInShout(msg2);
 			}
 		}
 	}
@@ -1622,7 +1608,7 @@ public class FourSepulchersManager
 		return _hallGateKeepers;
 	}
 	
-	public void showHtmlFile(L2PcInstance player, String file, L2Npc npc, L2PcInstance member)
+	public void showHtmlFile(Player player, String file, Npc npc, Player member)
 	{
 		final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 		html.setFile("data/html/sepulchers/" + file);

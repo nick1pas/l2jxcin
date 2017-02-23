@@ -27,10 +27,10 @@ import net.sf.l2j.gameserver.model.L2ClanMember;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.TowerSpawn;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2ControlTowerInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2FlameTowerInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.ControlTower;
+import net.sf.l2j.gameserver.model.actor.instance.FlameTower;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -61,10 +61,10 @@ public class Siege implements Siegable
 	
 	private final Castle _castle;
 	
-	private final List<L2ControlTowerInstance> _controlTowers = new ArrayList<>();
-	private final List<L2FlameTowerInstance> _flameTowers = new ArrayList<>();
+	private final List<ControlTower> _controlTowers = new ArrayList<>();
+	private final List<FlameTower> _flameTowers = new ArrayList<>();
 	
-	private final List<L2Npc> _destroyedTowers = new ArrayList<>();
+	private final List<Npc> _destroyedTowers = new ArrayList<>();
 	
 	protected Calendar _siegeEndDate;
 	protected ScheduledFuture<?> _siegeTask;
@@ -172,7 +172,7 @@ public class Siege implements Siegable
 				{
 					if (member != null)
 					{
-						L2PcInstance player = member.getPlayerInstance();
+						Player player = member.getPlayerInstance();
 						if (player != null && player.isNoble())
 							Hero.getInstance().setCastleTaken(player.getObjectId(), getCastle().getCastleId());
 					}
@@ -249,7 +249,7 @@ public class Siege implements Siegable
 	}
 	
 	@Override
-	public L2Npc getFlag(L2Clan clan)
+	public Npc getFlag(L2Clan clan)
 	{
 		return (checkSide(clan, SiegeSide.ATTACKER)) ? clan.getFlag() : null;
 	}
@@ -421,7 +421,7 @@ public class Siege implements Siegable
 	{
 		for (L2Clan clan : getAttackerClans())
 		{
-			for (L2PcInstance member : clan.getOnlineMembers())
+			for (Player member : clan.getOnlineMembers())
 			{
 				if (clear)
 				{
@@ -441,7 +441,7 @@ public class Siege implements Siegable
 		
 		for (L2Clan clan : getDefenderClans())
 		{
-			for (L2PcInstance member : clan.getOnlineMembers())
+			for (Player member : clan.getOnlineMembers())
 			{
 				if (clear)
 				{
@@ -527,9 +527,9 @@ public class Siege implements Siegable
 	
 	/**
 	 * Register clan as attacker
-	 * @param player The L2PcInstance of the player trying to register
+	 * @param player The Player of the player trying to register
 	 */
-	public void registerAttacker(L2PcInstance player)
+	public void registerAttacker(Player player)
 	{
 		if (player.getClan() == null)
 			return;
@@ -559,9 +559,9 @@ public class Siege implements Siegable
 	
 	/**
 	 * Register clan as defender.
-	 * @param player The L2PcInstance of the player trying to register
+	 * @param player The Player of the player trying to register
 	 */
-	public void registerDefender(L2PcInstance player)
+	public void registerDefender(Player player)
 	{
 		if (player.getClan() == null)
 			return;
@@ -579,7 +579,7 @@ public class Siege implements Siegable
 	
 	/**
 	 * Verify if allies are registered on different list than the actual player's choice. Let's say clan A and clan B are in same alliance. If clan A wants to attack a castle, clan B mustn't be on defenders' list. The contrary is right too : you can't defend if one ally is on attackers' list.
-	 * @param clan The clan of L2PcInstance, used for alliance existence checks
+	 * @param clan The clan of Player, used for alliance existence checks
 	 * @param attacker A boolean used to know if this check is used for attackers or defenders.
 	 * @return true if one clan of the alliance is registered in other side.
 	 */
@@ -663,11 +663,11 @@ public class Siege implements Siegable
 	}
 	
 	/**
-	 * @param player The L2PcInstance of the player trying to register
+	 * @param player The Player of the player trying to register
 	 * @param type
 	 * @return true if the player can register.
 	 */
-	private boolean checkIfCanRegister(L2PcInstance player, SiegeSide type)
+	private boolean checkIfCanRegister(Player player, SiegeSide type)
 	{
 		SystemMessage sm;
 		
@@ -715,13 +715,13 @@ public class Siege implements Siegable
 	/** Remove all spawned towers. */
 	private void removeTowers()
 	{
-		for (L2FlameTowerInstance ct : _flameTowers)
+		for (FlameTower ct : _flameTowers)
 			ct.deleteMe();
 		
-		for (L2ControlTowerInstance ct : _controlTowers)
+		for (ControlTower ct : _controlTowers)
 			ct.deleteMe();
 		
-		for (L2Npc ct : _destroyedTowers)
+		for (Npc ct : _destroyedTowers)
 			ct.deleteMe();
 		
 		_flameTowers.clear();
@@ -869,7 +869,7 @@ public class Siege implements Siegable
 				final L2Spawn spawn = new L2Spawn(NpcTable.getInstance().getTemplate(ts.getId()));
 				spawn.setLoc(ts.getLocation());
 				
-				final L2ControlTowerInstance tower = (L2ControlTowerInstance) spawn.doSpawn(false);
+				final ControlTower tower = (ControlTower) spawn.doSpawn(false);
 				tower.setCastle(getCastle());
 				
 				_controlTowers.add(tower);
@@ -893,7 +893,7 @@ public class Siege implements Siegable
 				final L2Spawn spawn = new L2Spawn(NpcTable.getInstance().getTemplate(ts.getId()));
 				spawn.setLoc(ts.getLocation());
 				
-				final L2FlameTowerInstance tower = (L2FlameTowerInstance) spawn.doSpawn(false);
+				final FlameTower tower = (FlameTower) spawn.doSpawn(false);
 				tower.setCastle(getCastle());
 				tower.setUpgradeLevel(ts.getUpgradeLevel());
 				tower.setZoneList(ts.getZoneList());
@@ -947,7 +947,7 @@ public class Siege implements Siegable
 		return (int) _controlTowers.stream().filter(lc -> lc.isActive()).count();
 	}
 	
-	public List<L2Npc> getDestroyedTowers()
+	public List<Npc> getDestroyedTowers()
 	{
 		return _destroyedTowers;
 	}

@@ -26,9 +26,9 @@ import net.sf.l2j.gameserver.model.L2EnchantScroll;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2WarehouseInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.WarehouseKeeper;
 import net.sf.l2j.gameserver.model.item.ArmorSet;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Armor;
@@ -57,15 +57,15 @@ public final class RequestEnchantItem extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final L2PcInstance activeChar = getClient().getActiveChar();
+		final Player activeChar = getClient().getActiveChar();
 		
 		if (activeChar == null || _objectId == 0)
 			return;
 		
-		Collection<L2Character> knowns = activeChar.getKnownTypeInRadius(L2Character.class, 400);
+		Collection<Character> knowns = activeChar.getKnownTypeInRadius(Character.class, 400);
 		for (L2Object wh : knowns)
 		{
-			if (wh instanceof L2WarehouseInstance)
+			if (wh instanceof WarehouseKeeper)
 			{
 				activeChar.sendMessage("You Cannot enchant near warehouse.");
 				return;

@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.network;
 
 import java.net.InetAddress;
@@ -41,7 +27,7 @@ import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.model.CharSelectInfoPackage;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.group.Party.MessageType;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadManager;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -71,7 +57,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	// Info
 	private String _accountName;
 	private SessionKey _sessionId;
-	private L2PcInstance _activeChar;
+	private Player _activeChar;
 	private final ReentrantLock _activeCharLock = new ReentrantLock();
 	private String _hwid = null;
 	public IExReader _reader;
@@ -154,12 +140,12 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		return true;
 	}
 	
-	public L2PcInstance getActiveChar()
+	public Player getActiveChar()
 	{
 		return _activeChar;
 	}
 	
-	public void setActiveChar(L2PcInstance pActiveChar)
+	public void setActiveChar(Player pActiveChar)
 	{
 		_activeChar = pActiveChar;
 		
@@ -415,13 +401,13 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		}
 	}
 	
-	public L2PcInstance loadCharFromDisk(int slot)
+	public Player loadCharFromDisk(int slot)
 	{
 		final int objectId = getObjectIdForSlot(slot);
 		if (objectId < 0)
 			return null;
 		
-		L2PcInstance player = World.getInstance().getPlayer(objectId);
+		Player player = World.getInstance().getPlayer(objectId);
 		if (player != null)
 		{
 			// exploit prevention, should not happens in normal way
@@ -435,7 +421,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 			return null;
 		}
 		
-		player = L2PcInstance.restore(objectId);
+		player = Player.restore(objectId);
 		if (player != null)
 		{
 			player.setRunning(); // running is default
@@ -577,7 +563,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 						getActiveChar().getParty().removePartyMember(getActiveChar(), MessageType.DISCONNECTED);
 						OlympiadManager.getInstance().unRegisterNoble(getActiveChar());
 						
-						// If the L2PcInstance has Pet, unsummon it
+						// If the Player has Pet, unsummon it
 						if (getActiveChar().hasPet())
 						{
 							getActiveChar().getPet().unSummon(getActiveChar());
@@ -844,7 +830,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	 * @param player the player to be check.
 	 * @return {@code true} if the player is allowed to remain as off-line shop.
 	 */
-	protected static boolean offlineMode(L2PcInstance player)
+	protected static boolean offlineMode(Player player)
 	{
 		if (player.isInOlympiadMode() || player.isFestivalParticipant() || player.isInJail() || player.getVehicle() != null)
 			return false;
@@ -891,6 +877,6 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	{
 		public abstract int read(ByteBuffer paramByteBuffer);
 		
-		public abstract void checkChar(L2PcInstance paramL2PcInstance);
+		public abstract void checkChar(Player paramL2PcInstance);
 	}
 }

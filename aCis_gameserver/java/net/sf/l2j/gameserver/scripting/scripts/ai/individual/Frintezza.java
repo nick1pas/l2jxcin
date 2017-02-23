@@ -26,12 +26,12 @@ import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2GrandBossInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.GrandBoss;
+import net.sf.l2j.gameserver.model.actor.instance.Monster;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.group.CommandChannel;
 import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
@@ -1110,13 +1110,13 @@ public class Frintezza extends L2AttackableAIScript
 	private static int _KillDarkChoirCaptain = 0;
 	
 	private static L2BossZone _Zone;
-	private L2GrandBossInstance frintezza, weakScarlet, strongScarlet, activeScarlet;
-	private L2MonsterInstance demon1, demon2, demon3, demon4, portrait1, portrait2, portrait3, portrait4;
-	private L2Npc _frintezzaDummy, _overheadDummy, _portraitDummy1, _portraitDummy3, _scarletDummy;
-	private static List<L2PcInstance> _PlayersInside = new CopyOnWriteArrayList<>();
-	private static List<L2Npc> _Room1Mobs = new CopyOnWriteArrayList<>();
-	private static List<L2Npc> _Room2Mobs = new CopyOnWriteArrayList<>();
-	private static List<L2Attackable> Minions = new CopyOnWriteArrayList<>();
+	private GrandBoss frintezza, weakScarlet, strongScarlet, activeScarlet;
+	private Monster demon1, demon2, demon3, demon4, portrait1, portrait2, portrait3, portrait4;
+	private Npc _frintezzaDummy, _overheadDummy, _portraitDummy1, _portraitDummy3, _scarletDummy;
+	private static List<Player> _PlayersInside = new CopyOnWriteArrayList<>();
+	private static List<Npc> _Room1Mobs = new CopyOnWriteArrayList<>();
+	private static List<Npc> _Room2Mobs = new CopyOnWriteArrayList<>();
+	private static List<Attackable> Minions = new CopyOnWriteArrayList<>();
 	
 	// Boss: Frintezza
 	public Frintezza()
@@ -1164,7 +1164,7 @@ public class Frintezza extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		long temp = 0;
 		if (event.equalsIgnoreCase("waiting"))
@@ -1179,7 +1179,7 @@ public class Frintezza extends L2AttackableAIScript
 			_Zone.broadcastPacket(cs);
 			for (int i = 0; i <= 17; i++)
 			{
-				L2Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
+				Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
 				_Room1Mobs.add(mob);
 			}
 		}
@@ -1187,7 +1187,7 @@ public class Frintezza extends L2AttackableAIScript
 		{
 			for (int i = 18; i <= 26; i++)
 			{
-				L2Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
+				Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
 				_Room1Mobs.add(mob);
 			}
 		}
@@ -1195,7 +1195,7 @@ public class Frintezza extends L2AttackableAIScript
 		{
 			for (int i = 27; i <= 32; i++)
 			{
-				L2Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
+				Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
 				_Room1Mobs.add(mob);
 			}
 		}
@@ -1203,7 +1203,7 @@ public class Frintezza extends L2AttackableAIScript
 		{
 			for (int i = 33; i <= 40; i++)
 			{
-				L2Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
+				Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
 				_Room1Mobs.add(mob);
 			}
 		}
@@ -1211,7 +1211,7 @@ public class Frintezza extends L2AttackableAIScript
 		{
 			for (int i = 41; i <= 44; i++)
 			{
-				L2Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
+				Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
 				_Room2Mobs.add(mob);
 			}
 		}
@@ -1219,13 +1219,13 @@ public class Frintezza extends L2AttackableAIScript
 		{
 			for (int i = 45; i <= 131; i++)
 			{
-				L2Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
+				Npc mob = addSpawn(_mobLoc[i][0], _mobLoc[i][1], _mobLoc[i][2], _mobLoc[i][3], _mobLoc[i][4], false, 0, false);
 				_Room2Mobs.add(mob);
 			}
 		}
 		else if (event.equalsIgnoreCase("room1_del"))
 		{
-			for (L2Npc mob : _Room1Mobs)
+			for (Npc mob : _Room1Mobs)
 			{
 				if (mob != null)
 					mob.deleteMe();
@@ -1234,7 +1234,7 @@ public class Frintezza extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("room2_del"))
 		{
-			for (L2Npc mob : _Room2Mobs)
+			for (Npc mob : _Room2Mobs)
 			{
 				if (mob != null)
 					mob.deleteMe();
@@ -1352,25 +1352,25 @@ public class Frintezza extends L2AttackableAIScript
 		else if (event.equalsIgnoreCase("camera_3"))
 		{
 			_Zone.broadcastPacket(new SpecialCamera(_overheadDummy.getObjectId(), 300, 90, -10, 6500, 7000, 0, 0, 1, 0));
-			frintezza = (L2GrandBossInstance) addSpawn(FRINTEZZA, 174240, -89805, -5022, 16048, false, 0, false);
+			frintezza = (GrandBoss) addSpawn(FRINTEZZA, 174240, -89805, -5022, 16048, false, 0, false);
 			GrandBossManager.getInstance().addBoss(frintezza);
 			frintezza.setIsImmobilized(true);
 			frintezza.setIsInvul(true);
 			frintezza.disableAllSkills();
 			_Zone.updateKnownList(frintezza);
-			demon2 = (L2MonsterInstance) addSpawn(29051, 175876, -88713, -5100, 28205, false, 0, false);
+			demon2 = (Monster) addSpawn(29051, 175876, -88713, -5100, 28205, false, 0, false);
 			demon2.setIsImmobilized(true);
 			demon2.disableAllSkills();
 			_Zone.updateKnownList(demon2);
-			demon3 = (L2MonsterInstance) addSpawn(29051, 172608, -88702, -5100, 64817, false, 0, false);
+			demon3 = (Monster) addSpawn(29051, 172608, -88702, -5100, 64817, false, 0, false);
 			demon3.setIsImmobilized(true);
 			demon3.disableAllSkills();
 			_Zone.updateKnownList(demon3);
-			demon1 = (L2MonsterInstance) addSpawn(29050, 175833, -87165, -5100, 35048, false, 0, false);
+			demon1 = (Monster) addSpawn(29050, 175833, -87165, -5100, 35048, false, 0, false);
 			demon1.setIsImmobilized(true);
 			demon1.disableAllSkills();
 			_Zone.updateKnownList(demon1);
-			demon4 = (L2MonsterInstance) addSpawn(29050, 172634, -87165, -5100, 57730, false, 0, false);
+			demon4 = (Monster) addSpawn(29050, 172634, -87165, -5100, 57730, false, 0, false);
 			demon4.setIsImmobilized(true);
 			demon4.disableAllSkills();
 			_Zone.updateKnownList(demon4);
@@ -1417,9 +1417,9 @@ public class Frintezza extends L2AttackableAIScript
 		{
 			_Zone.broadcastPacket(new SocialAction(demon1, 1));
 			_Zone.broadcastPacket(new SocialAction(demon4, 1));
-			for (L2Character pc : _Zone.getCharactersInside())
+			for (Character pc : _Zone.getCharactersInside())
 			{
-				if (pc instanceof L2PcInstance)
+				if (pc instanceof Player)
 					if (pc.getX() < 174232)
 						pc.broadcastPacket(new SpecialCamera(_portraitDummy1.getObjectId(), 1000, 118, 0, 0, 1000, 0, 0, 1, 0));
 					else
@@ -1429,9 +1429,9 @@ public class Frintezza extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("camera_9c"))
 		{
-			for (L2Character pc : _Zone.getCharactersInside())
+			for (Character pc : _Zone.getCharactersInside())
 			{
-				if (pc instanceof L2PcInstance)
+				if (pc instanceof Player)
 					if (pc.getX() < 174232)
 						pc.broadcastPacket(new SpecialCamera(_portraitDummy1.getObjectId(), 1000, 118, 0, 0, 10000, 0, 0, 1, 0));
 					else
@@ -1489,7 +1489,7 @@ public class Frintezza extends L2AttackableAIScript
 		{
 			_Zone.broadcastPacket(new SpecialCamera(_overheadDummy.getObjectId(), 600, 180, -25, 0, 10000, 0, 0, 1, 0));
 			_Zone.broadcastPacket(new MagicSkillUse(_scarletDummy, _overheadDummy, 5004, 1, 5800, 0));
-			weakScarlet = (L2GrandBossInstance) addSpawn(29046, 174232, -88020, -5110, 16384, false, 0, true);
+			weakScarlet = (GrandBoss) addSpawn(29046, 174232, -88020, -5110, 16384, false, 0, true);
 			weakScarlet.setIsInvul(true);
 			weakScarlet.setIsImmobilized(true);
 			weakScarlet.disableAllSkills();
@@ -1517,19 +1517,19 @@ public class Frintezza extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("camera_22"))
 		{
-			portrait2 = (L2MonsterInstance) addSpawn(29049, 175876, -88713, -5000, 28205, false, 0, false);
+			portrait2 = (Monster) addSpawn(29049, 175876, -88713, -5000, 28205, false, 0, false);
 			portrait2.setIsImmobilized(true);
 			portrait2.disableAllSkills();
 			_Zone.updateKnownList(portrait2);
-			portrait3 = (L2MonsterInstance) addSpawn(29049, 172608, -88702, -5000, 64817, false, 0, false);
+			portrait3 = (Monster) addSpawn(29049, 172608, -88702, -5000, 64817, false, 0, false);
 			portrait3.setIsImmobilized(true);
 			portrait3.disableAllSkills();
 			_Zone.updateKnownList(portrait3);
-			portrait1 = (L2MonsterInstance) addSpawn(29048, 175833, -87165, -5000, 35048, false, 0, false);
+			portrait1 = (Monster) addSpawn(29048, 175833, -87165, -5000, 35048, false, 0, false);
 			portrait1.setIsImmobilized(true);
 			portrait1.disableAllSkills();
 			_Zone.updateKnownList(portrait1);
-			portrait4 = (L2MonsterInstance) addSpawn(29048, 172634, -87165, -5000, 57730, false, 0, false);
+			portrait4 = (Monster) addSpawn(29048, 172634, -87165, -5000, 57730, false, 0, false);
 			portrait4.setIsImmobilized(true);
 			portrait4.disableAllSkills();
 			_Zone.updateKnownList(portrait4);
@@ -1573,7 +1573,7 @@ public class Frintezza extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("stop_pc"))
 		{
-			for (L2Character cha : _Zone.getCharactersInside())
+			for (Character cha : _Zone.getCharactersInside())
 			{
 				cha.abortAttack();
 				cha.abortCast();
@@ -1594,7 +1594,7 @@ public class Frintezza extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("start_pc"))
 		{
-			for (L2Character cha : _Zone.getCharactersInside())
+			for (Character cha : _Zone.getCharactersInside())
 			{
 				if (cha != frintezza)
 				{
@@ -1662,7 +1662,7 @@ public class Frintezza extends L2AttackableAIScript
 			weakScarlet.deleteMe();
 			weakScarlet = null;
 			activeScarlet = null;
-			weakScarlet = (L2GrandBossInstance) addSpawn(29046, _Scarlet_x, _Scarlet_y, _Scarlet_z, _Scarlet_h, false, 0, false);
+			weakScarlet = (GrandBoss) addSpawn(29046, _Scarlet_x, _Scarlet_y, _Scarlet_z, _Scarlet_h, false, 0, false);
 			weakScarlet.setIsInvul(true);
 			weakScarlet.setIsImmobilized(true);
 			weakScarlet.disableAllSkills();
@@ -1707,7 +1707,7 @@ public class Frintezza extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("morph_13"))
 		{
-			strongScarlet = (L2GrandBossInstance) addSpawn(SCARLET2, _Scarlet_x, _Scarlet_y, _Scarlet_z, _Scarlet_h, false, 0, false);
+			strongScarlet = (GrandBoss) addSpawn(SCARLET2, _Scarlet_x, _Scarlet_y, _Scarlet_z, _Scarlet_h, false, 0, false);
 			strongScarlet.setIsInvul(true);
 			strongScarlet.setIsImmobilized(true);
 			strongScarlet.disableAllSkills();
@@ -1814,9 +1814,9 @@ public class Frintezza extends L2AttackableAIScript
 			}
 			else if (_OnSong == 4)
 			{
-				for (L2Character cha : _Zone.getCharactersInside())
+				for (Character cha : _Zone.getCharactersInside())
 				{
-					if (cha instanceof L2PcInstance && Rnd.get(100) < 80)
+					if (cha instanceof Player && Rnd.get(100) < 80)
 					{
 						skill.getEffects(frintezza, cha);
 						cha.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_FEEL_S1_EFFECT).addSkillName(5008, 4));
@@ -1825,9 +1825,9 @@ public class Frintezza extends L2AttackableAIScript
 			}
 			else if (_OnSong == 5)
 			{
-				for (L2Character cha : _Zone.getCharactersInside())
+				for (Character cha : _Zone.getCharactersInside())
 				{
-					if (cha instanceof L2PcInstance && Rnd.get(100) < 70)
+					if (cha instanceof Player && Rnd.get(100) < 70)
 					{
 						cha.abortAttack();
 						cha.abortCast();
@@ -1846,9 +1846,9 @@ public class Frintezza extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("stop_effect"))
 		{
-			for (L2Character cha : _Zone.getCharactersInside())
+			for (Character cha : _Zone.getCharactersInside())
 			{
-				if (cha instanceof L2PcInstance)
+				if (cha instanceof Player)
 				{
 					cha.stopAbnormalEffect(AbnormalEffect.DANCE_STUNNED);
 					cha.stopAbnormalEffect(AbnormalEffect.FLOATING_ROOT);
@@ -1968,9 +1968,9 @@ public class Frintezza extends L2AttackableAIScript
 			}
 			else
 			{
-				for (L2Character cha : _Zone.getCharactersInside())
+				for (Character cha : _Zone.getCharactersInside())
 				{
-					if (cha instanceof L2PcInstance)
+					if (cha instanceof Player)
 					{
 						if (cha.getFirstEffect(5016) != null)
 						{
@@ -2038,7 +2038,7 @@ public class Frintezza extends L2AttackableAIScript
 		{
 			for (int i = 0; i < Minions.size(); i++)
 			{
-				L2Attackable mob = Minions.get(i);
+				Attackable mob = Minions.get(i);
 				if (mob != null)
 					mob.decayMe();
 			}
@@ -2048,9 +2048,9 @@ public class Frintezza extends L2AttackableAIScript
 		{
 			if (npc != null && !npc.isDead() && frintezza != null && !frintezza.isDead())
 			{
-				L2Npc mob = addSpawn(npc.getNpcId() + 2, npc.getX(), npc.getY(), npc.getZ(), npc.getHeading(), false, 0, false);
-				((L2Attackable) mob).setIsRaidMinion(true);
-				Minions.add((L2Attackable) mob);
+				Npc mob = addSpawn(npc.getNpcId() + 2, npc.getX(), npc.getY(), npc.getZ(), npc.getHeading(), false, 0, false);
+				((Attackable) mob).setIsRaidMinion(true);
+				Minions.add((Attackable) mob);
 				startQuestTimer("action", 200, mob, null, false);
 				startQuestTimer("spawn_minion", 18000, npc, null, false);
 			}
@@ -2072,7 +2072,7 @@ public class Frintezza extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onTalk(L2Npc npc, L2PcInstance player)
+	public String onTalk(Npc npc, Player player)
 	{
 		if (npc.getNpcId() == CUBE)
 		{
@@ -2139,7 +2139,7 @@ public class Frintezza extends L2AttackableAIScript
 									synchronized (_PlayersInside)
 									{
 										
-										for (L2PcInstance member : party.getMembers())
+										for (Player member : party.getMembers())
 										{
 											if (member == null || member.getLevel() < 74)
 												continue;
@@ -2166,7 +2166,7 @@ public class Frintezza extends L2AttackableAIScript
 							{ // teleport just actual party reb12
 								Party party = player.getParty();
 								
-								for (L2PcInstance member : party.getMembers())
+								for (Player member : party.getMembers())
 								{
 									if (member == null || member.getLevel() < 74)
 										continue;
@@ -2215,7 +2215,7 @@ public class Frintezza extends L2AttackableAIScript
 							
 							synchronized (_PlayersInside)
 							{
-								for (L2PcInstance member : party.getMembers())
+								for (Player member : party.getMembers())
 								{
 									if (member == null || member.getLevel() < 74)
 										continue;
@@ -2248,7 +2248,7 @@ public class Frintezza extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		_LastAction = System.currentTimeMillis();
 		if (npc.getNpcId() == FRINTEZZA)
@@ -2306,7 +2306,7 @@ public class Frintezza extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
 		if (npc.getNpcId() == SCARLET2)
 		{

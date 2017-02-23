@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import java.util.StringTokenizer;
@@ -29,9 +15,9 @@ import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Buff;
 import net.sf.l2j.gameserver.instancemanager.BotsPreventionManager;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2OlympiadManagerInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.OlympiadManagerNpc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
@@ -60,7 +46,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 		if (!FloodProtectors.performAction(getClient(), Action.SERVER_BYPASS))
 			return;
 		
-		final L2PcInstance activeChar = getClient().getActiveChar();
+		final Player activeChar = getClient().getActiveChar();
 		if (activeChar == null)
 			return;
 		
@@ -134,8 +120,8 @@ public final class RequestBypassToServer extends L2GameClientPacket
 				{
 					final L2Object object = World.getInstance().getObject(Integer.parseInt(id));
 					
-					if (object != null && object instanceof L2Npc && endOfId > 0 && ((L2Npc) object).canInteract(activeChar))
-						((L2Npc) object).onBypassFeedback(activeChar, _command.substring(endOfId + 1));
+					if (object != null && object instanceof Npc && endOfId > 0 && ((Npc) object).canInteract(activeChar))
+						((Npc) object).onBypassFeedback(activeChar, _command.substring(endOfId + 1));
 					
 					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 				}
@@ -147,8 +133,8 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			else if (_command.startsWith("manor_menu_select?"))
 			{
 				L2Object object = activeChar.getTarget();
-				if (object instanceof L2Npc)
-					((L2Npc) object).onBypassFeedback(activeChar, _command);
+				if (object instanceof Npc)
+					((Npc) object).onBypassFeedback(activeChar, _command);
 			}
 			else if (_command.startsWith("bbs_") || _command.startsWith("_bbs") || _command.startsWith("_friend") || _command.startsWith("_mail") || _command.startsWith("_block"))
 			{
@@ -191,7 +177,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			}
 			else if (_command.startsWith("arenachange")) // change
 			{
-				final boolean isManager = activeChar.getCurrentFolkNPC() instanceof L2OlympiadManagerInstance;
+				final boolean isManager = activeChar.getCurrentFolkNPC() instanceof OlympiadManagerNpc;
 				if (!isManager)
 				{
 					// Without npc, command can be used only in observer mode on arena
@@ -249,7 +235,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 		}
 	}
 	
-	private static void playerHelp(L2PcInstance activeChar, String path)
+	private static void playerHelp(Player activeChar, String path)
 	{
 		if (path.indexOf("..") != -1)
 			return;

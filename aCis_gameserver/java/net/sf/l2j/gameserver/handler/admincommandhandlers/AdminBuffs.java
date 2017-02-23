@@ -8,8 +8,8 @@ import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SkillCoolTime;
@@ -28,7 +28,7 @@ public class AdminBuffs implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		if (command.startsWith("admin_getbuffs"))
 		{
@@ -38,7 +38,7 @@ public class AdminBuffs implements IAdminCommandHandler
 			if (st.hasMoreTokens())
 			{
 				String playername = st.nextToken();
-				L2PcInstance player = World.getInstance().getPlayer(playername);
+				Player player = World.getInstance().getPlayer(playername);
 				if (player == null)
 				{
 					activeChar.sendPacket(SystemMessageId.TARGET_IS_NOT_FOUND_IN_THE_GAME);
@@ -52,9 +52,9 @@ public class AdminBuffs implements IAdminCommandHandler
 				showBuffs(activeChar, player, page);
 				return true;
 			}
-			else if ((activeChar.getTarget() != null) && (activeChar.getTarget() instanceof L2Character))
+			else if ((activeChar.getTarget() != null) && (activeChar.getTarget() instanceof Character))
 			{
-				showBuffs(activeChar, (L2Character) activeChar.getTarget(), 1);
+				showBuffs(activeChar, (Character) activeChar.getTarget(), 1);
 				return true;
 			}
 			else
@@ -109,7 +109,7 @@ public class AdminBuffs implements IAdminCommandHandler
 				String val = st.nextToken();
 				int radius = Integer.parseInt(val);
 				
-				for (L2PcInstance knownChar : activeChar.getKnownTypeInRadius(L2PcInstance.class, radius))
+				for (Player knownChar : activeChar.getKnownTypeInRadius(Player.class, radius))
 					knownChar.stopAllEffects();
 				
 				activeChar.sendMessage("All effects canceled within radius " + radius + ".");
@@ -126,7 +126,7 @@ public class AdminBuffs implements IAdminCommandHandler
 			StringTokenizer st = new StringTokenizer(command, " ");
 			st.nextToken();
 			
-			L2PcInstance player = null;
+			Player player = null;
 			if (st.hasMoreTokens())
 			{
 				final String name = st.nextToken();
@@ -138,8 +138,8 @@ public class AdminBuffs implements IAdminCommandHandler
 					return false;
 				}
 			}
-			else if (activeChar.getTarget() instanceof L2PcInstance)
-				player = (L2PcInstance) activeChar.getTarget();
+			else if (activeChar.getTarget() instanceof Player)
+				player = (Player) activeChar.getTarget();
 			
 			if (player == null)
 			{
@@ -163,7 +163,7 @@ public class AdminBuffs implements IAdminCommandHandler
 		return ADMIN_COMMANDS;
 	}
 	
-	public static void showBuffs(L2PcInstance activeChar, L2Character target, int page)
+	public static void showBuffs(Player activeChar, Character target, int page)
 	{
 		final L2Effect[] effects = target.getAllEffects();
 		
@@ -203,15 +203,15 @@ public class AdminBuffs implements IAdminCommandHandler
 		activeChar.sendPacket(html);
 	}
 	
-	private static void removeBuff(L2PcInstance activeChar, int objId, int skillId)
+	private static void removeBuff(Player activeChar, int objId, int skillId)
 	{
 		if (skillId < 1)
 			return;
 		
 		final L2Object obj = World.getInstance().getObject(objId);
-		if (obj instanceof L2Character)
+		if (obj instanceof Character)
 		{
-			final L2Character target = (L2Character) obj;
+			final Character target = (Character) obj;
 			
 			for (L2Effect e : target.getAllEffects())
 			{
@@ -225,14 +225,14 @@ public class AdminBuffs implements IAdminCommandHandler
 		}
 	}
 	
-	private static void removeAllBuffs(L2PcInstance activeChar, int objId)
+	private static void removeAllBuffs(Player activeChar, int objId)
 	{
 		final L2Object target = World.getInstance().getObject(objId);
-		if (target instanceof L2Character)
+		if (target instanceof Character)
 		{
-			((L2Character) target).stopAllEffects();
+			((Character) target).stopAllEffects();
 			activeChar.sendMessage("Removed all effects from " + target.getName() + " (" + objId + ")");
-			showBuffs(activeChar, ((L2Character) target), 1);
+			showBuffs(activeChar, ((Character) target), 1);
 		}
 	}
 }

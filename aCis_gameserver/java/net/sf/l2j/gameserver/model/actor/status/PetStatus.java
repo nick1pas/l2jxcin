@@ -1,42 +1,28 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.actor.status;
 
 import net.sf.l2j.gameserver.ai.CtrlEvent;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
 public class PetStatus extends SummonStatus
 {
-	private int _currentFed = 0; // Current Fed of the L2PetInstance
+	private int _currentFed = 0; // Current Fed of the Pet
 	
-	public PetStatus(L2PetInstance activeChar)
+	public PetStatus(Pet activeChar)
 	{
 		super(activeChar);
 	}
 	
 	@Override
-	public final void reduceHp(double value, L2Character attacker)
+	public final void reduceHp(double value, Character attacker)
 	{
 		reduceHp(value, attacker, true, false, false);
 	}
 	
 	@Override
-	public final void reduceHp(double value, L2Character attacker, boolean awake, boolean isDOT, boolean isHpConsumption)
+	public final void reduceHp(double value, Character attacker, boolean awake, boolean isDOT, boolean isHpConsumption)
 	{
 		if (getActiveChar().isDead())
 			return;
@@ -67,8 +53,8 @@ public class PetStatus extends SummonStatus
 	}
 	
 	@Override
-	public L2PetInstance getActiveChar()
+	public Pet getActiveChar()
 	{
-		return (L2PetInstance) super.getActiveChar();
+		return (Pet) super.getActiveChar();
 	}
 }

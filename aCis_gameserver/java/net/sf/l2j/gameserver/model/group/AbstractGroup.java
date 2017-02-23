@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.group;
 
 import java.util.List;
@@ -19,7 +5,7 @@ import java.util.List;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
@@ -27,10 +13,10 @@ import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
 public abstract class AbstractGroup
 {
-	private L2PcInstance _leader;
+	private Player _leader;
 	private int _level;
 	
-	public AbstractGroup(L2PcInstance leader)
+	public AbstractGroup(Player leader)
 	{
 		_leader = leader;
 	}
@@ -38,7 +24,7 @@ public abstract class AbstractGroup
 	/**
 	 * @return a list of all members of this group.
 	 */
-	public abstract List<L2PcInstance> getMembers();
+	public abstract List<Player> getMembers();
 	
 	/**
 	 * @return the count of all players in this group.
@@ -63,7 +49,7 @@ public abstract class AbstractGroup
 	 * @param msg : the msg to broadcast.
 	 * @param broadcaster : the player who broadcasts the message.
 	 */
-	public abstract void broadcastCreatureSay(final CreatureSay msg, final L2PcInstance broadcaster);
+	public abstract void broadcastCreatureSay(final CreatureSay msg, final Player broadcaster);
 	
 	/**
 	 * Recalculate the group level.
@@ -95,7 +81,7 @@ public abstract class AbstractGroup
 	/**
 	 * @return the leader of this group.
 	 */
-	public L2PcInstance getLeader()
+	public Player getLeader()
 	{
 		return _leader;
 	}
@@ -104,7 +90,7 @@ public abstract class AbstractGroup
 	 * Change the leader of this group to the specified player.
 	 * @param leader : the player to set as the new leader of this group.
 	 */
-	public void setLeader(L2PcInstance leader)
+	public void setLeader(Player leader)
 	{
 		_leader = leader;
 	}
@@ -122,7 +108,7 @@ public abstract class AbstractGroup
 	 * @param player : the player to check.
 	 * @return {@code true} if the specified player is the leader of this group, {@code false} otherwise.
 	 */
-	public boolean isLeader(L2PcInstance player)
+	public boolean isLeader(Player player)
 	{
 		return _leader.getObjectId() == player.getObjectId();
 	}
@@ -148,7 +134,7 @@ public abstract class AbstractGroup
 	/**
 	 * @return a random member of this group.
 	 */
-	public L2PcInstance getRandomPlayer()
+	public Player getRandomPlayer()
 	{
 		return Rnd.get(getMembers());
 	}

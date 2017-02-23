@@ -1,26 +1,12 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.skills.l2skills;
 
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2SiegeFlagInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.SiegeFlag;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
@@ -40,12 +26,12 @@ public class L2SkillSiegeFlag extends L2Skill
 	}
 	
 	@Override
-	public void useSkill(L2Character activeChar, L2Object[] targets)
+	public void useSkill(Character activeChar, L2Object[] targets)
 	{
-		if (!(activeChar instanceof L2PcInstance))
+		if (!(activeChar instanceof Player))
 			return;
 		
-		final L2PcInstance player = activeChar.getActingPlayer();
+		final Player player = activeChar.getActingPlayer();
 		
 		if (!checkIfOkToPlaceFlag(player, true))
 			return;
@@ -73,7 +59,7 @@ public class L2SkillSiegeFlag extends L2Skill
 		npcDat.set("runSpd", 0); // Have to keep this, static object MUST BE 0 (critical error otherwise).
 		
 		// Spawn a new flag.
-		final L2SiegeFlagInstance flag = new L2SiegeFlagInstance(player, IdFactory.getInstance().getNextId(), new NpcTemplate(npcDat));
+		final SiegeFlag flag = new SiegeFlag(player, IdFactory.getInstance().getNextId(), new NpcTemplate(npcDat));
 		flag.setCurrentHp(flag.getMaxHp());
 		flag.setHeading(player.getHeading());
 		flag.spawnMe(player.getX(), player.getY(), player.getZ() + 50);
@@ -84,7 +70,7 @@ public class L2SkillSiegeFlag extends L2Skill
 	 * @param isCheckOnly : If false, send a notification to the player telling him why it failed.
 	 * @return true if the player can place a flag.
 	 */
-	public static boolean checkIfOkToPlaceFlag(L2PcInstance player, boolean isCheckOnly)
+	public static boolean checkIfOkToPlaceFlag(Player player, boolean isCheckOnly)
 	{
 		final Siege siege = CastleManager.getInstance().getSiege(player);
 		SystemMessage sm;
@@ -96,7 +82,7 @@ public class L2SkillSiegeFlag extends L2Skill
 			sm = SystemMessage.getSystemMessage(SystemMessageId.NOT_ANOTHER_HEADQUARTERS);
 		else if (!player.isInsideZone(ZoneId.HQ))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.NOT_SET_UP_BASE_HERE);
-		else if (!player.getKnownTypeInRadius(L2SiegeFlagInstance.class, 400).isEmpty())
+		else if (!player.getKnownTypeInRadius(SiegeFlag.class, 400).isEmpty())
 			sm = SystemMessage.getSystemMessage(SystemMessageId.HEADQUARTERS_TOO_CLOSE);
 		else
 			return true;

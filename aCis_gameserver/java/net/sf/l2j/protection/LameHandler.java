@@ -14,11 +14,11 @@
  */
 package net.sf.l2j.protection;
 
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 
 public class LameHandler
 {
-	public void runCommand(L2PcInstance admin, String[] params)
+	public void runCommand(Player admin, String[] params)
 	{
 	}
 	

@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.handler.itemhandlers;
 
 import net.sf.l2j.Config;
@@ -19,9 +5,9 @@ import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.manor.Seed;
@@ -30,19 +16,19 @@ import net.sf.l2j.gameserver.network.SystemMessageId;
 public class SeedHandler implements IItemHandler
 {
 	@Override
-	public void useItem(L2Playable playable, ItemInstance item, boolean forceUse)
+	public void useItem(Playable playable, ItemInstance item, boolean forceUse)
 	{
-		if (!Config.ALLOW_MANOR || !(playable instanceof L2PcInstance))
+		if (!Config.ALLOW_MANOR || !(playable instanceof Player))
 			return;
 		
 		final L2Object tgt = playable.getTarget();
-		if (!(tgt instanceof L2Attackable) || !((L2Attackable) tgt).getTemplate().isSeedable())
+		if (!(tgt instanceof Attackable) || !((Attackable) tgt).getTemplate().isSeedable())
 		{
 			playable.sendPacket(SystemMessageId.THE_TARGET_IS_UNAVAILABLE_FOR_SEEDING);
 			return;
 		}
 		
-		final L2Attackable target = (L2Attackable) tgt;
+		final Attackable target = (Attackable) tgt;
 		if (target.isDead() || target.isSeeded())
 		{
 			playable.sendPacket(SystemMessageId.INCORRECT_TARGET);

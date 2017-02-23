@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import java.util.HashMap;
@@ -23,9 +9,9 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.BuyListTable;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2MerchantInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Merchant;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.buylist.NpcBuyList;
 import net.sf.l2j.gameserver.model.buylist.Product;
 import net.sf.l2j.gameserver.model.item.kind.Item;
@@ -47,9 +33,9 @@ public final class RequestPreviewItem extends L2GameClientPacket
 	
 	private class RemoveWearItemsTask implements Runnable
 	{
-		private final L2PcInstance activeChar;
+		private final Player activeChar;
 		
-		protected RemoveWearItemsTask(L2PcInstance player)
+		protected RemoveWearItemsTask(Player player)
 		{
 			activeChar = player;
 		}
@@ -102,7 +88,7 @@ public final class RequestPreviewItem extends L2GameClientPacket
 		}
 		
 		// Get the current player and return if null
-		final L2PcInstance activeChar = getClient().getActiveChar();
+		final Player activeChar = getClient().getActiveChar();
 		if (activeChar == null)
 			return;
 		
@@ -112,11 +98,11 @@ public final class RequestPreviewItem extends L2GameClientPacket
 		
 		// Check current target of the player and the INTERACTION_DISTANCE
 		L2Object target = activeChar.getTarget();
-		if (!activeChar.isGM() && (target == null || !(target instanceof L2MerchantInstance) || !activeChar.isInsideRadius(target, L2Npc.INTERACTION_DISTANCE, false, false)))
+		if (!activeChar.isGM() && (target == null || !(target instanceof Merchant) || !activeChar.isInsideRadius(target, Npc.INTERACTION_DISTANCE, false, false)))
 			return;
 		
 		// Get the current merchant targeted by the player
-		final L2MerchantInstance merchant = (target instanceof L2MerchantInstance) ? (L2MerchantInstance) target : null;
+		final Merchant merchant = (target instanceof Merchant) ? (Merchant) target : null;
 		if (merchant == null)
 		{
 			_log.warning(getClass().getName() + " Null merchant!");

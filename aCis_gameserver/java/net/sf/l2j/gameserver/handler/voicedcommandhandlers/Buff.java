@@ -3,7 +3,7 @@ package net.sf.l2j.gameserver.handler.voicedcommandhandlers;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
@@ -20,7 +20,7 @@ public class Buff implements IVoicedCommandHandler
     };
     
     @Override
-    public boolean useVoicedCommand(String command, L2PcInstance activeChar, String target)
+    public boolean useVoicedCommand(String command, Player activeChar, String target)
     {    
         if (check(activeChar)) //retorna                
             showHtml(activeChar);    
@@ -28,7 +28,7 @@ public class Buff implements IVoicedCommandHandler
         return true;
     }
     
-    public static void getFullBuff(L2PcInstance p, boolean isClassMage)
+    public static void getFullBuff(Player p, boolean isClassMage)
     {
         if (check(p))
         {
@@ -46,13 +46,13 @@ public class Buff implements IVoicedCommandHandler
         }        
     }
     
-    public static boolean check(L2PcInstance p)
+    public static boolean check(Player p)
     {        
     	p.sendMessage("You are in combat mode or outside the peace zone");
         return p.isInsideZone(ZoneId.PEACE) && !p.isInCombat() && !p.isInOlympiadMode(); //restrições       
     }
     
-    public static void showHtml(L2PcInstance player)
+    public static void showHtml(Player player)
     {      
         NpcHtmlMessage html = new NpcHtmlMessage(0);    
         html.setFile("data/html/mods/buffCommand.htm");

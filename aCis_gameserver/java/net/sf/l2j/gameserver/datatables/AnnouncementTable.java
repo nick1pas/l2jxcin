@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.datatables;
 
 import java.io.File;
@@ -24,7 +10,7 @@ import net.sf.l2j.commons.lang.StringUtil;
 
 import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.model.Announcement;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -120,7 +106,7 @@ public class AnnouncementTable
 	 * @param activeChar : The player to send infos.
 	 * @param autoOrNot : If True, sends only automatic announcements, otherwise send classic ones.
 	 */
-	public void showAnnouncements(L2PcInstance activeChar, boolean autoOrNot)
+	public void showAnnouncements(Player activeChar, boolean autoOrNot)
 	{
 		for (Announcement announce : _announcements.values())
 		{
@@ -157,7 +143,7 @@ public class AnnouncementTable
 	 * Send a static HTM with dynamic announcements content took from _announcements Map.
 	 * @param activeChar : The player to send the HTM packet.
 	 */
-	public void listAnnouncements(L2PcInstance activeChar)
+	public void listAnnouncements(Player activeChar)
 	{
 		final StringBuilder sb = new StringBuilder("<br>");
 		if (_announcements.isEmpty())

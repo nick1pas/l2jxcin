@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.handler.skillhandlers;
 
 import net.sf.l2j.gameserver.ai.CtrlEvent;
@@ -23,11 +9,11 @@ import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.instance.L2ClanHallManagerInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.instance.ClanHallManagerNpc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.skills.Env;
@@ -58,9 +44,9 @@ public class Continuous implements ISkillHandler
 	};
 	
 	@Override
-	public void useSkill(L2Character activeChar, L2Skill skill, L2Object[] targets)
+	public void useSkill(Character activeChar, L2Skill skill, L2Object[] targets)
 	{
-		final L2PcInstance player = activeChar.getActingPlayer();
+		final Player player = activeChar.getActingPlayer();
 		
 		if (skill.getEffectId() != 0)
 		{
@@ -75,10 +61,10 @@ public class Continuous implements ISkillHandler
 		
 		for (L2Object obj : targets)
 		{
-			if (!(obj instanceof L2Character))
+			if (!(obj instanceof Character))
 				continue;
 			
-			L2Character target = ((L2Character) obj);
+			Character target = ((Character) obj);
 			if (Formulas.calcSkillReflect(target, skill) == Formulas.SKILL_REFLECT_SUCCEED)
 				target = activeChar;
 			
@@ -90,15 +76,15 @@ public class Continuous implements ISkillHandler
 						continue;
 					
 					// Anti-Buff Protection prevents you from getting buffs by other players
-					if (activeChar instanceof L2PcInstance && target != activeChar && target.isBuffProtected() && !skill.isHeroSkill() && (skill.getSkillType() == L2SkillType.BUFF || skill.getSkillType() == L2SkillType.HEAL_PERCENT || skill.getSkillType() == L2SkillType.MANAHEAL_PERCENT || skill.getSkillType() == L2SkillType.COMBATPOINTHEAL || skill.getSkillType() == L2SkillType.REFLECT))
+					if (activeChar instanceof Player && target != activeChar && target.isBuffProtected() && !skill.isHeroSkill() && (skill.getSkillType() == L2SkillType.BUFF || skill.getSkillType() == L2SkillType.HEAL_PERCENT || skill.getSkillType() == L2SkillType.MANAHEAL_PERCENT || skill.getSkillType() == L2SkillType.COMBATPOINTHEAL || skill.getSkillType() == L2SkillType.REFLECT))
 						continue;
 					
 					// Player holding a cursed weapon can't be buffed and can't buff
-					if (!(activeChar instanceof L2ClanHallManagerInstance) && target != activeChar)
+					if (!(activeChar instanceof ClanHallManagerNpc) && target != activeChar)
 					{
-						if (target instanceof L2PcInstance)
+						if (target instanceof Player)
 						{
-							if (((L2PcInstance) target).isCursedWeaponEquipped())
+							if (((Player) target).isCursedWeaponEquipped())
 								continue;
 						}
 						else if (player != null && player.isCursedWeaponEquipped())
@@ -134,21 +120,21 @@ public class Continuous implements ISkillHandler
 				
 				// if this is a debuff let the duel manager know about it so the debuff
 				// can be removed after the duel (player & target must be in the same duel)
-				if (target instanceof L2PcInstance && ((L2PcInstance) target).isInDuel() && (skill.getSkillType() == L2SkillType.DEBUFF || skill.getSkillType() == L2SkillType.BUFF) && player != null && player.getDuelId() == ((L2PcInstance) target).getDuelId())
+				if (target instanceof Player && ((Player) target).isInDuel() && (skill.getSkillType() == L2SkillType.DEBUFF || skill.getSkillType() == L2SkillType.BUFF) && player != null && player.getDuelId() == ((Player) target).getDuelId())
 				{
 					DuelManager dm = DuelManager.getInstance();
 					for (L2Effect buff : skill.getEffects(activeChar, target, new Env(shld, ss, sps, bsps)))
 						if (buff != null)
-							dm.onBuff(((L2PcInstance) target), buff);
+							dm.onBuff(((Player) target), buff);
 				}
 				else
 					skill.getEffects(activeChar, target, new Env(shld, ss, sps, bsps));
 				
 				if (skill.getSkillType() == L2SkillType.AGGDEBUFF)
 				{
-					if (target instanceof L2Attackable)
+					if (target instanceof Attackable)
 						target.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, activeChar, (int) skill.getPower());
-					else if (target instanceof L2Playable)
+					else if (target instanceof Playable)
 					{
 						if (target.getTarget() == activeChar)
 							target.getAI().setIntention(CtrlIntention.ATTACK, activeChar);

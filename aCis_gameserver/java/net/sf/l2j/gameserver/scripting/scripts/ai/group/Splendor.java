@@ -26,9 +26,9 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
@@ -85,7 +85,7 @@ public class Splendor extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		int npcId = npc.getNpcId();
 		int NewMob = SplendorId.get(npcId)[0];
@@ -98,7 +98,7 @@ public class Splendor extends L2AttackableAIScript
 				if (ModeSpawn == 1)
 				{
 					npc.deleteMe();
-					L2Attackable newNpc = (L2Attackable) addSpawn(NewMob, npc, isPet, ModeSpawn, isPet);
+					Attackable newNpc = (Attackable) addSpawn(NewMob, npc, isPet, ModeSpawn, isPet);
 					newNpc.addDamageHate(attacker, 0, 999);
 					newNpc.getAI().setIntention(CtrlIntention.ATTACK, attacker);
 				}
@@ -109,7 +109,7 @@ public class Splendor extends L2AttackableAIScript
 				else if (ModeSpawn == 2)
 				{
 					AlwaysSpawn = true;
-					L2Attackable newNpc1 = (L2Attackable) addSpawn(NewMob, npc, isPet, ModeSpawn, isPet);
+					Attackable newNpc1 = (Attackable) addSpawn(NewMob, npc, isPet, ModeSpawn, isPet);
 					newNpc1.addDamageHate(attacker, 0, 999);
 					newNpc1.getAI().setIntention(CtrlIntention.ATTACK, attacker);
 				}
@@ -120,7 +120,7 @@ public class Splendor extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		int ModeSpawn = SplendorId.get(npcId)[2];

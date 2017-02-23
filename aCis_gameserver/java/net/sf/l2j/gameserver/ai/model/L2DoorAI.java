@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.ai.model;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
@@ -21,13 +7,13 @@ import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.SpawnLocation;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2SiegeGuardInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Door;
+import net.sf.l2j.gameserver.model.actor.instance.SiegeGuard;
 
 public class L2DoorAI extends L2CharacterAI
 {
-	public L2DoorAI(L2DoorInstance door)
+	public L2DoorAI(Door door)
 	{
 		super(door);
 	}
@@ -48,7 +34,7 @@ public class L2DoorAI extends L2CharacterAI
 	}
 	
 	@Override
-	protected void onIntentionAttack(L2Character target)
+	protected void onIntentionAttack(Character target)
 	{
 	}
 	
@@ -63,7 +49,7 @@ public class L2DoorAI extends L2CharacterAI
 	}
 	
 	@Override
-	protected void onIntentionFollow(L2Character target)
+	protected void onIntentionFollow(Character target)
 	{
 	}
 	
@@ -83,28 +69,28 @@ public class L2DoorAI extends L2CharacterAI
 	}
 	
 	@Override
-	protected void onEvtAttacked(L2Character attacker)
+	protected void onEvtAttacked(Character attacker)
 	{
-		ThreadPool.execute(new onEventAttackedDoorTask((L2DoorInstance) _actor, attacker));
+		ThreadPool.execute(new onEventAttackedDoorTask((Door) _actor, attacker));
 	}
 	
 	@Override
-	protected void onEvtAggression(L2Character target, int aggro)
-	{
-	}
-	
-	@Override
-	protected void onEvtStunned(L2Character attacker)
+	protected void onEvtAggression(Character target, int aggro)
 	{
 	}
 	
 	@Override
-	protected void onEvtSleeping(L2Character attacker)
+	protected void onEvtStunned(Character attacker)
 	{
 	}
 	
 	@Override
-	protected void onEvtRooted(L2Character attacker)
+	protected void onEvtSleeping(Character attacker)
+	{
+	}
+	
+	@Override
+	protected void onEvtRooted(Character attacker)
 	{
 	}
 	
@@ -140,10 +126,10 @@ public class L2DoorAI extends L2CharacterAI
 	
 	private class onEventAttackedDoorTask implements Runnable
 	{
-		private final L2DoorInstance _door;
-		private final L2Character _attacker;
+		private final Door _door;
+		private final Character _attacker;
 		
-		public onEventAttackedDoorTask(L2DoorInstance door, L2Character attacker)
+		public onEventAttackedDoorTask(Door door, Character attacker)
 		{
 			_door = door;
 			_attacker = attacker;
@@ -152,7 +138,7 @@ public class L2DoorAI extends L2CharacterAI
 		@Override
 		public void run()
 		{
-			for (L2SiegeGuardInstance guard : _door.getKnownType(L2SiegeGuardInstance.class))
+			for (SiegeGuard guard : _door.getKnownType(SiegeGuard.class))
 			{
 				if (_actor.isInsideRadius(guard, guard.getTemplate().getClanRange(), false, true) && Math.abs(_attacker.getZ() - guard.getZ()) < 200)
 					guard.getAI().notifyEvent(CtrlEvent.EVT_AGGRESSION, _attacker, 15);

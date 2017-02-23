@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.olympiad;
 
 import java.util.List;
@@ -24,10 +10,10 @@ import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
@@ -104,7 +90,7 @@ public abstract class AbstractOlympiadGame
 	 * @param player to check.
 	 * @return null or reason.
 	 */
-	protected static SystemMessage checkDefaulted(L2PcInstance player)
+	protected static SystemMessage checkDefaulted(Player player)
 	{
 		if (player == null || !player.isOnline())
 			return SystemMessage.getSystemMessage(SystemMessageId.THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_ENDS_THE_GAME);
@@ -145,7 +131,7 @@ public abstract class AbstractOlympiadGame
 	
 	protected static final boolean portPlayerToArena(Participant par, Location loc, int id)
 	{
-		final L2PcInstance player = par.player;
+		final Player player = par.player;
 		if (player == null || !player.isOnline())
 			return false;
 		
@@ -170,7 +156,7 @@ public abstract class AbstractOlympiadGame
 		return true;
 	}
 	
-	protected static final void removals(L2PcInstance player, boolean removeParty)
+	protected static final void removals(Player player, boolean removeParty)
 	{
 		try
 		{
@@ -216,14 +202,14 @@ public abstract class AbstractOlympiadGame
 			player.setCurrentMp(player.getMaxMp());
 			
 			// Remove Summon's Buffs
-			final L2Summon summon = player.getPet();
+			final Summon summon = player.getPet();
 			if (summon != null)
 			{
 				summon.stopAllEffectsExceptThoseThatLastThroughDeath();
 				summon.abortAttack();
 				summon.abortCast();
 				
-				if (summon instanceof L2PetInstance)
+				if (summon instanceof Pet)
 					summon.unSummon(player);
 			}
 			
@@ -269,7 +255,7 @@ public abstract class AbstractOlympiadGame
 	 * Buff the player. WW2 for fighter/mage + haste 1 if fighter.
 	 * @param player : the happy benefactor.
 	 */
-	protected static final void buffPlayer(L2PcInstance player)
+	protected static final void buffPlayer(Player player)
 	{
 		L2Skill skill = SkillTable.getInstance().getInfo(1204, 2); // Windwalk 2
 		if (skill != null)
@@ -303,14 +289,14 @@ public abstract class AbstractOlympiadGame
 	 * Heal the player.
 	 * @param player : the happy benefactor.
 	 */
-	protected static final void healPlayer(L2PcInstance player)
+	protected static final void healPlayer(Player player)
 	{
 		player.setCurrentCp(player.getMaxCp());
 		player.setCurrentHp(player.getMaxHp());
 		player.setCurrentMp(player.getMaxMp());
 	}
 	
-	protected static final void cleanEffects(L2PcInstance player)
+	protected static final void cleanEffects(Player player)
 	{
 		try
 		{
@@ -324,7 +310,7 @@ public abstract class AbstractOlympiadGame
 			if (player.isDead())
 				player.setIsDead(false);
 			
-			final L2Summon summon = player.getPet();
+			final Summon summon = player.getPet();
 			if (summon != null && !summon.isDead())
 			{
 				summon.setTarget(null);
@@ -344,7 +330,7 @@ public abstract class AbstractOlympiadGame
 		}
 	}
 	
-	protected static final void playerStatusBack(L2PcInstance player)
+	protected static final void playerStatusBack(Player player)
 	{
 		try
 		{
@@ -357,7 +343,7 @@ public abstract class AbstractOlympiadGame
 			player.stopAllEffectsExceptThoseThatLastThroughDeath();
 			player.clearCharges();
 			
-			final L2Summon summon = player.getPet();
+			final Summon summon = player.getPet();
 			if (summon != null && !summon.isDead())
 				summon.stopAllEffectsExceptThoseThatLastThroughDeath();
 			
@@ -401,7 +387,7 @@ public abstract class AbstractOlympiadGame
 		}
 	}
 	
-	protected static final void portPlayerBack(L2PcInstance player)
+	protected static final void portPlayerBack(Player player)
 	{
 		if (player == null)
 			return;
@@ -418,7 +404,7 @@ public abstract class AbstractOlympiadGame
 		player.getSavedLocation().clean();
 	}
 	
-	public static final void rewardParticipant(L2PcInstance player, int[][] reward)
+	public static final void rewardParticipant(Player player, int[][] reward)
 	{
 		if (player == null || !player.isOnline() || reward == null)
 			return;
@@ -452,7 +438,7 @@ public abstract class AbstractOlympiadGame
 	
 	public abstract boolean containsParticipant(int playerId);
 	
-	public abstract void sendOlympiadInfo(L2Character player);
+	public abstract void sendOlympiadInfo(Character player);
 	
 	public abstract void broadcastOlympiadInfo(L2OlympiadStadiumZone stadium);
 	
@@ -476,11 +462,11 @@ public abstract class AbstractOlympiadGame
 	
 	protected abstract void clearPlayers();
 	
-	protected abstract void handleDisconnect(L2PcInstance player);
+	protected abstract void handleDisconnect(Player player);
 	
 	protected abstract void resetDamage();
 	
-	protected abstract void addDamage(L2PcInstance player, int damage);
+	protected abstract void addDamage(Player player, int damage);
 	
 	protected abstract boolean checkBattleStatus();
 	

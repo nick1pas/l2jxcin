@@ -30,7 +30,7 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.model.CharSelectInfoPackage;
-import net.sf.l2j.gameserver.model.actor.L2PcPolymorph;
+import net.sf.l2j.gameserver.model.actor.PcPolymorph;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 
 /**
@@ -52,8 +52,8 @@ public final class CharacterKillingManager
 	
 	private ScheduledFuture<?> _scheduledKillingCycleTask = null;
 	
-	private List<L2PcPolymorph> pvpMorphListeners = new CopyOnWriteArrayList<>();
-	private List<L2PcPolymorph> pkMorphListeners = new CopyOnWriteArrayList<>();
+	private List<PcPolymorph> pvpMorphListeners = new CopyOnWriteArrayList<>();
+	private List<PcPolymorph> pkMorphListeners = new CopyOnWriteArrayList<>();
 	
 	protected CharacterKillingManager()
 	{
@@ -201,19 +201,19 @@ public final class CharacterKillingManager
 	public void broadcastMorphUpdate()
 	{
 		final CharSelectInfoPackage winnerPvPKillsInfo = getWinnerPvPKillsInfo();
-		for (L2PcPolymorph npc : pvpMorphListeners)
+		for (PcPolymorph npc : pvpMorphListeners)
 		{
 			broadcastPvPMorphUpdate(npc, winnerPvPKillsInfo);
 		}
 		
 		final CharSelectInfoPackage winnerPKKillsInfo = getWinnerPKKillsInfo();
-		for (L2PcPolymorph npc : pkMorphListeners)
+		for (PcPolymorph npc : pkMorphListeners)
 		{
 			broadcastPKMorphUpdate(npc, winnerPKKillsInfo);
 		}
 	}
 	
-	private void broadcastPvPMorphUpdate(L2PcPolymorph npc, CharSelectInfoPackage winnerPvPKillsInfo)
+	private void broadcastPvPMorphUpdate(PcPolymorph npc, CharSelectInfoPackage winnerPvPKillsInfo)
 	{
 		if (winnerPvPKillsInfo == null)
 		{
@@ -227,7 +227,7 @@ public final class CharacterKillingManager
 		npc.broadcastPacket(new SocialAction(npc, 16));
 	}
 	
-	private void broadcastPKMorphUpdate(L2PcPolymorph npc, CharSelectInfoPackage winnerPKKillsInfo)
+	private void broadcastPKMorphUpdate(PcPolymorph npc, CharSelectInfoPackage winnerPKKillsInfo)
 	{
 		if (winnerPKKillsInfo == null)
 		{
@@ -241,7 +241,7 @@ public final class CharacterKillingManager
 		npc.broadcastPacket(new SocialAction(npc, 16));
 	}
 	
-	public boolean addPvPMorphListener(L2PcPolymorph npc)
+	public boolean addPvPMorphListener(PcPolymorph npc)
 	{
 		if (npc == null)
 		{
@@ -251,12 +251,12 @@ public final class CharacterKillingManager
 		return pvpMorphListeners.add(npc);
 	}
 	
-	public boolean removePvPMorphListener(L2PcPolymorph npc)
+	public boolean removePvPMorphListener(PcPolymorph npc)
 	{
 		return pvpMorphListeners.remove(npc);
 	}
 	
-	public boolean addPKMorphListener(L2PcPolymorph npc)
+	public boolean addPKMorphListener(PcPolymorph npc)
 	{
 		if (npc == null)
 		{
@@ -266,7 +266,7 @@ public final class CharacterKillingManager
 		return pkMorphListeners.add(npc);
 	}
 	
-	public boolean removePKMorphListener(L2PcPolymorph npc)
+	public boolean removePKMorphListener(PcPolymorph npc)
 	{
 		return pkMorphListeners.remove(npc);
 	}
@@ -279,7 +279,7 @@ public final class CharacterKillingManager
 			{
 				if (_winnerPvPKillsInfo == null)
 				{
-					_winnerPvPKillsInfo = L2PcPolymorph.loadCharInfo(_winnerPvPKills);
+					_winnerPvPKillsInfo = PcPolymorph.loadCharInfo(_winnerPvPKills);
 				}
 			}
 		}
@@ -294,7 +294,7 @@ public final class CharacterKillingManager
 			{
 				if (_winnerPKKillsInfo == null)
 				{
-					_winnerPKKillsInfo = L2PcPolymorph.loadCharInfo(_winnerPKKills);
+					_winnerPKKillsInfo = PcPolymorph.loadCharInfo(_winnerPKKills);
 				}
 			}
 		}

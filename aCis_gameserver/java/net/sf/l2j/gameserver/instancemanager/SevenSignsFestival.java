@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.instancemanager;
 
 import java.sql.Connection;
@@ -41,9 +27,9 @@ import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2FestivalMonsterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.FestivalMonster;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.base.Experience;
 import net.sf.l2j.gameserver.model.group.Party;
@@ -3380,7 +3366,7 @@ public class SevenSignsFestival
 	
 	private static void addReputationPointsForPartyMemberClan(String playerName)
 	{
-		final L2PcInstance player = World.getInstance().getPlayer(playerName);
+		final Player player = World.getInstance().getPlayer(playerName);
 		if (player != null)
 		{
 			if (player.getClan() != null)
@@ -3476,7 +3462,7 @@ public class SevenSignsFestival
 		saveFestivalData(updateSettings);
 		
 		// Remove any unused blood offerings from online players.
-		for (L2PcInstance player : World.getInstance().getPlayers())
+		for (Player player : World.getInstance().getPlayers())
 		{
 			ItemInstance bloodOfferings = player.getInventory().getItemByItemId(FESTIVAL_OFFERING_ID);
 			if (bloodOfferings != null)
@@ -3540,7 +3526,7 @@ public class SevenSignsFestival
 	 * @param player
 	 * @return int[] playerFestivalInfo
 	 */
-	public final int[] getFestivalForPlayer(L2PcInstance player)
+	public final int[] getFestivalForPlayer(Player player)
 	{
 		int[] playerFestivalInfo =
 		{
@@ -3579,7 +3565,7 @@ public class SevenSignsFestival
 		return playerFestivalInfo;
 	}
 	
-	public final boolean isParticipant(L2PcInstance player)
+	public final boolean isParticipant(Player player)
 	{
 		if (SevenSigns.getInstance().isSealValidationPeriod())
 			return false;
@@ -3621,7 +3607,7 @@ public class SevenSignsFestival
 		if (festivalParty != null)
 		{
 			participants = new ArrayList<>(festivalParty.getMembersCount());
-			for (L2PcInstance player : festivalParty.getMembers())
+			for (Player player : festivalParty.getMembers())
 				participants.add(player.getObjectId());
 		}
 		
@@ -3631,7 +3617,7 @@ public class SevenSignsFestival
 			_duskFestivalParticipants.put(festivalId, participants);
 	}
 	
-	public void updateParticipants(L2PcInstance player, Party festivalParty)
+	public void updateParticipants(Player player, Party festivalParty)
 	{
 		if (!isParticipant(player))
 			return;
@@ -3651,7 +3637,7 @@ public class SevenSignsFestival
 				{
 					for (int partyMemberObjId : getParticipants(oracle, festivalId))
 					{
-						L2PcInstance partyMember = World.getInstance().getPlayer(partyMemberObjId);
+						Player partyMember = World.getInstance().getPlayer(partyMemberObjId);
 						if (partyMember == null)
 							continue;
 						
@@ -3741,7 +3727,7 @@ public class SevenSignsFestival
 	 * @param offeringScore
 	 * @return boolean isHighestScore
 	 */
-	public boolean setFinalScore(L2PcInstance player, CabalType oracle, FestivalType festival, int offeringScore)
+	public boolean setFinalScore(Player player, CabalType oracle, FestivalType festival, int offeringScore)
 	{
 		final int festivalId = festival.ordinal();
 		
@@ -3843,7 +3829,7 @@ public class SevenSignsFestival
 	 * @param player
 	 * @return playerBonus (the share of the bonus for the party)
 	 */
-	public final int distribAccumulatedBonus(L2PcInstance player)
+	public final int distribAccumulatedBonus(Player player)
 	{
 		if (SevenSigns.getInstance().getPlayerCabal(player.getObjectId()) != SevenSigns.getInstance().getCabalHighestScore())
 			return 0;
@@ -4185,8 +4171,8 @@ public class SevenSignsFestival
 		private FestivalSpawn _startLocation;
 		private FestivalSpawn _witchSpawn;
 		
-		private L2Npc _witchInst;
-		protected final List<L2FestivalMonsterInstance> _npcInsts;
+		private Npc _witchInst;
+		protected final List<FestivalMonster> _npcInsts;
 		
 		private List<Integer> _participants;
 		private final Map<Integer, FestivalSpawn> _originalLocations;
@@ -4227,7 +4213,7 @@ public class SevenSignsFestival
 			{
 				for (int participantObjId : _participants)
 				{
-					L2PcInstance participant = World.getInstance().getPlayer(participantObjId);
+					Player participant = World.getInstance().getPlayer(participantObjId);
 					if (participant == null)
 						continue;
 					
@@ -4303,7 +4289,7 @@ public class SevenSignsFestival
 		
 		protected void moveMonstersToCenter()
 		{
-			for (L2FestivalMonsterInstance festivalMob : _npcInsts)
+			for (FestivalMonster festivalMob : _npcInsts)
 			{
 				if (festivalMob.isDead())
 					continue;
@@ -4383,7 +4369,7 @@ public class SevenSignsFestival
 						npcSpawn.setRespawnState(true);
 						
 						SpawnTable.getInstance().addNewSpawn(npcSpawn, false);
-						L2FestivalMonsterInstance festivalMob = (L2FestivalMonsterInstance) npcSpawn.doSpawn(false);
+						FestivalMonster festivalMob = (FestivalMonster) npcSpawn.doSpawn(false);
 						
 						// Set the offering bonus to 2x or 5x the amount per kill, if this spawn is part of an increased challenge or is a festival chest.
 						if (spawnType == 1)
@@ -4426,7 +4412,7 @@ public class SevenSignsFestival
 			{
 				for (int participantObjId : _participants)
 				{
-					L2PcInstance participant = World.getInstance().getPlayer(participantObjId);
+					Player participant = World.getInstance().getPlayer(participantObjId);
 					if (participant == null)
 						continue;
 					
@@ -4455,7 +4441,7 @@ public class SevenSignsFestival
 			}
 			
 			if (_npcInsts != null)
-				for (L2FestivalMonsterInstance monsterInst : _npcInsts)
+				for (FestivalMonster monsterInst : _npcInsts)
 					if (monsterInst != null)
 					{
 						monsterInst.getSpawn().setRespawnState(false);
@@ -4464,7 +4450,7 @@ public class SevenSignsFestival
 					}
 		}
 		
-		public void relocatePlayer(L2PcInstance participant, boolean isRemoving)
+		public void relocatePlayer(Player participant, boolean isRemoving)
 		{
 			if (participant == null)
 				return;

@@ -9,7 +9,7 @@ import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.entity.ClanHall.ClanHallFunction;
 import net.sf.l2j.gameserver.model.entity.Siege;
@@ -32,9 +32,9 @@ public final class RequestRestartPoint extends L2GameClientPacket
 	
 	class DeathTask implements Runnable
 	{
-		final L2PcInstance _player;
+		final Player _player;
 		
-		DeathTask(L2PcInstance player)
+		DeathTask(Player player)
 		{
 			_player = player;
 		}
@@ -138,7 +138,7 @@ public final class RequestRestartPoint extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final L2PcInstance player = getClient().getActiveChar();
+		final Player player = getClient().getActiveChar();
 		if (player == null)
 			return;
 		

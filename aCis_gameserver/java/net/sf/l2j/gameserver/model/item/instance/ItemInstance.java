@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.item.instance;
 
 import java.sql.Connection;
@@ -37,8 +23,8 @@ import net.sf.l2j.gameserver.model.L2Augmentation;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.ShotType;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.item.MercenaryTicket;
 import net.sf.l2j.gameserver.model.item.kind.Armor;
@@ -183,10 +169,10 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * Sets the ownerID of the item
 	 * @param process : String Identifier of process triggering this action
 	 * @param owner_id : int designating the ID of the owner
-	 * @param creator : L2PcInstance Player requesting the item creation
+	 * @param creator : Player Player requesting the item creation
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 */
-	public void setOwnerId(String process, int owner_id, L2PcInstance creator, L2Object reference)
+	public void setOwnerId(String process, int owner_id, Player creator, L2Object reference)
 	{
 		setOwnerId(owner_id);
 		
@@ -286,10 +272,10 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * <U><I>Remark :</I></U> If loc and loc_data different from database, say datas not up-to-date
 	 * @param process : String Identifier of process triggering this action
 	 * @param count : int
-	 * @param creator : L2PcInstance Player requesting the item creation
+	 * @param creator : Player Player requesting the item creation
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 */
-	public void changeCount(String process, int count, L2PcInstance creator, L2Object reference)
+	public void changeCount(String process, int count, Player creator, L2Object reference)
 	{
 		if (count == 0)
 			return;
@@ -576,7 +562,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * @param allowNonTradable : if true, count non tradable items.
 	 * @return if item is available for manipulation.
 	 */
-	public boolean isAvailable(L2PcInstance player, boolean allowAdena, boolean allowNonTradable)
+	public boolean isAvailable(Player player, boolean allowAdena, boolean allowNonTradable)
 	{
 		return ((!isEquipped()) // Not equipped
 			&& (getItem().getType2() != Item.TYPE2_QUEST) // Not Quest Item
@@ -588,7 +574,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	}
 	
 	@Override
-	public void onAction(L2PcInstance player)
+	public void onAction(Player player)
 	{
 		if (player.isFlying())
 		{
@@ -631,7 +617,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	}
 	
 	@Override
-	public void onActionShift(L2PcInstance player)
+	public void onActionShift(Player player)
 	{
 		if (player.isGM())
 		{
@@ -815,17 +801,17 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * @return boolean false
 	 */
 	@Override
-	public boolean isAutoAttackable(L2Character attacker)
+	public boolean isAutoAttackable(Character attacker)
 	{
 		return false;
 	}
 	
 	/**
 	 * This function basically returns a set of functions from L2Item/L2Armor/Weapon, but may add additional functions, if this particular item instance is enhanched for a particular player.
-	 * @param player : L2Character designating the player
+	 * @param player : Character designating the player
 	 * @return Func[]
 	 */
-	public List<Func> getStatFuncs(L2Character player)
+	public List<Func> getStatFuncs(Character player)
 	{
 		return getItem().getStatFuncs(this, player);
 	}
@@ -940,7 +926,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * @param y : Y location of the item.
 	 * @param z : Z location of the item.
 	 */
-	public final void dropMe(L2Character dropper, int x, int y, int z)
+	public final void dropMe(Character dropper, int x, int y, int z)
 	{
 		ThreadPool.execute(new ItemDropTask(this, dropper, x, y, z));
 	}
@@ -948,10 +934,10 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	public class ItemDropTask implements Runnable
 	{
 		private int _x, _y, _z;
-		private final L2Character _dropper;
+		private final Character _dropper;
 		private final ItemInstance _itm;
 		
-		public ItemDropTask(ItemInstance item, L2Character dropper, int x, int y, int z)
+		public ItemDropTask(ItemInstance item, Character dropper, int x, int y, int z)
 		{
 			_x = x;
 			_y = y;
@@ -989,7 +975,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * <BR>
 	 * @param player Player that pick up the item
 	 */
-	public final void pickupMe(L2Character player)
+	public final void pickupMe(Character player)
 	{
 		player.broadcastPacket(new GetItem(this, player.getObjectId()));
 		
@@ -1000,7 +986,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 		
 		if (!Config.DISABLE_TUTORIAL && (_itemId == 57 || _itemId == 6353))
 		{
-			L2PcInstance actor = player.getActingPlayer();
+			Player actor = player.getActingPlayer();
 			if (actor != null)
 			{
 				QuestState qs = actor.getQuestState("Tutorial");
@@ -1236,7 +1222,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	}
 	
 	@Override
-	public void sendInfo(L2PcInstance activeChar)
+	public void sendInfo(Player activeChar)
 	{
 		if (_dropperObjectId != 0)
 			activeChar.sendPacket(new DropItem(this, _dropperObjectId));

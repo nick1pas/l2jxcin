@@ -14,7 +14,7 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.L2GameClient.GameClientState;
 import net.sf.l2j.gameserver.network.serverpackets.CharSelectInfo;
@@ -30,7 +30,7 @@ public final class RequestRestart extends L2GameClientPacket
     @Override
     protected void runImpl() 
     {
-        final L2PcInstance player = getClient().getActiveChar();
+        final Player player = getClient().getActiveChar();
         if (player == null) {
             return;
         }

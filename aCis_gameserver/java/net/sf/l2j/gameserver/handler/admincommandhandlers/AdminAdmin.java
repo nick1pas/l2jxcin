@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import java.util.StringTokenizer;
@@ -39,8 +25,8 @@ import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
 /**
@@ -72,7 +58,7 @@ public class AdminAdmin implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		if (command.startsWith("admin_admin"))
 			showMainPage(activeChar, command);
@@ -91,16 +77,16 @@ public class AdminAdmin implements IAdminCommandHandler
 			if (!st.hasMoreTokens())
 			{
 				final L2Object obj = activeChar.getTarget();
-				if (!(obj instanceof L2Character))
+				if (!(obj instanceof Character))
 					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 				else
-					kill(activeChar, (L2Character) obj);
+					kill(activeChar, (Character) obj);
 				
 				return true;
 			}
 			
 			String firstParam = st.nextToken();
-			L2PcInstance player = World.getInstance().getPlayer(firstParam);
+			Player player = World.getInstance().getPlayer(firstParam);
 			if (player != null)
 			{
 				if (st.hasMoreTokens())
@@ -109,7 +95,7 @@ public class AdminAdmin implements IAdminCommandHandler
 					if (StringUtil.isDigit(secondParam))
 					{
 						int radius = Integer.parseInt(secondParam);
-						for (L2Character knownChar : player.getKnownTypeInRadius(L2Character.class, radius))
+						for (Character knownChar : player.getKnownTypeInRadius(Character.class, radius))
 						{
 							if (knownChar.equals(activeChar))
 								continue;
@@ -127,7 +113,7 @@ public class AdminAdmin implements IAdminCommandHandler
 			else if (StringUtil.isDigit(firstParam))
 			{
 				int radius = Integer.parseInt(firstParam);
-				for (L2Character knownChar : activeChar.getKnownTypeInRadius(L2Character.class, radius))
+				for (Character knownChar : activeChar.getKnownTypeInRadius(Character.class, radius))
 					kill(activeChar, knownChar);
 				
 				activeChar.sendMessage("Killed all characters within a " + radius + " unit radius.");
@@ -291,11 +277,11 @@ public class AdminAdmin implements IAdminCommandHandler
 		return ADMIN_COMMANDS;
 	}
 	
-	private static void kill(L2PcInstance activeChar, L2Character target)
+	private static void kill(Player activeChar, Character target)
 	{
-		if (target instanceof L2PcInstance)
+		if (target instanceof Player)
 		{
-			if (!((L2PcInstance) target).isGM())
+			if (!((Player) target).isGM())
 				target.stopAllEffects(); // e.g. invincibility effect
 			target.reduceCurrentHp(target.getMaxHp() + target.getMaxCp() + 1, activeChar, null);
 		}
@@ -305,7 +291,7 @@ public class AdminAdmin implements IAdminCommandHandler
 			target.reduceCurrentHp(target.getMaxHp() + 1, activeChar, null);
 	}
 	
-	private static void showMainPage(L2PcInstance activeChar, String command)
+	private static void showMainPage(Player activeChar, String command)
 	{
 		int mode = 0;
 		String filename = null;

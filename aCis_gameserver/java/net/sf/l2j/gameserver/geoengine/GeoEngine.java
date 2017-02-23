@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.geoengine;
 
 import java.io.File;
@@ -45,8 +31,8 @@ import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Door;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 
 /**
@@ -550,7 +536,7 @@ public class GeoEngine
 		if (!hasGeoPos(gtx, gty))
 			return true;
 		
-		final boolean door = target instanceof L2DoorInstance;
+		final boolean door = target instanceof Door;
 		final short gtz = door ? getHeightNearestOriginal(gtx, gty, tz) : getHeightNearest(gtx, gty, tz);
 		
 		// origin and target coordinates are same
@@ -559,12 +545,12 @@ public class GeoEngine
 		
 		// get origin and target height, real height = collision height * 2
 		double oheight = 0;
-		if (origin instanceof L2Character)
-			oheight = ((L2Character) origin).getCollisionHeight() * 2;
+		if (origin instanceof Character)
+			oheight = ((Character) origin).getCollisionHeight() * 2;
 		
 		double theight = 0;
-		if (target instanceof L2Character)
-			theight = ((L2Character) target).getCollisionHeight() * 2;
+		if (target instanceof Character)
+			theight = ((Character) target).getCollisionHeight() * 2;
 		
 		// perform geodata check
 		return door ? checkSeeOriginal(gox, goy, goz, oheight, gtx, gty, gtz, theight) : checkSee(gox, goy, goz, oheight, gtx, gty, gtz, theight);
@@ -608,8 +594,8 @@ public class GeoEngine
 		
 		// get origin and target height, real height = collision height * 2
 		double oheight = 0;
-		if (origin instanceof L2Character)
-			oheight = ((L2Character) origin).getTemplate().getCollisionHeight();
+		if (origin instanceof Character)
+			oheight = ((Character) origin).getTemplate().getCollisionHeight();
 		
 		// perform geodata check
 		return checkSee(gox, goy, goz, oheight, gtx, gty, gtz, 0);
@@ -620,11 +606,11 @@ public class GeoEngine
 	 * @param gox : origin X geodata coordinate
 	 * @param goy : origin Y geodata coordinate
 	 * @param goz : origin Z geodata coordinate
-	 * @param oheight : origin height (if instance of {@link L2Character})
+	 * @param oheight : origin height (if instance of {@link Character})
 	 * @param gtx : target X geodata coordinate
 	 * @param gty : target Y geodata coordinate
 	 * @param gtz : target Z geodata coordinate
-	 * @param theight : target height (if instance of {@link L2Character})
+	 * @param theight : target height (if instance of {@link Character})
 	 * @return {@code boolean} : True, when target can be seen.
 	 */
 	protected final boolean checkSee(int gox, int goy, int goz, double oheight, int gtx, int gty, int gtz, double theight)
@@ -786,11 +772,11 @@ public class GeoEngine
 	 * @param gox : origin X geodata coordinate
 	 * @param goy : origin Y geodata coordinate
 	 * @param goz : origin Z geodata coordinate
-	 * @param oheight : origin height (if instance of {@link L2Character})
+	 * @param oheight : origin height (if instance of {@link Character})
 	 * @param gtx : target X geodata coordinate
 	 * @param gty : target Y geodata coordinate
 	 * @param gtz : target Z geodata coordinate
-	 * @param theight : target height (if instance of {@link L2Character} or {@link L2DoorInstance})
+	 * @param theight : target height (if instance of {@link Character} or {@link Door})
 	 * @return {@code boolean} : True, when target can be seen.
 	 */
 	protected final boolean checkSeeOriginal(int gox, int goy, int goz, double oheight, int gtx, int gty, int gtz, double theight)

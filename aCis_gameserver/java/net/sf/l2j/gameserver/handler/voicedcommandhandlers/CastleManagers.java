@@ -17,7 +17,7 @@ package net.sf.l2j.gameserver.handler.voicedcommandhandlers;
 
 import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -40,7 +40,7 @@ public class CastleManagers implements IVoicedCommandHandler
 	};
 	
 	@Override
-	public boolean useVoicedCommand(String command, L2PcInstance activeChar, String target)
+	public boolean useVoicedCommand(String command, Player activeChar, String target)
 	{
 		if (command.startsWith("castlemanager"))
 		{
@@ -83,7 +83,7 @@ public class CastleManagers implements IVoicedCommandHandler
 		return true;
 	}
 	
-	private static void sendHtml(L2PcInstance activeChar)
+	private static void sendHtml(Player activeChar)
 	{
 		String htmFile = "data/html/mods/CastleManager.htm";
 		NpcHtmlMessage msg = new NpcHtmlMessage(5);

@@ -29,7 +29,7 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
 
@@ -167,7 +167,7 @@ public class AioManager
 	
 	public void manageAioPrivileges(int objectId, boolean apply)
 	{
-		final L2PcInstance player = World.getInstance().getPlayer(objectId);
+		final Player player = World.getInstance().getPlayer(objectId);
 		player.broadcastUserInfo();
 		
 		for (Map.Entry<Integer, Integer> entry : Config.LIST_AIO_ITEMS.entrySet())
@@ -218,7 +218,7 @@ public class AioManager
 					final int objectId = entry.getKey();
 					removeAio(objectId);
 					
-					final L2PcInstance player = World.getInstance().getPlayer(objectId);
+					final Player player = World.getInstance().getPlayer(objectId);
 					player.sendPacket(new ExShowScreenMessage("Your aio privileges were removed.", 10000));
 				}
 			}

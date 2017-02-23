@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.instancemanager;
 
 import java.awt.Polygon;
@@ -30,8 +16,8 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
 import net.sf.l2j.gameserver.model.L2Spawn;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.DimensionalRift;
 import net.sf.l2j.gameserver.model.group.Party;
@@ -194,13 +180,13 @@ public class DimensionalRiftManager
 		return _rooms.get((byte) 0).get((byte) 0).checkIfInZone(x, y, z);
 	}
 	
-	public void teleportToWaitingRoom(L2PcInstance player)
+	public void teleportToWaitingRoom(Player player)
 	{
 		int[] coords = getRoom((byte) 0, (byte) 0).getTeleportCoords();
 		player.teleToLocation(coords[0], coords[1], coords[2], 0);
 	}
 	
-	public synchronized void start(L2PcInstance player, byte type, L2Npc npc)
+	public synchronized void start(Player player, byte type, Npc npc)
 	{
 		final Party party = player.getParty();
 		
@@ -244,7 +230,7 @@ public class DimensionalRiftManager
 		}
 		
 		// One of teammates isn't on peace zone or hasn't required amount of items.
-		for (L2PcInstance member : party.getMembers())
+		for (Player member : party.getMembers())
 		{
 			if (!checkIfInPeaceZone(member.getX(), member.getY(), member.getZ()))
 			{
@@ -256,7 +242,7 @@ public class DimensionalRiftManager
 		ItemInstance i;
 		final int count = getNeededItems(type);
 		
-		for (L2PcInstance member : party.getMembers())
+		for (Player member : party.getMembers())
 		{
 			i = member.getInventory().getItemByItemId(DIMENSIONAL_FRAGMENT_ITEM_ID);
 			
@@ -271,7 +257,7 @@ public class DimensionalRiftManager
 			}
 		}
 		
-		for (L2PcInstance member : party.getMembers())
+		for (Player member : party.getMembers())
 		{
 			i = member.getInventory().getItemByItemId(DIMENSIONAL_FRAGMENT_ITEM_ID);
 			if (!member.destroyItem("RiftEntrance", i, count, null, true))
@@ -315,7 +301,7 @@ public class DimensionalRiftManager
 		private final Shape _s;
 		private final boolean _isBossRoom;
 		private final List<L2Spawn> _roomSpawns;
-		protected final List<L2Npc> _roomMobs;
+		protected final List<Npc> _roomMobs;
 		private boolean _partyInside = false;
 		
 		public DimensionalRiftRoom(byte type, byte room, int xMin, int xMax, int yMin, int yMax, int xT, int yT)
@@ -435,7 +421,7 @@ public class DimensionalRiftManager
 		}
 	}
 	
-	public void showHtmlFile(L2PcInstance player, String file, L2Npc npc)
+	public void showHtmlFile(Player player, String file, Npc npc)
 	{
 		final NpcHtmlMessage html = new NpcHtmlMessage(npc.getObjectId());
 		html.setFile(file);
@@ -473,7 +459,7 @@ public class DimensionalRiftManager
 		final DimensionalRift rift = party.getDimensionalRift();
 		if (rift != null)
 		{
-			for (L2PcInstance member : party.getMembers())
+			for (Player member : party.getMembers())
 				teleportToWaitingRoom(member);
 			
 			rift.killRift();

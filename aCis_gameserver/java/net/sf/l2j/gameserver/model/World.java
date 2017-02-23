@@ -24,9 +24,9 @@ import java.util.logging.Logger;
 import net.sf.l2j.gameserver.datatables.CharNameTable;
 import net.sf.l2j.gameserver.datatables.GmListTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
 
 public final class World
 {
@@ -53,8 +53,8 @@ public final class World
 	private static final int REGION_Y_OFFSET = Math.abs(WORLD_Y_MIN / REGION_SIZE);
 	
 	private final Map<Integer, L2Object> _objects = new ConcurrentHashMap<>();
-	private final Map<Integer, L2PetInstance> _pets = new ConcurrentHashMap<>();
-	private final Map<Integer, L2PcInstance> _players = new ConcurrentHashMap<>();
+	private final Map<Integer, Pet> _pets = new ConcurrentHashMap<>();
+	private final Map<Integer, Player> _players = new ConcurrentHashMap<>();
 	
 	private final WorldRegion[][] _worldRegions = new WorldRegion[REGIONS_X + 1][REGIONS_Y + 1];
 	
@@ -107,32 +107,32 @@ public final class World
 		return _objects.get(objectId);
 	}
 	
-	public void addPlayer(L2PcInstance cha)
+	public void addPlayer(Player cha)
 	{
 		_players.putIfAbsent(cha.getObjectId(), cha);
 	}
 	
-	public void removePlayer(L2PcInstance cha)
+	public void removePlayer(Player cha)
 	{
 		_players.remove(cha.getObjectId());
 	}
 	
-	public Collection<L2PcInstance> getPlayers()
+	public Collection<Player> getPlayers()
 	{
 		return _players.values();
 	}
 	
-	public L2PcInstance getPlayer(String name)
+	public Player getPlayer(String name)
 	{
 		return _players.get(CharNameTable.getInstance().getPlayerObjectId(name));
 	}
 	
-	public L2PcInstance getPlayer(int objectId)
+	public Player getPlayer(int objectId)
 	{
 		return _players.get(objectId);
 	}
 	
-	public L2PetInstance addPet(int ownerId, L2PetInstance pet)
+	public Pet addPet(int ownerId, Pet pet)
 	{
 		return _pets.putIfAbsent(ownerId, pet);
 	}
@@ -142,7 +142,7 @@ public final class World
 		_pets.remove(ownerId);
 	}
 	
-	public L2PetInstance getPet(int ownerId)
+	public Pet getPet(int ownerId)
 	{
 		return _pets.get(ownerId);
 	}
@@ -201,11 +201,11 @@ public final class World
 			{
 				for (L2Object obj : _worldRegions[i][j].getObjects())
 				{
-					if (obj instanceof L2Npc)
+					if (obj instanceof Npc)
 					{
-						((L2Npc) obj).deleteMe();
+						((Npc) obj).deleteMe();
 						
-						final L2Spawn spawn = ((L2Npc) obj).getSpawn();
+						final L2Spawn spawn = ((Npc) obj).getSpawn();
 						if (spawn != null)
 						{
 							spawn.setRespawnState(false);
@@ -218,20 +218,20 @@ public final class World
 		_log.info("All visibles NPCs are now deleted.");
 	}
 	
-	public List<L2Npc> getAllByNpcId(int[] npc_ids, boolean justAlive)
+	public List<Npc> getAllByNpcId(int[] npc_ids, boolean justAlive)
 	{
-		List<L2Npc> result = new ArrayList<>();
+		List<Npc> result = new ArrayList<>();
 		for (L2Object _npc : _objects.values())
 		{
-			if (_npc instanceof L2Npc)
+			if (_npc instanceof Npc)
 			{
-				if (!justAlive || !((L2Npc) _npc).isDead())
+				if (!justAlive || !((Npc) _npc).isDead())
 				{
 					for (int npc_id : npc_ids)
 					{
-						if (npc_id == ((L2Npc) _npc).getNpcId())
+						if (npc_id == ((Npc) _npc).getNpcId())
 						{
-							result.add(((L2Npc) _npc));
+							result.add(((Npc) _npc));
 						}
 					}
 				}
@@ -245,7 +245,7 @@ public final class World
      * <BR>
      * @return the all g ms
      */
-    public static List<L2PcInstance> getAllGMs()
+    public static List<Player> getAllGMs()
     {
         return GmListTable.getInstance().getAllGms(true);
     }

@@ -17,10 +17,10 @@ package net.sf.l2j.gameserver.handler.itemhandlers;
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
@@ -33,12 +33,12 @@ import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 public class ScrollOfResurrection implements IItemHandler
 {
 	@Override
-	public void useItem(L2Playable playable, ItemInstance item, boolean forceUse)
+	public void useItem(Playable playable, ItemInstance item, boolean forceUse)
 	{
-		if (!(playable instanceof L2PcInstance))
+		if (!(playable instanceof Player))
 			return;
 		
-		final L2PcInstance activeChar = (L2PcInstance) playable;
+		final Player activeChar = (Player) playable;
 		if (activeChar.isSitting())
 		{
 			activeChar.sendPacket(SystemMessageId.CANT_MOVE_SITTING);
@@ -48,17 +48,17 @@ public class ScrollOfResurrection implements IItemHandler
 		if (activeChar.isMovementDisabled())
 			return;
 		
-		final L2Character target = (L2Character) activeChar.getTarget();
+		final Character target = (Character) activeChar.getTarget();
 		
-		// Target must be a dead L2PetInstance or L2PcInstance.
-		if ((!(target instanceof L2PetInstance) && !(target instanceof L2PcInstance)) || !target.isDead())
+		// Target must be a dead Pet or Player.
+		if ((!(target instanceof Pet) && !(target instanceof Player)) || !target.isDead())
 		{
 			activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 			return;
 		}
 		
 		// Pet scrolls to ress a player.
-		if (item.getItemId() == 6387 && target instanceof L2PcInstance)
+		if (item.getItemId() == 6387 && target instanceof Player)
 		{
 			activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 			return;
@@ -71,7 +71,7 @@ public class ScrollOfResurrection implements IItemHandler
 			return;
 		} 
 		// Pickup player, or pet owner in case target is a pet.
-		final L2PcInstance targetPlayer = target.getActingPlayer();
+		final Player targetPlayer = target.getActingPlayer();
 		
 		// Check if target isn't in a active siege zone.
 		final Siege siege = CastleManager.getInstance().getSiege(targetPlayer);

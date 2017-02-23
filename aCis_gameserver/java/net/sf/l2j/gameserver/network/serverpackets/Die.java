@@ -16,9 +16,9 @@ package net.sf.l2j.gameserver.network.serverpackets;
 
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
@@ -29,7 +29,7 @@ import net.sf.l2j.gameserver.model.zone.type.L2MultiZone;
 
 public class Die extends L2GameServerPacket
 {
-	private final L2Character _activeChar;
+	private final Character _activeChar;
 	private final int _charObjId;
 	private final boolean _fake;
 	private boolean _canTeleport;
@@ -37,27 +37,27 @@ public class Die extends L2GameServerPacket
 	private boolean _allowFixedRes;
 	private L2Clan _clan;
 	
-	public Die(L2Character cha)
+	public Die(Character cha)
 	{
 		_activeChar = cha;
 		_charObjId = cha.getObjectId();
 		_fake = !cha.isDead();
 		
-		if (cha instanceof L2PcInstance)
+		if (cha instanceof Player)
 		{
-			L2PcInstance player = (L2PcInstance) cha;
+			Player player = (Player) cha;
 			_allowFixedRes = player.getAccessLevel().allowFixedRes();
 			_clan = player.getClan();
 			
-	        _canTeleport = !((cha instanceof L2PcInstance && (
+	        _canTeleport = !((cha instanceof Player && (
         		(TvTEvent.isStarted() && TvTEvent.isPlayerParticipant(_charObjId)) ||
         		(DMEvent.isStarted() && DMEvent.isPlayerParticipant(_charObjId)) ||
         		(LMEvent.isStarted() && LMEvent.isPlayerParticipant(_charObjId))
         		)) || _activeChar.isInsideZone(ZoneId.MULTI) && L2MultiZone.isReviveEnabled());
 			
 		}
-		else if (cha instanceof L2Attackable)
-			_sweepable = ((L2Attackable) cha).isSpoiled();
+		else if (cha instanceof Attackable)
+			_sweepable = ((Attackable) cha).isSpoiled();
 	}
 	
 	@Override

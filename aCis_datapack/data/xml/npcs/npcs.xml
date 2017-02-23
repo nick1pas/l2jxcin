@@ -6,7 +6,7 @@
   		<set name="height" val="23"/>
   		<set name="rHand" val="0"/>
   		<set name="lHand" val="0"/>
-  		<set name="type" val="L2Merchant"/>
+  		<set name="type" val="Merchant"/>
   		<set name="exp" val="0"/>
   		<set name="sp" val="0"/>
   		<set name="hp" val="2444.46819"/>
@@ -42,7 +42,7 @@
   		<set name="height" val="23"/>
   		<set name="rHand" val="0"/>
   		<set name="lHand" val="0"/>
-  		<set name="type" val="L2Teleporter"/>
+  		<set name="type" val="Gatekeeper"/>
   		<set name="exp" val="0"/>
   		<set name="sp" val="0"/>
   		<set name="hp" val="2444.46819"/>
@@ -78,7 +78,7 @@
   		<set name="height" val="23"/>
   		<set name="rHand" val="0"/>
   		<set name="lHand" val="0"/>
-  		<set name="type" val="L2Warehouse"/>
+  		<set name="type" val="WarehouseKeeper"/>
   		<set name="exp" val="0"/>
   		<set name="sp" val="0"/>
   		<set name="hp" val="2444.46819"/>
@@ -114,7 +114,7 @@
   		<set name="height" val="23"/>
   		<set name="rHand" val="0"/>
   		<set name="lHand" val="0"/>
-  		<set name="type" val="L2SymbolMaker"/>
+  		<set name="type" val="SymbolMaker"/>
   		<set name="exp" val="0"/>
   		<set name="sp" val="0"/>
   		<set name="hp" val="2444.46819"/>

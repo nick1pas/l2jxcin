@@ -1,26 +1,12 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.scripting.scripts.ai.group;
 
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.base.Sex;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
@@ -59,7 +45,7 @@ public class Monastery extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAggro(L2Npc npc, L2PcInstance player, boolean isPet)
+	public String onAggro(Npc npc, Player player, boolean isPet)
 	{
 		if (!npc.isInCombat())
 		{
@@ -76,18 +62,18 @@ public class Monastery extends L2AttackableAIScript
 						break;
 					
 					default:
-						attack(((L2Attackable) npc), player);
+						attack(((Attackable) npc), player);
 						break;
 				}
 			}
-			else if (((L2Attackable) npc).getMostHated() == null)
+			else if (((Attackable) npc).getMostHated() == null)
 				return null;
 		}
 		return super.onAggro(npc, player, isPet);
 	}
 	
 	@Override
-	public String onSkillSee(L2Npc npc, L2PcInstance caster, L2Skill skill, L2Object[] targets, boolean isPet)
+	public String onSkillSee(Npc npc, Player caster, L2Skill skill, L2Object[] targets, boolean isPet)
 	{
 		if (skill.getSkillType() == L2SkillType.AGGDAMAGE && targets.length != 0)
 		{
@@ -96,7 +82,7 @@ public class Monastery extends L2AttackableAIScript
 				if (obj.equals(npc))
 				{
 					npc.broadcastNpcSay(((caster.getAppearance().getSex() == Sex.FEMALE) ? "Sister " : "Brother ") + caster.getName() + ", move your weapon away!");
-					attack(((L2Attackable) npc), caster);
+					attack(((Attackable) npc), caster);
 					break;
 				}
 			}
@@ -105,9 +91,9 @@ public class Monastery extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onSpawn(L2Npc npc)
+	public String onSpawn(Npc npc)
 	{
-		for (L2PcInstance target : npc.getKnownTypeInRadius(L2PcInstance.class, npc.getTemplate().getAggroRange()))
+		for (Player target : npc.getKnownTypeInRadius(Player.class, npc.getTemplate().getAggroRange()))
 		{
 			if (!target.isDead() && GeoEngine.getInstance().canSeeTarget(npc, target))
 			{
@@ -125,7 +111,7 @@ public class Monastery extends L2AttackableAIScript
 							break;
 						
 						default:
-							attack(((L2Attackable) npc), target);
+							attack(((Attackable) npc), target);
 							break;
 					}
 				}
@@ -135,10 +121,10 @@ public class Monastery extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
+	public String onSpellFinished(Npc npc, Player player, L2Skill skill)
 	{
 		if (skill.getId() == 4589)
-			attack(((L2Attackable) npc), player);
+			attack(((Attackable) npc), player);
 		
 		return super.onSpellFinished(npc, player, skill);
 	}

@@ -20,7 +20,7 @@ import net.sf.l2j.gameserver.handler.IChatHandler;
 import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
 import net.sf.l2j.gameserver.handler.VoicedCommandHandler;
 import net.sf.l2j.gameserver.model.BlockList;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.util.FloodProtectors;
 import net.sf.l2j.gameserver.util.FloodProtectors.Action;
@@ -33,7 +33,7 @@ public class ChatAll implements IChatHandler
 	};
 	
 	@Override
-	public void handleChat(int type, L2PcInstance activeChar, String params, String text)
+	public void handleChat(int type, Player activeChar, String params, String text)
 	{
 		if (!FloodProtectors.performAction(activeChar.getClient(), Action.GLOBAL_CHAT))
 			return;
@@ -66,7 +66,7 @@ public class ChatAll implements IChatHandler
 		{
 			CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
 			
-			for (L2PcInstance player : activeChar.getKnownTypeInRadius(L2PcInstance.class, 1250))
+			for (Player player : activeChar.getKnownTypeInRadius(Player.class, 1250))
 			{
 				if (!BlockList.isBlocked(player, activeChar))
 					player.sendPacket(cs);

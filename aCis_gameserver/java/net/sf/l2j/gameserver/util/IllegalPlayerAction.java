@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.util;
 
 import java.util.logging.Level;
@@ -20,7 +6,7 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.GmListTable;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 
 public final class IllegalPlayerAction implements Runnable
 {
@@ -28,14 +14,14 @@ public final class IllegalPlayerAction implements Runnable
 	
 	private final String _message;
 	private final int _punishment;
-	private final L2PcInstance _actor;
+	private final Player _actor;
 	
 	public static final int PUNISH_BROADCAST = 1;
 	public static final int PUNISH_KICK = 2;
 	public static final int PUNISH_KICKBAN = 3;
 	public static final int PUNISH_JAIL = 4;
 	
-	public IllegalPlayerAction(L2PcInstance actor, String message, int punishment)
+	public IllegalPlayerAction(Player actor, String message, int punishment)
 	{
 		_message = message;
 		_punishment = punishment;
@@ -83,7 +69,7 @@ public final class IllegalPlayerAction implements Runnable
 				_actor.logout();
 				break;
 			case PUNISH_JAIL:
-				_actor.setPunishLevel(L2PcInstance.PunishLevel.JAIL, Config.DEFAULT_PUNISH_PARAM);
+				_actor.setPunishLevel(Player.PunishLevel.JAIL, Config.DEFAULT_PUNISH_PARAM);
 				break;
 		}
 	}

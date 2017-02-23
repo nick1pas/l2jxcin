@@ -19,7 +19,7 @@ import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
 
 /**
@@ -60,7 +60,7 @@ public class ClanFull implements IVoicedCommandHandler
     };
     
     @Override
-    public boolean useVoicedCommand(String command, L2PcInstance activeChar, String params)
+    public boolean useVoicedCommand(String command, Player activeChar, String params)
     {  
          if (activeChar.isClanLeader())
          {

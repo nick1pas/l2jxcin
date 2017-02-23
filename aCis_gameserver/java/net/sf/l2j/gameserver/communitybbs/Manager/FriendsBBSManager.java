@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.communitybbs.Manager;
 
 import java.sql.Connection;
@@ -28,7 +14,7 @@ import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.datatables.CharNameTable;
 import net.sf.l2j.gameserver.model.BlockList;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.FriendList;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -48,7 +34,7 @@ public class FriendsBBSManager extends BaseBBSManager
 	}
 	
 	@Override
-	public void parseCmd(String command, L2PcInstance activeChar)
+	public void parseCmd(String command, Player activeChar)
 	{
 		if (command.startsWith("_friendlist"))
 			showFriendsList(activeChar, false);
@@ -87,7 +73,7 @@ public class FriendsBBSManager extends BaseBBSManager
 				
 				for (int friendId : activeChar.getFriendList())
 				{
-					L2PcInstance player = World.getInstance().getPlayer(friendId);
+					Player player = World.getInstance().getPlayer(friendId);
 					if (player != null)
 					{
 						player.getFriendList().remove(Integer.valueOf(activeChar.getObjectId()));
@@ -122,7 +108,7 @@ public class FriendsBBSManager extends BaseBBSManager
 						
 						String name = CharNameTable.getInstance().getPlayerName(friendId);
 						
-						L2PcInstance player = World.getInstance().getPlayer(friendId);
+						Player player = World.getInstance().getPlayer(friendId);
 						if (player != null)
 						{
 							player.getFriendList().remove(Integer.valueOf(activeChar.getObjectId()));
@@ -194,7 +180,7 @@ public class FriendsBBSManager extends BaseBBSManager
 	}
 	
 	@Override
-	public void parseWrite(String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
+	public void parseWrite(String ar1, String ar2, String ar3, String ar4, String ar5, Player activeChar)
 	{
 		if (ar1.equalsIgnoreCase("mail"))
 		{
@@ -205,7 +191,7 @@ public class FriendsBBSManager extends BaseBBSManager
 			super.parseWrite(ar1, ar2, ar3, ar4, ar5, activeChar);
 	}
 	
-	private static void showFriendsList(L2PcInstance activeChar, boolean delMsg)
+	private static void showFriendsList(Player activeChar, boolean delMsg)
 	{
 		String content = HtmCache.getInstance().getHtm(CB_PATH + "friend/friend-list.htm");
 		if (content == null)
@@ -227,7 +213,7 @@ public class FriendsBBSManager extends BaseBBSManager
 			if (friendName == null)
 				continue;
 			
-			final L2PcInstance friend = World.getInstance().getPlayer(id);
+			final Player friend = World.getInstance().getPlayer(id);
 			StringUtil.append(sb, "<a action=\"bypass _friend;select;", id, "\">[Select]</a>&nbsp;", friendName, " ", ((friend != null && friend.isOnline()) ? "(on)" : "(off)"), "<br1>");
 		}
 		content = content.replaceAll("%friendslist%", sb.toString());
@@ -242,7 +228,7 @@ public class FriendsBBSManager extends BaseBBSManager
 			if (friendName == null)
 				continue;
 			
-			final L2PcInstance friend = World.getInstance().getPlayer(id);
+			final Player friend = World.getInstance().getPlayer(id);
 			StringUtil.append(sb, "<a action=\"bypass _friend;deselect;", id, "\">[Deselect]</a>&nbsp;", friendName, " ", ((friend != null && friend.isOnline()) ? "(on)" : "(off)"), "<br1>");
 		}
 		content = content.replaceAll("%selectedFriendsList%", sb.toString());
@@ -253,7 +239,7 @@ public class FriendsBBSManager extends BaseBBSManager
 		separateAndSend(content, activeChar);
 	}
 	
-	private static void showBlockList(L2PcInstance activeChar, boolean delMsg)
+	private static void showBlockList(Player activeChar, boolean delMsg)
 	{
 		String content = HtmCache.getInstance().getHtm(CB_PATH + "friend/friend-blocklist.htm");
 		if (content == null)
@@ -275,7 +261,7 @@ public class FriendsBBSManager extends BaseBBSManager
 			if (blockName == null)
 				continue;
 			
-			final L2PcInstance block = World.getInstance().getPlayer(id);
+			final Player block = World.getInstance().getPlayer(id);
 			StringUtil.append(sb, "<a action=\"bypass _block;select;", id, "\">[Select]</a>&nbsp;", blockName, " ", ((block != null && block.isOnline()) ? "(on)" : "(off)"), "<br1>");
 		}
 		content = content.replaceAll("%blocklist%", sb.toString());
@@ -290,7 +276,7 @@ public class FriendsBBSManager extends BaseBBSManager
 			if (blockName == null)
 				continue;
 			
-			final L2PcInstance block = World.getInstance().getPlayer(id);
+			final Player block = World.getInstance().getPlayer(id);
 			StringUtil.append(sb, "<a action=\"bypass _block;deselect;", id, "\">[Deselect]</a>&nbsp;", blockName, " ", ((block != null && block.isOnline()) ? "(on)" : "(off)"), "<br1>");
 		}
 		content = content.replaceAll("%selectedBlocksList%", sb.toString());
@@ -301,7 +287,7 @@ public class FriendsBBSManager extends BaseBBSManager
 		separateAndSend(content, activeChar);
 	}
 	
-	public static final void showMailWrite(L2PcInstance activeChar)
+	public static final void showMailWrite(Player activeChar)
 	{
 		String content = HtmCache.getInstance().getHtm(CB_PATH + "friend/friend-mail.htm");
 		if (content == null)

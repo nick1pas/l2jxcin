@@ -18,7 +18,7 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
 
@@ -35,10 +35,10 @@ public class AdminAio implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		final L2Object target = activeChar.getTarget();
-		if (target == null || !(target instanceof L2PcInstance))
+		if (target == null || !(target instanceof Player))
 		{
 			activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 			return false;
@@ -49,7 +49,7 @@ public class AdminAio implements IAdminCommandHandler
 			try
 			{
 				int duration = Integer.parseInt(command.substring(14));
-				addAio(activeChar, (L2PcInstance) target, duration);
+				addAio(activeChar, (Player) target, duration);
 			}
 			catch (Exception e)
 			{
@@ -61,7 +61,7 @@ public class AdminAio implements IAdminCommandHandler
 			try
 			{
 				int duration = Integer.parseInt(command.substring(17));
-				updateAio(activeChar, (L2PcInstance) target, duration);
+				updateAio(activeChar, (Player) target, duration);
 			}
 			catch (Exception e)
 			{
@@ -69,12 +69,12 @@ public class AdminAio implements IAdminCommandHandler
 			}
 		}
 		else if (command.equalsIgnoreCase("admin_remove_aio"))
-			removeAio(activeChar, (L2PcInstance) target);
+			removeAio(activeChar, (Player) target);
 		
 		return true;
 	}
 	
-	private static void addAio(L2PcInstance activeChar, L2PcInstance targetChar, int duration)
+	private static void addAio(Player activeChar, Player targetChar, int duration)
 	{
 		if (duration <= 0)
 		{
@@ -102,7 +102,7 @@ public class AdminAio implements IAdminCommandHandler
 		targetChar.sendPacket(new ExShowScreenMessage("Your aio privileges were added by the admin.", 10000));
 	}
 	
-	private static void updateAio(L2PcInstance activeChar, L2PcInstance targetChar, int duration)
+	private static void updateAio(Player activeChar, Player targetChar, int duration)
 	{
 		if (duration <= 0)
 		{
@@ -120,7 +120,7 @@ public class AdminAio implements IAdminCommandHandler
 		targetChar.sendPacket(new ExShowScreenMessage("Your aio privileges were updated by the admin.", 10000));
 	}
 	
-	private static void removeAio(L2PcInstance activeChar, L2PcInstance targetChar)
+	private static void removeAio(Player activeChar, Player targetChar)
 	{
 		if (!AioManager.getInstance().hasAioPrivileges(targetChar.getObjectId()))
 		{

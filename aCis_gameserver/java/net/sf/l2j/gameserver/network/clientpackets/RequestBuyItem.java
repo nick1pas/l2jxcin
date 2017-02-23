@@ -5,9 +5,9 @@ import java.util.List;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.BuyListTable;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2MerchantInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Merchant;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.buylist.NpcBuyList;
 import net.sf.l2j.gameserver.model.buylist.Product;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
@@ -51,17 +51,17 @@ public final class RequestBuyItem extends L2GameClientPacket
 		if (_items == null)
 			return;
 		
-		final L2PcInstance player = getClient().getActiveChar();
+		final Player player = getClient().getActiveChar();
 		if (player == null)
 			return;
 		
 		if (!Config.KARMA_PLAYER_CAN_SHOP && player.getKarma() > 0)
 			return;
 		
-		L2Npc merchant = null;
+		Npc merchant = null;
 		if (!player.isGM())
 		{
-			merchant = (player.getTarget() instanceof L2MerchantInstance) ? (L2Npc) player.getTarget() : null;
+			merchant = (player.getTarget() instanceof Merchant) ? (Npc) player.getTarget() : null;
 			if (merchant == null || !merchant.canInteract(player))
 				return;
 		}
@@ -80,7 +80,7 @@ public final class RequestBuyItem extends L2GameClientPacket
 			if (!buyList.isNpcAllowed(merchant.getNpcId()))
 				return;
 			
-			if (merchant instanceof L2MerchantInstance && merchant.getCastle() != null)
+			if (merchant instanceof Merchant && merchant.getCastle() != null)
 				castleTaxRate = merchant.getCastle().getTaxRate();
 		}
 		
@@ -188,8 +188,8 @@ public final class RequestBuyItem extends L2GameClientPacket
 		}
 		
 		// add to castle treasury
-		if (merchant instanceof L2MerchantInstance && merchant.getCastle() != null)
-			((L2MerchantInstance) merchant).getCastle().addToTreasury((int) (subTotal * castleTaxRate));
+		if (merchant instanceof Merchant && merchant.getCastle() != null)
+			((Merchant) merchant).getCastle().addToTreasury((int) (subTotal * castleTaxRate));
 		
 		StatusUpdate su = new StatusUpdate(player);
 		su.addAttribute(StatusUpdate.CUR_LOAD, player.getCurrentLoad());

@@ -26,7 +26,7 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 
@@ -42,7 +42,7 @@ public class VoteHandler
 	
 	public static String whoIsVoting()
 	{
-		for (L2PcInstance player : World.getInstance().getPlayers())
+		for (Player player : World.getInstance().getPlayers())
 			if (player.isVoting())
 				return player.getName();
 		
@@ -86,7 +86,7 @@ public class VoteHandler
 		return votes;
 	}
 	
-	public static void tzvote(final L2PcInstance player)
+	public static void tzvote(final Player player)
 	{
 		long LastTZVote = 0L;
 		long voteDelay = 43200000L;
@@ -96,9 +96,9 @@ public class VoteHandler
 		
 		class tzvotetask implements Runnable
 		{
-			private final L2PcInstance p;
+			private final Player p;
 			
-			public tzvotetask(L2PcInstance player)
+			public tzvotetask(Player player)
 			
 			{
 				p = player;
@@ -145,7 +145,7 @@ public class VoteHandler
 		
 		if ((LastTZVote + voteDelay) < System.currentTimeMillis())
 		{
-			for (L2PcInstance actualchar : World.getInstance().getPlayers())
+			for (Player actualchar : World.getInstance().getPlayers())
 			{
 				if (actualchar.isVoting())
 				{
@@ -163,7 +163,7 @@ public class VoteHandler
 		}
 	}
 	
-	public static void updateLastTZVote(L2PcInstance player)
+	public static void updateLastTZVote(Player player)
 	{
 		{
 			try (Connection con = L2DatabaseFactory.getInstance().getConnection())
@@ -221,7 +221,7 @@ public class VoteHandler
 		return votes;
 	}
 	
-	public static void HZvote(final L2PcInstance player)
+	public static void HZvote(final Player player)
 	{
 		long LastHZVote = 0L;
 		long voteDelay = 43200000L;
@@ -230,9 +230,9 @@ public class VoteHandler
 		actualvotes = getHopZoneVotes();
 		class hpvotetask implements Runnable
 		{
-			private final L2PcInstance p;
+			private final Player p;
 			
-			public hpvotetask(L2PcInstance player)
+			public hpvotetask(Player player)
 			
 			{
 				p = player;
@@ -278,7 +278,7 @@ public class VoteHandler
 		
 		if ((LastHZVote + voteDelay) < System.currentTimeMillis())
 		{
-			for (L2PcInstance actualchar : World.getInstance().getPlayers())
+			for (Player actualchar : World.getInstance().getPlayers())
 			{
 				if (actualchar.isVoting())
 				{
@@ -296,7 +296,7 @@ public class VoteHandler
 		}
 	}
 	
-	public static void updateLastHZVote(L2PcInstance player)
+	public static void updateLastHZVote(Player player)
 	{
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
@@ -351,7 +351,7 @@ public class VoteHandler
 		return votes;
 	}
 	
-	public static void NZvote(final L2PcInstance player)
+	public static void NZvote(final Player player)
 	{
 		long LastNZVote = 0L;
 		long voteDelay = 43200000L;
@@ -361,9 +361,9 @@ public class VoteHandler
 		
 		class nzvotetask implements Runnable
 		{
-			private final L2PcInstance p;
+			private final Player p;
 			
-			public nzvotetask(L2PcInstance player)
+			public nzvotetask(Player player)
 			
 			{
 				p = player;
@@ -409,7 +409,7 @@ public class VoteHandler
 		
 		if ((LastNZVote + voteDelay) < System.currentTimeMillis())
 		{
-			for (L2PcInstance actualchar : World.getInstance().getPlayers())
+			for (Player actualchar : World.getInstance().getPlayers())
 			{
 				if (actualchar.isVoting())
 				{
@@ -427,7 +427,7 @@ public class VoteHandler
 		}
 	}
 	
-	public static void updateLastNZVote(L2PcInstance player)
+	public static void updateLastNZVote(Player player)
 	{
 		{
 			try (Connection con = L2DatabaseFactory.getInstance().getConnection())

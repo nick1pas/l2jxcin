@@ -26,10 +26,10 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
@@ -77,7 +77,7 @@ public class FairyTrees extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		for (mobs monster : _mobs)
@@ -86,8 +86,8 @@ public class FairyTrees extends L2AttackableAIScript
 			{
 				for (int i = 0; i < 20; i++)
 				{
-					L2Attackable newNpc = (L2Attackable) addSpawn(27189, npc.getX(), npc.getY(), npc.getZ(), 0, false, 30000, false);
-					L2Character originalKiller = isPet ? killer.getPet() : killer;
+					Attackable newNpc = (Attackable) addSpawn(27189, npc.getX(), npc.getY(), npc.getZ(), 0, false, 30000, false);
+					Character originalKiller = isPet ? killer.getPet() : killer;
 					newNpc.setRunning();
 					newNpc.addDamageHate(originalKiller, 0, 999);
 					newNpc.getAI().setIntention(CtrlIntention.ATTACK, originalKiller);

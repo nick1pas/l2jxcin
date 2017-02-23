@@ -1,23 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- *
- * @author FBIagent
- *
- */
 package net.sf.l2j.gameserver.handler.itemhandlers;
 
 import java.util.logging.Level;
@@ -30,11 +10,11 @@ import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2XmassTreeInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.instance.ChristmasTree;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
@@ -52,9 +32,9 @@ import net.sf.l2j.gameserver.util.Broadcast;
 public class SummonItems implements IItemHandler
 {
 	@Override
-	public void useItem(L2Playable playable, ItemInstance item, boolean forceUse)
+	public void useItem(Playable playable, ItemInstance item, boolean forceUse)
 	{
-		if (!(playable instanceof L2PcInstance))
+		if (!(playable instanceof Player))
 			return;
 		
 		if (!TvTEvent.onItemSummon(playable.getObjectId())
@@ -63,7 +43,7 @@ public class SummonItems implements IItemHandler
 			return;
 		
 		
-		final L2PcInstance activeChar = (L2PcInstance) playable;
+		final Player activeChar = (Player) playable;
 		
 		if (activeChar.isSitting())
 		{
@@ -106,9 +86,9 @@ public class SummonItems implements IItemHandler
 			case 0: // static summons (like Christmas tree)
 				try
 				{
-					for (L2XmassTreeInstance ch : activeChar.getKnownTypeInRadius(L2XmassTreeInstance.class, 1200)) // FIXME pointless
+					for (ChristmasTree ch : activeChar.getKnownTypeInRadius(ChristmasTree.class, 1200))
 					{
-						if (npcTemplate.getNpcId() == L2XmassTreeInstance.SPECIAL_TREE_ID)
+						if (npcTemplate.getNpcId() == ChristmasTree.SPECIAL_TREE_ID)
 						{
 							activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CANNOT_SUMMON_S1_AGAIN).addCharName(ch));
 							return;
@@ -118,10 +98,10 @@ public class SummonItems implements IItemHandler
 					if (activeChar.destroyItem("Summon", item.getObjectId(), 1, null, false))
 					{
 						final L2Spawn spawn = new L2Spawn(npcTemplate);
-						spawn.setLoc(activeChar.getX(), activeChar.getY(), activeChar.getZ(), activeChar.getHeading());
+						spawn.setLoc(activeChar.getPosition());
 						spawn.setRespawnState(false);
 						
-						final L2Npc npc = spawn.doSpawn(true);
+						final Npc npc = spawn.doSpawn(true);
 						npc.setTitle(activeChar.getName());
 						npc.setIsRunning(false); // broadcast info
 					}
@@ -151,11 +131,11 @@ public class SummonItems implements IItemHandler
 	// TODO: this should be inside skill handler
 	static class PetSummonFinalizer implements Runnable
 	{
-		private final L2PcInstance _activeChar;
+		private final Player _activeChar;
 		private final ItemInstance _item;
 		private final NpcTemplate _npcTemplate;
 		
-		PetSummonFinalizer(L2PcInstance activeChar, NpcTemplate npcTemplate, ItemInstance item)
+		PetSummonFinalizer(Player activeChar, NpcTemplate npcTemplate, ItemInstance item)
 		{
 			_activeChar = activeChar;
 			_npcTemplate = npcTemplate;
@@ -179,7 +159,7 @@ public class SummonItems implements IItemHandler
 					return;
 				
 				// Add the pet instance to world.
-				final L2PetInstance pet = L2PetInstance.restore(_item, _npcTemplate, _activeChar);
+				final Pet pet = Pet.restore(_item, _npcTemplate, _activeChar);
 				if (pet == null)
 					return;
 				

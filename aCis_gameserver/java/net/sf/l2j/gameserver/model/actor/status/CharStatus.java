@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.actor.status;
 
 import java.util.Set;
@@ -23,8 +9,8 @@ import java.util.logging.Logger;
 import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.stat.CharStat;
 import net.sf.l2j.gameserver.skills.Formulas;
 
@@ -32,9 +18,9 @@ public class CharStatus
 {
 	protected static final Logger _log = Logger.getLogger(CharStatus.class.getName());
 	
-	private final L2Character _activeChar;
+	private final Character _activeChar;
 	
-	private final Set<L2Character> _statusListener = ConcurrentHashMap.newKeySet();
+	private final Set<Character> _statusListener = ConcurrentHashMap.newKeySet();
 	
 	protected static final byte REGEN_FLAG_CP = 4;
 	private static final byte REGEN_FLAG_HP = 1;
@@ -46,16 +32,16 @@ public class CharStatus
 	private Future<?> _regTask;
 	protected byte _flagsRegenActive = 0;
 	
-	public CharStatus(L2Character activeChar)
+	public CharStatus(Character activeChar)
 	{
 		_activeChar = activeChar;
 	}
 	
 	/**
-	 * Add the object to the list of L2Character that must be informed of HP/MP updates of this L2Character.
-	 * @param object : L2Character to add to the listener.
+	 * Add the object to the list of Character that must be informed of HP/MP updates of this Character.
+	 * @param object : Character to add to the listener.
 	 */
-	public final void addStatusListener(L2Character object)
+	public final void addStatusListener(Character object)
 	{
 		if (object == getActiveChar())
 			return;
@@ -64,18 +50,18 @@ public class CharStatus
 	}
 	
 	/**
-	 * Remove the object from the list of L2Character that must be informed of HP/MP updates of this L2Character.
-	 * @param object : L2Character to remove to the listener.
+	 * Remove the object from the list of Character that must be informed of HP/MP updates of this Character.
+	 * @param object : Character to remove to the listener.
 	 */
-	public final void removeStatusListener(L2Character object)
+	public final void removeStatusListener(Character object)
 	{
 		_statusListener.remove(object);
 	}
 	
 	/**
-	 * @return The list of L2Character to inform, or null if empty.
+	 * @return The list of Character to inform, or null if empty.
 	 */
-	public final Set<L2Character> getStatusListener()
+	public final Set<Character> getStatusListener()
 	{
 		return _statusListener;
 	}
@@ -85,21 +71,21 @@ public class CharStatus
 	}
 	
 	/**
-	 * Reduce the current HP of the L2Character and launch the doDie Task if necessary.
+	 * Reduce the current HP of the Character and launch the doDie Task if necessary.
 	 * @param value : The amount of removed HPs.
-	 * @param attacker : The L2Character who attacks.
+	 * @param attacker : The Character who attacks.
 	 */
-	public void reduceHp(double value, L2Character attacker)
+	public void reduceHp(double value, Character attacker)
 	{
 		reduceHp(value, attacker, true, false, false);
 	}
 	
-	public void reduceHp(double value, L2Character attacker, boolean isHpConsumption)
+	public void reduceHp(double value, Character attacker, boolean isHpConsumption)
 	{
 		reduceHp(value, attacker, true, false, isHpConsumption);
 	}
 	
-	public void reduceHp(double value, L2Character attacker, boolean awake, boolean isDOT, boolean isHPConsumption)
+	public void reduceHp(double value, Character attacker, boolean awake, boolean isDOT, boolean isHPConsumption)
 	{
 		if (getActiveChar().isDead())
 			return;
@@ -118,7 +104,7 @@ public class CharStatus
 		
 		if (attacker != null)
 		{
-			final L2PcInstance attackerPlayer = attacker.getActingPlayer();
+			final Player attackerPlayer = attacker.getActingPlayer();
 			if (attackerPlayer != null && attackerPlayer.isGM() && !attackerPlayer.getAccessLevel().canGiveDamage())
 				return;
 		}
@@ -290,11 +276,11 @@ public class CharStatus
 	{
 		final CharStat charstat = getActiveChar().getStat();
 		
-		// Modify the current HP of the L2Character.
+		// Modify the current HP of the Character.
 		if (getCurrentHp() < charstat.getMaxHp())
 			setCurrentHp(getCurrentHp() + Formulas.calcHpRegen(getActiveChar()), false);
 		
-		// Modify the current MP of the L2Character.
+		// Modify the current MP of the Character.
 		if (getCurrentMp() < charstat.getMaxMp())
 			setCurrentMp(getCurrentMp() + Formulas.calcMpRegen(getActiveChar()), false);
 		
@@ -319,7 +305,7 @@ public class CharStatus
 		}
 	}
 	
-	public L2Character getActiveChar()
+	public Character getActiveChar()
 	{
 		return _activeChar;
 	}

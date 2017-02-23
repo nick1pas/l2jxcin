@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import java.sql.Connection;
@@ -20,7 +6,7 @@ import java.sql.PreparedStatement;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
 /**
@@ -34,7 +20,7 @@ public class AdminChangeAccessLevel implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		String[] parts = command.split(" ");
 		if (parts.length == 2)
@@ -42,8 +28,8 @@ public class AdminChangeAccessLevel implements IAdminCommandHandler
 			try
 			{
 				int lvl = Integer.parseInt(parts[1]);
-				if (activeChar.getTarget() instanceof L2PcInstance)
-					onLineChange(activeChar, (L2PcInstance) activeChar.getTarget(), lvl);
+				if (activeChar.getTarget() instanceof Player)
+					onLineChange(activeChar, (Player) activeChar.getTarget(), lvl);
 				else
 					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 			}
@@ -56,7 +42,7 @@ public class AdminChangeAccessLevel implements IAdminCommandHandler
 		{
 			String name = parts[1];
 			int lvl = Integer.parseInt(parts[2]);
-			L2PcInstance player = World.getInstance().getPlayer(name);
+			Player player = World.getInstance().getPlayer(name);
 			if (player != null)
 				onLineChange(activeChar, player, lvl);
 			else
@@ -94,7 +80,7 @@ public class AdminChangeAccessLevel implements IAdminCommandHandler
 	 * @param player
 	 * @param lvl
 	 */
-	private static void onLineChange(L2PcInstance activeChar, L2PcInstance player, int lvl)
+	private static void onLineChange(Player activeChar, Player player, int lvl)
 	{
 		player.setAccessLevel(lvl);
 		if (lvl > 0)

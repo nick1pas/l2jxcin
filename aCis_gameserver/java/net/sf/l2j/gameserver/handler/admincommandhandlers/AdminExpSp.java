@@ -1,24 +1,10 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import java.util.StringTokenizer;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
@@ -38,7 +24,7 @@ public class AdminExpSp implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		if (command.startsWith("admin_add_exp_sp"))
 		{
@@ -76,12 +62,12 @@ public class AdminExpSp implements IAdminCommandHandler
 		return ADMIN_COMMANDS;
 	}
 	
-	private static void addExpSp(L2PcInstance activeChar)
+	private static void addExpSp(Player activeChar)
 	{
 		L2Object target = activeChar.getTarget();
-		L2PcInstance player = null;
-		if (target instanceof L2PcInstance)
-			player = (L2PcInstance) target;
+		Player player = null;
+		if (target instanceof Player)
+			player = (Player) target;
 		else
 		{
 			activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
@@ -97,13 +83,13 @@ public class AdminExpSp implements IAdminCommandHandler
 		activeChar.sendPacket(html);
 	}
 	
-	private static boolean adminAddExpSp(L2PcInstance activeChar, String ExpSp)
+	private static boolean adminAddExpSp(Player activeChar, String ExpSp)
 	{
 		L2Object target = activeChar.getTarget();
-		L2PcInstance player = null;
-		if (target instanceof L2PcInstance)
+		Player player = null;
+		if (target instanceof Player)
 		{
-			player = (L2PcInstance) target;
+			player = (Player) target;
 		}
 		else
 		{
@@ -138,13 +124,13 @@ public class AdminExpSp implements IAdminCommandHandler
 		return true;
 	}
 	
-	private static boolean adminRemoveExpSP(L2PcInstance activeChar, String ExpSp)
+	private static boolean adminRemoveExpSP(Player activeChar, String ExpSp)
 	{
 		L2Object target = activeChar.getTarget();
-		L2PcInstance player = null;
-		if (target instanceof L2PcInstance)
+		Player player = null;
+		if (target instanceof Player)
 		{
-			player = (L2PcInstance) target;
+			player = (Player) target;
 		}
 		else
 		{

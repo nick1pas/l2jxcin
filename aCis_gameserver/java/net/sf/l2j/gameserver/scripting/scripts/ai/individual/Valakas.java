@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.scripting.scripts.ai.individual;
 
 import net.sf.l2j.commons.random.Rnd;
@@ -25,9 +11,9 @@ import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.SpawnLocation;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2GrandBossInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.GrandBoss;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
@@ -87,7 +73,7 @@ public class Valakas extends L2AttackableAIScript
 	public static final int VALAKAS = 29028;
 	
 	private long _timeTracker = 0; // Time tracker for last attack on Valakas.
-	private L2PcInstance _actualVictim; // Actual target of Valakas.
+	private Player _actualVictim; // Actual target of Valakas.
 	
 	public Valakas()
 	{
@@ -117,8 +103,8 @@ public class Valakas extends L2AttackableAIScript
 				final int hp = info.getInteger("currentHP");
 				final int mp = info.getInteger("currentMP");
 				
-				final L2Npc valakas = addSpawn(VALAKAS, loc_x, loc_y, loc_z, heading, false, 0, false);
-				GrandBossManager.getInstance().addBoss((L2GrandBossInstance) valakas);
+				final Npc valakas = addSpawn(VALAKAS, loc_x, loc_y, loc_z, heading, false, 0, false);
+				GrandBossManager.getInstance().addBoss((GrandBoss) valakas);
 				
 				valakas.setCurrentHpMp(hp, mp);
 				valakas.setRunning();
@@ -140,7 +126,7 @@ public class Valakas extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		if (event.equalsIgnoreCase("beginning"))
 		{
@@ -149,11 +135,11 @@ public class Valakas extends L2AttackableAIScript
 			
 			// Spawn Valakas and set him invul.
 			npc = addSpawn(VALAKAS, 212852, -114842, -1632, 0, false, 0, false);
-			GrandBossManager.getInstance().addBoss((L2GrandBossInstance) npc);
+			GrandBossManager.getInstance().addBoss((GrandBoss) npc);
 			npc.setIsInvul(true);
 			
 			// Sound + socialAction.
-			for (L2PcInstance plyr : VALAKAS_LAIR.getKnownTypeInside(L2PcInstance.class))
+			for (Player plyr : VALAKAS_LAIR.getKnownTypeInside(Player.class))
 			{
 				plyr.sendPacket(new PlaySound(1, "B03_A", 0, 0, 0, 0, 0));
 				plyr.sendPacket(new SocialAction(npc, 3));
@@ -279,14 +265,14 @@ public class Valakas extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onSpawn(L2Npc npc)
+	public String onSpawn(Npc npc)
 	{
 		npc.disableCoreAI(true);
 		return super.onSpawn(npc);
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		if (npc.isInvul())
 			return null;
@@ -307,7 +293,7 @@ public class Valakas extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
 		// Cancel skill_task and regen_task.
 		cancelQuestTimer("regen_task", npc, null);
@@ -341,18 +327,18 @@ public class Valakas extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAggro(L2Npc npc, L2PcInstance player, boolean isPet)
+	public String onAggro(Npc npc, Player player, boolean isPet)
 	{
 		return null;
 	}
 	
-	private void callSkillAI(L2Npc npc)
+	private void callSkillAI(Npc npc)
 	{
 		if (npc.isInvul() || npc.isCastingNow())
 			return;
 		
 		// Pickup a target if no or dead victim. 10% luck he decides to reconsiders his target.
-		if (_actualVictim == null || _actualVictim.isDead() || !(npc.getKnownType(L2PcInstance.class).contains(_actualVictim)) || Rnd.get(10) == 0)
+		if (_actualVictim == null || _actualVictim.isDead() || !(npc.getKnownType(Player.class).contains(_actualVictim)) || Rnd.get(10) == 0)
 			_actualVictim = getRandomPlayer(npc);
 		
 		// If result is still null, Valakas will roam. Don't go deeper in skill AI.
@@ -393,7 +379,7 @@ public class Valakas extends L2AttackableAIScript
 	 * @param npc valakas
 	 * @return a usable skillId
 	 */
-	private static int getRandomSkill(L2Npc npc)
+	private static int getRandomSkill(Npc npc)
 	{
 		final double hpRatio = npc.getCurrentHp() / npc.getMaxHp();
 		

@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model;
 
 import java.sql.Connection;
@@ -20,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.base.Sex;
 
 public class L2ClanMember
@@ -34,7 +20,7 @@ public class L2ClanMember
 	private int _classId;
 	private Sex _sex;
 	private int _raceOrdinal;
-	private L2PcInstance _player;
+	private Player _player;
 	private int _pledgeType;
 	private int _apprentice;
 	private int _sponsor;
@@ -69,7 +55,7 @@ public class L2ClanMember
 	 * @param clan the clan where the player belongs
 	 * @param player the player from which the clan member will be created
 	 */
-	public L2ClanMember(L2Clan clan, L2PcInstance player)
+	public L2ClanMember(L2Clan clan, Player player)
 	{
 		if (clan == null)
 			throw new IllegalArgumentException("Cannot create a clan member with a null clan.");
@@ -89,7 +75,7 @@ public class L2ClanMember
 		_raceOrdinal = player.getRace().ordinal();
 	}
 	
-	public void setPlayerInstance(L2PcInstance player)
+	public void setPlayerInstance(Player player)
 	{
 		if (player == null && _player != null)
 		{
@@ -123,7 +109,7 @@ public class L2ClanMember
 		_player = player;
 	}
 	
-	public L2PcInstance getPlayerInstance()
+	public Player getPlayerInstance()
 	{
 		return _player;
 	}
@@ -285,7 +271,7 @@ public class L2ClanMember
 	 * @param player The player to test.
 	 * @return the pledge class, under an int.
 	 */
-	public static int calculatePledgeClass(L2PcInstance player)
+	public static int calculatePledgeClass(Player player)
 	{
 		int pledgeClass = 0;
 		

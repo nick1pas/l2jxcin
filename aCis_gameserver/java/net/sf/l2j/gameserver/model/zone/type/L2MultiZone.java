@@ -21,9 +21,9 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -106,7 +106,7 @@ public class L2MultiZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onEnter(L2Character character)
+	protected void onEnter(Character character)
 	{
 		character.setInsideZone(ZoneId.MULTI, true);
 		
@@ -119,9 +119,9 @@ public class L2MultiZone extends L2ZoneType
 		if (_isNoSummonFriend)
 			character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, true);
 		
-		if (character instanceof L2PcInstance || character instanceof L2PetInstance)
+		if (character instanceof Player || character instanceof Pet)
 		{
-			final L2PcInstance player = (L2PcInstance) character;
+			final Player player = (Player) character;
 			player.sendPacket(new ExShowScreenMessage("You have entered a multi zone.", 5000));
 			
 			if (_isFlagEnabled)
@@ -133,7 +133,7 @@ public class L2MultiZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onExit(L2Character character)
+	protected void onExit(Character character)
 	{
 		character.setInsideZone(ZoneId.MULTI, false);
 		
@@ -146,9 +146,9 @@ public class L2MultiZone extends L2ZoneType
 		if (_isNoSummonFriend)
 			character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false);
 		
-		if (character instanceof L2PcInstance)
+		if (character instanceof Player)
 		{
-			final L2PcInstance player = (L2PcInstance) character;
+			final Player player = (Player) character;
 			player.sendPacket(new ExShowScreenMessage("You have left a multi zone.", 5000));
 			
 			if (_isFlagEnabled)
@@ -157,9 +157,9 @@ public class L2MultiZone extends L2ZoneType
 	}
 	
 	@Override
-	public void onDieInside(L2Character character)
+	public void onDieInside(Character character)
 	{
-		if (character instanceof L2PcInstance && _isReviveEnabled)
+		if (character instanceof Player && _isReviveEnabled)
 		{
 			ThreadPool.schedule(() -> respawnCharacter(character), _reviveDelay * 1000);
 			character.sendPacket(new ExShowScreenMessage("You will be revived in " + _reviveDelay + " second(s).", 5000));
@@ -167,9 +167,9 @@ public class L2MultiZone extends L2ZoneType
 	}
 	
 	@Override
-	public void onReviveInside(L2Character character)
+	public void onReviveInside(Character character)
 	{
-		if (character instanceof L2PcInstance && _isHealEnabled)
+		if (character instanceof Player && _isHealEnabled)
 		{
 			character.setCurrentCp(character.getMaxCp());
 			character.setCurrentHp(character.getMaxHp());
@@ -178,7 +178,7 @@ public class L2MultiZone extends L2ZoneType
 		}
 	}
 	
-	private static void respawnCharacter(L2Character character)
+	private static void respawnCharacter(Character character)
 	{
 		if (character.isDead())
 		{
@@ -187,7 +187,7 @@ public class L2MultiZone extends L2ZoneType
 		}
 	}
 	
-	private static void checkItemRestriction(L2Character character)
+	private static void checkItemRestriction(Character character)
 	{
 		for (ItemInstance item : character.getInventory().getPaperdollItems())
 		{
@@ -201,7 +201,7 @@ public class L2MultiZone extends L2ZoneType
 		}
 	}
 	
-	private static void checkSkillRestriction(L2Character character)
+	private static void checkSkillRestriction(Character character)
 	{
 		for (L2Effect effect : character.getAllEffects())
 		{

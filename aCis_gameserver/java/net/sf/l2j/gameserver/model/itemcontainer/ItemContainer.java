@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.itemcontainer;
 
 import java.sql.Connection;
@@ -31,8 +17,8 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemLocation;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemState;
@@ -48,7 +34,7 @@ public abstract class ItemContainer
 	{
 	}
 	
-	protected abstract L2Character getOwner();
+	protected abstract Character getOwner();
 	
 	protected abstract ItemLocation getBaseLocation();
 	
@@ -180,7 +166,7 @@ public abstract class ItemContainer
 	 * @param reference : The L2Object referencing current action (like NPC selling item or previous item in transformation,...)
 	 * @return the ItemInstance corresponding to the new or updated item.
 	 */
-	public ItemInstance addItem(String process, ItemInstance item, L2PcInstance actor, L2Object reference)
+	public ItemInstance addItem(String process, ItemInstance item, Player actor, L2Object reference)
 	{
 		ItemInstance olditem = getItemByItemId(item.getItemId());
 		
@@ -233,7 +219,7 @@ public abstract class ItemContainer
 	 * @param reference : The L2Object referencing current action (like NPC selling item or previous item in transformation,...)
 	 * @return the ItemInstance corresponding to the new or updated item.
 	 */
-	public ItemInstance addItem(String process, int itemId, int count, L2PcInstance actor, L2Object reference)
+	public ItemInstance addItem(String process, int itemId, int count, Player actor, L2Object reference)
 	{
 		ItemInstance item = getItemByItemId(itemId);
 		
@@ -292,11 +278,11 @@ public abstract class ItemContainer
 	 * @param objectId : int objectid of the item to be transfered
 	 * @param count : int Quantity of items to be transfered
 	 * @param target
-	 * @param actor : L2PcInstance Player requesting the item transfer
+	 * @param actor : Player Player requesting the item transfer
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the new item or the updated item in inventory
 	 */
-	public ItemInstance transferItem(String process, int objectId, int count, ItemContainer target, L2PcInstance actor, L2Object reference)
+	public ItemInstance transferItem(String process, int objectId, int count, ItemContainer target, Player actor, L2Object reference)
 	{
 		if (target == null)
 			return null;
@@ -361,11 +347,11 @@ public abstract class ItemContainer
 	 * Destroy item from inventory and updates database
 	 * @param process : String Identifier of process triggering this action
 	 * @param item : ItemInstance to be destroyed
-	 * @param actor : L2PcInstance Player requesting the item destroy
+	 * @param actor : Player Player requesting the item destroy
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance destroyItem(String process, ItemInstance item, L2PcInstance actor, L2Object reference)
+	public ItemInstance destroyItem(String process, ItemInstance item, Player actor, L2Object reference)
 	{
 		return destroyItem(process, item, item.getCount(), actor, reference);
 	}
@@ -375,11 +361,11 @@ public abstract class ItemContainer
 	 * @param process : String Identifier of process triggering this action
 	 * @param item : ItemInstance to be destroyed
 	 * @param count
-	 * @param actor : L2PcInstance Player requesting the item destroy
+	 * @param actor : Player Player requesting the item destroy
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance destroyItem(String process, ItemInstance item, int count, L2PcInstance actor, L2Object reference)
+	public ItemInstance destroyItem(String process, ItemInstance item, int count, Player actor, L2Object reference)
 	{
 		synchronized (item)
 		{
@@ -418,11 +404,11 @@ public abstract class ItemContainer
 	 * @param process : String Identifier of process triggering this action
 	 * @param objectId : int Item Instance identifier of the item to be destroyed
 	 * @param count : int Quantity of items to be destroyed
-	 * @param actor : L2PcInstance Player requesting the item destroy
+	 * @param actor : Player Player requesting the item destroy
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance destroyItem(String process, int objectId, int count, L2PcInstance actor, L2Object reference)
+	public ItemInstance destroyItem(String process, int objectId, int count, Player actor, L2Object reference)
 	{
 		ItemInstance item = getItemByObjectId(objectId);
 		if (item == null)
@@ -436,11 +422,11 @@ public abstract class ItemContainer
 	 * @param process : String Identifier of process triggering this action
 	 * @param itemId : int Item identifier of the item to be destroyed
 	 * @param count : int Quantity of items to be destroyed
-	 * @param actor : L2PcInstance Player requesting the item destroy
+	 * @param actor : Player Player requesting the item destroy
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance destroyItemByItemId(String process, int itemId, int count, L2PcInstance actor, L2Object reference)
+	public ItemInstance destroyItemByItemId(String process, int itemId, int count, Player actor, L2Object reference)
 	{
 		ItemInstance item = getItemByItemId(itemId);
 		if (item == null)
@@ -452,10 +438,10 @@ public abstract class ItemContainer
 	/**
 	 * Destroy all items from inventory and updates database
 	 * @param process : String Identifier of process triggering this action
-	 * @param actor : L2PcInstance Player requesting the item destroy
+	 * @param actor : Player Player requesting the item destroy
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 */
-	public void destroyAllItems(String process, L2PcInstance actor, L2Object reference)
+	public void destroyAllItems(String process, Player actor, L2Object reference)
 	{
 		for (ItemInstance item : _items)
 			destroyItem(process, item, actor, reference);
@@ -550,7 +536,7 @@ public abstract class ItemContainer
 				
 				World.getInstance().addObject(item);
 				
-				L2PcInstance owner = (getOwner() == null) ? null : getOwner().getActingPlayer();
+				Player owner = (getOwner() == null) ? null : getOwner().getActingPlayer();
 				
 				// If stackable item is found in inventory just add to current quantity
 				if (item.isStackable() && getItemByItemId(item.getItemId()) != null)

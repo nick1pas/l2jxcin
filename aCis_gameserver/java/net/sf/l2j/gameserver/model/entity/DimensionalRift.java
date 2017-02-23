@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.entity;
 
 import java.util.ArrayList;
@@ -27,8 +13,8 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
 import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager.DimensionalRiftRoom;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.serverpackets.Earthquake;
 
@@ -51,7 +37,7 @@ public class DimensionalRift
 	private boolean _hasJumped = false;
 	
 	protected List<Byte> _completedRooms = new ArrayList<>();
-	protected List<L2PcInstance> _revivedInWaitingRoom = new CopyOnWriteArrayList<>();
+	protected List<Player> _revivedInWaitingRoom = new CopyOnWriteArrayList<>();
 	
 	private boolean _isBossRoom = false;
 	
@@ -67,7 +53,7 @@ public class DimensionalRift
 		party.setDimensionalRift(this);
 		
 		final int[] coords = riftRoom.getTeleportCoords();
-		for (L2PcInstance member : party.getMembers())
+		for (Player member : party.getMembers())
 			member.teleToLocation(coords[0], coords[1], coords[2], 0);
 		
 		createSpawnTimer(_choosenRoom);
@@ -120,7 +106,7 @@ public class DimensionalRift
 					_completedRooms.add(_choosenRoom);
 					_choosenRoom = -1;
 					
-					for (L2PcInstance member : _party.getMembers())
+					for (Player member : _party.getMembers())
 					{
 						if (!_revivedInWaitingRoom.contains(member))
 							teleportToNextRoom(member, false);
@@ -131,7 +117,7 @@ public class DimensionalRift
 				}
 				else
 				{
-					for (L2PcInstance member : _party.getMembers())
+					for (Player member : _party.getMembers())
 					{
 						if (!_revivedInWaitingRoom.contains(member))
 							DimensionalRiftManager.getInstance().teleportToWaitingRoom(member);
@@ -149,7 +135,7 @@ public class DimensionalRift
 			_teleporterTimer.schedule(_teleporterTimerTask, jumpTime); // Teleporter task, 8-10 minutes
 			
 			_earthQuakeTask = ThreadPool.schedule(() -> {
-				for (L2PcInstance member : _party.getMembers())
+				for (Player member : _party.getMembers())
 				{
 					if (!_revivedInWaitingRoom.contains(member))
 						member.sendPacket(new Earthquake(member.getX(), member.getY(), member.getZ(), 65, 9));
@@ -187,7 +173,7 @@ public class DimensionalRift
 		_spawnTimer.schedule(_spawnTimerTask, Config.RIFT_SPAWN_DELAY);
 	}
 	
-	public void manualTeleport(L2PcInstance player, L2Npc npc)
+	public void manualTeleport(Player player, Npc npc)
 	{
 		final Party party = player.getParty();
 		if (party == null || !party.isInDimensionalRift())
@@ -216,7 +202,7 @@ public class DimensionalRift
 		_completedRooms.add(_choosenRoom);
 		_choosenRoom = -1;
 		
-		for (L2PcInstance member : _party.getMembers())
+		for (Player member : _party.getMembers())
 			teleportToNextRoom(member, true);
 		
 		DimensionalRiftManager.getInstance().getRoom(_type, _choosenRoom).setPartyInside(true);
@@ -225,7 +211,7 @@ public class DimensionalRift
 		createTeleporterTimer(true);
 	}
 	
-	public void manualExitRift(L2PcInstance player, L2Npc npc)
+	public void manualExitRift(Player player, Npc npc)
 	{
 		final Party party = player.getParty();
 		if (party == null || !party.isInDimensionalRift())
@@ -237,7 +223,7 @@ public class DimensionalRift
 			return;
 		}
 		
-		for (L2PcInstance member : party.getMembers())
+		for (Player member : party.getMembers())
 			DimensionalRiftManager.getInstance().teleportToWaitingRoom(member);
 		
 		killRift();
@@ -248,7 +234,7 @@ public class DimensionalRift
 	 * @param player to teleport
 	 * @param cantJumpToBossRoom if true, Anakazel room can't be choosen (case of manual teleport).
 	 */
-	protected void teleportToNextRoom(L2PcInstance player, boolean cantJumpToBossRoom)
+	protected void teleportToNextRoom(Player player, boolean cantJumpToBossRoom)
 	{
 		if (_choosenRoom == -1)
 		{
@@ -340,14 +326,14 @@ public class DimensionalRift
 		return time;
 	}
 	
-	public void usedTeleport(L2PcInstance player)
+	public void usedTeleport(Player player)
 	{
 		if (!_revivedInWaitingRoom.contains(player))
 			_revivedInWaitingRoom.add(player);
 		
 		if (_party.getMembersCount() - _revivedInWaitingRoom.size() < Config.RIFT_MIN_PARTY_SIZE)
 		{
-			for (L2PcInstance member : _party.getMembers())
+			for (Player member : _party.getMembers())
 			{
 				if (!_revivedInWaitingRoom.contains(member))
 					DimensionalRiftManager.getInstance().teleportToWaitingRoom(member);

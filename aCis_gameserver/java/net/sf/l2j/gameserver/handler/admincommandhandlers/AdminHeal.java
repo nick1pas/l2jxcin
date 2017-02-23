@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import java.util.logging.Logger;
@@ -20,8 +6,8 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
 /**
@@ -36,7 +22,7 @@ public class AdminHeal implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		if (command.equals("admin_heal"))
 			handleRes(activeChar);
@@ -63,17 +49,17 @@ public class AdminHeal implements IAdminCommandHandler
 		return ADMIN_COMMANDS;
 	}
 	
-	private static void handleRes(L2PcInstance activeChar)
+	private static void handleRes(Player activeChar)
 	{
 		handleRes(activeChar, null);
 	}
 	
-	private static void handleRes(L2PcInstance activeChar, String player)
+	private static void handleRes(Player activeChar, String player)
 	{
 		L2Object obj = activeChar.getTarget();
 		if (player != null)
 		{
-			L2PcInstance plyr = World.getInstance().getPlayer(player);
+			Player plyr = World.getInstance().getPlayer(player);
 			
 			if (plyr != null)
 				obj = plyr;
@@ -82,10 +68,10 @@ public class AdminHeal implements IAdminCommandHandler
 				try
 				{
 					int radius = Integer.parseInt(player);
-					for (L2Character character : activeChar.getKnownType(L2Character.class))
+					for (Character character : activeChar.getKnownType(Character.class))
 					{
 						character.setCurrentHpMp(character.getMaxHp(), character.getMaxMp());
-						if (character instanceof L2PcInstance)
+						if (character instanceof Player)
 							character.setCurrentCp(character.getMaxCp());
 					}
 					activeChar.sendMessage("Healed within " + radius + " unit radius.");
@@ -100,12 +86,12 @@ public class AdminHeal implements IAdminCommandHandler
 		if (obj == null)
 			obj = activeChar;
 		
-		if (obj instanceof L2Character)
+		if (obj instanceof Character)
 		{
-			L2Character target = (L2Character) obj;
+			Character target = (Character) obj;
 			target.setCurrentHpMp(target.getMaxHp(), target.getMaxMp());
 			
-			if (target instanceof L2PcInstance)
+			if (target instanceof Player)
 				target.setCurrentCp(target.getMaxCp());
 			
 			if (Config.DEBUG)

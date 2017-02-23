@@ -1,38 +1,24 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.network.serverpackets;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchRoom;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchRoomList;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchWaitingList;
 
 public class ExListPartyMatchingWaitingRoom extends L2GameServerPacket
 {
-	private final L2PcInstance _activeChar;
+	private final Player _activeChar;
 	@SuppressWarnings("unused")
 	private final int _page;
 	private final int _minlvl;
 	private final int _maxlvl;
 	private final int _mode;
-	private final List<L2PcInstance> _members;
+	private final List<Player> _members;
 	
-	public ExListPartyMatchingWaitingRoom(L2PcInstance player, int page, int minlvl, int maxlvl, int mode)
+	public ExListPartyMatchingWaitingRoom(Player player, int page, int minlvl, int maxlvl, int mode)
 	{
 		_activeChar = player;
 		_page = page;
@@ -61,7 +47,7 @@ public class ExListPartyMatchingWaitingRoom extends L2GameServerPacket
 			}
 		}
 		
-		for (L2PcInstance cha : PartyMatchWaitingList.getInstance().getPlayers())
+		for (Player cha : PartyMatchWaitingList.getInstance().getPlayers())
 		{
 			// Don't add yourself in the list
 			if (cha == null || cha == _activeChar)
@@ -75,7 +61,7 @@ public class ExListPartyMatchingWaitingRoom extends L2GameServerPacket
 		
 		writeD(1);
 		writeD(_members.size());
-		for (L2PcInstance member : _members)
+		for (Player member : _members)
 		{
 			writeS(member.getName());
 			writeD(member.getActiveClass());

@@ -1,20 +1,6 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.ai;
 
-import net.sf.l2j.gameserver.model.actor.L2Character;
+import net.sf.l2j.gameserver.model.actor.Character;
 
 /**
  * Interface of AI and client state. To correctly send messages to client we need it's state. For example, if we've sent 'StartAutoAttack' message, we need to send 'StopAutoAttack' message before any other action. Or if we've sent 'MoveToPawn', we need to send 'StopMove' when the movement of a
@@ -30,7 +16,7 @@ public interface Ctrl
 	/**
 	 * @return the character this AI serves
 	 */
-	L2Character getActor();
+	Character getActor();
 	
 	/**
 	 * @return current intention

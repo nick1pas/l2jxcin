@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.entity;
 
 import java.sql.Connection;
@@ -31,7 +17,7 @@ import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.AuctionManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
@@ -245,7 +231,7 @@ public class Auction
 	 * @param bidder The bidder.
 	 * @param bid The bid amount.
 	 */
-	public synchronized void setBid(L2PcInstance bidder, int bid)
+	public synchronized void setBid(Player bidder, int bid)
 	{
 		int requiredAdena = bid;
 		
@@ -290,7 +276,7 @@ public class Auction
 	 * @param quantity amount of money.
 	 * @return true if successful.
 	 */
-	public static boolean takeItem(L2PcInstance bidder, int quantity)
+	public static boolean takeItem(Player bidder, int quantity)
 	{
 		if (bidder.getClan() != null && bidder.getClan().getWarehouse().getAdena() >= quantity)
 		{
@@ -307,7 +293,7 @@ public class Auction
 	 * @param bidder The bidder to make checks on.
 	 * @param bid The related bid id.
 	 */
-	private void updateInDB(L2PcInstance bidder, int bid)
+	private void updateInDB(Player bidder, int bid)
 	{
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
@@ -354,7 +340,7 @@ public class Auction
 		}
 		catch (Exception e)
 		{
-			_log.log(Level.SEVERE, "Exception: Auction.updateInDB(L2PcInstance bidder, int bid): " + e.getMessage(), e);
+			_log.log(Level.SEVERE, "Exception: Auction.updateInDB(Player bidder, int bid): " + e.getMessage(), e);
 		}
 	}
 	

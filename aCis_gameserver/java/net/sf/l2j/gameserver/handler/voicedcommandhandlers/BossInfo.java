@@ -4,7 +4,7 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 public class BossInfo implements IVoicedCommandHandler
@@ -15,7 +15,7 @@ public class BossInfo implements IVoicedCommandHandler
 	};
 	
 	@Override
-	public boolean useVoicedCommand(String command, L2PcInstance activeChar, String params)
+	public boolean useVoicedCommand(String command, Player activeChar, String params)
 	{
 		StringBuilder tb = new StringBuilder();
 		NpcHtmlMessage msg = new NpcHtmlMessage(5);

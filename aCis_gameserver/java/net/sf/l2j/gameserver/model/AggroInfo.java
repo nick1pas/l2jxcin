@@ -1,42 +1,28 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model;
 
-import net.sf.l2j.gameserver.model.actor.L2Character;
+import net.sf.l2j.gameserver.model.actor.Character;
 
 /**
- * This class contains all AggroInfo of the L2Attackable against the attacker L2Character.
+ * This class contains all AggroInfo of the Attackable against the attacker Character.
  * <ul>
- * <li>attacker : The attacker L2Character concerned by this AggroInfo of this L2Attackable</li>
- * <li>hate : Hate level of this L2Attackable against the attacker L2Character (hate = damage)</li>
- * <li>damage : Number of damages that the attacker L2Character gave to this L2Attackable</li>
+ * <li>attacker : The attacker Character concerned by this AggroInfo of this Attackable</li>
+ * <li>hate : Hate level of this Attackable against the attacker Character (hate = damage)</li>
+ * <li>damage : Number of damages that the attacker Character gave to this Attackable</li>
  * </ul>
  */
 public final class AggroInfo
 {
-	private final L2Character _attacker;
+	private final Character _attacker;
 	
 	private int _hate;
 	private int _damage;
 	
-	public AggroInfo(L2Character attacker)
+	public AggroInfo(Character attacker)
 	{
 		_attacker = attacker;
 	}
 	
-	public L2Character getAttacker()
+	public Character getAttacker()
 	{
 		return _attacker;
 	}
@@ -46,9 +32,9 @@ public final class AggroInfo
 		return _hate;
 	}
 	
-	public int checkHate(L2Character owner)
+	public int checkHate(Character owner)
 	{
-		if (_attacker.isAlikeDead() || !_attacker.isVisible() || !owner.getKnownType(L2Character.class).contains(_attacker))
+		if (_attacker.isAlikeDead() || !_attacker.isVisible() || !owner.getKnownType(Character.class).contains(_attacker))
 			_hate = 0;
 		
 		return _hate;

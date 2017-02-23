@@ -17,10 +17,10 @@ package net.sf.l2j.gameserver.scripting.scripts.ai.group;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
 public class MagmaDrake extends L2AttackableAIScript
@@ -39,7 +39,7 @@ public class MagmaDrake extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
 		if (npc.getNpcId() == NPC[0])
 		{
@@ -47,8 +47,8 @@ public class MagmaDrake extends L2AttackableAIScript
 			{
 				for (int i = 0; i < 5; i++)
 				{
-					L2Attackable newNpc = (L2Attackable) addSpawn(NPC[1], npc.getX(), npc.getY(), npc.getZ(), npc.getHeading(), true, 0, false);
-					L2Character originalAttacker = isPet ? killer.getPet() : killer;
+					Attackable newNpc = (Attackable) addSpawn(NPC[1], npc.getX(), npc.getY(), npc.getZ(), npc.getHeading(), true, 0, false);
+					Character originalAttacker = isPet ? killer.getPet() : killer;
 					newNpc.setRunning();
 					newNpc.addDamageHate(originalAttacker, 0, 999);
 					newNpc.getAI().setIntention(CtrlIntention.ATTACK, originalAttacker);

@@ -1,32 +1,18 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.ai.model;
 
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.SpawnLocation;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Vehicle;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Vehicle;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.VehicleDeparture;
 import net.sf.l2j.gameserver.network.serverpackets.VehicleInfo;
 import net.sf.l2j.gameserver.network.serverpackets.VehicleStarted;
 
 public class L2VehicleAI extends L2CharacterAI
 {
-	public L2VehicleAI(L2Vehicle boat)
+	public L2VehicleAI(Vehicle boat)
 	{
 		super(boat);
 	}
@@ -60,20 +46,20 @@ public class L2VehicleAI extends L2CharacterAI
 	}
 	
 	@Override
-	public void describeStateToPlayer(L2PcInstance player)
+	public void describeStateToPlayer(Player player)
 	{
 		if (_clientMoving)
 			player.sendPacket(new VehicleDeparture(getActor()));
 	}
 	
 	@Override
-	public L2Vehicle getActor()
+	public Vehicle getActor()
 	{
-		return (L2Vehicle) _actor;
+		return (Vehicle) _actor;
 	}
 	
 	@Override
-	protected void onIntentionAttack(L2Character target)
+	protected void onIntentionAttack(Character target)
 	{
 	}
 	
@@ -83,7 +69,7 @@ public class L2VehicleAI extends L2CharacterAI
 	}
 	
 	@Override
-	protected void onIntentionFollow(L2Character target)
+	protected void onIntentionFollow(Character target)
 	{
 	}
 	
@@ -98,27 +84,27 @@ public class L2VehicleAI extends L2CharacterAI
 	}
 	
 	@Override
-	protected void onEvtAttacked(L2Character attacker)
+	protected void onEvtAttacked(Character attacker)
 	{
 	}
 	
 	@Override
-	protected void onEvtAggression(L2Character target, int aggro)
+	protected void onEvtAggression(Character target, int aggro)
 	{
 	}
 	
 	@Override
-	protected void onEvtStunned(L2Character attacker)
+	protected void onEvtStunned(Character attacker)
 	{
 	}
 	
 	@Override
-	protected void onEvtSleeping(L2Character attacker)
+	protected void onEvtSleeping(Character attacker)
 	{
 	}
 	
 	@Override
-	protected void onEvtRooted(L2Character attacker)
+	protected void onEvtRooted(Character attacker)
 	{
 	}
 	

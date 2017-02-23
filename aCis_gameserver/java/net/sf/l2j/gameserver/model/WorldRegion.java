@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model;
 
 import java.util.ArrayList;
@@ -22,10 +8,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
 import net.sf.l2j.gameserver.model.zone.type.L2DerbyTrackZone;
 import net.sf.l2j.gameserver.model.zone.type.L2PeaceZone;
@@ -86,7 +72,7 @@ public final class WorldRegion
 		_zones.remove(zone);
 	}
 	
-	public void revalidateZones(L2Character character)
+	public void revalidateZones(Character character)
 	{
 		// Do NOT update the world region while the character is still in the process of teleporting
 		if (character.isTeleporting())
@@ -95,7 +81,7 @@ public final class WorldRegion
 		_zones.forEach(z -> z.revalidateInZone(character));
 	}
 	
-	public void removeFromZones(L2Character character)
+	public void removeFromZones(Character character)
 	{
 		_zones.forEach(z -> z.removeCharacter(character));
 	}
@@ -141,12 +127,12 @@ public final class WorldRegion
 		return true;
 	}
 	
-	public void onDeath(L2Character character)
+	public void onDeath(Character character)
 	{
 		_zones.stream().filter(z -> z.isCharacterInZone(character)).forEach(z -> z.onDieInside(character));
 	}
 	
-	public void onRevive(L2Character character)
+	public void onRevive(Character character)
 	{
 		_zones.stream().filter(z -> z.isCharacterInZone(character)).forEach(z -> z.onReviveInside(character));
 	}
@@ -190,9 +176,9 @@ public final class WorldRegion
 		{
 			for (L2Object o : _objects.values())
 			{
-				if (o instanceof L2Attackable)
+				if (o instanceof Attackable)
 				{
-					L2Attackable mob = (L2Attackable) o;
+					Attackable mob = (Attackable) o;
 					
 					// Set target to null and cancel Attack or Cast
 					mob.setTarget(null);
@@ -200,7 +186,7 @@ public final class WorldRegion
 					// Stop movement
 					mob.stopMove(null);
 					
-					// Stop all active skills effects in progress on the L2Character
+					// Stop all active skills effects in progress on the Character
 					mob.stopAllEffects();
 					
 					mob.getAggroList().clear();
@@ -219,10 +205,10 @@ public final class WorldRegion
 		{
 			for (L2Object o : _objects.values())
 			{
-				if (o instanceof L2Attackable)
-					((L2Attackable) o).getStatus().startHpMpRegeneration();
-				else if (o instanceof L2Npc)
-					((L2Npc) o).startRandomAnimationTimer();
+				if (o instanceof Attackable)
+					((Attackable) o).getStatus().startHpMpRegeneration();
+				else if (o instanceof Npc)
+					((Npc) o).startRandomAnimationTimer();
 			}
 		}
 	}
@@ -238,7 +224,7 @@ public final class WorldRegion
 		
 		_objects.put(object.getObjectId(), object);
 		
-		if (object instanceof L2PcInstance)
+		if (object instanceof Player)
 			_playersCount.incrementAndGet();
 	}
 	
@@ -253,7 +239,7 @@ public final class WorldRegion
 		
 		_objects.remove(object.getObjectId());
 		
-		if (object instanceof L2PcInstance)
+		if (object instanceof Player)
 			_playersCount.decrementAndGet();
 	}
 }

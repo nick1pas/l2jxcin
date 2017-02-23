@@ -7,7 +7,7 @@ import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
+import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
@@ -22,7 +22,7 @@ public class MasterToma extends L2AttackableAIScript
 		new Location(178834, -184336, -352)
 	};
 	private static long TELEPORT_PERIOD = 30 * 60 * 1000; // 30 min
-	private static L2Npc masterToma = null;
+	private static Npc masterToma = null;
 	protected static boolean isSpawned = false;
 	
 	public MasterToma()
@@ -65,7 +65,7 @@ public class MasterToma extends L2AttackableAIScript
 			spawn.setLoc(loc.getX(), loc.getY(), loc.getZ() + 20, 0);
 			
 			SpawnTable.getInstance().addNewSpawn(spawn, false);
-			final L2Npc npc = spawn.doSpawn(true);
+			final Npc npc = spawn.doSpawn(true);
 			npc.scheduleDespawn(MASTER_TOMA);
 			isSpawned = true;
 		}

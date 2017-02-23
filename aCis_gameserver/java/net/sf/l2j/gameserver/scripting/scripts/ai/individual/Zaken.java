@@ -28,14 +28,13 @@ import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.instance.L2GrandBossInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2NpcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.instance.GrandBoss;
+import net.sf.l2j.gameserver.model.actor.instance.Monster;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
@@ -191,7 +190,7 @@ public class Zaken extends L2AttackableAIScript
 			{
 				// The time has already expired while the server was offline. Immediately spawn Zaken.
 				int i1 = Rnd.get(15);
-				L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, Xcoords[i1], Ycoords[i1], Zcoords[i1], i1, false, 0, false);
+				GrandBoss zaken = (GrandBoss) addSpawn(ZAKEN, Xcoords[i1], Ycoords[i1], Zcoords[i1], i1, false, 0, false);
 				GrandBossManager.getInstance().setBossStatus(ZAKEN, ALIVE);
 				spawnBoss(zaken);
 			}
@@ -204,7 +203,7 @@ public class Zaken extends L2AttackableAIScript
 			int heading = info.getInteger("heading");
 			int hp = info.getInteger("currentHP");
 			int mp = info.getInteger("currentMP");
-			L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, loc_x, loc_y, loc_z, heading, false, 0, false);
+			GrandBoss zaken = (GrandBoss) addSpawn(ZAKEN, loc_x, loc_y, loc_z, heading, false, 0, false);
 			zaken.setCurrentHpMp(hp, mp);
 			spawnBoss(zaken);
 		}
@@ -220,7 +219,7 @@ public class Zaken extends L2AttackableAIScript
 		addEventIds(PIRATEZOMBIE, EventType.ON_ATTACK, EventType.ON_KILL, EventType.ON_SPAWN, EventType.ON_SPELL_FINISHED, EventType.ON_SKILL_SEE, EventType.ON_FACTION_CALL, EventType.ON_AGGRO);
 	}
 	
-	public void spawnBoss(L2GrandBossInstance npc)
+	public void spawnBoss(GrandBoss npc)
 	{
 		if (npc == null)
 		{
@@ -249,7 +248,7 @@ public class Zaken extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		int status = GrandBossManager.getInstance().getBossStatus(ZAKEN);
 		if ((status == DEAD) && !event.equalsIgnoreCase("zaken_unlock"))
@@ -278,25 +277,25 @@ public class Zaken extends L2AttackableAIScript
 				}
 			}
 			
-			L2Character _mostHated = null;
+			Character _mostHated = null;
 			if ((npc.getAI().getIntention() == CtrlIntention.ATTACK) && (hate == 0))
 			{
-				if (((L2Attackable) npc).getMostHated() != null)
+				if (((Attackable) npc).getMostHated() != null)
 				{
-					_mostHated = ((L2Attackable) npc).getMostHated();
+					_mostHated = ((Attackable) npc).getMostHated();
 					hate = 1;
 				}
 			}
 			else if ((npc.getAI().getIntention() == CtrlIntention.ATTACK) && (hate != 0))
 			{
-				if (((L2Attackable) npc).getMostHated() != null)
+				if (((Attackable) npc).getMostHated() != null)
 				{
-					if (_mostHated == ((L2Attackable) npc).getMostHated())
+					if (_mostHated == ((Attackable) npc).getMostHated())
 						hate = hate + 1;
 					else
 					{
 						hate = 1;
-						_mostHated = ((L2Attackable) npc).getMostHated();
+						_mostHated = ((Attackable) npc).getMostHated();
 					}
 				}
 			}
@@ -306,8 +305,8 @@ public class Zaken extends L2AttackableAIScript
 			
 			if (hate > 5)
 			{
-				((L2Attackable) npc).stopHating(_mostHated);
-				L2Character nextTarget = ((L2Attackable) npc).getMostHated();
+				((Attackable) npc).stopHating(_mostHated);
+				Character nextTarget = ((Attackable) npc).getMostHated();
 				if (nextTarget != null)
 					npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
 				
@@ -450,7 +449,7 @@ public class Zaken extends L2AttackableAIScript
 		else if (event.equalsIgnoreCase("zaken_unlock"))
 		{
 			int i1 = Rnd.get(15);
-			L2GrandBossInstance zaken = (L2GrandBossInstance) addSpawn(ZAKEN, Xcoords[i1], Ycoords[i1], Zcoords[i1], i1, false, 0, false);
+			GrandBoss zaken = (GrandBoss) addSpawn(ZAKEN, Xcoords[i1], Ycoords[i1], Zcoords[i1], i1, false, 0, false);
 			GrandBossManager.getInstance().setBossStatus(ZAKEN, ALIVE);
 			spawnBoss(zaken);
 		}
@@ -460,7 +459,8 @@ public class Zaken extends L2AttackableAIScript
 		return super.onAdvEvent(event, npc, player);
 	}
 	
-	public String onFactionCall(L2Npc npc, L2NpcInstance caller, L2PcInstance attacker, boolean isPet)
+	@Override
+	public String onFactionCall(Npc npc, Npc caller, Player attacker, boolean isPet)
 	{
 		if ((caller == null) || (npc == null))
 			return super.onFactionCall(npc, caller, attacker, isPet);
@@ -479,7 +479,7 @@ public class Zaken extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
+	public String onSpellFinished(Npc npc, Player player, L2Skill skill)
 	{
 		if (npc.getNpcId() == ZAKEN)
 		{
@@ -494,8 +494,8 @@ public class Zaken extends L2AttackableAIScript
 			{
 				int i1 = Rnd.get(15);
 				player.teleToLocation(Xcoords[i1], Ycoords[i1], Zcoords[i1], i1);
-				((L2Attackable) npc).stopHating(player);
-				L2Character nextTarget = ((L2Attackable) npc).getMostHated();
+				((Attackable) npc).stopHating(player);
+				Character nextTarget = ((Attackable) npc).getMostHated();
 				if (nextTarget != null)
 					npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
 			}
@@ -503,19 +503,19 @@ public class Zaken extends L2AttackableAIScript
 			{
 				int i1 = Rnd.get(15);
 				player.teleToLocation(Xcoords[i1], Ycoords[i1], Zcoords[i1], i1);
-				((L2Attackable) npc).stopHating(player);
+				((Attackable) npc).stopHating(player);
 				
-				for (L2Character character : npc.getKnownType(L2MonsterInstance.class))
+				for (Character character : npc.getKnownType(Monster.class))
 				{
 					if ((character != player) && !Util.checkIfInRange(250, player, character, true))
 					{
 						int r1 = Rnd.get(15);
 						character.teleToLocation(Xcoords[r1], Ycoords[r1], Zcoords[r1], r1);
-						((L2Attackable) npc).stopHating(character);
+						((Attackable) npc).stopHating(character);
 					}
 				}
 				
-				L2Character nextTarget = ((L2Attackable) npc).getMostHated();
+				Character nextTarget = ((Attackable) npc).getMostHated();
 				if (nextTarget != null)
 					npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
 			}
@@ -524,10 +524,10 @@ public class Zaken extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onSkillSee(L2Npc npc, L2PcInstance caster, L2Skill skill, L2Object[] targets, boolean isPet)
+	public String onSkillSee(Npc npc, Player caster, L2Skill skill, L2Object[] targets, boolean isPet)
 	{
 		if (skill.getAggroPoints() > 0)
-			((L2Attackable) npc).addDamageHate(caster, 0, ((skill.getAggroPoints() / npc.getMaxHp()) * 10 * 150));
+			((Attackable) npc).addDamageHate(caster, 0, ((skill.getAggroPoints() / npc.getMaxHp()) * 10 * 150));
 		
 		if (Rnd.get(12) < 1)
 		{
@@ -538,13 +538,13 @@ public class Zaken extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAggro(L2Npc npc, L2PcInstance player, boolean isPet)
+	public String onAggro(Npc npc, Player player, boolean isPet)
 	{
 		if (npc == null)
 			return null;
 		
 		final boolean isMage;
-		final L2Playable character;
+		final Playable character;
 		if (isPet)
 		{
 			isMage = false;
@@ -579,14 +579,14 @@ public class Zaken extends L2AttackableAIScript
 				curse.getEffects(npc, character);
 			}
 			
-			((L2Attackable) npc).stopHating(character); // for calling again
+			((Attackable) npc).stopHating(character); // for calling again
 			return null;
 		}
 		
 		if (_zakenLair.isInsideZone(npc))
 		{
-			L2Character target = isPet ? player.getPet() : player;
-			((L2Attackable) npc).addDamageHate(target, 1, 200);
+			Character target = isPet ? player.getPet() : player;
+			((Attackable) npc).addDamageHate(target, 1, 200);
 		}
 		
 		int npcId = npc.getNpcId();
@@ -601,7 +601,7 @@ public class Zaken extends L2AttackableAIScript
 		return super.onAggro(npc, player, isPet);
 	}
 	
-	public void CallSkills(L2Npc npc)
+	public void CallSkills(Npc npc)
 	{
 		if (npc.isCastingNow())
 			return;
@@ -621,7 +621,7 @@ public class Zaken extends L2AttackableAIScript
 		
 		if (Rnd.get(2) < 1)
 		{
-			if (_target == ((L2Attackable) npc).getMostHated())
+			if (_target == ((Attackable) npc).getMostHated())
 				npc.doCast(SkillTable.getInstance().getInfo(DUAL_ATTACK, 1));
 		}
 		
@@ -633,7 +633,7 @@ public class Zaken extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		int npcId = npc.getNpcId();
 		if (npcId == ZAKEN)
@@ -647,9 +647,9 @@ public class Zaken extends L2AttackableAIScript
 					npc.doCast(skill2);
 				}
 			}
-			L2Character originalAttacker = isPet ? attacker.getPet() : attacker;
+			Character originalAttacker = isPet ? attacker.getPet() : attacker;
 			int hate = (int) ((damage / npc.getMaxHp() / 0.05) * 20000);
-			((L2Attackable) npc).addDamageHate(originalAttacker, 0, hate);
+			((Attackable) npc).addDamageHate(originalAttacker, 0, hate);
 			
 			if (Rnd.get(10) < 1)
 			{
@@ -662,7 +662,7 @@ public class Zaken extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
 		int npcId = npc.getNpcId();
 		if (npcId == ZAKEN)

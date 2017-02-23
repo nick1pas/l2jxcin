@@ -14,8 +14,8 @@
  */
 package net.sf.l2j.gameserver.scripting.quests;
 
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.NpcSay;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
@@ -51,7 +51,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		String htmltext = getNoQuestMsg();
 		QuestState st = player.getQuestState(getName());
@@ -107,7 +107,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 			case "32022-02.htm":
 				st.playSound(QuestState.SOUND_MIDDLE);
 				st.set("cond", "9");
-				L2Npc man = addSpawn(SUSPICIOUS, 104562, -107598, -3688, 0, false, 4000, false);
+				Npc man = addSpawn(SUSPICIOUS, 104562, -107598, -3688, 0, false, 4000, false);
 				man.broadcastPacket(new NpcSay(man.getObjectId(), 0, man.getNpcId(), "We meet again."));
 				startQuestTimer("2", 3700, man, player, false);
 				st.giveItems(REPORT, 1);
@@ -122,7 +122,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 			case "Sculpture-04a.htm":
 				st.playSound(QuestState.SOUND_MIDDLE);
 				st.set("cond", "8");
-				L2Npc man2 = addSpawn(SUSPICIOUS, 117890, -126478, -2584, 0, false, 4000, false);
+				Npc man2 = addSpawn(SUSPICIOUS, 117890, -126478, -2584, 0, false, 4000, false);
 				man2.broadcastPacket(new NpcSay(man2.getObjectId(), 0, man2.getNpcId(), "This looks like the right place..."));
 				startQuestTimer("1", 3700, man2, player, false);
 				htmltext = "Sculpture-04.htm";
@@ -173,7 +173,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 	}
 	
 	@Override
-	public String onTalk(L2Npc npc, L2PcInstance player)
+	public String onTalk(Npc npc, Player player)
 	{
 		String htmltext = getNoQuestMsg();
 		final QuestState st = player.getQuestState(getName());

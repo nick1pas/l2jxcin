@@ -14,14 +14,14 @@
  */
 package net.sf.l2j.gameserver.model.entity.events;
 
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 
 /**
  * @author L0ngh0rn
  */
 public class DMPlayer
 {
-	private L2PcInstance _player;
+	private Player _player;
 	private short _points;
 	private short _death;
 	private String _hexCode;
@@ -30,7 +30,7 @@ public class DMPlayer
 	 * @param player
 	 * @param hexCode
 	 */
-	public DMPlayer(L2PcInstance player, String hexCode)
+	public DMPlayer(Player player, String hexCode)
 	{
 		_player = player;
 		_points = 0;
@@ -41,7 +41,7 @@ public class DMPlayer
 	/**
 	 * @return the _player
 	 */
-	public L2PcInstance getPlayer()
+	public Player getPlayer()
 	{
 		return _player;
 	}
@@ -49,7 +49,7 @@ public class DMPlayer
 	/**
 	 * @param player the _player to set
 	 */
-	public void setPlayer(L2PcInstance player)
+	public void setPlayer(Player player)
 	{
 		_player = player;
 	}

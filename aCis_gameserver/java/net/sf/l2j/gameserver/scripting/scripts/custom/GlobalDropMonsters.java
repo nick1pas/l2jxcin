@@ -8,9 +8,9 @@ import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.NpcTable;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -24,7 +24,7 @@ public class GlobalDropMonsters extends Quest
 {
 	
 	@Override
-	public String onKill(L2Npc mob, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc mob, Player killer, boolean isPet)
 	{
 		int levelMobMin = 0;
 		for (int i = 1; i < 81; i++)
@@ -43,7 +43,7 @@ public class GlobalDropMonsters extends Quest
 		return super.onKill(mob, killer, isPet);
 	}
 	
-	private static void dropItem(final L2Npc mob, final L2PcInstance player, final Map<Integer, List<Integer>> droplist)
+	private static void dropItem(final Npc mob, final Player player, final Map<Integer, List<Integer>> droplist)
 	{
 		Integer key;
 		Integer chance;
@@ -94,12 +94,12 @@ public class GlobalDropMonsters extends Quest
 	 * @param item instance IntIntHolder.
 	 * @return the dropped item instance.
 	 */
-	 public static ItemInstance dropItem(L2Npc mob, L2PcInstance lastAttacker, IntIntHolder item)
+	 public static ItemInstance dropItem(Npc mob, Player lastAttacker, IntIntHolder item)
 	 {
 		 if (Config.AUTO_LOOT)
-			 lastAttacker.doAutoLoot((L2Attackable) mob, item);
+			 lastAttacker.doAutoLoot((Attackable) mob, item);
 		 else
-			 return  ((L2Attackable) mob).dropItem(lastAttacker, item);
+			 return  ((Attackable) mob).dropItem(lastAttacker, item);
 		return null;		 
 	 }
 

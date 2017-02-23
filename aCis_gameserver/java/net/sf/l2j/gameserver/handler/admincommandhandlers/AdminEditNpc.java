@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import java.util.List;
@@ -25,9 +11,9 @@ import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2MerchantInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Merchant;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
 import net.sf.l2j.gameserver.model.buylist.NpcBuyList;
@@ -53,7 +39,7 @@ public class AdminEditNpc implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		final StringTokenizer st = new StringTokenizer(command, " ");
 		st.nextToken();
@@ -120,7 +106,7 @@ public class AdminEditNpc implements IAdminCommandHandler
 		return true;
 	}
 	
-	private static void showShopList(L2PcInstance activeChar, int listId)
+	private static void showShopList(Player activeChar, int listId)
 	{
 		final NpcBuyList buyList = BuyListTable.getInstance().getBuyList(listId);
 		if (buyList == null)
@@ -142,7 +128,7 @@ public class AdminEditNpc implements IAdminCommandHandler
 		activeChar.sendPacket(html);
 	}
 	
-	private static void showShop(L2PcInstance activeChar, int npcId)
+	private static void showShop(Player activeChar, int npcId)
 	{
 		final List<NpcBuyList> buyLists = BuyListTable.getInstance().getBuyListsByNpcId(npcId);
 		if (buyLists.isEmpty())
@@ -154,9 +140,9 @@ public class AdminEditNpc implements IAdminCommandHandler
 		final StringBuilder sb = new StringBuilder(500);
 		StringUtil.append(sb, "<html><title>Merchant Shop Lists</title><body>");
 		
-		if (activeChar.getTarget() instanceof L2MerchantInstance)
+		if (activeChar.getTarget() instanceof Merchant)
 		{
-			L2Npc merchant = (L2Npc) activeChar.getTarget();
+			Npc merchant = (Npc) activeChar.getTarget();
 			int taxRate = merchant.getCastle().getTaxPercent();
 			
 			StringUtil.append(sb, "<center><font color=\"LEVEL\">", merchant.getName(), " (", npcId, ")</font></center><br>Tax rate: ", taxRate, "%");
@@ -174,7 +160,7 @@ public class AdminEditNpc implements IAdminCommandHandler
 		activeChar.sendPacket(html);
 	}
 	
-	private static void showNpcDropList(L2PcInstance activeChar, int npcId, int page)
+	private static void showNpcDropList(Player activeChar, int npcId, int page)
 	{
 		final NpcTemplate npcData = NpcTable.getInstance().getTemplate(npcId);
 		if (npcData == null)
@@ -255,7 +241,7 @@ public class AdminEditNpc implements IAdminCommandHandler
 		activeChar.sendPacket(html);
 	}
 	
-	private static void showNpcSkillList(L2PcInstance activeChar, int npcId)
+	private static void showNpcSkillList(Player activeChar, int npcId)
 	{
 		final NpcTemplate npcData = NpcTable.getInstance().getTemplate(npcId);
 		if (npcData == null)
@@ -294,7 +280,7 @@ public class AdminEditNpc implements IAdminCommandHandler
 		activeChar.sendPacket(html);
 	}
 	
-	private static void showScriptsList(L2PcInstance activeChar, int npcId)
+	private static void showScriptsList(Player activeChar, int npcId)
 	{
 		final NpcTemplate npcData = NpcTable.getInstance().getTemplate(npcId);
 		if (npcData == null)

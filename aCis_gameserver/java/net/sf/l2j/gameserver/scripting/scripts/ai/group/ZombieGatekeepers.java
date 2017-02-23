@@ -20,10 +20,10 @@ import java.util.Map;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
@@ -36,18 +36,18 @@ public class ZombieGatekeepers extends L2AttackableAIScript
 		addAggroRangeEnterId(22136);
 	}
 	
-	private final Map<Integer, ArrayList<L2Character>> _attackersList = new LinkedHashMap<>();
+	private final Map<Integer, ArrayList<Character>> _attackersList = new LinkedHashMap<>();
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		int npcObjId = npc.getObjectId();
 		
-		L2Character target = isPet ? attacker.getPet() : attacker;
+		Character target = isPet ? attacker.getPet() : attacker;
 		
 		if (_attackersList.get(npcObjId) == null)
 		{
-			ArrayList<L2Character> player = new ArrayList<>();
+			ArrayList<Character> player = new ArrayList<>();
 			player.add(target);
 			_attackersList.put(npcObjId, player);
 		}
@@ -60,18 +60,18 @@ public class ZombieGatekeepers extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAggro(L2Npc npc, L2PcInstance player, boolean isPet)
+	public String onAggro(Npc npc, Player player, boolean isPet)
 	{
 		if ((player.getLevel() < 73) && !player.isGM())
 		{
-			((L2Attackable) npc).addDamageHate(player, 0, 999);
+			((Attackable) npc).addDamageHate(player, 0, 999);
 			npc.getAI().setIntention(CtrlIntention.ATTACK, player);
 			return super.onAggro(npc, player, isPet);
 		}
 		
 		int npcObjId = npc.getObjectId();
 		
-		L2Character target = isPet ? player.getPet() : player;
+		Character target = isPet ? player.getPet() : player;
 		
 		ItemInstance VisitorsMark = player.getInventory().getItemByItemId(8064);
 		ItemInstance FadedVisitorsMark = player.getInventory().getItemByItemId(8065);
@@ -83,18 +83,18 @@ public class ZombieGatekeepers extends L2AttackableAIScript
 		
 		if ((mark1 == 0) && (mark2 == 0) && (mark3 == 0))
 		{
-			((L2Attackable) npc).addDamageHate(target, 0, 999);
+			((Attackable) npc).addDamageHate(target, 0, 999);
 			npc.getAI().setIntention(CtrlIntention.ATTACK, target);
 		}
 		else
 		{
 			if ((_attackersList.get(npcObjId) == null) || !_attackersList.get(npcObjId).contains(target))
 			{
-				((L2Attackable) npc).getAggroList().remove(target);
+				((Attackable) npc).getAggroList().remove(target);
 			}
 			else
 			{
-				((L2Attackable) npc).addDamageHate(target, 0, 999);
+				((Attackable) npc).addDamageHate(target, 0, 999);
 				npc.getAI().setIntention(CtrlIntention.ATTACK, target);
 			}
 		}
@@ -103,7 +103,7 @@ public class ZombieGatekeepers extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
 		int npcObjId = npc.getObjectId();
 		if (_attackersList.get(npcObjId) != null)

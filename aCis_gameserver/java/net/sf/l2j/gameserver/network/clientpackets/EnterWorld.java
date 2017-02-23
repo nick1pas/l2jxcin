@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import java.sql.Connection;
@@ -39,8 +25,8 @@ import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Clan.SubPledge;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2ClassMasterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.ClassMaster;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
@@ -90,7 +76,7 @@ public class EnterWorld extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final L2PcInstance activeChar = getClient().getActiveChar();
+		final Player activeChar = getClient().getActiveChar();
 		if (activeChar == null)
 		{
 			_log.warning("EnterWorld failed! activeChar is null...");
@@ -141,7 +127,7 @@ public class EnterWorld extends L2GameClientPacket
 			final PledgeShowMemberListUpdate update = new PledgeShowMemberListUpdate(activeChar);
 			
 			// Send packets to others members.
-			for (L2PcInstance member : clan.getOnlineMembers())
+			for (Player member : clan.getOnlineMembers())
 			{
 				if (member == activeChar)
 					continue;
@@ -153,13 +139,13 @@ public class EnterWorld extends L2GameClientPacket
 			// Send a login notification to sponsor or apprentice, if logged.
 			if (activeChar.getSponsor() != 0)
 			{
-				final L2PcInstance sponsor = World.getInstance().getPlayer(activeChar.getSponsor());
+				final Player sponsor = World.getInstance().getPlayer(activeChar.getSponsor());
 				if (sponsor != null)
 					sponsor.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOUR_APPRENTICE_S1_HAS_LOGGED_IN).addCharName(activeChar));
 			}
 			else if (activeChar.getApprentice() != 0)
 			{
-				final L2PcInstance apprentice = World.getInstance().getPlayer(activeChar.getApprentice());
+				final Player apprentice = World.getInstance().getPlayer(activeChar.getApprentice());
 				if (apprentice != null)
 					apprentice.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOUR_SPONSOR_S1_HAS_LOGGED_IN).addCharName(activeChar));
 			}
@@ -356,7 +342,7 @@ public class EnterWorld extends L2GameClientPacket
 		if (!activeChar.isGM() && (!activeChar.isInSiege() || activeChar.getSiegeState() < 2) && activeChar.isInsideZone(ZoneId.SIEGE))
 			activeChar.teleToLocation(TeleportType.TOWN);
 		
-		L2ClassMasterInstance.showQuestionMark(activeChar);
+		ClassMaster.showQuestionMark(activeChar);
 		
 		activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 	}

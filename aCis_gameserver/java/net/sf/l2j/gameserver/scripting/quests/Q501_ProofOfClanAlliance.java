@@ -25,9 +25,9 @@ import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
 import net.sf.l2j.gameserver.scripting.QuestTimer;
@@ -146,7 +146,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 		}
 		
 		QuestState l;
-		L2PcInstance pleader = null;
+		Player pleader = null;
 		
 		if (leader)
 		{
@@ -167,7 +167,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 				}
 			}
 		}
-		for (L2PcInstance pl : st.getPlayer().getClan().getOnlineMembers())
+		for (Player pl : st.getPlayer().getClan().getOnlineMembers())
 		{
 			if ((pl != null) && (pl.getQuestState(getName()) != null))
 			{
@@ -177,7 +177,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		QuestState st = player.getQuestState(getName());
 		if ((st.getPlayer() == null) || (st.getPlayer().getClan() == null))
@@ -280,7 +280,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 	}
 	
 	@Override
-	public String onTalk(L2Npc npc, L2PcInstance player)
+	public String onTalk(Npc npc, Player player)
 	{
 		QuestState st = player.getQuestState(qn);
 		String htmltext = getNoQuestMsg();
@@ -511,7 +511,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance player, boolean isSunnon)
+	public String onKill(Npc npc, Player player, boolean isSunnon)
 	{
 		QuestState st = checkPlayerState(player, npc, STATE_STARTED);
 		if (st == null)
@@ -612,7 +612,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 		int attempts = leader.getInt("chest_try");
 		leader.set("chest_try", String.valueOf(attempts + 1));
 		
-		for (L2Npc npc : World.getInstance().getAllByNpcId(CHESTS, false))
+		for (Npc npc : World.getInstance().getAllByNpcId(CHESTS, false))
 		{
 			npc.deleteMe();
 		}
@@ -636,7 +636,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 			return;
 		}
 		
-		for (L2Npc npc : World.getInstance().getAllByNpcId(CHESTS, false))
+		for (Npc npc : World.getInstance().getAllByNpcId(CHESTS, false))
 		{
 			npc.deleteMe();
 		}
@@ -644,9 +644,9 @@ public class Q501_ProofOfClanAlliance extends Quest
 	}
 	
 	@Override
-	public String onDeath(L2Character npc, L2Character pc, L2PcInstance player)
+	public String onDeath(Character npc, Character pc, Player player)
 	{
-		QuestState st = checkPlayerState(player, (L2Npc) npc, STATE_STARTED);
+		QuestState st = checkPlayerState(player, (Npc) npc, STATE_STARTED);
 		if ((st.getPlayer() == null) || (st.getPlayer().getClan() == null))
 		{
 			st.exitQuest(true);

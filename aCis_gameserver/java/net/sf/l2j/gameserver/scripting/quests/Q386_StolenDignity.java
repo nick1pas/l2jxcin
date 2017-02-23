@@ -19,8 +19,8 @@ import java.util.Map;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Bingo;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
@@ -152,7 +152,7 @@ public class Q386_StolenDignity extends Quest
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		QuestState st = player.getQuestState(qn);
 		if (event.equalsIgnoreCase("30843-05.htm"))
@@ -196,7 +196,7 @@ public class Q386_StolenDignity extends Quest
 	}
 	
 	@Override
-	public String onTalk(L2Npc npc, L2PcInstance player)
+	public String onTalk(Npc npc, Player player)
 	{
 		QuestState st = player.getQuestState(qn);
 		if (st.getState() == STATE_CREATED)
@@ -212,7 +212,7 @@ public class Q386_StolenDignity extends Quest
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance player, boolean isPet)
+	public String onKill(Npc npc, Player player, boolean isPet)
 	{
 		QuestState st = checkPlayerCondition(player, npc, "cond", "1");
 		if (st == null)

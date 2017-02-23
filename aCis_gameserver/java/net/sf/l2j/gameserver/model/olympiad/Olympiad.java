@@ -1,21 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @author godson
- */
 package net.sf.l2j.gameserver.model.olympiad;
 
 import java.sql.Connection;
@@ -36,8 +18,8 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
-import net.sf.l2j.gameserver.model.actor.instance.L2OlympiadManagerInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.OlympiadManagerNpc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.model.zone.type.L2OlympiadStadiumZone;
@@ -459,7 +441,7 @@ public class Olympiad
 			}
 		}, getMillisToCompBegin());
 	}
-	public static void olympiadEnd(L2PcInstance player)
+	public static void olympiadEnd(Player player)
 	{
 	        long milliToEnd;
 	        if(_period == 0)
@@ -603,7 +585,7 @@ public class Olympiad
 		return _currentCycle;
 	}
 	
-	public boolean playerInStadia(L2PcInstance player)
+	public boolean playerInStadia(Player player)
 	{
 		return ZoneManager.getInstance().getZone(player, L2OlympiadStadiumZone.class) != null;
 	}
@@ -772,7 +754,7 @@ public class Olympiad
 		return names;
 	}
 	
-	public int getNoblessePasses(L2PcInstance player, boolean clear)
+	public int getNoblessePasses(Player player, boolean clear)
 	{
 		if ((player == null) || (_period != 1) || _noblesRank.isEmpty())
 			return 0;
@@ -921,7 +903,7 @@ public class Olympiad
 				else
 					announcement = "Olympiad class individual match is going to begin in Arena " + (game.getStadiumId() + 1) + " in a moment.";
 				
-				for (L2OlympiadManagerInstance manager : L2OlympiadManagerInstance.getInstances())
+				for (OlympiadManagerNpc manager : OlympiadManagerNpc.getInstances())
 					manager.broadcastPacket(new NpcSay(manager.getObjectId(), Say2.SHOUT, manager.getNpcId(), announcement));
 			}
 		}

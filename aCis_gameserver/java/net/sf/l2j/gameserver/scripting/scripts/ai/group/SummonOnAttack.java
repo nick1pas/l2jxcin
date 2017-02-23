@@ -20,10 +20,10 @@ package net.sf.l2j.gameserver.scripting.scripts.ai.group;
 
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
 public class SummonOnAttack extends L2AttackableAIScript
@@ -51,12 +51,12 @@ public class SummonOnAttack extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance player, int damage, boolean isPet, L2Skill skill)
+	public String onAttack(Npc npc, Player player, int damage, boolean isPet, L2Skill skill)
 	{
-		L2Character attacker = isPet ? player.getPet().getOwner() : player;
+		Character attacker = isPet ? player.getPet().getOwner() : player;
 		
 		npc.setIsRunning(true);
-		((L2Attackable) npc).addDamageHate(attacker, 0, 999);
+		((Attackable) npc).addDamageHate(attacker, 0, 999);
 		npc.getAI().setIntention(CtrlIntention.ATTACK, attacker);
 		
 		return super.onAttack(npc, player, damage, isPet, skill);

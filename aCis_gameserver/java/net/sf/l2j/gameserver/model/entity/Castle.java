@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.entity;
 
 import java.sql.Connection;
@@ -40,10 +26,10 @@ import net.sf.l2j.gameserver.model.L2ClanMember;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.TowerSpawn;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2ArtefactInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Door;
+import net.sf.l2j.gameserver.model.actor.instance.HolyThing;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.MercenaryTicket;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -66,13 +52,13 @@ public class Castle
 	private int _ownerId;
 	private L2Clan _formerOwner;
 	
-	private final List<L2DoorInstance> _doors = new ArrayList<>();
+	private final List<Door> _doors = new ArrayList<>();
 	private final List<MercenaryTicket> _tickets = new ArrayList<>(60);
 	private final List<Integer> _artifacts = new ArrayList<>(1);
 	private final List<Integer> _relatedNpcIds = new ArrayList<>();
 	
 	private final Set<ItemInstance> _droppedTickets = new ConcurrentSkipListSet<>();
-	private final List<L2Npc> _siegeGuards = new ArrayList<>();
+	private final List<Npc> _siegeGuards = new ArrayList<>();
 	
 	private final List<TowerSpawn> _controlTowers = new ArrayList<>();
 	private final List<TowerSpawn> _flameTowers = new ArrayList<>();
@@ -261,22 +247,22 @@ public class Castle
 		return getSiegeZone().getDistanceToZone(obj);
 	}
 	
-	public void closeDoor(L2PcInstance activeChar, int doorId)
+	public void closeDoor(Player activeChar, int doorId)
 	{
 		openCloseDoor(activeChar, doorId, false);
 	}
 	
-	public void openDoor(L2PcInstance activeChar, int doorId)
+	public void openDoor(Player activeChar, int doorId)
 	{
 		openCloseDoor(activeChar, doorId, true);
 	}
 	
-	public void openCloseDoor(L2PcInstance activeChar, int doorId, boolean open)
+	public void openCloseDoor(Player activeChar, int doorId, boolean open)
 	{
 		if (activeChar.getClanId() != _ownerId)
 			return;
 		
-		L2DoorInstance door = getDoor(doorId);
+		Door door = getDoor(doorId);
 		if (door != null)
 		{
 			if (open)
@@ -304,7 +290,7 @@ public class Castle
 					_formerOwner = oldOwner;
 				
 				// Dismount the old leader if he was riding a wyvern.
-				L2PcInstance oldLeader = oldOwner.getLeader().getPlayerInstance();
+				Player oldLeader = oldOwner.getLeader().getPlayerInstance();
 				if (oldLeader != null)
 				{
 					if (oldLeader.getMountType() == 2)
@@ -341,6 +327,9 @@ public class Castle
 			
 			clan.setCastle(0);
 			clan.broadcastToOnlineMembers(new PledgeShowInfoUpdate(clan));
+			
+			// Remove clan from siege registered clans (as owners are automatically added).
+			getSiege().getRegisteredClans().remove(clan);
 		}
 		
 		updateOwnerInDB(null);
@@ -356,7 +345,7 @@ public class Castle
 	 * @param activeChar Sends informative messages to that character (success or fail).
 	 * @param taxPercent The new tax rate to apply.
 	 */
-	public void setTaxPercent(L2PcInstance activeChar, int taxPercent)
+	public void setTaxPercent(Player activeChar, int taxPercent)
 	{
 		int maxTax;
 		switch (SevenSigns.getInstance().getSealOwner(SealType.STRIFE))
@@ -410,7 +399,7 @@ public class Castle
 	 */
 	public void spawnDoors(boolean isDoorWeak)
 	{
-		for (L2DoorInstance door : _doors)
+		for (Door door : _doors)
 		{
 			if (door.isDead())
 				door.doRevive();
@@ -426,7 +415,7 @@ public class Castle
 	 */
 	public void closeDoors()
 	{
-		for (L2DoorInstance door : _doors)
+		for (Door door : _doors)
 			door.closeMe();
 	}
 	
@@ -438,7 +427,7 @@ public class Castle
 	 */
 	public void upgradeDoor(int doorId, int hp, boolean db)
 	{
-		L2DoorInstance door = getDoor(doorId);
+		Door door = getDoor(doorId);
 		if (door == null)
 			return;
 		
@@ -492,7 +481,7 @@ public class Castle
 	 */
 	public void removeDoorUpgrade()
 	{
-		for (L2DoorInstance door : _doors)
+		for (Door door : _doors)
 			door.getStat().setUpgradeHpRatio(1);
 		
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
@@ -549,9 +538,9 @@ public class Castle
 		return _castleId;
 	}
 	
-	public L2DoorInstance getDoor(int doorId)
+	public Door getDoor(int doorId)
 	{
-		for (L2DoorInstance door : _doors)
+		for (Door door : _doors)
 		{
 			if (door.getDoorId() == doorId)
 				return door;
@@ -559,7 +548,7 @@ public class Castle
 		return null;
 	}
 	
-	public List<L2DoorInstance> getDoors()
+	public List<Door> getDoors()
 	{
 		return _doors;
 	}
@@ -664,7 +653,7 @@ public class Castle
 	{
 		if (_ownerId > 0)
 		{
-			for (L2Npc npc : _siegeGuards)
+			for (Npc npc : _siegeGuards)
 				npc.doDie(npc);
 			
 			_siegeGuards.clear();
@@ -845,7 +834,7 @@ public class Castle
 	
 	public boolean isGoodArtifact(L2Object object)
 	{
-		return object instanceof L2ArtefactInstance && _artifacts.contains(((L2ArtefactInstance) object).getNpcId());
+		return object instanceof HolyThing && _artifacts.contains(((HolyThing) object).getNpcId());
 	}
 	
 	/**
@@ -927,7 +916,7 @@ public class Castle
 		if (member == null)
 			return;
 		
-		final L2PcInstance player = member.getPlayerInstance();
+		final Player player = member.getPlayerInstance();
 		
 		if (player != null)
 		{

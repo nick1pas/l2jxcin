@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
-import net.sf.l2j.gameserver.model.actor.instance.L2FenceInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Fence;
 
 /**
- * Fence table to manage {@link L2FenceInstance} spawn/despawn.
+ * Fence table to manage {@link Fence} spawn/despawn.
  * @author Hasha
  */
 public class FenceTable
@@ -48,7 +48,7 @@ public class FenceTable
 		}
 	}
 	
-	private final List<L2FenceInstance> _fences;
+	private final List<Fence> _fences;
 	
 	public static FenceTable getInstance()
 	{
@@ -62,25 +62,25 @@ public class FenceTable
 	
 	/**
 	 * Returns list of all fences spawned in the world.
-	 * @return List<L2FenceInstance> : List of all fences.
+	 * @return List<Fence> : List of all fences.
 	 */
-	public final List<L2FenceInstance> getFences()
+	public final List<Fence> getFences()
 	{
 		return _fences;
 	}
 	
 	/**
-	 * Adds {@link L2FenceInstance} to the world.
+	 * Adds {@link Fence} to the world.
 	 * @param x : Spawn X world coordinate.
 	 * @param y : Spawn Y world coordinate.
 	 * @param z : Spawn Z world coordinate.
 	 * @param type : Type of the fence. 1..corner stones only, 2..fence + corner stones
-	 * @param sizeX : Size of the {@link L2FenceInstance} in X direction.
-	 * @param sizeY : Size of the {@link L2FenceInstance} in Y direction.
-	 * @param height : The height of {@link L2FenceInstance}.
-	 * @return The newly created L2FenceInstance object.
+	 * @param sizeX : Size of the {@link Fence} in X direction.
+	 * @param sizeY : Size of the {@link Fence} in Y direction.
+	 * @param height : The height of {@link Fence}.
+	 * @return The newly created Fence object.
 	 */
-	public final L2FenceInstance addFence(int x, int y, int z, int type, int sizeX, int sizeY, int height)
+	public final Fence addFence(int x, int y, int z, int type, int sizeX, int sizeY, int height)
 	{
 		final FenceSize fsx = getFenceSize(sizeX);
 		final FenceSize fsy = getFenceSize(sizeY);
@@ -113,7 +113,7 @@ public class FenceTable
 		final byte[][] geoData = GeoEngine.calculateGeoObject(inside);
 		
 		// create new fence
-		L2FenceInstance fence = new L2FenceInstance(type, sizeX, sizeY, height, geoX, geoY, geoZ, geoData);
+		Fence fence = new Fence(type, sizeX, sizeY, height, geoX, geoY, geoZ, geoData);
 		
 		// spawn fence to world
 		fence.spawnMe(x, y, z);
@@ -126,10 +126,10 @@ public class FenceTable
 	}
 	
 	/**
-	 * Remove given {@link L2FenceInstance} from the world.
-	 * @param fence : {@link L2FenceInstance} to be removed.
+	 * Remove given {@link Fence} from the world.
+	 * @param fence : {@link Fence} to be removed.
 	 */
-	public final void removeFence(L2FenceInstance fence)
+	public final void removeFence(Fence fence)
 	{
 		// remove fence from world
 		fence.decayMe();
@@ -140,9 +140,9 @@ public class FenceTable
 	}
 	
 	/**
-	 * Returns the size template of {@link L2FenceInstance} based on given size value.
+	 * Returns the size template of {@link Fence} based on given size value.
 	 * @param size : Requested size.
-	 * @return {@link FenceSize} : Size of {@link L2FenceInstance} in particular dimension.
+	 * @return {@link FenceSize} : Size of {@link Fence} in particular dimension.
 	 */
 	private static final FenceSize getFenceSize(int size)
 	{

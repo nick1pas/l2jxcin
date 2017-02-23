@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.handler.voicedcommandhandlers;
 
 import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 
 /**
@@ -13,7 +13,7 @@ public class LMVoicedInfo implements IVoicedCommandHandler
 	private static final String[] _voicedCommands = { "lmjoin", "lmleave" };
 	
 	@Override
-	public boolean useVoicedCommand(String command, L2PcInstance activeChar, String target)
+	public boolean useVoicedCommand(String command, Player activeChar, String target)
 	{
 		if (command.equalsIgnoreCase("lmjoin"))
 		{

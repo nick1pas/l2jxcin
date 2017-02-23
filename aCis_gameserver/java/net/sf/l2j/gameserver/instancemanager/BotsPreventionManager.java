@@ -19,9 +19,9 @@ import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Monster;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeCrest;
 
@@ -65,11 +65,11 @@ public class BotsPreventionManager
 		getimages();
 	}
 	
-	public void updatecounter(L2Character player, L2Character monster)
+	public void updatecounter(Character player, Character monster)
 	{
-		if ((player instanceof L2PcInstance) && (monster instanceof L2MonsterInstance))
+		if ((player instanceof Player) && (monster instanceof Monster))
 		{
-			L2PcInstance killer = (L2PcInstance) player;
+			Player killer = (Player) player;
 			
 			if (_validation.get(killer.getObjectId()) != null)
 			{
@@ -124,7 +124,7 @@ public class BotsPreventionManager
 		}
 	}
 	
-	public void prevalidationwindow(L2PcInstance player)
+	public void prevalidationwindow(Player player)
 	{
 		NpcHtmlMessage html = new NpcHtmlMessage(1);
 		StringBuilder tb = new StringBuilder();
@@ -140,7 +140,7 @@ public class BotsPreventionManager
 		player.sendPacket(html);
 	}
 	
-	private static void validationwindow(L2PcInstance player)
+	private static void validationwindow(Player player)
 	{
 		PlayerData container = _validation.get(player.getObjectId());
 		NpcHtmlMessage html = new NpcHtmlMessage(1);
@@ -169,7 +169,7 @@ public class BotsPreventionManager
 		player.sendPacket(html);
 	}
 	
-	public void punishmentnwindow(L2PcInstance player)
+	public void punishmentnwindow(Player player)
 	{
 		NpcHtmlMessage html = new NpcHtmlMessage(1);
 		StringBuilder tb = new StringBuilder();
@@ -184,7 +184,7 @@ public class BotsPreventionManager
 		player.sendPacket(html);
 	}
 	
-	public void validationtasks(L2PcInstance player)
+	public void validationtasks(Player player)
 	{
 		PlayerData container = new PlayerData();
 		randomizeimages(container, player);
@@ -206,7 +206,7 @@ public class BotsPreventionManager
 		_beginvalidation.put(player.getObjectId(), newTask);
 	}
 	
-	protected void randomizeimages(PlayerData container,L2PcInstance player)
+	protected void randomizeimages(PlayerData container,Player player)
 	{
 		int buttonscount = 4;
 		int imagescount = _images.size();
@@ -229,7 +229,7 @@ public class BotsPreventionManager
 		container.patternid = Integer.parseInt(uniquetoken);	
 	}
 	
-	protected void banpunishment(L2PcInstance player)
+	protected void banpunishment(Player player)
 	{
 		_validation.remove(player.getObjectId());
 		_beginvalidation.get(player.getObjectId()).cancel(true);
@@ -264,7 +264,7 @@ public class BotsPreventionManager
 		player.sendMessage("Unfortunately, colours doesn't match.");
 	}
 	
-	private static void changeaccesslevel(L2PcInstance targetPlayer, int lvl)
+	private static void changeaccesslevel(Player targetPlayer, int lvl)
 	{
 		if (targetPlayer.isOnline())
 		{
@@ -289,11 +289,11 @@ public class BotsPreventionManager
 		}
 	}
 	
-	private static void jailpunishment(L2PcInstance activeChar, int delay)
+	private static void jailpunishment(Player activeChar, int delay)
 	{
 		if (activeChar.isOnline())
 		{
-			activeChar.setPunishLevel(L2PcInstance.PunishLevel.JAIL, Config.PUNISHMENT_TIME);
+			activeChar.setPunishLevel(Player.PunishLevel.JAIL, Config.PUNISHMENT_TIME);
 		}
 		else
 		{
@@ -303,7 +303,7 @@ public class BotsPreventionManager
 				statement.setInt(1, -114356);
 				statement.setInt(2, -249645);
 				statement.setInt(3, -2984);
-				statement.setInt(4, L2PcInstance.PunishLevel.JAIL.value());
+				statement.setInt(4, Player.PunishLevel.JAIL.value());
 				statement.setLong(5, (delay > 0 ? delay * Config.PUNISHMENT_TIME * 100 : 0));
 				statement.setInt(6, activeChar.getObjectId());
 				
@@ -319,7 +319,7 @@ public class BotsPreventionManager
 		}
 	}
 	
-	public void AnalyseBypass(String command, L2PcInstance player)
+	public void AnalyseBypass(String command, Player player)
 	{
 		if (!_validation.containsKey(player.getObjectId()))
 			return;
@@ -358,10 +358,10 @@ public class BotsPreventionManager
 	
 	protected class countdown implements Runnable
 	{
-		private final L2PcInstance _player;
+		private final Player _player;
 		private int _time;
 		
-		public countdown(L2PcInstance player, int time)
+		public countdown(Player player, int time)
 		{
 			_time = time;
 			_player = player;
@@ -421,7 +421,7 @@ public class BotsPreventionManager
 		}
 	}
 	
-	public void CaptchaSuccessfull(L2PcInstance player)
+	public void CaptchaSuccessfull(Player player)
 	{
 		if (_validation.get(player.getObjectId()) != null)
 		{
@@ -429,7 +429,7 @@ public class BotsPreventionManager
 		}
 	}
 	
-	public Boolean IsAlredyInReportMode(L2PcInstance player)
+	public Boolean IsAlredyInReportMode(Player player)
 	{
 		if (_validation.get(player.getObjectId()) != null)
 		{
@@ -440,9 +440,9 @@ public class BotsPreventionManager
 	
 	private class ReportCheckTask implements Runnable
 	{
-		private final L2PcInstance _player;
+		private final Player _player;
 		
-		public ReportCheckTask(L2PcInstance player)
+		public ReportCheckTask(Player player)
 		{
 			_player = player;
 		}

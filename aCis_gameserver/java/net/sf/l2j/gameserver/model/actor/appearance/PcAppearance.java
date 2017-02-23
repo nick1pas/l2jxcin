@@ -14,12 +14,12 @@
  */
 package net.sf.l2j.gameserver.model.actor.appearance;
 
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.base.Sex;
 
 public final class PcAppearance
 {
-	private L2PcInstance _owner;
+	private Player _owner;
 	private byte _face;
 	private byte _hairColor;
 	private byte _hairStyle;
@@ -151,12 +151,12 @@ public final class PcAppearance
 		return _visibleTitle;
 	}
 
-	public void setOwner(L2PcInstance owner)
+	public void setOwner(Player owner)
 	{
 		_owner = owner;
 	}
 
-	public L2PcInstance getOwner()
+	public Player getOwner()
 	{
 		return _owner;
 	}

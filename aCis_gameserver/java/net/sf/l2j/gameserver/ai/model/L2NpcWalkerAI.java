@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.ai.model;
 
 import java.util.List;
@@ -23,8 +9,8 @@ import net.sf.l2j.gameserver.datatables.NpcWalkerRoutesTable;
 import net.sf.l2j.gameserver.model.L2NpcWalkerNode;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.SpawnLocation;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2NpcWalkerInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Walker;
 
 public class L2NpcWalkerAI extends L2CharacterAI implements Runnable
 {
@@ -39,7 +25,7 @@ public class L2NpcWalkerAI extends L2CharacterAI implements Runnable
 	private L2NpcWalkerNode _currentNode;
 	private int _currentPos;
 	
-	public L2NpcWalkerAI(L2Character character)
+	public L2NpcWalkerAI(Character character)
 	{
 		super(character);
 		
@@ -115,8 +101,8 @@ public class L2NpcWalkerAI extends L2CharacterAI implements Runnable
 	}
 	
 	@Override
-	public L2NpcWalkerInstance getActor()
+	public Walker getActor()
 	{
-		return (L2NpcWalkerInstance) super.getActor();
+		return (Walker) super.getActor();
 	}
 }

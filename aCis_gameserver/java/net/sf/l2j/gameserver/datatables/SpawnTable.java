@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.datatables;
 
 import java.sql.Connection;
@@ -67,20 +53,20 @@ public class SpawnTable
 				template1 = NpcTable.getInstance().getTemplate(rset.getInt("npc_templateid"));
 				if (template1 != null)
 				{
-					if (template1.isType("L2SiegeGuard"))
+					if (template1.isType("SiegeGuard"))
 					{
 						// Don't spawn guards, they're spawned during castle sieges.
 					}
-					else if (template1.isType("L2RaidBoss"))
+					else if (template1.isType("RaidBoss"))
 					{
 						// Don't spawn raidbosses ; raidbosses are supposed to be loaded in another table !
 						_log.warning("SpawnTable: RB (" + template1.getIdTemplate() + ") is in regular spawnlist, move it in raidboss_spawnlist.");
 					}
-					else if (!Config.ALLOW_CLASS_MASTERS && template1.isType("L2ClassMaster"))
+					else if (!Config.ALLOW_CLASS_MASTERS && template1.isType("ClassMaster"))
 					{
 						// Dont' spawn class masters (if config is setuped to false).
 					}
-					else if (!Config.WYVERN_ALLOW_UPGRADER && template1.isType("L2WyvernManager"))
+					else if (!Config.WYVERN_ALLOW_UPGRADER && template1.isType("WyvernManagerNpc"))
 					{
 						// Dont' spawn wyvern managers (if config is setuped to false).
 					}

@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.zone.type;
 
 import java.sql.Connection;
@@ -25,12 +11,12 @@ import java.util.logging.Level;
 
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 
@@ -93,14 +79,14 @@ public class L2BossZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onEnter(L2Character character)
+	protected void onEnter(Character character)
 	{
 		if (_enabled)
 		{
-			if (character instanceof L2PcInstance)
+			if (character instanceof Player)
 			{
 				// Get player and set zone info.
-				final L2PcInstance player = (L2PcInstance) character;
+				final Player player = (Player) character;
 				player.setInsideZone(ZoneId.NO_SUMMON_FRIEND, true);
 				
 				// Skip other checks for GM.
@@ -127,9 +113,9 @@ public class L2BossZone extends L2ZoneType
 				else
 					player.teleToLocation(TeleportType.TOWN);
 			}
-			else if (character instanceof L2Summon)
+			else if (character instanceof Summon)
 			{
-				final L2PcInstance player = ((L2Summon) character).getOwner();
+				final Player player = ((Summon) character).getOwner();
 				if (player != null)
 				{
 					if (_playerAllowed.contains(player.getObjectId()) || player.isGM())
@@ -143,20 +129,20 @@ public class L2BossZone extends L2ZoneType
 				}
 				
 				// Remove summon.
-				((L2Summon) character).unSummon(player);
+				((Summon) character).unSummon(player);
 			}
 		}
 	}
 	
 	@Override
-	protected void onExit(L2Character character)
+	protected void onExit(Character character)
 	{
-		if (character instanceof L2Playable && _enabled)
+		if (character instanceof Playable && _enabled)
 		{
-			if (character instanceof L2PcInstance)
+			if (character instanceof Player)
 			{
 				// Get player and set zone info.
-				final L2PcInstance player = (L2PcInstance) character;
+				final Player player = (Player) character;
 				player.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false);
 				
 				// Skip other checks for GM.
@@ -188,10 +174,10 @@ public class L2BossZone extends L2ZoneType
 			// If playables aren't found, force all bosses to return to spawnpoint.
 			if (!_characterList.isEmpty())
 			{
-				if (!getKnownTypeInside(L2Playable.class).isEmpty())
+				if (!getKnownTypeInside(Playable.class).isEmpty())
 					return;
 				
-				for (L2Attackable raid : getKnownTypeInside(L2Attackable.class))
+				for (Attackable raid : getKnownTypeInside(Attackable.class))
 				{
 					if (!raid.isRaid())
 						continue;
@@ -200,8 +186,8 @@ public class L2BossZone extends L2ZoneType
 				}
 			}
 		}
-		else if (character instanceof L2Attackable && character.isRaid())
-			((L2Attackable) character).returnHome(true);
+		else if (character instanceof Attackable && character.isRaid())
+			((Attackable) character).returnHome(true);
 	}
 	
 	/**
@@ -209,7 +195,7 @@ public class L2BossZone extends L2ZoneType
 	 * @param player : Player to allow entry.
 	 * @param duration : Entry permission is valid for this period (in seconds).
 	 */
-	public void allowPlayerEntry(L2PcInstance player, int duration)
+	public void allowPlayerEntry(Player player, int duration)
 	{
 		// Get player object id.
 		final int playerId = player.getObjectId();
@@ -240,7 +226,7 @@ public class L2BossZone extends L2ZoneType
 	 * Removes the player from allowed list and cancel the entry permition.
 	 * @param player : Player to remove from the zone.
 	 */
-	public void removePlayer(L2PcInstance player)
+	public void removePlayer(Player player)
 	{
 		// Get player object id.
 		final int id = player.getObjectId();
@@ -271,7 +257,7 @@ public class L2BossZone extends L2ZoneType
 		if (_characterList.isEmpty())
 			return;
 		
-		for (L2PcInstance player : getKnownTypeInside(L2PcInstance.class))
+		for (Player player : getKnownTypeInside(Player.class))
 		{
 			if (player.isOnline())
 				player.teleToLocation(x, y, z, 0);
@@ -287,7 +273,7 @@ public class L2BossZone extends L2ZoneType
 		if (_characterList.isEmpty())
 			return;
 		
-		for (L2PcInstance player : getKnownTypeInside(L2PcInstance.class))
+		for (Player player : getKnownTypeInside(Player.class))
 		{
 			if (player.isOnline())
 			{
@@ -301,16 +287,16 @@ public class L2BossZone extends L2ZoneType
 		_playerAllowed.clear();
 	}
 	
-	public void updateKnownList(L2Npc npc)
+	public void updateKnownList(Npc npc)
 	{
 		if (_characterList == null || _characterList.isEmpty())
 		{
 			return;
 		}
 		
-		for (L2Character character : _characterList.values())
+		for (Character character : _characterList.values())
 		{
-			if (character instanceof L2PcInstance)
+			if (character instanceof Player)
 			{
 				npc.addKnownObject(character);
 			}
@@ -318,12 +304,12 @@ public class L2BossZone extends L2ZoneType
 	}
 	
 	@Override
-	public void onDieInside(L2Character character)
+	public void onDieInside(Character character)
 	{
 	}
 	
 	@Override
-	public void onReviveInside(L2Character character)
+	public void onReviveInside(Character character)
 	{
 	}
 }

@@ -37,13 +37,12 @@ import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.instance.Door;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.itemcontainer.PcInventory;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadManager;
@@ -73,7 +72,7 @@ public class DMEvent
 	protected static final Logger _log = Logger.getLogger(DMEvent.class.getName());
 	private static final String htmlPath = "data/html/mods/DMEvent/";
 	private static EventState _state = EventState.INACTIVE;
-	private static L2Npc _lastNpcSpawn = null;
+	private static Npc _lastNpcSpawn = null;
 	private static Map<Integer, DMPlayer> _dmPlayer = new HashMap<>();
 	
 	public DMEvent()
@@ -203,7 +202,7 @@ public class DMEvent
 	{
 		for (int doorId : doors)
 		{
-			L2DoorInstance doorInstance = DoorTable.getInstance().getDoor(doorId);
+			Door doorInstance = DoorTable.getInstance().getDoor(doorId);
 			
 			if (doorInstance != null)
 			{
@@ -220,7 +219,7 @@ public class DMEvent
 	{
 		for (int doorId : doors)
 		{
-			L2DoorInstance doorInstance = DoorTable.getInstance().getDoor(doorId);
+			Door doorInstance = DoorTable.getInstance().getDoor(doorId);
 			
 			if (doorInstance != null)
 			{
@@ -238,7 +237,7 @@ public class DMEvent
 			spawn.setLoc(Config.DM_EVENT_PARTICIPATION_NPC_COORDINATES[0], Config.DM_EVENT_PARTICIPATION_NPC_COORDINATES[1], Config.DM_EVENT_PARTICIPATION_NPC_COORDINATES[2], 0);
 			
 			SpawnTable.getInstance().addNewSpawn(spawn, false);
-			final L2Npc npc = spawn.doSpawn(true);
+			final Npc npc = spawn.doSpawn(true);
 			npc.scheduleDespawn(Config.DM_EVENT_PARTICIPATION_NPC_ID);
 			npc.broadcastPacket(new MagicSkillUse(npc, npc, 1034, 1, 1, 1));
 		}
@@ -267,10 +266,10 @@ public class DMEvent
 		setState(EventState.STARTING);
 		
 		// Randomize and balance team distribution
-		Map<Integer, L2PcInstance> allParticipants = new HashMap<>();
+		Map<Integer, Player> allParticipants = new HashMap<>();
 		
-		L2PcInstance player;
-		Iterator<L2PcInstance> iter;
+		Player player;
+		Iterator<Player> iter;
 		if (needParticipationFee())
 		{
 			iter = allParticipants.values().iterator();
@@ -385,7 +384,7 @@ public class DMEvent
 	
 	private static void rewardPlayer(DMPlayer p, int pos)
 	{
-		L2PcInstance activeChar = p.getPlayer();
+		Player activeChar = p.getPlayer();
 		
 		// Check for nullpointer
 		if (activeChar == null)
@@ -504,10 +503,10 @@ public class DMEvent
 	
 	/**
 	 * Adds a player to a DMEvent<br>
-	 * @param activeChar as L2PcInstance<br>
+	 * @param activeChar as Player<br>
 	 * @return boolean: true if success, otherwise false<br>
 	 */
-	public static synchronized boolean addParticipant(L2PcInstance activeChar)
+	public static synchronized boolean addParticipant(Player activeChar)
 	{
 		// Check for nullpoitner
 		if (activeChar == null)
@@ -521,7 +520,7 @@ public class DMEvent
 		return true;
 	}
 	
-	public static boolean isPlayerParticipant(L2PcInstance activeChar)
+	public static boolean isPlayerParticipant(Player activeChar)
 	{
 		if (activeChar == null)
 			return false;
@@ -539,7 +538,7 @@ public class DMEvent
 	
 	public static boolean isPlayerParticipant(int objectId)
 	{
-		L2PcInstance activeChar = World.getInstance().getPlayer(objectId);
+		Player activeChar = World.getInstance().getPlayer(objectId);
 		if (activeChar == null)
 			return false;
 		return isPlayerParticipant(activeChar);
@@ -547,10 +546,10 @@ public class DMEvent
 	
 	/**
 	 * Removes a DMEvent player<br>
-	 * @param activeChar as L2PcInstance<br>
+	 * @param activeChar as Player<br>
 	 * @return boolean: true if success, otherwise false<br>
 	 */
-	public static boolean removeParticipant(L2PcInstance activeChar)
+	public static boolean removeParticipant(Player activeChar)
 	{
 		if (activeChar == null)
 			return false;
@@ -575,12 +574,12 @@ public class DMEvent
 		return Config.DM_EVENT_PARTICIPATION_FEE[0] != 0 && Config.DM_EVENT_PARTICIPATION_FEE[1] != 0;
 	}
 	
-	public static boolean hasParticipationFee(L2PcInstance playerInstance)
+	public static boolean hasParticipationFee(Player playerInstance)
 	{
 		return playerInstance.getInventory().getInventoryItemCount(Config.DM_EVENT_PARTICIPATION_FEE[0], -1) >= Config.DM_EVENT_PARTICIPATION_FEE[1];
 	}
 	
-	public static boolean payParticipationFee(L2PcInstance activeChar)
+	public static boolean payParticipationFee(Player activeChar)
 	{
 		return activeChar.destroyItemByItemId("DM Participation Fee", Config.DM_EVENT_PARTICIPATION_FEE[0], Config.DM_EVENT_PARTICIPATION_FEE[1], _lastNpcSpawn, true);
 	}
@@ -610,9 +609,9 @@ public class DMEvent
 	/**
 	 * Called when a player logs in<br>
 	 * <br>
-	 * @param activeChar as L2PcInstance<br>
+	 * @param activeChar as Player<br>
 	 */
-	public static void onLogin(L2PcInstance activeChar)
+	public static void onLogin(Player activeChar)
 	{
 		if (activeChar == null || (!isStarting() && !isStarted()))
 		{
@@ -628,9 +627,9 @@ public class DMEvent
 	/**
 	 * Called when a player logs out<br>
 	 * <br>
-	 * @param activeChar as L2PcInstance<br>
+	 * @param activeChar as Player<br>
 	 */
-	public static void onLogout(L2PcInstance activeChar)
+	public static void onLogout(Player activeChar)
 	{
 		if (activeChar != null && (isStarting() || isStarted() || isParticipating()))
 		{
@@ -644,9 +643,9 @@ public class DMEvent
 	 * Needs synchronization cause of the max player check<br>
 	 * <br>
 	 * @param command as String<br>
-	 * @param activeChar as L2PcInstance<br>
+	 * @param activeChar as Player<br>
 	 */
-	public static synchronized void onBypass(String command, L2PcInstance activeChar)
+	public static synchronized void onBypass(String command, Player activeChar)
 	{
 		if (activeChar == null || !isParticipating())
 			return;
@@ -804,10 +803,10 @@ public class DMEvent
 	/**
 	 * Is called when a player is killed<br>
 	 * <br>
-	 * @param killerCharacter as L2Character<br>
-	 * @param killedPlayerInstance as L2PcInstance<br>
+	 * @param killerCharacter as Character<br>
+	 * @param killedPlayerInstance as Player<br>
 	 */
-	public static void onKill(L2Character killerCharacter, L2PcInstance killedPlayerInstance)
+	public static void onKill(Character killerCharacter, Player killedPlayerInstance)
 	{
 		if (killedPlayerInstance == null || !isStarted())
 			return;
@@ -820,16 +819,16 @@ public class DMEvent
 		if (killerCharacter == null)
 			return;
 		
-		L2PcInstance killerPlayerInstance = null;
+		Player killerPlayerInstance = null;
 		
-		if (killerCharacter instanceof L2PetInstance || killerCharacter instanceof L2SummonInstance)
+		if (killerCharacter instanceof Pet || killerCharacter instanceof Summon)
 		{
-			killerPlayerInstance = ((L2Summon) killerCharacter).getOwner();
+			killerPlayerInstance = ((Summon) killerCharacter).getOwner();
 			if (killerPlayerInstance == null)
 				return;
 		}
-		else if (killerCharacter instanceof L2PcInstance)
-			killerPlayerInstance = (L2PcInstance) killerCharacter;
+		else if (killerCharacter instanceof Player)
+			killerPlayerInstance = (Player) killerCharacter;
 		else
 			return;
 		
@@ -848,7 +847,7 @@ public class DMEvent
 	 * <br>
 	 * @param activeChar
 	 */
-	public static void onTeleported(L2PcInstance activeChar)
+	public static void onTeleported(Player activeChar)
 	{
 		if (!isStarted() || activeChar == null || !isPlayerParticipant(activeChar.getObjectId()))
 			return;
@@ -884,7 +883,7 @@ public class DMEvent
 	/*
 	 * Return true if player valid for skill
 	 */
-	public static final boolean checkForDMSkill(L2PcInstance source, L2PcInstance target, L2Skill skill)
+	public static final boolean checkForDMSkill(Player source, Player target, L2Skill skill)
 	{
 		if (!isStarted())
 			return true;
@@ -949,11 +948,11 @@ public class DMEvent
 	/**
 	 * Called on every onAction in L2PcIstance<br>
 	 * <br>
-	 * @param activeChar as L2PcInstance<br>
+	 * @param activeChar as Player<br>
 	 * @param targetedPlayerObjectId as Integer<br>
 	 * @return boolean: true if player is allowed to target, otherwise false<br>
 	 */
-	public static boolean onAction(L2PcInstance activeChar, int targetedPlayerObjectId)
+	public static boolean onAction(Player activeChar, int targetedPlayerObjectId)
 	{
 		if (activeChar == null || !isStarted())
 			return true;

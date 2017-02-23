@@ -19,9 +19,9 @@ import java.util.HashMap;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Monster;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
@@ -228,7 +228,7 @@ public class NewbieHelper extends Quest
     }
     
     @Override
-    public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+    public String onAdvEvent(String event, Npc npc, Player player)
     {
         QuestState st = player.getQuestState(qn);
         QuestState qs = player.getQuestState(qnTutorial);
@@ -300,7 +300,7 @@ public class NewbieHelper extends Quest
     }
     
     @Override
-    public String onFirstTalk(L2Npc npc, L2PcInstance player)
+    public String onFirstTalk(Npc npc, Player player)
     {
         String htmltext = "";
         QuestState qs = player.getQuestState(qnTutorial);
@@ -423,7 +423,7 @@ public class NewbieHelper extends Quest
     }
     
     @Override
-    public String onKill(L2Npc npc, L2PcInstance player, boolean isPet)
+    public String onKill(Npc npc, Player player, boolean isPet)
     {
         QuestState st = checkPlayerState(player, npc, STATE_STARTED);
         QuestState qs = player.getQuestState(qnTutorial);
@@ -441,7 +441,7 @@ public class NewbieHelper extends Quest
         if (ex <= 2 && st.getState() == Quest.STATE_STARTED && qs.getInt("Gemstone") == 0)
             if (Rnd.get(100) < 25)
             {
-                ((L2MonsterInstance) npc).dropItem(player, new IntIntHolder(BLUE_GEM, 1));
+                ((Monster) npc).dropItem(player, new IntIntHolder(BLUE_GEM, 1));
                 st.playSound("ItemSound.quest_tutorial");
             }
         return null;

@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.entity;
 
 import java.sql.Connection;
@@ -31,9 +17,9 @@ import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.group.Party.MessageType;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -53,7 +39,7 @@ public class CursedWeapon
 	private ItemInstance _item = null;
 	
 	private int _playerId = 0;
-	protected L2PcInstance _player = null;
+	protected Player _player = null;
 	
 	// Skill id and max level. Max level is took from skillid (allow custom skills).
 	private final int _skillId;
@@ -311,7 +297,7 @@ public class CursedWeapon
 	 * It drops the item on ground, and reset player stats.
 	 * @param killer : The player who killed CW owner.
 	 */
-	private void dropFromPlayer(L2Character killer)
+	private void dropFromPlayer(Character killer)
 	{
 		_player.abortAttack();
 		
@@ -352,7 +338,7 @@ public class CursedWeapon
 	 * @param attackable : The monster who dropped CW.
 	 * @param player : The player who killed the monster.
 	 */
-	private void dropFromMob(L2Attackable attackable, L2PcInstance player)
+	private void dropFromMob(Attackable attackable, Player player)
 	{
 		_isActivated = false;
 		
@@ -450,7 +436,7 @@ public class CursedWeapon
 		}
 	}
 	
-	public boolean checkDrop(L2Attackable attackable, L2PcInstance player)
+	public boolean checkDrop(Attackable attackable, Player player)
 	{
 		if (Rnd.get(1000000) < _dropRate)
 		{
@@ -467,7 +453,7 @@ public class CursedWeapon
 		return false;
 	}
 	
-	public void activate(L2PcInstance player, ItemInstance item)
+	public void activate(Player player, ItemInstance item)
 	{
 		// if the player is mounted, attempt to unmount first and pick it if successful.
 		if (player.isMounted() && !player.dismount())
@@ -640,7 +626,7 @@ public class CursedWeapon
 	 * This method checks if the CW is dropped or simply dissapears.
 	 * @param killer : The killer of CW's owner.
 	 */
-	public void dropIt(L2Character killer)
+	public void dropIt(Character killer)
 	{
 		// Remove it
 		if (Rnd.get(100) <= _disapearChance)
@@ -719,7 +705,7 @@ public class CursedWeapon
 		_stageKills = stageKills;
 	}
 	
-	public void setPlayer(L2PcInstance player)
+	public void setPlayer(Player player)
 	{
 		_player = player;
 	}
@@ -774,7 +760,7 @@ public class CursedWeapon
 		return _playerId;
 	}
 	
-	public L2PcInstance getPlayer()
+	public Player getPlayer()
 	{
 		return _player;
 	}
@@ -824,7 +810,7 @@ public class CursedWeapon
 		return _hungryTime;
 	}
 	
-	public void goTo(L2PcInstance player)
+	public void goTo(Player player)
 	{
 		if (player == null)
 			return;

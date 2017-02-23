@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
 public final class RequestAnswerJoinAlly extends L2GameClientPacket
@@ -17,11 +17,11 @@ public final class RequestAnswerJoinAlly extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final L2PcInstance activeChar = getClient().getActiveChar();
+		final Player activeChar = getClient().getActiveChar();
 		if (activeChar == null)
 			return;
 		
-		final L2PcInstance requestor = activeChar.getRequest().getPartner();
+		final Player requestor = activeChar.getRequest().getPartner();
 		if (requestor == null)
 			return;
 		

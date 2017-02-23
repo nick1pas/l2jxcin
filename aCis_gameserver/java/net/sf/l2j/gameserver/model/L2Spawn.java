@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model;
 
 import java.lang.reflect.Constructor;
@@ -23,16 +9,16 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 
 /**
- * This class manages the spawn and respawn a {@link L2Npc}.<br>
+ * This class manages the spawn and respawn a {@link Npc}.<br>
  * <br>
- * L2Npc can be spawned to already defined {@link SpawnLocation}. If not defined, {@link L2Npc} is not spawned.
+ * Npc can be spawned to already defined {@link SpawnLocation}. If not defined, {@link Npc} is not spawned.
  */
 public final class L2Spawn implements Runnable
 {
@@ -41,11 +27,11 @@ public final class L2Spawn implements Runnable
 	// the link on the NpcTemplate object containing generic and static properties of this spawn (ex : RewardExp, RewardSP, AggroRange...)
 	private NpcTemplate _template;
 	
-	// the generic constructor of L2Npc managed by this L2Spawn
+	// the generic constructor of Npc managed by this L2Spawn
 	private Constructor<?> _constructor;
 	
-	// the instance if L2Npc
-	private L2Npc _npc;
+	// the instance if Npc
+	private Npc _npc;
 	
 	// spawn location
 	private SpawnLocation _loc;
@@ -66,15 +52,15 @@ public final class L2Spawn implements Runnable
 	 * Each L2Spawn owns generic and static properties (ex : RewardExp, RewardSP, AggroRange...). All of those properties are stored in a different L2NpcTemplate for each type of L2Spawn. Each template is loaded once in the server cache memory (reduce memory use). When a new instance of L2Spawn is
 	 * created, server just create a link between the instance and the template. This link is stored in <B>_template</B><BR>
 	 * <BR>
-	 * Each L2Npc is linked to a L2Spawn that manages its spawn and respawn (delay, location...). This link is stored in <B>_spawn</B> of the L2Npc<BR>
+	 * Each Npc is linked to a L2Spawn that manages its spawn and respawn (delay, location...). This link is stored in <B>_spawn</B> of the Npc<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B><BR>
 	 * <BR>
 	 * <li>Set the _template of the L2Spawn</li>
-	 * <li>Calculate the implementationName used to generate the generic constructor of L2Npc managed by this L2Spawn</li>
-	 * <li>Create the generic constructor of L2Npc managed by this L2Spawn</li><BR>
+	 * <li>Calculate the implementationName used to generate the generic constructor of Npc managed by this L2Spawn</li>
+	 * <li>Create the generic constructor of Npc managed by this L2Spawn</li><BR>
 	 * <BR>
-	 * @param template : {@link NpcTemplate} the template of {@link L2Npc} to be spawned.
+	 * @param template : {@link NpcTemplate} the template of {@link Npc} to be spawned.
 	 * @throws SecurityException
 	 * @throws ClassNotFoundException
 	 * @throws NoSuchMethodException
@@ -86,13 +72,13 @@ public final class L2Spawn implements Runnable
 		if (_template == null)
 			return;
 		
-		// Create the generic constructor of L2Npc managed by this L2Spawn
+		// Create the generic constructor of Npc managed by this L2Spawn
 		Class<?>[] parameters =
 		{
 			int.class,
 			Class.forName("net.sf.l2j.gameserver.model.actor.template.NpcTemplate")
 		};
-		_constructor = Class.forName("net.sf.l2j.gameserver.model.actor.instance." + _template.getType() + "Instance").getConstructor(parameters);
+		_constructor = Class.forName("net.sf.l2j.gameserver.model.actor.instance." + _template.getType()).getConstructor(parameters);
 	}
 	
 	/**
@@ -115,9 +101,9 @@ public final class L2Spawn implements Runnable
 	
 	/**
 	 * Return the instance of NPC.
-	 * @return {@link L2Npc} : Instance of NPC.
+	 * @return {@link Npc} : Instance of NPC.
 	 */
-	public L2Npc getNpc()
+	public Npc getNpc()
 	{
 		return _npc;
 	}
@@ -293,70 +279,70 @@ public final class L2Spawn implements Runnable
 		return _respawnMaxDelay;
 	}
 
-	public L2Npc spawnOne()
+	public Npc spawnOne()
 	{
 		return doSpawn();
 	}
 
-	public L2Npc doSpawn()
+	public Npc doSpawn()
 	{
 		return doSpawn(false);
 	}
 	
 	/**
-	 * Create the {@link L2Npc}, add it to the world and launch its onSpawn() action.<BR>
+	 * Create the {@link Npc}, add it to the world and launch its onSpawn() action.<BR>
 	 * <BR>
 	 * <B><U> Concept</U> :</B><BR>
 	 * <BR>
-	 * L2Npc can be spawned to already defined {@link SpawnLocation}. If not defined, {@link L2Npc} is not spawned.<BR>
+	 * Npc can be spawned to already defined {@link SpawnLocation}. If not defined, {@link Npc} is not spawned.<BR>
 	 * <BR>
 	 * <B><U> Actions sequence for each spawn</U> : </B><BR>
 	 * <ul>
-	 * <li>Get {@link L2Npc} initialize parameters and generate its object ID</li>
-	 * <li>Call the constructor of the {@link L2Npc}</li>
-	 * <li>Link the {@link L2Npc} to this {@link L2Spawn}</li>
+	 * <li>Get {@link Npc} initialize parameters and generate its object ID</li>
+	 * <li>Call the constructor of the {@link Npc}</li>
+	 * <li>Link the {@link Npc} to this {@link L2Spawn}</li>
 	 * <li>Make {@link SpawnLocation} check, when exists spawn process continues</li>
-	 * <li>Reset {@link L2Npc} parameters - for re-spawning of existing {@link L2Npc}</li>
+	 * <li>Reset {@link Npc} parameters - for re-spawning of existing {@link Npc}</li>
 	 * <li>Calculate position using {@link SpawnLocation} and geodata</li>
-	 * <li>Set the HP and MP of the {@link L2Npc} to the max</li>
-	 * <li>Set the position and heading of the {@link L2Npc} (random heading is calculated, if not defined : value -1)</li>
-	 * <li>Spawn {@link L2Npc} to the world</li>
+	 * <li>Set the HP and MP of the {@link Npc} to the max</li>
+	 * <li>Set the position and heading of the {@link Npc} (random heading is calculated, if not defined : value -1)</li>
+	 * <li>Spawn {@link Npc} to the world</li>
 	 * </ul>
 	 * @param isSummonSpawn When true, summon magic circle will appear.
 	 * @return the newly created instance.
 	 */
-	public L2Npc doSpawn(boolean isSummonSpawn)
+	public Npc doSpawn(boolean isSummonSpawn)
 	{
 		try
 		{
-			// Check if the L2Spawn is not a L2Pet or L2Minion
-			if (_template.isType("L2Pet") || _template.isType("L2Minion"))
+			// Check if the L2Spawn is not a Pet.
+			if (_template.isType("Pet"))
 				return null;
 			
-			// Get L2Npc Init parameters and its generate an Identifier
+			// Get Npc Init parameters and its generate an Identifier
 			Object[] parameters =
 			{
 				IdFactory.getInstance().getNextId(),
 				_template
 			};
 			
-			// Call the constructor of the L2Npc (can be a L2ArtefactInstance, L2FriendlyMobInstance, L2GuardInstance, L2MonsterInstance, L2SiegeGuardInstance, L2BoxInstance, L2FeedableBeastInstance, L2TamedBeastInstance, L2NpcInstance)
+			// Call the constructor of the Npc (can be a L2ArtefactInstance, L2FriendlyMobInstance, L2GuardInstance, Monster, SiegeGuard, L2BoxInstance, L2FeedableBeastInstance, TamedBeast, Npc)
 			Object tmp = _constructor.newInstance(parameters);
 			
-			if (isSummonSpawn && tmp instanceof L2Character)
-				((L2Character) tmp).setShowSummonAnimation(isSummonSpawn);
+			if (isSummonSpawn && tmp instanceof Character)
+				((Character) tmp).setShowSummonAnimation(isSummonSpawn);
 			
-			// Check if the Instance is a L2Npc
-			if (!(tmp instanceof L2Npc))
+			// Check if the Instance is a Npc
+			if (!(tmp instanceof Npc))
 				return null;
 			
-			// create final instance of L2Npc
-			_npc = (L2Npc) tmp;
+			// create final instance of Npc
+			_npc = (Npc) tmp;
 			
-			// assign L2Spawn to L2Npc
+			// assign L2Spawn to Npc
 			_npc.setSpawn(this);
 			
-			// initialize L2Npc and spawn it
+			// initialize Npc and spawn it
 			initializeAndSpawn();
 			
 			return _npc;
@@ -399,7 +385,7 @@ public final class L2Spawn implements Runnable
 	}
 	
 	/**
-	 * Initializes the {@link L2Npc} based on data in this L2Spawn and spawn {@link L2Npc} into the world.
+	 * Initializes the {@link Npc} based on data in this L2Spawn and spawn {@link Npc} into the world.
 	 */
 	private void initializeAndSpawn()
 	{
@@ -420,7 +406,7 @@ public final class L2Spawn implements Runnable
 		// reset script value
 		_npc.setScriptValue(0);
 		
-		// The L2Npc is spawned at the exact position (Lox, Locy, Locz)
+		// The Npc is spawned at the exact position (Lox, Locy, Locz)
 		int locx = _loc.getX();
 		int locy = _loc.getY();
 		int locz = GeoEngine.getInstance().getHeight(locx, locy, _loc.getZ());
@@ -429,15 +415,15 @@ public final class L2Spawn implements Runnable
 		if (Math.abs(locz - _loc.getZ()) > 200)
 			locz = _loc.getZ();
 		
-		// Set the HP and MP of the L2Npc to the max
+		// Set the HP and MP of the Npc to the max
 		_npc.setCurrentHpMp(_npc.getMaxHp(), _npc.getMaxMp());
 		
 		// when champion mod is enabled, try to make NPC a champion
 		if (Config.CHAMPION_FREQUENCY > 0)
 		{
 			// It can't be a Raid, a Raid minion nor a minion. Quest mobs and chests are disabled too.
-			if (_npc instanceof L2MonsterInstance && !getTemplate().cantBeChampion() && _npc.getLevel() >= Config.CHAMP_MIN_LVL && _npc.getLevel() <= Config.CHAMP_MAX_LVL && !_npc.isRaid() && !((L2MonsterInstance) _npc).isRaidMinion() && !((L2MonsterInstance) _npc).isMinion())
-				((L2Attackable) _npc).setChampion(Rnd.get(100) < Config.CHAMPION_FREQUENCY);
+			if (_npc instanceof Monster && !getTemplate().cantBeChampion() && _npc.getLevel() >= Config.CHAMP_MIN_LVL && _npc.getLevel() <= Config.CHAMP_MAX_LVL && !_npc.isRaid() && !((Monster) _npc).isRaidMinion() && !((Monster) _npc).isMinion())
+				((Attackable) _npc).setChampion(Rnd.get(100) < Config.CHAMPION_FREQUENCY);
 		}
 		
 		// set heading (random heading if not defined)

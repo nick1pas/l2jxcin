@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.scripting.scripts.teleports;
 
 import java.util.List;
@@ -23,8 +9,8 @@ import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
@@ -85,7 +71,7 @@ public class GrandBossTeleporters extends Quest
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		String htmltext = "";
 		QuestState st = player.getQuestState(qn);
@@ -131,7 +117,7 @@ public class GrandBossTeleporters extends Quest
 	}
 	
 	@Override
-	public String onFirstTalk(L2Npc npc, L2PcInstance player)
+	public String onFirstTalk(Npc npc, Player player)
 	{
 		String htmltext = "";
 		QuestState st = player.getQuestState(qn);
@@ -161,7 +147,7 @@ public class GrandBossTeleporters extends Quest
 	}
 	
 	@Override
-	public String onTalk(L2Npc npc, L2PcInstance player)
+	public String onTalk(Npc npc, Player player)
 	{
 		String htmltext = "";
 		QuestState st = player.getQuestState(getName());
@@ -278,10 +264,10 @@ public class GrandBossTeleporters extends Quest
 						status = GrandBossManager.getInstance().getBossStatus(Sailren.SAILREN);
 						if (status == Sailren.DORMANT)
 						{
-							final List<L2PcInstance> party = player.getParty().getMembers();
+							final List<Player> party = player.getParty().getMembers();
 							
 							// Check players conditions.
-							for (L2PcInstance member : party)
+							for (Player member : party)
 							{
 								if (member.getLevel() < 70)
 									return "32109-06.htm";
@@ -296,7 +282,7 @@ public class GrandBossTeleporters extends Quest
 							final L2BossZone nest = ZoneManager.getInstance().getZoneById(110015, L2BossZone.class);
 							
 							// Teleport players.
-							for (L2PcInstance member : party)
+							for (Player member : party)
 							{
 								if (nest != null)
 								{

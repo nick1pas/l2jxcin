@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model;
 
 import net.sf.l2j.gameserver.templates.StatsSet;
@@ -34,7 +20,7 @@ public class HelperBuff
 	}
 	
 	/**
-	 * @return the lower level that the L2PcInstance must achieve in order to obtain this buff.
+	 * @return the lower level that the Player must achieve in order to obtain this buff.
 	 */
 	public int getLowerLevel()
 	{
@@ -42,7 +28,7 @@ public class HelperBuff
 	}
 	
 	/**
-	 * @return the upper level that the L2PcInstance mustn't exceed in order to obtain this buff.
+	 * @return the upper level that the Player mustn't exceed in order to obtain this buff.
 	 */
 	public int getUpperLevel()
 	{
@@ -50,7 +36,7 @@ public class HelperBuff
 	}
 	
 	/**
-	 * @return the skill id of the buff that the L2PcInstance will receive.
+	 * @return the skill id of the buff that the Player will receive.
 	 */
 	public int getSkillId()
 	{
@@ -58,7 +44,7 @@ public class HelperBuff
 	}
 	
 	/**
-	 * @return the Level of the buff that the L2PcInstance will receive.
+	 * @return the Level of the buff that the Player will receive.
 	 */
 	public int getSkillLevel()
 	{

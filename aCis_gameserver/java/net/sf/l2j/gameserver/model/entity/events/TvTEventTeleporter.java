@@ -18,14 +18,14 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Duel.DuelState;
 
 public class TvTEventTeleporter implements Runnable
 {
 	/** The instance of the player to teleport */
-	private L2PcInstance _playerInstance = null;
+	private Player _playerInstance = null;
 	/** Coordinates of the spot to teleport to */
 	private int[] _coordinates = new int[3];
 	/** Admin removed this player from event */
@@ -34,12 +34,12 @@ public class TvTEventTeleporter implements Runnable
 	/**
 	 * Initialize the teleporter and start the delayed task<br>
 	 * <br>
-	 * @param playerInstance as L2PcInstance<br>
+	 * @param playerInstance as Player<br>
 	 * @param coordinates as int[]<br>
 	 * @param fastSchedule as boolean<br>
 	 * @param adminRemove as boolean<br>
 	 */
-	public TvTEventTeleporter(L2PcInstance playerInstance, int[] coordinates, boolean fastSchedule, boolean adminRemove)
+	public TvTEventTeleporter(Player playerInstance, int[] coordinates, boolean fastSchedule, boolean adminRemove)
 	{
 		_playerInstance = playerInstance;
 		_coordinates = coordinates;
@@ -66,7 +66,7 @@ public class TvTEventTeleporter implements Runnable
 		if (_playerInstance == null)
 			return;
 		
-		L2Summon summon = _playerInstance.getPet();
+		Summon summon = _playerInstance.getPet();
 		
 		if (summon != null)
 			summon.unSummon(_playerInstance);

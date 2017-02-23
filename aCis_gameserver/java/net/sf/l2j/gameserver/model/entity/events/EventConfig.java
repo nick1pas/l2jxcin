@@ -18,7 +18,7 @@ import java.math.BigInteger;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.group.Party.MessageType;
 
@@ -27,7 +27,7 @@ import net.sf.l2j.gameserver.model.group.Party.MessageType;
  */
 public class EventConfig
 {
-	public static void removeParty(L2PcInstance activeChar)
+	public static void removeParty(Player activeChar)
 	{
 		if (activeChar.getParty() != null)
 		{

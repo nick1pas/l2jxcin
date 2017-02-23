@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.actor.status;
 
 import net.sf.l2j.commons.random.Rnd;
@@ -19,12 +5,12 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.instancemanager.DuelManager;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance.StoreType;
-import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.Player.StoreType;
+import net.sf.l2j.gameserver.model.actor.instance.Servitor;
 import net.sf.l2j.gameserver.model.actor.stat.PcStat;
 import net.sf.l2j.gameserver.model.entity.Duel.DuelState;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -39,7 +25,7 @@ public class PcStatus extends PlayableStatus
 {
 	private double _currentCp = 0;
 	
-	public PcStatus(L2PcInstance activeChar)
+	public PcStatus(Player activeChar)
 	{
 		super(activeChar);
 	}
@@ -54,18 +40,18 @@ public class PcStatus extends PlayableStatus
 	}
 	
 	@Override
-	public final void reduceHp(double value, L2Character attacker)
+	public final void reduceHp(double value, Character attacker)
 	{
 		reduceHp(value, attacker, true, false, false, false);
 	}
 	
 	@Override
-	public final void reduceHp(double value, L2Character attacker, boolean awake, boolean isDOT, boolean isHPConsumption)
+	public final void reduceHp(double value, Character attacker, boolean awake, boolean isDOT, boolean isHPConsumption)
 	{
 		reduceHp(value, attacker, awake, isDOT, isHPConsumption, false);
 	}
 	
-	public final void reduceHp(double value, L2Character attacker, boolean awake, boolean isDOT, boolean isHPConsumption, boolean ignoreCP)
+	public final void reduceHp(double value, Character attacker, boolean awake, boolean isDOT, boolean isHPConsumption, boolean ignoreCP)
 	{
 		if (getActiveChar().isDead())
 			return;
@@ -103,7 +89,7 @@ public class PcStatus extends PlayableStatus
 		
 		if (attacker != null && attacker != getActiveChar())
 		{
-			final L2PcInstance attackerPlayer = attacker.getActingPlayer();
+			final Player attackerPlayer = attacker.getActingPlayer();
 			if (attackerPlayer != null)
 			{
 				if (attackerPlayer.isGM() && !attackerPlayer.getAccessLevel().canGiveDamage())
@@ -122,8 +108,8 @@ public class PcStatus extends PlayableStatus
 			}
 			
 			// Check and calculate transfered damage
-			final L2Summon summon = getActiveChar().getPet();
-			if (summon != null && summon instanceof L2SummonInstance && Util.checkIfInRange(900, getActiveChar(), summon, true))
+			final Summon summon = getActiveChar().getPet();
+			if (summon != null && summon instanceof Servitor && Util.checkIfInRange(900, getActiveChar(), summon, true))
 			{
 				tDmg = (int) value * (int) getActiveChar().getStat().calcStat(Stats.TRANSFER_DAMAGE_PERCENT, 0, null, null) / 100;
 				
@@ -137,7 +123,7 @@ public class PcStatus extends PlayableStatus
 				}
 			}
 			
-			if (!ignoreCP && attacker instanceof L2Playable)
+			if (!ignoreCP && attacker instanceof Playable)
 			{
 				if (getCurrentCp() >= value)
 				{
@@ -154,7 +140,7 @@ public class PcStatus extends PlayableStatus
 			if (fullValue > 0 && !isDOT)
 			{
 				SystemMessage smsg;
-				// Send a System Message to the L2PcInstance
+				// Send a System Message to the Player
 				smsg = SystemMessage.getSystemMessage(SystemMessageId.S1_GAVE_YOU_S2_DMG);
 				smsg.addCharName(attacker);
 				smsg.addNumber(fullValue);
@@ -301,15 +287,15 @@ public class PcStatus extends PlayableStatus
 	{
 		final PcStat pcStat = getActiveChar().getStat();
 		
-		// Modify the current CP of the L2Character.
+		// Modify the current CP of the Character.
 		if (getCurrentCp() < pcStat.getMaxCp())
 			setCurrentCp(getCurrentCp() + Formulas.calcCpRegen(getActiveChar()), false);
 		
-		// Modify the current HP of the L2Character.
+		// Modify the current HP of the Character.
 		if (getCurrentHp() < pcStat.getMaxHp())
 			setCurrentHp(getCurrentHp() + Formulas.calcHpRegen(getActiveChar()), false);
 		
-		// Modify the current MP of the L2Character.
+		// Modify the current MP of the Character.
 		if (getCurrentMp() < pcStat.getMaxMp())
 			setCurrentMp(getCurrentMp() + Formulas.calcMpRegen(getActiveChar()), false);
 		
@@ -318,8 +304,8 @@ public class PcStatus extends PlayableStatus
 	}
 	
 	@Override
-	public L2PcInstance getActiveChar()
+	public Player getActiveChar()
 	{
-		return (L2PcInstance) super.getActiveChar();
+		return (Player) super.getActiveChar();
 	}
 }

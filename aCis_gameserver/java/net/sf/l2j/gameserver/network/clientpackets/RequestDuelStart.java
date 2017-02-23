@@ -1,21 +1,7 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.group.CommandChannel;
 import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -37,11 +23,11 @@ public final class RequestDuelStart extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final L2PcInstance activeChar = getClient().getActiveChar();
+		final Player activeChar = getClient().getActiveChar();
 		if (activeChar == null)
 			return;
 		
-		final L2PcInstance targetChar = World.getInstance().getPlayer(_player);
+		final Player targetChar = World.getInstance().getPlayer(_player);
 		if (targetChar == null || activeChar == targetChar)
 		{
 			activeChar.sendPacket(SystemMessageId.THERE_IS_NO_OPPONENT_TO_RECEIVE_YOUR_CHALLENGE_FOR_A_DUEL);
@@ -88,7 +74,7 @@ public final class RequestDuelStart extends L2GameClientPacket
 			}
 			
 			// Check if every player is ready for a duel.
-			for (L2PcInstance member : activeCharParty.getMembers())
+			for (Player member : activeCharParty.getMembers())
 			{
 				if (member != activeChar && !member.canDuel())
 				{
@@ -97,7 +83,7 @@ public final class RequestDuelStart extends L2GameClientPacket
 				}
 			}
 			
-			for (L2PcInstance member : targetCharParty.getMembers())
+			for (Player member : targetCharParty.getMembers())
 			{
 				if (member != targetChar && !member.canDuel())
 				{
@@ -106,7 +92,7 @@ public final class RequestDuelStart extends L2GameClientPacket
 				}
 			}
 			
-			final L2PcInstance partyLeader = targetCharParty.getLeader();
+			final Player partyLeader = targetCharParty.getLeader();
 			
 			// Send request to targetChar's party leader.
 			if (!partyLeader.isProcessingRequest())
@@ -121,10 +107,10 @@ public final class RequestDuelStart extends L2GameClientPacket
 					targetCharChannel.removeParty(targetCharParty);
 				
 				// Partymatching
-				for (L2PcInstance member : activeCharParty.getMembers())
+				for (Player member : activeCharParty.getMembers())
 					member.removeMeFromPartyMatch();
 				
-				for (L2PcInstance member : targetCharParty.getMembers())
+				for (Player member : targetCharParty.getMembers())
 					member.removeMeFromPartyMatch();
 				
 				activeChar.onTransactionRequest(partyLeader);

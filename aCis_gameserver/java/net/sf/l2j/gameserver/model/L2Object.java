@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model;
 
 import java.util.ArrayList;
@@ -24,11 +10,11 @@ import net.sf.l2j.commons.math.MathUtil;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2FenceInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Door;
+import net.sf.l2j.gameserver.model.actor.instance.Fence;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
@@ -66,17 +52,17 @@ public abstract class L2Object
 		_objectId = objectId;
 	}
 	
-	public void onAction(L2PcInstance player)
+	public void onAction(Player player)
 	{
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 	
-	public void onActionShift(L2PcInstance player)
+	public void onActionShift(Player player)
 	{
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
 	
-	public void onForcedAttack(L2PcInstance player)
+	public void onForcedAttack(Player player)
 	{
 		player.sendPacket(ActionFailed.STATIC_PACKET);
 	}
@@ -132,7 +118,7 @@ public abstract class L2Object
 	 * @param attacker The target to make checks on.
 	 * @return true or false, depending if the target is attackable or not.
 	 */
-	public abstract boolean isAutoAttackable(L2Character attacker);
+	public abstract boolean isAutoAttackable(Character attacker);
 	
 	/**
 	 * A L2Object is visible if <B>_isVisible</B> = true and <B>_worldregion</B> != null.
@@ -183,7 +169,7 @@ public abstract class L2Object
 	
 	public boolean polymorph(PolyType type, int id)
 	{
-		if (!(this instanceof L2Npc) && !(this instanceof L2PcInstance))
+		if (!(this instanceof Npc) && !(this instanceof Player))
 			return false;
 		
 		if (type == PolyType.NPC)
@@ -221,7 +207,7 @@ public abstract class L2Object
 		spawnMe();
 	}
 	
-	public L2PcInstance getActingPlayer()
+	public Player getActingPlayer()
 	{
 		return null;
 	}
@@ -241,15 +227,15 @@ public abstract class L2Object
 	/**
 	 * Sends the Server->Client info packet for the object. Is Overridden in:
 	 * <li>L2BoatInstance</li>
-	 * <li>L2DoorInstance</li>
-	 * <li>L2PcInstance</li>
-	 * <li>L2StaticObjectInstance</li>
-	 * <li>L2Npc</li>
-	 * <li>L2Summon</li>
+	 * <li>Door</li>
+	 * <li>Player</li>
+	 * <li>StaticObject</li>
+	 * <li>Npc</li>
+	 * <li>Summon</li>
 	 * <li>ItemInstance</li>
 	 * @param activeChar
 	 */
-	public void sendInfo(L2PcInstance activeChar)
+	public void sendInfo(Player activeChar)
 	{
 		
 	}
@@ -397,7 +383,7 @@ public abstract class L2Object
 				}
 				
 				// Desactivate the old neighbor region.
-				if (this instanceof L2PcInstance && region.isEmptyNeighborhood())
+				if (this instanceof Player && region.isEmptyNeighborhood())
 					region.setActive(false);
 			}
 		}
@@ -418,7 +404,7 @@ public abstract class L2Object
 				}
 				
 				// Activate the new neighbor region.
-				if (this instanceof L2PcInstance)
+				if (this instanceof Player)
 					region.setActive(true);
 			}
 		}
@@ -460,7 +446,7 @@ public abstract class L2Object
 		{
 			for (L2Object obj : reg.getObjects())
 			{
-				if (obj == this || obj.getInstanceId() == getInstanceId() || obj instanceof L2DoorInstance || obj instanceof L2FenceInstance)
+				if (obj == this || obj.getInstanceId() == getInstanceId() || obj instanceof Door || obj instanceof Fence)
 					continue;
 				
 				result.add(obj);
@@ -492,7 +478,7 @@ public abstract class L2Object
 				if (obj == this || !type.isAssignableFrom(obj.getClass()))
 					continue;
  				
-				if (obj.getInstanceId() != getInstanceId() && !(obj instanceof L2DoorInstance || obj instanceof L2FenceInstance))
+				if (obj.getInstanceId() != getInstanceId() && !(obj instanceof Door || obj instanceof Fence))
 					continue;
 	
 				result.add((A) obj);
@@ -525,7 +511,7 @@ public abstract class L2Object
 				if (obj == this || !type.isAssignableFrom(obj.getClass()) || !Util.checkIfInRange(radius, this, obj, true))
 					continue;
  				
-				if (obj.getInstanceId() != getInstanceId() && !(obj instanceof L2DoorInstance || obj instanceof L2FenceInstance))
+				if (obj.getInstanceId() != getInstanceId() && !(obj instanceof Door || obj instanceof Fence))
 					continue;
 	
 				result.add((A) obj);

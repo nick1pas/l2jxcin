@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.LoginServerThread;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.L2GameClient.IExReader;
 import net.sf.l2j.gameserver.network.serverpackets.GameGuardQuery;
@@ -113,7 +113,7 @@ public class CatsGuard
 		}
 		
 		@Override
-		public void checkChar(L2PcInstance cha)
+		public void checkChar(Player cha)
 		{
 			if (!_checkChar || (cha == null))
 			{
@@ -178,7 +178,7 @@ public class CatsGuard
 		return Config.ENABLED;
 	}
 	
-	public void ban(L2PcInstance player)
+	public void ban(Player player)
 	{
 		ban(player.getHWid());
 	}

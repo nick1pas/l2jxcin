@@ -14,7 +14,7 @@
  */
 package net.sf.l2j.gameserver.skills.conditions;
 
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.skills.Env;
 
@@ -39,7 +39,7 @@ public class ConditionPlayerDMEvent extends Condition
 	@Override
 	public boolean testImpl(Env env)
 	{
-		final L2PcInstance player = env.getPlayer();
+		final Player player = env.getPlayer();
 		if (player == null || !DMEvent.isStarted())
 			return !_val;
 

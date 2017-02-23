@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.communitybbs.Manager;
 
 import java.util.StringTokenizer;
@@ -22,7 +8,7 @@ import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2ClanMember;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
 public class ClanBBSManager extends BaseBBSManager
@@ -37,7 +23,7 @@ public class ClanBBSManager extends BaseBBSManager
 	}
 	
 	@Override
-	public void parseCmd(String command, L2PcInstance activeChar)
+	public void parseCmd(String command, Player activeChar)
 	{
 		if (command.equalsIgnoreCase("_bbsclan"))
 		{
@@ -76,7 +62,7 @@ public class ClanBBSManager extends BaseBBSManager
 	}
 	
 	@Override
-	public void parseWrite(String ar1, String ar2, String ar3, String ar4, String ar5, L2PcInstance activeChar)
+	public void parseWrite(String ar1, String ar2, String ar3, String ar4, String ar5, Player activeChar)
 	{
 		if (ar1.equalsIgnoreCase("intro"))
 		{
@@ -130,7 +116,7 @@ public class ClanBBSManager extends BaseBBSManager
 		return "clan/";
 	}
 	
-	private static void sendClanMail(L2PcInstance activeChar, int clanId)
+	private static void sendClanMail(Player activeChar, int clanId)
 	{
 		final L2Clan clan = ClanTable.getInstance().getClan(clanId);
 		if (clan == null)
@@ -149,7 +135,7 @@ public class ClanBBSManager extends BaseBBSManager
 		separateAndSend(content, activeChar);
 	}
 	
-	private static void sendClanManagement(L2PcInstance activeChar, int clanId)
+	private static void sendClanManagement(Player activeChar, int clanId)
 	{
 		final L2Clan clan = ClanTable.getInstance().getClan(clanId);
 		if (clan == null)
@@ -168,7 +154,7 @@ public class ClanBBSManager extends BaseBBSManager
 		send1002(activeChar, clan.getIntroduction(), "", "");
 	}
 	
-	private static void sendClanNotice(L2PcInstance activeChar, int clanId)
+	private static void sendClanNotice(Player activeChar, int clanId)
 	{
 		final L2Clan clan = ClanTable.getInstance().getClan(clanId);
 		if (clan == null || activeChar.getClanId() != clanId)
@@ -189,7 +175,7 @@ public class ClanBBSManager extends BaseBBSManager
 		send1002(activeChar, clan.getNotice(), "", "");
 	}
 	
-	private static void sendClanList(L2PcInstance activeChar, int index)
+	private static void sendClanList(Player activeChar, int index)
 	{
 		String content = HtmCache.getInstance().getHtm(CB_PATH + "clan/clanlist.htm");
 		
@@ -249,7 +235,7 @@ public class ClanBBSManager extends BaseBBSManager
 		separateAndSend(content, activeChar);
 	}
 	
-	private static void sendClanDetails(L2PcInstance activeChar, int clanId)
+	private static void sendClanDetails(Player activeChar, int clanId)
 	{
 		final L2Clan clan = ClanTable.getInstance().getClan(clanId);
 		if (clan == null)

@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import java.util.Collection;
@@ -22,7 +8,7 @@ import net.sf.l2j.gameserver.datatables.ArmorSetsTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.ArmorSet;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
@@ -49,7 +35,7 @@ public class AdminCreateItem implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		StringTokenizer st = new StringTokenizer(command);
 		command = st.nextToken();
@@ -65,8 +51,8 @@ public class AdminCreateItem implements IAdminCommandHandler
 				final int id = Integer.parseInt(st.nextToken());
 				final int count = (st.hasMoreTokens()) ? Integer.parseInt(st.nextToken()) : 1;
 				
-				final Collection<L2PcInstance> players = World.getInstance().getPlayers();
-				for (L2PcInstance player : players)
+				final Collection<Player> players = World.getInstance().getPlayers();
+				for (Player player : players)
 					createItem(activeChar, player, id, count, 0, false);
 				
 				activeChar.sendMessage(players.size() + " players rewarded with " + ItemTable.getInstance().getTemplate(id).getName());
@@ -79,9 +65,9 @@ public class AdminCreateItem implements IAdminCommandHandler
 		}
 		else
 		{
-			L2PcInstance target = activeChar;
-			if (activeChar.getTarget() != null && activeChar.getTarget() instanceof L2PcInstance)
-				target = (L2PcInstance) activeChar.getTarget();
+			Player target = activeChar;
+			if (activeChar.getTarget() != null && activeChar.getTarget() instanceof Player)
+				target = (Player) activeChar.getTarget();
 			
 			if (command.equals("admin_create_item"))
 			{
@@ -187,7 +173,7 @@ public class AdminCreateItem implements IAdminCommandHandler
 		return true;
 	}
 	
-	private static void createItem(L2PcInstance activeChar, L2PcInstance target, int id, int num, int radius, boolean sendGmMessage)
+	private static void createItem(Player activeChar, Player target, int id, int num, int radius, boolean sendGmMessage)
 	{
 		final Item template = ItemTable.getInstance().getTemplate(id);
 		if (template == null)
@@ -204,8 +190,8 @@ public class AdminCreateItem implements IAdminCommandHandler
 		
 		if (radius > 0)
 		{
-			final List<L2PcInstance> players = activeChar.getKnownTypeInRadius(L2PcInstance.class, radius);
-			for (L2PcInstance obj : players)
+			final List<Player> players = activeChar.getKnownTypeInRadius(Player.class, radius);
+			for (Player obj : players)
 			{
 				obj.addItem("Admin", id, num, activeChar, false);
 				obj.sendMessage("A GM spawned " + num + " " + template.getName() + " in your inventory.");

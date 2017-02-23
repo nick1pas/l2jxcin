@@ -19,16 +19,16 @@ import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.skills.AbnormalEffect;
 
 public class CharInfo extends L2GameServerPacket
 {
-	private final L2PcInstance _activeChar;
+	private final Player _activeChar;
 	private final Inventory _inv;
 	
-	public CharInfo(L2PcInstance cha)
+	public CharInfo(Player cha)
 	{
 		_activeChar = cha;
 		_inv = _activeChar.getInventory();
@@ -41,7 +41,7 @@ public class CharInfo extends L2GameServerPacket
 		
 		if (_activeChar.getAppearance().getInvisible())
 		{
-			L2PcInstance tmp = getClient().getActiveChar();
+			Player tmp = getClient().getActiveChar();
 			if (tmp != null && tmp.isGM())
 				gmSeeInvis = true;
 		}

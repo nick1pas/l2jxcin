@@ -5,7 +5,7 @@ import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.gameserver.handler.IUserCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -22,7 +22,7 @@ public class SiegeStatus implements IUserCommandHandler
 	private static final String OUTSIDE_ZONE = "Outside Castle Siege Zone";
 	
 	@Override
-	public boolean useUserCommand(int id, L2PcInstance activeChar)
+	public boolean useUserCommand(int id, Player activeChar)
 	{
 		if (!activeChar.isClanLeader())
 		{
@@ -46,7 +46,7 @@ public class SiegeStatus implements IUserCommandHandler
 			if (!castle.getSiege().isInProgress() || !castle.getSiege().checkSides(clan, SiegeSide.ATTACKER, SiegeSide.DEFENDER, SiegeSide.OWNER))
 				continue;
 			
-			for (L2PcInstance member : clan.getOnlineMembers())
+			for (Player member : clan.getOnlineMembers())
 				StringUtil.append(sb, "<tr><td width=170>", member.getName(), "</td><td width=100>", (castle.getSiegeZone().isInsideZone(member)) ? IN_PROGRESS : OUTSIDE_ZONE, "</td></tr>");
 			
 			final NpcHtmlMessage html = new NpcHtmlMessage(0);

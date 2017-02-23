@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import java.util.StringTokenizer;
@@ -20,11 +6,11 @@ import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2ChestInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.instance.Chest;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.Earthquake;
 import net.sf.l2j.gameserver.network.serverpackets.ExRedSky;
@@ -47,9 +33,9 @@ import net.sf.l2j.gameserver.util.Broadcast;
  * <li>para/unpara = paralyze/remove paralysis from target.</li>
  * <li>para_all/unpara_all = same as para/unpara, affects the whole world.</li>
  * <li>polyself/unpolyself = makes you look as a specified mob.</li>
- * <li>social = forces an L2Character instance to broadcast social action packets.</li>
- * <li>effect = forces an L2Character instance to broadcast MSU packets.</li>
- * <li>abnormal = force changes over an L2Character instance's abnormal state.</li>
+ * <li>social = forces an Character instance to broadcast social action packets.</li>
+ * <li>effect = forces an Character instance to broadcast MSU packets.</li>
+ * <li>abnormal = force changes over an Character instance's abnormal state.</li>
  * <li>play_sound/jukebox = Music broadcasting related commands.</li>
  * <li>atmosphere = sky change related commands.</li>
  * </ul>
@@ -84,7 +70,7 @@ public class AdminEffects implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		StringTokenizer st = new StringTokenizer(command);
 		st.nextToken();
@@ -179,7 +165,7 @@ public class AdminEffects implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_para_all"))
 		{
-			for (L2PcInstance player : activeChar.getKnownType(L2PcInstance.class))
+			for (Player player : activeChar.getKnownType(Player.class))
 			{
 				if (!player.isGM())
 				{
@@ -191,7 +177,7 @@ public class AdminEffects implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_unpara_all"))
 		{
-			for (L2PcInstance player : activeChar.getKnownType(L2PcInstance.class))
+			for (Player player : activeChar.getKnownType(Player.class))
 			{
 				player.stopAbnormalEffect(0x0800);
 				player.setIsParalyzed(false);
@@ -200,9 +186,9 @@ public class AdminEffects implements IAdminCommandHandler
 		else if (command.startsWith("admin_para"))
 		{
 			final L2Object target = activeChar.getTarget();
-			if (target instanceof L2Character)
+			if (target instanceof Character)
 			{
-				final L2Character player = (L2Character) target;
+				final Character player = (Character) target;
 				
 				player.startAbnormalEffect(0x0800);
 				player.setIsParalyzed(true);
@@ -214,9 +200,9 @@ public class AdminEffects implements IAdminCommandHandler
 		else if (command.startsWith("admin_unpara"))
 		{
 			final L2Object target = activeChar.getTarget();
-			if (target instanceof L2Character)
+			if (target instanceof Character)
 			{
-				final L2Character player = (L2Character) target;
+				final Character player = (Character) target;
 				
 				player.stopAbnormalEffect(0x0800);
 				player.setIsParalyzed(false);
@@ -254,7 +240,7 @@ public class AdminEffects implements IAdminCommandHandler
 					final String targetOrRadius = st.nextToken();
 					if (targetOrRadius != null)
 					{
-						L2PcInstance player = World.getInstance().getPlayer(targetOrRadius);
+						Player player = World.getInstance().getPlayer(targetOrRadius);
 						if (player != null)
 						{
 							if (performSocial(social, player))
@@ -266,7 +252,7 @@ public class AdminEffects implements IAdminCommandHandler
 						{
 							final int radius = Integer.parseInt(targetOrRadius);
 							
-							for (L2Character object : activeChar.getKnownTypeInRadius(L2Character.class, radius))
+							for (Character object : activeChar.getKnownTypeInRadius(Character.class, radius))
 								performSocial(social, object);
 							
 							activeChar.sendMessage(radius + " units radius was affected by your social request.");
@@ -301,7 +287,7 @@ public class AdminEffects implements IAdminCommandHandler
 					final String targetOrRadius = st.nextToken();
 					if (targetOrRadius != null)
 					{
-						L2PcInstance player = World.getInstance().getPlayer(targetOrRadius);
+						Player player = World.getInstance().getPlayer(targetOrRadius);
 						if (player != null)
 						{
 							if (performAbnormal(abnormal, player))
@@ -313,7 +299,7 @@ public class AdminEffects implements IAdminCommandHandler
 						{
 							final int radius = Integer.parseInt(targetOrRadius);
 							
-							for (L2Character object : activeChar.getKnownTypeInRadius(L2Character.class, radius))
+							for (Character object : activeChar.getKnownTypeInRadius(Character.class, radius))
 								performAbnormal(abnormal, object);
 							
 							activeChar.sendMessage(radius + " units radius was affected by your abnormal request.");
@@ -353,11 +339,11 @@ public class AdminEffects implements IAdminCommandHandler
 				if (obj == null)
 					obj = activeChar;
 				
-				if (!(obj instanceof L2Character))
+				if (!(obj instanceof Character))
 					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 				else
 				{
-					L2Character target = (L2Character) obj;
+					Character target = (Character) obj;
 					target.broadcastPacket(new MagicSkillUse(target, activeChar, skill, level, hittime, 0));
 					activeChar.sendMessage(obj.getName() + " performs MSU " + skill + "/" + level + " by your request.");
 				}
@@ -384,9 +370,9 @@ public class AdminEffects implements IAdminCommandHandler
 	
 	private static boolean performAbnormal(int action, L2Object target)
 	{
-		if (target instanceof L2Character)
+		if (target instanceof Character)
 		{
-			final L2Character character = (L2Character) target;
+			final Character character = (Character) target;
 			if ((character.getAbnormalEffect() & action) == action)
 				character.stopAbnormalEffect(action);
 			else
@@ -399,12 +385,12 @@ public class AdminEffects implements IAdminCommandHandler
 	
 	private static boolean performSocial(int action, L2Object target)
 	{
-		if (target instanceof L2Character)
+		if (target instanceof Character)
 		{
-			if (target instanceof L2Summon || target instanceof L2ChestInstance || (target instanceof L2Npc && (action < 1 || action > 3)) || (target instanceof L2PcInstance && (action < 2 || action > 16)))
+			if (target instanceof Summon || target instanceof Chest || (target instanceof Npc && (action < 1 || action > 3)) || (target instanceof Player && (action < 2 || action > 16)))
 				return false;
 			
-			final L2Character character = (L2Character) target;
+			final Character character = (Character) target;
 			character.broadcastPacket(new SocialAction(character, action));
 			return true;
 		}

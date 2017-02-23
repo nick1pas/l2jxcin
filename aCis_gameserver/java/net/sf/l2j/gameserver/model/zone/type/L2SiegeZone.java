@@ -1,23 +1,9 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.zone.type;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2SiegeSummonInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.SiegeSummon;
 import net.sf.l2j.gameserver.model.zone.L2SpawnZone;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -52,7 +38,7 @@ public class L2SiegeZone extends L2SpawnZone
 	}
 	
 	@Override
-	protected void onEnter(L2Character character)
+	protected void onEnter(Character character)
 	{
 		if (_isActiveSiege)
 		{
@@ -60,9 +46,9 @@ public class L2SiegeZone extends L2SpawnZone
 			character.setInsideZone(ZoneId.SIEGE, true);
 			character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, true);
 			
-			if (character instanceof L2PcInstance)
+			if (character instanceof Player)
 			{
-				L2PcInstance activeChar = (L2PcInstance) character;
+				Player activeChar = (Player) character;
 				
 				activeChar.setIsInSiege(true); // in siege
 				
@@ -78,15 +64,15 @@ public class L2SiegeZone extends L2SpawnZone
 	}
 	
 	@Override
-	protected void onExit(L2Character character)
+	protected void onExit(Character character)
 	{
 		character.setInsideZone(ZoneId.PVP, false);
 		character.setInsideZone(ZoneId.SIEGE, false);
 		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false);
 		
-		if (character instanceof L2PcInstance)
+		if (character instanceof Player)
 		{
-			final L2PcInstance activeChar = (L2PcInstance) character;
+			final Player activeChar = (Player) character;
 			
 			if (_isActiveSiege)
 			{
@@ -104,17 +90,17 @@ public class L2SiegeZone extends L2SpawnZone
 			
 			activeChar.setIsInSiege(false);
 		}
-		else if (character instanceof L2SiegeSummonInstance)
-			((L2SiegeSummonInstance) character).unSummon(((L2SiegeSummonInstance) character).getOwner());
+		else if (character instanceof SiegeSummon)
+			((SiegeSummon) character).unSummon(((SiegeSummon) character).getOwner());
 	}
 	
 	@Override
-	public void onDieInside(L2Character character)
+	public void onDieInside(Character character)
 	{
 	}
 	
 	@Override
-	public void onReviveInside(L2Character character)
+	public void onReviveInside(Character character)
 	{
 	}
 	
@@ -122,12 +108,12 @@ public class L2SiegeZone extends L2SpawnZone
 	{
 		if (_isActiveSiege)
 		{
-			for (L2Character character : _characterList.values())
+			for (Character character : _characterList.values())
 				onEnter(character);
 		}
 		else
 		{
-			for (L2Character character : _characterList.values())
+			for (Character character : _characterList.values())
 			{
 				if (character == null)
 					continue;
@@ -136,17 +122,17 @@ public class L2SiegeZone extends L2SpawnZone
 				character.setInsideZone(ZoneId.SIEGE, false);
 				character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false);
 				
-				if (character instanceof L2PcInstance)
+				if (character instanceof Player)
 				{
-					final L2PcInstance player = ((L2PcInstance) character);
+					final Player player = ((Player) character);
 					
 					player.sendPacket(SystemMessageId.LEFT_COMBAT_ZONE);
 					
 					if (player.getMountType() == 2)
 						player.exitedNoLanding();
 				}
-				else if (character instanceof L2SiegeSummonInstance)
-					((L2SiegeSummonInstance) character).unSummon(((L2SiegeSummonInstance) character).getOwner());
+				else if (character instanceof SiegeSummon)
+					((SiegeSummon) character).unSummon(((SiegeSummon) character).getOwner());
 			}
 		}
 	}
@@ -157,7 +143,7 @@ public class L2SiegeZone extends L2SpawnZone
 	 */
 	public void announceToPlayers(String message)
 	{
-		for (L2PcInstance player : getKnownTypeInside(L2PcInstance.class))
+		for (Player player : getKnownTypeInside(Player.class))
 			player.sendMessage(message);
 	}
 	
@@ -185,7 +171,7 @@ public class L2SiegeZone extends L2SpawnZone
 		if (_characterList.isEmpty())
 			return;
 			
-		for (L2PcInstance player : getKnownTypeInside(L2PcInstance.class))
+		for (Player player : getKnownTypeInside(Player.class))
 		{
 			if (player.getClanId() == owningClanId)
 				continue;

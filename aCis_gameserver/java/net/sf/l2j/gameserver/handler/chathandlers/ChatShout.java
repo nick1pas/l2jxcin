@@ -20,7 +20,7 @@ import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.handler.IChatHandler;
 import net.sf.l2j.gameserver.model.BlockList;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.util.FloodProtectors;
 import net.sf.l2j.gameserver.util.FloodProtectors.Action;
@@ -33,7 +33,7 @@ public class ChatShout implements IChatHandler
 	};
 	
 	@Override
-	public void handleChat(int type, L2PcInstance activeChar, String target, String text)
+	public void handleChat(int type, Player activeChar, String target, String text)
 	{
 		int restrictionValue = Config.SHOUT_RESTRICTION_VALUE;
 		if (Config.SHOUT_RESTRICTION_TYPE == ShoutRestrictionType.PVP && activeChar.getPvpKills() < restrictionValue)
@@ -54,7 +54,7 @@ public class ChatShout implements IChatHandler
 		final CreatureSay cs = new CreatureSay(activeChar.getObjectId(), type, activeChar.getName(), text);
 		final int region = MapRegionTable.getInstance().getMapRegion(activeChar.getX(), activeChar.getY());
 		
-		for (L2PcInstance player : World.getInstance().getPlayers())
+		for (Player player : World.getInstance().getPlayers())
 		{
 			if (!BlockList.isBlocked(player, activeChar) && region == MapRegionTable.getInstance().getMapRegion(player.getX(), player.getY()))
 				player.sendPacket(cs);

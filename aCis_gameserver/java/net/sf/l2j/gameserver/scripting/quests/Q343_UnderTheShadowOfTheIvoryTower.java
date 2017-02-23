@@ -14,8 +14,8 @@ package net.sf.l2j.gameserver.scripting.quests;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.base.ClassType;
 import net.sf.l2j.gameserver.scripting.Quest;
@@ -145,7 +145,7 @@ public class Q343_UnderTheShadowOfTheIvoryTower extends Quest
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		String htmltext = event;
 		QuestState st = player.getQuestState(qn);
@@ -383,7 +383,7 @@ public class Q343_UnderTheShadowOfTheIvoryTower extends Quest
 	}
 	
 	@Override
-	public String onTalk(L2Npc npc, L2PcInstance player)
+	public String onTalk(Npc npc, Player player)
 	{
 		String htmltext = getNoQuestMsg();
 		QuestState st = player.getQuestState(qn);
@@ -464,7 +464,7 @@ public class Q343_UnderTheShadowOfTheIvoryTower extends Quest
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance player, boolean isPet)
+	public String onKill(Npc npc, Player player, boolean isPet)
 	{
 		QuestState st = checkPlayerCondition(player, npc, "cond", "1");
 		if (st == null)
@@ -477,7 +477,7 @@ public class Q343_UnderTheShadowOfTheIvoryTower extends Quest
 		return null;
 	}
 	
-	public static boolean isValidClass(L2PcInstance player)
+	public static boolean isValidClass(Player player)
 	{
 		if (player.getClassId().getType() != ClassType.FIGHTER && (player.getClassId().getRace() != ClassRace.ORC) && (player.getClassId().level() >= 1) && !player.isSubClassActive())
 		{

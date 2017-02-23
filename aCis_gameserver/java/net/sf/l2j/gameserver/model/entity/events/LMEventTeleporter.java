@@ -18,8 +18,8 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Duel.DuelState;
 
 /**
@@ -28,7 +28,7 @@ import net.sf.l2j.gameserver.model.entity.Duel.DuelState;
 public class LMEventTeleporter implements Runnable
 {
 	/** The instance of the player to teleport */
-	private L2PcInstance _activeChar = null;
+	private Player _activeChar = null;
 	/** Coordinates of the spot to teleport to */
 	private int[] _coordinates = new int[3];
 	/** Admin removed this player from event */
@@ -37,12 +37,12 @@ public class LMEventTeleporter implements Runnable
 	/**
 	 * Initialize the teleporter and start the delayed task<br>
 	 * <br>
-	 * @param activeChar as L2PcInstance<br>
+	 * @param activeChar as Player<br>
 	 * @param coordinates as int[]<br>
 	 * @param fastSchedule as boolean<br>
 	 * @param adminRemove as boolean<br>
 	 */
-	public LMEventTeleporter(L2PcInstance activeChar, int[] coordinates, boolean fastSchedule, boolean adminRemove)
+	public LMEventTeleporter(Player activeChar, int[] coordinates, boolean fastSchedule, boolean adminRemove)
 	{
 		_activeChar = activeChar;
 		_coordinates = coordinates;
@@ -54,11 +54,11 @@ public class LMEventTeleporter implements Runnable
 	/**
 	 * Initialize the teleporter and start the delayed task<br>
 	 * <br>
-	 * @param activeChar as L2PcInstance<br>
+	 * @param activeChar as Player<br>
 	 * @param fastSchedule as boolean<br>
 	 * @param adminRemove as boolean<br>
 	 */
-	public LMEventTeleporter(L2PcInstance activeChar, boolean fastSchedule, boolean adminRemove)
+	public LMEventTeleporter(Player activeChar, boolean fastSchedule, boolean adminRemove)
 	{
 		_activeChar = activeChar;
 		_coordinates = Config.LM_EVENT_PLAYER_COORDINATES.get(Rnd.get(Config.LM_EVENT_PLAYER_COORDINATES.size()));
@@ -73,7 +73,7 @@ public class LMEventTeleporter implements Runnable
 		ThreadPool.schedule(this, fastSchedule ? 0 : delay);
 	}
 	
-	private void cryptChar(L2PcInstance activeChar)
+	private void cryptChar(Player activeChar)
 	{
 		if (Config.LM_EVENT_HIDE_NAME)
 		{
@@ -90,7 +90,7 @@ public class LMEventTeleporter implements Runnable
 		_activeChar.setHideInfo(true);
 	}
 	
-	private void decryptChar(L2PcInstance activeChar)
+	private void decryptChar(Player activeChar)
 	{
 		if (Config.LM_EVENT_HIDE_NAME)
 		{
@@ -121,7 +121,7 @@ public class LMEventTeleporter implements Runnable
 		if (_activeChar == null)
 			return;
 		
-		L2Summon summon = _activeChar.getPet();
+		Summon summon = _activeChar.getPet();
 		
 		if (summon != null)
 			summon.unSummon(_activeChar);

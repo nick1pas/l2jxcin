@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.taskmanager;
 
 import java.sql.Connection;
@@ -30,8 +16,8 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 
@@ -109,9 +95,9 @@ public final class ItemsOnGroundTaskManager implements Runnable
 	/**
 	 * Adds {@link ItemInstance} to the ItemAutoDestroyTask.
 	 * @param item : {@link ItemInstance} to be added and checked.
-	 * @param actor : {@link L2Character} who dropped the item.
+	 * @param actor : {@link Character} who dropped the item.
 	 */
-	public final void add(ItemInstance item, L2Character actor)
+	public final void add(ItemInstance item, Character actor)
 	{
 		// Actor doesn't exist or item is protected, don't bother with the item (e.g. Cursed Weapons).
 		if (actor == null || item.isDestroyProtected())
@@ -136,7 +122,7 @@ public final class ItemsOnGroundTaskManager implements Runnable
 		}
 		
 		// Item was dropped by playable, apply the multiplier.
-		if (actor instanceof L2Playable)
+		if (actor instanceof Playable)
 			dropTime *= Config.PLAYER_DROPPED_ITEM_MULTIPLIER;
 		
 		// If drop time exists, set real drop time.

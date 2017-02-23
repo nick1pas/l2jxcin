@@ -17,7 +17,7 @@ package net.sf.l2j.gameserver.handler.admincommandhandlers;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEventTeleporter;
 import net.sf.l2j.gameserver.model.entity.events.TvTManager;
@@ -35,7 +35,7 @@ public class AdminTvTEvent implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		if (activeChar == null)
 			return false;
@@ -44,25 +44,25 @@ public class AdminTvTEvent implements IAdminCommandHandler
 		{
 			L2Object target = activeChar.getTarget();
 			
-			if (!(target instanceof L2PcInstance))
+			if (!(target instanceof Player))
 			{
 				activeChar.sendMessage("You should select a player!");
 				return true;
 			}
 			
-			add(activeChar, (L2PcInstance) target);
+			add(activeChar, (Player) target);
 		}
 		else if (command.equals("admin_tvt_remove"))
 		{
 			L2Object target = activeChar.getTarget();
 			
-			if (!(target instanceof L2PcInstance))
+			if (!(target instanceof Player))
 			{
 				activeChar.sendMessage("You should select a player!");
 				return true;
 			}
 			
-			remove(activeChar, (L2PcInstance) target);
+			remove(activeChar, (Player) target);
 		}
 		else if ( command.equals( "admin_tvt_advance" ) )
 		{
@@ -78,7 +78,7 @@ public class AdminTvTEvent implements IAdminCommandHandler
 		return ADMIN_COMMANDS;
 	}
 	
-	private static void add(L2PcInstance activeChar, L2PcInstance playerInstance)
+	private static void add(Player activeChar, Player playerInstance)
 	{
 		if (TvTEvent.isPlayerParticipant(playerInstance.getObjectId()))
 		{
@@ -98,7 +98,7 @@ public class AdminTvTEvent implements IAdminCommandHandler
 		}
 	}
 	
-	private static void remove(L2PcInstance activeChar, L2PcInstance playerInstance)
+	private static void remove(Player activeChar, Player playerInstance)
 	{
 		if (!TvTEvent.removeParticipant(playerInstance.getObjectId()))
 		{

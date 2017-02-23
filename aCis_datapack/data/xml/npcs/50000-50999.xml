@@ -6,7 +6,7 @@
 		<set name="height" val="23.5"/>
 		<set name="rHand" val="94"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2AioManager"/>
+		<set name="type" val="Aio"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="0"/>
 		<set name="hp" val="3290.11306877694"/>
@@ -42,7 +42,7 @@
 		<set name="height" val="23.5"/>
 		<set name="rHand" val="94"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2RaidBossInfo"/>
+		<set name="type" val="RaidBossInfo"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="0"/>
 		<set name="hp" val="3290.11306877694"/>
@@ -78,7 +78,7 @@
 		<set name="height" val="23.5"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2ItemEnchanter"/>
+		<set name="type" val="ItemEnchanter"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="0"/>
 		<set name="hp" val="2444.46819"/>
@@ -114,7 +114,7 @@
 		<set name="height" val="16"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2ClassMaster"/>
+		<set name="type" val="ClassMaster"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="10"/>
 		<set name="hp" val="2444.46819"/>
@@ -151,7 +151,7 @@
 		<set name="height" val="23"/>
 		<set name="rHand" val="316"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2WeddingManager"/>
+		<set name="type" val="WeddingManagerNpc"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="0"/>
 		<set name="hp" val="2444.46819"/>
@@ -188,7 +188,7 @@
 		<set name="height" val="18"/>
 		<set name="rHand" val="0"/>
 		<set name="lHand" val="0"/>
-		<set name="type" val="L2Buffer"/>
+		<set name="type" val="SchemeBuffer"/>
 		<set name="exp" val="0"/>
 		<set name="sp" val="0"/>
 		<set name="hp" val="2444.46819"/>

@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.skills.l2skills;
 
 import net.sf.l2j.Config;
@@ -19,10 +5,10 @@ import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.instance.L2CubicInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.instance.Cubic;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -43,21 +29,21 @@ public class L2SkillDrain extends L2Skill
 	}
 	
 	@Override
-	public void useSkill(L2Character activeChar, L2Object[] targets)
+	public void useSkill(Character activeChar, L2Object[] targets)
 	{
 		if (activeChar.isAlikeDead())
 			return;
 		
 		final boolean sps = activeChar.isChargedShot(ShotType.SPIRITSHOT);
 		final boolean bsps = activeChar.isChargedShot(ShotType.BLESSED_SPIRITSHOT);
-		final boolean isPlayable = activeChar instanceof L2Playable;
+		final boolean isPlayable = activeChar instanceof Playable;
 		
 		for (L2Object obj : targets)
 		{
-			if (!(obj instanceof L2Character))
+			if (!(obj instanceof Character))
 				continue;
 			
-			final L2Character target = ((L2Character) obj);
+			final Character target = ((Character) obj);
 			if (target.isAlikeDead() && getTargetType() != SkillTargetType.TARGET_CORPSE_MOB)
 				continue;
 			
@@ -74,7 +60,7 @@ public class L2SkillDrain extends L2Skill
 				int _cp = (int) target.getCurrentCp();
 				int _hp = (int) target.getCurrentHp();
 				
-				// Drain system is different for L2Playable and monsters.
+				// Drain system is different for Playable and monsters.
 				// When playables attack CP of enemies, monsters don't bother about it.
 				if (isPlayable && _cp > 0)
 				{
@@ -144,17 +130,17 @@ public class L2SkillDrain extends L2Skill
 		activeChar.setChargedShot(bsps ? ShotType.BLESSED_SPIRITSHOT : ShotType.SPIRITSHOT, isStaticReuse());
 	}
 	
-	public void useCubicSkill(L2CubicInstance activeCubic, L2Object[] targets)
+	public void useCubicSkill(Cubic activeCubic, L2Object[] targets)
 	{
 		if (Config.DEBUG)
 			_log.info("L2SkillDrain: useCubicSkill()");
 		
 		for (L2Object obj : targets)
 		{
-			if (!(obj instanceof L2Character))
+			if (!(obj instanceof Character))
 				continue;
 			
-			final L2Character target = ((L2Character) obj);
+			final Character target = ((Character) obj);
 			if (target.isAlikeDead() && getTargetType() != SkillTargetType.TARGET_CORPSE_MOB)
 				continue;
 			
@@ -165,7 +151,7 @@ public class L2SkillDrain extends L2Skill
 			// Check to see if we should damage the target
 			if (damage > 0)
 			{
-				final L2PcInstance owner = activeCubic.getOwner();
+				final Player owner = activeCubic.getOwner();
 				final double hpAdd = _absorbAbs + _absorbPart * damage;
 				if (hpAdd > 0)
 				{

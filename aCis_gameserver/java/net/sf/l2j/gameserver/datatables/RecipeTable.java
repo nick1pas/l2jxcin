@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.datatables;
 
 import java.io.File;
@@ -28,7 +14,7 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.L2ManufactureItem;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.RecipeList;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -161,14 +147,14 @@ public class RecipeTable
 		return null;
 	}
 	
-	public void requestBookOpen(L2PcInstance player, boolean isDwarvenCraft)
+	public void requestBookOpen(Player player, boolean isDwarvenCraft)
 	{
 		RecipeBookItemList response = new RecipeBookItemList(isDwarvenCraft, player.getMaxMp());
 		response.addRecipes(isDwarvenCraft ? player.getDwarvenRecipeBook() : player.getCommonRecipeBook());
 		player.sendPacket(response);
 	}
 	
-	public void requestManufactureItem(L2PcInstance manufacturer, int recipeListId, L2PcInstance player)
+	public void requestManufactureItem(Player manufacturer, int recipeListId, Player player)
 	{
 		final RecipeList recipeList = getValidRecipeList(player, recipeListId);
 		if (recipeList == null)
@@ -188,7 +174,7 @@ public class RecipeTable
 			maker.run();
 	}
 	
-	public void requestMakeItem(L2PcInstance player, int recipeListId)
+	public void requestMakeItem(Player player, int recipeListId)
 	{
 		if (AttackStanceTaskManager.getInstance().isInAttackStance(player) || player.isInDuel())
 		{
@@ -218,14 +204,14 @@ public class RecipeTable
 	{
 		protected boolean _isValid;
 		protected final RecipeList _recipeList;
-		protected final L2PcInstance _player; // "crafter"
-		protected final L2PcInstance _target; // "customer"
+		protected final Player _player; // "crafter"
+		protected final Player _target; // "customer"
 		protected final int _skillId;
 		protected final int _skillLevel;
 		protected double _manaRequired;
 		protected int _price;
 		
-		public RecipeItemMaker(L2PcInstance pPlayer, RecipeList pRecipeList, L2PcInstance pTarget)
+		public RecipeItemMaker(Player pPlayer, RecipeList pRecipeList, Player pTarget)
 		{
 			_player = pPlayer;
 			_target = pTarget;
@@ -475,7 +461,7 @@ public class RecipeTable
 		}
 	}
 	
-	private RecipeList getValidRecipeList(L2PcInstance player, int id)
+	private RecipeList getValidRecipeList(Player player, int id)
 	{
 		final RecipeList recipeList = _lists.get(id);
 		if (recipeList == null || recipeList.getNeededRecipeParts().isEmpty())

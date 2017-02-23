@@ -1,38 +1,24 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.itemcontainer;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemLocation;
 import net.sf.l2j.gameserver.model.item.type.EtcItemType;
 
 public class PetInventory extends Inventory
 {
-	private final L2PetInstance _owner;
+	private final Pet _owner;
 	
-	public PetInventory(L2PetInstance owner)
+	public PetInventory(Pet owner)
 	{
 		_owner = owner;
 	}
 	
 	@Override
-	public L2PetInstance getOwner()
+	public Pet getOwner()
 	{
 		return _owner;
 	}
@@ -103,7 +89,7 @@ public class PetInventory extends Inventory
 	@Override
 	public void deleteMe()
 	{
-		final L2PcInstance petOwner = getOwner().getOwner();
+		final Player petOwner = getOwner().getOwner();
 		if (petOwner != null)
 		{
 			for (ItemInstance item : _items)

@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.actor.stat;
 
 import java.util.Map;
@@ -20,10 +6,10 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.RewardInfo;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2ClassMasterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.ClassMaster;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.model.base.Experience;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.model.zone.type.L2SwampZone;
@@ -43,7 +29,7 @@ public class PcStat extends PlayableStat
 	private int _oldMaxMp; // stats watch
 	private int _oldMaxCp; // stats watch
 	
-	public PcStat(L2PcInstance activeChar)
+	public PcStat(Player activeChar)
 	{
 		super(activeChar);
 	}
@@ -63,14 +49,14 @@ public class PcStat extends PlayableStat
 	}
 	
 	/**
-	 * Add Experience and SP rewards to the L2PcInstance, remove its Karma (if necessary) and Launch increase level task.
+	 * Add Experience and SP rewards to the Player, remove its Karma (if necessary) and Launch increase level task.
 	 * <ul>
-	 * <li>Remove Karma when the player kills L2MonsterInstance</li>
-	 * <li>Send StatusUpdate to the L2PcInstance</li>
-	 * <li>Send a Server->Client System Message to the L2PcInstance</li>
-	 * <li>If the L2PcInstance increases its level, send SocialAction (broadcast)</li>
-	 * <li>If the L2PcInstance increases its level, manage the increase level task (Max MP, Max MP, Recommandation, Expertise and beginner skills...)</li>
-	 * <li>If the L2PcInstance increases its level, send UserInfo to the L2PcInstance</li>
+	 * <li>Remove Karma when the player kills Monster</li>
+	 * <li>Send StatusUpdate to the Player</li>
+	 * <li>Send a Server->Client System Message to the Player</li>
+	 * <li>If the Player increases its level, send SocialAction (broadcast)</li>
+	 * <li>If the Player increases its level, manage the increase level task (Max MP, Max MP, Recommandation, Expertise and beginner skills...)</li>
+	 * <li>If the Player increases its level, send UserInfo to the Player</li>
 	 * </ul>
 	 * @param addToExp The Experience value to add
 	 * @param addToSp The SP value to add
@@ -99,21 +85,21 @@ public class PcStat extends PlayableStat
 	}
 	
 	/**
-	 * Add Experience and SP rewards to the L2PcInstance, remove its Karma (if necessary) and Launch increase level task.
+	 * Add Experience and SP rewards to the Player, remove its Karma (if necessary) and Launch increase level task.
 	 * <ul>
-	 * <li>Remove Karma when the player kills L2MonsterInstance</li>
-	 * <li>Send StatusUpdate to the L2PcInstance</li>
-	 * <li>Send a Server->Client System Message to the L2PcInstance</li>
-	 * <li>If the L2PcInstance increases its level, send SocialAction (broadcast)</li>
-	 * <li>If the L2PcInstance increases its level, manage the increase level task (Max MP, Max MP, Recommandation, Expertise and beginner skills...)</li>
-	 * <li>If the L2PcInstance increases its level, send UserInfo to the L2PcInstance</li>
+	 * <li>Remove Karma when the player kills Monster</li>
+	 * <li>Send StatusUpdate to the Player</li>
+	 * <li>Send a Server->Client System Message to the Player</li>
+	 * <li>If the Player increases its level, send SocialAction (broadcast)</li>
+	 * <li>If the Player increases its level, manage the increase level task (Max MP, Max MP, Recommandation, Expertise and beginner skills...)</li>
+	 * <li>If the Player increases its level, send UserInfo to the Player</li>
 	 * </ul>
 	 * @param addToExp The Experience value to add
 	 * @param addToSp The SP value to add
 	 * @param rewards The list of players and summons, who done damage
 	 * @return
 	 */
-	public boolean addExpAndSp(long addToExp, int addToSp, Map<L2Character, RewardInfo> rewards)
+	public boolean addExpAndSp(long addToExp, int addToSp, Map<Character, RewardInfo> rewards)
 	{
 		// GM check concerning canGainExp().
 		if (!getActiveChar().getAccessLevel().canGainExp())
@@ -122,7 +108,7 @@ public class PcStat extends PlayableStat
 		// If this player has a pet, give the xp to the pet now (if any).
 		if (getActiveChar().hasPet())
 		{
-			final L2PetInstance pet = (L2PetInstance) getActiveChar().getPet();
+			final Pet pet = (Pet) getActiveChar().getPet();
 			if (pet.getStat().getExp() <= (pet.getTemplate().getPetDataEntry(81).getMaxExp() + 10000) && !pet.isDead())
 			{
 				if (Util.checkIfInShortRadius(Config.ALT_PARTY_RANGE, pet, getActiveChar(), true))
@@ -209,7 +195,7 @@ public class PcStat extends PlayableStat
 			getActiveChar().broadcastPacket(new SocialAction(getActiveChar(), 15));
 			getActiveChar().sendPacket(SystemMessageId.YOU_INCREASED_YOUR_LEVEL);
 			
-			L2ClassMasterInstance.showQuestionMark(getActiveChar());
+			ClassMaster.showQuestionMark(getActiveChar());
 		}
 		
 		getActiveChar().rewardSkills(); // Give Expertise skill of this level
@@ -222,11 +208,11 @@ public class PcStat extends PlayableStat
 		if (getActiveChar().isInParty())
 			getActiveChar().getParty().recalculateLevel(); // Recalculate the party level
 			
-		// Update the overloaded status of the L2PcInstance
+		// Update the overloaded status of the Player
 		getActiveChar().refreshOverloaded();
-		// Update the expertise status of the L2PcInstance
+		// Update the expertise status of the Player
 		getActiveChar().refreshExpertisePenalty();
-		// Send UserInfo to the L2PcInstance
+		// Send UserInfo to the Player
 		getActiveChar().sendPacket(new UserInfo(getActiveChar()));
 		
 		return levelIncreased;
@@ -239,9 +225,9 @@ public class PcStat extends PlayableStat
 	}
 	
 	@Override
-	public final L2PcInstance getActiveChar()
+	public final Player getActiveChar()
 	{
-		return (L2PcInstance) super.getActiveChar();
+		return (Player) super.getActiveChar();
 	}
 	
 	@Override
@@ -286,7 +272,7 @@ public class PcStat extends PlayableStat
 	@Override
 	public final int getMaxCp()
 	{
-		// Get the Max CP (base+modifier) of the L2PcInstance
+		// Get the Max CP (base+modifier) of the Player
 		int val = (int) calcStat(Stats.MAX_CP, getActiveChar().getTemplate().getBaseCpMax(getActiveChar().getLevel()), null, null);
 		if (val != _oldMaxCp)
 		{
@@ -302,7 +288,7 @@ public class PcStat extends PlayableStat
 	@Override
 	public final int getMaxHp()
 	{
-		// Get the Max HP (base+modifier) of the L2PcInstance
+		// Get the Max HP (base+modifier) of the Player
 		int val = super.getMaxHp();
 		if (val != _oldMaxHp)
 		{
@@ -319,7 +305,7 @@ public class PcStat extends PlayableStat
 	@Override
 	public final int getMaxMp()
 	{
-		// Get the Max MP (base+modifier) of the L2PcInstance
+		// Get the Max MP (base+modifier) of the Player
 		int val = super.getMaxMp();
 		
 		if (val != _oldMaxMp)
@@ -423,7 +409,7 @@ public class PcStat extends PlayableStat
 	}
 	
 	@Override
-	public int getMAtk(L2Character target, L2Skill skill)
+	public int getMAtk(Character target, L2Skill skill)
 	{
 		if (getActiveChar().isMounted())
 		{
@@ -463,7 +449,7 @@ public class PcStat extends PlayableStat
 	}
 	
 	@Override
-	public int getPAtk(L2Character target)
+	public int getPAtk(Character target)
 	{
 		if (getActiveChar().isMounted())
 		{
@@ -499,7 +485,7 @@ public class PcStat extends PlayableStat
 	}
 	
 	@Override
-	public int getEvasionRate(L2Character target)
+	public int getEvasionRate(Character target)
 	{
 		int val = super.getEvasionRate(target);
 		

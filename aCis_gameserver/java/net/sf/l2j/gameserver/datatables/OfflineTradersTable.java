@@ -32,8 +32,8 @@ import net.sf.l2j.gameserver.LoginServerThread;
 import net.sf.l2j.gameserver.model.L2ManufactureItem;
 import net.sf.l2j.gameserver.model.L2ManufactureList;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance.StoreType;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.Player.StoreType;
 import net.sf.l2j.gameserver.model.tradelist.TradeItem;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.L2GameClient.GameClientState;
@@ -62,7 +62,7 @@ public class OfflineTradersTable
 			stm2.execute();
 			con.setAutoCommit(false); // avoid halfway done
 			
-			for (L2PcInstance pc : World.getInstance().getPlayers())
+			for (Player pc : World.getInstance().getPlayers())
 			{
 				try
 				{
@@ -168,13 +168,13 @@ public class OfflineTradersTable
 				if (type == StoreType.NONE)
 					continue;
 				
-				L2PcInstance player = null;
+				Player player = null;
 				
 				try
 				{
 					L2GameClient client = new L2GameClient(null);
 					client.setDetached(true);
-					player = L2PcInstance.restore(rs.getInt("charId"));
+					player = Player.restore(rs.getInt("charId"));
 					client.setActiveChar(player);
 					player.setOnlineStatus(true, false);
 					client.setAccountName(player.getAccountNamePlayer());

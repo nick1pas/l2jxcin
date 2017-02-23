@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.clanhallsiege.FortressOfResistance;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
@@ -33,7 +33,7 @@ public class Nurka extends L2AttackableAIScript
 	
 	@SuppressWarnings("null")
 	@Override
-	public String onTalk(L2Npc npc, L2PcInstance player)
+	public String onTalk(Npc npc, Player player)
 	{
 		if (npc.getNpcId() == MESSENGER)
 		{
@@ -56,7 +56,7 @@ public class Nurka extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isPet, L2Skill skill)
 	{		
 		if (attacker != null && npc.getNpcId() == NURKA && CLAN_LEADERS.contains(attacker.getName()))
 		{
@@ -67,7 +67,7 @@ public class Nurka extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
 		FortressOfResistance.getInstance().CaptureFinish();
 		return super.onKill(npc, killer, isPet);

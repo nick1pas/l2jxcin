@@ -19,17 +19,17 @@ import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.L2Object.PolyType;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.skills.AbnormalEffect;
 
 public class UserInfo extends L2GameServerPacket
 {
-	private final L2PcInstance _activeChar;
+	private final Player _activeChar;
 	private int _relation;
 	
-	public UserInfo(L2PcInstance character)
+	public UserInfo(Player character)
 	{
 		_activeChar = character;
 		
@@ -181,7 +181,7 @@ public class UserInfo extends L2GameServerPacket
 		writeF(_activeChar.getStat().getMovementSpeedMultiplier()); // run speed multiplier
 		writeF(_activeChar.getStat().getAttackSpeedMultiplier()); // attack speed multiplier
 		
-		L2Summon pet = _activeChar.getPet();
+		Summon pet = _activeChar.getPet();
 		if (_activeChar.getMountType() != 0 && pet != null)
 		{
 			writeF(pet.getCollisionRadius());

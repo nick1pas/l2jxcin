@@ -14,8 +14,8 @@
  */
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.gameserver.model.actor.instance.L2ClassMasterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.ClassMaster;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.QuestState;
 
 public class RequestTutorialQuestionMark extends L2GameClientPacket
@@ -31,11 +31,11 @@ public class RequestTutorialQuestionMark extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final L2PcInstance player = getClient().getActiveChar();
+		final Player player = getClient().getActiveChar();
 		if (player == null)
 			return;
 		
-		L2ClassMasterInstance.onTutorialQuestionMark(player, _number);
+		ClassMaster.onTutorialQuestionMark(player, _number);
 		
 		QuestState qs = player.getQuestState("Tutorial");
 		if (qs != null)

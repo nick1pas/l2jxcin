@@ -1,21 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @author Forsaiken
- */
 package net.sf.l2j.gameserver.skills.effects;
 
 import java.util.ArrayList;
@@ -28,12 +10,12 @@ import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.ShotType;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2EffectPointInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.instance.EffectPoint;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillLaunched;
@@ -44,7 +26,7 @@ import net.sf.l2j.gameserver.templates.skills.L2EffectType;
 
 public class EffectSignetMDam extends L2Effect
 {
-	private L2EffectPointInstance _actor;
+	private EffectPoint _actor;
 	
 	public EffectSignetMDam(Env env, EffectTemplate template)
 	{
@@ -66,7 +48,7 @@ public class EffectSignetMDam extends L2Effect
 		else
 			return false;
 		
-		L2EffectPointInstance effectPoint = new L2EffectPointInstance(IdFactory.getInstance().getNextId(), template, getEffector());
+		EffectPoint effectPoint = new EffectPoint(IdFactory.getInstance().getNextId(), template, getEffector());
 		effectPoint.setCurrentHp(effectPoint.getMaxHp());
 		effectPoint.setCurrentMp(effectPoint.getMaxMp());
 		
@@ -74,9 +56,9 @@ public class EffectSignetMDam extends L2Effect
 		int y = getEffector().getY();
 		int z = getEffector().getZ();
 		
-		if (getEffector() instanceof L2PcInstance && getSkill().getTargetType() == L2Skill.SkillTargetType.TARGET_GROUND)
+		if (getEffector() instanceof Player && getSkill().getTargetType() == L2Skill.SkillTargetType.TARGET_GROUND)
 		{
-			Location wordPosition = ((L2PcInstance) getEffector()).getCurrentSkillWorldPosition();
+			Location wordPosition = ((Player) getEffector()).getCurrentSkillWorldPosition();
 			
 			if (wordPosition != null)
 			{
@@ -99,21 +81,21 @@ public class EffectSignetMDam extends L2Effect
 		if (getCount() >= getTotalCount() - 2)
 			return true; // do nothing first 2 times
 			
-		final L2PcInstance caster = (L2PcInstance) getEffector();
+		final Player caster = (Player) getEffector();
 		
 		final int mpConsume = getSkill().getMpConsume();
 		
 		final boolean sps = caster.isChargedShot(ShotType.SPIRITSHOT);
 		final boolean bsps = caster.isChargedShot(ShotType.BLESSED_SPIRITSHOT);
 		
-		List<L2Character> targets = new ArrayList<>();
+		List<Character> targets = new ArrayList<>();
 		
-		for (L2Character cha : _actor.getKnownTypeInRadius(L2Character.class, getSkill().getSkillRadius()))
+		for (Character cha : _actor.getKnownTypeInRadius(Character.class, getSkill().getSkillRadius()))
 		{
 			if (cha == caster)
 				continue;
 			
-			if (cha instanceof L2Attackable || cha instanceof L2Playable)
+			if (cha instanceof Attackable || cha instanceof Playable)
 			{
 				if (cha.isAlikeDead())
 					continue;
@@ -126,7 +108,7 @@ public class EffectSignetMDam extends L2Effect
 				
 				caster.reduceCurrentMp(mpConsume);
 				
-				if (cha instanceof L2Playable)
+				if (cha instanceof Playable)
 				{
 					if (caster.canAttackCharacter(cha))
 					{
@@ -141,15 +123,15 @@ public class EffectSignetMDam extends L2Effect
 		
 		if (!targets.isEmpty())
 		{
-			caster.broadcastPacket(new MagicSkillLaunched(caster, getSkill().getId(), getSkill().getLevel(), targets.toArray(new L2Character[targets.size()])));
-			for (L2Character target : targets)
+			caster.broadcastPacket(new MagicSkillLaunched(caster, getSkill().getId(), getSkill().getLevel(), targets.toArray(new Character[targets.size()])));
+			for (Character target : targets)
 			{
 				boolean mcrit = Formulas.calcMCrit(caster.getMCriticalHit(target, getSkill()));
 				byte shld = Formulas.calcShldUse(caster, target, getSkill());
 				
 				int mdam = (int) Formulas.calcMagicDam(caster, target, getSkill(), shld, sps, bsps, mcrit);
 				
-				if (target instanceof L2Summon)
+				if (target instanceof Summon)
 					target.broadcastStatusUpdate();
 				
 				if (mdam > 0)

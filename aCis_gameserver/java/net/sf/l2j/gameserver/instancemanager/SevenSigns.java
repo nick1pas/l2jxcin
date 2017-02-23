@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.instancemanager;
 
 import java.sql.Connection;
@@ -33,7 +19,7 @@ import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.AutoSpawnManager.AutoSpawnInstance;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SSQInfo;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -1088,7 +1074,7 @@ public class SevenSigns
 	 */
 	protected void teleLosingCabalFromDungeons(CabalType winningCabal)
 	{
-		for (L2PcInstance player : World.getInstance().getPlayers())
+		for (Player player : World.getInstance().getPlayers())
 		{
 			if (player.isGM() || !player.isIn7sDungeon())
 				continue;
@@ -1226,7 +1212,7 @@ public class SevenSigns
 	 */
 	public void giveSosEffect(CabalType strifeOwner)
 	{
-		for (L2PcInstance player : World.getInstance().getPlayers())
+		for (Player player : World.getInstance().getPlayers())
 		{
 			final CabalType cabal = getPlayerCabal(player.getObjectId());
 			if (cabal != CabalType.NORMAL)
@@ -1244,7 +1230,7 @@ public class SevenSigns
 	 */
 	public void removeSosEffect()
 	{
-		for (L2PcInstance player : World.getInstance().getPlayers())
+		for (Player player : World.getInstance().getPlayers())
 		{
 			player.removeSkill(SkillTable.FrequentSkill.THE_VICTOR_OF_WAR.getSkill());
 			player.removeSkill(SkillTable.FrequentSkill.THE_VANQUISHED_OF_WAR.getSkill());

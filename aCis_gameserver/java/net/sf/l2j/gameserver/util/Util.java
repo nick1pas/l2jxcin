@@ -1,31 +1,17 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.util;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 
 /**
  * General Utility functions related to Gameserver
  */
 public final class Util
 {
-	public static void handleIllegalPlayerAction(L2PcInstance actor, String message, int punishment)
+	public static void handleIllegalPlayerAction(Player actor, String message, int punishment)
 	{
 		ThreadPool.schedule(new IllegalPlayerAction(actor, message, punishment), 5000);
 	}
@@ -165,11 +151,11 @@ public final class Util
 			return true; // not limited
 			
 		double rad = 0;
-		if (obj1 instanceof L2Character)
-			rad += ((L2Character) obj1).getCollisionRadius();
+		if (obj1 instanceof Character)
+			rad += ((Character) obj1).getCollisionRadius();
 		
-		if (obj2 instanceof L2Character)
-			rad += ((L2Character) obj2).getCollisionRadius();
+		if (obj2 instanceof Character)
+			rad += ((Character) obj2).getCollisionRadius();
 		
 		double dx = obj1.getX() - obj2.getX();
 		double dy = obj1.getY() - obj2.getY();

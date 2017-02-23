@@ -1,27 +1,13 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2FishermanInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2MercManagerInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2MerchantInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Fisherman;
+import net.sf.l2j.gameserver.model.actor.instance.MercenaryManagerNpc;
+import net.sf.l2j.gameserver.model.actor.instance.Merchant;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
@@ -68,7 +54,7 @@ public final class RequestSellItem extends L2GameClientPacket
 		if (_items == null)
 			return;
 		
-		final L2PcInstance player = getClient().getActiveChar();
+		final Player player = getClient().getActiveChar();
 		if (player == null)
 			return;
 		
@@ -76,11 +62,11 @@ public final class RequestSellItem extends L2GameClientPacket
 		if (!Config.KARMA_PLAYER_CAN_SHOP && player.getKarma() > 0)
 			return;
 		
-		L2Npc merchant = null;
+		Npc merchant = null;
 		L2Object target = player.getTarget();
-		boolean isGoodInstance = (target instanceof L2MerchantInstance || target instanceof L2MercManagerInstance);
+		boolean isGoodInstance = (target instanceof Merchant || target instanceof MercenaryManagerNpc);
 		
-		merchant = isGoodInstance ? (L2Npc) target : null;
+		merchant = isGoodInstance ? (Npc) target : null;
 		if (merchant == null || !merchant.canInteract(player))
 			return;
 		
@@ -112,9 +98,9 @@ public final class RequestSellItem extends L2GameClientPacket
 		
 		// Send the htm, if existing.
 		String htmlFolder = "";
-		if (merchant instanceof L2MerchantInstance)
+		if (merchant instanceof Merchant)
 			htmlFolder = "merchant";
-		else if (merchant instanceof L2FishermanInstance)
+		else if (merchant instanceof Fisherman)
 			htmlFolder = "fisherman";
 		
 		if (!htmlFolder.isEmpty())

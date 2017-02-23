@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.scripting.scripts.ai.individual;
 
 import java.util.ArrayList;
@@ -24,9 +10,9 @@ import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.SpawnLocation;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
@@ -67,11 +53,11 @@ public class Benom extends L2AttackableAIScript
 	
 	private Siege _siege;
 	
-	private L2Npc _benom;
+	private Npc _benom;
 	
 	private boolean _isPrisonOpened;
 	
-	private List<L2PcInstance> _targets = new ArrayList<>();
+	private List<Player> _targets = new ArrayList<>();
 	
 	public Benom()
 	{
@@ -90,7 +76,7 @@ public class Benom extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onTalk(L2Npc npc, L2PcInstance talker)
+	public String onTalk(Npc npc, Player talker)
 	{
 		switch (npc.getNpcId())
 		{
@@ -109,7 +95,7 @@ public class Benom extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		switch (event)
 		{
@@ -139,7 +125,7 @@ public class Benom extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAggro(L2Npc npc, L2PcInstance player, boolean isPet)
+	public String onAggro(Npc npc, Player player, boolean isPet)
 	{
 		if (isPet)
 			return super.onAggro(npc, player, isPet);
@@ -186,21 +172,21 @@ public class Benom extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onSpellFinished(L2Npc npc, L2PcInstance player, L2Skill skill)
+	public String onSpellFinished(Npc npc, Player player, L2Skill skill)
 	{
 		switch (skill.getId())
 		{
 			case 4995:
 				teleportTarget(player);
-				((L2Attackable) npc).stopHating(player);
+				((Attackable) npc).stopHating(player);
 				break;
 			
 			case 4996:
 				teleportTarget(player);
-				((L2Attackable) npc).stopHating(player);
+				((Attackable) npc).stopHating(player);
 				if (!_targets.isEmpty())
 				{
-					for (L2PcInstance target : _targets)
+					for (Player target : _targets)
 					{
 						final long x = player.getX() - target.getX();
 						final long y = player.getY() - target.getY();
@@ -209,7 +195,7 @@ public class Benom extends L2AttackableAIScript
 						if (((x * x) + (y * y) + (z * z)) <= (range * range))
 						{
 							teleportTarget(target);
-							((L2Attackable) npc).stopHating(target);
+							((Attackable) npc).stopHating(target);
 						}
 					}
 					_targets.clear();
@@ -221,7 +207,7 @@ public class Benom extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		if (Rnd.get(100) <= 25)
 		{
@@ -250,7 +236,7 @@ public class Benom extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
 		npc.broadcastNpcSay("It's not over yet... It won't be... over... like this... Never...");
 		cancelQuestTimer("raid_check", npc, null);
@@ -264,7 +250,7 @@ public class Benom extends L2AttackableAIScript
 	 * Move a player by Skill. Venom has two skill related.
 	 * @param player the player targeted
 	 */
-	private static void teleportTarget(L2PcInstance player)
+	private static void teleportTarget(Player player)
 	{
 		if (player != null)
 		{

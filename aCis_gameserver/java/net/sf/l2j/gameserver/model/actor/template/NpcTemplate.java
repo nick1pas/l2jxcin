@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.actor.template;
 
 import java.util.ArrayList;
@@ -140,7 +126,7 @@ public class NpcTemplate extends CharTemplate
 		_usingServerSideName = set.getBool("usingServerSideName", false);
 		_title = set.getString("title", "");
 		_usingServerSideTitle = set.getBool("usingServerSideTitle", false);
-		_cantBeChampionMonster = _title.equalsIgnoreCase("Quest Monster") || isType("L2Chest");
+		_cantBeChampionMonster = _title.equalsIgnoreCase("Quest Monster") || isType("Chest");
 		_level = set.getByte("level", (byte) 1);
 		_exp = set.getInteger("exp", 0);
 		_sp = set.getInteger("sp", 0);
@@ -395,6 +381,8 @@ public class NpcTemplate extends CharTemplate
 	 */
 	public void addDropData(DropData drop, int categoryType)
 	{
+		final boolean isBossType = isType("RaidBoss") || isType("GrandBoss");
+		
 		synchronized (_categories)
 		{
 			// Category exists, stores the drop and return.
@@ -402,21 +390,21 @@ public class NpcTemplate extends CharTemplate
 			{
 				if (cat.getCategoryType() == categoryType)
 				{
-					cat.addDropData(drop, isType("L2RaidBoss") || isType("L2GrandBoss"));
+					cat.addDropData(drop, isBossType);
 					return;
 				}
 			}
 			
 			// Category doesn't exist, create and store it.
 			final DropCategory cat = new DropCategory(categoryType);
-			cat.addDropData(drop, isType("L2RaidBoss") || isType("L2GrandBoss"));
+			cat.addDropData(drop, isBossType);
 			
 			_categories.add(cat);
 		}
 	}
 	
 	/**
-	 * @return the list of all Minions that must be spawn with the L2Npc using this L2NpcTemplate.
+	 * @return the list of all Minions that must be spawn with the Npc using this L2NpcTemplate.
 	 */
 	public List<MinionData> getMinionData()
 	{

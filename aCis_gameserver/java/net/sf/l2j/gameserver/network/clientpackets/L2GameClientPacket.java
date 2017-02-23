@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 import net.sf.l2j.commons.mmocore.ReceivablePacket;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
 
@@ -68,7 +68,7 @@ public abstract class L2GameClientPacket extends ReceivablePacket<L2GameClient>
 			// Depending of the packet send, removes spawn protection
 			if (triggersOnActionRequest())
 			{
-				final L2PcInstance actor = getClient().getActiveChar();
+				final Player actor = getClient().getActiveChar();
 				if (actor != null && actor.isSpawnProtected())
 				{
 					actor.onActionRequest();

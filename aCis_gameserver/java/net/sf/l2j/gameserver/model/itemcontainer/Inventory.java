@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.itemcontainer;
 
 import java.sql.Connection;
@@ -26,8 +12,8 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemLocation;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemState;
@@ -93,7 +79,7 @@ public abstract class Inventory extends ItemContainer
 		 * Add alteration in inventory when item equipped
 		 */
 		@Override
-		public void onEquip(int slot, ItemInstance item, L2Playable actor)
+		public void onEquip(int slot, ItemInstance item, Playable actor)
 		{
 			if (!_changed.contains(item))
 				_changed.add(item);
@@ -103,7 +89,7 @@ public abstract class Inventory extends ItemContainer
 		 * Add alteration in inventory when item unequipped
 		 */
 		@Override
-		public void onUnequip(int slot, ItemInstance item, L2Playable actor)
+		public void onUnequip(int slot, ItemInstance item, Playable actor)
 		{
 			if (!_changed.contains(item))
 				_changed.add(item);
@@ -146,11 +132,11 @@ public abstract class Inventory extends ItemContainer
 	 * Drop item from inventory and updates database
 	 * @param process : String Identifier of process triggering this action
 	 * @param item : ItemInstance to be dropped
-	 * @param actor : L2PcInstance Player requesting the item drop
+	 * @param actor : Player Player requesting the item drop
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance dropItem(String process, ItemInstance item, L2PcInstance actor, L2Object reference)
+	public ItemInstance dropItem(String process, ItemInstance item, Player actor, L2Object reference)
 	{
 		if (item == null)
 			return null;
@@ -176,11 +162,11 @@ public abstract class Inventory extends ItemContainer
 	 * @param process : String Identifier of process triggering this action
 	 * @param objectId : int Item Instance identifier of the item to be dropped
 	 * @param count : int Quantity of items to be dropped
-	 * @param actor : L2PcInstance Player requesting the item drop
+	 * @param actor : Player Player requesting the item drop
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance dropItem(String process, int objectId, int count, L2PcInstance actor, L2Object reference)
+	public ItemInstance dropItem(String process, int objectId, int count, Player actor, L2Object reference)
 	{
 		ItemInstance item = getItemByObjectId(objectId);
 		if (item == null)
@@ -403,7 +389,7 @@ public abstract class Inventory extends ItemContainer
 					if (listener == null)
 						continue;
 					
-					listener.onUnequip(slot, old, (L2Playable) getOwner());
+					listener.onUnequip(slot, old, (Playable) getOwner());
 				}
 				old.updateDatabase();
 			}
@@ -436,7 +422,7 @@ public abstract class Inventory extends ItemContainer
 					if (listener == null)
 						continue;
 					
-					listener.onEquip(slot, item, (L2Playable) getOwner());
+					listener.onEquip(slot, item, (Playable) getOwner());
 				}
 				item.updateDatabase();
 			}
@@ -575,8 +561,8 @@ public abstract class Inventory extends ItemContainer
 		try
 		{
 			unEquipItemInSlot(slot);
-			if (getOwner() instanceof L2PcInstance)
-				((L2PcInstance) getOwner()).refreshExpertisePenalty();
+			if (getOwner() instanceof Player)
+				((Player) getOwner()).refreshExpertisePenalty();
 		}
 		finally
 		{
@@ -662,8 +648,8 @@ public abstract class Inventory extends ItemContainer
 			ItemInstance old = setPaperdollItem(pdollSlot, null);
 			if (old != null)
 			{
-				if (getOwner() instanceof L2PcInstance)
-					((L2PcInstance) getOwner()).refreshExpertisePenalty();
+				if (getOwner() instanceof Player)
+					((Player) getOwner()).refreshExpertisePenalty();
 			}
 			return old;
 		}
@@ -697,10 +683,10 @@ public abstract class Inventory extends ItemContainer
 	 */
 	public void equipItem(ItemInstance item)
 	{
-		if (getOwner() instanceof L2PcInstance)
+		if (getOwner() instanceof Player)
 		{
 			// Can't equip item if you are in shop mod or hero item and you're not hero.
-			if (((L2PcInstance) getOwner()).isInStoreMode() || (!((L2PcInstance) getOwner()).isHero() && item.isHeroItem()))
+			if (((Player) getOwner()).isInStoreMode() || (!((Player) getOwner()).isHero() && item.isHeroItem()))
 				return;
 		}
 		
@@ -867,10 +853,10 @@ public abstract class Inventory extends ItemContainer
 	 */
 	public void equipPetItem(ItemInstance item)
 	{
-		if (getOwner() instanceof L2PcInstance)
+		if (getOwner() instanceof Player)
 		{
 			// Can't equip item if you are in shop mod.
-			if (((L2PcInstance) getOwner()).isInStoreMode())
+			if (((Player) getOwner()).isInStoreMode())
 				return;
 		}
 		
@@ -971,9 +957,9 @@ public abstract class Inventory extends ItemContainer
 				if (item == null)
 					continue;
 				
-				if (getOwner() instanceof L2PcInstance)
+				if (getOwner() instanceof Player)
 				{
-					if (!((L2PcInstance) getOwner()).isHero() && item.isHeroItem())
+					if (!((Player) getOwner()).isHero() && item.isHeroItem())
 						item.setLocation(ItemLocation.INVENTORY);
 				}
 				
@@ -1012,8 +998,8 @@ public abstract class Inventory extends ItemContainer
 				if (listener == null)
 					continue;
 				
-				listener.onUnequip(slot, element, (L2Playable) getOwner());
-				listener.onEquip(slot, element, (L2Playable) getOwner());
+				listener.onUnequip(slot, element, (Playable) getOwner());
+				listener.onEquip(slot, element, (Playable) getOwner());
 			}
 		}
 	}

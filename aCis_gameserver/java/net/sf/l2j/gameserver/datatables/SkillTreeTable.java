@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.datatables;
 
 import java.io.File;
@@ -28,7 +14,7 @@ import net.sf.l2j.gameserver.model.L2EnchantSkillLearn;
 import net.sf.l2j.gameserver.model.L2PledgeSkillLearn;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2SkillLearn;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.xmlfactory.XMLDocumentFactory;
 
@@ -249,11 +235,11 @@ public class SkillTreeTable
 	}
 	
 	/**
-	 * @param cha L2PcInstance player whom skills are compared.
+	 * @param cha Player player whom skills are compared.
 	 * @param classId ClassId as a source for skill tree.
-	 * @return list of available general skills for L2PcInstance.
+	 * @return list of available general skills for Player.
 	 */
-	public List<L2SkillLearn> getAvailableSkills(L2PcInstance cha, ClassId classId)
+	public List<L2SkillLearn> getAvailableSkills(Player cha, ClassId classId)
 	{
 		List<L2SkillLearn> result = new ArrayList<>();
 		
@@ -292,11 +278,11 @@ public class SkillTreeTable
 	}
 	
 	/**
-	 * @param cha L2PcInstance, player whom skills are compared.
+	 * @param cha Player, player whom skills are compared.
 	 * @param classId ClassId, as a source for skill tree.
-	 * @return list of all available general skills <b>of maximal level</b> for L2PcInstance.
+	 * @return list of all available general skills <b>of maximal level</b> for Player.
 	 */
-	public Collection<L2SkillLearn> getAllAvailableSkills(L2PcInstance cha, ClassId classId)
+	public Collection<L2SkillLearn> getAllAvailableSkills(Player cha, ClassId classId)
 	{
 		Map<Integer, L2SkillLearn> result = new LinkedHashMap<>();
 		
@@ -331,11 +317,11 @@ public class SkillTreeTable
 	}
 	
 	/**
-	 * @param cha L2PcInstance, player whom level is checked.
+	 * @param cha Player, player whom level is checked.
 	 * @param classId ClassId, as a source for skill tree.
-	 * @return the minimum level for next general skill for L2PcInstance.
+	 * @return the minimum level for next general skill for Player.
 	 */
-	public int getMinLevelForNewSkill(L2PcInstance cha, ClassId classId)
+	public int getMinLevelForNewSkill(Player cha, ClassId classId)
 	{
 		int level = cha.getLevel();
 		int result = Integer.MAX_VALUE;
@@ -364,10 +350,10 @@ public class SkillTreeTable
 	}
 	
 	/**
-	 * @param cha L2PcInstance, player whom skills are compared.
-	 * @return list of available fishing and expand dwarven craft skills for L2PcInstance.
+	 * @param cha Player, player whom skills are compared.
+	 * @return list of available fishing and expand dwarven craft skills for Player.
 	 */
-	public List<L2SkillLearn> getAvailableFishingDwarvenCraftSkills(L2PcInstance cha)
+	public List<L2SkillLearn> getAvailableFishingDwarvenCraftSkills(Player cha)
 	{
 		List<L2SkillLearn> result = new ArrayList<>();
 		List<L2SkillLearn> skills = new ArrayList<>();
@@ -405,10 +391,10 @@ public class SkillTreeTable
 	}
 	
 	/**
-	 * @param cha L2PcInstance, player whom level is checked.
-	 * @return the minimum level for next fishing and expand dwarven craft skill for L2PcInstance.
+	 * @param cha Player, player whom level is checked.
+	 * @return the minimum level for next fishing and expand dwarven craft skill for Player.
 	 */
-	public int getMinLevelForNewFishingDwarvenCraftSkill(L2PcInstance cha)
+	public int getMinLevelForNewFishingDwarvenCraftSkill(Player cha)
 	{
 		List<L2SkillLearn> skills = new ArrayList<>();
 		
@@ -434,10 +420,10 @@ public class SkillTreeTable
 	}
 	
 	/**
-	 * @param cha L2PcInstance, player whom skills are compared.
-	 * @return list of available enchant skills for L2PcInstance.
+	 * @param cha Player, player whom skills are compared.
+	 * @return list of available enchant skills for Player.
 	 */
-	public List<L2EnchantSkillLearn> getAvailableEnchantSkills(L2PcInstance cha)
+	public List<L2EnchantSkillLearn> getAvailableEnchantSkills(Player cha)
 	{
 		final List<L2EnchantSkillLearn> result = new ArrayList<>();
 		final Collection<L2Skill> chaSkills = cha.getSkills().values();
@@ -468,10 +454,10 @@ public class SkillTreeTable
 	}
 	
 	/**
-	 * @param cha L2PcInstance, player whom skills are compared.
-	 * @return list of available pledge skills for L2PcInstance.
+	 * @param cha Player, player whom skills are compared.
+	 * @return list of available pledge skills for Player.
 	 */
-	public List<L2PledgeSkillLearn> getAvailablePledgeSkills(L2PcInstance cha)
+	public List<L2PledgeSkillLearn> getAvailablePledgeSkills(Player cha)
 	{
 		List<L2PledgeSkillLearn> result = new ArrayList<>();
 		

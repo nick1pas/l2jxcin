@@ -15,7 +15,7 @@
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.protection.CatsGuard;
 
 /**
@@ -36,7 +36,7 @@ public class AdminHwidBan implements IAdminCommandHandler
 	};
 	
 	@Override
-	public boolean useAdminCommand(String command, L2PcInstance activeChar)
+	public boolean useAdminCommand(String command, Player activeChar)
 	{
 		if (command.equals("admin_hwid"))
 		{
@@ -44,7 +44,7 @@ public class AdminHwidBan implements IAdminCommandHandler
 		}
 		else if (command.equals("admin_hwidban"))
 		{
-			String hwid = ((L2PcInstance) activeChar.getTarget()).getHWid();
+			String hwid = ((Player) activeChar.getTarget()).getHWid();
 			if (hwid != null)
 			{
 				CatsGuard.getInstance().ban(hwid);
@@ -57,7 +57,7 @@ public class AdminHwidBan implements IAdminCommandHandler
 		}
 		else if (command.equals("admin_hwidunban"))
 		{
-			String hwid = ((L2PcInstance) activeChar.getTarget()).getHWid();
+			String hwid = ((Player) activeChar.getTarget()).getHWid();
 			if (hwid != null)
 			{
 				CatsGuard.getInstance().unban(hwid);

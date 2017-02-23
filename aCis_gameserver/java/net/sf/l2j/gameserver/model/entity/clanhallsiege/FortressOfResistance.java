@@ -35,8 +35,8 @@ import net.sf.l2j.gameserver.datatables.SpawnTable;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Spawn;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.taskmanager.GameTimeTaskManager;
 import net.sf.l2j.gameserver.util.Broadcast;
@@ -188,7 +188,7 @@ public class FortressOfResistance
 			final L2Spawn spawn = new L2Spawn(template);
 			spawn.setLoc(50335, 111275, -1970, 0);
 			SpawnTable.getInstance().addNewSpawn(spawn, false);
-			final L2Npc npc = spawn.doSpawn(true);
+			final Npc npc = spawn.doSpawn(true);
 			npc.scheduleDespawn(3600000);
 		}
 		catch (Exception e)
@@ -221,7 +221,7 @@ public class FortressOfResistance
 			final L2Spawn spawn = new L2Spawn(template);
 			spawn.setLoc(44525, 108867, -2020, 0);
 			SpawnTable.getInstance().addNewSpawn(spawn, false);
-			final L2Npc npc = spawn.doSpawn(true);
+			final Npc npc = spawn.doSpawn(true);
 			npc.scheduleDespawn(3600000);
 		}
 		catch (Exception e)
@@ -233,7 +233,7 @@ public class FortressOfResistance
 		ThreadPool.schedule(new AnnounceInfo("No one can`t kill Nurka! Partisan Hideout set free until next week!"), 3600000);
 	}
 	
-	public final static boolean Conditions(L2PcInstance player)
+	public final static boolean Conditions(Player player)
 	{
 		if (player != null && player.getClan() != null && player.isClanLeader() && player.getClan().getAuctionBiddedAt() <= 0 && ClanHallManager.getInstance().getClanHallByOwner(player.getClan()) == null && player.getClan().getLevel() > 2)
 		{

@@ -1,21 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @author godson
- */
 package net.sf.l2j.gameserver.model.entity;
 
 import java.sql.Connection;
@@ -42,7 +24,7 @@ import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
@@ -456,7 +438,7 @@ public class Hero
 		_heroMessages.clear();
 	}
 	
-	public void showHeroDiary(L2PcInstance activeChar, int heroclass, int charid, int page)
+	public void showHeroDiary(Player activeChar, int heroclass, int charid, int page)
 	{
 		if (!_heroDiaries.containsKey(charid))
 			return;
@@ -515,7 +497,7 @@ public class Hero
 		activeChar.sendPacket(html);
 	}
 	
-	public void showHeroFights(L2PcInstance activeChar, int heroclass, int charid, int page)
+	public void showHeroFights(Player activeChar, int heroclass, int charid, int page)
 	{
 		if (!_heroFights.containsKey(charid))
 			return;
@@ -595,7 +577,7 @@ public class Hero
 			{
 				String name = hero.getString(Olympiad.CHAR_NAME);
 				
-				L2PcInstance player = World.getInstance().getPlayer(name);
+				Player player = World.getInstance().getPlayer(name);
 				if (player == null)
 					continue;
 				
@@ -837,7 +819,7 @@ public class Hero
 	 * @param player the player instance
 	 * @param message String to set
 	 */
-	public void setHeroMessage(L2PcInstance player, String message)
+	public void setHeroMessage(Player player, String message)
 	{
 		_heroMessages.put(player.getObjectId(), message);
 	}
@@ -903,7 +885,7 @@ public class Hero
 		return entry != null && entry.getInteger(ACTIVE) == 0;
 	}
 	
-	public void activateHero(L2PcInstance player)
+	public void activateHero(Player player)
 	{
 		StatsSet hero = _heroes.get(player.getObjectId());
 		hero.set(ACTIVE, 1);

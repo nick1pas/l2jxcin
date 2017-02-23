@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.scripting.scripts.ai.individual;
 
 import java.util.ArrayList;
@@ -27,12 +13,12 @@ import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.SpawnLocation;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2GrandBossInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.GrandBoss;
+import net.sf.l2j.gameserver.model.actor.instance.Monster;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
 import net.sf.l2j.gameserver.network.serverpackets.Earthquake;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
@@ -74,9 +60,9 @@ public class Baium extends L2AttackableAIScript
 		new SpawnLocation(115792, 16608, 10080, 0)
 	};
 	
-	private L2Character _actualVictim;
+	private Character _actualVictim;
 	private long _lastAttackTime = 0;
-	private final List<L2Npc> _minions = new ArrayList<>(5);
+	private final List<Npc> _minions = new ArrayList<>(5);
 	
 	public Baium()
 	{
@@ -114,8 +100,8 @@ public class Baium extends L2AttackableAIScript
 			final int hp = info.getInteger("currentHP");
 			final int mp = info.getInteger("currentMP");
 			
-			final L2Npc baium = addSpawn(LIVE_BAIUM, loc_x, loc_y, loc_z, heading, false, 0, false);
-			GrandBossManager.getInstance().addBoss((L2GrandBossInstance) baium);
+			final Npc baium = addSpawn(LIVE_BAIUM, loc_x, loc_y, loc_z, heading, false, 0, false);
+			GrandBossManager.getInstance().addBoss((GrandBoss) baium);
 			
 			baium.setCurrentHpMp(hp, mp);
 			baium.setRunning();
@@ -128,8 +114,8 @@ public class Baium extends L2AttackableAIScript
 			// Spawns angels
 			for (SpawnLocation loc : ANGEL_LOCATION)
 			{
-				L2Npc angel = addSpawn(ARCHANGEL, loc.getX(), loc.getY(), loc.getZ(), loc.getHeading(), false, 0, true);
-				((L2Attackable) angel).setIsRaidMinion(true);
+				Npc angel = addSpawn(ARCHANGEL, loc.getX(), loc.getY(), loc.getZ(), loc.getHeading(), false, 0, true);
+				((Attackable) angel).setIsRaidMinion(true);
 				angel.setRunning();
 				_minions.add(angel);
 			}
@@ -148,7 +134,7 @@ public class Baium extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		if (npc != null && npc.getNpcId() == LIVE_BAIUM)
 		{
@@ -184,8 +170,8 @@ public class Baium extends L2AttackableAIScript
 				// Spawn angels
 				for (SpawnLocation loc : ANGEL_LOCATION)
 				{
-					L2Npc angel = addSpawn(ARCHANGEL, loc.getX(), loc.getY(), loc.getZ(), loc.getHeading(), false, 0, true);
-					((L2Attackable) angel).setIsRaidMinion(true);
+					Npc angel = addSpawn(ARCHANGEL, loc.getX(), loc.getY(), loc.getZ(), loc.getHeading(), false, 0, true);
+					((Attackable) angel).setIsRaidMinion(true);
 					angel.setRunning();
 					_minions.add(angel);
 				}
@@ -214,7 +200,7 @@ public class Baium extends L2AttackableAIScript
 					npc.deleteMe();
 					
 					// Unspawn angels
-					for (L2Npc minion : _minions)
+					for (Npc minion : _minions)
 					{
 						minion.getSpawn().setRespawnState(false);
 						minion.deleteMe();
@@ -244,10 +230,10 @@ public class Baium extends L2AttackableAIScript
 		{
 			boolean updateTarget = false; // Update or no the target
 			
-			for (L2Npc minion : _minions)
+			for (Npc minion : _minions)
 			{
-				L2Attackable angel = ((L2Attackable) minion);
-				L2Character victim = angel.getMostHated();
+				Attackable angel = ((Attackable) minion);
+				Character victim = angel.getMostHated();
 				
 				if (Rnd.get(100) < 10) // Chaos time
 					updateTarget = true;
@@ -255,7 +241,7 @@ public class Baium extends L2AttackableAIScript
 				{
 					if (victim != null) // Target is a unarmed player ; clean aggro.
 					{
-						if (victim instanceof L2PcInstance && victim.getActiveWeaponInstance() == null)
+						if (victim instanceof Player && victim.getActiveWeaponInstance() == null)
 						{
 							angel.stopHating(victim); // Clean the aggro number of previous victim.
 							updateTarget = true;
@@ -268,7 +254,7 @@ public class Baium extends L2AttackableAIScript
 				
 				if (updateTarget)
 				{
-					L2Character newVictim = getRandomTarget(minion);
+					Character newVictim = getRandomTarget(minion);
 					if (newVictim != null && victim != newVictim)
 					{
 						angel.addDamageHate(newVictim, 0, 10000);
@@ -281,7 +267,7 @@ public class Baium extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onTalk(L2Npc npc, L2PcInstance player)
+	public String onTalk(Npc npc, Player player)
 	{
 		String htmltext = "";
 		
@@ -289,10 +275,10 @@ public class Baium extends L2AttackableAIScript
 		{
 			GrandBossManager.getInstance().setBossStatus(LIVE_BAIUM, AWAKE);
 			
-			final L2Npc baium = addSpawn(LIVE_BAIUM, npc, false, 0, false);
+			final Npc baium = addSpawn(LIVE_BAIUM, npc, false, 0, false);
 			baium.setIsInvul(true);
 			
-			GrandBossManager.getInstance().addBoss((L2GrandBossInstance) baium);
+			GrandBossManager.getInstance().addBoss((GrandBoss) baium);
 			
 			// First animation
 			baium.broadcastPacket(new SocialAction(baium, 2));
@@ -311,14 +297,14 @@ public class Baium extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onSpawn(L2Npc npc)
+	public String onSpawn(Npc npc)
 	{
 		npc.disableCoreAI(true);
 		return super.onSpawn(npc);
 	}
 	
 	@Override
-	public String onAttack(L2Npc npc, L2PcInstance attacker, int damage, boolean isPet, L2Skill skill)
+	public String onAttack(Npc npc, Player attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		if (!BAIUM_LAIR.isInsideZone(attacker))
 		{
@@ -347,7 +333,7 @@ public class Baium extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance killer, boolean isPet)
+	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
 		cancelQuestTimer("baium_despawn", npc, null);
 		npc.broadcastPacket(new PlaySound(1, "BS01_D", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
@@ -366,7 +352,7 @@ public class Baium extends L2AttackableAIScript
 		GrandBossManager.getInstance().setStatsSet(LIVE_BAIUM, info);
 		
 		// Unspawn angels.
-		for (L2Npc minion : _minions)
+		for (Npc minion : _minions)
 		{
 			minion.getSpawn().setRespawnState(false);
 			minion.deleteMe();
@@ -387,28 +373,28 @@ public class Baium extends L2AttackableAIScript
 	 * @param npc to check.
 	 * @return the random target.
 	 */
-	private L2Character getRandomTarget(L2Npc npc)
+	private Character getRandomTarget(Npc npc)
 	{
 		int npcId = npc.getNpcId();
-		List<L2Character> result = new ArrayList<>();
+		List<Character> result = new ArrayList<>();
 		
-		for (L2Character obj : npc.getKnownType(L2Character.class))
+		for (Character obj : npc.getKnownType(Character.class))
 		{
-			if (obj instanceof L2PcInstance)
+			if (obj instanceof Player)
 			{
 				if (obj.isDead() || !(GeoEngine.getInstance().canSeeTarget(npc, obj)))
 					continue;
 				
-				if (((L2PcInstance) obj).isGM() && ((L2PcInstance) obj).getAppearance().getInvisible())
+				if (((Player) obj).isGM() && ((Player) obj).getAppearance().getInvisible())
 					continue;
 				
-				if (npcId == ARCHANGEL && ((L2PcInstance) obj).getActiveWeaponInstance() == null)
+				if (npcId == ARCHANGEL && ((Player) obj).getActiveWeaponInstance() == null)
 					continue;
 				
 				result.add(obj);
 			}
 			// Case of Archangels, they can hit Baium.
-			else if (obj instanceof L2GrandBossInstance && npcId == ARCHANGEL)
+			else if (obj instanceof GrandBoss && npcId == ARCHANGEL)
 				result.add(obj);
 		}
 		
@@ -417,7 +403,7 @@ public class Baium extends L2AttackableAIScript
 		{
 			if (npcId == LIVE_BAIUM) // Case of Baium. Angels should never be without target.
 			{
-				for (L2Npc minion : _minions)
+				for (Npc minion : _minions)
 					result.add(minion);
 			}
 		}
@@ -429,13 +415,13 @@ public class Baium extends L2AttackableAIScript
 	 * The personal casting AI for Baium.
 	 * @param npc baium, basically...
 	 */
-	private void callSkillAI(L2Npc npc)
+	private void callSkillAI(Npc npc)
 	{
 		if (npc.isInvul() || npc.isCastingNow())
 			return;
 		
 		// Pickup a target if no or dead victim. If Baium was hitting an angel, 50% luck he reconsiders his target. 10% luck he decides to reconsiders his target.
-		if (_actualVictim == null || _actualVictim.isDead() || !(npc.getKnownType(L2PcInstance.class).contains(_actualVictim)) || (_actualVictim instanceof L2MonsterInstance && Rnd.get(10) < 5) || Rnd.get(10) == 0)
+		if (_actualVictim == null || _actualVictim.isDead() || !(npc.getKnownType(Player.class).contains(_actualVictim)) || (_actualVictim instanceof Monster && Rnd.get(10) < 5) || Rnd.get(10) == 0)
 			_actualVictim = getRandomTarget(npc);
 		
 		// If result is null, return directly.
@@ -461,7 +447,7 @@ public class Baium extends L2AttackableAIScript
 	 * @param npc baium
 	 * @return a usable skillId
 	 */
-	private static int getRandomSkill(L2Npc npc)
+	private static int getRandomSkill(Npc npc)
 	{
 		// Baium's selfheal. It happens exceptionaly.
 		if (npc.getCurrentHp() / npc.getMaxHp() < 0.1)
@@ -474,7 +460,7 @@ public class Baium extends L2AttackableAIScript
 		final int chance = Rnd.get(100); // Remember, it's 0 to 99, not 1 to 100.
 		
 		// If Baium feels surrounded or see 2+ angels, he unleashes his wrath upon heads :).
-		if (getPlayersCountInRadius(600, npc, false) >= 20 || npc.getKnownTypeInRadius(L2MonsterInstance.class, 600).size() >= 2)
+		if (getPlayersCountInRadius(600, npc, false) >= 20 || npc.getKnownTypeInRadius(Monster.class, 600).size() >= 2)
 		{
 			if (chance < 25)
 				skill = 4130;

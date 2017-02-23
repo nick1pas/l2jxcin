@@ -35,10 +35,10 @@ import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2DecoInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2MonsterInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Deco;
+import net.sf.l2j.gameserver.model.actor.instance.Monster;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -169,8 +169,8 @@ public class WildBeastFarmSiege extends ClanHallSiege
 		for (String clanName : getRegisteredClans())
 		{
 			L2Clan clan = ClanTable.getInstance().getClanByName(clanName);
-			L2MonsterInstance mob = getQuestMob(clan);
-			L2DecoInstance flag = getSiegeFlag(clan);
+			Monster mob = getQuestMob(clan);
+			Deco flag = getSiegeFlag(clan);
 			if (mob != null)
 				mob.deleteMe();
 			
@@ -202,11 +202,11 @@ public class WildBeastFarmSiege extends ClanHallSiege
 	public void teleportPlayers()
 	{
 		zone = clanhall.getZone();
-		for (L2Character cha : zone.getCharactersInside())
+		for (Character cha : zone.getCharactersInside())
 		{
-			if (cha instanceof L2PcInstance)
+			if (cha instanceof Player)
 			{
-				L2Clan clan = ((L2PcInstance) cha).getClan();
+				L2Clan clan = ((Player) cha).getClan();
 				if (!isPlayerRegister(clan, cha.getName()))
 				{
 					cha.teleToLocation(53468, -94092, -1634, 0);
@@ -276,7 +276,7 @@ public class WildBeastFarmSiege extends ClanHallSiege
 				NpcTemplate template;
 				L2Clan clan = ClanTable.getInstance().getClanByName(clanName);
 				template = NpcTable.getInstance().getTemplate(35617 + mobCounter);
-				L2MonsterInstance questMob = new L2MonsterInstance(IdFactory.getInstance().getNextId(), template);
+				Monster questMob = new Monster(IdFactory.getInstance().getNextId(), template);
 				questMob.setHeading(100);
 				questMob.getStatus().setCurrentHpMp(questMob.getMaxHp(), questMob.getMaxMp());
 				
@@ -326,7 +326,7 @@ public class WildBeastFarmSiege extends ClanHallSiege
 			{
 				template = NpcTable.getInstance().getTemplate(35422 + flagCounter);
 			}
-			L2DecoInstance flag = new L2DecoInstance(IdFactory.getInstance().getNextId(), template);
+			Deco flag = new Deco(IdFactory.getInstance().getNextId(), template);
 			flag.setTitle(clan.getName());
 			flag.setHeading(100);
 			flag.getStatus().setCurrentHpMp(flag.getMaxHp(), flag.getMaxMp());
@@ -404,7 +404,7 @@ public class WildBeastFarmSiege extends ClanHallSiege
 		return true;
 	}
 	
-	public synchronized int registerClanOnSiege(L2PcInstance player, L2Clan playerClan)
+	public synchronized int registerClanOnSiege(Player player, L2Clan playerClan)
 	{
 		if (_clanCounter == 5)
 		{
@@ -469,7 +469,7 @@ public class WildBeastFarmSiege extends ClanHallSiege
 		return null;
 	}
 	
-	public L2DecoInstance getSiegeFlag(L2Clan playerClan)
+	public Deco getSiegeFlag(L2Clan playerClan)
 	{
 		clanPlayersInfo clanInfo = _clansInfo.get(playerClan.getClanId());
 		if (clanInfo != null)
@@ -480,7 +480,7 @@ public class WildBeastFarmSiege extends ClanHallSiege
 		return null;
 	}
 	
-	public L2MonsterInstance getQuestMob(L2Clan clan)
+	public Monster getQuestMob(L2Clan clan)
 	{
 		clanPlayersInfo clanInfo = _clansInfo.get(clan.getClanId());
 		if (clanInfo != null)
@@ -606,7 +606,7 @@ public class WildBeastFarmSiege extends ClanHallSiege
 				L2Clan clan = ClanTable.getInstance().getClanByName(clanName);
 				for (String playerName : getRegisteredPlayers(clan))
 				{
-					L2PcInstance cha = World.getInstance().getPlayer(playerName);
+					Player cha = World.getInstance().getPlayer(playerName);
 					if (cha != null)
 					{
 						cha.sendPacket(cs);
@@ -617,7 +617,7 @@ public class WildBeastFarmSiege extends ClanHallSiege
 		else
 		{
 			CreatureSay cs = new CreatureSay(0, 1, "Journal", text);
-			for (L2PcInstance player : World.getInstance().getPlayers())
+			for (Player player : World.getInstance().getPlayers())
 			{
 				player.sendPacket(cs);
 			}
@@ -688,8 +688,8 @@ public class WildBeastFarmSiege extends ClanHallSiege
 	class clanPlayersInfo
 	{
 		public String _clanName;
-		public L2DecoInstance _flag = null;
-		public L2MonsterInstance _mob = null;
+		public Deco _flag = null;
+		public Monster _mob = null;
 		public List<String> _players = new ArrayList<>();
 	}
 	

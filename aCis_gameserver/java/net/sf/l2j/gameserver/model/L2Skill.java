@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model;
 
 import java.util.ArrayList;
@@ -26,19 +12,19 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SkillTreeTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.L2Playable;
-import net.sf.l2j.gameserver.model.actor.L2Summon;
-import net.sf.l2j.gameserver.model.actor.instance.L2ArtefactInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2ChestInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2CubicInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2PetInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2SiegeFlagInstance;
-import net.sf.l2j.gameserver.model.actor.instance.L2SummonInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.instance.Chest;
+import net.sf.l2j.gameserver.model.actor.instance.Cubic;
+import net.sf.l2j.gameserver.model.actor.instance.Door;
+import net.sf.l2j.gameserver.model.actor.instance.HolyThing;
+import net.sf.l2j.gameserver.model.actor.instance.Pet;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.Servitor;
+import net.sf.l2j.gameserver.model.actor.instance.SiegeFlag;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
@@ -481,7 +467,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		}
 	}
 	
-	public abstract void useSkill(L2Character caster, L2Object[] targets);
+	public abstract void useSkill(Character caster, L2Object[] targets);
 	
 	public final boolean isPotion()
 	{
@@ -560,7 +546,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 	 * @param activeChar
 	 * @return the power of the skill.
 	 */
-	public final double getPower(L2Character activeChar)
+	public final double getPower(Character activeChar)
 	{
 		if (activeChar == null)
 			return _power;
@@ -1196,7 +1182,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		}
 	}
 	
-	public final boolean getWeaponDependancy(L2Character activeChar)
+	public final boolean getWeaponDependancy(Character activeChar)
 	{
 		int weaponsAllowed = getWeaponsAllowed();
 		// check to see if skill has a weapon dependency.
@@ -1217,7 +1203,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		return false;
 	}
 	
-	public boolean checkCondition(L2Character activeChar, L2Object target, boolean itemOrWeapon)
+	public boolean checkCondition(Character activeChar, L2Object target, boolean itemOrWeapon)
 	{
 		final List<Condition> preCondition = (itemOrWeapon) ? _itemPreCondition : _preCondition;
 		if (preCondition == null || preCondition.isEmpty())
@@ -1225,8 +1211,8 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		
 		final Env env = new Env();
 		env.setCharacter(activeChar);
-		if (target instanceof L2Character)
-			env.setTarget((L2Character) target);
+		if (target instanceof Character)
+			env.setTarget((Character) target);
 		
 		env.setSkill(this);
 		
@@ -1254,17 +1240,17 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		return true;
 	}
 	
-	public final L2Object[] getTargetList(L2Character activeChar, boolean onlyFirst)
+	public final L2Object[] getTargetList(Character activeChar, boolean onlyFirst)
 	{
 		// Init to null the target of the skill
-		L2Character target = null;
+		Character target = null;
 		
 		// Get the L2Objcet targeted by the user of the skill at this moment
 		L2Object objTarget = activeChar.getTarget();
-		// If the L2Object targeted is a L2Character, it becomes the L2Character target
-		if (objTarget instanceof L2Character)
+		// If the L2Object targeted is a Character, it becomes the Character target
+		if (objTarget instanceof Character)
 		{
-			target = (L2Character) objTarget;
+			target = (Character) objTarget;
 		}
 		
 		return getTargetList(activeChar, onlyFirst, target);
@@ -1276,7 +1262,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 	 * @param target : The skill target, which can be used as a radius center or as main target.
 	 * @return an L2Object[] consisting of all targets, depending of the skill type.
 	 */
-	public final L2Object[] getTargetList(L2Character activeChar, boolean onlyFirst, L2Character target)
+	public final L2Object[] getTargetList(Character activeChar, boolean onlyFirst, Character target)
 	{
 		switch (_targetType)
 		{
@@ -1307,7 +1293,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 					return _emptyTargetList;
 				}
 				
-				return new L2Character[]
+				return new Character[]
 				{
 					target
 				};
@@ -1315,20 +1301,20 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			case TARGET_SELF:
 			case TARGET_GROUND:
 			{
-				return new L2Character[]
+				return new Character[]
 				{
 					activeChar
 				};
 			}
 			case TARGET_HOLY:
 			{
-				if (!(target instanceof L2ArtefactInstance))
+				if (!(target instanceof HolyThing))
 				{
 					activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.TARGET_IS_INCORRECT));
 					return _emptyTargetList;
 				}
 				
-				return new L2Character[]
+				return new Character[]
 				{
 					target
 				};
@@ -1337,7 +1323,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			{
 				target = activeChar.getPet();
 				if (target != null && !target.isDead())
-					return new L2Character[]
+					return new Character[]
 					{
 						target
 					};
@@ -1347,8 +1333,8 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			case TARGET_SUMMON:
 			{
 				target = activeChar.getPet();
-				if (target != null && !target.isDead() && target instanceof L2SummonInstance)
-					return new L2Character[]
+				if (target != null && !target.isDead() && target instanceof Servitor)
+					return new Character[]
 					{
 						target
 					};
@@ -1357,11 +1343,11 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			}
 			case TARGET_OWNER_PET:
 			{
-				if (activeChar instanceof L2Summon)
+				if (activeChar instanceof Summon)
 				{
 					target = activeChar.getActingPlayer();
 					if (target != null && !target.isDead())
-						return new L2Character[]
+						return new Character[]
 						{
 							target
 						};
@@ -1371,11 +1357,11 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			}
 			case TARGET_CORPSE_PET:
 			{
-				if (activeChar instanceof L2PcInstance)
+				if (activeChar instanceof Player)
 				{
 					target = activeChar.getPet();
 					if (target != null && target.isDead())
-						return new L2Character[]
+						return new Character[]
 						{
 							target
 						};
@@ -1387,23 +1373,23 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			case TARGET_FRONT_AURA:
 			case TARGET_BEHIND_AURA:
 			{
-				List<L2Character> targetList = new ArrayList<>();
+				List<Character> targetList = new ArrayList<>();
 				
-				// Go through the L2Character _knownList
+				// Go through the Character _knownList
 				if (_skillType == L2SkillType.DUMMY)
 				{
 					if (onlyFirst)
-						return new L2Character[]
+						return new Character[]
 						{
 							activeChar
 						};
 					
-					final L2PcInstance sourcePlayer = activeChar.getActingPlayer();
+					final Player sourcePlayer = activeChar.getActingPlayer();
 					
 					targetList.add(activeChar);
-					for (L2Character obj : activeChar.getKnownTypeInRadius(L2Character.class, _skillRadius))
+					for (Character obj : activeChar.getKnownTypeInRadius(Character.class, _skillRadius))
 					{
-						if (!(obj == activeChar || obj == sourcePlayer || obj instanceof L2Npc || obj instanceof L2Attackable))
+						if (!(obj == activeChar || obj == sourcePlayer || obj instanceof Npc || obj instanceof Attackable))
 							continue;
 						
 						targetList.add(obj);
@@ -1413,9 +1399,9 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				{
 					final boolean srcInArena = activeChar.isInArena();
 					
-					for (L2Character obj : activeChar.getKnownTypeInRadius(L2Character.class, _skillRadius))
+					for (Character obj : activeChar.getKnownTypeInRadius(Character.class, _skillRadius))
 					{
-						if (obj instanceof L2Attackable || obj instanceof L2Playable)
+						if (obj instanceof Attackable || obj instanceof Playable)
 						{
 							switch (_targetType)
 							{
@@ -1433,7 +1419,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 								continue;
 							
 							if (onlyFirst)
-								return new L2Character[]
+								return new Character[]
 								{
 									obj
 								};
@@ -1442,24 +1428,24 @@ public abstract class L2Skill implements IChanceSkillTrigger
 						}
 					}
 				}
-				return targetList.toArray(new L2Character[targetList.size()]);
+				return targetList.toArray(new Character[targetList.size()]);
 			}
 			case TARGET_AREA_SUMMON:
 			{
 				target = activeChar.getPet();
-				if (target == null || !(target instanceof L2SummonInstance) || target.isDead())
+				if (target == null || !(target instanceof Servitor) || target.isDead())
 					return _emptyTargetList;
 				
 				if (onlyFirst)
-					return new L2Character[]
+					return new Character[]
 					{
 						target
 					};
 				
 				final boolean srcInArena = activeChar.isInArena();
-				List<L2Character> targetList = new ArrayList<>();
+				List<Character> targetList = new ArrayList<>();
 				
-				for (L2Character obj : target.getKnownType(L2Character.class))
+				for (Character obj : target.getKnownType(Character.class))
 				{
 					if (obj == null || obj == target || obj == activeChar)
 						continue;
@@ -1467,7 +1453,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 					if (!Util.checkIfInRange(_skillRadius, target, obj, true))
 						continue;
 					
-					if (!(obj instanceof L2Attackable || obj instanceof L2Playable))
+					if (!(obj instanceof Attackable || obj instanceof Playable))
 						continue;
 					
 					if (!checkForAreaOffensiveSkills(activeChar, obj, this, srcInArena))
@@ -1479,21 +1465,21 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				if (targetList.isEmpty())
 					return _emptyTargetList;
 				
-				return targetList.toArray(new L2Character[targetList.size()]);
+				return targetList.toArray(new Character[targetList.size()]);
 			}
 			case TARGET_AREA:
 			case TARGET_FRONT_AREA:
 			case TARGET_BEHIND_AREA:
 			{
-				if (((target == null || target == activeChar || target.isAlikeDead()) && _castRange >= 0) || (!(target instanceof L2Attackable || target instanceof L2Playable)))
+				if (((target == null || target == activeChar || target.isAlikeDead()) && _castRange >= 0) || (!(target instanceof Attackable || target instanceof Playable)))
 				{
 					activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.TARGET_IS_INCORRECT));
 					return _emptyTargetList;
 				}
 				
-				final L2Character origin;
+				final Character origin;
 				final boolean srcInArena = activeChar.isInArena();
-				List<L2Character> targetList = new ArrayList<>();
+				List<Character> targetList = new ArrayList<>();
 				
 				if (_castRange >= 0)
 				{
@@ -1501,7 +1487,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 						return _emptyTargetList;
 					
 					if (onlyFirst)
-						return new L2Character[]
+						return new Character[]
 						{
 							target
 						};
@@ -1512,9 +1498,9 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				else
 					origin = activeChar;
 				
-				for (L2Character obj : activeChar.getKnownType(L2Character.class))
+				for (Character obj : activeChar.getKnownType(Character.class))
 				{
-					if (!(obj instanceof L2Attackable || obj instanceof L2Playable))
+					if (!(obj instanceof Attackable || obj instanceof Playable))
 						continue;
 					
 					if (obj == origin)
@@ -1544,28 +1530,28 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				if (targetList.isEmpty())
 					return _emptyTargetList;
 				
-				return targetList.toArray(new L2Character[targetList.size()]);
+				return targetList.toArray(new Character[targetList.size()]);
 			}
 			case TARGET_PARTY:
 			{
 				if (onlyFirst)
-					return new L2Character[]
+					return new Character[]
 					{
 						activeChar
 					};
 				
-				List<L2Character> targetList = new ArrayList<>();
+				List<Character> targetList = new ArrayList<>();
 				targetList.add(activeChar);
 				
 				final int radius = _skillRadius;
-				final L2PcInstance player = activeChar.getActingPlayer();
+				final Player player = activeChar.getActingPlayer();
 				
-				if (activeChar instanceof L2Summon)
+				if (activeChar instanceof Summon)
 				{
 					if (addCharacter(activeChar, player, radius, false))
 						targetList.add(player);
 				}
-				else if (activeChar instanceof L2PcInstance)
+				else if (activeChar instanceof Player)
 				{
 					if (addSummon(activeChar, player, radius, false))
 						targetList.add(player.getPet());
@@ -1575,7 +1561,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				if (party != null)
 				{
 					// Get a list of Party Members
-					for (L2PcInstance partyMember : party.getMembers())
+					for (Player partyMember : party.getMembers())
 					{
 						if (partyMember == player)
 							continue;
@@ -1587,16 +1573,16 @@ public abstract class L2Skill implements IChanceSkillTrigger
 							targetList.add(partyMember.getPet());
 					}
 				}
-				return targetList.toArray(new L2Character[targetList.size()]);
+				return targetList.toArray(new Character[targetList.size()]);
 			}
 			case TARGET_PARTY_MEMBER:
 			{
-				if (target != null && (target == activeChar || (activeChar.isInParty() && target.isInParty() && activeChar.getParty().getLeaderObjectId() == target.getParty().getLeaderObjectId()) || (activeChar instanceof L2PcInstance && target instanceof L2Summon && activeChar.getPet() == target) || (activeChar instanceof L2Summon && target instanceof L2PcInstance && activeChar == target.getPet())))
+				if (target != null && (target == activeChar || (activeChar.isInParty() && target.isInParty() && activeChar.getParty().getLeaderObjectId() == target.getParty().getLeaderObjectId()) || (activeChar instanceof Player && target instanceof Summon && activeChar.getPet() == target) || (activeChar instanceof Summon && target instanceof Player && activeChar == target.getPet())))
 				{
 					if (!target.isDead())
 					{
 						// If a target is found, return it in a table else send a system message TARGET_IS_INCORRECT
-						return new L2Character[]
+						return new Character[]
 						{
 							target
 						};
@@ -1613,22 +1599,22 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				{
 					if (!target.isDead())
 					{
-						if (target instanceof L2PcInstance)
+						if (target instanceof Player)
 						{
 							switch (getId())
 							{
 								// FORCE BUFFS may cancel here but there should be a proper condition
 								case 426:
-									if (!((L2PcInstance) target).isMageClass())
-										return new L2Character[]
+									if (!((Player) target).isMageClass())
+										return new Character[]
 										{
 											target
 										};
 									return _emptyTargetList;
 								
 								case 427:
-									if (((L2PcInstance) target).isMageClass())
-										return new L2Character[]
+									if (((Player) target).isMageClass())
+										return new Character[]
 										{
 											target
 										};
@@ -1636,7 +1622,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 									return _emptyTargetList;
 							}
 						}
-						return new L2Character[]
+						return new Character[]
 						{
 							target
 						};
@@ -1649,17 +1635,17 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			}
 			case TARGET_ALLY:
 			{
-				final L2PcInstance player = activeChar.getActingPlayer();
+				final Player player = activeChar.getActingPlayer();
 				if (player == null)
 					return _emptyTargetList;
 				
 				if (onlyFirst || player.isInOlympiadMode())
-					return new L2Character[]
+					return new Character[]
 					{
 						activeChar
 					};
 				
-				List<L2Character> targetList = new ArrayList<>();
+				List<Character> targetList = new ArrayList<>();
 				targetList.add(player);
 				
 				final int radius = _skillRadius;
@@ -1669,7 +1655,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				
 				if (player.getClan() != null)
 				{
-					for (L2PcInstance obj : activeChar.getKnownTypeInRadius(L2PcInstance.class, radius))
+					for (Player obj : activeChar.getKnownTypeInRadius(Player.class, radius))
 					{
 						if ((obj.getAllyId() == 0 || obj.getAllyId() != player.getAllyId()) && (obj.getClan() == null || obj.getClanId() != player.getClanId()))
 							continue;
@@ -1691,7 +1677,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 								|| !LMEvent.checkForLMSkill(player, obj, this))
 							continue;
 						
-						final L2Summon summon = obj.getPet();
+						final Summon summon = obj.getPet();
 						if (summon != null && !summon.isDead())
 							targetList.add(summon);
 						
@@ -1699,28 +1685,28 @@ public abstract class L2Skill implements IChanceSkillTrigger
 							targetList.add(obj);
 					}
 				}
-				return targetList.toArray(new L2Character[targetList.size()]);
+				return targetList.toArray(new Character[targetList.size()]);
 			}
 			case TARGET_CORPSE_ALLY:
 			{
-				final L2PcInstance player = activeChar.getActingPlayer();
+				final Player player = activeChar.getActingPlayer();
 				if (player == null)
 					return _emptyTargetList;
 				
 				if (onlyFirst || player.isInOlympiadMode())
-					return new L2Character[]
+					return new Character[]
 					{
 						activeChar
 					};
 				
 				final int radius = _skillRadius;
-				List<L2Character> targetList = new ArrayList<>();
+				List<Character> targetList = new ArrayList<>();
 				
 				targetList.add(activeChar);
 				
 				if (player.getClan() != null)
 				{
-					for (L2PcInstance obj : activeChar.getKnownTypeInRadius(L2PcInstance.class, radius))
+					for (Player obj : activeChar.getKnownTypeInRadius(Player.class, radius))
 					{
 						if (!obj.isDead())
 							continue;
@@ -1744,20 +1730,20 @@ public abstract class L2Skill implements IChanceSkillTrigger
 						targetList.add(obj);
 					}
 				}
-				return targetList.toArray(new L2Character[targetList.size()]);
+				return targetList.toArray(new Character[targetList.size()]);
 			}
 			case TARGET_CLAN:
 			{
-				List<L2Character> targetList = new ArrayList<>();
+				List<Character> targetList = new ArrayList<>();
 				
-				if (activeChar instanceof L2Playable)
+				if (activeChar instanceof Playable)
 				{
-					final L2PcInstance player = activeChar.getActingPlayer();
+					final Player player = activeChar.getActingPlayer();
 					if (player == null)
 						return _emptyTargetList;
 					
 					if (onlyFirst || player.isInOlympiadMode())
-						return new L2Character[]
+						return new Character[]
 						{
 							activeChar
 						};
@@ -1774,7 +1760,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 					{
 						for (L2ClanMember member : clan.getMembers())
 						{
-							final L2PcInstance obj = member.getPlayerInstance();
+							final Player obj = member.getPlayerInstance();
 							if (obj == null || obj == player)
 								continue;
 							
@@ -1805,35 +1791,35 @@ public abstract class L2Skill implements IChanceSkillTrigger
 						}
 					}
 				}
-				else if (activeChar instanceof L2Npc)
+				else if (activeChar instanceof Npc)
 				{
 					targetList.add(activeChar);
-					for (L2Npc newTarget : activeChar.getKnownTypeInRadius(L2Npc.class, _castRange))
+					for (Npc newTarget : activeChar.getKnownTypeInRadius(Npc.class, _castRange))
 					{
-						if (newTarget.isDead() || !ArraysUtil.contains(((L2Npc) activeChar).getTemplate().getClans(), newTarget.getTemplate().getClans()))
+						if (newTarget.isDead() || !ArraysUtil.contains(((Npc) activeChar).getTemplate().getClans(), newTarget.getTemplate().getClans()))
 							continue;
 						
 						targetList.add(newTarget);
 					}
 				}
-				return targetList.toArray(new L2Character[targetList.size()]);
+				return targetList.toArray(new Character[targetList.size()]);
 			}
 			case TARGET_CORPSE_PLAYER:
 			{
-				if (!(activeChar instanceof L2PcInstance))
+				if (!(activeChar instanceof Player))
 					return _emptyTargetList;
 				
 				if (target != null && target.isDead())
 				{
-					final L2PcInstance targetPlayer;
-					if (target instanceof L2PcInstance)
-						targetPlayer = (L2PcInstance) target;
+					final Player targetPlayer;
+					if (target instanceof Player)
+						targetPlayer = (Player) target;
 					else
 						targetPlayer = null;
 					
-					final L2PetInstance targetPet;
-					if (target instanceof L2PetInstance)
-						targetPet = (L2PetInstance) target;
+					final Pet targetPet;
+					if (target instanceof Pet)
+						targetPet = (Pet) target;
 					else
 						targetPet = null;
 					
@@ -1843,7 +1829,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 						
 						if (_skillType == L2SkillType.RESURRECT)
 						{
-							final L2PcInstance player = (L2PcInstance) activeChar;
+							final Player player = (Player) activeChar;
 							
 							if (targetPlayer != null)
 							{
@@ -1886,7 +1872,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 						}
 						
 						if (condGood)
-							return new L2Character[]
+							return new Character[]
 							{
 								target
 							};
@@ -1897,46 +1883,46 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			}
 			case TARGET_CORPSE_MOB:
 			{
-				if (!(target instanceof L2Attackable) || !target.isDead())
+				if (!(target instanceof Attackable) || !target.isDead())
 				{
 					activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.TARGET_IS_INCORRECT));
 					return _emptyTargetList;
 				}
 				
 				// Corpse mob only available for half time
-				if (_skillType == L2SkillType.DRAIN && !DecayTaskManager.getInstance().isCorpseActionAllowed((L2Attackable) target))
+				if (_skillType == L2SkillType.DRAIN && !DecayTaskManager.getInstance().isCorpseActionAllowed((Attackable) target))
 				{
 					activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.CORPSE_TOO_OLD_SKILL_NOT_USED));
 					return _emptyTargetList;
 				}
 				
-				return new L2Character[]
+				return new Character[]
 				{
 					target
 				};
 			}
 			case TARGET_AREA_CORPSE_MOB:
 			{
-				if ((!(target instanceof L2Attackable)) || !target.isDead())
+				if ((!(target instanceof Attackable)) || !target.isDead())
 				{
 					activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.TARGET_IS_INCORRECT));
 					return _emptyTargetList;
 				}
 				
 				if (onlyFirst)
-					return new L2Character[]
+					return new Character[]
 					{
 						target
 					};
 				
-				List<L2Character> targetList = new ArrayList<>();
+				List<Character> targetList = new ArrayList<>();
 				targetList.add(target);
 				
 				final boolean srcInArena = activeChar.isInArena();
 				
-				for (L2Character obj : activeChar.getKnownTypeInRadius(L2Character.class, _skillRadius))
+				for (Character obj : activeChar.getKnownTypeInRadius(Character.class, _skillRadius))
 				{
-					if (!(obj instanceof L2Attackable || obj instanceof L2Playable))
+					if (!(obj instanceof Attackable || obj instanceof Playable))
 						continue;
 					
 					if (!checkForAreaOffensiveSkills(activeChar, obj, this, srcInArena))
@@ -1948,14 +1934,14 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				if (targetList.isEmpty())
 					return _emptyTargetList;
 				
-				return targetList.toArray(new L2Character[targetList.size()]);
+				return targetList.toArray(new Character[targetList.size()]);
 			}
 			case TARGET_UNLOCKABLE:
 			{
-				if (!(target instanceof L2DoorInstance) && !(target instanceof L2ChestInstance))
+				if (!(target instanceof Door) && !(target instanceof Chest))
 					return _emptyTargetList;
 				
-				return new L2Character[]
+				return new Character[]
 				{
 					target
 				};
@@ -1963,7 +1949,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			}
 			case TARGET_UNDEAD:
 			{
-				if (target instanceof L2Npc || target instanceof L2SummonInstance)
+				if (target instanceof Npc || target instanceof Servitor)
 				{
 					if (!target.isUndead() || target.isDead())
 					{
@@ -1971,7 +1957,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 						return _emptyTargetList;
 					}
 					
-					return new L2Character[]
+					return new Character[]
 					{
 						target
 					};
@@ -1982,11 +1968,11 @@ public abstract class L2Skill implements IChanceSkillTrigger
 			}
 			case TARGET_AURA_UNDEAD:
 			{
-				List<L2Character> targetList = new ArrayList<>();
+				List<Character> targetList = new ArrayList<>();
 				
-				for (L2Character obj : activeChar.getKnownTypeInRadius(L2Character.class, _skillRadius))
+				for (Character obj : activeChar.getKnownTypeInRadius(Character.class, _skillRadius))
 				{
-					if (obj instanceof L2Npc || obj instanceof L2SummonInstance)
+					if (obj instanceof Npc || obj instanceof Servitor)
 						target = obj;
 					else
 						continue;
@@ -1998,7 +1984,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 						continue;
 					
 					if (onlyFirst)
-						return new L2Character[]
+						return new Character[]
 						{
 							obj
 						};
@@ -2009,17 +1995,17 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				if (targetList.isEmpty())
 					return _emptyTargetList;
 				
-				return targetList.toArray(new L2Character[targetList.size()]);
+				return targetList.toArray(new Character[targetList.size()]);
 			}
 			case TARGET_ENEMY_SUMMON:
 			{
-				if (target instanceof L2Summon)
+				if (target instanceof Summon)
 				{
-					final L2Summon targetSummon = (L2Summon) target;
-					final L2PcInstance summonOwner = targetSummon.getActingPlayer();
+					final Summon targetSummon = (Summon) target;
+					final Player summonOwner = targetSummon.getActingPlayer();
 					
-					if (activeChar instanceof L2PcInstance && activeChar.getPet() != targetSummon && !targetSummon.isDead() && (summonOwner.getPvpFlag() != 0 || summonOwner.getKarma() > 0) || (summonOwner.isInsideZone(ZoneId.PVP) && activeChar.isInsideZone(ZoneId.PVP)) || (summonOwner.isInDuel() && ((L2PcInstance) activeChar).isInDuel() && summonOwner.getDuelId() == ((L2PcInstance) activeChar).getDuelId()))
-						return new L2Character[]
+					if (activeChar instanceof Player && activeChar.getPet() != targetSummon && !targetSummon.isDead() && (summonOwner.getPvpFlag() != 0 || summonOwner.getKarma() > 0) || (summonOwner.isInsideZone(ZoneId.PVP) && activeChar.isInsideZone(ZoneId.PVP)) || (summonOwner.isInDuel() && ((Player) activeChar).isInDuel() && summonOwner.getDuelId() == ((Player) activeChar).getDuelId()))
+						return new Character[]
 						{
 							targetSummon
 						};
@@ -2034,12 +2020,12 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		}
 	}
 	
-	public final L2Object[] getTargetList(L2Character activeChar)
+	public final L2Object[] getTargetList(Character activeChar)
 	{
 		return getTargetList(activeChar, false);
 	}
 	
-	public final L2Object getFirstOfTargetList(L2Character activeChar)
+	public final L2Object getFirstOfTargetList(Character activeChar)
 	{
 		L2Object[] targets = getTargetList(activeChar, true);
 		if (targets.length == 0)
@@ -2061,7 +2047,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 	 * <ul>
 	 * <li>Mustn't be in Observer mode.</li>
 	 * <li>If not in PvP zones (arena, siege): target in not the same clan and alliance with caster, and usual PvP skill check.</li>
-	 * <li>In case caster and target are L2Attackable : verify if caster isn't confused.</li>
+	 * <li>In case caster and target are Attackable : verify if caster isn't confused.</li>
 	 * </ul>
 	 * Caution: distance is not checked.
 	 * @param caster The skill caster.
@@ -2070,13 +2056,13 @@ public abstract class L2Skill implements IChanceSkillTrigger
 	 * @param sourceInArena True means the caster is in a pvp or siege zone, and so the additional check will be skipped.
 	 * @return
 	 */
-	public static final boolean checkForAreaOffensiveSkills(L2Character caster, L2Character target, L2Skill skill, boolean sourceInArena)
+	public static final boolean checkForAreaOffensiveSkills(Character caster, Character target, L2Skill skill, boolean sourceInArena)
 	{
 		if (target == null || target.isDead() || target == caster)
 			return false;
 		
-		final L2PcInstance player = caster.getActingPlayer();
-		final L2PcInstance targetPlayer = target.getActingPlayer();
+		final Player player = caster.getActingPlayer();
+		final Player targetPlayer = target.getActingPlayer();
 		if (player != null && targetPlayer != null)
 		{
 			if (targetPlayer == caster || targetPlayer == player)
@@ -2119,9 +2105,9 @@ public abstract class L2Skill implements IChanceSkillTrigger
 					return false;
 			}
 		}
-		else if (target instanceof L2Attackable)
+		else if (target instanceof Attackable)
 		{
-			if (caster instanceof L2Attackable && !caster.isConfused())
+			if (caster instanceof Attackable && !caster.isConfused())
 				return false;
 			
 			if (skill.isOffensive() && !target.isAutoAttackable(caster))
@@ -2130,9 +2116,9 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		return GeoEngine.getInstance().canSeeTarget(caster, target);
 	}
 	
-	public static final boolean addSummon(L2Character caster, L2PcInstance owner, int radius, boolean isDead)
+	public static final boolean addSummon(Character caster, Player owner, int radius, boolean isDead)
 	{
-		final L2Summon summon = owner.getPet();
+		final Summon summon = owner.getPet();
 		
 		if (summon == null)
 			return false;
@@ -2140,7 +2126,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		return addCharacter(caster, summon, radius, isDead);
 	}
 	
-	public static final boolean addCharacter(L2Character caster, L2Character target, int radius, boolean isDead)
+	public static final boolean addCharacter(Character caster, Character target, int radius, boolean isDead)
 	{
 		if (isDead != target.isDead())
 			return false;
@@ -2151,12 +2137,12 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		return true;
 	}
 	
-	public final List<Func> getStatFuncs(L2Character player)
+	public final List<Func> getStatFuncs(Character player)
 	{
 		if (_funcTemplates == null)
 			return Collections.emptyList();
 		
-		if (!(player instanceof L2Playable) && !(player instanceof L2Attackable))
+		if (!(player instanceof Playable) && !(player instanceof Attackable))
 			return Collections.emptyList();
 		
 		final List<Func> funcs = new ArrayList<>(_funcTemplates.size());
@@ -2195,16 +2181,16 @@ public abstract class L2Skill implements IChanceSkillTrigger
 	 * @param env parameters for secondary effects (shield and ss/bss/bsss)
 	 * @return an array with the effects that have been added to effector
 	 */
-	public final List<L2Effect> getEffects(L2Character effector, L2Character effected, Env env)
+	public final List<L2Effect> getEffects(Character effector, Character effected, Env env)
 	{
 		if (!hasEffects() || isPassive())
 			return Collections.emptyList();
 		
 		// doors and siege flags cannot receive any effects
-		if (effected instanceof L2DoorInstance || effected instanceof L2SiegeFlagInstance)
+		if (effected instanceof Door || effected instanceof SiegeFlag)
 			return Collections.emptyList();
  		
-		if ((effected instanceof L2PcInstance || effected instanceof L2PetInstance) && effected.isInsideZone(ZoneId.MULTI) && L2MultiZone.isRestrictedSkill(getId()))
+		if ((effected instanceof Player || effected instanceof Pet) && effected.isInsideZone(ZoneId.MULTI) && L2MultiZone.isRestrictedSkill(getId()))
 			return Collections.emptyList();
 	
 		if (effector != effected)
@@ -2214,9 +2200,9 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				if (effected.isInvul())
 					return Collections.emptyList();
 				
-				if (effector instanceof L2PcInstance && ((L2PcInstance) effector).isGM())
+				if (effector instanceof Player && ((Player) effector).isGM())
 				{
-					if (!((L2PcInstance) effector).getAccessLevel().canGiveDamage())
+					if (!((Player) effector).getAccessLevel().canGiveDamage())
 						return Collections.emptyList();
 				}
 			}
@@ -2249,8 +2235,8 @@ public abstract class L2Skill implements IChanceSkillTrigger
 				}
 			}
 			// display fail message only for effects with icons
-			else if (et.icon && effector instanceof L2PcInstance)
-				((L2PcInstance) effector).sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_RESISTED_YOUR_S2).addCharName(effected).addSkillName(this));
+			else if (et.icon && effector instanceof Player)
+				((Player) effector).sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_RESISTED_YOUR_S2).addCharName(effected).addSkillName(this));
 		}
 		return effects;
 	}
@@ -2261,7 +2247,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 	 * @param effected
 	 * @return An array of L2Effect.
 	 */
-	public final List<L2Effect> getEffects(L2Character effector, L2Character effected)
+	public final List<L2Effect> getEffects(Character effector, Character effected)
 	{
 		return getEffects(effector, effected, null);
 	}
@@ -2278,7 +2264,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 	 * @param env parameters for secondary effects (shield and ss/bss/bsss)
 	 * @return An array of L2Effect.
 	 */
-	public final List<L2Effect> getEffects(L2CubicInstance effector, L2Character effected, Env env)
+	public final List<L2Effect> getEffects(Cubic effector, Character effected, Env env)
 	{
 		if (!hasEffects() || isPassive())
 			return Collections.emptyList();
@@ -2324,7 +2310,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		return effects;
 	}
 	
-	public final List<L2Effect> getEffectsSelf(L2Character effector)
+	public final List<L2Effect> getEffectsSelf(Character effector)
 	{
 		if (!hasSelfEffects() || isPassive())
 			return Collections.emptyList();

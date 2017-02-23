@@ -21,7 +21,7 @@ import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2ClanMember;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeShowInfoUpdate;
@@ -132,7 +132,7 @@ public class ClanTable
 	 * @param clanName The name of the clan player wants.
 	 * @return null if checks fail, or L2Clan
 	 */
-	public L2Clan createClan(L2PcInstance player, String clanName)
+	public L2Clan createClan(Player player, String clanName)
 	{
 		if (player == null)
 			return null;

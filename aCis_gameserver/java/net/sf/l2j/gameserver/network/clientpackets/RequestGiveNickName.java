@@ -19,7 +19,7 @@ import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2ClanMember;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
@@ -38,7 +38,7 @@ public class RequestGiveNickName extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final L2PcInstance activeChar = getClient().getActiveChar();
+		final Player activeChar = getClient().getActiveChar();
 		if (activeChar == null)
 			return;
 		
@@ -74,7 +74,7 @@ public class RequestGiveNickName extends L2GameClientPacket
 			final L2ClanMember member = activeChar.getClan().getClanMember(_target);
 			if (member != null)
 			{
-				final L2PcInstance playerMember = member.getPlayerInstance();
+				final Player playerMember = member.getPlayerInstance();
 				if (playerMember != null)
 				{
 					if (!StringUtil.isValidName(_title, Config.CHAR_TITLE_NAME_TEMPLATE))

@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.datatables;
 
 import java.io.File;
@@ -28,8 +14,8 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemLocation;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance.ItemState;
@@ -146,20 +132,20 @@ public class ItemTable
 	 * @param process : String Identifier of process triggering this action
 	 * @param itemId : int Item Identifier of the item to be created
 	 * @param count : int Quantity of items to be created for stackable items
-	 * @param actor : L2PcInstance Player requesting the item creation
+	 * @param actor : Player Player requesting the item creation
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the new item
 	 */
-	public ItemInstance createItem(String process, int itemId, int count, L2PcInstance actor, L2Object reference)
+	public ItemInstance createItem(String process, int itemId, int count, Player actor, L2Object reference)
 	{
 		// Create and Init the ItemInstance corresponding to the Item Identifier
 		ItemInstance item = new ItemInstance(IdFactory.getInstance().getNextId(), itemId);
 		
 		if (process.equalsIgnoreCase("loot"))
 		{
-			if (reference instanceof L2Attackable && ((L2Attackable) reference).isRaid())
+			if (reference instanceof Attackable && ((Attackable) reference).isRaid())
 			{
-				final L2Attackable raid = (L2Attackable) reference;
+				final Attackable raid = (Attackable) reference;
 				if (raid.getFirstCommandChannelAttacked() != null && !Config.AUTO_LOOT_RAID)
 					item.setDropProtection(raid.getFirstCommandChannelAttacked().getLeaderObjectId(), true);
 			}
@@ -208,10 +194,10 @@ public class ItemTable
 	 * Destroys the ItemInstance.
 	 * @param process : String Identifier of process triggering this action
 	 * @param item : ItemInstance The instance of object to delete
-	 * @param actor : L2PcInstance Player requesting the item destroy
+	 * @param actor : Player Player requesting the item destroy
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 */
-	public void destroyItem(String process, ItemInstance item, L2PcInstance actor, L2Object reference)
+	public void destroyItem(String process, ItemInstance item, Player actor, L2Object reference)
 	{
 		synchronized (item)
 		{

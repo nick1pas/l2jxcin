@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.model.group;
 
 import java.util.ArrayList;
@@ -19,8 +5,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.L2Attackable;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Attackable;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.ExCloseMPCC;
@@ -43,13 +29,13 @@ public class CommandChannel extends AbstractGroup
 		
 		recalculateLevel();
 		
-		for (L2PcInstance member : requestor.getMembers())
+		for (Player member : requestor.getMembers())
 		{
 			member.sendPacket(SystemMessageId.COMMAND_CHANNEL_FORMED);
 			member.sendPacket(ExOpenMPCC.STATIC_PACKET);
 		}
 		
-		for (L2PcInstance member : target.getMembers())
+		for (Player member : target.getMembers())
 		{
 			member.sendPacket(SystemMessageId.JOINED_COMMAND_CHANNEL);
 			member.sendPacket(ExOpenMPCC.STATIC_PACKET);
@@ -72,9 +58,9 @@ public class CommandChannel extends AbstractGroup
 	 * <b>BEWARE : create a temporary List. Uses containsPlayer whenever possible.</b>
 	 */
 	@Override
-	public List<L2PcInstance> getMembers()
+	public List<Player> getMembers()
 	{
-		final List<L2PcInstance> members = new ArrayList<>();
+		final List<Player> members = new ArrayList<>();
 		for (Party party : _parties)
 			members.addAll(party.getMembers());
 		
@@ -110,7 +96,7 @@ public class CommandChannel extends AbstractGroup
 	}
 	
 	@Override
-	public void broadcastCreatureSay(final CreatureSay msg, final L2PcInstance broadcaster)
+	public void broadcastCreatureSay(final CreatureSay msg, final Player broadcaster)
 	{
 		for (Party party : _parties)
 			party.broadcastCreatureSay(msg, broadcaster);
@@ -157,7 +143,7 @@ public class CommandChannel extends AbstractGroup
 		
 		party.setCommandChannel(this);
 		
-		for (L2PcInstance member : party.getMembers())
+		for (Player member : party.getMembers())
 		{
 			member.sendPacket(SystemMessageId.JOINED_COMMAND_CHANNEL);
 			member.sendPacket(ExOpenMPCC.STATIC_PACKET);
@@ -202,7 +188,7 @@ public class CommandChannel extends AbstractGroup
 	 * @param attackable : the attackable to check.
 	 * @return true if the members count is reached.
 	 */
-	public boolean meetRaidWarCondition(L2Attackable attackable)
+	public boolean meetRaidWarCondition(Attackable attackable)
 	{
 		switch (attackable.getNpcId())
 		{

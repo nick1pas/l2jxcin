@@ -17,8 +17,8 @@ package net.sf.l2j.gameserver.handler.skillhandlers;
 import net.sf.l2j.gameserver.handler.ISkillHandler;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.L2Character;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
@@ -39,12 +39,12 @@ public class SummonFriend implements ISkillHandler
 	};
 	
 	@Override
-	public void useSkill(L2Character activeChar, L2Skill skill, L2Object[] targets)
+	public void useSkill(Character activeChar, L2Skill skill, L2Object[] targets)
 	{
-		if (!(activeChar instanceof L2PcInstance))
+		if (!(activeChar instanceof Player))
 			return;
 
-		final L2PcInstance player = (L2PcInstance) activeChar;
+		final Player player = (Player) activeChar;
 		
 		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(player.getObjectId())
 			|| !DMEvent.isInactive() && DMEvent.isPlayerParticipant(player.getObjectId())
@@ -54,22 +54,22 @@ public class SummonFriend implements ISkillHandler
 			return;
 		}
 		// Check player status.
-		if (!L2PcInstance.checkSummonerStatus(player))
+		if (!Player.checkSummonerStatus(player))
 			return;
 		
 		for (L2Object obj : targets)
 		{
 			// The target must be a player.
-			if (!(obj instanceof L2PcInstance))
+			if (!(obj instanceof Player))
 				continue;
 			
 			// Can't summon yourself.
-			final L2PcInstance target = ((L2PcInstance) obj);
+			final Player target = ((Player) obj);
 			if (activeChar == target)
 				continue;
 			
 			// Check target status.
-			if (!L2PcInstance.checkSummonTargetStatus(target, player))
+			if (!Player.checkSummonTargetStatus(target, player))
 				continue;
 			
 			// Check target distance.
@@ -95,7 +95,7 @@ public class SummonFriend implements ISkillHandler
 			}
 			else
 			{
-				L2PcInstance.teleToTarget(target, player, skill);
+				Player.teleToTarget(target, player, skill);
 				target.teleportRequest(null, null);
 			}
 		}

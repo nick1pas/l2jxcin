@@ -18,7 +18,7 @@ import net.sf.l2j.gameserver.datatables.CharTemplateTable;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.model.CharSelectInfoPackage;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.actor.L2PcPolymorph;
+import net.sf.l2j.gameserver.model.actor.PcPolymorph;
 import net.sf.l2j.gameserver.model.actor.template.PcTemplate;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 
@@ -27,7 +27,7 @@ import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
  */
 public final class NpcInfoPolymorph extends L2GameServerPacket
 {
-	private final L2PcPolymorph _activeChar;
+	private final PcPolymorph _activeChar;
 	private final CharSelectInfoPackage _morph;
 	private final PcTemplate _template;
 	private final L2Clan _clan;
@@ -36,7 +36,7 @@ public final class NpcInfoPolymorph extends L2GameServerPacket
 	private final int _runSpd, _walkSpd;
 	private final float _moveMultiplier;
 	
-	public NpcInfoPolymorph(L2PcPolymorph cha)
+	public NpcInfoPolymorph(PcPolymorph cha)
 	{
 		_activeChar = cha;
 		_morph = cha.getPolymorphInfo();

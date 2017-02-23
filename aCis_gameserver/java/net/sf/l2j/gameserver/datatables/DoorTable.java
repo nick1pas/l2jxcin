@@ -1,17 +1,3 @@
-/*
- * This program is free software: you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package net.sf.l2j.gameserver.datatables;
 
 import java.io.File;
@@ -29,7 +15,7 @@ import net.sf.l2j.gameserver.geoengine.geodata.ABlock;
 import net.sf.l2j.gameserver.geoengine.geodata.GeoStructure;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
-import net.sf.l2j.gameserver.model.actor.instance.L2DoorInstance;
+import net.sf.l2j.gameserver.model.actor.instance.Door;
 import net.sf.l2j.gameserver.model.actor.template.DoorTemplate;
 import net.sf.l2j.gameserver.model.actor.template.DoorTemplate.DoorType;
 import net.sf.l2j.gameserver.model.entity.Castle;
@@ -44,7 +30,7 @@ public class DoorTable
 {
 	private static final Logger _log = Logger.getLogger(DoorTable.class.getName());
 	
-	private final Map<Integer, L2DoorInstance> _doors = new HashMap<>();
+	private final Map<Integer, Door> _doors = new HashMap<>();
 	
 	public static DoorTable getInstance()
 	{
@@ -58,7 +44,7 @@ public class DoorTable
 	
 	public final void reload()
 	{
-		for (L2DoorInstance door : _doors.values())
+		for (Door door : _doors.values())
 			door.openMe();
 		
 		_doors.clear();
@@ -265,7 +251,7 @@ public class DoorTable
 							final DoorTemplate template = new DoorTemplate(stats);
 							
 							// create door instance
-							final L2DoorInstance door = new L2DoorInstance(IdFactory.getInstance().getNextId(), template);
+							final Door door = new Door(IdFactory.getInstance().getNextId(), template);
 							door.setCurrentHpMp(door.getMaxHp(), door.getMaxMp());
 							door.getPosition().set(posX, posY, posZ);
 							
@@ -288,10 +274,10 @@ public class DoorTable
 	 */
 	public final void spawn()
 	{
-		// Note: keep as side-method, do not join to the load(). On initial load, the DoorTable.getInstance() is not initialized, yet L2DoorInstance is calling it during spawn process...causing NPE -> one advantage/disadvantage of singletons.
+		// Note: keep as side-method, do not join to the load(). On initial load, the DoorTable.getInstance() is not initialized, yet Door is calling it during spawn process...causing NPE -> one advantage/disadvantage of singletons.
 		
 		// spawn doors
-		for (L2DoorInstance door : _doors.values())
+		for (Door door : _doors.values())
 			door.spawnMe();
 		
 		// load doors upgrades
@@ -299,12 +285,12 @@ public class DoorTable
 			castle.loadDoorUpgrade();
 	}
 	
-	public L2DoorInstance getDoor(int id)
+	public Door getDoor(int id)
 	{
 		return _doors.get(id);
 	}
 	
-	public Collection<L2DoorInstance> getDoors()
+	public Collection<Door> getDoors()
 	{
 		return _doors.values();
 	}

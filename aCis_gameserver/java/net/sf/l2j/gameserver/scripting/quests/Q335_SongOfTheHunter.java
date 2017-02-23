@@ -19,8 +19,8 @@ import java.util.Map;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.model.actor.L2Npc;
-import net.sf.l2j.gameserver.model.actor.instance.L2PcInstance;
+import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.scripting.Quest;
@@ -356,7 +356,7 @@ public class Q335_SongOfTheHunter extends Quest
 	}
 	
 	@Override
-	public String onAdvEvent(String event, L2Npc npc, L2PcInstance player)
+	public String onAdvEvent(String event, Npc npc, Player player)
 	{
 		String htmltext = event;
 		QuestState st = player.getQuestState(qn);
@@ -552,7 +552,7 @@ public class Q335_SongOfTheHunter extends Quest
 	}
 	
 	@Override
-	public String onTalk(L2Npc npc, L2PcInstance player)
+	public String onTalk(Npc npc, Player player)
 	{
 		String htmltext = getNoQuestMsg();
 		QuestState st = player.getQuestState(qn);
@@ -763,7 +763,7 @@ public class Q335_SongOfTheHunter extends Quest
 	}
 	
 	@Override
-	public String onKill(L2Npc npc, L2PcInstance player, boolean isPet)
+	public String onKill(Npc npc, Player player, boolean isPet)
 	{
 		QuestState st = checkPlayerState(player, npc, STATE_STARTED);
 		if (st == null)
@@ -1061,7 +1061,7 @@ public class Q335_SongOfTheHunter extends Quest
 		return false;
 	}
 	
-	public int hasRequest(L2PcInstance player, int level)
+	public int hasRequest(Player player, int level)
 	{
 		QuestState st = player.getQuestState(qn);
 		
@@ -1098,7 +1098,7 @@ public class Q335_SongOfTheHunter extends Quest
 		}
 	}
 	
-	public static void autoChat(L2Npc npc, String text)
+	public static void autoChat(Npc npc, String text)
 	{
 		npc.broadcastPacket(new CreatureSay(npc.getObjectId(), Say2.ALL, npc.getName(), text));
 	}

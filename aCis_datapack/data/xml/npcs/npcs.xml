@@ -108,7 +108,7 @@
   		 	<skill id="4416" level="14"/>
   		</skills>
  </npc>
- 	<npc id="50009" idTemplate="31264" name="Jonas" title="Auction Manager">
+ 	<npc id="65529" idTemplate="31264" name="Jonas" title="Auction Manager">
  		<set name="level" val="70"/>
   		<set name="radius" val="8"/>
   		<set name="height" val="23"/>
@@ -180,7 +180,7 @@
   		 	<skill id="4416" level="14"/>
   		</skills>
  </npc>
-   	<npc id="10" idTemplate="31264" name="Smith" title="Bug Report">
+   	<npc id="50010" idTemplate="31264" name="Smith" title="Bug Report">
  		<set name="level" val="70"/>
   		<set name="radius" val="8"/>
   		<set name="height" val="23"/>

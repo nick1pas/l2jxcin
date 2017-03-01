@@ -7,7 +7,6 @@ import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.type.CrystalType;
 import net.sf.l2j.gameserver.model.itemcontainer.PcInventory;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.InventoryUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.util.IllegalPlayerAction;
@@ -48,7 +47,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 		if (skillLevel <= 0)
 		{
 			activeChar.sendPacket(SystemMessageId.CRYSTALLIZE_LEVEL_TOO_LOW);
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
@@ -58,7 +57,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 			final ItemInstance item = inventory.getItemByObjectId(_objectId);
 			if (item == null)
 			{
-				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return;
 			}
 			
@@ -108,7 +107,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 		if (!canCrystallize)
 		{
 			activeChar.sendPacket(SystemMessageId.CRYSTALLIZE_LEVEL_TOO_LOW);
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		

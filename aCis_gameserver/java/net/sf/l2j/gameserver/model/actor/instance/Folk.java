@@ -16,7 +16,6 @@ import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.AcquireSkillList;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ExEnchantSkillList;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -92,7 +91,7 @@ public class Folk extends Npc
 		else
 			player.sendPacket(asl);
 		
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	/**
@@ -149,7 +148,7 @@ public class Folk extends Npc
 		else
 			player.sendPacket(esl);
 		
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	public void giveBlessingSupport(Player player)

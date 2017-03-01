@@ -11,7 +11,6 @@ import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.NpcInfoPolymorph;
 
@@ -121,7 +120,7 @@ public class PcPolymorph extends Npc
 		player.sendPacket(html);
 		
 		// Send a Server->Client ActionFailed to the Player in order to avoid that the client wait another packet
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	public static CharSelectInfoPackage loadCharInfo(int objectId)

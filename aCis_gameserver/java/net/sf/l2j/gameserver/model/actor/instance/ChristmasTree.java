@@ -8,7 +8,6 @@ import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 
 /**
  * Christmas trees used on events.<br>
@@ -54,6 +53,6 @@ public class ChristmasTree extends Folk
 	@Override
 	public void onAction(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 }

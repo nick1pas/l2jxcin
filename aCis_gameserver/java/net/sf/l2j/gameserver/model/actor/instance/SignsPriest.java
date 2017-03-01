@@ -12,7 +12,6 @@ import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.PcInventory;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
@@ -742,7 +741,7 @@ public class SignsPriest extends Folk
 						if (playerCabal != winningCabal || playerCabal != sealAvariceOwner)
 						{
 							player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DAWN);
-							player.sendPacket(ActionFailed.STATIC_PACKET);
+							player.ActionF();
 							return;
 						}
 						break;
@@ -751,7 +750,7 @@ public class SignsPriest extends Folk
 						if (playerCabal != winningCabal || playerCabal != sealAvariceOwner)
 						{
 							player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DUSK);
-							player.sendPacket(ActionFailed.STATIC_PACKET);
+							player.ActionF();
 							return;
 						}
 						break;
@@ -771,7 +770,7 @@ public class SignsPriest extends Folk
 						if (playerCabal != winningCabal || playerCabal != sealGnosisOwner)
 						{
 							player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DAWN);
-							player.sendPacket(ActionFailed.STATIC_PACKET);
+							player.ActionF();
 							return;
 						}
 						break;
@@ -780,7 +779,7 @@ public class SignsPriest extends Folk
 						if (playerCabal != winningCabal || playerCabal != sealGnosisOwner)
 						{
 							player.sendPacket(SystemMessageId.CAN_BE_USED_BY_DUSK);
-							player.sendPacket(ActionFailed.STATIC_PACKET);
+							player.ActionF();
 							return;
 						}
 						break;
@@ -800,7 +799,7 @@ public class SignsPriest extends Folk
 		player.sendPacket(html);
 		
 		// Send a Server->Client ActionFailed to the Player in order to avoid that the client wait another packet
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	private void showChatWindow(Player player, int val, String suffix, boolean isDescription)

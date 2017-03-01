@@ -15,7 +15,6 @@ import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowCropInfo;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowCropSetting;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowManorDefaultInfo;
@@ -329,7 +328,7 @@ public class CastleChamberlain extends Merchant
 			final CastleManorManager manor = CastleManorManager.getInstance();
 			if (manor.isUnderMaintenance())
 			{
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				player.sendPacket(SystemMessageId.THE_MANOR_SYSTEM_IS_CURRENTLY_UNDER_MAINTENANCE);
 				return;
 			}
@@ -581,7 +580,7 @@ public class CastleChamberlain extends Merchant
 	@Override
 	public void showChatWindow(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		String filename = "data/html/chamberlain/no.htm";
 		
 		int condition = validateCondition(player);

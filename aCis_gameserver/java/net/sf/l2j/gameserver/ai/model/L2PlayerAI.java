@@ -10,7 +10,6 @@ import net.sf.l2j.gameserver.model.actor.Character;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.StaticObject;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
 public class L2PlayerAI extends L2PlayableAI
@@ -26,7 +25,7 @@ public class L2PlayerAI extends L2PlayableAI
 	@Override
 	protected void clientActionFailed()
 	{
-		_actor.sendPacket(ActionFailed.STATIC_PACKET);
+		_actor.ActionF();
 	}
 	
 	void setNextIntention(CtrlIntention intention, Object arg0, Object arg1)

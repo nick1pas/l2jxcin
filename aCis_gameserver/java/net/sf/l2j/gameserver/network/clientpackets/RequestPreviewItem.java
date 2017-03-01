@@ -17,7 +17,6 @@ import net.sf.l2j.gameserver.model.buylist.Product;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ShopPreviewInfo;
 import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
 import net.sf.l2j.gameserver.util.Util;
@@ -83,7 +82,7 @@ public final class RequestPreviewItem extends L2GameClientPacket
 		
 		if (_count < 1 || _listId >= 4000000)
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		

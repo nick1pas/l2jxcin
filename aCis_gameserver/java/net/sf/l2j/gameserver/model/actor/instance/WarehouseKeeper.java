@@ -7,7 +7,6 @@ import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.itemcontainer.PcFreight;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.EnchantResult;
 import net.sf.l2j.gameserver.network.serverpackets.PackageToList;
 import net.sf.l2j.gameserver.network.serverpackets.WarehouseDepositList;
@@ -40,7 +39,7 @@ public class WarehouseKeeper extends Folk
 	
 	private static void showRetrieveWindow(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		player.setActiveWarehouse(player.getWarehouse());
 		
 		if (player.getActiveWarehouse().getSize() == 0)
@@ -54,7 +53,7 @@ public class WarehouseKeeper extends Folk
 	
 	private static void showDepositWindow(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		player.setActiveWarehouse(player.getWarehouse());
 		player.tempInventoryDisable();
 		
@@ -63,7 +62,7 @@ public class WarehouseKeeper extends Folk
 	
 	private static void showDepositWindowClan(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		if (player.getClan() != null)
 		{
 			if (player.getClan().getLevel() == 0)
@@ -79,7 +78,7 @@ public class WarehouseKeeper extends Folk
 	
 	private static void showWithdrawWindowClan(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		if ((player.getClanPrivileges() & L2Clan.CP_CL_VIEW_WAREHOUSE) != L2Clan.CP_CL_VIEW_WAREHOUSE)
 		{
 			player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_RIGHT_TO_USE_CLAN_WAREHOUSE);
@@ -97,7 +96,7 @@ public class WarehouseKeeper extends Folk
 	
 	private void showWithdrawWindowFreight(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		PcFreight freight = player.getFreight();
 		
 		if (freight != null)
@@ -129,7 +128,7 @@ public class WarehouseKeeper extends Folk
 			
 			if (chars.size() < 1)
 			{
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				return;
 			}
 			
@@ -139,7 +138,7 @@ public class WarehouseKeeper extends Folk
 	
 	private void showDepositWindowFreight(Player player, int obj_Id)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		
 		PcFreight freight = player.getDepositedFreight(obj_Id);
 		

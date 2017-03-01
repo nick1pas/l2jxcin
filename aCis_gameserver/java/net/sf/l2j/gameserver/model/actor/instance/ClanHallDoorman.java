@@ -5,7 +5,6 @@ import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 public class ClanHallDoorman extends Doorman
@@ -20,7 +19,7 @@ public class ClanHallDoorman extends Doorman
 	@Override
 	public void showChatWindow(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		
 		if (_clanHall == null)
 			return;

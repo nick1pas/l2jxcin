@@ -9,7 +9,6 @@ import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.L2TeleportLocation;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 public class DungeonGatekeeper extends Folk
@@ -22,7 +21,7 @@ public class DungeonGatekeeper extends Folk
 	@Override
 	public void onBypassFeedback(Player player, String command)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		
 		StringTokenizer st = new StringTokenizer(command, " ");
 		String actualCommand = st.nextToken(); // Get actual command
@@ -146,6 +145,6 @@ public class DungeonGatekeeper extends Folk
 		else
 			_log.warning("No teleport destination with id:" + val);
 		
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 }

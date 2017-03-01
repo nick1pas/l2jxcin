@@ -17,7 +17,6 @@ import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.manor.SeedProduction;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.util.FloodProtectors;
 import net.sf.l2j.gameserver.util.FloodProtectors.Action;
@@ -66,28 +65,28 @@ public class RequestBuySeed extends L2GameClientPacket
 		
 		if (_items == null)
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
 		final CastleManorManager manor = CastleManorManager.getInstance();
 		if (manor.isUnderMaintenance())
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
 		final Castle castle = CastleManager.getInstance().getCastleById(_manorId);
 		if (castle == null)
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
 		final Npc manager = player.getCurrentFolkNPC();
 		if (!(manager instanceof ManorManagerNpc) || !manager.canInteract(player) || manager.getCastle() != castle)
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
@@ -102,7 +101,7 @@ public class RequestBuySeed extends L2GameClientPacket
 			final SeedProduction sp = manor.getSeedProduct(_manorId, ih.getId(), false);
 			if (sp == null || sp.getPrice() <= 0 || sp.getAmount() < ih.getValue() || ((Integer.MAX_VALUE / ih.getValue()) < sp.getPrice()))
 			{
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return;
 			}
 			
@@ -110,7 +109,7 @@ public class RequestBuySeed extends L2GameClientPacket
 			totalPrice += (sp.getPrice() * ih.getValue());
 			if (totalPrice > Integer.MAX_VALUE)
 			{
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return;
 			}
 			

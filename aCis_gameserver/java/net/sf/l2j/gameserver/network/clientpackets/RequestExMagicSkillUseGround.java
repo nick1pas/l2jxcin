@@ -4,7 +4,6 @@ import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ValidateLocation;
 import net.sf.l2j.gameserver.util.Util;
 
@@ -41,7 +40,7 @@ public final class RequestExMagicSkillUseGround extends L2GameClientPacket
 		final int level = activeChar.getSkillLevel(_skillId);
 		if (level <= 0)
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
@@ -59,7 +58,7 @@ public final class RequestExMagicSkillUseGround extends L2GameClientPacket
 		}
 		else
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			_log.warning("No skill found with id: " + _skillId + " and level: " + level);
 		}
 	}

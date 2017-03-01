@@ -9,7 +9,6 @@ import net.sf.l2j.gameserver.handler.ChatHandler;
 import net.sf.l2j.gameserver.handler.IChatHandler;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.util.IllegalPlayerAction;
 import net.sf.l2j.gameserver.util.Util;
 
@@ -121,7 +120,7 @@ public final class Say2 extends L2GameClientPacket
 		if (_type < 0 || _type >= CHAT_NAMES.length)
 		{
 			_log.warning("Say2: Invalid type: " + _type + " Player : " + activeChar.getName() + " text: " + _text);
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			activeChar.logout();
 			return;
 		}
@@ -129,7 +128,7 @@ public final class Say2 extends L2GameClientPacket
 		if (_text.isEmpty())
 		{
 			_log.warning(activeChar.getName() + ": sending empty text. Possible packet hack.");
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			activeChar.logout();
 			return;
 		}

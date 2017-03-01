@@ -3,7 +3,6 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -22,7 +21,7 @@ public class ClanManager extends Npc
     @Override
     public void showChatWindow(Player player, int val)
     {
-        player.sendPacket(ActionFailed.STATIC_PACKET);
+        player.ActionF();
         String filename = "data/html/mods/clanManager.htm";
         NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
         html.setFile(filename);

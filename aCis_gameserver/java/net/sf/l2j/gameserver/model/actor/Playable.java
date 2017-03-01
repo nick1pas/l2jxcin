@@ -12,7 +12,6 @@ import net.sf.l2j.gameserver.model.actor.status.PlayableStatus;
 import net.sf.l2j.gameserver.model.actor.template.CharTemplate;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.Revive;
 import net.sf.l2j.gameserver.scripting.QuestState;
 import net.sf.l2j.gameserver.templates.skills.L2EffectFlag;
@@ -74,7 +73,7 @@ public abstract class Playable extends Character
 		if (player.getTarget() != this)
 			player.setTarget(this);
 		else
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 	}
 	
 	@Override

@@ -3,7 +3,6 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 /**
@@ -74,6 +73,6 @@ public class LMEventManager extends Folk
 	    	}
 		}
 
-		activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+		activeChar.ActionF();
 	}
 }

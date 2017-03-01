@@ -15,7 +15,6 @@ import net.sf.l2j.gameserver.model.group.Party.MessageType;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.zone.type.L2PeaceZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.templates.StatsSet;
@@ -430,7 +429,7 @@ public final class FestivalGuide extends Folk
 		player.sendPacket(html);
 		
 		// Send ActionFailed to the player in order to avoid he stucks
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	private void showChatWindow(Player player, int val, String suffix, boolean isDescription)
@@ -459,7 +458,7 @@ public final class FestivalGuide extends Folk
 		player.sendPacket(html);
 		
 		// Send ActionFailed to the player in order to avoid he stucks
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	private static final String getStatsTable()

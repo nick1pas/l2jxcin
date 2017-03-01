@@ -4,7 +4,6 @@ import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 
 public final class Action extends L2GameClientPacket
 {
@@ -33,20 +32,20 @@ public final class Action extends L2GameClientPacket
 		if (activeChar.isInObserverMode())
 		{
 			activeChar.sendPacket(SystemMessageId.OBSERVERS_CANNOT_PARTICIPATE);
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
 		if (activeChar.getActiveRequester() != null || activeChar.isOutOfControl())
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
 		final L2Object obj = (activeChar.getTargetId() == _objectId) ? activeChar.getTarget() : World.getInstance().getObject(_objectId);
 		if (obj == null)
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
@@ -63,7 +62,7 @@ public final class Action extends L2GameClientPacket
 			default:
 				// Invalid action detected (probably client cheating), log this
 				_log.warning(activeChar.getName() + " requested invalid action: " + _actionId);
-				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				break;
 		}
 	}

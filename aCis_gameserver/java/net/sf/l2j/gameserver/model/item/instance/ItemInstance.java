@@ -36,7 +36,6 @@ import net.sf.l2j.gameserver.model.item.type.EtcItemType;
 import net.sf.l2j.gameserver.model.item.type.ItemType;
 import net.sf.l2j.gameserver.model.item.type.WeaponType;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.DropItem;
 import net.sf.l2j.gameserver.network.serverpackets.GetItem;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -578,7 +577,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	{
 		if (player.isFlying())
 		{
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 			return;
 		}
 		
@@ -587,28 +586,28 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 		{
 			if (player.isInParty())
 			{
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				return;
 			}
 			
 			final Castle castle = CastleManager.getInstance().getCastle(player);
 			if (castle == null)
 			{
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				return;
 			}
 			
 			final MercenaryTicket ticket = castle.getTicket(_itemId);
 			if (ticket == null)
 			{
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				return;
 			}
 			
 			if (!player.isCastleLord(castle.getCastleId()))
 			{
 				player.sendPacket(SystemMessageId.THIS_IS_NOT_A_MERCENARY_OF_A_CASTLE_THAT_YOU_OWN_AND_SO_CANNOT_CANCEL_POSITIONING);
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				return;
 			}
 		}

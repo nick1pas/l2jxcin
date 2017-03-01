@@ -5,7 +5,6 @@ import java.util.StringTokenizer;
 import net.sf.l2j.gameserver.datatables.MultisellData;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.scripting.QuestState;
 
@@ -105,7 +104,7 @@ public class GoldenRamMercenary extends Folk
 		html.setFile(filename);
 		html.replace("%objectId%", getObjectId());
 		player.sendPacket(html);
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	@Override

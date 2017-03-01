@@ -27,7 +27,6 @@ import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Weapon;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ConfirmDlg;
 import net.sf.l2j.gameserver.network.serverpackets.DoorInfo;
 import net.sf.l2j.gameserver.network.serverpackets.DoorStatusUpdate;
@@ -297,11 +296,11 @@ public class Door extends Character implements IGeoObject
 			{
 				player.setRequestedGate(this);
 				player.sendPacket(new ConfirmDlg((!isOpened()) ? 1140 : 1141));
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 			}
 			else
 				// Send a Server->Client ActionFailed to the Player in order to avoid that the client wait another packet
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 		}
 	}
 	
@@ -342,7 +341,7 @@ public class Door extends Character implements IGeoObject
 				player.sendPacket(new DoorStatusUpdate(this, player));
 		}
 		else
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 	}
 	
 	@Override

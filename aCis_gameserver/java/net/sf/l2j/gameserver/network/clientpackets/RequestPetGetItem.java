@@ -5,7 +5,6 @@ import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 
 public final class RequestPetGetItem extends L2GameClientPacket
 {
@@ -31,7 +30,7 @@ public final class RequestPetGetItem extends L2GameClientPacket
 		final Pet pet = (Pet) activeChar.getPet();
 		if (pet.isDead() || pet.isOutOfControl())
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		

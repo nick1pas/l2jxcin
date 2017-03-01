@@ -6,7 +6,6 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.BuyListSeed;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowCropInfo;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowManorDefaultInfo;
@@ -29,7 +28,7 @@ public class ManorManagerNpc extends Merchant
 		{
 			if (CastleManorManager.getInstance().isUnderMaintenance())
 			{
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				player.sendPacket(SystemMessageId.THE_MANOR_SYSTEM_IS_CURRENTLY_UNDER_MAINTENANCE);
 				return;
 			}

@@ -1,7 +1,6 @@
 package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SiegeInfo;
 
@@ -24,7 +23,7 @@ public class SiegeNpc extends Folk
 			html.replace("%castlename%", getCastle().getName());
 			html.replace("%objectId%", getObjectId());
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 	}
 }

@@ -7,7 +7,6 @@ import net.sf.l2j.gameserver.datatables.TeleportLocationTable;
 import net.sf.l2j.gameserver.model.L2TeleportLocation;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 /**
@@ -66,7 +65,7 @@ public class Doorman extends Folk
 		html.replace("%objectId%", getObjectId());
 		player.sendPacket(html);
 		
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	protected void openDoors(Player player, String command)
@@ -93,7 +92,7 @@ public class Doorman extends Folk
 		html.setFile("data/html/doormen/busy.htm");
 		player.sendPacket(html);
 		
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	protected void doTeleport(Player player, String command)
@@ -108,7 +107,7 @@ public class Doorman extends Folk
 		else
 			_log.warning("No teleport destination with id: " + whereTo);
 		
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	protected boolean isOwnerClan(Player player)

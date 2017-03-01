@@ -9,7 +9,6 @@ import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 
 public class Escape implements IUserCommandHandler
@@ -32,7 +31,7 @@ public class Escape implements IUserCommandHandler
 				|| !DMEvent.onEscapeUse(activeChar.getObjectId())
 				|| !LMEvent.onEscapeUse(activeChar.getObjectId()))
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			activeChar.ActionF();
 			return false;
 		}
 		activeChar.stopMove(null);

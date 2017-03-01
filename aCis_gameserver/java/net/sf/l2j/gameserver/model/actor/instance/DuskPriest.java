@@ -4,7 +4,6 @@ import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 public class DuskPriest extends SignsPriest
@@ -26,7 +25,7 @@ public class DuskPriest extends SignsPriest
 	@Override
 	public void showChatWindow(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		
 		String filename = SevenSigns.SEVEN_SIGNS_HTML_PATH;
 		

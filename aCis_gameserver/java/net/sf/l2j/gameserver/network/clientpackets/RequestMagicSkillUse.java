@@ -9,7 +9,6 @@ import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.model.zone.type.L2MultiZone;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 
 public final class RequestMagicSkillUse extends L2GameClientPacket
@@ -38,7 +37,7 @@ public final class RequestMagicSkillUse extends L2GameClientPacket
 		final int level = activeChar.getSkillLevel(_magicId);
 		if (level <= 0)
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
@@ -46,7 +45,7 @@ public final class RequestMagicSkillUse extends L2GameClientPacket
 		final L2Skill skill = SkillTable.getInstance().getInfo(_magicId, level);
 		if (skill == null)
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			_log.warning("No skill found with id " + _magicId + " and level " + level + ".");
 			return;
 		}
@@ -54,27 +53,27 @@ public final class RequestMagicSkillUse extends L2GameClientPacket
 		// If Alternate rule Karma punishment is set to true, forbid skill Return to player with Karma
 		if (skill.getSkillType() == L2SkillType.RECALL && !Config.KARMA_PLAYER_CAN_TELEPORT && activeChar.getKarma() > 0)
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
 		// players mounted on pets cannot use any toggle skills
 		if (skill.isToggle() && activeChar.isMounted())
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
 		if (activeChar.isOutOfControl())
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
  		
 		if (activeChar.isInsideZone(ZoneId.MULTI) && L2MultiZone.isRestrictedSkill(skill.getId()))
 		{
 			activeChar.sendMessage(skill.getName() + " cannot be used inside multi zone.");
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 	
@@ -82,7 +81,7 @@ public final class RequestMagicSkillUse extends L2GameClientPacket
 		{
 			if (skill.isToggle())
 			{
-				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return;
 			}
 			

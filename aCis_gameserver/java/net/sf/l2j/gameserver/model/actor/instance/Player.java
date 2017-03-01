@@ -1,5 +1,7 @@
 package net.sf.l2j.gameserver.model.actor.instance;
 
+import static net.sf.l2j.gameserver.network.serverpackets.ActionFailed.STATIC_PACKET;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -156,7 +158,6 @@ import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.AbstractNpcInfo;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ChairSit;
 import net.sf.l2j.gameserver.network.serverpackets.ChangeWaitType;
 import net.sf.l2j.gameserver.network.serverpackets.CharInfo;
@@ -3237,7 +3238,7 @@ public final class Player extends Playable
 				// Player with lvl < 21 can't attack a cursed weapon holder and a cursed weapon holder can't attack players with lvl < 21
 				if ((isCursedWeaponEquipped() && player.getLevel() < 21) || (player.isCursedWeaponEquipped() && getLevel() < 21))
 				{
-					player.sendPacket(ActionFailed.STATIC_PACKET);
+					player.ActionF();
 					return;
 				}
 				
@@ -3250,7 +3251,7 @@ public final class Player extends Playable
 			else
 			{
 				// avoids to stuck when clicking two or more times
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				
 				if (player != this && GeoEngine.getInstance().canSeeTarget(player, this))
 					player.getAI().setIntention(CtrlIntention.FOLLOW, this);
@@ -3550,7 +3551,7 @@ public final class Player extends Playable
 		ItemInstance item = (ItemInstance) object;
 		
 		// Send ActionFailed to this Player
-		sendPacket(ActionFailed.STATIC_PACKET);
+		ActionF();
 		sendPacket(new StopMove(this));
 		
 		synchronized (item)
@@ -3697,7 +3698,7 @@ public final class Player extends Playable
 			if (isInsideZone(ZoneId.NO_STORE))
 				sendPacket(SystemMessageId.NO_PRIVATE_STORE_HERE);
 			
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 		}
 	}
 	
@@ -3721,7 +3722,7 @@ public final class Player extends Playable
 			if (isInsideZone(ZoneId.NO_STORE))
 				sendPacket(SystemMessageId.NO_PRIVATE_STORE_HERE);
 			
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 		}
 	}
 	
@@ -3747,7 +3748,7 @@ public final class Player extends Playable
 			if (isInsideZone(ZoneId.NO_STORE))
 				sendPacket(SystemMessageId.NO_PRIVATE_WORKSHOP_HERE);
 			
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 		}
 	}
 	
@@ -6633,7 +6634,7 @@ public final class Player extends Playable
 		// Check if the skill is active
 		if (skill.isPassive())
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return false;
 		}
 		
@@ -6642,7 +6643,7 @@ public final class Player extends Playable
 			|| (getMountType() == 1 && !skill.isStriderSkill()) // If mounted, allow ONLY Strider skills.
 			|| (getMountType() == 2 && !skill.isFlyingSkill())) // If flying, allow ONLY Wyvern skills.
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return false;
 		}
  		
@@ -6650,7 +6651,7 @@ public final class Player extends Playable
 		{
 			if (!isInsideZone(ZoneId.TOWN) ? true : !skill.isAioSkill())
 			{
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return false;
 			}
 		}
@@ -6660,7 +6661,7 @@ public final class Player extends Playable
 		if (formal != null && formal.getItem().getBodyPart() == Item.SLOT_ALLDRESS)
 		{
 			sendPacket(SystemMessageId.CANNOT_USE_ITEMS_SKILLS_WITH_FORMALWEAR);
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return false;
 		}
 		
@@ -6673,7 +6674,7 @@ public final class Player extends Playable
 			if (_currentSkill.getSkill() != null && skill.getId() != _currentSkill.getSkillId())
 				setQueuedSkill(skill, forceUse, dontMove);
 			
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return false;
 		}
 		
@@ -6724,7 +6725,7 @@ public final class Player extends Playable
 		// Check if the player is dead or out of control.
 		if (isDead() || isOutOfControl())
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return false;
 		}
 		
@@ -6741,7 +6742,7 @@ public final class Player extends Playable
 		{
 			sendPacket(SystemMessageId.OBSERVERS_CANNOT_PARTICIPATE);
 			abortCast();
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return false;
 		}
 		
@@ -6757,7 +6758,7 @@ public final class Player extends Playable
 					effect.exit();
 					
 					// Send ActionFailed to the Player
-					sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return false;
 				}
 			}
@@ -6766,7 +6767,7 @@ public final class Player extends Playable
 			sendPacket(SystemMessageId.CANT_MOVE_SITTING);
 			
 			// Send ActionFailed to the Player
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return false;
 		}
 		
@@ -6783,7 +6784,7 @@ public final class Player extends Playable
 					effect.exit();
 				
 				// Send ActionFailed to the Player
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return false;
 			}
 		}
@@ -6792,7 +6793,7 @@ public final class Player extends Playable
 		if (isFakeDeath())
 		{
 			// Send ActionFailed to the Player
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return false;
 		}
 		
@@ -6805,7 +6806,7 @@ public final class Player extends Playable
 		if (sklTargetType == SkillTargetType.TARGET_GROUND && worldPosition == null)
 		{
 			_log.info("WorldPosition is null for skill: " + skill.getName() + ", player: " + getName() + ".");
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return false;
 		}
 		
@@ -6837,7 +6838,7 @@ public final class Player extends Playable
 		// Check the validity of the target
 		if (target == null)
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return false;
 		}
 		
@@ -6847,7 +6848,7 @@ public final class Player extends Playable
 				|| (((Door) target).isUnlockable() && skill.getSkillType() != L2SkillType.UNLOCK)) // unlockable doors
 			{
 				sendPacket(SystemMessageId.INCORRECT_TARGET);
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return false;
 			}
 		}
@@ -6862,7 +6863,7 @@ public final class Player extends Playable
 				if (cha.getDuelId() != getDuelId())
 				{
 					sendPacket(SystemMessageId.INCORRECT_TARGET);
-					sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return false;
 				}
 			}
@@ -6893,7 +6894,7 @@ public final class Player extends Playable
 		if (!skill.checkCondition(this, target, false))
 		{
 			// Send ActionFailed to the Player
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return false;
 		}
 		
@@ -6906,14 +6907,14 @@ public final class Player extends Playable
 			{
 				// If Character or target is in a peace zone, send a system message TARGET_IN_PEACEZONE ActionFailed
 				sendPacket(SystemMessageId.TARGET_IN_PEACEZONE);
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return false;
 			}
 			
 			if (isInOlympiadMode() && !isOlympiadStart())
 			{
 				// if Player is in Olympia and the match isn't already start, send ActionFailed
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return false;
 			}
 			
@@ -6921,7 +6922,7 @@ public final class Player extends Playable
 			if (!target.isAttackable() && !getAccessLevel().allowPeaceAttack())
 			{
 				// If target is not attackable, send ActionFailed
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return false;
 			}
 			
@@ -6943,7 +6944,7 @@ public final class Player extends Playable
 					case TARGET_AREA_SUMMON:
 						break;
 					default: // Send ActionFailed to the Player
-						sendPacket(ActionFailed.STATIC_PACKET);
+						ActionF();
 						return false;
 				}
 			}
@@ -6960,7 +6961,7 @@ public final class Player extends Playable
 						sendPacket(SystemMessageId.TARGET_TOO_FAR);
 						
 						// Send ActionFailed to the Player
-						sendPacket(ActionFailed.STATIC_PACKET);
+						ActionF();
 						return false;
 					}
 				}
@@ -6970,7 +6971,7 @@ public final class Player extends Playable
 					sendPacket(SystemMessageId.TARGET_TOO_FAR);
 					
 					// Send ActionFailed to the Player
-					sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return false;
 				}
 			}
@@ -7006,7 +7007,7 @@ public final class Player extends Playable
 						case UNLOCK:
 							break;
 						default:
-							sendPacket(ActionFailed.STATIC_PACKET);
+							ActionF();
 							return false;
 					}
 					break;
@@ -7023,7 +7024,7 @@ public final class Player extends Playable
 				sendPacket(SystemMessageId.INCORRECT_TARGET);
 				
 				// Send ActionFailed to the Player
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return false;
 			}
 		}
@@ -7040,7 +7041,7 @@ public final class Player extends Playable
 					sendPacket(SystemMessageId.SWEEPER_FAILED_TARGET_NOT_SPOILED);
 					
 					// Send ActionFailed to the Player
-					sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return false;
 				}
 				
@@ -7050,7 +7051,7 @@ public final class Player extends Playable
 					sendPacket(SystemMessageId.SWEEP_NOT_ALLOWED);
 					
 					// Send ActionFailed to the Player
-					sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return false;
 				}
 			}
@@ -7065,7 +7066,7 @@ public final class Player extends Playable
 				sendPacket(SystemMessageId.INCORRECT_TARGET);
 				
 				// Send ActionFailed to the Player
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return false;
 			}
 		}
@@ -7092,14 +7093,14 @@ public final class Player extends Playable
 					sendPacket(SystemMessageId.TARGET_IS_INCORRECT);
 					
 					// Send ActionFailed to the Player
-					sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return false;
 				}
 		}
 		
 		if ((sklTargetType == SkillTargetType.TARGET_HOLY && !checkIfOkToCastSealOfRule(CastleManager.getInstance().getCastle(this), false, skill, target)) || (sklType == L2SkillType.SIEGEFLAG && !L2SkillSiegeFlag.checkIfOkToPlaceFlag(this, false)) || (sklType == L2SkillType.STRSIEGEASSAULT && !checkIfOkToUseStriderSiegeAssault(skill)) || (sklType == L2SkillType.SUMMON_FRIEND && !(checkSummonerStatus(this) && checkSummonTargetStatus(target, this))))
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			abortCast();
 			return false;
 		}
@@ -7112,14 +7113,14 @@ public final class Player extends Playable
 				if (!GeoEngine.getInstance().canSeeTarget(this, worldPosition))
 				{
 					sendPacket(SystemMessageId.CANT_SEE_TARGET);
-					sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return false;
 				}
 			}
 			else if (!GeoEngine.getInstance().canSeeTarget(this, target))
 			{
 				sendPacket(SystemMessageId.CANT_SEE_TARGET);
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return false;
 			}
 		}
@@ -10989,5 +10990,9 @@ public final class Player extends Playable
 		
 		sendPacket(new SkillCoolTime(this));
 	}
-	
+
+	@Override
+	public void ActionF() {
+        sendPacket(STATIC_PACKET);
+    }
 }

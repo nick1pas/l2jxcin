@@ -14,7 +14,6 @@ import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.entity.ClanHall.ClanHallFunction;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ClanHallDecoration;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.WarehouseDepositList;
@@ -1469,11 +1468,11 @@ public class ClanHallManagerNpc extends Merchant
 				else
 					_log.warning("No teleport destination with id:" + val);
 				
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 			}
 			else if (actualCommand.equalsIgnoreCase("WithdrawC"))
 			{
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				if ((player.getClanPrivileges() & L2Clan.CP_CL_VIEW_WAREHOUSE) != L2Clan.CP_CL_VIEW_WAREHOUSE)
 				{
 					player.sendPacket(SystemMessageId.YOU_DO_NOT_HAVE_THE_RIGHT_TO_USE_CLAN_WAREHOUSE);
@@ -1490,7 +1489,7 @@ public class ClanHallManagerNpc extends Merchant
 			}
 			else if (actualCommand.equalsIgnoreCase("DepositC"))
 			{
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				if (player.getClan() != null)
 				{
 					if (player.getClan().getLevel() == 0)
@@ -1511,7 +1510,7 @@ public class ClanHallManagerNpc extends Merchant
 	@Override
 	public void showChatWindow(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		String filename = "data/html/clanHallManager/chamberlain-no.htm";
 		
 		final int condition = validateCondition(player);

@@ -4,7 +4,6 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.AioManagerTable;
 import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.templates.L2Aio;
@@ -30,7 +29,7 @@ public class Aio extends Folk
 		html.setFile(name);
 		html.replace("%objectId%", getObjectId());
 		player.sendPacket(html);
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	@Override

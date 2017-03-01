@@ -5,7 +5,6 @@ import net.sf.l2j.gameserver.model.actor.Vehicle;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.type.WeaponType;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToLocationInVehicle;
 import net.sf.l2j.gameserver.network.serverpackets.StopMoveInVehicle;
 
@@ -46,20 +45,20 @@ public final class RequestMoveToLocationInVehicle extends L2GameClientPacket
 		
 		if (activeChar.isAttackingNow() && activeChar.getAttackType() == WeaponType.BOW)
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
 		if (activeChar.isSitting() || activeChar.isMovementDisabled())
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
 		if (activeChar.getPet() != null)
 		{
 			activeChar.sendPacket(SystemMessageId.RELEASE_PET_ON_BOAT);
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
@@ -69,7 +68,7 @@ public final class RequestMoveToLocationInVehicle extends L2GameClientPacket
 			boat = activeChar.getBoat();
 			if (boat.getObjectId() != _boatId)
 			{
-				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return;
 			}
 		}
@@ -78,7 +77,7 @@ public final class RequestMoveToLocationInVehicle extends L2GameClientPacket
 			boat = BoatManager.getInstance().getBoat(_boatId);
 			if (boat == null || !boat.isInsideRadius(activeChar, 300, true, false))
 			{
-				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return;
 			}
 			activeChar.setVehicle(boat);

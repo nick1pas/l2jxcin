@@ -14,7 +14,6 @@ import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.manor.CropProcure;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
 public class RequestProcureCropList extends L2GameClientPacket
@@ -61,14 +60,14 @@ public class RequestProcureCropList extends L2GameClientPacket
 		final CastleManorManager manor = CastleManorManager.getInstance();
 		if (manor.isUnderMaintenance())
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
 		final Npc manager = player.getCurrentFolkNPC();
 		if (!(manager instanceof ManorManagerNpc) || !manager.canInteract(player))
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
@@ -83,14 +82,14 @@ public class RequestProcureCropList extends L2GameClientPacket
 			final ItemInstance item = player.getInventory().getItemByObjectId(i.getObjectId());
 			if (item == null || item.getCount() < i.getValue() || item.getItemId() != i.getId())
 			{
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return;
 			}
 			
 			final CropProcure cp = i.getCropProcure();
 			if (cp == null || cp.getAmount() < i.getValue())
 			{
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return;
 			}
 			

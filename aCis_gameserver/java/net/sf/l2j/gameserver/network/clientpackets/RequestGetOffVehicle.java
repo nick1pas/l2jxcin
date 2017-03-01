@@ -1,7 +1,6 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.gameserver.model.actor.instance.Player;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.GetOffVehicle;
 import net.sf.l2j.gameserver.network.serverpackets.StopMoveInVehicle;
 
@@ -30,13 +29,13 @@ public final class RequestGetOffVehicle extends L2GameClientPacket
 		
 		if (!activeChar.isInBoat() || activeChar.getBoat().getObjectId() != _boatId || activeChar.getBoat().isMoving() || !activeChar.isInsideRadius(_x, _y, _z, 1000, true, false))
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
 		activeChar.broadcastPacket(new StopMoveInVehicle(activeChar, _boatId));
 		activeChar.setVehicle(null);
-		sendPacket(ActionFailed.STATIC_PACKET);
+		ActionF();
 		activeChar.broadcastPacket(new GetOffVehicle(activeChar.getObjectId(), _boatId, _x, _y, _z));
 		activeChar.setXYZ(_x, _y, _z + 50);
 		activeChar.revalidateZone(true);

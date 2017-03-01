@@ -9,7 +9,6 @@ import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.manor.CropProcure;
 import net.sf.l2j.gameserver.model.manor.Seed;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 
 public class RequestSetCrop extends L2GameClientPacket
 {
@@ -54,7 +53,7 @@ public class RequestSetCrop extends L2GameClientPacket
 		final CastleManorManager manor = CastleManorManager.getInstance();
 		if (!manor.isModifiablePeriod())
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
@@ -62,7 +61,7 @@ public class RequestSetCrop extends L2GameClientPacket
 		final Player player = getClient().getActiveChar();
 		if (player == null || player.getClan() == null || player.getClan().getCastleId() != _manorId || ((player.getClanPrivileges() & L2Clan.CP_CS_MANOR_ADMIN) != L2Clan.CP_CS_MANOR_ADMIN) || !player.getCurrentFolkNPC().canInteract(player))
 		{
-			sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		

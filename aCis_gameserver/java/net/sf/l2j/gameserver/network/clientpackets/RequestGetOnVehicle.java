@@ -3,7 +3,6 @@ package net.sf.l2j.gameserver.network.clientpackets;
 import net.sf.l2j.gameserver.instancemanager.BoatManager;
 import net.sf.l2j.gameserver.model.actor.Vehicle;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.GetOnVehicle;
 
 public final class RequestGetOnVehicle extends L2GameClientPacket
@@ -35,7 +34,7 @@ public final class RequestGetOnVehicle extends L2GameClientPacket
 			boat = activeChar.getBoat();
 			if (boat.getObjectId() != _boatId)
 			{
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return;
 			}
 		}
@@ -44,7 +43,7 @@ public final class RequestGetOnVehicle extends L2GameClientPacket
 			boat = BoatManager.getInstance().getBoat(_boatId);
 			if (boat == null || boat.isMoving() || !activeChar.isInsideRadius(boat, 1000, true, false))
 			{
-				sendPacket(ActionFailed.STATIC_PACKET);
+				ActionF();
 				return;
 			}
 		}

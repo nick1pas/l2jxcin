@@ -14,7 +14,6 @@ import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.DeleteObject;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -154,7 +153,7 @@ public class RaceManagerNpc extends Folk
 			html.replace("1race", MonsterRace.getInstance().getRaceNumber());
 			html.replace("%objectId%", getObjectId());
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 		else if (command.equals("ShowOdds"))
 		{
@@ -180,7 +179,7 @@ public class RaceManagerNpc extends Folk
 			html.replace("1race", MonsterRace.getInstance().getRaceNumber());
 			html.replace("%objectId%", getObjectId());
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 		else if (command.equals("ShowInfo"))
 		{
@@ -195,7 +194,7 @@ public class RaceManagerNpc extends Folk
 			}
 			html.replace("%objectId%", getObjectId());
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 		else if (command.equals("ShowTickets"))
 		{
@@ -217,7 +216,7 @@ public class RaceManagerNpc extends Folk
 			html.replace("%tickets%", sb.toString());
 			html.replace("%objectId%", getObjectId());
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 		else if (command.startsWith("ShowTicket"))
 		{
@@ -259,7 +258,7 @@ public class RaceManagerNpc extends Folk
 			html.replace("%objectId%", getObjectId());
 			html.replace("%ticketObjectId%", val);
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 		else if (command.startsWith("CalculateWin"))
 		{
@@ -316,7 +315,7 @@ public class RaceManagerNpc extends Folk
 			html.replace("%infos%", sb.toString());
 			html.replace("%objectId%", getObjectId());
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 		else
 			super.onBypassFeedback(player, command);

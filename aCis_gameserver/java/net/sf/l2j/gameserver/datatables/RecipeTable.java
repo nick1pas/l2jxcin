@@ -20,7 +20,6 @@ import net.sf.l2j.gameserver.model.item.RecipeList;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
 import net.sf.l2j.gameserver.network.serverpackets.RecipeBookItemList;
 import net.sf.l2j.gameserver.network.serverpackets.RecipeItemMakeInfo;
@@ -227,14 +226,14 @@ public class RecipeTable
 			
 			if (_player.isAlikeDead() || _target.isAlikeDead())
 			{
-				_player.sendPacket(ActionFailed.STATIC_PACKET);
+				_player.ActionF();
 				abort();
 				return;
 			}
 			
 			if (_player.isProcessingTransaction() || _target.isProcessingTransaction())
 			{
-				_target.sendPacket(ActionFailed.STATIC_PACKET);
+				_target.ActionF();
 				abort();
 				return;
 			}
@@ -242,7 +241,7 @@ public class RecipeTable
 			// validate recipe list
 			if (_recipeList.getNeededRecipeParts().isEmpty())
 			{
-				_player.sendPacket(ActionFailed.STATIC_PACKET);
+				_player.ActionF();
 				abort();
 				return;
 			}
@@ -250,7 +249,7 @@ public class RecipeTable
 			// validate skill level
 			if (_recipeList.getLevel() > _skillLevel)
 			{
-				_player.sendPacket(ActionFailed.STATIC_PACKET);
+				_player.ActionF();
 				abort();
 				return;
 			}

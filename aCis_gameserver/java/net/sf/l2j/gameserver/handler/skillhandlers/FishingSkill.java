@@ -10,7 +10,6 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Weapon;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 
 public class FishingSkill implements ISkillHandler
@@ -34,7 +33,7 @@ public class FishingSkill implements ISkillHandler
 		if (fish == null)
 		{
 			player.sendPacket((isReelingSkill) ? SystemMessageId.CAN_USE_REELING_ONLY_WHILE_FISHING : SystemMessageId.CAN_USE_PUMPING_ONLY_WHILE_FISHING);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 			return;
 		}
 		

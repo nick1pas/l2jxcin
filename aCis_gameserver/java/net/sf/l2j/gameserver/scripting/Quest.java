@@ -35,7 +35,6 @@ import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
@@ -663,7 +662,7 @@ public class Quest
 				npcReply.replace("%objectId%", npc.getObjectId());
 			
 			player.sendPacket(npcReply);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 		else if (result.startsWith("<html>"))
 		{
@@ -674,7 +673,7 @@ public class Quest
 				npcReply.replace("%objectId%", npc.getObjectId());
 			
 			player.sendPacket(npcReply);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 		else
 			player.sendMessage(result);
@@ -697,7 +696,7 @@ public class Quest
 			NpcHtmlMessage npcReply = new NpcHtmlMessage(0);
 			npcReply.setHtml("<html><body><title>Script error</title>" + e.getMessage() + "</body></html>");
 			player.sendPacket(npcReply);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 	}
 	
@@ -1145,7 +1144,7 @@ public class Quest
 		if (res != null && res.length() > 0)
 			showResult(npc, player, res);
 		else
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 	}
 	
 	public String onFirstTalk(Npc npc, Player player)

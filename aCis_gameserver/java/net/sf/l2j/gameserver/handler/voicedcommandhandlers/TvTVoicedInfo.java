@@ -5,7 +5,6 @@ import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 /**
@@ -59,7 +58,7 @@ public class TvTVoicedInfo implements IVoicedCommandHandler
 			}
 			else
 			{
-				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+				activeChar.ActionF();
 			}
 		}
 		else if (command.equalsIgnoreCase("tvtjoin"))

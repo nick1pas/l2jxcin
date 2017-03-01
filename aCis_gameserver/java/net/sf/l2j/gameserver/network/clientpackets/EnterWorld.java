@@ -39,7 +39,6 @@ import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.olympiad.Olympiad;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.Die;
 import net.sf.l2j.gameserver.network.serverpackets.EtcStatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.ExMailArrived;
@@ -344,7 +343,7 @@ public class EnterWorld extends L2GameClientPacket
 		
 		ClassMaster.showQuestionMark(activeChar);
 		
-		activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+		ActionF();
 	}
 	
 	@Override

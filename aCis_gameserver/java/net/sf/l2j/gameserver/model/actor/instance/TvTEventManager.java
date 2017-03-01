@@ -4,7 +4,6 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 public class TvTEventManager extends Folk
@@ -78,6 +77,6 @@ public class TvTEventManager extends Folk
 			}
 		}
 		
-		playerInstance.sendPacket(ActionFailed.STATIC_PACKET);
+		playerInstance.ActionF();
 	}
 }

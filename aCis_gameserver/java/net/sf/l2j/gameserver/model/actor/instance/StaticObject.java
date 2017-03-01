@@ -4,7 +4,6 @@ import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.actor.Character;
 import net.sf.l2j.gameserver.model.actor.Npc;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.ShowTownMap;
 import net.sf.l2j.gameserver.network.serverpackets.StaticObjectInfo;
@@ -96,7 +95,7 @@ public class StaticObject extends L2Object
 					player.sendPacket(getMap());
 				
 				// Send ActionFailed to the player in order to avoid he stucks
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 			}
 		}
 	}
@@ -115,13 +114,13 @@ public class StaticObject extends L2Object
 			html.replace("%staticid%", getStaticObjectId());
 			html.replace("%class%", getClass().getSimpleName());
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 		
 		if (player.getTarget() != this)
 			player.setTarget(this);
 		else
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 	}
 	
 	@Override

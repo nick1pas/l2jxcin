@@ -23,7 +23,6 @@ import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadManager;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.AcquireSkillList;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeShowMemberListAll;
@@ -893,7 +892,7 @@ public class VillageMaster extends Folk
 			final NpcHtmlMessage html = new NpcHtmlMessage(0);
 			html.setFile("data/html/villagemaster/NotClanLeader.htm");
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 			return;
 		}
 		
@@ -928,6 +927,6 @@ public class VillageMaster extends Folk
 		else
 			player.sendPacket(asl);
 		
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 }

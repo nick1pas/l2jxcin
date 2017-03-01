@@ -5,7 +5,6 @@ import net.sf.l2j.gameserver.model.partymatching.PartyMatchRoom;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchRoomList;
 import net.sf.l2j.gameserver.model.partymatching.PartyMatchWaitingList;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ExPartyRoomMember;
 import net.sf.l2j.gameserver.network.serverpackets.PartyMatchDetail;
 import net.sf.l2j.gameserver.network.serverpackets.PartyMatchList;
@@ -32,7 +31,7 @@ public final class RequestPartyMatchConfig extends L2GameClientPacket
 		if (!activeChar.isInPartyMatchRoom() && activeChar.getParty() != null && activeChar.getParty().getLeader() != activeChar)
 		{
 			activeChar.sendPacket(SystemMessageId.CANT_VIEW_PARTY_ROOMS);
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		

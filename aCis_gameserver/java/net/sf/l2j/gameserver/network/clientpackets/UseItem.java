@@ -20,7 +20,6 @@ import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.model.zone.type.L2MultiZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
 import net.sf.l2j.gameserver.network.serverpackets.PetItemList;
@@ -136,7 +135,7 @@ public final class UseItem extends L2GameClientPacket
 				{
 					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
 					activeChar.sendPacket(cs);
-					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return;
 				}
 			}
@@ -150,7 +149,7 @@ public final class UseItem extends L2GameClientPacket
 				{
 					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
 					activeChar.sendPacket(cs);
-					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return;
 				}
 			}
@@ -164,7 +163,7 @@ public final class UseItem extends L2GameClientPacket
 				{
 					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
 					activeChar.sendPacket(cs);
-					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return;
 				}
 			}
@@ -178,7 +177,7 @@ public final class UseItem extends L2GameClientPacket
 				{
 					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
 					activeChar.sendPacket(cs);
-					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return;
 				}
 			}
@@ -192,7 +191,7 @@ public final class UseItem extends L2GameClientPacket
 				{
 					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
 					activeChar.sendPacket(cs);
-					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return;
 				}
 			}
@@ -206,7 +205,7 @@ public final class UseItem extends L2GameClientPacket
 				{
 					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
 					activeChar.sendPacket(cs);
-					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return;
 				}
 			}
@@ -220,7 +219,7 @@ public final class UseItem extends L2GameClientPacket
 				{
 					CreatureSay cs = new CreatureSay(0, Say2.PARTYROOM_COMMANDER, "Weapon Protection System", " " + activeChar.getName() + " this item can not be equipped by your class");
 					activeChar.sendPacket(cs);
-					activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+					ActionF();
 					return;
 				}
 			}

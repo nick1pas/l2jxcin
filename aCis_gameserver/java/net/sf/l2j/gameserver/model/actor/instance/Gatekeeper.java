@@ -11,7 +11,6 @@ import net.sf.l2j.gameserver.model.L2TeleportLocation;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 public final class Gatekeeper extends Folk
@@ -28,7 +27,7 @@ public final class Gatekeeper extends Folk
 	@Override
 	public void onBypassFeedback(Player player, String command)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		
 		if (command.startsWith("goto"))
 		{
@@ -83,7 +82,7 @@ public final class Gatekeeper extends Folk
 				if (player.destroyItemByItemId("Teleport ", (list.isForNoble()) ? 6651 : 57, price, this, true))
 					player.teleToLocation(list.getLocX(), list.getLocY(), list.getLocZ(), 20);
 				
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 			}
 		}
 		else if (command.startsWith("Chat"))

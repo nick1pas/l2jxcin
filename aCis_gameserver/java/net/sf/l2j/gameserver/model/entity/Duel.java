@@ -14,7 +14,6 @@ import net.sf.l2j.gameserver.model.actor.Summon;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ExDuelEnd;
 import net.sf.l2j.gameserver.network.serverpackets.ExDuelReady;
 import net.sf.l2j.gameserver.network.serverpackets.ExDuelStart;
@@ -293,7 +292,7 @@ public class Duel
 				partyPlayer.abortCast();
 				partyPlayer.getAI().setIntention(CtrlIntention.ACTIVE);
 				partyPlayer.setTarget(null);
-				partyPlayer.sendPacket(ActionFailed.STATIC_PACKET);
+				partyPlayer.ActionF();
 			}
 			
 			for (Player partyPlayer : _playerB.getParty().getMembers())
@@ -301,7 +300,7 @@ public class Duel
 				partyPlayer.abortCast();
 				partyPlayer.getAI().setIntention(CtrlIntention.ACTIVE);
 				partyPlayer.setTarget(null);
-				partyPlayer.sendPacket(ActionFailed.STATIC_PACKET);
+				partyPlayer.ActionF();
 			}
 		}
 		else
@@ -312,8 +311,8 @@ public class Duel
 			_playerA.setTarget(null);
 			_playerB.getAI().setIntention(CtrlIntention.ACTIVE);
 			_playerB.setTarget(null);
-			_playerA.sendPacket(ActionFailed.STATIC_PACKET);
-			_playerB.sendPacket(ActionFailed.STATIC_PACKET);
+			_playerA.ActionF();
+			_playerB.ActionF();
 		}
 	}
 	

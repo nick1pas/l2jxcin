@@ -14,7 +14,6 @@ import net.sf.l2j.gameserver.model.actor.instance.Servitor;
 import net.sf.l2j.gameserver.model.actor.stat.PcStat;
 import net.sf.l2j.gameserver.model.entity.Duel.DuelState;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.scripting.QuestState;
 import net.sf.l2j.gameserver.skills.Formulas;
@@ -179,7 +178,7 @@ public class PcStatus extends PlayableStatus
 						if (attacker != null)
 						{
 							attacker.getAI().setIntention(CtrlIntention.ACTIVE);
-							attacker.sendPacket(ActionFailed.STATIC_PACKET);
+							attacker.ActionF();
 						}
 						
 						// let the DuelManager know of his defeat

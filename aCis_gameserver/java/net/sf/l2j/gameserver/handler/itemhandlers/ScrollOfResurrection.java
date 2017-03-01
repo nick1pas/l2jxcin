@@ -14,7 +14,6 @@ import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 
 public class ScrollOfResurrection implements IItemHandler
 {
@@ -53,7 +52,7 @@ public class ScrollOfResurrection implements IItemHandler
 			|| !DMEvent.onScrollUse(activeChar.getObjectId())
 			|| !LMEvent.onScrollUse(activeChar.getObjectId()))
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			activeChar.ActionF();
 			return;
 		} 
 		// Pickup player, or pet owner in case target is a pet.

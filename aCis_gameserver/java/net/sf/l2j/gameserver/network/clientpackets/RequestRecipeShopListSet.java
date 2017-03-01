@@ -7,7 +7,6 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.Player.StoreType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.RecipeShopMsg;
 
 public final class RequestRecipeShopListSet extends L2GameClientPacket
@@ -48,7 +47,7 @@ public final class RequestRecipeShopListSet extends L2GameClientPacket
 		if (player.isInsideZone(ZoneId.NO_STORE))
 		{
 			player.sendPacket(SystemMessageId.NO_PRIVATE_WORKSHOP_HERE);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		

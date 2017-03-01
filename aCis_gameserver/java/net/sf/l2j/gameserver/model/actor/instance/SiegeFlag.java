@@ -9,7 +9,6 @@ import net.sf.l2j.gameserver.model.actor.Character;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
@@ -77,7 +76,7 @@ public class SiegeFlag extends Npc
 				player.sendPacket(new MoveToPawn(player, this, Npc.INTERACTION_DISTANCE));
 				
 				// Send ActionFailed to the player in order to avoid he stucks
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 			}
 		}
 	}

@@ -9,7 +9,6 @@ import net.sf.l2j.gameserver.model.actor.instance.Door;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 
 public class PaganKeys implements IItemHandler
 {
@@ -25,7 +24,7 @@ public class PaganKeys implements IItemHandler
 		if (!(target instanceof Door))
 		{
 			activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			activeChar.ActionF();
 			return;
 		}
 		
@@ -34,7 +33,7 @@ public class PaganKeys implements IItemHandler
 		if (!(activeChar.isInsideRadius(door, Npc.INTERACTION_DISTANCE, false, false)))
 		{
 			activeChar.sendPacket(SystemMessageId.DIST_TOO_FAR_CASTING_STOPPED);
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			activeChar.ActionF();
 			return;
 		}
 		

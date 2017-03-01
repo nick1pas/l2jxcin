@@ -6,7 +6,6 @@ import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 /**
@@ -113,6 +112,6 @@ public class WyvernManagerNpc extends CastleChamberlain
 		html.replace("%needed_crystals%", Config.WYVERN_REQUIRED_CRYSTALS);
 		player.sendPacket(html);
 		
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 }

@@ -4,7 +4,6 @@ import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.templates.skills.L2EffectType;
 
@@ -25,7 +24,7 @@ public class CastleMagician extends Folk
 	@Override
 	public void showChatWindow(Player player, int val)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		String filename = "data/html/castlemagician/magician-no.htm";
 		
 		int condition = validateCondition(player);

@@ -3,7 +3,6 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
 
 /**
@@ -39,7 +38,7 @@ public final class MutedFolk extends Folk
 				else
 				{
 					// Send a Server->Client ActionFailed to the Player in order to avoid that the client wait another packet
-					player.sendPacket(ActionFailed.STATIC_PACKET);
+					player.ActionF();
 				}
 			}
 			else if (!isAutoAttackable(player))
@@ -56,7 +55,7 @@ public final class MutedFolk extends Folk
 					player.sendPacket(new MoveToPawn(player, this, Npc.INTERACTION_DISTANCE));
 					
 					// Send ActionFailed to the player in order to avoid he stucks
-					player.sendPacket(ActionFailed.STATIC_PACKET);
+					player.ActionF();
 				}
 			}
 		}

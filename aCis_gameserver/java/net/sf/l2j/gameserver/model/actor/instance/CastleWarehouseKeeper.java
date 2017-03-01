@@ -1,7 +1,6 @@
 package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 /**
@@ -27,7 +26,7 @@ public class CastleWarehouseKeeper extends WarehouseKeeper
 	@Override
 	public void showChatWindow(Player player, int val)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		String filename = "data/html/castlewarehouse/castlewarehouse-no.htm";
 		
 		int condition = validateCondition(player);

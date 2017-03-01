@@ -46,7 +46,6 @@ import net.sf.l2j.gameserver.model.item.kind.Weapon;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.AbstractNpcInfo.NpcInfo;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowVariationCancelWindow;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowVariationMakeWindow;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
@@ -350,7 +349,7 @@ public class Npc extends Character
 					player.sendPacket(new MoveToPawn(player, this, Npc.INTERACTION_DISTANCE));
 					
 					// Send ActionFailed to the player in order to avoid he stucks
-					player.sendPacket(ActionFailed.STATIC_PACKET);
+					player.ActionF();
 					
 					if (hasRandomAnimation())
 						onRandomAnimation(Rnd.get(8));
@@ -457,7 +456,7 @@ public class Npc extends Character
 		if (player.getTarget() != this)
 			player.setTarget(this);
 		else
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 	}
 	
 	/**
@@ -522,7 +521,7 @@ public class Npc extends Character
 	{
 		if (isBusy() && getBusyMessage().length() > 0)
 		{
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 
 			NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 			html.setFile("data/html/npcbusy.htm");
@@ -734,7 +733,7 @@ public class Npc extends Character
 			html.setHtml(Quest.getNoQuestMsg());
 			player.sendPacket(html);
 			
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 			return;
 		}
 		
@@ -753,7 +752,7 @@ public class Npc extends Character
 				html.setHtml(Quest.getTooMuchQuestsMsg());
 				player.sendPacket(html);
 				
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				return;
 			}
 			
@@ -796,7 +795,7 @@ public class Npc extends Character
 		html.replace("%objectId%", npc.getObjectId());
 		player.sendPacket(html);
 		
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	/**
@@ -1108,7 +1107,7 @@ public class Npc extends Character
 		player.sendPacket(html);
 		
 		// Send a Server->Client ActionFailed to the Player in order to avoid that the client wait another packet
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	public void makeCPRecovery(Player player)
@@ -1211,7 +1210,7 @@ public class Npc extends Character
 			final NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 			html.setHtml(content);
 			player.sendPacket(html);
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 			return true;
 		}
 		
@@ -1262,7 +1261,7 @@ public class Npc extends Character
 		player.sendPacket(html);
 		
 		// Send a Server->Client ActionFailed to the Player in order to avoid that the client wait another packet
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	/**
@@ -1281,7 +1280,7 @@ public class Npc extends Character
 		player.sendPacket(html);
 		
 		// Send a Server->Client ActionFailed to the Player in order to avoid that the client wait another packet
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	/**

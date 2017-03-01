@@ -17,7 +17,6 @@ import net.sf.l2j.gameserver.instancemanager.RaidBossInfoManager;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.DropData;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 /**
@@ -55,7 +54,7 @@ public class RaidBossInfo extends Npc
 		html.setFile(name);
 		html.replace("%objectId%", getObjectId());
 		player.sendPacket(html);
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	@Override

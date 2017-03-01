@@ -4,7 +4,6 @@ import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 public class Book implements IItemHandler
@@ -23,6 +22,6 @@ public class Book implements IItemHandler
 		html.setItemId(itemId);
 		activeChar.sendPacket(html);
 		
-		activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+		activeChar.ActionF();
 	}
 }

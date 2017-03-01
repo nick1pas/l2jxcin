@@ -14,7 +14,6 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.itemcontainer.PcInventory;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.WarehouseWithdrawList;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
@@ -157,7 +156,7 @@ public class KetraOrcSupport extends Quest
 				htmltext = "31374-0.htm";
 			else
 			{
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				player.setActiveWarehouse(player.getWarehouse());
 				player.sendPacket(new WarehouseWithdrawList(player, 1));
 			}

@@ -7,7 +7,6 @@ import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.EnchantResult;
 import net.sf.l2j.gameserver.network.serverpackets.StopMove;
 import net.sf.l2j.gameserver.util.Util;
@@ -58,7 +57,7 @@ public class MoveBackwardToLocation extends L2GameClientPacket
 		
 		if (activeChar.isOutOfControl())
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		
@@ -82,7 +81,7 @@ public class MoveBackwardToLocation extends L2GameClientPacket
 			if (activeChar.getTeleMode() == 1)
 				activeChar.setTeleMode(0);
 			
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			activeChar.teleToLocation(_targetX, _targetY, _targetZ, 0);
 			return;
 		}
@@ -92,7 +91,7 @@ public class MoveBackwardToLocation extends L2GameClientPacket
 		
 		if ((dx * dx + dy * dy) > 98010000) // 9900*9900
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		activeChar.getAI().setIntention(CtrlIntention.MOVE_TO, new Location(_targetX, _targetY, _targetZ));

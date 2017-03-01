@@ -14,7 +14,6 @@ import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -98,7 +97,7 @@ public class SepulcherNpc extends Folk
 				else
 				{
 					// Send ActionFailed (target is out of attack range) to the Player player
-					player.sendPacket(ActionFailed.STATIC_PACKET);
+					player.ActionF();
 				}
 			}
 			else if (!isAutoAttackable(player))
@@ -115,7 +114,7 @@ public class SepulcherNpc extends Folk
 					player.sendPacket(new MoveToPawn(player, this, Npc.INTERACTION_DISTANCE));
 					
 					// Send ActionFailed to the player in order to avoid he stucks
-					player.sendPacket(ActionFailed.STATIC_PACKET);
+					player.ActionF();
 					
 					if (hasRandomAnimation())
 						onRandomAnimation(Rnd.get(8));
@@ -125,7 +124,7 @@ public class SepulcherNpc extends Folk
 			}
 			// Send a Server->Client ActionFailed to the Player in order
 			// to avoid that the client wait another packet
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 		}
 	}
 	
@@ -133,7 +132,7 @@ public class SepulcherNpc extends Folk
 	{
 		if (isDead())
 		{
-			player.sendPacket(ActionFailed.STATIC_PACKET);
+			player.ActionF();
 			return;
 		}
 		
@@ -199,7 +198,7 @@ public class SepulcherNpc extends Folk
 					showChatWindow(player);
 			}
 		}
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	@Override
@@ -221,7 +220,7 @@ public class SepulcherNpc extends Folk
 		html.setFile(getHtmlPath(getNpcId(), val));
 		html.replace("%objectId%", getObjectId());
 		player.sendPacket(html);
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	@Override

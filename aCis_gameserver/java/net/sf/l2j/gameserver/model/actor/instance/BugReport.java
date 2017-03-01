@@ -10,7 +10,6 @@ import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.L2GameClient;
 import net.sf.l2j.gameserver.network.clientpackets.Say2;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.MyTargetSelected;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -136,7 +135,7 @@ public class BugReport extends Folk
         }
         
         // Send a Server->Client ActionFailed to the Player in order to avoid that the client wait another packet
-        player.sendPacket(ActionFailed.STATIC_PACKET);
+        player.ActionF();
     }
 
     private void showMessageWindow(Player player)

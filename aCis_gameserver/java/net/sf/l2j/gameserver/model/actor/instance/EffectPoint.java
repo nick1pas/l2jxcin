@@ -3,7 +3,6 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import net.sf.l2j.gameserver.model.actor.Character;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 
 public class EffectPoint extends Npc
 {
@@ -24,12 +23,12 @@ public class EffectPoint extends Npc
 	@Override
 	public void onAction(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	@Override
 	public void onActionShift(Player player)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 }

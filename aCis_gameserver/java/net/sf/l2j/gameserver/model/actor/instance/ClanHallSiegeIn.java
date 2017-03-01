@@ -10,7 +10,6 @@ import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
 import net.sf.l2j.gameserver.model.entity.clanhallsiege.BanditStrongholdSiege;
 import net.sf.l2j.gameserver.model.entity.clanhallsiege.WildBeastFarmSiege;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.MyTargetSelected;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.ValidateLocation;
@@ -54,7 +53,7 @@ public class ClanHallSiegeIn extends Folk
 		}
 		
 		// Send a Server->Client ActionFailed to the Player in order to avoid that the client wait another packet
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 	}
 	
 	@Override
@@ -343,7 +342,7 @@ public class ClanHallSiegeIn extends Folk
 	@SuppressWarnings("null")
 	public void showMessageWindow(Player player, int val)
 	{
-		player.sendPacket(ActionFailed.STATIC_PACKET);
+		player.ActionF();
 		long startSiege = 0;
 		int npcId = getTemplate().getNpcId();
 		String filename;

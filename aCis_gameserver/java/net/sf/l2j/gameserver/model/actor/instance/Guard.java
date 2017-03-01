@@ -9,7 +9,6 @@ import net.sf.l2j.gameserver.model.actor.Attackable;
 import net.sf.l2j.gameserver.model.actor.Character;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.Quest;
@@ -74,7 +73,7 @@ public final class Guard extends Attackable
 				player.sendPacket(new MoveToPawn(player, this, Npc.INTERACTION_DISTANCE));
 				
 				// Send a Server->Client ActionFailed to the Player in order to avoid that the client wait another packet
-				player.sendPacket(ActionFailed.STATIC_PACKET);
+				player.ActionF();
 				
 				// Some guards have no HTMs on retail. Bypass the chat window if such guard is met.
 				switch (getNpcId())

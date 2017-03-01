@@ -17,7 +17,6 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.Servitor;
 import net.sf.l2j.gameserver.model.actor.instance.SiegeSummon;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcSay;
 import net.sf.l2j.gameserver.util.Util;
 
@@ -95,7 +94,7 @@ public final class RequestActionUse extends L2GameClientPacket
 		// Dont do anything if player is dead, or use fakedeath using another action than sit.
 		if ((activeChar.isFakeDeath() && _actionId != 0) || activeChar.isDead() || activeChar.isOutOfControl())
 		{
-			activeChar.sendPacket(ActionFailed.STATIC_PACKET);
+			ActionF();
 			return;
 		}
 		

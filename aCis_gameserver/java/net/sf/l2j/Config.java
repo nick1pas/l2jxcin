@@ -629,10 +629,6 @@ public final class Config
 	/** Others - Enchant/Augmentations */
 	public static boolean ENCH_SCROLLS_STACK;
 	public static boolean LIFE_STONES_STACK;
-	
-    // Templates all names
-    public static String CHAR_NAME_TEMPLATE;
-    public static String CHAR_TITLE_NAME_TEMPLATE;
     
 	/** Inventory & WH */
 	public static int INVENTORY_MAXIMUM_NO_DWARF;
@@ -2256,8 +2252,6 @@ public final class Config
 		DEEPBLUE_DROP_RULES = players.getProperty("UseDeepBlueDropRules", true);
 		ALT_GAME_DELEVEL = players.getProperty("Delevel", true);
 		DEATH_PENALTY_CHANCE = players.getProperty("DeathPenaltyChance", 20);
-        CHAR_NAME_TEMPLATE = players.getProperty("CharNameTemplate", "[A-Za-z0-9]{3,16}");
-        CHAR_TITLE_NAME_TEMPLATE = players.getProperty("CharTitleNameTemplate", "[A-Za-z0-9]{1,16}");
 		ENCH_SCROLLS_STACK = players.getProperty("EnchScrollsStack", false);
 		LIFE_STONES_STACK = players.getProperty("LifeStonesStack", false);
 		

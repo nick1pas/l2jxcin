@@ -17,8 +17,6 @@ Add: Amor and Weapon Protection.
 Add: Restriction Login.
 Fix: Login restrictions.
 Fix: closed hole with multisel-sheets.
-Add: new config CharNameTemplate, customization template character's name. (Added at the request Zod'a)
-Add: new config CharNameTemplate, customization of the title name of the template.
 Fix: relog can be done if you are a member of the Olympiad. (Off-like)
 Fix: Now if the player is in combat condition (eg: after a fight with someone) then relog he can not leave until you finish have called in this very state. (Off-like)
 Upd: separate canRestart () method checks to the player relogom. (I had to divide canLogout () and canRestart ())

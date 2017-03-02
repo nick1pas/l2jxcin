@@ -5,8 +5,6 @@ import java.util.List;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import javolution.text.TextBuilder;
-
 public class Bingo
 {
 	protected final static String template = "%msg%<br><br>%choices%<br><br>%board%";
@@ -110,7 +108,7 @@ public class Bingo
 			result = result.replaceFirst("%msg%", _msg.equalsIgnoreCase("") ? msg_next : _msg);
 		}
 		result = result.replaceFirst("%choicenum%", nums[guesses.size()]);
-		TextBuilder choices = TextBuilder.newInstance();
+		StringBuilder choices = new StringBuilder();
 		for (int i = 1; i <= 9; i++)
 		{
 			if (!guesses.contains(i))

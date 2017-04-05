@@ -625,11 +625,7 @@ public final class Config
 	public static boolean DEEPBLUE_DROP_RULES;
 	public static boolean ALT_GAME_DELEVEL;
 	public static int DEATH_PENALTY_CHANCE;
-	
-	/** Others - Enchant/Augmentations */
-	public static boolean ENCH_SCROLLS_STACK;
-	public static boolean LIFE_STONES_STACK;
-    
+
 	/** Inventory & WH */
 	public static int INVENTORY_MAXIMUM_NO_DWARF;
 	public static int INVENTORY_MAXIMUM_DWARF;
@@ -2252,8 +2248,6 @@ public final class Config
 		DEEPBLUE_DROP_RULES = players.getProperty("UseDeepBlueDropRules", true);
 		ALT_GAME_DELEVEL = players.getProperty("Delevel", true);
 		DEATH_PENALTY_CHANCE = players.getProperty("DeathPenaltyChance", 20);
-		ENCH_SCROLLS_STACK = players.getProperty("EnchScrollsStack", false);
-		LIFE_STONES_STACK = players.getProperty("LifeStonesStack", false);
 		
 		INVENTORY_MAXIMUM_NO_DWARF = players.getProperty("MaximumSlotsForNoDwarf", 80);
 		INVENTORY_MAXIMUM_DWARF = players.getProperty("MaximumSlotsForDwarf", 100);

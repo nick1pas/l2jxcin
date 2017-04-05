@@ -61,6 +61,15 @@ public class Buff implements IVoicedCommandHandler
         player.sendPacket(html);
     }
     
+    public static void showHtmlDance(Player player)
+    {      
+        NpcHtmlMessage html = new NpcHtmlMessage(0);    
+        html.setFile("data/html/mods/DancesCommand.htm");
+        html.replace("%currentBuffs%", player.getBuffCount());
+        html.replace("%getMaxBuffs%", player.getMaxBuffCount());
+        player.sendPacket(html);
+    }
+    
     @Override
     public String[] getVoicedCommandList()
     {

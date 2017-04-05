@@ -1,7 +1,5 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import java.util.Collection;
-
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
@@ -9,12 +7,9 @@ import net.sf.l2j.gameserver.datatables.ArmorSetsTable;
 import net.sf.l2j.gameserver.datatables.EnchantTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2EnchantScroll;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
-import net.sf.l2j.gameserver.model.actor.instance.WarehouseKeeper;
 import net.sf.l2j.gameserver.model.item.ArmorSet;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Armor;
@@ -43,26 +38,18 @@ public final class RequestEnchantItem extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
+		// get player
 		final Player activeChar = getClient().getActiveChar();
-		
 		if (activeChar == null || _objectId == 0)
 			return;
 		
-		Collection<Character> knowns = activeChar.getKnownTypeInRadius(Character.class, 400);
-		for (L2Object wh : knowns)
-		{
-			if (wh instanceof WarehouseKeeper)
-			{
-				activeChar.sendMessage("You Cannot enchant near warehouse.");
-				return;
-			}	
-		}
+		// player online and active
 		if (!activeChar.isOnline() || getClient().isDetached())
 		{
 			activeChar.setActiveEnchantItem(null);
 			return;
-		}
-		
+		}	
+
 		if (activeChar.isProcessingTransaction() || activeChar.isInStoreMode())
 		{
 			activeChar.sendPacket(SystemMessageId.CANNOT_ENCHANT_WHILE_STORE);
@@ -70,7 +57,18 @@ public final class RequestEnchantItem extends L2GameClientPacket
 			activeChar.sendPacket(EnchantResult.CANCELLED);
 			return;
 		}
-		
+
+		// player trading
+		if (activeChar.getActiveTradeList() != null)
+		{
+			activeChar.cancelActiveTrade();
+			activeChar.sendPacket(SystemMessageId.TRADE_ATTEMPT_FAILED);
+			activeChar.setActiveEnchantItem(null);
+			activeChar.sendPacket(EnchantResult.CANCELLED);
+			return;
+		}
+ 		
+		// get item and enchant scroll
 		ItemInstance item = activeChar.getInventory().getItemByObjectId(_objectId);
 		ItemInstance scroll = activeChar.getActiveEnchantItem();
 		
@@ -78,15 +76,6 @@ public final class RequestEnchantItem extends L2GameClientPacket
 		{
 			activeChar.setActiveEnchantItem(null);
 			activeChar.sendPacket(SystemMessageId.ENCHANT_SCROLL_CANCELLED);
-			activeChar.sendPacket(EnchantResult.CANCELLED);
-			return;
-		}
-		// player trading
-		if (activeChar.getActiveTradeList() != null)
-		{
-			activeChar.cancelActiveTrade();
-			activeChar.sendPacket(SystemMessageId.TRADE_ATTEMPT_FAILED);
-			activeChar.setActiveEnchantItem(null);
 			activeChar.sendPacket(EnchantResult.CANCELLED);
 			return;
 		}
@@ -105,14 +94,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 			return;
 		}
 		
-        // attempting to destroy scroll
-        if (Config.ENCH_SCROLLS_STACK) { 
-            scroll = activeChar.getInventory().destroyItem("Enchant", scroll.getObjectId(), 1, activeChar, item);
-        } else {
-            scroll = activeChar.getInventory().destroyItem("Enchant", scroll, activeChar, item);
-        }
-        
-		// attempting to destroy scroll
+		// destroy enchant scroll
 		scroll = activeChar.getInventory().destroyItem("Enchant", scroll.getObjectId(), 1, activeChar, item);
 		if (scroll == null)
 		{
@@ -122,13 +104,13 @@ public final class RequestEnchantItem extends L2GameClientPacket
 			activeChar.sendPacket(EnchantResult.CANCELLED);
 			return;
 		}
-		
+
 		synchronized (item)
 		{
 			// success
 			if (Rnd.get(100) < enchant.getChance(item))
 			{
-				// announce the success
+				// send message
 				SystemMessage sm;
 				
 				if (item.getEnchantLevel() == 0)
@@ -142,7 +124,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 				}
 				sm.addItemName(item.getItemId());
 				activeChar.sendPacket(sm);
-				
+				// update item
 				item.setEnchantLevel(item.getEnchantLevel() + 1);
 				item.updateDatabase();
 				
@@ -187,6 +169,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 				}
 				activeChar.sendPacket(EnchantResult.SUCCESS);
 			}
+			// fail
 			else
 			{
 				// Drop passive skills from items.
@@ -231,7 +214,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 				
 				if (!enchant.canBreak())
 				{
-					// blessed enchant - clear enchant value
+					// keep item
 					activeChar.sendPacket(SystemMessageId.BLESSED_ENCHANT_FAILED);
 					
 					if (!enchant.canMaintain())
@@ -242,11 +225,11 @@ public final class RequestEnchantItem extends L2GameClientPacket
 					activeChar.sendPacket(EnchantResult.UNSUCCESS);
 				}
 				else
-				{					
+				{
+					// destroy item
 					ItemInstance destroyItem = activeChar.getInventory().destroyItem("Enchant", item, activeChar, null);
 					if (destroyItem == null)
 					{
-						// unable to destroy item, cheater ?
 						Util.handleIllegalPlayerAction(activeChar, "Unable to delete item on enchant failure from player " + activeChar.getName() + ", possible cheater !", Config.DEFAULT_PUNISH);
 						activeChar.setActiveEnchantItem(null);
 						activeChar.sendPacket(EnchantResult.CANCELLED);
@@ -277,9 +260,8 @@ public final class RequestEnchantItem extends L2GameClientPacket
 					activeChar.sendPacket(iu);
 					
 					// remove item
-					World.getInstance().removeObject(destroyItem);
-					
-					// send message
+					World.getInstance().removeObject(destroyItem);									
+						
 					if (item.getEnchantLevel() > 0)
 						activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.ENCHANTMENT_FAILED_S1_S2_EVAPORATED).addNumber(item.getEnchantLevel()).addItemName(item.getItemId()));
 					else
@@ -291,18 +273,21 @@ public final class RequestEnchantItem extends L2GameClientPacket
 					else
 						activeChar.sendPacket(EnchantResult.UNK_RESULT_1);
 					
+					// update weight
 					StatusUpdate su = new StatusUpdate(activeChar);
 					su.addAttribute(StatusUpdate.CUR_LOAD, activeChar.getCurrentLoad());
 					activeChar.sendPacket(su);
 				}
 			}
+ 			
+			// send item list
+ 			activeChar.sendPacket(new ItemList(activeChar, false));
 			
-			activeChar.sendPacket(new ItemList(activeChar, false));
-			activeChar.broadcastUserInfo();
-			activeChar.setActiveEnchantItem(null);
+			// update appearance
+ 			activeChar.broadcastUserInfo();
+ 			activeChar.setActiveEnchantItem(null);
 		}
 	}
-
 	/**
 	 * @param item The instance of item to make checks on.
 	 * @return true if item can be enchanted.
@@ -316,6 +301,6 @@ public final class RequestEnchantItem extends L2GameClientPacket
 		if (item.getLocation() != ItemInstance.ItemLocation.INVENTORY && item.getLocation() != ItemInstance.ItemLocation.PAPERDOLL)
 			return false;
 		
-		return true;
-	}	
+	return true;
+	}
 }

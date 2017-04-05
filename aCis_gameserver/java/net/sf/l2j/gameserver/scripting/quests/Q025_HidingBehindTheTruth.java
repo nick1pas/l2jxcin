@@ -130,9 +130,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 		else if (event.equalsIgnoreCase("Coffin_Despawn"))
 		{
 			if (COFFIN_SPAWN != null)
-			{
 				COFFIN_SPAWN.deleteMe();
-			}
 			
 			if (st.getInt("cond") == 12)
 			{

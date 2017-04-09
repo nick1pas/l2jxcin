@@ -364,6 +364,7 @@ public final class Config
 	// --------------------------------------------------
 	// Custom Events
 	// --------------------------------------------------
+	public static boolean EVENTS_ALLOW_VOICED_COMMAND;
 	/** TvT Event */
 	public static boolean TVT_EVENT_ENABLED;
 	public static String[] TVT_EVENT_INTERVAL;
@@ -394,7 +395,6 @@ public final class Config
 	public static int TVT_EVENT_EFFECTS_REMOVAL;
 	public static Map<Integer, Integer> TVT_EVENT_FIGHTER_BUFFS;
 	public static Map<Integer, Integer> TVT_EVENT_MAGE_BUFFS;
-	public static boolean TVT_ALLOW_VOICED_COMMAND;
 	/** DM Event */
 	public static boolean DM_EVENT_ENABLED;
 	public static String[] DM_EVENT_INTERVAL;
@@ -426,7 +426,6 @@ public final class Config
 	public static int DM_EVENT_EFFECTS_REMOVAL;
 	public static Map<Integer, Integer> DM_EVENT_FIGHTER_BUFFS;
 	public static Map<Integer, Integer> DM_EVENT_MAGE_BUFFS;
-	public static boolean DM_ALLOW_VOICED_COMMAND;
 	/** LM Event */
 	public static boolean LM_EVENT_ENABLED;
 	public static String[] LM_EVENT_INTERVAL;
@@ -456,8 +455,6 @@ public final class Config
 	public static int LM_EVENT_EFFECTS_REMOVAL;
 	public static Map<Integer, Integer> LM_EVENT_FIGHTER_BUFFS;
 	public static Map<Integer, Integer> LM_EVENT_MAGE_BUFFS;
-	public static boolean LM_ALLOW_VOICED_COMMAND;
-	
 	// --------------------------------------------------
 	// GeoEngine
 	// --------------------------------------------------
@@ -1435,6 +1432,7 @@ public final class Config
 	{
 		final ExProperties events_custom = initProperties(CUSTOM_EVENTS_FILE);
 		
+		EVENTS_ALLOW_VOICED_COMMAND = events_custom.getProperty("EventsAllowVoicedInfoCommand", false);
 		// TvT Event
 		TVT_EVENT_ENABLED = events_custom.getProperty("TvTEventEnabled", false);
 		TVT_EVENT_INTERVAL = events_custom.getProperty("TvTEventInterval", "20:00").split(",");
@@ -1476,7 +1474,6 @@ public final class Config
 				TVT_EVENT_RESPAWN_TELEPORT_DELAY = events_custom.getProperty("TvTEventRespawnTeleportDelay", 20);
 				TVT_EVENT_START_LEAVE_TELEPORT_DELAY = events_custom.getProperty("TvTEventStartLeaveTeleportDelay", 20);
 				TVT_EVENT_EFFECTS_REMOVAL = events_custom.getProperty("TvTEventEffectsRemoval", 0);
-				TVT_ALLOW_VOICED_COMMAND = events_custom.getProperty("TvTAllowVoicedInfoCommand", false);
 				TVT_EVENT_TEAM_1_NAME = events_custom.getProperty("TvTEventTeam1Name", "Team1");
 				propertySplit = events_custom.getProperty("TvTEventTeam1Coordinates", "0,0,0").split(",");
 				if (propertySplit.length < 3)
@@ -1688,7 +1685,6 @@ public final class Config
 					DM_EVENT_RESPAWN_TELEPORT_DELAY = events_custom.getProperty("DMEventRespawnTeleportDelay", 20);
 					DM_EVENT_START_LEAVE_TELEPORT_DELAY = events_custom.getProperty("DMEventStartLeaveTeleportDelay", 20);
 					DM_EVENT_EFFECTS_REMOVAL = events_custom.getProperty("DMEventEffectsRemoval", 0);
-					DM_ALLOW_VOICED_COMMAND = events_custom.getProperty("DMAllowVoicedInfoCommand", true);
 					
 					propertySplit = events_custom.getProperty("DMEventParticipationFee", "0,0").split(",");
 					try
@@ -1923,7 +1919,6 @@ public final class Config
 					LM_EVENT_RESPAWN_TELEPORT_DELAY = events_custom.getProperty("LMEventRespawnTeleportDelay", 20);
 					LM_EVENT_START_LEAVE_TELEPORT_DELAY = events_custom.getProperty("LMEventStartLeaveTeleportDelay", 20);
 					LM_EVENT_EFFECTS_REMOVAL = events_custom.getProperty("LMEventEffectsRemoval", 0);
-					LM_ALLOW_VOICED_COMMAND = events_custom.getProperty("LMAllowVoicedInfoCommand", true);
 					
 					propertySplit = events_custom.getProperty("LMEventParticipationFee", "0,0").split(",");
 					try

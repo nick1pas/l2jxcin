@@ -11,10 +11,7 @@ import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Buff;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.CastleManagers;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.ChangePassword;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.ClanFull;
-import net.sf.l2j.gameserver.handler.voicedcommandhandlers.DMVoicedInfo;
-import net.sf.l2j.gameserver.handler.voicedcommandhandlers.LMVoicedInfo;
-import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Menu;
-import net.sf.l2j.gameserver.handler.voicedcommandhandlers.TvTVoicedInfo;
+import net.sf.l2j.gameserver.handler.voicedcommandhandlers.EventsVoicedInfo;
 
 public class VoicedCommandHandler
 {
@@ -35,13 +32,8 @@ public class VoicedCommandHandler
 		registerHandler(new CastleManagers());
 		registerHandler(new ChangePassword());
 		registerHandler(new ClanFull());
-		if (Config.DM_ALLOW_VOICED_COMMAND)
-			registerHandler(new DMVoicedInfo());
-		if (Config.LM_ALLOW_VOICED_COMMAND)
-			registerHandler(new LMVoicedInfo());
-		registerHandler(new Menu());	
-		if (Config.TVT_ALLOW_VOICED_COMMAND)
-			registerHandler(new TvTVoicedInfo());
+		if (Config.EVENTS_ALLOW_VOICED_COMMAND)
+			registerHandler(new EventsVoicedInfo());
 	}
 	
 	public void registerHandler(IVoicedCommandHandler handler)

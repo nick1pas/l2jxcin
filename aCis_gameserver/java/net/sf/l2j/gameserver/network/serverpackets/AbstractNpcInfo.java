@@ -5,13 +5,13 @@ import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.L2Object.PolyType;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject.PolyType;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.Summon;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
-import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 
 public abstract class AbstractNpcInfo extends L2GameServerPacket
@@ -27,7 +27,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 	
 	protected String _name = "", _title = "";
 	
-	public AbstractNpcInfo(Character cha)
+	public AbstractNpcInfo(Creature cha)
 	{
 		_isSummoned = cha.isShowSummonAnimation();
 		_x = cha.getX();
@@ -47,7 +47,7 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 	{
 		private final Npc _npc;
 		
-		public NpcInfo(Npc cha, Character attacker)
+		public NpcInfo(Npc cha, Creature attacker)
 		{
 			super(cha);
 			_npc = cha;

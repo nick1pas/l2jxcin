@@ -10,7 +10,6 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.Player.StoreType;
 import net.sf.l2j.gameserver.model.tradelist.TradeList;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class RequestPrivateStoreBuy extends L2GameClientPacket
 {
@@ -78,14 +77,8 @@ public final class RequestPrivateStoreBuy extends L2GameClientPacket
 			return;
 		}
 		
-		if (storePlayer.getStoreType() == StoreType.PACKAGE_SELL)
-		{
-			if (storeList.getItems().size() > _items.size())
-			{
-				Util.handleIllegalPlayerAction(getClient().getActiveChar(), "[RequestPrivateStoreBuy] " + player.getName() + " tried to buy less items than sold in package.", Config.DEFAULT_PUNISH);
-				return;
-			}
-		}
+		if (storePlayer.getStoreType() == StoreType.PACKAGE_SELL && storeList.getItems().size() > _items.size())
+			return;
 		
 		int result = storeList.privateStoreBuy(player, _items);
 		if (result > 0)

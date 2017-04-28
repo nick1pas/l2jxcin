@@ -23,9 +23,9 @@ import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2ClanMember;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.TowerSpawn;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Door;
 import net.sf.l2j.gameserver.model.actor.instance.HolyThing;
@@ -75,6 +75,8 @@ public class Castle
 	private L2CastleZone _castleZone;
 	private L2CastleTeleportZone _teleZone;
 	
+	private int _leftCertificates;
+		
 	public Castle(int id, String name)
 	{
 		_castleId = id;
@@ -111,7 +113,7 @@ public class Castle
 		}
 	}
 	
-	public synchronized void engrave(L2Clan clan, L2Object target)
+	public synchronized void engrave(L2Clan clan, WorldObject target)
 	{
 		if (!isGoodArtifact(target))
 			return;
@@ -236,13 +238,42 @@ public class Castle
 	{
 		getTeleZone().oustAllPlayers();
 	}
+ 	
+	public int getLeftCertificates()
+	{
+		return _leftCertificates;
+	}
+	
+ 	/**
+	 * Set (and optionally save on database) left certificates count.
+	 * @param leftCertificates : the count to save.
+	 * @param save : true means we store it on database. Basically setted to false on server startup.
+	 */
+	public void setLeftCertificates(int leftCertificates, boolean save)
+	{
+		_leftCertificates = leftCertificates;
+		
+		if (save)
+		{
+			try (Connection con = L2DatabaseFactory.getInstance().getConnection(); PreparedStatement ps = con.prepareStatement("UPDATE castle SET certificates=? WHERE id=?"))
+			{
+				ps.setInt(1, leftCertificates);
+				ps.setInt(2, _castleId);
+				ps.executeUpdate();
+			}
+			catch (Exception e)
+			{
+				_log.log(Level.WARNING, "setLeftCertificates: " + e.getMessage(), e);
+			}
+		}
+	}
 	
 	/**
 	 * Get the object distance to this castle zone.
 	 * @param obj The L2Object to make tests on.
 	 * @return the distance between the L2Object and the zone.
 	 */
-	public double getDistance(L2Object obj)
+	public double getDistance(WorldObject obj)
 	{
 		return getSiegeZone().getDistanceToZone(obj);
 	}
@@ -832,7 +863,7 @@ public class Castle
 			_artifacts.add(Integer.parseInt(idToSplit));
 	}
 	
-	public boolean isGoodArtifact(L2Object object)
+	public boolean isGoodArtifact(WorldObject object)
 	{
 		return object instanceof HolyThing && _artifacts.contains(((HolyThing) object).getNpcId());
 	}

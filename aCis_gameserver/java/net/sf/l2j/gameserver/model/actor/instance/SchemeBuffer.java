@@ -11,7 +11,7 @@ import net.sf.l2j.commons.math.MathUtil;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.BufferTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Summon;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -74,7 +74,7 @@ public class SchemeBuffer extends Folk
 			final String schemeName = st.nextToken();
 			final int cost = Integer.parseInt(st.nextToken());
 			
-			Character target = null;
+			Creature target = null;
 			if (st.hasMoreTokens())
 			{
 				final String targetType = st.nextToken();

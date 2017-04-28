@@ -2,11 +2,11 @@ package net.sf.l2j.gameserver.network.clientpackets;
 
 import java.util.logging.Level;
 
+import net.sf.l2j.gameserver.network.FloodProtectors;
+import net.sf.l2j.gameserver.network.FloodProtectors.Action;
 import net.sf.l2j.gameserver.network.serverpackets.CharDeleteFail;
 import net.sf.l2j.gameserver.network.serverpackets.CharDeleteOk;
 import net.sf.l2j.gameserver.network.serverpackets.CharSelectInfo;
-import net.sf.l2j.gameserver.util.FloodProtectors;
-import net.sf.l2j.gameserver.util.FloodProtectors.Action;
 
 public final class CharacterDelete extends L2GameClientPacket
 {

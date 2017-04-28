@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.l2j.commons.math.MathUtil;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.gameserver.model.actor.Npc;
@@ -13,7 +14,6 @@ import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
-import net.sf.l2j.gameserver.util.Util;
 
 public class Q335_SongOfTheHunter extends Quest
 {
@@ -523,7 +523,7 @@ public class Q335_SongOfTheHunter extends Quest
 				st.takeItems(3697, -1);
 				st.takeItems(3471, -1);
 			}
-			else if (Util.isDigit(event))
+			else if (MathUtil.isDigit(event))
 			{
 				int _item = Integer.parseInt(event);
 				
@@ -742,7 +742,7 @@ public class Q335_SongOfTheHunter extends Quest
 				break;
 		}
 		
-		if (Util.isDigit(htmltext))
+		if (MathUtil.isDigit(htmltext))
 		{
 			htmltext = _npc + "-" + htmltext + ".htm";
 		}

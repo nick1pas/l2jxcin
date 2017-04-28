@@ -2,7 +2,7 @@ package net.sf.l2j.gameserver.network.serverpackets;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 /**
  * Format (ch)ddddd
@@ -10,12 +10,12 @@ import net.sf.l2j.gameserver.model.actor.Character;
  */
 public class ExFishingStart extends L2GameServerPacket
 {
-	private final Character _activeChar;
+	private final Creature _activeChar;
 	private final Location _loc;
 	private final int _fishType;
 	private final boolean _isNightLure;
 	
-	public ExFishingStart(Character character, int fishType, Location loc, boolean isNightLure)
+	public ExFishingStart(Creature character, int fishType, Location loc, boolean isNightLure)
 	{
 		_activeChar = character;
 		_fishType = fishType;

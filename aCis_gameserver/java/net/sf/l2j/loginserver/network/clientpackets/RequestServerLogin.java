@@ -2,7 +2,7 @@ package net.sf.l2j.loginserver.network.clientpackets;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.loginserver.LoginController;
-import net.sf.l2j.loginserver.SessionKey;
+import net.sf.l2j.loginserver.network.SessionKey;
 import net.sf.l2j.loginserver.network.serverpackets.LoginFail.LoginFailReason;
 import net.sf.l2j.loginserver.network.serverpackets.PlayFail.PlayFailReason;
 import net.sf.l2j.loginserver.network.serverpackets.PlayOk;

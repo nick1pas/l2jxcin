@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.model.zone.type;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -17,26 +17,26 @@ public class L2NoStoreZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onEnter(final Character character)
+	protected void onEnter(final Creature character)
 	{
 		if (character instanceof Player)
 			character.setInsideZone(ZoneId.NO_STORE, true);
 	}
 	
 	@Override
-	protected void onExit(final Character character)
+	protected void onExit(final Creature character)
 	{
 		if (character instanceof Player)
 			character.setInsideZone(ZoneId.NO_STORE, false);
 	}
 	
 	@Override
-	public void onDieInside(final Character character)
+	public void onDieInside(final Creature character)
 	{
 	}
 	
 	@Override
-	public void onReviveInside(final Character character)
+	public void onReviveInside(final Creature character)
 	{
 	}
 }

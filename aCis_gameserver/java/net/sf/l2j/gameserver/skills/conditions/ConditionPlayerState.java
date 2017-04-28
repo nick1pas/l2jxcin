@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.skills.conditions;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.skills.Env;
 
@@ -33,7 +33,7 @@ public class ConditionPlayerState extends Condition
 	@Override
 	public boolean testImpl(Env env)
 	{
-		final Character character = env.getCharacter();
+		final Creature character = env.getCharacter();
 		final Player player = env.getPlayer();
 		
 		switch (_check)

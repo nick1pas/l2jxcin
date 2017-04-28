@@ -2,7 +2,7 @@ package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Door;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -48,7 +48,7 @@ public class AdminDoorControl implements IAdminCommandHandler
 				}
 				catch (Exception e)
 				{
-					final L2Object target = activeChar.getTarget();
+					final WorldObject target = activeChar.getTarget();
 					
 					if (target instanceof Door)
 						((Door) target).openMe();
@@ -76,7 +76,7 @@ public class AdminDoorControl implements IAdminCommandHandler
 				}
 				catch (Exception e)
 				{
-					final L2Object target = activeChar.getTarget();
+					final WorldObject target = activeChar.getTarget();
 					
 					if (target instanceof Door)
 						((Door) target).closeMe();

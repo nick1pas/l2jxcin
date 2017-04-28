@@ -3,7 +3,7 @@ package net.sf.l2j.gameserver.handler.admincommandhandlers;
 import java.util.StringTokenizer;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -64,7 +64,7 @@ public class AdminExpSp implements IAdminCommandHandler
 	
 	private static void addExpSp(Player activeChar)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		if (target instanceof Player)
 			player = (Player) target;
@@ -85,7 +85,7 @@ public class AdminExpSp implements IAdminCommandHandler
 	
 	private static boolean adminAddExpSp(Player activeChar, String ExpSp)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		if (target instanceof Player)
 		{
@@ -126,7 +126,7 @@ public class AdminExpSp implements IAdminCommandHandler
 	
 	private static boolean adminRemoveExpSP(Player activeChar, String ExpSp)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		if (target instanceof Player)
 		{

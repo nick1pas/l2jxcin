@@ -3,9 +3,9 @@ package net.sf.l2j.gameserver.handler.chathandlers;
 import net.sf.l2j.gameserver.handler.IChatHandler;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.network.FloodProtectors;
+import net.sf.l2j.gameserver.network.FloodProtectors.Action;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
-import net.sf.l2j.gameserver.util.FloodProtectors;
-import net.sf.l2j.gameserver.util.FloodProtectors.Action;
 
 public class ChatHeroVoice implements IChatHandler
 {

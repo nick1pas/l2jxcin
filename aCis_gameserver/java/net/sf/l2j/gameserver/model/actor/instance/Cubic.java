@@ -9,18 +9,18 @@ import java.util.logging.Logger;
 import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.handler.ISkillHandler;
 import net.sf.l2j.gameserver.handler.SkillHandler;
 import net.sf.l2j.gameserver.instancemanager.DuelManager;
 import net.sf.l2j.gameserver.model.L2Effect;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlEvent;
 import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -53,7 +53,7 @@ public class Cubic
 	public static final int SKILL_CUBIC_CURE = 5579;
 	
 	protected Player _owner;
-	protected Character _target;
+	protected Creature _target;
 	
 	protected int _id;
 	protected int _matk;
@@ -158,7 +158,7 @@ public class Cubic
 		return _owner;
 	}
 	
-	public final int getMCriticalHit(Character target, L2Skill skill)
+	public final int getMCriticalHit(Creature target, L2Skill skill)
 	{
 		return _owner.getMCriticalHit(target, skill);
 	}
@@ -194,7 +194,7 @@ public class Cubic
 		try
 		{
 			_target = null;
-			L2Object ownerTarget = _owner.getTarget();
+			WorldObject ownerTarget = _owner.getTarget();
 			if (ownerTarget == null)
 				return;
 			
@@ -238,7 +238,7 @@ public class Cubic
 					if (partyEnemy != null)
 					{
 						if (partyEnemy.containsPlayer(ownerTarget))
-							_target = (Character) ownerTarget;
+							_target = (Creature) ownerTarget;
 						
 						return;
 					}
@@ -269,21 +269,21 @@ public class Cubic
 					{
 						final Player targetPlayer = ownerTarget.getActingPlayer();
 						if (targetPlayer != null && targetPlayer.getOlympiadGameId() == _owner.getOlympiadGameId() && targetPlayer.getOlympiadSide() != _owner.getOlympiadSide())
-							_target = (Character) ownerTarget;
+							_target = (Creature) ownerTarget;
 					}
 				}
 				return;
 			}
 			
 			// test owners target if it is valid then use it
-			if (ownerTarget instanceof Character && ownerTarget != _owner.getPet() && ownerTarget != _owner)
+			if (ownerTarget instanceof Creature && ownerTarget != _owner.getPet() && ownerTarget != _owner)
 			{
 				// target mob which has aggro on you or your summon
 				if (ownerTarget instanceof Attackable)
 				{
 					if (((Attackable) ownerTarget).getAggroList().get(_owner) != null && !((Attackable) ownerTarget).isDead())
 					{
-						_target = (Character) ownerTarget;
+						_target = (Creature) ownerTarget;
 						return;
 					}
 					
@@ -291,7 +291,7 @@ public class Cubic
 					{
 						if (((Attackable) ownerTarget).getAggroList().get(_owner.getPet()) != null && !((Attackable) ownerTarget).isDead())
 						{
-							_target = (Character) ownerTarget;
+							_target = (Creature) ownerTarget;
 							return;
 						}
 					}
@@ -302,7 +302,7 @@ public class Cubic
 				
 				if ((_owner.getPvpFlag() > 0 && !_owner.isInsideZone(ZoneId.PEACE)) || _owner.isInsideZone(ZoneId.PVP))
 				{
-					if (!((Character) ownerTarget).isDead())
+					if (!((Creature) ownerTarget).isDead())
 						enemy = ownerTarget.getActingPlayer();
 					
 					if (enemy != null)
@@ -405,14 +405,14 @@ public class Cubic
 								_target = null;
 						}
 						
-						final Character target = _target;
+						final Creature target = _target;
 						if (target != null && !target.isDead())
 						{
 							_owner.broadcastPacket(new MagicSkillUse(_owner, target, skill.getId(), skill.getLevel(), 0, 0));
 							
 							final L2SkillType type = skill.getSkillType();
 							final ISkillHandler handler = SkillHandler.getInstance().getSkillHandler(skill.getSkillType());
-							final Character[] targets =
+							final Creature[] targets =
 							{
 								target
 							};
@@ -438,14 +438,14 @@ public class Cubic
 		}
 	}
 	
-	public void useCubicContinuous(Cubic activeCubic, L2Skill skill, L2Object[] targets)
+	public void useCubicContinuous(Cubic activeCubic, L2Skill skill, WorldObject[] targets)
 	{
-		for (L2Object obj : targets)
+		for (WorldObject obj : targets)
 		{
-			if (!(obj instanceof Character))
+			if (!(obj instanceof Creature))
 				continue;
 			
-			final Character target = ((Character) obj);
+			final Creature target = ((Creature) obj);
 			if (target.isDead())
 				continue;
 			
@@ -476,14 +476,14 @@ public class Cubic
 		}
 	}
 	
-	public void useCubicMdam(Cubic activeCubic, L2Skill skill, L2Object[] targets)
+	public void useCubicMdam(Cubic activeCubic, L2Skill skill, WorldObject[] targets)
 	{
-		for (L2Object obj : targets)
+		for (WorldObject obj : targets)
 		{
-			if (!(obj instanceof Character))
+			if (!(obj instanceof Creature))
 				continue;
 			
-			final Character target = ((Character) obj);
+			final Creature target = ((Creature) obj);
 			if (target.isAlikeDead())
 			{
 				if (target instanceof Player)
@@ -526,14 +526,14 @@ public class Cubic
 		}
 	}
 	
-	public void useCubicDisabler(L2SkillType type, Cubic activeCubic, L2Skill skill, L2Object[] targets)
+	public void useCubicDisabler(L2SkillType type, Cubic activeCubic, L2Skill skill, WorldObject[] targets)
 	{
-		for (L2Object obj : targets)
+		for (WorldObject obj : targets)
 		{
-			if (!(obj instanceof Character))
+			if (!(obj instanceof Creature))
 				continue;
 			
-			final Character target = ((Character) obj);
+			final Creature target = ((Creature) obj);
 			if (target.isDead())
 				continue;
 			
@@ -600,7 +600,7 @@ public class Cubic
 	 * @param target
 	 * @return true if the target is inside of the owner's max Cubic range
 	 */
-	public boolean isInCubicRange(Character owner, Character target)
+	public boolean isInCubicRange(Creature owner, Creature target)
 	{
 		if (owner == null || target == null)
 			return false;
@@ -618,7 +618,7 @@ public class Cubic
 	/** this sets the friendly target for a cubic */
 	public void cubicTargetForHeal()
 	{
-		Character target = null;
+		Creature target = null;
 		double percentleft = 100.0;
 		Party party = _owner.getParty();
 		
@@ -630,7 +630,7 @@ public class Cubic
 		if (party != null && !_owner.isInOlympiadMode())
 		{
 			// Get all Party Members in a spheric area near the Character
-			for (Character partyMember : party.getMembers())
+			for (Creature partyMember : party.getMembers())
 			{
 				if (!partyMember.isDead())
 				{
@@ -724,12 +724,12 @@ public class Cubic
 				if (skill != null)
 				{
 					cubicTargetForHeal();
-					Character target = _target;
+					Creature target = _target;
 					if (target != null && !target.isDead())
 					{
 						if (target.getMaxHp() - target.getCurrentHp() > skill.getPower())
 						{
-							final Character[] targets =
+							final Creature[] targets =
 							{
 								target
 							};

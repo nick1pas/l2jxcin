@@ -1,10 +1,10 @@
 package net.sf.l2j.gameserver.skills.l2skills;
 
 import net.sf.l2j.gameserver.model.L2Effect;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -20,7 +20,7 @@ public class L2SkillChargeDmg extends L2Skill
 	}
 	
 	@Override
-	public void useSkill(Character caster, L2Object[] targets)
+	public void useSkill(Creature caster, WorldObject[] targets)
 	{
 		if (caster.isAlikeDead())
 			return;
@@ -32,12 +32,12 @@ public class L2SkillChargeDmg extends L2Skill
 		
 		final boolean ss = caster.isChargedShot(ShotType.SOULSHOT);
 		
-		for (L2Object obj : targets)
+		for (WorldObject obj : targets)
 		{
-			if (!(obj instanceof Character))
+			if (!(obj instanceof Creature))
 				continue;
 			
-			final Character target = ((Character) obj);
+			final Creature target = ((Creature) obj);
 			if (target.isAlikeDead())
 				continue;
 			

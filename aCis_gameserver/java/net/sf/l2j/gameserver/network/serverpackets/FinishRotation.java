@@ -1,13 +1,13 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 public class FinishRotation extends L2GameServerPacket
 {
 	private final int _heading;
 	private final int _charObjId;
 	
-	public FinishRotation(Character cha)
+	public FinishRotation(Creature cha)
 	{
 		_charObjId = cha.getObjectId();
 		_heading = cha.getHeading();

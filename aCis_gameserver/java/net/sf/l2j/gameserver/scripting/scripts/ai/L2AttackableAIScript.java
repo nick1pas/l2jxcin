@@ -3,26 +3,26 @@ package net.sf.l2j.gameserver.scripting.scripts.ai;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.l2j.commons.math.MathUtil;
 import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.commons.util.ArraysUtil;
 
-import net.sf.l2j.gameserver.ai.CtrlEvent;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlEvent;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.RiftInvader;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.Quest;
-import net.sf.l2j.gameserver.util.Util;
 
 public class L2AttackableAIScript extends Quest
 {
@@ -77,7 +77,7 @@ public class L2AttackableAIScript extends Quest
 	}
 	
 	@Override
-	public String onSkillSee(Npc npc, Player caster, L2Skill skill, L2Object[] targets, boolean isPet)
+	public String onSkillSee(Npc npc, Player caster, L2Skill skill, WorldObject[] targets, boolean isPet)
 	{
 		if (caster == null)
 			return null;
@@ -98,12 +98,12 @@ public class L2AttackableAIScript extends Quest
 		{
 			if (attackable.hasAI() && (attackable.getAI().getIntention() == CtrlIntention.ATTACK))
 			{
-				L2Object npcTarget = attackable.getTarget();
-				for (L2Object skillTarget : targets)
+				WorldObject npcTarget = attackable.getTarget();
+				for (WorldObject skillTarget : targets)
 				{
 					if (npcTarget == skillTarget || npc == skillTarget)
 					{
-						Character originalCaster = isPet ? caster.getPet() : caster;
+						Creature originalCaster = isPet ? caster.getPet() : caster;
 						attackable.addDamageHate(originalCaster, 0, (skillAggroPoints * 150) / (attackable.getLevel() + 7));
 					}
 				}
@@ -128,7 +128,7 @@ public class L2AttackableAIScript extends Quest
 		}
 		
 		final Attackable attackable = (Attackable) npc;
-		final Character originalAttackTarget = (isPet ? attacker.getPet() : attacker);
+		final Creature originalAttackTarget = (isPet ? attacker.getPet() : attacker);
 		
 		// Add the target to the actor _aggroList or update hate if already present
 		attackable.addDamageHate(originalAttackTarget, 0, 1);
@@ -166,7 +166,7 @@ public class L2AttackableAIScript extends Quest
 		if (attacker != null && npc instanceof Attackable)
 		{
 			Attackable attackable = (Attackable) npc;
-			Character originalAttacker = isPet ? attacker.getPet() : attacker;
+			Creature originalAttacker = isPet ? attacker.getPet() : attacker;
 			
 			attackable.getAI().notifyEvent(CtrlEvent.EVT_ATTACKED, originalAttacker);
 			attackable.addDamageHate(originalAttacker, damage, (damage * 100) / (attackable.getLevel() + 7));
@@ -223,7 +223,7 @@ public class L2AttackableAIScript extends Quest
 	 * @param invisible : true counts invisible characters.
 	 * @return the number of targets found.
 	 */
-	public static int getPlayersCountInRadius(int range, Character npc, boolean invisible)
+	public static int getPlayersCountInRadius(int range, Creature npc, boolean invisible)
 	{
 		int count = 0;
 		for (Player player : npc.getKnownTypeInRadius(Player.class, range))
@@ -247,7 +247,7 @@ public class L2AttackableAIScript extends Quest
 	 * @param invisible : true counts invisible characters.
 	 * @return an array composed of front, back and side targets number.
 	 */
-	public static int[] getPlayersCountInPositions(int range, Character npc, boolean invisible)
+	public static int[] getPlayersCountInPositions(int range, Creature npc, boolean invisible)
 	{
 		int frontCount = 0;
 		int backCount = 0;
@@ -261,7 +261,7 @@ public class L2AttackableAIScript extends Quest
 			if (!invisible && player.getAppearance().getInvisible())
 				continue;
 			
-			if (!Util.checkIfInRange(range, npc, player, true))
+			if (!MathUtil.checkIfInRange(range, npc, player, true))
 				continue;
 			
 			if (player.isInFrontOf(npc))

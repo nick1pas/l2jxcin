@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.gameserver.datatables.NpcTable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 
 /**
@@ -52,7 +52,7 @@ public final class Chest extends Monster
 	}
 	
 	@Override
-	public void doItemDrop(NpcTemplate npcTemplate, Character lastAttacker)
+	public void doItemDrop(NpcTemplate npcTemplate, Creature lastAttacker)
 	{
 		int id = getTemplate().getNpcId();
 		

@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.Servitor;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -39,8 +39,8 @@ public abstract class L2Effect
 		FINISHING
 	}
 	
-	private final Character _effector;
-	private final Character _effected;
+	private final Creature _effector;
+	private final Creature _effected;
 	
 	private final L2Skill _skill; // the skill that was used.
 	
@@ -218,12 +218,12 @@ public abstract class L2Effect
 		return _skill;
 	}
 	
-	public final Character getEffector()
+	public final Creature getEffector()
 	{
 		return _effector;
 	}
 	
-	public final Character getEffected()
+	public final Creature getEffected()
 	{
 		return _effected;
 	}

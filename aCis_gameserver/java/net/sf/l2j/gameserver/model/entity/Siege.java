@@ -24,9 +24,9 @@ import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2ClanMember;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.TowerSpawn;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.ControlTower;
 import net.sf.l2j.gameserver.model.actor.instance.FlameTower;
@@ -143,7 +143,7 @@ public class Siege implements Siegable
 		_siegeEndDate.add(Calendar.MINUTE, Config.SIEGE_LENGTH);
 		
 		// Schedule a task to prepare auto siege end
-		ThreadPool.schedule(new ScheduleEndSiegeTask(getCastle()), 1000);
+		ThreadPool.schedule(new EndSiegeTask(getCastle()), 1000);
 		
 		Broadcast.toAllOnlinePlayers(SystemMessage.getSystemMessage(SystemMessageId.SIEGE_OF_S1_HAS_STARTED).addString(getCastle().getName()));
 		Broadcast.toAllOnlinePlayers(new PlaySound("systemmsg_e.17"));
@@ -465,7 +465,7 @@ public class Siege implements Siegable
 	 * @param object The Object to use positions.
 	 * @return true if object is inside the zone
 	 */
-	public boolean checkIfInZone(L2Object object)
+	public boolean checkIfInZone(WorldObject object)
 	{
 		return checkIfInZone(object.getX(), object.getY(), object.getZ());
 	}
@@ -512,7 +512,7 @@ public class Siege implements Siegable
 	{
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
-			PreparedStatement ps = con.prepareStatement("DELETE FROM siege_clans WHERE castle_id=? AND type=PENDING");
+			PreparedStatement ps = con.prepareStatement("DELETE FROM siege_clans WHERE castle_id=? AND type='PENDING'");
 			ps.setInt(1, getCastle().getCastleId());
 			ps.execute();
 			ps.close();
@@ -527,7 +527,7 @@ public class Siege implements Siegable
 	
 	/**
 	 * Register clan as attacker
-	 * @param player The Player of the player trying to register
+	 * @param player : The player trying to register
 	 */
 	public void registerAttacker(Player player)
 	{
@@ -559,7 +559,7 @@ public class Siege implements Siegable
 	
 	/**
 	 * Register clan as defender.
-	 * @param player The Player of the player trying to register
+	 * @param player : The player trying to register
 	 */
 	public void registerDefender(Player player)
 	{
@@ -579,8 +579,8 @@ public class Siege implements Siegable
 	
 	/**
 	 * Verify if allies are registered on different list than the actual player's choice. Let's say clan A and clan B are in same alliance. If clan A wants to attack a castle, clan B mustn't be on defenders' list. The contrary is right too : you can't defend if one ally is on attackers' list.
-	 * @param clan The clan of Player, used for alliance existence checks
-	 * @param attacker A boolean used to know if this check is used for attackers or defenders.
+	 * @param clan : The clan used for alliance existence checks.
+	 * @param attacker : A boolean used to know if this check is used for attackers or defenders.
 	 * @return true if one clan of the alliance is registered in other side.
 	 */
 	private boolean allyIsRegisteredOnOppositeSide(L2Clan clan, boolean attacker)
@@ -663,8 +663,8 @@ public class Siege implements Siegable
 	}
 	
 	/**
-	 * @param player The Player of the player trying to register
-	 * @param type
+	 * @param player : The player trying to register.
+	 * @param type : The SiegeSide to test.
 	 * @return true if the player can register.
 	 */
 	private boolean checkIfCanRegister(Player player, SiegeSide type)
@@ -952,13 +952,13 @@ public class Siege implements Siegable
 		return _destroyedTowers;
 	}
 	
-	public class ScheduleEndSiegeTask implements Runnable
+	public class EndSiegeTask implements Runnable
 	{
-		private final Castle _castleInst;
+		private final Castle _castle;
 		
-		public ScheduleEndSiegeTask(Castle pCastle)
+		public EndSiegeTask(Castle castle)
 		{
-			_castleInst = pCastle;
+			_castle = castle;
 		}
 		
 		@Override
@@ -967,41 +967,34 @@ public class Siege implements Siegable
 			if (!isInProgress())
 				return;
 			
-			try
+			final long timeRemaining = _siegeEndDate.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+			if (timeRemaining > 3600000)
 			{
-				long timeRemaining = _siegeEndDate.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-				if (timeRemaining > 3600000)
-				{
-					announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.S1_HOURS_UNTIL_SIEGE_CONCLUSION).addNumber(2), true);
-					ThreadPool.schedule(new ScheduleEndSiegeTask(_castleInst), timeRemaining - 3600000);
-				}
-				else if (timeRemaining <= 3600000 && timeRemaining > 600000)
-				{
-					announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.S1_MINUTES_UNTIL_SIEGE_CONCLUSION).addNumber(Math.round(timeRemaining / 60000)), true);
-					ThreadPool.schedule(new ScheduleEndSiegeTask(_castleInst), timeRemaining - 600000);
-				}
-				else if (timeRemaining <= 600000 && timeRemaining > 300000)
-				{
-					announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.S1_MINUTES_UNTIL_SIEGE_CONCLUSION).addNumber(Math.round(timeRemaining / 60000)), true);
-					ThreadPool.schedule(new ScheduleEndSiegeTask(_castleInst), timeRemaining - 300000);
-				}
-				else if (timeRemaining <= 300000 && timeRemaining > 10000)
-				{
-					announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.S1_MINUTES_UNTIL_SIEGE_CONCLUSION).addNumber(Math.round(timeRemaining / 60000)), true);
-					ThreadPool.schedule(new ScheduleEndSiegeTask(_castleInst), timeRemaining - 10000);
-				}
-				else if (timeRemaining <= 10000 && timeRemaining > 0)
-				{
-					announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.CASTLE_SIEGE_S1_SECONDS_LEFT).addNumber(Math.round(timeRemaining / 1000)), true);
-					ThreadPool.schedule(new ScheduleEndSiegeTask(_castleInst), timeRemaining);
-				}
-				else
-					_castleInst.getSiege().endSiege();
+				announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.S1_HOURS_UNTIL_SIEGE_CONCLUSION).addNumber(2), true);
+				ThreadPool.schedule(new EndSiegeTask(_castle), timeRemaining - 3600000);
 			}
-			catch (Exception e)
+			else if (timeRemaining <= 3600000 && timeRemaining > 600000)
 			{
-				_log.log(Level.SEVERE, "", e);
+				announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.S1_MINUTES_UNTIL_SIEGE_CONCLUSION).addNumber(Math.round(timeRemaining / 60000)), true);
+				ThreadPool.schedule(new EndSiegeTask(_castle), timeRemaining - 600000);
 			}
+			else if (timeRemaining <= 600000 && timeRemaining > 300000)
+			{
+				announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.S1_MINUTES_UNTIL_SIEGE_CONCLUSION).addNumber(Math.round(timeRemaining / 60000)), true);
+				ThreadPool.schedule(new EndSiegeTask(_castle), timeRemaining - 300000);
+			}
+			else if (timeRemaining <= 300000 && timeRemaining > 10000)
+			{
+				announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.S1_MINUTES_UNTIL_SIEGE_CONCLUSION).addNumber(Math.round(timeRemaining / 60000)), true);
+				ThreadPool.schedule(new EndSiegeTask(_castle), timeRemaining - 10000);
+			}
+			else if (timeRemaining <= 10000 && timeRemaining > 0)
+			{
+				announceToPlayer(SystemMessage.getSystemMessage(SystemMessageId.CASTLE_SIEGE_S1_SECONDS_LEFT).addNumber(Math.round(timeRemaining / 1000)), true);
+				ThreadPool.schedule(new EndSiegeTask(_castle), timeRemaining);
+			}
+			else
+				_castle.getSiege().endSiege();
 		}
 	}
 	
@@ -1021,45 +1014,38 @@ public class Siege implements Siegable
 			if (isInProgress())
 				return;
 			
-			try
+			if (!isTimeRegistrationOver())
 			{
-				if (!isTimeRegistrationOver())
+				final long regTimeRemaining = getSiegeRegistrationEndDate() - Calendar.getInstance().getTimeInMillis();
+				if (regTimeRemaining > 0)
 				{
-					long regTimeRemaining = getSiegeRegistrationEndDate() - Calendar.getInstance().getTimeInMillis();
-					if (regTimeRemaining > 0)
-					{
-						_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), regTimeRemaining);
-						return;
-					}
-					endTimeRegistration(true);
-				}
-				
-				long timeRemaining = getSiegeDate().getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-				
-				if (timeRemaining > 86400000)
-					_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining - 86400000);
-				else if (timeRemaining <= 86400000 && timeRemaining > 13600000)
-				{
-					Broadcast.toAllOnlinePlayers(SystemMessage.getSystemMessage(SystemMessageId.REGISTRATION_TERM_FOR_S1_ENDED).addString(getCastle().getName()));
-					changeStatus(SiegeStatus.REGISTRATION_OVER);
-					clearPendingClans();
-					_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining - 13600000);
-				}
-				else if (timeRemaining <= 13600000 && timeRemaining > 600000)
-					_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining - 600000);
-				else if (timeRemaining <= 600000 && timeRemaining > 300000)
-					_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining - 300000);
-				else if (timeRemaining <= 300000 && timeRemaining > 10000)
-					_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining - 10000);
-				else if (timeRemaining <= 10000 && timeRemaining > 0)
-					_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining);
-				else
-					_castle.getSiege().startSiege();
+					_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), regTimeRemaining);
+					return;
+				}			
+				endTimeRegistration(true);
 			}
-			catch (Exception e)
+						
+			final long timeRemaining = getSiegeDate().getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+			
+			if (timeRemaining > 86400000)
+				_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining - 86400000);
+			else if (timeRemaining <= 86400000 && timeRemaining > 13600000)
 			{
-				_log.log(Level.SEVERE, "", e);
+				Broadcast.toAllOnlinePlayers(SystemMessage.getSystemMessage(SystemMessageId.REGISTRATION_TERM_FOR_S1_ENDED).addString(getCastle().getName()));
+				changeStatus(SiegeStatus.REGISTRATION_OVER);
+				clearPendingClans();
+				_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining - 13600000);
 			}
+			else if (timeRemaining <= 13600000 && timeRemaining > 600000)
+				_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining - 600000);
+			else if (timeRemaining <= 600000 && timeRemaining > 300000)
+				_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining - 300000);
+			else if (timeRemaining <= 300000 && timeRemaining > 10000)
+				_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining - 10000);
+			else if (timeRemaining <= 10000 && timeRemaining > 0)
+				_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), timeRemaining);
+			else
+				_castle.getSiege().startSiege();
 		}
 	}
 	

@@ -4,7 +4,7 @@ import java.util.concurrent.Future;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.L2CastleZoneType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -54,7 +54,7 @@ public class L2DamageZone extends L2CastleZoneType
 	}
 	
 	@Override
-	protected boolean isAffected(Character character)
+	protected boolean isAffected(Creature character)
 	{
 		// check obj class
 		try
@@ -71,7 +71,7 @@ public class L2DamageZone extends L2CastleZoneType
 	}
 	
 	@Override
-	protected void onEnter(Character character)
+	protected void onEnter(Creature character)
 	{
 		if (_task == null && _hpDps != 0)
 		{
@@ -100,7 +100,7 @@ public class L2DamageZone extends L2CastleZoneType
 	}
 	
 	@Override
-	protected void onExit(Character character)
+	protected void onExit(Creature character)
 	{
 		if (character instanceof Player)
 		{
@@ -151,7 +151,7 @@ public class L2DamageZone extends L2CastleZoneType
 			}
 			
 			// Effect all people inside the zone.
-			for (Character temp : _dmgZone.getCharactersInside())
+			for (Creature temp : _dmgZone.getCharactersInside())
 			{
 				if (temp != null && !temp.isDead())
 					temp.reduceCurrentHp(_dmgZone.getHpDps() * (1 + (temp.calcStat(Stats.DAMAGE_ZONE_VULN, 0, null, null) / 100)), null, null);

@@ -2,21 +2,24 @@ package net.sf.l2j.gameserver.network.serverpackets;
 
 public class AuthLoginFail extends L2GameServerPacket
 {
-	public static final int NO_TEXT = 0;
-	public static final int SYSTEM_ERROR_LOGIN_LATER = 1;
-	public static final int PASSWORD_DOES_NOT_MATCH_THIS_ACCOUNT = 2;
-	public static final int PASSWORD_DOES_NOT_MATCH_THIS_ACCOUNT2 = 3;
-	public static final int ACCESS_FAILED_TRY_LATER = 4;
-	public static final int INCORRECT_ACCOUNT_INFO_CONTACT_CUSTOMER_SUPPORT = 5;
-	public static final int ACCESS_FAILED_TRY_LATER2 = 6;
-	public static final int ACOUNT_ALREADY_IN_USE = 7;
-	public static final int ACCESS_FAILED_TRY_LATER3 = 8;
-	public static final int ACCESS_FAILED_TRY_LATER4 = 9;
-	public static final int ACCESS_FAILED_TRY_LATER5 = 10;
+	public enum FailReason
+	{
+		NO_TEXT,
+		SYSTEM_ERROR_LOGIN_LATER,
+		PASSWORD_DOES_NOT_MATCH_THIS_ACCOUNT,
+		PASSWORD_DOES_NOT_MATCH_THIS_ACCOUNT2,
+		ACCESS_FAILED_TRY_LATER,
+		INCORRECT_ACCOUNT_INFO_CONTACT_CUSTOMER_SUPPORT,
+		ACCESS_FAILED_TRY_LATER2,
+		ACOUNT_ALREADY_IN_USE,
+		ACCESS_FAILED_TRY_LATER3,
+		ACCESS_FAILED_TRY_LATER4,
+		ACCESS_FAILED_TRY_LATER5
+	}
 	
-	private final int _reason;
+	private final FailReason _reason;
 	
-	public AuthLoginFail(int reason)
+	public AuthLoginFail(FailReason reason)
 	{
 		_reason = reason;
 	}
@@ -25,6 +28,6 @@ public class AuthLoginFail extends L2GameServerPacket
 	protected final void writeImpl()
 	{
 		writeC(0x14);
-		writeD(_reason);
+		writeD(_reason.ordinal());
 	}
 }

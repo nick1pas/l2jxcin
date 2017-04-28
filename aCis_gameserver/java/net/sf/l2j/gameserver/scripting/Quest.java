@@ -22,11 +22,11 @@ import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2ClanMember;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.SpawnLocation;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -545,7 +545,7 @@ public class Quest
 	 * @param isSummonSpawn if true, spawn with animation (if any exists).
 	 * @return instance of the newly spawned npc with summon animation.
 	 */
-	public Npc addSpawn(int npcId, Character cha, boolean randomOffset, long despawnDelay, boolean isSummonSpawn)
+	public Npc addSpawn(int npcId, Creature cha, boolean randomOffset, long despawnDelay, boolean isSummonSpawn)
 	{
 		return addSpawn(npcId, cha.getX(), cha.getY(), cha.getZ(), cha.getHeading(), randomOffset, despawnDelay, isSummonSpawn);
 	}
@@ -907,7 +907,7 @@ public class Quest
 		return null;
 	}
 	
-	public final void notifyDeath(Character killer, Player player)
+	public final void notifyDeath(Creature killer, Player player)
 	{
 		String res = null;
 		try
@@ -922,7 +922,7 @@ public class Quest
 		showResult((killer instanceof Npc) ? (Npc) killer : null, player, res);
 	}
 	
-	public final void notifyDeath(Character killer, Character victim, Player player)
+	public final void notifyDeath(Creature killer, Creature victim, Player player)
 	{
 		String res = null;
 		try
@@ -941,7 +941,7 @@ public class Quest
 		showResult(null, player, res);
 	}
 	
-	public String onDeath(Character killer, Character victim, Player player)
+	public String onDeath(Creature killer, Creature victim, Player player)
 	{
 		if (killer instanceof Npc)
 		{
@@ -951,7 +951,7 @@ public class Quest
 		return onAdvEvent("", null, player);
 	}
 	
-	public String onDeath(Character killer, Player player)
+	public String onDeath(Creature killer, Player player)
 	{
 		return onAdvEvent("", (killer instanceof Npc) ? (Npc) killer : null, player);
 	}
@@ -1023,7 +1023,7 @@ public class Quest
 		}
 	}
 	
-	public final void notifyEnterZone(Character character, L2ZoneType zone)
+	public final void notifyEnterZone(Creature character, L2ZoneType zone)
 	{
 		Player player = character.getActingPlayer();
 		String res = null;
@@ -1043,7 +1043,7 @@ public class Quest
 			showResult(null, player, res);
 	}
 	
-	public String onEnterZone(Character character, L2ZoneType zone)
+	public String onEnterZone(Creature character, L2ZoneType zone)
 	{
 		return null;
 	}
@@ -1062,7 +1062,7 @@ public class Quest
 		}
 	}
 	
-	public final void notifyExitZone(Character character, L2ZoneType zone)
+	public final void notifyExitZone(Creature character, L2ZoneType zone)
 	{
 		Player player = character.getActingPlayer();
 		String res = null;
@@ -1082,7 +1082,7 @@ public class Quest
 			showResult(null, player, res);
 	}
 	
-	public String onExitZone(Character character, L2ZoneType zone)
+	public String onExitZone(Creature character, L2ZoneType zone)
 	{
 		return null;
 	}
@@ -1166,7 +1166,7 @@ public class Quest
 		}
 	}
 	
-	public final void notifyItemUse(ItemInstance item, Player player, L2Object target)
+	public final void notifyItemUse(ItemInstance item, Player player, WorldObject target)
 	{
 		String res = null;
 		try
@@ -1181,7 +1181,7 @@ public class Quest
 		showResult(null, player, res);
 	}
 	
-	public String onItemUse(ItemInstance item, Player player, L2Object target)
+	public String onItemUse(ItemInstance item, Player player, WorldObject target)
 	{
 		return null;
 	}
@@ -1285,10 +1285,10 @@ public class Quest
 		private final Npc _npc;
 		private final Player _caster;
 		private final L2Skill _skill;
-		private final L2Object[] _targets;
+		private final WorldObject[] _targets;
 		private final boolean _isPet;
 		
-		public OnSkillSee(Npc npc, Player caster, L2Skill skill, L2Object[] targets, boolean isPet)
+		public OnSkillSee(Npc npc, Player caster, L2Skill skill, WorldObject[] targets, boolean isPet)
 		{
 			_npc = npc;
 			_caster = caster;
@@ -1314,12 +1314,12 @@ public class Quest
 		}
 	}
 	
-	public final void notifySkillSee(Npc npc, Player caster, L2Skill skill, L2Object[] targets, boolean isPet)
+	public final void notifySkillSee(Npc npc, Player caster, L2Skill skill, WorldObject[] targets, boolean isPet)
 	{
 		ThreadPool.execute(new OnSkillSee(npc, caster, skill, targets, isPet));
 	}
 	
-	public String onSkillSee(Npc npc, Player caster, L2Skill skill, L2Object[] targets, boolean isPet)
+	public String onSkillSee(Npc npc, Player caster, L2Skill skill, WorldObject[] targets, boolean isPet)
 	{
 		return null;
 	}

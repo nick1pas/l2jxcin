@@ -1,9 +1,11 @@
 package net.sf.l2j.gameserver.handler.skillhandlers;
 
+import net.sf.l2j.commons.math.MathUtil;
+
 import net.sf.l2j.gameserver.handler.ISkillHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
@@ -12,7 +14,6 @@ import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ConfirmDlg;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
-import net.sf.l2j.gameserver.util.Util;
 
 /**
  * @authors BiTi, Sami
@@ -25,7 +26,7 @@ public class SummonFriend implements ISkillHandler
 	};
 	
 	@Override
-	public void useSkill(Character activeChar, L2Skill skill, L2Object[] targets)
+	public void useSkill(Creature activeChar, L2Skill skill, WorldObject[] targets)
 	{
 		if (!(activeChar instanceof Player))
 			return;
@@ -43,7 +44,7 @@ public class SummonFriend implements ISkillHandler
 		if (!Player.checkSummonerStatus(player))
 			return;
 		
-		for (L2Object obj : targets)
+		for (WorldObject obj : targets)
 		{
 			// The target must be a player.
 			if (!(obj instanceof Player))
@@ -59,7 +60,7 @@ public class SummonFriend implements ISkillHandler
 				continue;
 			
 			// Check target distance.
-			if (Util.checkIfInRange(50, activeChar, target, false))
+			if (MathUtil.checkIfInRange(50, activeChar, target, false))
 				continue;
 			
 			// Check target teleport request status.

@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.model.zone.type;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.L2SpawnZone;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -31,24 +31,24 @@ public class L2CastleZone extends L2SpawnZone
 	}
 	
 	@Override
-	protected void onEnter(Character character)
+	protected void onEnter(Creature character)
 	{
 		character.setInsideZone(ZoneId.CASTLE, true);
 	}
 	
 	@Override
-	protected void onExit(Character character)
+	protected void onExit(Creature character)
 	{
 		character.setInsideZone(ZoneId.CASTLE, false);
 	}
 	
 	@Override
-	public void onDieInside(Character character)
+	public void onDieInside(Creature character)
 	{
 	}
 	
 	@Override
-	public void onReviveInside(Character character)
+	public void onReviveInside(Creature character)
 	{
 	}
 	

@@ -2,13 +2,13 @@ package net.sf.l2j.gameserver.model.actor.instance;
 
 import java.util.List;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Spawn;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.model.zone.L2CastleZoneType;
@@ -35,7 +35,7 @@ public class FlameTower extends Npc
 	}
 	
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		// Attackable during siege by attacker only
 		return attacker instanceof Player && getCastle() != null && getCastle().getSiege().isInProgress() && getCastle().getSiege().checkSide(((Player) attacker).getClan(), SiegeSide.ATTACKER);
@@ -72,7 +72,7 @@ public class FlameTower extends Npc
 	}
 	
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		enableZones(false);
 		

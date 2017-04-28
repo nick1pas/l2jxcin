@@ -15,10 +15,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.WorldRegion;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.zone.L2SpawnZone;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
@@ -76,10 +76,10 @@ public class ZoneManager
 		load();
 		
 		// revalidate objects in zones
-		for (L2Object o : World.getInstance().getObjects())
+		for (WorldObject o : World.getInstance().getObjects())
 		{
-			if (o instanceof Character)
-				((Character) o).revalidateZone(true);
+			if (o instanceof Creature)
+				((Creature) o).revalidateZone(true);
 		}
 	}
 	
@@ -393,7 +393,7 @@ public class ZoneManager
 	 * @param object
 	 * @return zones
 	 */
-	public List<L2ZoneType> getZones(L2Object object)
+	public List<L2ZoneType> getZones(WorldObject object)
 	{
 		return getZones(object.getX(), object.getY(), object.getZ());
 	}
@@ -405,7 +405,7 @@ public class ZoneManager
 	 * @param type
 	 * @return zone
 	 */
-	public <T extends L2ZoneType> T getZone(L2Object object, Class<T> type)
+	public <T extends L2ZoneType> T getZone(WorldObject object, Class<T> type)
 	{
 		if (object == null)
 			return null;

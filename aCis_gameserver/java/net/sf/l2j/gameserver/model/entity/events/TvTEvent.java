@@ -19,7 +19,7 @@ import net.sf.l2j.gameserver.datatables.SpawnTable;
 import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Spawn;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.Summon;
 import net.sf.l2j.gameserver.model.actor.instance.Door;
@@ -752,7 +752,7 @@ public class TvTEvent
 	 * @param killerCharacter as Character<br>
 	 * @param killedPlayerInstance as Player<br>
 	 */
-	public static void onKill(Character killerCharacter, Player killedPlayerInstance)
+	public static void onKill(Creature killerCharacter, Player killedPlayerInstance)
 	{
 		if (killedPlayerInstance == null || !isStarted())
 		{

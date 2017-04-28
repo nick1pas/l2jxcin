@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.ItemTable;
-import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Summon;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
@@ -409,7 +409,7 @@ public abstract class Item
 	 * @param player : Character pointing out the player
 	 * @return the list of functions
 	 */
-	public final List<Func> getStatFuncs(ItemInstance item, Character player)
+	public final List<Func> getStatFuncs(ItemInstance item, Creature player)
 	{
 		if (_funcTemplates == null || _funcTemplates.isEmpty())
 			return Collections.emptyList();
@@ -460,7 +460,7 @@ public abstract class Item
 		return _skillHolder;
 	}
 	
-	public boolean checkCondition(Character activeChar, L2Object target, boolean sendMessage)
+	public boolean checkCondition(Creature activeChar, WorldObject target, boolean sendMessage)
 	{
 		// Don't allow hero equipment and restricted items during Olympiad
 		if ((isOlyRestrictedItem() || isHeroItem()) && ((activeChar instanceof Player) && activeChar.getActingPlayer().isInOlympiadMode()))
@@ -478,8 +478,8 @@ public abstract class Item
 		
 		final Env env = new Env();
 		env.setCharacter(activeChar);
-		if (target instanceof Character)
-			env.setTarget((Character) target);
+		if (target instanceof Creature)
+			env.setTarget((Creature) target);
 		
 		for (Condition preCondition : _preConditions)
 		{

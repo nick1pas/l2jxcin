@@ -1,9 +1,7 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.PrivateStoreMsgBuy;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class SetPrivateStoreMsgBuy extends L2GameClientPacket
 {
@@ -26,10 +24,7 @@ public final class SetPrivateStoreMsgBuy extends L2GameClientPacket
 		
 		// store message is limited to 29 characters.
 		if (_storeMsg != null && _storeMsg.length() > MAX_MSG_LENGTH)
-		{
-			Util.handleIllegalPlayerAction(player, player.getName() + " tried to overflow private store buy message", Config.DEFAULT_PUNISH);
 			return;
-		}
 		
 		player.getBuyList().setTitle(_storeMsg);
 		player.sendPacket(new PrivateStoreMsgBuy(player));

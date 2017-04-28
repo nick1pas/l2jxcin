@@ -2,10 +2,10 @@ package net.sf.l2j.gameserver.skills.l2skills;
 
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.EffectPoint;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -24,7 +24,7 @@ public final class L2SkillSignet extends L2Skill
 	}
 	
 	@Override
-	public void useSkill(Character caster, L2Object[] targets)
+	public void useSkill(Creature caster, WorldObject[] targets)
 	{
 		if (caster.isAlikeDead())
 			return;

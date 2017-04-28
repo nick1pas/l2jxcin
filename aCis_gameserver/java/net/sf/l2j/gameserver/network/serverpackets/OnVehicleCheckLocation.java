@@ -1,15 +1,15 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 /**
  * @author Maktakien
  */
 public class OnVehicleCheckLocation extends L2GameServerPacket
 {
-	private final Character _boat;
+	private final Creature _boat;
 	
-	public OnVehicleCheckLocation(Character boat)
+	public OnVehicleCheckLocation(Creature boat)
 	{
 		_boat = boat;
 	}

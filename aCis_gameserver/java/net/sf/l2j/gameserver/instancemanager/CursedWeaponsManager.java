@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.FeedableBeast;
 import net.sf.l2j.gameserver.model.actor.instance.FestivalMonster;
 import net.sf.l2j.gameserver.model.actor.instance.GrandBoss;
@@ -180,7 +180,7 @@ public class CursedWeaponsManager
 			cw.activate(player, item);
 	}
 	
-	public void drop(int itemId, Character killer)
+	public void drop(int itemId, Creature killer)
 	{
 		_cursedWeapons.get(itemId).dropIt(killer);
 	}

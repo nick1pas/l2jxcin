@@ -1,10 +1,12 @@
 package net.sf.l2j.gameserver.handler.skillhandlers;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
+import net.sf.l2j.commons.math.MathUtil;
+
 import net.sf.l2j.gameserver.handler.ISkillHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.FlyToLocation;
@@ -13,7 +15,6 @@ import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.network.serverpackets.ValidateLocation;
 import net.sf.l2j.gameserver.skills.Formulas;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
-import net.sf.l2j.gameserver.util.Util;
 
 /**
  * @author Didldak Some parts taken from EffectWarp, which cannot be used for this case.
@@ -26,9 +27,9 @@ public class InstantJump implements ISkillHandler
 	};
 	
 	@Override
-	public void useSkill(Character activeChar, L2Skill skill, L2Object[] targets)
+	public void useSkill(Creature activeChar, L2Skill skill, WorldObject[] targets)
 	{
-		Character target = (Character) targets[0];
+		Creature target = (Creature) targets[0];
 		
 		if (Formulas.calcPhysicalSkillEvasion(target, skill))
 		{
@@ -42,7 +43,7 @@ public class InstantJump implements ISkillHandler
 		
 		int px = target.getX();
 		int py = target.getY();
-		double ph = Util.convertHeadingToDegree(target.getHeading());
+		double ph = MathUtil.convertHeadingToDegree(target.getHeading());
 		
 		ph += 180;
 		

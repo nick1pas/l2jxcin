@@ -3,7 +3,7 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.gameserver.instancemanager.RaidBossPointsManager;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.model.group.Party;
@@ -35,7 +35,7 @@ public final class GrandBoss extends Monster
 	}
 	
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		if (!super.doDie(killer))
 			return false;

@@ -6,9 +6,6 @@ import java.util.logging.Logger;
 
 import javax.crypto.Cipher;
 
-/**
- * @author -Wooden-
- */
 public class BlowFishKey extends GameServerBasePacket
 {
 	private static Logger _log = Logger.getLogger(BlowFishKey.class.getName());

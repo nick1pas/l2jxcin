@@ -3,7 +3,7 @@ package net.sf.l2j.gameserver.skills.effects;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.gameserver.model.L2Effect;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.skills.Env;
 import net.sf.l2j.gameserver.skills.Formulas;
@@ -37,7 +37,7 @@ public class EffectCancel extends L2Effect
 		return false;
 	}
 	
-	private static boolean cancel(Character caster, Character target, L2Effect effect)
+	private static boolean cancel(Creature caster, Creature target, L2Effect effect)
 	{
 		if (!(target instanceof Player) || target.isDead())
 			return false;

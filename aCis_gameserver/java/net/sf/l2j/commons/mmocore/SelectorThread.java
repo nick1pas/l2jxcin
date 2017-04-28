@@ -273,7 +273,10 @@ public final class SelectorThread<T extends MMOClient<?>> extends Thread
 			
 			// if we try to to do a read with no space in the buffer it will read 0 bytes going into infinite loop
 			if (buf.position() == buf.limit())
-				System.exit(0);
+			{
+				closeConnectionImpl(key, con);
+				return;
+			}
 			
 			int result = -2;
 			

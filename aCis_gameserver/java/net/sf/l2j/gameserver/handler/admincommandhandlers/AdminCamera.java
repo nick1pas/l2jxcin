@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.CameraMode;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
@@ -23,7 +23,7 @@ public class AdminCamera implements IAdminCommandHandler
 		{
 			try
 			{
-				final Character target = (Character) activeChar.getTarget();
+				final Creature target = (Creature) activeChar.getTarget();
 				final String[] com = command.split(" ");
 				
 				target.broadcastPacket(new SpecialCamera(target.getObjectId(), Integer.parseInt(com[1]), Integer.parseInt(com[2]), Integer.parseInt(com[3]), Integer.parseInt(com[4]), Integer.parseInt(com[5]), Integer.parseInt(com[6]), Integer.parseInt(com[7]), Integer.parseInt(com[8]), Integer.parseInt(com[9])));

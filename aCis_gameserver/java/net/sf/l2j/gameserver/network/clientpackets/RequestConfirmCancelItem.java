@@ -1,16 +1,10 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ExConfirmCancelItem;
-import net.sf.l2j.gameserver.util.Util;
 
-/**
- * Format(ch) d
- * @author -Wooden-
- */
 public final class RequestConfirmCancelItem extends L2GameClientPacket
 {
 	private int _objectId;
@@ -33,11 +27,8 @@ public final class RequestConfirmCancelItem extends L2GameClientPacket
 			return;
 		
 		if (item.getOwnerId() != activeChar.getObjectId())
-		{
-			Util.handleIllegalPlayerAction(activeChar, activeChar.getName() + " of account " + activeChar.getAccountName() + " tried to destroy augment on item he doesn't own.", Config.DEFAULT_PUNISH);
 			return;
-		}
-		
+
 		if (!item.isAugmented())
 		{
 			activeChar.sendPacket(SystemMessageId.AUGMENTATION_REMOVAL_CAN_ONLY_BE_DONE_ON_AN_AUGMENTED_ITEM);

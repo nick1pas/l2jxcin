@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 /**
  * format dddddd dddh (h)
@@ -15,13 +15,13 @@ public class MagicSkillUse extends L2GameServerPacket
 	private final int _charObjId, _x, _y, _z, _targetx, _targety, _targetz;
 	private boolean _success = false;
 	
-	public MagicSkillUse(Character cha, Character target, int skillId, int skillLevel, int hitTime, int reuseDelay, boolean crit)
+	public MagicSkillUse(Creature cha, Creature target, int skillId, int skillLevel, int hitTime, int reuseDelay, boolean crit)
 	{
 		this(cha, target, skillId, skillLevel, hitTime, reuseDelay);
 		_success = crit;
 	}
 	
-	public MagicSkillUse(Character cha, Character target, int skillId, int skillLevel, int hitTime, int reuseDelay)
+	public MagicSkillUse(Creature cha, Creature target, int skillId, int skillLevel, int hitTime, int reuseDelay)
 	{
 		_charObjId = cha.getObjectId();
 		_targetId = target.getObjectId();
@@ -37,7 +37,7 @@ public class MagicSkillUse extends L2GameServerPacket
 		_targetz = target.getZ();
 	}
 	
-	public MagicSkillUse(Character cha, int skillId, int skillLevel, int hitTime, int reuseDelay)
+	public MagicSkillUse(Creature cha, int skillId, int skillLevel, int hitTime, int reuseDelay)
 	{
 		_charObjId = cha.getObjectId();
 		_targetId = cha.getTargetId();

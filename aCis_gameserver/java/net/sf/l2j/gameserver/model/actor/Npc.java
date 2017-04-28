@@ -11,7 +11,6 @@ import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.cache.HtmCache;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.HelperBuffTable;
@@ -25,10 +24,11 @@ import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.games.Lottery;
 import net.sf.l2j.gameserver.model.HelperBuff;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.ShotType;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Fisherman;
 import net.sf.l2j.gameserver.model.actor.instance.Gatekeeper;
 import net.sf.l2j.gameserver.model.actor.instance.Merchant;
@@ -74,7 +74,7 @@ import net.sf.l2j.gameserver.util.Broadcast;
  * <li>L2NpcInstance</li>
  * </ul>
  */
-public class Npc extends Character
+public class Npc extends Creature
 {
 	public static final int INTERACTION_DISTANCE = 150;
 	private static final int SOCIAL_INTERVAL = 12000;
@@ -277,7 +277,7 @@ public class Npc extends Character
 	}
 	
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		return false;
 	}
@@ -1319,7 +1319,7 @@ public class Npc extends Character
 	 * @param killer The Character who killed it
 	 */
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		if (!super.doDie(killer))
 			return false;
@@ -1503,7 +1503,7 @@ public class Npc extends Character
 	}
 	
 	@Override
-	protected final void notifyQuestEventSkillFinished(L2Skill skill, L2Object target)
+	protected final void notifyQuestEventSkillFinished(L2Skill skill, WorldObject target)
 	{
 		try
 		{

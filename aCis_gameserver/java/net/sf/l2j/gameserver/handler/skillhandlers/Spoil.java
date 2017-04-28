@@ -1,10 +1,10 @@
 package net.sf.l2j.gameserver.handler.skillhandlers;
 
-import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.handler.ISkillHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlEvent;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -23,7 +23,7 @@ public class Spoil implements ISkillHandler
 	};
 	
 	@Override
-	public void useSkill(Character activeChar, L2Skill skill, L2Object[] targets)
+	public void useSkill(Creature activeChar, L2Skill skill, WorldObject[] targets)
 	{
 		if (!(activeChar instanceof Player))
 			return;
@@ -31,7 +31,7 @@ public class Spoil implements ISkillHandler
 		if (targets == null)
 			return;
 		
-		for (L2Object tgt : targets)
+		for (WorldObject tgt : targets)
 		{
 			if (!(tgt instanceof Monster))
 				continue;
@@ -46,7 +46,7 @@ public class Spoil implements ISkillHandler
 				continue;
 			}
 			
-			if (Formulas.calcMagicSuccess(activeChar, (Character) tgt, skill))
+			if (Formulas.calcMagicSuccess(activeChar, (Creature) tgt, skill))
 			{
 				target.setSpoilerId(activeChar.getObjectId());
 				activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.SPOIL_SUCCESS));

@@ -155,6 +155,7 @@ public class CharSelectInfo extends L2GameServerPacket
 			writeC((charInfoPackage.getEnchantEffect() > 127) ? 127 : charInfoPackage.getEnchantEffect());
 			writeD(charInfoPackage.getAugmentationId());
 		}
+		getClient().setCharSelection(getCharInfo());
 	}
 	
 	private static CharSelectInfoPackage[] loadCharacterSelectInfo(String loginName)

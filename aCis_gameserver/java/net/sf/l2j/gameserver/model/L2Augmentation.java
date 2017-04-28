@@ -5,7 +5,7 @@ import java.util.List;
 import net.sf.l2j.gameserver.datatables.AugmentationData;
 import net.sf.l2j.gameserver.datatables.AugmentationData.AugStat;
 import net.sf.l2j.gameserver.datatables.SkillTable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.SkillCoolTime;
 import net.sf.l2j.gameserver.skills.Stats;
@@ -64,7 +64,7 @@ public final class L2Augmentation
 				return;
 			
 			for (int i = 0; i < _stats.length; i++)
-				((Character) player).addStatFunc(new FuncAdd(_stats[i], 0x40, this, new LambdaConst(_values[i])));
+				((Creature) player).addStatFunc(new FuncAdd(_stats[i], 0x40, this, new LambdaConst(_values[i])));
 			
 			_active = true;
 		}
@@ -75,7 +75,7 @@ public final class L2Augmentation
 			if (!_active)
 				return;
 			
-			((Character) player).removeStatsByOwner(this);
+			((Creature) player).removeStatsByOwner(this);
 			
 			_active = false;
 		}

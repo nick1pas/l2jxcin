@@ -8,7 +8,7 @@ import net.sf.l2j.gameserver.model.VehiclePathPoint;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.Vehicle;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
-import net.sf.l2j.gameserver.model.actor.template.CharTemplate;
+import net.sf.l2j.gameserver.model.actor.template.CreatureTemplate;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
 import net.sf.l2j.gameserver.templates.StatsSet;
 
@@ -69,7 +69,7 @@ public class BoatManager
 		npcDat.set("walkSpd", 0);
 		npcDat.set("runSpd", 0);
 		
-		CharTemplate template = new CharTemplate(npcDat);
+		CreatureTemplate template = new CreatureTemplate(npcDat);
 		Vehicle boat = new Vehicle(IdFactory.getInstance().getNextId(), template);
 		
 		_boats.put(boat.getObjectId(), boat);

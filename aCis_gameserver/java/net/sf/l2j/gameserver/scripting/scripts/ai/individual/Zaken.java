@@ -6,17 +6,17 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Effect;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.GrandBoss;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
@@ -392,7 +392,7 @@ public class Zaken extends L2AttackableAIScript
 					_ai2 = npc.getY();
 					_ai3 = npc.getZ();
 				}
-				Character c_ai0 = null;
+				Creature c_ai0 = null;
 				if ((npc.getAI().getIntention() == CtrlIntention.ATTACK) && (_quest1 == 0))
 				{
 					if (((Attackable) npc).getMostHated() != null)
@@ -423,7 +423,7 @@ public class Zaken extends L2AttackableAIScript
 				if (_quest1 > 5)
 				{
 					((Attackable) npc).stopHating(c_ai0);
-					Character nextTarget = ((Attackable) npc).getMostHated();
+					Creature nextTarget = ((Attackable) npc).getMostHated();
 					if (nextTarget != null)
 					{
 						npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
@@ -640,7 +640,7 @@ public class Zaken extends L2AttackableAIScript
 				int i1 = Rnd.get(15);
 				player.teleToLocation(Xcoords[i1] + Rnd.get(650), Ycoords[i1] + Rnd.get(650), Zcoords[i1], 0);
 				((Attackable) npc).stopHating(player);
-				Character nextTarget = ((Attackable) npc).getMostHated();
+				Creature nextTarget = ((Attackable) npc).getMostHated();
 				if (nextTarget != null)
 				{
 					npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
@@ -739,7 +739,7 @@ public class Zaken extends L2AttackableAIScript
 						((Attackable) npc).stopHating(c_quest4);
 					}
 				}
-				Character nextTarget = ((Attackable) npc).getMostHated();
+				Creature nextTarget = ((Attackable) npc).getMostHated();
 				if (nextTarget != null)
 				{
 					npc.getAI().setIntention(CtrlIntention.ATTACK, nextTarget);
@@ -774,7 +774,7 @@ public class Zaken extends L2AttackableAIScript
 					npc.doCast(SkillTable.getInstance().getInfo(4258, 1));
 				}
 			}
-			Character originalAttacker = isPet ? attacker.getPet() : attacker;
+			Creature originalAttacker = isPet ? attacker.getPet() : attacker;
 			int hate = (int) (((damage / npc.getMaxHp()) / 0.05) * 20000);
 			((Attackable) npc).addDamageHate(originalAttacker, 0, hate);
 			if (Rnd.get(10) < 1)
@@ -802,7 +802,7 @@ public class Zaken extends L2AttackableAIScript
 				}
 				else if (i0 < 15)
 				{
-					for (Character character : npc.getKnownTypeInRadius(Character.class, 100))
+					for (Creature character : npc.getKnownTypeInRadius(Creature.class, 100))
 					{
 						if (character != attacker)
 						{
@@ -870,7 +870,7 @@ public class Zaken extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onSkillSee(Npc npc, Player caster, L2Skill skill, L2Object[] targets, boolean isPet)
+	public String onSkillSee(Npc npc, Player caster, L2Skill skill, WorldObject[] targets, boolean isPet)
 	{
 		if (npc.getNpcId() == ZAKEN)
 		{
@@ -899,7 +899,7 @@ public class Zaken extends L2AttackableAIScript
 				}
 				else if (i0 < 15)
 				{
-					for (Character character : npc.getKnownTypeInRadius(Character.class, 100))
+					for (Creature character : npc.getKnownTypeInRadius(Creature.class, 100))
 					{
 						if (character != caster)
 						{
@@ -932,7 +932,7 @@ public class Zaken extends L2AttackableAIScript
 		{
 			if (_zakenLair.isInsideZone(npc))
 			{
-				Character target = isPet ? player.getPet() : player;
+				Creature target = isPet ? player.getPet() : player;
 				((Attackable) npc).addDamageHate(target, 1, 200);
 			}
 			if ((player.getZ() > (npc.getZ() - 100)) && (player.getZ() < (npc.getZ() + 100)))
@@ -986,7 +986,7 @@ public class Zaken extends L2AttackableAIScript
 					}
 					else if (i0 < 15)
 					{
-						for (Character character : npc.getKnownTypeInRadius(Character.class, 100))
+						for (Creature character : npc.getKnownTypeInRadius(Creature.class, 100))
 						{
 							if (character != player)
 							{

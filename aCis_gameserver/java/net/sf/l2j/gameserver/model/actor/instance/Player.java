@@ -26,21 +26,15 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
+import net.sf.l2j.commons.math.MathUtil;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.LoginServerThread;
-import net.sf.l2j.gameserver.ai.CtrlEvent;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.ai.NextAction;
-import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
-import net.sf.l2j.gameserver.ai.model.L2PlayerAI;
-import net.sf.l2j.gameserver.ai.model.L2SummonAI;
 import net.sf.l2j.gameserver.communitybbs.BB.Forum;
 import net.sf.l2j.gameserver.communitybbs.Manager.ForumsBBSManager;
 import net.sf.l2j.gameserver.datatables.AccessLevels;
-import net.sf.l2j.gameserver.datatables.CharNameTable;
 import net.sf.l2j.gameserver.datatables.CharTemplateTable;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.FishTable;
@@ -49,6 +43,7 @@ import net.sf.l2j.gameserver.datatables.HennaTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.datatables.NpcTable;
+import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.datatables.PvpColorTable;
 import net.sf.l2j.gameserver.datatables.PvpColorTable.PvpColor;
 import net.sf.l2j.gameserver.datatables.RecipeTable;
@@ -79,7 +74,6 @@ import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Fishing;
 import net.sf.l2j.gameserver.model.L2Macro;
 import net.sf.l2j.gameserver.model.L2ManufactureList;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Radar;
 import net.sf.l2j.gameserver.model.L2Request;
 import net.sf.l2j.gameserver.model.L2ShortCut;
@@ -94,18 +88,25 @@ import net.sf.l2j.gameserver.model.ShortCuts;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.WorldRegion;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.Summon;
 import net.sf.l2j.gameserver.model.actor.Vehicle;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlEvent;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
+import net.sf.l2j.gameserver.model.actor.ai.NextAction;
+import net.sf.l2j.gameserver.model.actor.ai.type.CreatureAI;
+import net.sf.l2j.gameserver.model.actor.ai.type.PlayerAI;
+import net.sf.l2j.gameserver.model.actor.ai.type.SummonAI;
 import net.sf.l2j.gameserver.model.actor.appearance.PcAppearance;
-import net.sf.l2j.gameserver.model.actor.stat.PcStat;
-import net.sf.l2j.gameserver.model.actor.status.PcStatus;
-import net.sf.l2j.gameserver.model.actor.template.PcTemplate;
+import net.sf.l2j.gameserver.model.actor.stat.PlayerStat;
+import net.sf.l2j.gameserver.model.actor.status.PlayerStatus;
 import net.sf.l2j.gameserver.model.actor.template.PetTemplate;
+import net.sf.l2j.gameserver.model.actor.template.PlayerTemplate;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.base.ClassType;
@@ -251,7 +252,6 @@ import net.sf.l2j.gameserver.templates.skills.L2EffectFlag;
 import net.sf.l2j.gameserver.templates.skills.L2EffectType;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 import net.sf.l2j.gameserver.util.Broadcast;
-import net.sf.l2j.gameserver.util.Util;
 
 
 /**
@@ -640,11 +640,11 @@ public final class Player extends Playable
 	 * </ul>
 	 * <FONT COLOR=#FF0000><B> <U>Caution</U> : This method SET the level of the Player to 1</B></FONT>
 	 * @param objectId Identifier of the object to initialized
-	 * @param template The L2PcTemplate to apply to the Player
+	 * @param template The L2PlayerTemplate to apply to the Player
 	 * @param accountName The name of the account including this Player
 	 * @param app The PcAppearance of the Player
 	 */
-	private Player(int objectId, PcTemplate template, String accountName, PcAppearance app)
+	private Player(int objectId, PlayerTemplate template, String accountName, PcAppearance app)
 	{
 		super(objectId, template);
 		
@@ -654,7 +654,7 @@ public final class Player extends Playable
 		_appearance = app;
 		
 		// Create an AI
-		_ai = new L2PlayerAI(this);
+		_ai = new PlayerAI(this);
 		
 		// Create a L2Radar object
 		_radar = new L2Radar(this);
@@ -680,7 +680,7 @@ public final class Player extends Playable
 	 * <li>Add the player in the characters table of the database</li>
 	 * </ul>
 	 * @param objectId Identifier of the object to initialized
-	 * @param template The L2PcTemplate to apply to the Player
+	 * @param template The L2PlayerTemplate to apply to the Player
 	 * @param accountName The name of the Player
 	 * @param name The name of the Player
 	 * @param hairStyle The hair style Identifier of the Player
@@ -689,7 +689,7 @@ public final class Player extends Playable
 	 * @param sex The sex type Identifier of the Player
 	 * @return The Player added to the database or null
 	 */
-	public static Player create(int objectId, PcTemplate template, String accountName, String name, byte hairStyle, byte hairColor, byte face, Sex sex)
+	public static Player create(int objectId, PlayerTemplate template, String accountName, String name, byte hairStyle, byte hairColor, byte face, Sex sex)
 	{
 		// Create a new Player with an account name
 		PcAppearance app = new PcAppearance(face, hairColor, hairStyle, sex);
@@ -698,8 +698,8 @@ public final class Player extends Playable
 		// Set the name of the Player
 		player.setName(name);
 		
-		// Cache few informations into CharNameTable.
-		CharNameTable.getInstance().addPlayer(objectId, accountName, name, player.getAccessLevel().getLevel());
+		// Cache few informations into PlayerNameTable.
+		PlayerNameTable.getInstance().addPlayer(objectId, accountName, name, player.getAccessLevel().getLevel());
 		
 		// Set the base class ID to that of the actual class ID.
 		player.setBaseClass(player.getClassId());
@@ -786,25 +786,25 @@ public final class Player extends Playable
 	@Override
 	public void initCharStat()
 	{
-		setStat(new PcStat(this));
+		setStat(new PlayerStat(this));
 	}
 	
 	@Override
-	public final PcStat getStat()
+	public final PlayerStat getStat()
 	{
-		return (PcStat) super.getStat();
+		return (PlayerStat) super.getStat();
 	}
 	
 	@Override
 	public void initCharStatus()
 	{
-		setStatus(new PcStatus(this));
+		setStatus(new PlayerStatus(this));
 	}
 	
 	@Override
-	public final PcStatus getStatus()
+	public final PlayerStatus getStatus()
 	{
-		return (PcStatus) super.getStatus();
+		return (PlayerStatus) super.getStatus();
 	}
 	
 	public final PcAppearance getAppearance()
@@ -813,18 +813,18 @@ public final class Player extends Playable
 	}
 	
 	/**
-	 * @return the base L2PcTemplate link to the Player.
+	 * @return the base L2PlayerTemplate link to the Player.
 	 */
-	public final PcTemplate getBaseTemplate()
+	public final PlayerTemplate getBaseTemplate()
 	{
 		return CharTemplateTable.getInstance().getTemplate(_baseClass);
 	}
 	
-	/** Return the L2PcTemplate link to the Player. */
+	/** Return the L2PlayerTemplate link to the Player. */
 	@Override
-	public final PcTemplate getTemplate()
+	public final PlayerTemplate getTemplate()
 	{
-		return (PcTemplate) super.getTemplate();
+		return (PlayerTemplate) super.getTemplate();
 	}
 	
 	public void setTemplate(ClassId newclass)
@@ -836,15 +836,15 @@ public final class Player extends Playable
 	 * Return the AI of the Player (create it if necessary).
 	 */
 	@Override
-	public L2CharacterAI getAI()
+	public CreatureAI getAI()
 	{
-		L2CharacterAI ai = _ai;
+		CreatureAI ai = _ai;
 		if (ai == null)
 		{
 			synchronized (this)
 			{
 				if (_ai == null)
-					_ai = new L2PlayerAI(this);
+					_ai = new PlayerAI(this);
 				
 				return _ai;
 			}
@@ -893,19 +893,12 @@ public final class Player extends Playable
 	{
 		_isCrafting = state;
 	}
-	
-	/**
-	 * Manage Logout Task
-	 */
+
 	public void logout()
 	{
 		logout(true);
 	}
-	
-	/**
-	 * Manage Logout Task
-	 * @param closeClient
-	 */
+
 	public void logout(boolean closeClient)
 	{
 		try
@@ -1059,7 +1052,7 @@ public final class Player extends Playable
 		if (qs == null)
 			return;
 		
-		L2Object object = World.getInstance().getObject(getLastQuestNpcObject());
+		WorldObject object = World.getInstance().getObject(getLastQuestNpcObject());
 		if (!(object instanceof Npc) || !isInsideRadius(object, Npc.INTERACTION_DISTANCE, false, false))
 			return;
 		
@@ -1723,7 +1716,7 @@ public final class Player extends Playable
 	}
 	
 	/**
-	 * @return The ClassId object of the Player contained in L2PcTemplate.
+	 * @return The ClassId object of the Player contained in L2PlayerTemplate.
 	 */
 	public ClassId getClassId()
 	{
@@ -1732,7 +1725,7 @@ public final class Player extends Playable
 	
 	/**
 	 * Set the template of the Player.
-	 * @param Id The Identifier of the L2PcTemplate to set to the Player
+	 * @param Id The Identifier of the L2PlayerTemplate to set to the Player
 	 */
 	public void setClassId(int Id)
 	{
@@ -2219,7 +2212,7 @@ public final class Player extends Playable
 	 * @param target The target, used for thrones types.
 	 * @param sittingState The sitting state, inheritated from packet or player status.
 	 */
-	public void tryToSitOrStand(final L2Object target, final boolean sittingState)
+	public void tryToSitOrStand(final WorldObject target, final boolean sittingState)
 	{
 		if (isFakeDeath())
 		{
@@ -2269,7 +2262,7 @@ public final class Player extends Playable
 			{
 				if (_throneId != 0)
 				{
-					final L2Object object = World.getInstance().getObject(_throneId);
+					final WorldObject object = World.getInstance().getObject(_throneId);
 					if (object instanceof StaticObject)
 						((StaticObject) object).setBusy(false);
 					
@@ -2306,7 +2299,7 @@ public final class Player extends Playable
 					{
 						if (_throneId != 0)
 						{
-							final L2Object object = World.getInstance().getObject(_throneId);
+							final WorldObject object = World.getInstance().getObject(_throneId);
 							if (object instanceof StaticObject)
 								((StaticObject) object).setBusy(false);
 							
@@ -2437,7 +2430,7 @@ public final class Player extends Playable
 	 * @param reference L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 */
-	public void addAdena(String process, int count, L2Object reference, boolean sendMessage)
+	public void addAdena(String process, int count, WorldObject reference, boolean sendMessage)
 	{
 		if (sendMessage)
 			sendPacket(SystemMessage.getSystemMessage(SystemMessageId.EARNED_S1_ADENA).addNumber(count));
@@ -2465,7 +2458,7 @@ public final class Player extends Playable
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 * @return boolean informing if the action was successfull
 	 */
-	public boolean reduceAdena(String process, int count, L2Object reference, boolean sendMessage)
+	public boolean reduceAdena(String process, int count, WorldObject reference, boolean sendMessage)
 	{
 		if (count > getAdena())
 		{
@@ -2499,7 +2492,7 @@ public final class Player extends Playable
 	 * @param reference L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 */
-	public void addAncientAdena(String process, int count, L2Object reference, boolean sendMessage)
+	public void addAncientAdena(String process, int count, WorldObject reference, boolean sendMessage)
 	{
 		if (sendMessage)
 			sendPacket(SystemMessage.getSystemMessage(SystemMessageId.EARNED_S2_S1_S).addItemName(PcInventory.ANCIENT_ADENA_ID).addNumber(count));
@@ -2522,7 +2515,7 @@ public final class Player extends Playable
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 * @return boolean informing if the action was successfull
 	 */
-	public boolean reduceAncientAdena(String process, int count, L2Object reference, boolean sendMessage)
+	public boolean reduceAncientAdena(String process, int count, WorldObject reference, boolean sendMessage)
 	{
 		if (count > getAncientAdena())
 		{
@@ -2560,7 +2553,7 @@ public final class Player extends Playable
 	 * @param reference L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 */
-	public void addItem(String process, ItemInstance item, L2Object reference, boolean sendMessage)
+	public void addItem(String process, ItemInstance item, WorldObject reference, boolean sendMessage)
 	{
 		if (item.getCount() > 0)
 		{
@@ -2606,7 +2599,7 @@ public final class Player extends Playable
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 * @return The created ItemInstance.
 	 */
-	public ItemInstance addItem(String process, int itemId, int count, L2Object reference, boolean sendMessage)
+	public ItemInstance addItem(String process, int itemId, int count, WorldObject reference, boolean sendMessage)
 	{
 		if (count > 0)
 		{
@@ -2672,7 +2665,7 @@ public final class Player extends Playable
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 * @return boolean informing if the action was successfull
 	 */
-	public boolean destroyItem(String process, ItemInstance item, L2Object reference, boolean sendMessage)
+	public boolean destroyItem(String process, ItemInstance item, WorldObject reference, boolean sendMessage)
 	{
 		return this.destroyItem(process, item, item.getCount(), reference, sendMessage);
 	}
@@ -2686,7 +2679,7 @@ public final class Player extends Playable
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 * @return boolean informing if the action was successfull
 	 */
-	public boolean destroyItem(String process, ItemInstance item, int count, L2Object reference, boolean sendMessage)
+	public boolean destroyItem(String process, ItemInstance item, int count, WorldObject reference, boolean sendMessage)
 	{
 		item = _inventory.destroyItem(process, item, count, this, reference);
 		
@@ -2729,7 +2722,7 @@ public final class Player extends Playable
 	 * @return boolean informing if the action was successfull
 	 */
 	@Override
-	public boolean destroyItem(String process, int objectId, int count, L2Object reference, boolean sendMessage)
+	public boolean destroyItem(String process, int objectId, int count, WorldObject reference, boolean sendMessage)
 	{
 		ItemInstance item = _inventory.getItemByObjectId(objectId);
 		
@@ -2752,7 +2745,7 @@ public final class Player extends Playable
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 * @return boolean informing if the action was successfull
 	 */
-	public boolean destroyItemWithoutTrace(String process, int objectId, int count, L2Object reference, boolean sendMessage)
+	public boolean destroyItemWithoutTrace(String process, int objectId, int count, WorldObject reference, boolean sendMessage)
 	{
 		ItemInstance item = _inventory.getItemByObjectId(objectId);
 		
@@ -2777,7 +2770,7 @@ public final class Player extends Playable
 	 * @return boolean informing if the action was successfull
 	 */
 	@Override
-	public boolean destroyItemByItemId(String process, int itemId, int count, L2Object reference, boolean sendMessage)
+	public boolean destroyItemByItemId(String process, int itemId, int count, WorldObject reference, boolean sendMessage)
 	{
 		if (itemId == 57)
 			return reduceAdena(process, count, reference, sendMessage);
@@ -2822,7 +2815,7 @@ public final class Player extends Playable
 	 * @param reference L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the new item or the updated item in inventory
 	 */
-	public ItemInstance transferItem(String process, int objectId, int count, Inventory target, L2Object reference)
+	public ItemInstance transferItem(String process, int objectId, int count, Inventory target, WorldObject reference)
 	{
 		final ItemInstance oldItem = checkItemManipulation(objectId, count);
 		if (oldItem == null)
@@ -2884,7 +2877,7 @@ public final class Player extends Playable
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 * @return boolean informing if the action was successfull
 	 */
-	public boolean dropItem(String process, ItemInstance item, L2Object reference, boolean sendMessage)
+	public boolean dropItem(String process, ItemInstance item, WorldObject reference, boolean sendMessage)
 	{
 		item = _inventory.dropItem(process, item, this, reference);
 		
@@ -2927,7 +2920,7 @@ public final class Player extends Playable
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 * @return ItemInstance corresponding to the new item or the updated item in inventory
 	 */
-	public ItemInstance dropItem(String process, int objectId, int count, int x, int y, int z, L2Object reference, boolean sendMessage)
+	public ItemInstance dropItem(String process, int objectId, int count, int x, int y, int z, WorldObject reference, boolean sendMessage)
 	{
 		ItemInstance invItem = _inventory.getItemByObjectId(objectId);
 		ItemInstance item = _inventory.dropItem(process, objectId, count, this, reference);
@@ -3125,7 +3118,7 @@ public final class Player extends Playable
 	}
 	
 	/**
-	 * @see net.sf.l2j.gameserver.model.actor.Character#enableSkill(net.sf.l2j.gameserver.model.L2Skill)
+	 * @see net.sf.l2j.gameserver.model.actor.Creature#enableSkill(net.sf.l2j.gameserver.model.L2Skill)
 	 */
 	@Override
 	public void enableSkill(L2Skill skill)
@@ -3465,7 +3458,7 @@ public final class Player extends Playable
 	 * In case of private stores, send the related packet.
 	 * @param target The Character targeted
 	 */
-	public void doInteract(Character target)
+	public void doInteract(Creature target)
 	{
 		if (target instanceof Player)
 		{
@@ -3532,7 +3525,7 @@ public final class Player extends Playable
 	 * @param object The ItemInstance to pick up
 	 */
 	@Override
-	public void doPickupItem(L2Object object)
+	public void doPickupItem(WorldObject object)
 	{
 		if (isAlikeDead() || isFakeDeath())
 			return;
@@ -3657,7 +3650,7 @@ public final class Player extends Playable
 	}
 	
 	@Override
-	public void doAttack(Character target)
+	public void doAttack(Creature target)
 	{
 		super.doAttack(target);
 		clearRecentFakeDeath();
@@ -3763,7 +3756,7 @@ public final class Player extends Playable
 	}
 	
 	@Override
-	public void setTarget(L2Object newTarget)
+	public void setTarget(WorldObject newTarget)
 	{
 		if (newTarget != null)
 		{
@@ -3788,7 +3781,7 @@ public final class Player extends Playable
 		}
 		
 		// Get the current target
-		L2Object oldTarget = getTarget();
+		WorldObject oldTarget = getTarget();
 		
 		if (oldTarget != null)
 		{
@@ -3796,8 +3789,8 @@ public final class Player extends Playable
 				return; // no target change
 				
 			// Remove the Player from the _statusListener of the old target if it was a Character
-			if (oldTarget instanceof Character)
-				((Character) oldTarget).removeStatusListener(this);
+			if (oldTarget instanceof Creature)
+				((Creature) oldTarget).removeStatusListener(this);
 		}
 		
 		// Verify if it's a static object.
@@ -3807,9 +3800,9 @@ public final class Player extends Playable
 			sendPacket(new StaticObjectInfo((StaticObject) newTarget));
 		}
 		// Add the Player to the _statusListener of the new target if it's a Character
-		else if (newTarget instanceof Character)
+		else if (newTarget instanceof Creature)
 		{
-			final Character target = (Character) newTarget;
+			final Creature target = (Creature) newTarget;
 			
 			// Validate location of the new target.
 			if (newTarget.getObjectId() != getObjectId())
@@ -3968,7 +3961,7 @@ public final class Player extends Playable
 	 * @param killer The Character who attacks
 	 */
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		// Kill the Player
 		if (!super.doDie(killer))
@@ -4046,7 +4039,7 @@ public final class Player extends Playable
 		if (_fusionSkill != null)
 			abortCast();
 		
-		for (Character character : getKnownType(Character.class))
+		for (Creature character : getKnownType(Creature.class))
 			if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == this)
 				character.abortCast();
 			
@@ -4064,7 +4057,7 @@ public final class Player extends Playable
 		return true;
 	}
 	
-	private void onDieDropItem(Character killer)
+	private void onDieDropItem(Creature killer)
 	{
 		if (killer == null)
 			return;
@@ -4227,7 +4220,7 @@ public final class Player extends Playable
 			updatePvPFlag(1);
 	}
 	
-	public void updatePvPStatus(Character target)
+	public void updatePvPStatus(Creature target)
 	{
 		final Player player = target.getActingPlayer();
 		if (player == null)
@@ -4952,7 +4945,7 @@ public final class Player extends Playable
 				return false;
 			}
 			
-			if (!Util.checkIfInRange(200, this, summon, true))
+			if (!MathUtil.checkIfInRange(200, this, summon, true))
 			{
 				sendPacket(SystemMessageId.TOO_FAR_AWAY_FROM_STRIDER_TO_MOUNT);
 				return false;
@@ -5256,7 +5249,7 @@ public final class Player extends Playable
 		getAppearance().setTitleColor(_accessLevel.getTitleColor());
 		broadcastUserInfo();
 		
-		CharNameTable.getInstance().updatePlayerData(this, true);
+		PlayerNameTable.getInstance().updatePlayerData(this, true);
 	}
 	
 	public void setAccountAccesslevel(int level)
@@ -5370,7 +5363,7 @@ public final class Player extends Playable
 			while (rset.next())
 			{
 				final int activeClassId = rset.getInt("classid");
-				final PcTemplate template = CharTemplateTable.getInstance().getTemplate(activeClassId);
+				final PlayerTemplate template = CharTemplateTable.getInstance().getTemplate(activeClassId);
 				final PcAppearance app = new PcAppearance(rset.getByte("face"), rset.getByte("hairColor"), rset.getByte("hairStyle"), Sex.values()[rset.getInt("sex")]);
 				
 				player = new Player(objectId, template, rset.getString("account_name"), app);
@@ -6511,7 +6504,7 @@ public final class Player extends Playable
 	 * </ul>
 	 */
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		// Check if the attacker isn't the Player Pet
 		if (attacker == this || attacker == getPet())
@@ -6694,7 +6687,7 @@ public final class Player extends Playable
 		}
 		
 		// Check if the target is correct and Notify the AI with CAST and target
-		L2Object target = null;
+		WorldObject target = null;
 		
 		switch (skill.getTargetType())
 		{
@@ -6799,7 +6792,7 @@ public final class Player extends Playable
 		
 		// ************************************* Check Target *******************************************
 		// Create and set a L2Object containing the target of the skill
-		L2Object target = null;
+		WorldObject target = null;
 		SkillTargetType sklTargetType = skill.getTargetType();
 		Location worldPosition = getCurrentSkillWorldPosition();
 		
@@ -7147,7 +7140,7 @@ public final class Player extends Playable
 		return false;
 	}
 	
-	public boolean checkIfOkToCastSealOfRule(Castle castle, boolean isCheckOnly, L2Skill skill, L2Object target)
+	public boolean checkIfOkToCastSealOfRule(Castle castle, boolean isCheckOnly, L2Skill skill, WorldObject target)
 	{
 		SystemMessage sm;
 		
@@ -7157,7 +7150,7 @@ public final class Player extends Playable
 			sm = SystemMessage.getSystemMessage(SystemMessageId.INCORRECT_TARGET);
 		else if (!castle.getSiege().isInProgress())
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill);
-		else if (!Util.checkIfInRange(200, this, target, true))
+		else if (!MathUtil.checkIfInRange(200, this, target, true))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.DIST_TOO_FAR_CASTING_STOPPED);
 		else if (!isInsideZone(ZoneId.CAST_ON_ARTIFACT))
 			sm = SystemMessage.getSystemMessage(SystemMessageId.S1_CANNOT_BE_USED).addSkillName(skill);
@@ -7202,7 +7195,7 @@ public final class Player extends Playable
 	 * @param skill L2Skill instance with the skill being casted
 	 * @return {@code false} if the skill is a pvpSkill and target is not a valid pvp target, {@code true} otherwise.
 	 */
-	public boolean checkPvpSkill(L2Object target, L2Skill skill)
+	public boolean checkPvpSkill(WorldObject target, L2Skill skill)
 	{
 		if (skill == null || target == null)
 			return false;
@@ -8399,7 +8392,7 @@ public final class Player extends Playable
 	{
 		_activeClass = classId;
 		
-		PcTemplate t = CharTemplateTable.getInstance().getTemplate(classId);
+		PlayerTemplate t = CharTemplateTable.getInstance().getTemplate(classId);
 		
 		if (t == null)
 		{
@@ -8436,7 +8429,7 @@ public final class Player extends Playable
 			abortCast();
 			
 			// Stop casting for any player that may be casting a force buff on this l2pcinstance.
-			for (Character character : getKnownType(Character.class))
+			for (Creature character : getKnownType(Creature.class))
 				if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == this)
 					character.abortCast();
 				
@@ -8837,7 +8830,7 @@ public final class Player extends Playable
 		{
 			pet.setFollowStatus(false);
 			pet.teleToLocation(getPosition(), 0);
-			((L2SummonAI) pet.getAI()).setStartFollowController(true);
+			((SummonAI) pet.getAI()).setStartFollowController(true);
 			pet.setFollowStatus(true);
 		}
 		TvTEvent.onTeleported(this);
@@ -8851,7 +8844,7 @@ public final class Player extends Playable
 		getStat().addExpAndSp(addToExp, addToSp);
 	}
 	
-	public void addExpAndSp(long addToExp, int addToSp, Map<Character, RewardInfo> rewards)
+	public void addExpAndSp(long addToExp, int addToSp, Map<Creature, RewardInfo> rewards)
 	{
 		getStat().addExpAndSp(addToExp, addToSp, rewards);
 	}
@@ -8862,7 +8855,7 @@ public final class Player extends Playable
 	}
 	
 	@Override
-	public void reduceCurrentHp(double value, Character attacker, boolean awake, boolean isDOT, L2Skill skill)
+	public void reduceCurrentHp(double value, Creature attacker, boolean awake, boolean isDOT, L2Skill skill)
 	{
 		if (skill != null)
 			getStatus().reduceHp(value, attacker, awake, isDOT, skill.isToggle(), skill.getDmgDirectlyToHP());
@@ -9032,7 +9025,7 @@ public final class Player extends Playable
 			stopAllTimers();
 			
 			// Cancel the cast of eventual fusion skill users on this target.
-			for (Character character : getKnownType(Character.class))
+			for (Creature character : getKnownType(Creature.class))
 				if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == this)
 					character.abortCast();
 				
@@ -9114,7 +9107,7 @@ public final class Player extends Playable
 			
 			if (isSeated())
 			{
-				final L2Object object = World.getInstance().getObject(_throneId);
+				final WorldObject object = World.getInstance().getObject(_throneId);
 				if (object instanceof StaticObject)
 					((StaticObject) object).setBusy(false);
 			}
@@ -9906,7 +9899,7 @@ public final class Player extends Playable
 		_deathPenaltyBuffLevel = level;
 	}
 	
-	public void calculateDeathPenaltyBuffLevel(Character killer)
+	public void calculateDeathPenaltyBuffLevel(Creature killer)
 	{
 		if (_deathPenaltyBuffLevel >= 15) // maximum level reached
 			return;
@@ -10055,7 +10048,7 @@ public final class Player extends Playable
 	}
 	
 	@Override
-	public final void sendDamageMessage(Character target, int damage, boolean mcrit, boolean pcrit, boolean miss)
+	public final void sendDamageMessage(Creature target, int damage, boolean mcrit, boolean pcrit, boolean miss)
 	{
 		// Check if hit is missed
 		if (miss)
@@ -10241,7 +10234,7 @@ public final class Player extends Playable
 	 * @param cha The target to make checks on.
 	 * @return true if player can attack the target.
 	 */
-	public boolean canAttackCharacter(Character cha)
+	public boolean canAttackCharacter(Creature cha)
 	{
 		if (cha instanceof Attackable)
 			return true;
@@ -10334,7 +10327,7 @@ public final class Player extends Playable
 		return true;
 	}
 	
-	public static boolean checkSummonTargetStatus(L2Object target, Player summonerChar)
+	public static boolean checkSummonTargetStatus(WorldObject target, Player summonerChar)
 	{
 		if (target == null || !(target instanceof Player))
 			return false;
@@ -10612,7 +10605,7 @@ public final class Player extends Playable
 			
 			if (isSeated())
 			{
-				final L2Object object = World.getInstance().getObject(_throneId);
+				final WorldObject object = World.getInstance().getObject(_throneId);
 				if (object instanceof StaticObject)
 					activeChar.sendPacket(new ChairSit(getObjectId(), ((StaticObject) object).getStaticObjectId()));
 			}
@@ -10726,13 +10719,13 @@ public final class Player extends Playable
 	}
 	
 	@Override
-	public void addKnownObject(L2Object object)
+	public void addKnownObject(WorldObject object)
 	{
 		sendInfoFrom(object);
 	}
 	
 	@Override
-	public void removeKnownObject(L2Object object)
+	public void removeKnownObject(WorldObject object)
 	{
 		super.removeKnownObject(object);
 		
@@ -10742,7 +10735,7 @@ public final class Player extends Playable
 	
 	public final void refreshInfos()
 	{
-		for (L2Object object : getKnownType(L2Object.class))
+		for (WorldObject object : getKnownType(WorldObject.class))
 		{
 			if (object instanceof Player && ((Player) object).isInObserverMode())
 				continue;
@@ -10751,7 +10744,7 @@ public final class Player extends Playable
 		}
 	}
 	
-	private final void sendInfoFrom(L2Object object)
+	private final void sendInfoFrom(WorldObject object)
 	{
 		if (object.getPolyType() == PolyType.ITEM)
 			sendPacket(new SpawnItem(object));
@@ -10760,10 +10753,10 @@ public final class Player extends Playable
 			// send object info to player
 			object.sendInfo(this);
 			
-			if (object instanceof Character)
+			if (object instanceof Creature)
 			{
 				// Update the state of the Character object client side by sending Server->Client packet MoveToPawn/MoveToLocation and AutoAttackStart to the Player
-				Character obj = (Character) object;
+				Creature obj = (Creature) object;
 				if (obj.hasAI())
 					obj.getAI().describeStateToPlayer(this);
 			}

@@ -1,17 +1,20 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import java.util.logging.Logger;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.AdminCommandAccessRights;
 import net.sf.l2j.gameserver.handler.AdminCommandHandler;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
-import net.sf.l2j.gameserver.util.GMAudit;
 
 /**
  * This class handles all GM commands triggered by //command
  */
 public final class SendBypassBuildCmd extends L2GameClientPacket
 {
+	private static final Logger GMAUDIT_LOG = Logger.getLogger("gmaudit");
+	
 	private String _command;
 	
 	@Override
@@ -49,7 +52,7 @@ public final class SendBypassBuildCmd extends L2GameClientPacket
 		}
 		
 		if (Config.GMAUDIT)
-			GMAudit.auditGMAction(activeChar.getName() + " [" + activeChar.getObjectId() + "]", _command, (activeChar.getTarget() != null ? activeChar.getTarget().getName() : "no-target"));
+			GMAUDIT_LOG.info(activeChar.getName() + " [" + activeChar.getObjectId() + "] used '" + _command + "' command on: " + ((activeChar.getTarget() != null) ? activeChar.getTarget().getName() : "none"));
 		
 		ach.useAdminCommand("admin_" + _command, activeChar);
 	}

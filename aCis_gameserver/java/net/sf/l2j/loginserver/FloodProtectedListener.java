@@ -4,34 +4,26 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 
-/**
- * @author -Wooden-
- */
 @SuppressWarnings("resource")
 public abstract class FloodProtectedListener extends Thread
 {
 	private final Logger _log = Logger.getLogger(FloodProtectedListener.class.getName());
-	private final Map<String, ForeignConnection> _floodProtection = new HashMap<>();
-	private final String _listenIp;
-	private final int _port;
-	private ServerSocket _serverSocket;
+	private final Map<String, ForeignConnection> _floodProtection = new ConcurrentHashMap<>();
+	private final ServerSocket _serverSocket;
 	
 	public FloodProtectedListener(String listenIp, int port) throws IOException
 	{
-		_port = port;
-		_listenIp = listenIp;
-		
-		if (_listenIp.equals("*"))
-			_serverSocket = new ServerSocket(_port);
+		if (listenIp.equals("*"))
+			_serverSocket = new ServerSocket(port);
 		else
-			_serverSocket = new ServerSocket(_port, 50, InetAddress.getByName(_listenIp));
+			_serverSocket = new ServerSocket(port, 50, InetAddress.getByName(listenIp));
 	}
 	
 	@Override
@@ -53,10 +45,13 @@ public abstract class FloodProtectedListener extends Thread
 						if ((fConnection.connectionNumber > Config.FAST_CONNECTION_LIMIT && (System.currentTimeMillis() - fConnection.lastConnection) < Config.NORMAL_CONNECTION_TIME) || (System.currentTimeMillis() - fConnection.lastConnection) < Config.FAST_CONNECTION_TIME || fConnection.connectionNumber > Config.MAX_CONNECTION_PER_IP)
 						{
 							fConnection.lastConnection = System.currentTimeMillis();
-							connection.close();
 							fConnection.connectionNumber -= 1;
+							
+							connection.close();
+							
 							if (!fConnection.isFlooding)
 								_log.warning("Potential Flood from " + connection.getInetAddress().getHostAddress());
+							
 							fConnection.isFlooding = true;
 							continue;
 						}
@@ -110,9 +105,6 @@ public abstract class FloodProtectedListener extends Thread
 		public long lastConnection;
 		public boolean isFlooding = false;
 		
-		/**
-		 * @param time
-		 */
 		public ForeignConnection(long time)
 		{
 			lastConnection = time;
@@ -126,6 +118,7 @@ public abstract class FloodProtectedListener extends Thread
 	{
 		if (!Config.FLOOD_PROTECTION)
 			return;
+		
 		ForeignConnection fConnection = _floodProtection.get(ip);
 		if (fConnection != null)
 		{

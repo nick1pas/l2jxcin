@@ -3,14 +3,14 @@ package net.sf.l2j.gameserver.network.serverpackets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.model.actor.instance.Servitor;
 
 public class PartySpelled extends L2GameServerPacket
 {
 	private final List<Effect> _effects;
-	private final Character _activeChar;
+	private final Creature _activeChar;
 	
 	private class Effect
 	{
@@ -26,7 +26,7 @@ public class PartySpelled extends L2GameServerPacket
 		}
 	}
 	
-	public PartySpelled(Character cha)
+	public PartySpelled(Creature cha)
 	{
 		_effects = new ArrayList<>();
 		_activeChar = cha;

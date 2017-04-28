@@ -13,7 +13,7 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.type.L2OlympiadStadiumZone;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -85,7 +85,7 @@ abstract public class OlympiadGameNormal extends AbstractOlympiadGame
 	/**
 	 * Sends olympiad info to the new spectator.
 	 */
-	public final void sendOlympiadInfo(Character player)
+	public final void sendOlympiadInfo(Creature player)
 	{
 		player.sendPacket(new ExOlympiadUserInfo(_playerOne.player));
 		_playerOne.player.updateEffectIcons();

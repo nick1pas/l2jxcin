@@ -2,9 +2,6 @@ package net.sf.l2j.gameserver.network.gameserverpackets;
 
 import java.util.List;
 
-/**
- * @author -Wooden-
- */
 public class PlayerInGame extends GameServerBasePacket
 {
 	public PlayerInGame(String player)

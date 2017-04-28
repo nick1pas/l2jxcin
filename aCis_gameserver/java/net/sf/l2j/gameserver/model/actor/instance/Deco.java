@@ -19,7 +19,7 @@
 package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 
 public class Deco extends Folk
@@ -30,7 +30,7 @@ public class Deco extends Folk
 	}
 	
 	@Override
-	public void reduceCurrentHp(double i, Character attacker, boolean awake, boolean isDOT, L2Skill skill)
+	public void reduceCurrentHp(double i, Creature attacker, boolean awake, boolean isDOT, L2Skill skill)
 	{
 		i = 0;
 		super.reduceCurrentHp(i, attacker, awake, isDOT, skill);

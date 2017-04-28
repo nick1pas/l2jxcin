@@ -4,10 +4,10 @@ import net.sf.l2j.commons.lang.StringUtil;
 
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -300,7 +300,7 @@ public class KetraOrcSupport extends Quest
 	}
 	
 	@Override
-	public String onSkillSee(Npc npc, Player caster, L2Skill skill, L2Object[] targets, boolean isPet)
+	public String onSkillSee(Npc npc, Player caster, L2Skill skill, WorldObject[] targets, boolean isPet)
 	{
 		// Caster is an allied.
 		if (caster.isAlliedWithKetra())
@@ -314,7 +314,7 @@ public class KetraOrcSupport extends Quest
 				case HEAL_STATIC:
 				case BALANCE_LIFE:
 				case HOT:
-					for (Character target : (Character[]) targets)
+					for (Creature target : (Creature[]) targets)
 					{
 						// Character isn't existing, is dead or is current caster, we drop check.
 						if (target == null || target.isDead() || target == caster)
@@ -334,7 +334,7 @@ public class KetraOrcSupport extends Quest
 							if (((Attackable) npc).getAggroList().containsKey(player))
 							{
 								// Save current target for future use.
-								final L2Object oldTarget = npc.getTarget();
+								final WorldObject oldTarget = npc.getTarget();
 								
 								// Curse the heretic or his pet.
 								npc.setTarget((isPet && player.getPet() != null) ? caster.getPet() : caster);

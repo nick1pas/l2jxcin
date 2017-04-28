@@ -4,15 +4,14 @@ import java.util.Collection;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.ArmorSetsTable;
 import net.sf.l2j.gameserver.datatables.EnchantTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
-import net.sf.l2j.gameserver.model.actor.Character;
 import net.sf.l2j.gameserver.model.L2EnchantScroll;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.WarehouseKeeper;
 import net.sf.l2j.gameserver.model.item.ArmorSet;
@@ -28,7 +27,6 @@ import net.sf.l2j.gameserver.network.serverpackets.InventoryUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class RequestEnchantItem extends L2GameClientPacket
 {
@@ -48,8 +46,8 @@ public final class RequestEnchantItem extends L2GameClientPacket
 		if (activeChar == null || _objectId == 0)
 			return;	
 		
-		Collection<Character> knowns = activeChar.getKnownTypeInRadius(Character.class, 400);
-		for (L2Object wh : knowns)
+		Collection<Creature> knowns = activeChar.getKnownTypeInRadius(Creature.class, 400);
+		for (WorldObject wh : knowns)
 		{
 			if (wh instanceof WarehouseKeeper)
 			{
@@ -114,7 +112,6 @@ public final class RequestEnchantItem extends L2GameClientPacket
 		if (scroll == null)
 		{
 			activeChar.sendPacket(SystemMessageId.NOT_ENOUGH_ITEMS);
-			Util.handleIllegalPlayerAction(activeChar, activeChar.getName() + " tried to enchant without scroll.", Config.DEFAULT_PUNISH);
 			activeChar.setActiveEnchantItem(null);
 			activeChar.sendPacket(EnchantResult.CANCELLED);
 			return;
@@ -245,7 +242,6 @@ public final class RequestEnchantItem extends L2GameClientPacket
 					ItemInstance destroyItem = activeChar.getInventory().destroyItem("Enchant", item, activeChar, null);
 					if (destroyItem == null)
 					{
-						Util.handleIllegalPlayerAction(activeChar, "Unable to delete item on enchant failure from player " + activeChar.getName() + ", possible cheater !", Config.DEFAULT_PUNISH);
 						activeChar.setActiveEnchantItem(null);
 						activeChar.sendPacket(EnchantResult.CANCELLED);
 						return;

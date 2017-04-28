@@ -1,6 +1,6 @@
-package net.sf.l2j.gameserver.network.serverpackets;
+	package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 /**
  * Format (ch)dddcccd
@@ -8,10 +8,10 @@ import net.sf.l2j.gameserver.model.actor.Character;
  */
 public class ExFishingHpRegen extends L2GameServerPacket
 {
-	private final Character _activeChar;
+	private final Creature _activeChar;
 	private final int _time, _fishHP, _hpMode, _anim, _goodUse, _penalty, _hpBarColor;
 	
-	public ExFishingHpRegen(Character character, int time, int fishHP, int HPmode, int GoodUse, int anim, int penalty, int hpBarColor)
+	public ExFishingHpRegen(Creature character, int time, int fishHP, int HPmode, int GoodUse, int anim, int penalty, int hpBarColor)
 	{
 		_activeChar = character;
 		_time = time;

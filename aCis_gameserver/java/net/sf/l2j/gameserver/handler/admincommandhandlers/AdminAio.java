@@ -3,7 +3,7 @@ package net.sf.l2j.gameserver.handler.admincommandhandlers;
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.AioManager;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
@@ -23,7 +23,7 @@ public class AdminAio implements IAdminCommandHandler
 	@Override
 	public boolean useAdminCommand(String command, Player activeChar)
 	{
-		final L2Object target = activeChar.getTarget();
+		final WorldObject target = activeChar.getTarget();
 		if (target == null || !(target instanceof Player))
 		{
 			activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);

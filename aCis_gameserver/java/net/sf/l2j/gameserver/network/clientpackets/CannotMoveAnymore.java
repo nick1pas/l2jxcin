@@ -1,8 +1,8 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.model.SpawnLocation;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlEvent;
 
 public final class CannotMoveAnymore extends L2GameClientPacket
 {
@@ -23,7 +23,7 @@ public final class CannotMoveAnymore extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		final Character player = getClient().getActiveChar();
+		final Creature player = getClient().getActiveChar();
 		if (player == null)
 			return;
 		

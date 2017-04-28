@@ -1,12 +1,10 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.HennaTable;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.Henna;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class RequestHennaEquip extends L2GameClientPacket
 {
@@ -32,7 +30,6 @@ public final class RequestHennaEquip extends L2GameClientPacket
 		if (!henna.isForThisClass(activeChar))
 		{
 			activeChar.sendPacket(SystemMessageId.CANT_DRAW_SYMBOL);
-			Util.handleIllegalPlayerAction(activeChar, activeChar.getName() + " of account " + activeChar.getAccountName() + " tried to add a forbidden henna.", Config.DEFAULT_PUNISH);
 			return;
 		}
 		

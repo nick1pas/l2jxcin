@@ -19,7 +19,7 @@ import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -65,7 +65,7 @@ public class BotsPreventionManager
 		getimages();
 	}
 	
-	public void updatecounter(Character player, Character monster)
+	public void updatecounter(Creature player, Creature monster)
 	{
 		if ((player instanceof Player) && (monster instanceof Monster))
 		{

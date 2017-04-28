@@ -23,12 +23,12 @@ import java.util.List;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
@@ -87,7 +87,7 @@ public class FairyTrees extends L2AttackableAIScript
 				for (int i = 0; i < 20; i++)
 				{
 					Attackable newNpc = (Attackable) addSpawn(27189, npc.getX(), npc.getY(), npc.getZ(), 0, false, 30000, false);
-					Character originalKiller = isPet ? killer.getPet() : killer;
+					Creature originalKiller = isPet ? killer.getPet() : killer;
 					newNpc.setRunning();
 					newNpc.addDamageHate(originalKiller, 0, 999);
 					newNpc.getAI().setIntention(CtrlIntention.ATTACK, originalKiller);

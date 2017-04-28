@@ -10,7 +10,7 @@ import net.sf.l2j.gameserver.instancemanager.RaidBossPointsManager;
 import net.sf.l2j.gameserver.instancemanager.RaidBossSpawnManager;
 import net.sf.l2j.gameserver.instancemanager.RaidBossSpawnManager.StatusEnum;
 import net.sf.l2j.gameserver.model.L2Spawn;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.model.group.Party;
@@ -24,7 +24,7 @@ import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 public class RaidBoss extends Monster
 {
 	private StatusEnum _raidStatus;
-	protected ScheduledFuture<?> _maintenanceTask;
+	private ScheduledFuture<?> _maintenanceTask;
 	
 	/**
 	 * Constructor of L2RaidBossInstance (use Character and Npc constructor).
@@ -50,7 +50,7 @@ public class RaidBoss extends Monster
 	}
 	
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		if (!super.doDie(killer))
 			return false;
@@ -118,38 +118,29 @@ public class RaidBoss extends Monster
 			@Override
 			public void run()
 			{
-				checkAndReturnToSpawn();
+				// If the boss is dead, movement disabled, is Gordon or is in combat, return.
+				if (isDead() || isMovementDisabled() || getNpcId() == 29095 || isInCombat())
+					return;
+				
+				// Spawn must exist.
+				final L2Spawn spawn = getSpawn();
+				if (spawn == null)
+					return;
+				
+				// If the boss is above drift range (or 200 minimum), teleport him on his spawn.
+				if (!isInsideRadius(spawn.getLocX(), spawn.getLocY(), spawn.getLocZ(), Math.max(Config.MAX_DRIFT_RANGE, 200), true, false))
+					teleToLocation(spawn.getLoc(), 0);
 			}
 		}, 60000, 30000);
-	}
-	
-	protected void checkAndReturnToSpawn()
-	{
-		if (isDead() || isMovementDisabled())
-			return;
-		
-		// Gordon does not have permanent spawn
-		if (getNpcId() == 29095)
-			return;
-		
-		final L2Spawn spawn = getSpawn();
-		if (spawn == null)
-			return;
-		
-		if (!isInCombat() && !isMovementDisabled())
-		{
-			if (!isInsideRadius(spawn.getLocX(), spawn.getLocY(), spawn.getLocZ(), Math.max(Config.MAX_DRIFT_RANGE, 200), true, false))
-				teleToLocation(spawn.getLoc(), 0);
-		}
-	}
-	
-	public void setRaidStatus(StatusEnum status)
-	{
-		_raidStatus = status;
 	}
 	
 	public StatusEnum getRaidStatus()
 	{
 		return _raidStatus;
+	}
+	
+	public void setRaidStatus(StatusEnum status)
+	{
+		_raidStatus = status;
 	}
 }

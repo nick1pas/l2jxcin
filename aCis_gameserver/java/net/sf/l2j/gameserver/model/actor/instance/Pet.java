@@ -14,19 +14,19 @@ import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.handler.ItemHandler;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.PetDataEntry;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Player.TimeStamp;
 import net.sf.l2j.gameserver.model.actor.stat.PetStat;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -272,7 +272,7 @@ public class Pet extends Summon
 	 * @return boolean informing if the action was successfull
 	 */
 	@Override
-	public boolean destroyItem(String process, int objectId, int count, L2Object reference, boolean sendMessage)
+	public boolean destroyItem(String process, int objectId, int count, WorldObject reference, boolean sendMessage)
 	{
 		ItemInstance item = _inventory.destroyItem(process, objectId, count, getOwner(), reference);
 		
@@ -309,7 +309,7 @@ public class Pet extends Summon
 	 * @return boolean informing if the action was successfull
 	 */
 	@Override
-	public boolean destroyItemByItemId(String process, int itemId, int count, L2Object reference, boolean sendMessage)
+	public boolean destroyItemByItemId(String process, int itemId, int count, WorldObject reference, boolean sendMessage)
 	{
 		ItemInstance item = _inventory.destroyItemByItemId(process, itemId, count, getOwner(), reference);
 		
@@ -337,7 +337,7 @@ public class Pet extends Summon
 	}
 	
 	@Override
-	public void doPickupItem(L2Object object)
+	public void doPickupItem(WorldObject object)
 	{
 		if (isDead())
 			return;
@@ -463,7 +463,7 @@ public class Pet extends Summon
 	}
 	
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		if (!super.doDie(killer))
 			return false;
@@ -515,7 +515,7 @@ public class Pet extends Summon
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the new item or the updated item in inventory
 	 */
-	public ItemInstance transferItem(String process, int objectId, int count, Inventory target, Player actor, L2Object reference)
+	public ItemInstance transferItem(String process, int objectId, int count, Inventory target, Player actor, WorldObject reference)
 	{
 		final ItemInstance oldItem = checkItemManipulation(objectId, count);
 		if (oldItem == null)

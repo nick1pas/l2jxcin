@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.logging.Level;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -13,7 +12,6 @@ import net.sf.l2j.gameserver.model.item.type.EtcItemType;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.InventoryUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class RequestDestroyItem extends L2GameClientPacket
 {
@@ -51,10 +49,7 @@ public final class RequestDestroyItem extends L2GameClientPacket
 		}
 		
 		if (!itemToRemove.isStackable() && _count > 1)
-		{
-			Util.handleIllegalPlayerAction(activeChar, "[RequestDestroyItem] " + activeChar.getName() + " of account " + activeChar.getAccountName() + " tried to destroy a non-stackable item with oid " + _objectId + " but has count > 1.", Config.DEFAULT_PUNISH);
 			return;
-		}
 		
 		final int itemId = itemToRemove.getItemId();
 		

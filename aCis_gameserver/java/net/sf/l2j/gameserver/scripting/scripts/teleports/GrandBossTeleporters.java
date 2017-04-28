@@ -2,6 +2,7 @@ package net.sf.l2j.gameserver.scripting.scripts.teleports;
 
 import java.util.List;
 
+import net.sf.l2j.commons.math.MathUtil;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
@@ -19,7 +20,6 @@ import net.sf.l2j.gameserver.scripting.scripts.ai.individual.Antharas;
 import net.sf.l2j.gameserver.scripting.scripts.ai.individual.Baium;
 import net.sf.l2j.gameserver.scripting.scripts.ai.individual.Sailren;
 import net.sf.l2j.gameserver.scripting.scripts.ai.individual.Valakas;
-import net.sf.l2j.gameserver.util.Util;
 
 /**
  * This script leads behavior of multiple bosses teleporters.
@@ -272,11 +272,11 @@ public class GrandBossTeleporters extends Quest
 								if (member.getLevel() < 70)
 									return "32109-06.htm";
 								
-								if (!Util.checkIfInRange(1000, player, member, true))
+								if (!MathUtil.checkIfInRange(1000, player, member, true))
 									return "32109-07.htm";
 							}
 							
-							// Take item from party leader.
+							// Take item from party leader.	
 							st.takeItems(8784, 1);
 							
 							final L2BossZone nest = ZoneManager.getInstance().getZoneById(110015, L2BossZone.class);

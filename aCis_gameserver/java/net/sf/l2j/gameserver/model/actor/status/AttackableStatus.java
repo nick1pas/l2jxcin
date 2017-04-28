@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.model.actor.status;
 
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 public class AttackableStatus extends NpcStatus
 {
@@ -11,13 +11,13 @@ public class AttackableStatus extends NpcStatus
 	}
 	
 	@Override
-	public final void reduceHp(double value, Character attacker)
+	public final void reduceHp(double value, Creature attacker)
 	{
 		reduceHp(value, attacker, true, false, false);
 	}
 	
 	@Override
-	public final void reduceHp(double value, Character attacker, boolean awake, boolean isDOT, boolean isHpConsumption)
+	public final void reduceHp(double value, Creature attacker, boolean awake, boolean isDOT, boolean isHpConsumption)
 	{
 		if (getActiveChar().isDead())
 			return;

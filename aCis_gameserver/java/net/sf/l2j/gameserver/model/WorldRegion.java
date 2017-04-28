@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
 import net.sf.l2j.gameserver.model.zone.type.L2DerbyTrackZone;
@@ -19,7 +19,7 @@ import net.sf.l2j.gameserver.model.zone.type.L2TownZone;
 
 public final class WorldRegion
 {
-	private final Map<Integer, L2Object> _objects = new ConcurrentHashMap<>();
+	private final Map<Integer, WorldObject> _objects = new ConcurrentHashMap<>();
 	
 	private final List<WorldRegion> _surroundingRegions = new ArrayList<>();
 	private final List<L2ZoneType> _zones = new ArrayList<>();
@@ -42,7 +42,7 @@ public final class WorldRegion
 		return "WorldRegion " + _tileX + "_" + _tileY + ", _active=" + _active + ", _playersCount=" + _playersCount.get() + "]";
 	}
 	
-	public Collection<L2Object> getObjects()
+	public Collection<WorldObject> getObjects()
 	{
 		return _objects.values();
 	}
@@ -72,7 +72,7 @@ public final class WorldRegion
 		_zones.remove(zone);
 	}
 	
-	public void revalidateZones(Character character)
+	public void revalidateZones(Creature character)
 	{
 		// Do NOT update the world region while the character is still in the process of teleporting
 		if (character.isTeleporting())
@@ -81,7 +81,7 @@ public final class WorldRegion
 		_zones.forEach(z -> z.revalidateInZone(character));
 	}
 	
-	public void removeFromZones(Character character)
+	public void removeFromZones(Creature character)
 	{
 		_zones.forEach(z -> z.removeCharacter(character));
 	}
@@ -127,12 +127,12 @@ public final class WorldRegion
 		return true;
 	}
 	
-	public void onDeath(Character character)
+	public void onDeath(Creature character)
 	{
 		_zones.stream().filter(z -> z.isCharacterInZone(character)).forEach(z -> z.onDieInside(character));
 	}
 	
-	public void onRevive(Character character)
+	public void onRevive(Creature character)
 	{
 		_zones.stream().filter(z -> z.isCharacterInZone(character)).forEach(z -> z.onReviveInside(character));
 	}
@@ -174,7 +174,7 @@ public final class WorldRegion
 		
 		if (!value)
 		{
-			for (L2Object o : _objects.values())
+			for (WorldObject o : _objects.values())
 			{
 				if (o instanceof Attackable)
 				{
@@ -203,7 +203,7 @@ public final class WorldRegion
 		}
 		else
 		{
-			for (L2Object o : _objects.values())
+			for (WorldObject o : _objects.values())
 			{
 				if (o instanceof Attackable)
 					((Attackable) o).getStatus().startHpMpRegeneration();
@@ -217,7 +217,7 @@ public final class WorldRegion
 	 * Put the given object into WorldRegion objects map. If it's a player, increment the counter (used for region activation/desactivation).
 	 * @param object : The object to register into this region.
 	 */
-	public void addVisibleObject(L2Object object)
+	public void addVisibleObject(WorldObject object)
 	{
 		if (object == null)
 			return;
@@ -232,7 +232,7 @@ public final class WorldRegion
 	 * Remove the given object from WorldRegion objects map. If it's a player, decrement the counter (used for region activation/desactivation).
 	 * @param object : The object to remove from this region.
 	 */
-	public void removeVisibleObject(L2Object object)
+	public void removeVisibleObject(WorldObject object)
 	{
 		if (object == null)
 			return;

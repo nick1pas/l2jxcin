@@ -8,7 +8,7 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.BuyListTable;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Merchant;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -19,7 +19,6 @@ import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ShopPreviewInfo;
 import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class RequestPreviewItem extends L2GameClientPacket
 {
@@ -96,7 +95,7 @@ public final class RequestPreviewItem extends L2GameClientPacket
 			return;
 		
 		// Check current target of the player and the INTERACTION_DISTANCE
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		if (!activeChar.isGM() && (target == null || !(target instanceof Merchant) || !activeChar.isInsideRadius(target, Npc.INTERACTION_DISTANCE, false, false)))
 			return;
 		
@@ -110,10 +109,7 @@ public final class RequestPreviewItem extends L2GameClientPacket
 		
 		final NpcBuyList buyList = BuyListTable.getInstance().getBuyList(_listId);
 		if (buyList == null)
-		{
-			Util.handleIllegalPlayerAction(activeChar, activeChar.getName() + " of account " + activeChar.getAccountName() + " sent a false BuyList list_id " + _listId, Config.DEFAULT_PUNISH);
 			return;
-		}
 		
 		int totalPrice = 0;
 		_listId = buyList.getListId();
@@ -125,10 +121,7 @@ public final class RequestPreviewItem extends L2GameClientPacket
 			
 			final Product product = buyList.getProductByItemId(itemId);
 			if (product == null)
-			{
-				Util.handleIllegalPlayerAction(activeChar, activeChar.getName() + " of account " + activeChar.getAccountName() + " sent a false BuyList list_id " + _listId + " and item_id " + itemId, Config.DEFAULT_PUNISH);
 				return;
-			}
 			
 			final Item template = product.getItem();
 			if (template == null)
@@ -146,11 +139,9 @@ public final class RequestPreviewItem extends L2GameClientPacket
 			_itemList.put(slot, itemId);
 			
 			totalPrice += Config.WEAR_PRICE;
+			
 			if (totalPrice > Integer.MAX_VALUE)
-			{
-				Util.handleIllegalPlayerAction(activeChar, activeChar.getName() + " of account " + activeChar.getAccountName() + " tried to purchase over " + Integer.MAX_VALUE + " adena worth of goods.", Config.DEFAULT_PUNISH);
 				return;
-			}
 		}
 		
 		// Charge buyer and add tax to castle treasury if not owned by npc clan because a Try On is not Free

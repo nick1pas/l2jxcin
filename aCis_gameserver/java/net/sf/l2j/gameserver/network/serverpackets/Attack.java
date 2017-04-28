@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 
 /**
@@ -20,7 +20,7 @@ public class Attack extends L2GameServerPacket
 		protected final int _damage;
 		protected int _flags;
 		
-		Hit(L2Object target, int damage, boolean miss, boolean crit, byte shld)
+		Hit(WorldObject target, int damage, boolean miss, boolean crit, byte shld)
 		{
 			_targetId = target.getObjectId();
 			_damage = damage;
@@ -49,11 +49,11 @@ public class Attack extends L2GameServerPacket
 	private Hit[] _hits;
 	
 	/**
-	 * @param attacker The attacking Character.
+	 * @param attacker The attacking Creature.
 	 * @param useShots True if soulshots are used.
 	 * @param ssGrade The grade of the soulshots.
 	 */
-	public Attack(Character attacker, boolean useShots, int ssGrade)
+	public Attack(Creature attacker, boolean useShots, int ssGrade)
 	{
 		_attackerObjId = attacker.getObjectId();
 		soulshot = useShots;
@@ -63,7 +63,7 @@ public class Attack extends L2GameServerPacket
 		_z = attacker.getZ();
 	}
 	
-	public Hit createHit(L2Object target, int damage, boolean miss, boolean crit, byte shld)
+	public Hit createHit(WorldObject target, int damage, boolean miss, boolean crit, byte shld)
 	{
 		return new Hit(target, damage, miss, crit, shld);
 	}

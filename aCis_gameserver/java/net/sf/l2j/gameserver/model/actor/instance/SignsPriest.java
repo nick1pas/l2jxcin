@@ -270,19 +270,19 @@ public class SignsPriest extends Folk
 					switch (contribStoneId)
 					{
 						case SevenSigns.SEAL_STONE_BLUE_ID:
-							blueContrib = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - score) / SevenSigns.BLUE_CONTRIB_POINTS;
+							blueContrib = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - score) / SevenSigns.SEAL_STONE_BLUE_VALUE;
 							if (blueContrib > contribBlueStoneCount)
 								blueContrib = contributionCount;
 							break;
 						
 						case SevenSigns.SEAL_STONE_GREEN_ID:
-							greenContrib = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - score) / SevenSigns.GREEN_CONTRIB_POINTS;
+							greenContrib = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - score) / SevenSigns.SEAL_STONE_GREEN_VALUE;
 							if (greenContrib > contribGreenStoneCount)
 								greenContrib = contributionCount;
 							break;
 						
 						case SevenSigns.SEAL_STONE_RED_ID:
-							redContrib = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - score) / SevenSigns.RED_CONTRIB_POINTS;
+							redContrib = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - score) / SevenSigns.SEAL_STONE_RED_VALUE;
 							if (redContrib > contribRedStoneCount)
 								redContrib = contributionCount;
 							break;
@@ -371,17 +371,17 @@ public class SignsPriest extends Folk
 							
 							case 4:
 								int tempContribScore = contribScore;
-								redContribCount = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - tempContribScore) / SevenSigns.RED_CONTRIB_POINTS;
+								redContribCount = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - tempContribScore) / SevenSigns.SEAL_STONE_RED_VALUE;
 								if (redContribCount > redStoneCount)
 									redContribCount = redStoneCount;
 								
-								tempContribScore += redContribCount * SevenSigns.RED_CONTRIB_POINTS;
-								greenContribCount = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - tempContribScore) / SevenSigns.GREEN_CONTRIB_POINTS;
+								tempContribScore += redContribCount * SevenSigns.SEAL_STONE_RED_VALUE;
+								greenContribCount = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - tempContribScore) / SevenSigns.SEAL_STONE_GREEN_VALUE;
 								if (greenContribCount > greenStoneCount)
 									greenContribCount = greenStoneCount;
 								
-								tempContribScore += greenContribCount * SevenSigns.GREEN_CONTRIB_POINTS;
-								blueContribCount = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - tempContribScore) / SevenSigns.BLUE_CONTRIB_POINTS;
+								tempContribScore += greenContribCount * SevenSigns.SEAL_STONE_GREEN_VALUE;
+								blueContribCount = (Config.ALT_MAXIMUM_PLAYER_CONTRIB - tempContribScore) / SevenSigns.SEAL_STONE_BLUE_VALUE;
 								if (blueContribCount > blueStoneCount)
 									blueContribCount = blueStoneCount;
 								
@@ -561,7 +561,7 @@ public class SignsPriest extends Folk
 							int redStoneCountAll = redStonesAll == null ? 0 : redStonesAll.getCount();
 							int ancientAdenaRewardAll = 0;
 							
-							ancientAdenaRewardAll = SevenSigns.calcAncientAdenaReward(blueStoneCountAll, greenStoneCountAll, redStoneCountAll);
+							ancientAdenaRewardAll = SevenSigns.calcScore(blueStoneCountAll, greenStoneCountAll, redStoneCountAll);
 							
 							if (ancientAdenaRewardAll == 0)
 							{
@@ -636,13 +636,13 @@ public class SignsPriest extends Folk
 							switch (convertStoneId)
 							{
 								case SevenSigns.SEAL_STONE_BLUE_ID:
-									ancientAdenaReward = SevenSigns.calcAncientAdenaReward(convertCount, 0, 0);
+									ancientAdenaReward = SevenSigns.calcScore(convertCount, 0, 0);
 									break;
 								case SevenSigns.SEAL_STONE_GREEN_ID:
-									ancientAdenaReward = SevenSigns.calcAncientAdenaReward(0, convertCount, 0);
+									ancientAdenaReward = SevenSigns.calcScore(0, convertCount, 0);
 									break;
 								case SevenSigns.SEAL_STONE_RED_ID:
-									ancientAdenaReward = SevenSigns.calcAncientAdenaReward(0, 0, convertCount);
+									ancientAdenaReward = SevenSigns.calcScore(0, 0, convertCount);
 									break;
 							}
 							

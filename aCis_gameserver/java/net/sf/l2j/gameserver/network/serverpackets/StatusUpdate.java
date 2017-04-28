@@ -3,7 +3,7 @@ package net.sf.l2j.gameserver.network.serverpackets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 
 /**
@@ -47,7 +47,7 @@ public class StatusUpdate extends L2GameServerPacket
 	private final int _objectId;
 	private final List<IntIntHolder> _attributes;
 	
-	public StatusUpdate(L2Object object)
+	public StatusUpdate(WorldObject object)
 	{
 		_attributes = new ArrayList<>();
 		_objectId = object.getObjectId();

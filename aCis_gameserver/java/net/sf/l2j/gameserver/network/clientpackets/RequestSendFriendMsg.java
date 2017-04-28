@@ -16,7 +16,7 @@ import net.sf.l2j.gameserver.network.serverpackets.L2FriendSay;
  */
 public final class RequestSendFriendMsg extends L2GameClientPacket
 {
-	private static Logger _logChat = Logger.getLogger("chat");
+	private static final Logger CHAT_LOG = Logger.getLogger("chat");
 	
 	private String _message;
 	private String _reciever;
@@ -55,7 +55,7 @@ public final class RequestSendFriendMsg extends L2GameClientPacket
 				"[" + activeChar.getName() + " to " + _reciever + "]"
 			});
 			
-			_logChat.log(record);
+			CHAT_LOG.log(record);
 		}
 		
 		targetPlayer.sendPacket(new L2FriendSay(activeChar.getName(), _reciever, _message));

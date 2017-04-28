@@ -18,11 +18,11 @@
  */
 package net.sf.l2j.gameserver.scripting.scripts.ai.group;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
@@ -53,7 +53,7 @@ public class SummonOnAttack extends L2AttackableAIScript
 	@Override
 	public String onAttack(Npc npc, Player player, int damage, boolean isPet, L2Skill skill)
 	{
-		Character attacker = isPet ? player.getPet().getOwner() : player;
+		Creature attacker = isPet ? player.getPet().getOwner() : player;
 		
 		npc.setIsRunning(true);
 		((Attackable) npc).addDamageHate(attacker, 0, 999);

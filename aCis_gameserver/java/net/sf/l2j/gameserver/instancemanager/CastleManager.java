@@ -16,9 +16,9 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.CabalType;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.TowerSpawn;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.item.MercenaryTicket;
@@ -53,6 +53,7 @@ public final class CastleManager
 				castle.setTimeRegistrationOver(rs.getBoolean("regTimeOver"));
 				castle.setTaxPercent(rs.getInt("taxPercent"), false);
 				castle.setTreasury(rs.getLong("treasury"));
+				castle.setLeftCertificates(rs.getInt("certificates"), false);
 				
 				try (PreparedStatement ps1 = con.prepareStatement(LOAD_OWNERS))
 				{
@@ -200,7 +201,7 @@ public final class CastleManager
 		return opt.isPresent() ? opt.get() : null;
 	}
 	
-	public Castle getCastle(L2Object object)
+	public Castle getCastle(WorldObject object)
 	{
 		return getCastle(object.getX(), object.getY(), object.getZ());
 	}
@@ -231,7 +232,7 @@ public final class CastleManager
 		_castles.values().stream().filter(c -> c.getTaxPercent() > maxTax).forEach(c -> c.setTaxPercent(maxTax, true));
 	}
 	
-	public Siege getSiege(L2Object object)
+	public Siege getSiege(WorldObject object)
 	{
 		return getSiege(object.getX(), object.getY(), object.getZ());
 	}
@@ -244,7 +245,27 @@ public final class CastleManager
 			
 		return null;
 	}
-	
+ 	
+	/**
+	 * Reset all castles certificates. Reset the memory value, and run a unique query.
+	 */
+	public void resetCertificates()
+	{
+		// Reset memory. Don't use the inner save.
+		for (Castle castle : _castles.values())
+			castle.setLeftCertificates(300, false);
+		
+		// Update all castles with a single query.
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection(); PreparedStatement ps = con.prepareStatement("UPDATE castle SET certificates=300"))
+		{
+			ps.executeUpdate();
+		}
+		catch (Exception e)
+		{
+			LOG.log(Level.WARNING, "resetCertificates: " + e.getMessage(), e);
+		}
+	}
+
 	public static final CastleManager getInstance()
 	{
 		return SingletonHolder.INSTANCE;

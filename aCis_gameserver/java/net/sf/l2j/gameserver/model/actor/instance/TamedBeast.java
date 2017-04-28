@@ -6,9 +6,9 @@ import java.util.concurrent.Future;
 import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate.SkillType;
 import net.sf.l2j.gameserver.network.serverpackets.NpcSay;
@@ -70,7 +70,7 @@ public final class TamedBeast extends FeedableBeast
 	}
 	
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		if (!super.doDie(killer))
 			return false;
@@ -114,7 +114,7 @@ public final class TamedBeast extends FeedableBeast
 	 * Tamed mobs will heal/recharge or debuff the enemy according to their skills.
 	 * @param attacker
 	 */
-	public void onOwnerGotAttacked(Character attacker)
+	public void onOwnerGotAttacked(Creature attacker)
 	{
 		// Check if the owner is no longer around. If so, despawn.
 		if (_owner == null || !_owner.isOnline())
@@ -195,7 +195,7 @@ public final class TamedBeast extends FeedableBeast
 	 * @param skill The skill to cast.
 	 * @param target The benefactor of the skill.
 	 */
-	protected void sitCastAndFollow(L2Skill skill, Character target)
+	protected void sitCastAndFollow(L2Skill skill, Creature target)
 	{
 		stopMove(null);
 		getAI().setIntention(CtrlIntention.IDLE);

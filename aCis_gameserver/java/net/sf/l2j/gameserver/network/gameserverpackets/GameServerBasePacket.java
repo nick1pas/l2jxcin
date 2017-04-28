@@ -3,9 +3,6 @@ package net.sf.l2j.gameserver.network.gameserverpackets;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/**
- * @author -Wooden-
- */
 public abstract class GameServerBasePacket
 {
 	private final ByteArrayOutputStream _bao;

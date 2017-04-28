@@ -5,7 +5,7 @@ import net.sf.l2j.gameserver.templates.StatsSet;
 /**
  * @author Hasha
  */
-public class DoorTemplate extends CharTemplate
+public class DoorTemplate extends CreatureTemplate
 {
 	public enum DoorType
 	{

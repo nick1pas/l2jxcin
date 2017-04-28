@@ -1,13 +1,10 @@
 package net.sf.l2j.loginserver.network.clientpackets;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.loginserver.L2LoginClient.LoginClientState;
+import net.sf.l2j.loginserver.network.LoginClient.LoginClientState;
 import net.sf.l2j.loginserver.network.serverpackets.GGAuth;
 import net.sf.l2j.loginserver.network.serverpackets.LoginFail.LoginFailReason;
 
-/**
- * @author -Wooden- Format: ddddd
- */
 public class AuthGameGuard extends L2LoginClientPacket
 {
 	private int _sessionId;
@@ -40,10 +37,7 @@ public class AuthGameGuard extends L2LoginClientPacket
 	{
 		return _data4;
 	}
-	
-	/**
-	 * @see net.sf.l2j.loginserver.network.clientpackets.L2LoginClientPacket readImpl()
-	 */
+
 	@Override
 	protected boolean readImpl()
 	{

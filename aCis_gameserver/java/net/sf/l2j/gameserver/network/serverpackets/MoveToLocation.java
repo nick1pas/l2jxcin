@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 /**
  * ddddddd
@@ -9,7 +9,7 @@ public final class MoveToLocation extends L2GameServerPacket
 {
 	private final int _charObjId, _x, _y, _z, _xDst, _yDst, _zDst;
 	
-	public MoveToLocation(Character cha)
+	public MoveToLocation(Creature cha)
 	{
 		_charObjId = cha.getObjectId();
 		_x = cha.getX();

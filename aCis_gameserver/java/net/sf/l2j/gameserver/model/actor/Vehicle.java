@@ -4,18 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
+import net.sf.l2j.commons.math.MathUtil;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
-import net.sf.l2j.gameserver.ai.model.L2VehicleAI;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.VehiclePathPoint;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
+import net.sf.l2j.gameserver.model.actor.ai.type.CreatureAI;
+import net.sf.l2j.gameserver.model.actor.ai.type.VehicleAI;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.stat.VehicleStat;
-import net.sf.l2j.gameserver.model.actor.template.CharTemplate;
+import net.sf.l2j.gameserver.model.actor.template.CreatureTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Weapon;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -26,9 +27,8 @@ import net.sf.l2j.gameserver.network.serverpackets.VehicleDeparture;
 import net.sf.l2j.gameserver.network.serverpackets.VehicleInfo;
 import net.sf.l2j.gameserver.network.serverpackets.VehicleStarted;
 import net.sf.l2j.gameserver.taskmanager.MovementTaskManager;
-import net.sf.l2j.gameserver.util.Util;
 
-public class Vehicle extends Character
+public class Vehicle extends Creature
 {
 	private Runnable _engine;
 	
@@ -38,11 +38,11 @@ public class Vehicle extends Character
 	protected VehiclePathPoint[] _currentPath;
 	protected int _runState;
 	
-	public Vehicle(int objectId, CharTemplate template)
+	public Vehicle(int objectId, CreatureTemplate template)
 	{
 		super(objectId, template);
 		
-		setAI(new L2VehicleAI(this));
+		setAI(new VehicleAI(this));
 	}
 	
 	@Override
@@ -123,7 +123,7 @@ public class Vehicle extends Character
 						final double dy = point.y - getY();
 						final double distance = Math.sqrt(dx * dx + dy * dy);
 						if (distance > 1) // vertical movement heading check
-							setHeading(Util.calculateHeadingFrom(getX(), getY(), point.x, point.y));
+							setHeading(MathUtil.calculateHeadingFrom(getX(), getY(), point.x, point.y));
 						
 						m._moveStartTime = System.currentTimeMillis();
 						_move = m;
@@ -374,13 +374,13 @@ public class Vehicle extends Character
 	}
 	
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		return false;
 	}
 	
 	@Override
-	public void setAI(L2CharacterAI newAI)
+	public void setAI(CreatureAI newAI)
 	{
 		if (_ai == null)
 			_ai = newAI;

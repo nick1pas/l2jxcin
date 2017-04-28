@@ -15,15 +15,15 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Augmentation;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.ShotType;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.item.MercenaryTicket;
@@ -48,9 +48,9 @@ import net.sf.l2j.gameserver.taskmanager.ItemsOnGroundTaskManager;
 /**
  * This class manages items.
  */
-public final class ItemInstance extends L2Object implements Runnable, Comparable<ItemInstance>
+public final class ItemInstance extends WorldObject implements Runnable, Comparable<ItemInstance>
 {
-	private static final Logger _logItems = Logger.getLogger("item");
+	private static final Logger ITEM_LOG = Logger.getLogger("item");
 	
 	public static enum ItemState
 	{
@@ -171,21 +171,21 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * @param creator : Player Player requesting the item creation
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 */
-	public void setOwnerId(String process, int owner_id, Player creator, L2Object reference)
+	public void setOwnerId(String process, int owner_id, Player creator, WorldObject reference)
 	{
 		setOwnerId(owner_id);
 		
 		if (Config.LOG_ITEMS)
 		{
-			LogRecord record = new LogRecord(Level.INFO, "CHANGE:" + process);
+			final LogRecord record = new LogRecord(Level.INFO, "CHANGE:" + process);
 			record.setLoggerName("item");
 			record.setParameters(new Object[]
 			{
-				this,
 				creator,
+				this,
 				reference
 			});
-			_logItems.log(record);
+			ITEM_LOG.log(record);
 		}
 	}
 	
@@ -274,7 +274,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * @param creator : Player Player requesting the item creation
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 */
-	public void changeCount(String process, int count, Player creator, L2Object reference)
+	public void changeCount(String process, int count, Player creator, WorldObject reference)
 	{
 		if (count == 0)
 			return;
@@ -291,15 +291,15 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 		
 		if (Config.LOG_ITEMS && process != null)
 		{
-			LogRecord record = new LogRecord(Level.INFO, "CHANGE:" + process);
+			final LogRecord record = new LogRecord(Level.INFO, "CHANGE:" + process);
 			record.setLoggerName("item");
 			record.setParameters(new Object[]
 			{
-				this,
 				creator,
+				this,
 				reference
 			});
-			_logItems.log(record);
+			ITEM_LOG.log(record);
 		}
 	}
 	
@@ -800,7 +800,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * @return boolean false
 	 */
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		return false;
 	}
@@ -810,7 +810,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * @param player : Character designating the player
 	 * @return Func[]
 	 */
-	public List<Func> getStatFuncs(Character player)
+	public List<Func> getStatFuncs(Creature player)
 	{
 		return getItem().getStatFuncs(this, player);
 	}
@@ -925,7 +925,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * @param y : Y location of the item.
 	 * @param z : Z location of the item.
 	 */
-	public final void dropMe(Character dropper, int x, int y, int z)
+	public final void dropMe(Creature dropper, int x, int y, int z)
 	{
 		ThreadPool.execute(new ItemDropTask(this, dropper, x, y, z));
 	}
@@ -933,10 +933,10 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	public class ItemDropTask implements Runnable
 	{
 		private int _x, _y, _z;
-		private final Character _dropper;
+		private final Creature _dropper;
 		private final ItemInstance _itm;
 		
-		public ItemDropTask(ItemInstance item, Character dropper, int x, int y, int z)
+		public ItemDropTask(ItemInstance item, Creature dropper, int x, int y, int z)
 		{
 			_x = x;
 			_y = y;
@@ -974,7 +974,7 @@ public final class ItemInstance extends L2Object implements Runnable, Comparable
 	 * <BR>
 	 * @param player Player that pick up the item
 	 */
-	public final void pickupMe(Character player)
+	public final void pickupMe(Creature player)
 	{
 		player.broadcastPacket(new GetItem(this, player.getObjectId()));
 		

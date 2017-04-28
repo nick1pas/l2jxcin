@@ -102,7 +102,7 @@ public class ValidatePosition extends L2GameClientPacket
 			}
 			// Sync 2 (or other), intended for geodata. Sends a validation packet to client when too far from server calculated real coordinate.
 			// Due to geodata/zone errors, some Z axis checks are made. (maybe a temporary solution)
-			// Important: this code part must work together with Character.updatePosition
+			// Important: this code part must work together with Creature.updatePosition
 			if (diffSq > 250000 || Math.abs(dz) > 200)
 			{
 				if (Math.abs(dz) > 200 && Math.abs(dz) < 1500 && Math.abs(_z - activeChar.getClientZ()) < 800)

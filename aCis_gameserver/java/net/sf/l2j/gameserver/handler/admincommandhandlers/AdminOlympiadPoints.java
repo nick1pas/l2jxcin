@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.olympiad.Olympiad;
 import net.sf.l2j.gameserver.templates.StatsSet;
@@ -24,7 +24,7 @@ public class AdminOlympiadPoints implements IAdminCommandHandler
 			try
 			{
 				String val = command.substring(19);
-				L2Object target = activeChar.getTarget();
+				WorldObject target = activeChar.getTarget();
 				Player player = null;
 				if (target instanceof Player)
 				{
@@ -71,7 +71,7 @@ public class AdminOlympiadPoints implements IAdminCommandHandler
 			try
 			{
 				String val = command.substring(22);
-				L2Object target = activeChar.getTarget();
+				WorldObject target = activeChar.getTarget();
 				Player player = null;
 				if (target instanceof Player)
 				{
@@ -114,7 +114,7 @@ public class AdminOlympiadPoints implements IAdminCommandHandler
 			try
 			{
 				String val = command.substring(19);
-				L2Object target = activeChar.getTarget();
+				WorldObject target = activeChar.getTarget();
 				Player player = null;
 				if (target instanceof Player)
 				{
@@ -157,7 +157,7 @@ public class AdminOlympiadPoints implements IAdminCommandHandler
 		{
 			try
 			{
-				L2Object target = activeChar.getTarget();
+				WorldObject target = activeChar.getTarget();
 				Player player = null;
 				if (target instanceof Player)
 				{

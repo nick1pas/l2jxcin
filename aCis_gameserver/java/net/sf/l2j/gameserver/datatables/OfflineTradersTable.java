@@ -182,7 +182,7 @@ public class OfflineTradersTable
 					player.setClient(client);
 					player.setOfflineStartTime(time);
 					player.spawnMe(player.getX(), player.getY(), player.getZ());
-					LoginServerThread.getInstance().addGameServerLogin(player.getAccountName(), client);
+					LoginServerThread.getInstance().addClient(player.getAccountName(), client);
 					try (PreparedStatement stm_items = con.prepareStatement(LOAD_OFFLINE_ITEMS))
 					{
 						stm_items.setInt(1, player.getObjectId());

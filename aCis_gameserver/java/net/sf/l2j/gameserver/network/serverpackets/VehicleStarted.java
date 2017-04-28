@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 /**
  * @author Kerberos
@@ -10,7 +10,7 @@ public class VehicleStarted extends L2GameServerPacket
 	private final int _objectId;
 	private final int _state;
 	
-	public VehicleStarted(Character boat, int state)
+	public VehicleStarted(Creature boat, int state)
 	{
 		_objectId = boat.getObjectId();
 		_state = state;

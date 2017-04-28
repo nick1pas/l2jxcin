@@ -23,9 +23,9 @@ import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.AioManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
@@ -76,11 +76,11 @@ public class AdminAdmin implements IAdminCommandHandler
 			
 			if (!st.hasMoreTokens())
 			{
-				final L2Object obj = activeChar.getTarget();
-				if (!(obj instanceof Character))
+				final WorldObject obj = activeChar.getTarget();
+				if (!(obj instanceof Creature))
 					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 				else
-					kill(activeChar, (Character) obj);
+					kill(activeChar, (Creature) obj);
 				
 				return true;
 			}
@@ -95,7 +95,7 @@ public class AdminAdmin implements IAdminCommandHandler
 					if (StringUtil.isDigit(secondParam))
 					{
 						int radius = Integer.parseInt(secondParam);
-						for (Character knownChar : player.getKnownTypeInRadius(Character.class, radius))
+						for (Creature knownChar : player.getKnownTypeInRadius(Creature.class, radius))
 						{
 							if (knownChar.equals(activeChar))
 								continue;
@@ -113,7 +113,7 @@ public class AdminAdmin implements IAdminCommandHandler
 			else if (StringUtil.isDigit(firstParam))
 			{
 				int radius = Integer.parseInt(firstParam);
-				for (Character knownChar : activeChar.getKnownTypeInRadius(Character.class, radius))
+				for (Creature knownChar : activeChar.getKnownTypeInRadius(Creature.class, radius))
 					kill(activeChar, knownChar);
 				
 				activeChar.sendMessage("Killed all characters within a " + radius + " unit radius.");
@@ -277,7 +277,7 @@ public class AdminAdmin implements IAdminCommandHandler
 		return ADMIN_COMMANDS;
 	}
 	
-	private static void kill(Player activeChar, Character target)
+	private static void kill(Player activeChar, Creature target)
 	{
 		if (target instanceof Player)
 		{

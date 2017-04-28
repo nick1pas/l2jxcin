@@ -3,7 +3,7 @@ package net.sf.l2j.gameserver.network.serverpackets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.l2j.gameserver.datatables.CharNameTable;
+import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 
@@ -35,7 +35,7 @@ public class FriendList extends L2GameServerPacket
 		
 		for (int objId : player.getFriendList())
 		{
-			final String name = CharNameTable.getInstance().getPlayerName(objId);
+			final String name = PlayerNameTable.getInstance().getPlayerName(objId);
 			final Player player1 = World.getInstance().getPlayer(objId);
 			
 			_info.add(new FriendInfo(objId, name, (player1 != null && player1.isOnline())));

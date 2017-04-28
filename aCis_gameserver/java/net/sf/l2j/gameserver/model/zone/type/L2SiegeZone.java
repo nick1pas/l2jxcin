@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.model.zone.type;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.SiegeSummon;
 import net.sf.l2j.gameserver.model.zone.L2SpawnZone;
@@ -38,7 +38,7 @@ public class L2SiegeZone extends L2SpawnZone
 	}
 	
 	@Override
-	protected void onEnter(Character character)
+	protected void onEnter(Creature character)
 	{
 		if (_isActiveSiege)
 		{
@@ -64,7 +64,7 @@ public class L2SiegeZone extends L2SpawnZone
 	}
 	
 	@Override
-	protected void onExit(Character character)
+	protected void onExit(Creature character)
 	{
 		character.setInsideZone(ZoneId.PVP, false);
 		character.setInsideZone(ZoneId.SIEGE, false);
@@ -95,12 +95,12 @@ public class L2SiegeZone extends L2SpawnZone
 	}
 	
 	@Override
-	public void onDieInside(Character character)
+	public void onDieInside(Creature character)
 	{
 	}
 	
 	@Override
-	public void onReviveInside(Character character)
+	public void onReviveInside(Creature character)
 	{
 	}
 	
@@ -108,12 +108,12 @@ public class L2SiegeZone extends L2SpawnZone
 	{
 		if (_isActiveSiege)
 		{
-			for (Character character : _characterList.values())
+			for (Creature character : _characterList.values())
 				onEnter(character);
 		}
 		else
 		{
-			for (Character character : _characterList.values())
+			for (Creature character : _characterList.values())
 			{
 				if (character == null)
 					continue;

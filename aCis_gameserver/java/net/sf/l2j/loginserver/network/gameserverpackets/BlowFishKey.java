@@ -8,18 +8,11 @@ import javax.crypto.Cipher;
 
 import net.sf.l2j.loginserver.network.clientpackets.ClientBasePacket;
 
-/**
- * @author -Wooden-
- */
 public class BlowFishKey extends ClientBasePacket
 {
 	byte[] _key;
 	protected static final Logger _log = Logger.getLogger(BlowFishKey.class.getName());
-	
-	/**
-	 * @param decrypt
-	 * @param privateKey
-	 */
+
 	public BlowFishKey(byte[] decrypt, RSAPrivateKey privateKey)
 	{
 		super(decrypt);

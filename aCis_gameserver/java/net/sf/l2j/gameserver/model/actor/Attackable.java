@@ -10,22 +10,23 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
+import net.sf.l2j.commons.math.MathUtil;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.ai.CtrlEvent;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.ai.model.L2AttackableAI;
-import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
-import net.sf.l2j.gameserver.ai.model.L2SiegeGuardAI;
 import net.sf.l2j.gameserver.datatables.HerbDropTable;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.AbsorbInfo;
 import net.sf.l2j.gameserver.model.AggroInfo;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.RewardInfo;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlEvent;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
+import net.sf.l2j.gameserver.model.actor.ai.type.AttackableAI;
+import net.sf.l2j.gameserver.model.actor.ai.type.CreatureAI;
+import net.sf.l2j.gameserver.model.actor.ai.type.SiegeGuardAI;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.Servitor;
 import net.sf.l2j.gameserver.model.actor.status.AttackableStatus;
@@ -42,16 +43,15 @@ import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.Quest;
-import net.sf.l2j.gameserver.util.Util;
 
 /**
  * This class manages all NPC that can be attacked. It inherits from Npc.
  */
 public class Attackable extends Npc
 {
-	private final Set<Character> _attackByList = ConcurrentHashMap.newKeySet();
+	private final Set<Creature> _attackByList = ConcurrentHashMap.newKeySet();
 	
-	private final Map<Character, AggroInfo> _aggroList = new ConcurrentHashMap<>();
+	private final Map<Creature, AggroInfo> _aggroList = new ConcurrentHashMap<>();
 	private final Map<Integer, AbsorbInfo> _absorbersList = new ConcurrentHashMap<>();
 	
 	private final List<IntIntHolder> _sweepItems = new ArrayList<>();
@@ -67,7 +67,7 @@ public class Attackable extends Npc
 	
 	private boolean _overhit;
 	private double _overhitDamage;
-	private Character _overhitAttacker;
+	private Creature _overhitAttacker;
 	
 	private CommandChannel _firstCommandChannelAttacked;
 	private CommandChannelTimer _commandChannelTimer;
@@ -91,15 +91,15 @@ public class Attackable extends Npc
 	}
 	
 	@Override
-	public L2CharacterAI getAI()
+	public CreatureAI getAI()
 	{
-		L2CharacterAI ai = _ai;
+		CreatureAI ai = _ai;
 		if (ai == null)
 		{
 			synchronized (this)
 			{
 				if (_ai == null)
-					_ai = new L2AttackableAI(this);
+					_ai = new AttackableAI(this);
 				
 				return _ai;
 			}
@@ -113,7 +113,7 @@ public class Attackable extends Npc
 	 * @param attacker The Character who attacks
 	 */
 	@Override
-	public void reduceCurrentHp(double damage, Character attacker, L2Skill skill)
+	public void reduceCurrentHp(double damage, Creature attacker, L2Skill skill)
 	{
 		reduceCurrentHp(damage, attacker, true, false, skill);
 	}
@@ -124,7 +124,7 @@ public class Attackable extends Npc
 	 * @param awake The awake state (If True : stop sleeping)
 	 */
 	@Override
-	public void reduceCurrentHp(double damage, Character attacker, boolean awake, boolean isDOT, L2Skill skill)
+	public void reduceCurrentHp(double damage, Creature attacker, boolean awake, boolean isDOT, L2Skill skill)
 	{
 		if (isRaid() && !isMinion() && attacker != null && attacker.getParty() != null && attacker.getParty().isInCommandChannel() && attacker.getParty().getCommandChannel().meetRaidWarCondition(this))
 		{
@@ -166,7 +166,7 @@ public class Attackable extends Npc
 	 * @param killer The Character that has killed the Attackable
 	 */
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		// Kill the Npc (the corpse disappeared after 7 seconds)
 		if (!super.doDie(killer))
@@ -209,13 +209,13 @@ public class Attackable extends Npc
 	 * @param lastAttacker The Character that has killed the Attackable
 	 */
 	@Override
-	protected void calculateRewards(Character lastAttacker)
+	protected void calculateRewards(Creature lastAttacker)
 	{
 		if (_aggroList.isEmpty())
 			return;
 		
 		// Creates an empty list of rewards.
-		final Map<Character, RewardInfo> rewards = new ConcurrentHashMap<>();
+		final Map<Creature, RewardInfo> rewards = new ConcurrentHashMap<>();
 		
 		Player maxDealer = null;
 		int maxDamage = 0;
@@ -236,7 +236,7 @@ public class Attackable extends Npc
 				continue;
 			
 			// Check if attacker isn't too far from this.
-			if (!Util.checkIfInRange(Config.ALT_PARTY_RANGE, this, attacker, true))
+			if (!MathUtil.checkIfInRange(Config.ALT_PARTY_RANGE, this, attacker, true))
 				continue;
 			
 			final Player attackerPlayer = attacker.getActingPlayer();
@@ -337,7 +337,7 @@ public class Attackable extends Npc
 				// Go through all Player in the party.
 				final List<Player> groupMembers = (attackerParty.isInCommandChannel()) ? attackerParty.getCommandChannel().getMembers() : attackerParty.getMembers();
 				
-				final Map<Character, RewardInfo> playersWithPets = new HashMap<>();
+				final Map<Creature, RewardInfo> playersWithPets = new HashMap<>();
 				
 				for (Player partyPlayer : groupMembers)
 				{
@@ -350,7 +350,7 @@ public class Attackable extends Npc
 					// If the Player is in the Attackable rewards add its damages to party damages
 					if (reward2 != null)
 					{
-						if (Util.checkIfInRange(Config.ALT_PARTY_RANGE, this, partyPlayer, true))
+						if (MathUtil.checkIfInRange(Config.ALT_PARTY_RANGE, this, partyPlayer, true))
 						{
 							partyDmg += reward2.getDamage(); // Add Player damages to party damages
 							rewardedMembers.add(partyPlayer);
@@ -367,7 +367,7 @@ public class Attackable extends Npc
 					// Add Player of the party (that have attacked or not) to members that can be rewarded and in range of the monster.
 					else
 					{
-						if (Util.checkIfInRange(Config.ALT_PARTY_RANGE, this, partyPlayer, true))
+						if (MathUtil.checkIfInRange(Config.ALT_PARTY_RANGE, this, partyPlayer, true))
 						{
 							rewardedMembers.add(partyPlayer);
 							if (partyPlayer.getLevel() > partyLvl)
@@ -497,7 +497,7 @@ public class Attackable extends Npc
 		return getLeader() != null;
 	}
 	
-	public void addAttackerToAttackByList(Character player)
+	public void addAttackerToAttackByList(Creature player)
 	{
 		if (player == null || player == this)
 			return;
@@ -511,7 +511,7 @@ public class Attackable extends Npc
 	 * @param damage The number of damages given by the attacker Character
 	 * @param skill The skill used to make damage.
 	 */
-	public void addDamage(Character attacker, int damage, L2Skill skill)
+	public void addDamage(Creature attacker, int damage, L2Skill skill)
 	{
 		if (attacker == null || isDead())
 			return;
@@ -539,7 +539,7 @@ public class Attackable extends Npc
 	 * @param damage The number of damages given by the attacker Character
 	 * @param aggro The hate (=damage) given by the attacker Character
 	 */
-	public void addDamageHate(Character attacker, int damage, int aggro)
+	public void addDamageHate(Creature attacker, int damage, int aggro)
 	{
 		if (attacker == null)
 			return;
@@ -578,9 +578,9 @@ public class Attackable extends Npc
 	 * @param target The target to check.
 	 * @param amount The amount to remove.
 	 */
-	public void reduceHate(Character target, int amount)
+	public void reduceHate(Creature target, int amount)
 	{
-		if (getAI() instanceof L2SiegeGuardAI)
+		if (getAI() instanceof SiegeGuardAI)
 		{
 			stopHating(target);
 			setTarget(null);
@@ -590,12 +590,12 @@ public class Attackable extends Npc
 		
 		if (target == null) // whole aggrolist
 		{
-			Character mostHated = getMostHated();
+			Creature mostHated = getMostHated();
 			
 			// If not most hated target is found, makes AI passive for a moment more
 			if (mostHated == null)
 			{
-				((L2AttackableAI) getAI()).setGlobalAggro(-25);
+				((AttackableAI) getAI()).setGlobalAggro(-25);
 				return;
 			}
 			
@@ -606,7 +606,7 @@ public class Attackable extends Npc
 			
 			if (amount <= 0)
 			{
-				((L2AttackableAI) getAI()).setGlobalAggro(-25);
+				((AttackableAI) getAI()).setGlobalAggro(-25);
 				_aggroList.clear();
 				getAI().setIntention(CtrlIntention.ACTIVE);
 				setWalking();
@@ -624,7 +624,7 @@ public class Attackable extends Npc
 		{
 			if (getMostHated() == null)
 			{
-				((L2AttackableAI) getAI()).setGlobalAggro(-25);
+				((AttackableAI) getAI()).setGlobalAggro(-25);
 				_aggroList.clear();
 				getAI().setIntention(CtrlIntention.ACTIVE);
 				setWalking();
@@ -636,7 +636,7 @@ public class Attackable extends Npc
 	 * Clears _aggroList hate of the Character without removing from the list.
 	 * @param target The target to clean from that Attackable _aggroList.
 	 */
-	public void stopHating(Character target)
+	public void stopHating(Creature target)
 	{
 		if (target == null)
 			return;
@@ -649,12 +649,12 @@ public class Attackable extends Npc
 	/**
 	 * @return the most hated Character of the Attackable _aggroList.
 	 */
-	public Character getMostHated()
+	public Creature getMostHated()
 	{
 		if (_aggroList.isEmpty() || isAlikeDead())
 			return null;
 		
-		Character mostHated = null;
+		Creature mostHated = null;
 		int maxHate = 0;
 		
 		// Go through the aggroList of the Attackable
@@ -672,12 +672,12 @@ public class Attackable extends Npc
 	/**
 	 * @return the list of hated Character. It also make checks, setting hate to 0 following conditions.
 	 */
-	public List<Character> getHateList()
+	public List<Creature> getHateList()
 	{
 		if (_aggroList.isEmpty() || isAlikeDead())
 			return Collections.emptyList();
 		
-		final List<Character> result = new ArrayList<>();
+		final List<Creature> result = new ArrayList<>();
 		for (AggroInfo ai : _aggroList.values())
 		{
 			ai.checkHate(this);
@@ -690,7 +690,7 @@ public class Attackable extends Npc
 	 * @param target The Character whose hate level must be returned
 	 * @return the hate level of the Attackable against this Character contained in _aggroList.
 	 */
-	public int getHating(final Character target)
+	public int getHating(final Creature target)
 	{
 		if (_aggroList.isEmpty() || target == null)
 			return 0;
@@ -913,7 +913,7 @@ public class Attackable extends Npc
 			int highestLevel = lastAttacker.getLevel();
 			
 			// Check to prevent very high level player to nearly kill mob and let low level player do the last hit.
-			for (Character atkChar : _attackByList)
+			for (Creature atkChar : _attackByList)
 				if (atkChar.getLevel() > highestLevel)
 					highestLevel = atkChar.getLevel();
 				
@@ -1029,12 +1029,12 @@ public class Attackable extends Npc
 	 * </ul>
 	 * @param mainDamageDealer The Character that made the most damage.
 	 */
-	public void doItemDrop(Character mainDamageDealer)
+	public void doItemDrop(Creature mainDamageDealer)
 	{
 		doItemDrop(getTemplate(), mainDamageDealer);
 	}
 	
-	public void doItemDrop(NpcTemplate npcTemplate, Character mainDamageDealer)
+	public void doItemDrop(NpcTemplate npcTemplate, Creature mainDamageDealer)
 	{
 		if (mainDamageDealer == null)
 			return;
@@ -1200,7 +1200,7 @@ public class Attackable extends Npc
 				return;
 		}
 		
-		L2Object target = skill.getFirstOfTargetList(this);
+		WorldObject target = skill.getFirstOfTargetList(this);
 		if (target == null)
 			return;
 		
@@ -1227,12 +1227,12 @@ public class Attackable extends Npc
 		return Config.MAX_DRIFT_RANGE;
 	}
 	
-	public final Set<Character> getAttackByList()
+	public final Set<Creature> getAttackByList()
 	{
 		return _attackByList;
 	}
 	
-	public final Map<Character, AggroInfo> getAggroList()
+	public final Map<Creature, AggroInfo> getAggroList()
 	{
 		return _aggroList;
 	}
@@ -1303,7 +1303,7 @@ public class Attackable extends Npc
 	 * @param attacker The Character who hit on the Attackable using the over-hit enabled skill
 	 * @param damage The ammount of damage done by the over-hit enabled skill on the Attackable
 	 */
-	public void setOverhitValues(Character attacker, double damage)
+	public void setOverhitValues(Creature attacker, double damage)
 	{
 		// Calculate the over-hit damage
 		// Ex: mob had 10 HP left, over-hit skill did 50 damage total, over-hit damage is 40
@@ -1325,7 +1325,7 @@ public class Attackable extends Npc
 	/**
 	 * @return the Character who hit on the Attackable using an over-hit enabled skill.
 	 */
-	public Character getOverhitAttacker()
+	public Creature getOverhitAttacker()
 	{
 		return _overhitAttacker;
 	}
@@ -1627,19 +1627,19 @@ public class Attackable extends Npc
 	}
 	
 	@Override
-	public void addKnownObject(L2Object object)
+	public void addKnownObject(WorldObject object)
 	{
 		if (object instanceof Player && getAI().getIntention() == CtrlIntention.IDLE)
 			getAI().setIntention(CtrlIntention.ACTIVE, null);
 	}
 	
 	@Override
-	public void removeKnownObject(L2Object object)
+	public void removeKnownObject(WorldObject object)
 	{
 		super.removeKnownObject(object);
 		
 		// remove object from agro list
-		if (object instanceof Character)
+		if (object instanceof Creature)
 			getAggroList().remove(object);
 	}
 }

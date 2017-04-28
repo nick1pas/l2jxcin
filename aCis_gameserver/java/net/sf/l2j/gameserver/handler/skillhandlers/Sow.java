@@ -2,11 +2,11 @@ package net.sf.l2j.gameserver.handler.skillhandlers;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.handler.ISkillHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.group.Party;
@@ -24,12 +24,12 @@ public class Sow implements ISkillHandler
 	};
 	
 	@Override
-	public void useSkill(Character activeChar, L2Skill skill, L2Object[] targets)
+	public void useSkill(Creature activeChar, L2Skill skill, WorldObject[] targets)
 	{
 		if (!(activeChar instanceof Player))
 			return;
 		
-		final L2Object object = targets[0];
+		final WorldObject object = targets[0];
 		if (!(object instanceof Monster))
 			return;
 		
@@ -66,7 +66,7 @@ public class Sow implements ISkillHandler
 		target.getAI().setIntention(CtrlIntention.IDLE);
 	}
 	
-	private static boolean calcSuccess(Character activeChar, Character target, Seed seed)
+	private static boolean calcSuccess(Creature activeChar, Creature target, Seed seed)
 	{
 		final int minlevelSeed = seed.getLevel() - 5;
 		final int maxlevelSeed = seed.getLevel() + 5;

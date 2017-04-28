@@ -3,9 +3,6 @@ package net.sf.l2j.gameserver.model.actor.instance;
 import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
-import net.sf.l2j.gameserver.ai.model.L2DoorAI;
 import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.geoengine.geodata.IGeoObject;
@@ -14,9 +11,12 @@ import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.SpawnLocation;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.Playable;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
+import net.sf.l2j.gameserver.model.actor.ai.type.CreatureAI;
+import net.sf.l2j.gameserver.model.actor.ai.type.DoorAI;
 import net.sf.l2j.gameserver.model.actor.stat.DoorStat;
 import net.sf.l2j.gameserver.model.actor.status.DoorStatus;
 import net.sf.l2j.gameserver.model.actor.template.DoorTemplate;
@@ -33,7 +33,7 @@ import net.sf.l2j.gameserver.network.serverpackets.DoorStatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
-public class Door extends Character implements IGeoObject
+public class Door extends Creature implements IGeoObject
 {
 	private final Castle _castle;
 	private final ClanHall _clanHall;
@@ -41,15 +41,15 @@ public class Door extends Character implements IGeoObject
 	private boolean _open;
 	
 	@Override
-	public L2CharacterAI getAI()
+	public CreatureAI getAI()
 	{
-		L2CharacterAI ai = _ai;
+		CreatureAI ai = _ai;
 		if (ai == null)
 		{
 			synchronized (this)
 			{
 				if (_ai == null)
-					_ai = new L2DoorAI(this);
+					_ai = new DoorAI(this);
 				
 				return _ai;
 			}
@@ -254,7 +254,7 @@ public class Door extends Character implements IGeoObject
 	}
 	
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		// Doors can't be attacked by NPCs
 		if (!(attacker instanceof Playable))
@@ -345,7 +345,7 @@ public class Door extends Character implements IGeoObject
 	}
 	
 	@Override
-	public void reduceCurrentHp(double damage, Character attacker, boolean awake, boolean isDOT, L2Skill skill)
+	public void reduceCurrentHp(double damage, Creature attacker, boolean awake, boolean isDOT, L2Skill skill)
 	{
 		if (getTemplate().getType() == DoorType.WALL && !(attacker instanceof SiegeSummon))
 			return;
@@ -357,7 +357,7 @@ public class Door extends Character implements IGeoObject
 	}
 	
 	@Override
-	public void reduceCurrentHpByDOT(double i, Character attacker, L2Skill skill)
+	public void reduceCurrentHpByDOT(double i, Creature attacker, L2Skill skill)
 	{
 		// Doors can't be damaged by DOTs.
 	}
@@ -371,7 +371,7 @@ public class Door extends Character implements IGeoObject
 	}
 	
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		if (!super.doDie(killer))
 			return false;
@@ -414,7 +414,7 @@ public class Door extends Character implements IGeoObject
 	}
 	
 	@Override
-	public synchronized void doAttack(Character target)
+	public synchronized void doAttack(Creature target)
 	{
 	}
 	

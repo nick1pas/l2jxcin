@@ -3,11 +3,12 @@ package net.sf.l2j.gameserver.scripting.quests;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.l2j.commons.math.MathUtil;
+
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
-import net.sf.l2j.gameserver.util.Util;
 
 public class Q336_CoinsOfMagic extends Quest
 {
@@ -547,7 +548,7 @@ public class Q336_CoinsOfMagic extends Quest
 						}
 					}
 				}
-				else if (Util.isDigit(event))
+				else if (MathUtil.isDigit(event))
 				{
 					int item = Integer.parseInt(event);
 					

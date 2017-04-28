@@ -9,7 +9,7 @@ import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.games.MonsterRace;
 import net.sf.l2j.gameserver.instancemanager.games.MonsterRace.HistoryInfo;
 import net.sf.l2j.gameserver.instancemanager.games.MonsterRace.RaceState;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -322,14 +322,14 @@ public class RaceManagerNpc extends Folk
 	}
 	
 	@Override
-	public void addKnownObject(L2Object object)
+	public void addKnownObject(WorldObject object)
 	{
 		if (object instanceof Player)
 			((Player) object).sendPacket(MonsterRace.getInstance().getRacePacket());
 	}
 	
 	@Override
-	public void removeKnownObject(L2Object object)
+	public void removeKnownObject(WorldObject object)
 	{
 		super.removeKnownObject(object);
 		

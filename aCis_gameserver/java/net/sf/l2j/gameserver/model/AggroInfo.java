@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.model;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 /**
  * This class contains all AggroInfo of the Attackable against the attacker Character.
@@ -12,17 +12,17 @@ import net.sf.l2j.gameserver.model.actor.Character;
  */
 public final class AggroInfo
 {
-	private final Character _attacker;
+	private final Creature _attacker;
 	
 	private int _hate;
 	private int _damage;
 	
-	public AggroInfo(Character attacker)
+	public AggroInfo(Creature attacker)
 	{
 		_attacker = attacker;
 	}
 	
-	public Character getAttacker()
+	public Creature getAttacker()
 	{
 		return _attacker;
 	}
@@ -32,9 +32,9 @@ public final class AggroInfo
 		return _hate;
 	}
 	
-	public int checkHate(Character owner)
+	public int checkHate(Creature owner)
 	{
-		if (_attacker.isAlikeDead() || !_attacker.isVisible() || !owner.getKnownType(Character.class).contains(_attacker))
+		if (_attacker.isAlikeDead() || !_attacker.isVisible() || !owner.getKnownType(Creature.class).contains(_attacker))
 			_hate = 0;
 		
 		return _hate;

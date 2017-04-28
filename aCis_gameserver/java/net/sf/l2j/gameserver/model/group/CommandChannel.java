@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -78,7 +78,7 @@ public class CommandChannel extends AbstractGroup
 	}
 	
 	@Override
-	public boolean containsPlayer(L2Object player)
+	public boolean containsPlayer(WorldObject player)
 	{
 		for (Party party : _parties)
 		{

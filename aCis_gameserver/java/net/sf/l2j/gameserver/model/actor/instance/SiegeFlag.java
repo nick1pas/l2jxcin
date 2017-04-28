@@ -2,11 +2,11 @@ package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
@@ -36,13 +36,13 @@ public class SiegeFlag extends Npc
 	}
 	
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		return !isInvul();
 	}
 	
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		if (!super.doDie(killer))
 			return false;
@@ -82,7 +82,7 @@ public class SiegeFlag extends Npc
 	}
 	
 	@Override
-	public void reduceCurrentHp(double damage, Character attacker, L2Skill skill)
+	public void reduceCurrentHp(double damage, Creature attacker, L2Skill skill)
 	{
 		// Send warning to owners of headquarters that theirs base is under attack.
 		if (_clan != null && isScriptValue(0))

@@ -9,8 +9,8 @@ import net.sf.l2j.commons.util.ArraysUtil;
 
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -667,7 +667,7 @@ public class FeedableBeasts extends L2AttackableAIScript
 	}
 	
 	@Override
-	public String onSkillSee(Npc npc, Player caster, L2Skill skill, L2Object[] targets, boolean isPet)
+	public String onSkillSee(Npc npc, Player caster, L2Skill skill, WorldObject[] targets, boolean isPet)
 	{
 		if (!ArraysUtil.contains(targets, npc))
 			return super.onSkillSee(npc, caster, skill, targets, isPet);

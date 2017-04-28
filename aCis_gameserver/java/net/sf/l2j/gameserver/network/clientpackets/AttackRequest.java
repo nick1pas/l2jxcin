@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
@@ -39,7 +39,7 @@ public final class AttackRequest extends L2GameClientPacket
 		}
 		
 		// avoid using expensive operations if not needed
-		final L2Object target;
+		final WorldObject target;
 		if (activeChar.getTargetId() == _objectId)
 			target = activeChar.getTarget();
 		else

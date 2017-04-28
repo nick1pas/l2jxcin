@@ -8,7 +8,7 @@ import net.sf.l2j.gameserver.network.clientpackets.L2GameClientPacket;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 
 /**
- * This class manages requests (transactions) between two Player.
+ * This class manages requests (transactions) between two players.
  * @author kriau
  */
 public class L2Request
@@ -32,7 +32,7 @@ public class L2Request
 	}
 	
 	/**
-	 * Set the Player member of a transaction (ex : FriendInvite, JoinAlly, JoinParty...).
+	 * Set the partner of a transaction (ex : FriendInvite, JoinAlly, JoinParty...).
 	 * @param partner
 	 */
 	private synchronized void setPartner(Player partner)
@@ -41,7 +41,7 @@ public class L2Request
 	}
 	
 	/**
-	 * @return the Player member of a transaction (ex : FriendInvite, JoinAlly, JoinParty...).
+	 * @return the partner member of a transaction (ex : FriendInvite, JoinAlly, JoinParty...).
 	 */
 	public Player getPartner()
 	{

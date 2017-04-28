@@ -2,7 +2,7 @@ package net.sf.l2j.gameserver.model.zone.type;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -19,7 +19,7 @@ public class L2JailZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onEnter(Character character)
+	protected void onEnter(Creature character)
 	{
 		if (character instanceof Player)
 		{
@@ -30,7 +30,7 @@ public class L2JailZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onExit(Character character)
+	protected void onExit(Creature character)
 	{
 		if (character instanceof Player)
 		{
@@ -49,12 +49,12 @@ public class L2JailZone extends L2ZoneType
 	}
 	
 	@Override
-	public void onDieInside(Character character)
+	public void onDieInside(Creature character)
 	{
 	}
 	
 	@Override
-	public void onReviveInside(Character character)
+	public void onReviveInside(Creature character)
 	{
 	}
 	
@@ -62,7 +62,7 @@ public class L2JailZone extends L2ZoneType
 	{
 		private final Player _activeChar;
 		
-		BackToJail(Character character)
+		BackToJail(Creature character)
 		{
 			_activeChar = (Player) character;
 		}

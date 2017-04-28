@@ -5,11 +5,12 @@ import java.util.List;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
+
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.Character;
-import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -92,7 +93,7 @@ public class L2MultiZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onEnter(Character character)
+	protected void onEnter(Creature character)
 	{
 		character.setInsideZone(ZoneId.MULTI, true);
 		
@@ -119,7 +120,7 @@ public class L2MultiZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onExit(Character character)
+	protected void onExit(Creature character)
 	{
 		character.setInsideZone(ZoneId.MULTI, false);
 		
@@ -143,7 +144,7 @@ public class L2MultiZone extends L2ZoneType
 	}
 	
 	@Override
-	public void onDieInside(Character character)
+	public void onDieInside(Creature character)
 	{
 		if (character instanceof Player && _isReviveEnabled)
 		{
@@ -153,7 +154,7 @@ public class L2MultiZone extends L2ZoneType
 	}
 	
 	@Override
-	public void onReviveInside(Character character)
+	public void onReviveInside(Creature character)
 	{
 		if (character instanceof Player && _isHealEnabled)
 		{
@@ -164,7 +165,7 @@ public class L2MultiZone extends L2ZoneType
 		}
 	}
 	
-	private static void respawnCharacter(Character character)
+	private static void respawnCharacter(Creature character)
 	{
 		if (character.isDead())
 		{
@@ -173,7 +174,7 @@ public class L2MultiZone extends L2ZoneType
 		}
 	}
 	
-	private static void checkItemRestriction(Character character)
+	private static void checkItemRestriction(Creature character)
 	{
 		for (ItemInstance item : character.getInventory().getPaperdollItems())
 		{
@@ -187,7 +188,7 @@ public class L2MultiZone extends L2ZoneType
 		}
 	}
 	
-	private static void checkSkillRestriction(Character character)
+	private static void checkSkillRestriction(Creature character)
 	{
 		for (L2Effect effect : character.getAllEffects())
 		{

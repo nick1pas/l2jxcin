@@ -2,7 +2,7 @@ package net.sf.l2j.gameserver.handler.itemhandlers;
 
 import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.handler.IItemHandler;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.instance.Door;
@@ -19,7 +19,7 @@ public class PaganKeys implements IItemHandler
 			return;
 		
 		final Player activeChar = (Player) playable;
-		final L2Object target = activeChar.getTarget();
+		final WorldObject target = activeChar.getTarget();
 		
 		if (!(target instanceof Door))
 		{

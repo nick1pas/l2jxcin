@@ -16,12 +16,10 @@ public class LoginServerFail extends LoginServerBasePacket
 	};
 	private final int _reason;
 	
-	/**
-	 * @param decrypt
-	 */
 	public LoginServerFail(byte[] decrypt)
 	{
 		super(decrypt);
+		
 		_reason = readC();
 	}
 	

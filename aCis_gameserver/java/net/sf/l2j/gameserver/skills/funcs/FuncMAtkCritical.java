@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.skills.funcs;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.skills.Env;
 import net.sf.l2j.gameserver.skills.Formulas;
@@ -24,7 +24,7 @@ public class FuncMAtkCritical extends Func
 	@Override
 	public void calc(Env env)
 	{
-		final Character player = env.getCharacter();
+		final Creature player = env.getCharacter();
 		if (player instanceof Player)
 		{
 			if (player.getActiveWeaponInstance() != null)

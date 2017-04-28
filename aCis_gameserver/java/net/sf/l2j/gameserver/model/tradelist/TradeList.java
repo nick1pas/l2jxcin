@@ -5,11 +5,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.model.ItemRequest;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
@@ -18,7 +17,6 @@ import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.InventoryUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
-import net.sf.l2j.gameserver.util.Util;
 
 public class TradeList
 {
@@ -173,7 +171,7 @@ public class TradeList
 		if (isLocked())
 			return null;
 		
-		L2Object o = World.getInstance().getObject(objectId);
+		WorldObject o = World.getInstance().getObject(objectId);
 		if (!(o instanceof ItemInstance))
 			return null;
 		
@@ -576,10 +574,7 @@ public class TradeList
 			if (!found)
 			{
 				if (isPackaged())
-				{
-					Util.handleIllegalPlayerAction(player, "[TradeList.privateStoreBuy()] Player " + player.getName() + " tried to cheat the package sell and buy only a part of the package! Ban this player for bot usage!", Config.DEFAULT_PUNISH);
 					return 2;
-				}
 				
 				item.setCount(0);
 				continue;
@@ -813,11 +808,8 @@ public class TradeList
 					continue;
 			}
 			if (oldItem.getItemId() != item.getItemId())
-			{
-				Util.handleIllegalPlayerAction(player, player + " is cheating with sell items", Config.DEFAULT_PUNISH);
 				return false;
-			}
-			
+
 			if (!oldItem.isTradable())
 				continue;
 			

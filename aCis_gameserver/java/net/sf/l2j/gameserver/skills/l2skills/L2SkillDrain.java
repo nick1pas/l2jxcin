@@ -2,10 +2,10 @@ package net.sf.l2j.gameserver.skills.l2skills;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.L2Effect;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.instance.Cubic;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -29,7 +29,7 @@ public class L2SkillDrain extends L2Skill
 	}
 	
 	@Override
-	public void useSkill(Character activeChar, L2Object[] targets)
+	public void useSkill(Creature activeChar, WorldObject[] targets)
 	{
 		if (activeChar.isAlikeDead())
 			return;
@@ -38,12 +38,12 @@ public class L2SkillDrain extends L2Skill
 		final boolean bsps = activeChar.isChargedShot(ShotType.BLESSED_SPIRITSHOT);
 		final boolean isPlayable = activeChar instanceof Playable;
 		
-		for (L2Object obj : targets)
+		for (WorldObject obj : targets)
 		{
-			if (!(obj instanceof Character))
+			if (!(obj instanceof Creature))
 				continue;
 			
-			final Character target = ((Character) obj);
+			final Creature target = ((Creature) obj);
 			if (target.isAlikeDead() && getTargetType() != SkillTargetType.TARGET_CORPSE_MOB)
 				continue;
 			
@@ -130,17 +130,17 @@ public class L2SkillDrain extends L2Skill
 		activeChar.setChargedShot(bsps ? ShotType.BLESSED_SPIRITSHOT : ShotType.SPIRITSHOT, isStaticReuse());
 	}
 	
-	public void useCubicSkill(Cubic activeCubic, L2Object[] targets)
+	public void useCubicSkill(Cubic activeCubic, WorldObject[] targets)
 	{
 		if (Config.DEBUG)
 			_log.info("L2SkillDrain: useCubicSkill()");
 		
-		for (L2Object obj : targets)
+		for (WorldObject obj : targets)
 		{
-			if (!(obj instanceof Character))
+			if (!(obj instanceof Creature))
 				continue;
 			
-			final Character target = ((Character) obj);
+			final Creature target = ((Creature) obj);
 			if (target.isAlikeDead() && getTargetType() != SkillTargetType.TARGET_CORPSE_MOB)
 				continue;
 			

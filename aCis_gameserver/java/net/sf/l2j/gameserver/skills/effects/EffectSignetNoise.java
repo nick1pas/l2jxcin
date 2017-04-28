@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.skills.effects;
 
 import net.sf.l2j.gameserver.model.L2Effect;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.EffectPoint;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.skills.Env;
@@ -40,7 +40,7 @@ public class EffectSignetNoise extends L2Effect
 			
 		Player caster = (Player) getEffector();
 		
-		for (Character target : _actor.getKnownTypeInRadius(Character.class, getSkill().getSkillRadius()))
+		for (Creature target : _actor.getKnownTypeInRadius(Creature.class, getSkill().getSkillRadius()))
 		{
 			if (target == caster)
 				continue;

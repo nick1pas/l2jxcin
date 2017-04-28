@@ -4,7 +4,7 @@ import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.gameserver.datatables.SoulCrystalsTable;
 import net.sf.l2j.gameserver.model.AbsorbInfo;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -107,7 +107,7 @@ public class Q350_EnhanceYourWeapon extends Quest
 	}
 	
 	@Override
-	public String onItemUse(ItemInstance item, Player user, L2Object target)
+	public String onItemUse(ItemInstance item, Player user, WorldObject target)
 	{
 		// Caster is dead.
 		if (user.isDead())

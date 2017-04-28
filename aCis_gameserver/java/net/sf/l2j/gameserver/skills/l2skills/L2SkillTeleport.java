@@ -3,11 +3,11 @@ package net.sf.l2j.gameserver.skills.l2skills;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.ShotType;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
@@ -38,7 +38,7 @@ public class L2SkillTeleport extends L2Skill
 	}
 	
 	@Override
-	public void useSkill(Character activeChar, L2Object[] targets)
+	public void useSkill(Creature activeChar, WorldObject[] targets)
 	{
 		if (activeChar instanceof Player)
 		{
@@ -58,12 +58,12 @@ public class L2SkillTeleport extends L2Skill
 		
 		boolean bsps = activeChar.isChargedShot(ShotType.BLESSED_SPIRITSHOT);
 		
-		for (L2Object obj : targets)
+		for (WorldObject obj : targets)
 		{
-			if (!(obj instanceof Character))
+			if (!(obj instanceof Creature))
 				continue;
 			
-			final Character target = ((Character) obj);
+			final Creature target = ((Creature) obj);
 			
 			if (target instanceof Player)
 			{

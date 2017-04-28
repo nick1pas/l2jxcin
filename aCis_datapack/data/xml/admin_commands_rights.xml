@@ -304,6 +304,7 @@
 	<aCar name="admin_clanhallopendoors" accessLevel="1" />
 	<aCar name="admin_clanhallclosedoors" accessLevel="1" />
 	<aCar name="admin_clanhallteleportself" accessLevel="1" />
+	<aCar name="admin_reset_certificates" accessLevel="1" />
 
 	<!-- SKILL -->
 	<aCar name="admin_show_skills" accessLevel="1" />

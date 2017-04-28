@@ -18,7 +18,7 @@ import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.group.Party.MessageType;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -297,7 +297,7 @@ public class CursedWeapon
 	 * It drops the item on ground, and reset player stats.
 	 * @param killer : The player who killed CW owner.
 	 */
-	private void dropFromPlayer(Character killer)
+	private void dropFromPlayer(Creature killer)
 	{
 		_player.abortAttack();
 		
@@ -626,7 +626,7 @@ public class CursedWeapon
 	 * This method checks if the CW is dropped or simply dissapears.
 	 * @param killer : The killer of CW's owner.
 	 */
-	public void dropIt(Character killer)
+	public void dropIt(Creature killer)
 	{
 		// Remove it
 		if (Rnd.get(100) <= _disapearChance)

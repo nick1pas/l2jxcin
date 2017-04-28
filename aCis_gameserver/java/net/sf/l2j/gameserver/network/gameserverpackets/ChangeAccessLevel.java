@@ -1,8 +1,5 @@
 package net.sf.l2j.gameserver.network.gameserverpackets;
 
-/**
- * @author -Wooden-
- */
 public class ChangeAccessLevel extends GameServerBasePacket
 {
 	public ChangeAccessLevel(String player, int access)

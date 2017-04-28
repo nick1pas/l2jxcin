@@ -10,7 +10,7 @@ import net.sf.l2j.gameserver.handler.ISkillHandler;
 import net.sf.l2j.gameserver.handler.SkillHandler;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
@@ -278,7 +278,7 @@ public final class Weapon extends Item
 	 * @param crit : boolean tells whether the hit was critical
 	 * @return An array of L2Effect of skills associated with the item to be triggered onHit.
 	 */
-	public List<L2Effect> getSkillEffects(Character caster, Character target, boolean crit)
+	public List<L2Effect> getSkillEffects(Creature caster, Creature target, boolean crit)
 	{
 		if (_skillsOnCrit == null || !crit)
 			return Collections.emptyList();
@@ -315,7 +315,7 @@ public final class Weapon extends Item
 	 * @param trigger : L2Skill pointing out the skill triggering this action
 	 * @return An array of L2Effect associated with the item to be triggered onCast.
 	 */
-	public List<L2Effect> getSkillEffects(Character caster, Character target, L2Skill trigger)
+	public List<L2Effect> getSkillEffects(Creature caster, Creature target, L2Skill trigger)
 	{
 		if (_skillsOnCast == null)
 			return Collections.emptyList();
@@ -346,7 +346,7 @@ public final class Weapon extends Item
 		// Get the skill handler corresponding to the skill type
 		ISkillHandler handler = SkillHandler.getInstance().getSkillHandler(_skillsOnCast.getSkill().getSkillType());
 		
-		Character[] targets = new Character[1];
+		Creature[] targets = new Creature[1];
 		targets[0] = target;
 		
 		// Launch the magic skill and calculate its effects

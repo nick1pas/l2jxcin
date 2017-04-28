@@ -19,7 +19,7 @@ import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.templates.StatsSet;
 
-public class NpcTemplate extends CharTemplate
+public class NpcTemplate extends CreatureTemplate
 {
 	public static enum SkillType
 	{

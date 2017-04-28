@@ -12,6 +12,7 @@ import net.sf.l2j.gameserver.handler.voicedcommandhandlers.CastleManagers;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.ChangePassword;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.ClanFull;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.EventsVoicedInfo;
+import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Menu;
 
 public class VoicedCommandHandler
 {
@@ -34,6 +35,7 @@ public class VoicedCommandHandler
 		registerHandler(new ClanFull());
 		if (Config.EVENTS_ALLOW_VOICED_COMMAND)
 			registerHandler(new EventsVoicedInfo());
+		registerHandler(new Menu());
 	}
 	
 	public void registerHandler(IVoicedCommandHandler handler)

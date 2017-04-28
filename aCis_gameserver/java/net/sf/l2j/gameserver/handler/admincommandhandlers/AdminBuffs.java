@@ -6,9 +6,9 @@ import net.sf.l2j.commons.lang.StringUtil;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.model.L2Effect;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
@@ -52,9 +52,9 @@ public class AdminBuffs implements IAdminCommandHandler
 				showBuffs(activeChar, player, page);
 				return true;
 			}
-			else if ((activeChar.getTarget() != null) && (activeChar.getTarget() instanceof Character))
+			else if ((activeChar.getTarget() != null) && (activeChar.getTarget() instanceof Creature))
 			{
-				showBuffs(activeChar, (Character) activeChar.getTarget(), 1);
+				showBuffs(activeChar, (Creature) activeChar.getTarget(), 1);
 				return true;
 			}
 			else
@@ -163,7 +163,7 @@ public class AdminBuffs implements IAdminCommandHandler
 		return ADMIN_COMMANDS;
 	}
 	
-	public static void showBuffs(Player activeChar, Character target, int page)
+	public static void showBuffs(Player activeChar, Creature target, int page)
 	{
 		final L2Effect[] effects = target.getAllEffects();
 		
@@ -208,10 +208,10 @@ public class AdminBuffs implements IAdminCommandHandler
 		if (skillId < 1)
 			return;
 		
-		final L2Object obj = World.getInstance().getObject(objId);
-		if (obj instanceof Character)
+		final WorldObject obj = World.getInstance().getObject(objId);
+		if (obj instanceof Creature)
 		{
-			final Character target = (Character) obj;
+			final Creature target = (Creature) obj;
 			
 			for (L2Effect e : target.getAllEffects())
 			{
@@ -227,12 +227,12 @@ public class AdminBuffs implements IAdminCommandHandler
 	
 	private static void removeAllBuffs(Player activeChar, int objId)
 	{
-		final L2Object target = World.getInstance().getObject(objId);
-		if (target instanceof Character)
+		final WorldObject target = World.getInstance().getObject(objId);
+		if (target instanceof Creature)
 		{
-			((Character) target).stopAllEffects();
+			((Creature) target).stopAllEffects();
 			activeChar.sendMessage("Removed all effects from " + target.getName() + " (" + objId + ")");
-			showBuffs(activeChar, ((Character) target), 1);
+			showBuffs(activeChar, ((Creature) target), 1);
 		}
 	}
 }

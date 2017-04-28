@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 
 public final class ServerObjectInfo extends L2GameServerPacket
@@ -20,7 +20,7 @@ public final class ServerObjectInfo extends L2GameServerPacket
 	
 	private final boolean _isAttackable;
 	
-	public ServerObjectInfo(Npc npc, Character actor)
+	public ServerObjectInfo(Npc npc, Creature actor)
 	{
 		_npc = npc;
 		

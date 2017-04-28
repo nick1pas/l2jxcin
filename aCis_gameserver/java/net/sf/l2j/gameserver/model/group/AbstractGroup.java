@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
@@ -36,7 +36,7 @@ public abstract class AbstractGroup
 	 * @param player : the player to check.
 	 * @return {@code true} if this group contains the specified player, {@code false} otherwise.
 	 */
-	public abstract boolean containsPlayer(final L2Object player);
+	public abstract boolean containsPlayer(final WorldObject player);
 	
 	/**
 	 * Broadcast a packet to every member of this group.

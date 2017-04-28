@@ -20,7 +20,7 @@ public class HelperBuff
 	}
 	
 	/**
-	 * @return the lower level that the Player must achieve in order to obtain this buff.
+	 * @return the lower level that the player must achieve in order to obtain this buff.
 	 */
 	public int getLowerLevel()
 	{
@@ -28,7 +28,7 @@ public class HelperBuff
 	}
 	
 	/**
-	 * @return the upper level that the Player mustn't exceed in order to obtain this buff.
+	 * @return the upper level that the player mustn't exceed in order to obtain this buff.
 	 */
 	public int getUpperLevel()
 	{
@@ -36,7 +36,7 @@ public class HelperBuff
 	}
 	
 	/**
-	 * @return the skill id of the buff that the Player will receive.
+	 * @return the skill id of the buff that the player will receive.
 	 */
 	public int getSkillId()
 	{
@@ -44,7 +44,7 @@ public class HelperBuff
 	}
 	
 	/**
-	 * @return the Level of the buff that the Player will receive.
+	 * @return the Level of the buff that the player will receive.
 	 */
 	public int getSkillLevel()
 	{

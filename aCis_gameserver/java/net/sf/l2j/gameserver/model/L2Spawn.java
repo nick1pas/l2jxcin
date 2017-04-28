@@ -10,7 +10,7 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -329,8 +329,8 @@ public final class L2Spawn implements Runnable
 			// Call the constructor of the Npc (can be a L2ArtefactInstance, L2FriendlyMobInstance, L2GuardInstance, Monster, SiegeGuard, L2BoxInstance, L2FeedableBeastInstance, TamedBeast, Npc)
 			Object tmp = _constructor.newInstance(parameters);
 			
-			if (isSummonSpawn && tmp instanceof Character)
-				((Character) tmp).setShowSummonAnimation(isSummonSpawn);
+			if (isSummonSpawn && tmp instanceof Creature)
+				((Creature) tmp).setShowSummonAnimation(isSummonSpawn);
 			
 			// Check if the Instance is a Npc
 			if (!(tmp instanceof Npc))

@@ -4,7 +4,16 @@ public class InitLS extends LoginServerBasePacket
 {
 	private final int _rev;
 	private final byte[] _key;
-	
+ 	
+	public InitLS(byte[] decrypt)
+	{
+		super(decrypt);
+		
+		_rev = readD();
+		int size = readD();
+		_key = readB(size);
+	}
+
 	public int getRevision()
 	{
 		return _rev;
@@ -14,16 +23,4 @@ public class InitLS extends LoginServerBasePacket
 	{
 		return _key;
 	}
-	
-	/**
-	 * @param decrypt
-	 */
-	public InitLS(byte[] decrypt)
-	{
-		super(decrypt);
-		_rev = readD();
-		int size = readD();
-		_key = readB(size);
-	}
-	
 }

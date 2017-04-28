@@ -8,7 +8,7 @@ import net.sf.l2j.commons.math.MathUtil;
 
 import net.sf.l2j.gameserver.datatables.BookmarkTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Bookmark;
+import net.sf.l2j.gameserver.model.Bookmark;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
@@ -103,7 +103,7 @@ public class AdminBookmark implements IAdminCommandHandler
 	private static void showBookmarks(Player activeChar, int page)
 	{
 		final int objId = activeChar.getObjectId();
-		List<L2Bookmark> bookmarks = BookmarkTable.getInstance().getBookmarks(objId);
+		List<Bookmark> bookmarks = BookmarkTable.getInstance().getBookmarks(objId);
 		
 		// Load static Htm.
 		final NpcHtmlMessage html = new NpcHtmlMessage(0);
@@ -123,7 +123,7 @@ public class AdminBookmark implements IAdminCommandHandler
 		// Generate data.
 		final StringBuilder sb = new StringBuilder(2000);
 		
-		for (L2Bookmark bk : bookmarks)
+		for (Bookmark bk : bookmarks)
 		{
 			final String name = bk.getName();
 			final int x = bk.getX();

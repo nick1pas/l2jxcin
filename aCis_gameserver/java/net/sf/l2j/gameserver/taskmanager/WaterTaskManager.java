@@ -32,7 +32,7 @@ public final class WaterTaskManager implements Runnable
 	
 	/**
 	 * Adds {@link Player} to the WaterTask.
-	 * @param player : {@link Player} to be added and checked.
+	 * @param player : Player to be removed.
 	 */
 	public final void add(Player player)
 	{

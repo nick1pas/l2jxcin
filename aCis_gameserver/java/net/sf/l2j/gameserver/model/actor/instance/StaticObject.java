@@ -1,9 +1,9 @@
 package net.sf.l2j.gameserver.model.actor.instance;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.ShowTownMap;
 import net.sf.l2j.gameserver.network.serverpackets.StaticObjectInfo;
@@ -11,7 +11,7 @@ import net.sf.l2j.gameserver.network.serverpackets.StaticObjectInfo;
 /**
  * GODSON ROX!
  */
-public class StaticObject extends L2Object
+public class StaticObject extends WorldObject
 {
 	private int _staticObjectId;
 	private int _type = -1; // 0 - map signs, 1 - throne , 2 - arena signs
@@ -124,7 +124,7 @@ public class StaticObject extends L2Object
 	}
 	
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		return false;
 	}

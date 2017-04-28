@@ -4,9 +4,9 @@ import java.util.StringTokenizer;
 
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.Summon;
 import net.sf.l2j.gameserver.model.actor.instance.Chest;
@@ -33,9 +33,9 @@ import net.sf.l2j.gameserver.util.Broadcast;
  * <li>para/unpara = paralyze/remove paralysis from target.</li>
  * <li>para_all/unpara_all = same as para/unpara, affects the whole world.</li>
  * <li>polyself/unpolyself = makes you look as a specified mob.</li>
- * <li>social = forces an Character instance to broadcast social action packets.</li>
- * <li>effect = forces an Character instance to broadcast MSU packets.</li>
- * <li>abnormal = force changes over an Character instance's abnormal state.</li>
+ * <li>social = forces an Creature instance to broadcast social action packets.</li>
+ * <li>effect = forces an Creature instance to broadcast MSU packets.</li>
+ * <li>abnormal = force changes over an Creature instance's abnormal state.</li>
  * <li>play_sound/jukebox = Music broadcasting related commands.</li>
  * <li>atmosphere = sky change related commands.</li>
  * </ul>
@@ -185,10 +185,10 @@ public class AdminEffects implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_para"))
 		{
-			final L2Object target = activeChar.getTarget();
-			if (target instanceof Character)
+			final WorldObject target = activeChar.getTarget();
+			if (target instanceof Creature)
 			{
-				final Character player = (Character) target;
+				final Creature player = (Creature) target;
 				
 				player.startAbnormalEffect(0x0800);
 				player.setIsParalyzed(true);
@@ -199,10 +199,10 @@ public class AdminEffects implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_unpara"))
 		{
-			final L2Object target = activeChar.getTarget();
-			if (target instanceof Character)
+			final WorldObject target = activeChar.getTarget();
+			if (target instanceof Creature)
 			{
-				final Character player = (Character) target;
+				final Creature player = (Creature) target;
 				
 				player.stopAbnormalEffect(0x0800);
 				player.setIsParalyzed(false);
@@ -252,7 +252,7 @@ public class AdminEffects implements IAdminCommandHandler
 						{
 							final int radius = Integer.parseInt(targetOrRadius);
 							
-							for (Character object : activeChar.getKnownTypeInRadius(Character.class, radius))
+							for (Creature object : activeChar.getKnownTypeInRadius(Creature.class, radius))
 								performSocial(social, object);
 							
 							activeChar.sendMessage(radius + " units radius was affected by your social request.");
@@ -261,7 +261,7 @@ public class AdminEffects implements IAdminCommandHandler
 				}
 				else
 				{
-					L2Object obj = activeChar.getTarget();
+					WorldObject obj = activeChar.getTarget();
 					if (obj == null)
 						obj = activeChar;
 					
@@ -299,7 +299,7 @@ public class AdminEffects implements IAdminCommandHandler
 						{
 							final int radius = Integer.parseInt(targetOrRadius);
 							
-							for (Character object : activeChar.getKnownTypeInRadius(Character.class, radius))
+							for (Creature object : activeChar.getKnownTypeInRadius(Creature.class, radius))
 								performAbnormal(abnormal, object);
 							
 							activeChar.sendMessage(radius + " units radius was affected by your abnormal request.");
@@ -308,7 +308,7 @@ public class AdminEffects implements IAdminCommandHandler
 				}
 				else
 				{
-					L2Object obj = activeChar.getTarget();
+					WorldObject obj = activeChar.getTarget();
 					if (obj == null)
 						obj = activeChar;
 					
@@ -327,7 +327,7 @@ public class AdminEffects implements IAdminCommandHandler
 		{
 			try
 			{
-				L2Object obj = activeChar.getTarget();
+				WorldObject obj = activeChar.getTarget();
 				int level = 1, hittime = 1;
 				int skill = Integer.parseInt(st.nextToken());
 				
@@ -339,11 +339,11 @@ public class AdminEffects implements IAdminCommandHandler
 				if (obj == null)
 					obj = activeChar;
 				
-				if (!(obj instanceof Character))
+				if (!(obj instanceof Creature))
 					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 				else
 				{
-					Character target = (Character) obj;
+					Creature target = (Creature) obj;
 					target.broadcastPacket(new MagicSkillUse(target, activeChar, skill, level, hittime, 0));
 					activeChar.sendMessage(obj.getName() + " performs MSU " + skill + "/" + level + " by your request.");
 				}
@@ -368,11 +368,11 @@ public class AdminEffects implements IAdminCommandHandler
 		return true;
 	}
 	
-	private static boolean performAbnormal(int action, L2Object target)
+	private static boolean performAbnormal(int action, WorldObject target)
 	{
-		if (target instanceof Character)
+		if (target instanceof Creature)
 		{
-			final Character character = (Character) target;
+			final Creature character = (Creature) target;
 			if ((character.getAbnormalEffect() & action) == action)
 				character.stopAbnormalEffect(action);
 			else
@@ -383,14 +383,14 @@ public class AdminEffects implements IAdminCommandHandler
 		return false;
 	}
 	
-	private static boolean performSocial(int action, L2Object target)
+	private static boolean performSocial(int action, WorldObject target)
 	{
-		if (target instanceof Character)
+		if (target instanceof Creature)
 		{
 			if (target instanceof Summon || target instanceof Chest || (target instanceof Npc && (action < 1 || action > 3)) || (target instanceof Player && (action < 2 || action > 16)))
 				return false;
 			
-			final Character character = (Character) target;
+			final Creature character = (Creature) target;
 			character.broadcastPacket(new SocialAction(character, action));
 			return true;
 		}

@@ -17,10 +17,10 @@ import java.util.logging.Logger;
 import net.sf.l2j.commons.lang.StringUtil;
 
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.datatables.CharNameTable;
 import net.sf.l2j.gameserver.datatables.CharTemplateTable;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.NpcTable;
+import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.World;
@@ -280,7 +280,7 @@ public class Hero
 			
 			_heroDiaries.put(charId, _diary);
 			
-			_log.info("Hero: Loaded " + entries + " diary entries for hero: " + CharNameTable.getInstance().getPlayerName(charId));
+			_log.info("Hero: Loaded " + entries + " diary entries for hero: " + PlayerNameTable.getInstance().getPlayerName(charId));
 		}
 		catch (SQLException e)
 		{
@@ -325,7 +325,7 @@ public class Hero
 				
 				if (charId == charOneId)
 				{
-					String name = CharNameTable.getInstance().getPlayerName(charTwoId);
+					String name = PlayerNameTable.getInstance().getPlayerName(charTwoId);
 					String cls = CharTemplateTable.getInstance().getClassNameById(charTwoClass);
 					if (name != null && cls != null)
 					{
@@ -360,7 +360,7 @@ public class Hero
 				}
 				else if (charId == charTwoId)
 				{
-					String name = CharNameTable.getInstance().getPlayerName(charOneId);
+					String name = PlayerNameTable.getInstance().getPlayerName(charOneId);
 					String cls = CharTemplateTable.getInstance().getClassNameById(charOneClass);
 					if (name != null && cls != null)
 					{
@@ -404,7 +404,7 @@ public class Hero
 			_heroCounts.put(charId, heroCountData);
 			_heroFights.put(charId, _fights);
 			
-			_log.info("Hero: Loaded " + numberOfFights + " fights for: " + CharNameTable.getInstance().getPlayerName(charId));
+			_log.info("Hero: Loaded " + numberOfFights + " fights for: " + PlayerNameTable.getInstance().getPlayerName(charId));
 		}
 		catch (SQLException e)
 		{
@@ -449,7 +449,7 @@ public class Hero
 		
 		final NpcHtmlMessage html = new NpcHtmlMessage(0);
 		html.setFile("data/html/olympiad/herodiary.htm");
-		html.replace("%heroname%", CharNameTable.getInstance().getPlayerName(charid));
+		html.replace("%heroname%", PlayerNameTable.getInstance().getPlayerName(charid));
 		html.replace("%message%", _heroMessages.get(charid));
 		html.disableValidation();
 		
@@ -511,7 +511,7 @@ public class Hero
 		
 		final NpcHtmlMessage html = new NpcHtmlMessage(0);
 		html.setFile("data/html/olympiad/herohistory.htm");
-		html.replace("%heroname%", CharNameTable.getInstance().getPlayerName(charid));
+		html.replace("%heroname%", PlayerNameTable.getInstance().getPlayerName(charid));
 		html.disableValidation();
 		
 		if (!list.isEmpty())

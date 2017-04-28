@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 
 /**
@@ -26,7 +26,7 @@ public class FestivalMonster extends Monster
 	 * Return True if the attacker is not another L2FestivalMonsterInstance.
 	 */
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		if (attacker instanceof FestivalMonster)
 			return false;
@@ -56,7 +56,7 @@ public class FestivalMonster extends Monster
 	 * Add a blood offering item to the leader of the party.
 	 */
 	@Override
-	public void doItemDrop(Character attacker)
+	public void doItemDrop(Creature attacker)
 	{
 		final Player player = attacker.getActingPlayer();
 		if (player == null || !player.isInParty())

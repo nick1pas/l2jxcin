@@ -1,11 +1,11 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 /**
- * This packet is used to move characters to a target.<br>
- * It is aswell used to rotate characters in front of the target.
+ * This packet is used to move Creatures to a target.<br>
+ * It is aswell used to rotate Creatures in front of the target.
  */
 public class MoveToPawn extends L2GameServerPacket
 {
@@ -14,7 +14,7 @@ public class MoveToPawn extends L2GameServerPacket
 	private final int _distance;
 	private final int _x, _y, _z;
 	
-	public MoveToPawn(Character cha, L2Object target, int distance)
+	public MoveToPawn(Creature cha, WorldObject target, int distance)
 	{
 		_objectId = cha.getObjectId();
 		_targetId = target.getObjectId();

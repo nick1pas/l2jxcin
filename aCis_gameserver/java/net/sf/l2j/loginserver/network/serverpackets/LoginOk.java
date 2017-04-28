@@ -1,6 +1,6 @@
 package net.sf.l2j.loginserver.network.serverpackets;
 
-import net.sf.l2j.loginserver.SessionKey;
+import net.sf.l2j.loginserver.network.SessionKey;
 
 /**
  * Format: dddddddd f: the session key d: ? d: ? d: ? d: ? d: ? d: ? b: 16 bytes - unknown

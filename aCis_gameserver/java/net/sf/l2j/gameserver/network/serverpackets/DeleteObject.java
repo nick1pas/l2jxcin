@@ -1,19 +1,19 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 
 public class DeleteObject extends L2GameServerPacket
 {
 	private final int _objectId;
 	private final boolean _isSeated;
 	
-	public DeleteObject(L2Object obj)
+	public DeleteObject(WorldObject obj)
 	{
 		_objectId = obj.getObjectId();
 		_isSeated = false;
 	}
 	
-	public DeleteObject(L2Object obj, boolean sit)
+	public DeleteObject(WorldObject obj, boolean sit)
 	{
 		_objectId = obj.getObjectId();
 		_isSeated = sit;

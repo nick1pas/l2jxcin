@@ -2,13 +2,13 @@ package net.sf.l2j.gameserver.scripting.quests;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -259,7 +259,7 @@ public class Q421_LittleWingsBigAdventure extends Quest
 	@Override
 	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
-		final Character originalKiller = isPet ? killer.getPet() : killer;
+		final Creature originalKiller = isPet ? killer.getPet() : killer;
 		
 		// Tree curses the killer.
 		if (Rnd.get(100) < 30)

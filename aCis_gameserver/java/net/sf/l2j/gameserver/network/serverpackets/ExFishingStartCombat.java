@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 /**
  * Format (ch)dddcc
@@ -8,13 +8,13 @@ import net.sf.l2j.gameserver.model.actor.Character;
  */
 public class ExFishingStartCombat extends L2GameServerPacket
 {
-	private final Character _activeChar;
+	private final Creature _activeChar;
 	private final int _time, _hp;
 	private final int _lureType, _deceptiveMode, _mode;
 	
-	public ExFishingStartCombat(Character character, int time, int hp, int mode, int lureType, int deceptiveMode)
+	public ExFishingStartCombat(Creature Creature, int time, int hp, int mode, int lureType, int deceptiveMode)
 	{
-		_activeChar = character;
+		_activeChar = Creature;
 		_time = time;
 		_hp = hp;
 		_mode = mode;

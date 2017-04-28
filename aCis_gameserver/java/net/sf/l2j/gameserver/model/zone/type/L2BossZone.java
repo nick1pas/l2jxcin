@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.Summon;
@@ -79,7 +79,7 @@ public class L2BossZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onEnter(Character character)
+	protected void onEnter(Creature character)
 	{
 		if (_enabled)
 		{
@@ -135,7 +135,7 @@ public class L2BossZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onExit(Character character)
+	protected void onExit(Creature character)
 	{
 		if (character instanceof Playable && _enabled)
 		{
@@ -294,7 +294,7 @@ public class L2BossZone extends L2ZoneType
 			return;
 		}
 		
-		for (Character character : _characterList.values())
+		for (Creature character : _characterList.values())
 		{
 			if (character instanceof Player)
 			{
@@ -304,12 +304,12 @@ public class L2BossZone extends L2ZoneType
 	}
 	
 	@Override
-	public void onDieInside(Character character)
+	public void onDieInside(Creature character)
 	{
 	}
 	
 	@Override
-	public void onReviveInside(Character character)
+	public void onReviveInside(Creature character)
 	{
 	}
 }

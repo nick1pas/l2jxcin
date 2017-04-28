@@ -7,7 +7,7 @@ import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.model.zone.type.L2SwampZone;
 import net.sf.l2j.gameserver.skills.Stats;
 
-public class PlayableStat extends CharStat
+public class PlayableStat extends CreatureStat
 {
 	public PlayableStat(Playable activeChar)
 	{

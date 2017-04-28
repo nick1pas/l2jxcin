@@ -1,11 +1,11 @@
 package net.sf.l2j.gameserver.model.actor.instance;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
-import net.sf.l2j.gameserver.ai.model.L2SiegeGuardAI;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
+import net.sf.l2j.gameserver.model.actor.ai.type.CreatureAI;
+import net.sf.l2j.gameserver.model.actor.ai.type.SiegeGuardAI;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
@@ -21,15 +21,15 @@ public final class SiegeGuard extends Attackable
 	}
 	
 	@Override
-	public L2CharacterAI getAI()
+	public CreatureAI getAI()
 	{
-		L2CharacterAI ai = _ai;
+		CreatureAI ai = _ai;
 		if (ai == null)
 		{
 			synchronized (this)
 			{
 				if (_ai == null)
-					_ai = new L2SiegeGuardAI(this);
+					_ai = new SiegeGuardAI(this);
 				
 				return _ai;
 			}
@@ -42,7 +42,7 @@ public final class SiegeGuard extends Attackable
 	 * @param attacker The Character that the SiegeGuard try to attack
 	 */
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		// Attackable during siege by all except defenders
 		return (attacker != null && attacker.getActingPlayer() != null && getCastle() != null && getCastle().getSiege().isInProgress() && !getCastle().getSiege().checkSides(attacker.getActingPlayer().getClan(), SiegeSide.DEFENDER, SiegeSide.OWNER));
@@ -88,7 +88,7 @@ public final class SiegeGuard extends Attackable
 	}
 	
 	@Override
-	public void addDamageHate(Character attacker, int damage, int aggro)
+	public void addDamageHate(Creature attacker, int damage, int aggro)
 	{
 		if (attacker == null)
 			return;

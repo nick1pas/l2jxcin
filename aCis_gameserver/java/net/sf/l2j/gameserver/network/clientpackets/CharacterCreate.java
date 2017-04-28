@@ -3,8 +3,8 @@ package net.sf.l2j.gameserver.network.clientpackets;
 import net.sf.l2j.commons.lang.StringUtil;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.datatables.CharNameTable;
 import net.sf.l2j.gameserver.datatables.CharTemplateTable;
+import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.datatables.SkillTreeTable;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
@@ -12,7 +12,7 @@ import net.sf.l2j.gameserver.model.L2ShortCut;
 import net.sf.l2j.gameserver.model.L2SkillLearn;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
-import net.sf.l2j.gameserver.model.actor.template.PcTemplate;
+import net.sf.l2j.gameserver.model.actor.template.PlayerTemplate;
 import net.sf.l2j.gameserver.model.base.Sex;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.kind.Item;
@@ -85,19 +85,19 @@ public final class CharacterCreate extends L2GameClientPacket
 			return;
 		}
 		
-		if (CharNameTable.getInstance().getCharactersInAcc(getClient().getAccountName()) >= 7)
+		if (PlayerNameTable.getInstance().getCharactersInAcc(getClient().getAccountName()) >= 7)
 		{
 			sendPacket(new CharCreateFail(CharCreateFail.REASON_TOO_MANY_CHARACTERS));
 			return;
 		}
 		
-		if (CharNameTable.getInstance().getPlayerObjectId(_name) > 0)
+		if (PlayerNameTable.getInstance().getPlayerObjectId(_name) > 0)
 		{
 			sendPacket(new CharCreateFail(CharCreateFail.REASON_NAME_ALREADY_EXISTS));
 			return;
 		}
 		
-		final PcTemplate template = CharTemplateTable.getInstance().getTemplate(_classId);
+		final PlayerTemplate template = CharTemplateTable.getInstance().getTemplate(_classId);
 		if (template == null || template.getClassBaseLevel() > 1)
 		{
 			sendPacket(new CharCreateFail(CharCreateFail.REASON_CREATION_FAILED));

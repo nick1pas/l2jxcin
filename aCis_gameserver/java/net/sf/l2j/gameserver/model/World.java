@@ -7,12 +7,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import net.sf.l2j.gameserver.datatables.CharNameTable;
 import net.sf.l2j.gameserver.datatables.GmListTable;
+import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.datatables.SpawnTable;
 import net.sf.l2j.gameserver.model.actor.Npc;
-import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 
 public final class World
 {
@@ -38,7 +38,7 @@ public final class World
 	private static final int REGION_X_OFFSET = Math.abs(WORLD_X_MIN / REGION_SIZE);
 	private static final int REGION_Y_OFFSET = Math.abs(WORLD_Y_MIN / REGION_SIZE);
 	
-	private final Map<Integer, L2Object> _objects = new ConcurrentHashMap<>();
+	private final Map<Integer, WorldObject> _objects = new ConcurrentHashMap<>();
 	private final Map<Integer, Pet> _pets = new ConcurrentHashMap<>();
 	private final Map<Integer, Player> _players = new ConcurrentHashMap<>();
 	
@@ -69,26 +69,26 @@ public final class World
 		_log.info("World: WorldRegion grid (" + REGIONS_X + " by " + REGIONS_Y + ") is now set up.");
 	}
 	
-	public void addObject(L2Object object)
+	public void addObject(WorldObject object)
 	{
 		_objects.putIfAbsent(object.getObjectId(), object);
 	}
 
-    public L2Object findObject(int oID) {
+    public WorldObject findObject(int oID) {
         return _objects.get(Integer.valueOf(oID));
     }
 
-	public void removeObject(L2Object object)
+	public void removeObject(WorldObject object)
 	{
 		_objects.remove(object.getObjectId());
 	}
 	
-	public Collection<L2Object> getObjects()
+	public Collection<WorldObject> getObjects()
 	{
 		return _objects.values();
 	}
 	
-	public L2Object getObject(int objectId)
+	public WorldObject getObject(int objectId)
 	{
 		return _objects.get(objectId);
 	}
@@ -110,7 +110,7 @@ public final class World
 	
 	public Player getPlayer(String name)
 	{
-		return _players.get(CharNameTable.getInstance().getPlayerObjectId(name));
+		return _players.get(PlayerNameTable.getInstance().getPlayerObjectId(name));
 	}
 	
 	public Player getPlayer(int objectId)
@@ -185,7 +185,7 @@ public final class World
 		{
 			for (int j = 0; j <= REGIONS_Y; j++)
 			{
-				for (L2Object obj : _worldRegions[i][j].getObjects())
+				for (WorldObject obj : _worldRegions[i][j].getObjects())
 				{
 					if (obj instanceof Npc)
 					{
@@ -207,7 +207,7 @@ public final class World
 	public List<Npc> getAllByNpcId(int[] npc_ids, boolean justAlive)
 	{
 		List<Npc> result = new ArrayList<>();
-		for (L2Object _npc : _objects.values())
+		for (WorldObject _npc : _objects.values())
 		{
 			if (_npc instanceof Npc)
 			{

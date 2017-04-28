@@ -2,9 +2,9 @@ package net.sf.l2j.gameserver.skills.l2skills;
 
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Cubic;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.Servitor;
@@ -64,7 +64,7 @@ public class L2SkillSummon extends L2Skill
 		_itemConsumeSteps = set.getInteger("itemConsumeSteps", 0);
 	}
 	
-	public boolean checkCondition(Character activeChar)
+	public boolean checkCondition(Creature activeChar)
 	{
 		if (activeChar instanceof Player)
 		{
@@ -101,7 +101,7 @@ public class L2SkillSummon extends L2Skill
 	}
 	
 	@Override
-	public void useSkill(Character caster, L2Object[] targets)
+	public void useSkill(Creature caster, WorldObject[] targets)
 	{
 		if (caster.isAlikeDead() || !(caster instanceof Player))
 			return;
@@ -122,7 +122,7 @@ public class L2SkillSummon extends L2Skill
 			
 			if (targets.length > 1) // Mass cubic skill
 			{
-				for (L2Object obj : targets)
+				for (WorldObject obj : targets)
 				{
 					if (!(obj instanceof Player))
 						continue;

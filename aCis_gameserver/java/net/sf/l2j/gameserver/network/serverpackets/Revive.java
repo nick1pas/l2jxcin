@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 
 /**
  * format d
@@ -9,7 +9,7 @@ public class Revive extends L2GameServerPacket
 {
 	private final int _objectId;
 	
-	public Revive(L2Object obj)
+	public Revive(WorldObject obj)
 	{
 		_objectId = obj.getObjectId();
 	}

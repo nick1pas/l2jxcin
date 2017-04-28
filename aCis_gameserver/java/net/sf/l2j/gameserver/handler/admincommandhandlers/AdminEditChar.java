@@ -14,14 +14,14 @@ import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.commons.math.MathUtil;
 
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.datatables.CharNameTable;
 import net.sf.l2j.gameserver.datatables.CharTemplateTable;
+import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.Summon;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
@@ -35,7 +35,6 @@ import net.sf.l2j.gameserver.network.serverpackets.AbstractNpcInfo.NpcInfo;
 import net.sf.l2j.gameserver.network.serverpackets.GMViewItemList;
 import net.sf.l2j.gameserver.network.serverpackets.HennaInfo;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
-import net.sf.l2j.gameserver.util.Util;
 
 public class AdminEditChar implements IAdminCommandHandler
 {
@@ -172,7 +171,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		{
 			try
 			{
-				L2Object target = activeChar.getTarget();
+				WorldObject target = activeChar.getTarget();
 				Player player = null;
 				
 				if (target instanceof Player)
@@ -193,7 +192,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		{
 			try
 			{
-				L2Object target = activeChar.getTarget();
+				WorldObject target = activeChar.getTarget();
 				Player player = null;
 				
 				if (target instanceof Player)
@@ -238,7 +237,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		{
 			try
 			{
-				final L2Object target = activeChar.getTarget();
+				final WorldObject target = activeChar.getTarget();
 				final String newTitle = command.substring(15);
 				
 				if (target instanceof Player)
@@ -268,7 +267,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		{
 			try
 			{
-				final L2Object target = activeChar.getTarget();
+				final WorldObject target = activeChar.getTarget();
 				final String newName = command.substring(14);
 				
 				if (target instanceof Player)
@@ -282,7 +281,7 @@ public class AdminEditChar implements IAdminCommandHandler
 					final Player player = (Player) target;
 					
 					player.setName(newName);
-					CharNameTable.getInstance().updatePlayerData(player, false);
+					PlayerNameTable.getInstance().updatePlayerData(player, false);
 					player.sendMessage("Your name has been changed by a GM.");
 					player.broadcastUserInfo();
 					player.store();
@@ -304,7 +303,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_setsex"))
 		{
-			L2Object target = activeChar.getTarget();
+			WorldObject target = activeChar.getTarget();
 			Player player = null;
 			
 			if (target instanceof Player)
@@ -340,7 +339,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		{
 			try
 			{
-				L2Object target = activeChar.getTarget();
+				WorldObject target = activeChar.getTarget();
 				Player player = null;
 				
 				if (target instanceof Player)
@@ -361,7 +360,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		{
 			try
 			{
-				L2Object target = activeChar.getTarget();
+				WorldObject target = activeChar.getTarget();
 				Player player = null;
 				
 				if (target instanceof Player)
@@ -380,7 +379,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_summon_info"))
 		{
-			L2Object target = activeChar.getTarget();
+			WorldObject target = activeChar.getTarget();
 			if (target instanceof Summon)
 				gatherSummonInfo((Summon) target, activeChar);
 			// Allow to target a player to find his pet - target the pet then.
@@ -400,7 +399,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_unsummon"))
 		{
-			L2Object target = activeChar.getTarget();
+			WorldObject target = activeChar.getTarget();
 			if (target instanceof Summon)
 				((Summon) target).unSummon(((Summon) target).getOwner());
 			else
@@ -408,7 +407,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_summon_setlvl"))
 		{
-			L2Object target = activeChar.getTarget();
+			WorldObject target = activeChar.getTarget();
 			if (target instanceof Pet)
 			{
 				Pet pet = (Pet) target;
@@ -433,7 +432,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_show_pet_inv"))
 		{
-			L2Object target;
+			WorldObject target;
 			try
 			{
 				target = World.getInstance().getPet(Integer.parseInt(command.substring(19)));
@@ -451,7 +450,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_fullfood"))
 		{
-			L2Object target = activeChar.getTarget();
+			WorldObject target = activeChar.getTarget();
 			if (target instanceof Pet)
 			{
 				Pet targetPet = (Pet) target;
@@ -462,7 +461,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		}
 		else if (command.startsWith("admin_party_info"))
 		{
-			L2Object target;
+			WorldObject target;
 			try
 			{
 				target = World.getInstance().getPlayer(command.substring(17));
@@ -623,7 +622,7 @@ public class AdminEditChar implements IAdminCommandHandler
 	{
 		if (player == null)
 		{
-			L2Object target = activeChar.getTarget();
+			WorldObject target = activeChar.getTarget();
 			if (!(target instanceof Player))
 				return;
 			
@@ -646,12 +645,6 @@ public class AdminEditChar implements IAdminCommandHandler
 		final String clientInfo = player.getClient().toString();
 		final String account = clientInfo.substring(clientInfo.indexOf("Account: ") + 9, clientInfo.indexOf(" - IP: "));
 		final String ip = clientInfo.substring(clientInfo.indexOf(" - IP: ") + 7, clientInfo.lastIndexOf("]"));
-		final L2GameClient client = player.getClient();
-
-		if (client == null)
-			activeChar.sendMessage("Client is null.");
-		else if (client.isDetached())
-			activeChar.sendMessage("Client is detached.");
 		
 		final NpcHtmlMessage html = new NpcHtmlMessage(0);
 		html.setFile("data/html/admin/" + filename);
@@ -679,7 +672,7 @@ public class AdminEditChar implements IAdminCommandHandler
 		html.replace("%pkkills%", player.getPkKills());
 		html.replace("%currentload%", player.getCurrentLoad());
 		html.replace("%maxload%", player.getMaxLoad());
-		html.replace("%percent%", Util.roundTo(((float) player.getCurrentLoad() / (float) player.getMaxLoad()) * 100, 2));
+		html.replace("%percent%", MathUtil.roundTo(((float) player.getCurrentLoad() / (float) player.getMaxLoad()) * 100, 2));
 		html.replace("%patk%", player.getPAtk(null));
 		html.replace("%matk%", player.getMAtk(null, null));
 		html.replace("%pdef%", player.getPDef(null));
@@ -698,7 +691,7 @@ public class AdminEditChar implements IAdminCommandHandler
 	
 	private static void setTargetKarma(Player activeChar, int newKarma)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		if (!(target instanceof Player))
 			return;
 		
@@ -717,7 +710,7 @@ public class AdminEditChar implements IAdminCommandHandler
 	
 	private static void editCharacter(Player activeChar)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		if (!(target instanceof Player))
 			return;
 		

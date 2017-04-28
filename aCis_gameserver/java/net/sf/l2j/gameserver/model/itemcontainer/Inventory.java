@@ -10,8 +10,8 @@ import java.util.logging.Level;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.datatables.ItemTable;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -136,7 +136,7 @@ public abstract class Inventory extends ItemContainer
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance dropItem(String process, ItemInstance item, Player actor, L2Object reference)
+	public ItemInstance dropItem(String process, ItemInstance item, Player actor, WorldObject reference)
 	{
 		if (item == null)
 			return null;
@@ -166,7 +166,7 @@ public abstract class Inventory extends ItemContainer
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the destroyed item or the updated item in inventory
 	 */
-	public ItemInstance dropItem(String process, int objectId, int count, Player actor, L2Object reference)
+	public ItemInstance dropItem(String process, int objectId, int count, Player actor, WorldObject reference)
 	{
 		ItemInstance item = getItemByObjectId(objectId);
 		if (item == null)

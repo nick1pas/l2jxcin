@@ -27,7 +27,6 @@ import net.sf.l2j.gameserver.network.serverpackets.RecipeShopItemInfo;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.taskmanager.AttackStanceTaskManager;
-import net.sf.l2j.gameserver.util.Util;
 import net.sf.l2j.gameserver.xmlfactory.XMLDocumentFactory;
 
 import org.w3c.dom.Document;
@@ -163,10 +162,8 @@ public class RecipeTable
 		Collection<RecipeList> commonRecipes = manufacturer.getCommonRecipeBook();
 		
 		if (!dwarfRecipes.contains(recipeList) && !commonRecipes.contains(recipeList))
-		{
-			Util.handleIllegalPlayerAction(player, player.getName() + " of account " + player.getAccountName() + " sent a false recipe id.", Config.DEFAULT_PUNISH);
 			return;
-		}
+		
 		
 		final RecipeItemMaker maker = new RecipeItemMaker(manufacturer, recipeList, player);
 		if (maker._isValid)
@@ -189,10 +186,7 @@ public class RecipeTable
 		Collection<RecipeList> commonRecipes = player.getCommonRecipeBook();
 		
 		if (!dwarfRecipes.contains(recipeList) && !commonRecipes.contains(recipeList))
-		{
-			Util.handleIllegalPlayerAction(player, player.getName() + " of account " + player.getAccountName() + " sent a false recipe id.", Config.DEFAULT_PUNISH);
 			return;
-		}
 		
 		final RecipeItemMaker maker = new RecipeItemMaker(player, recipeList, player);
 		if (maker._isValid)

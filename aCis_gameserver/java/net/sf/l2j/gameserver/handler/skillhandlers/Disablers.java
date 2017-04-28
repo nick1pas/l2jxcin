@@ -1,16 +1,16 @@
 package net.sf.l2j.gameserver.handler.skillhandlers;
 
-import net.sf.l2j.gameserver.ai.CtrlEvent;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.ai.model.L2AttackableAI;
 import net.sf.l2j.gameserver.handler.ISkillHandler;
 import net.sf.l2j.gameserver.model.L2Effect;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlEvent;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
+import net.sf.l2j.gameserver.model.actor.ai.type.AttackableAI;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.SiegeSummon;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -46,7 +46,7 @@ public class Disablers implements ISkillHandler
 	};
 	
 	@Override
-	public void useSkill(Character activeChar, L2Skill skill, L2Object[] targets)
+	public void useSkill(Creature activeChar, L2Skill skill, WorldObject[] targets)
 	{
 		L2SkillType type = skill.getSkillType();
 		
@@ -54,12 +54,12 @@ public class Disablers implements ISkillHandler
 		final boolean sps = activeChar.isChargedShot(ShotType.SPIRITSHOT);
 		final boolean bsps = activeChar.isChargedShot(ShotType.BLESSED_SPIRITSHOT);
 		
-		for (L2Object obj : targets)
+		for (WorldObject obj : targets)
 		{
-			if (!(obj instanceof Character))
+			if (!(obj instanceof Creature))
 				continue;
 			
-			Character target = (Character) obj;
+			Creature target = (Creature) obj;
 			if (target.isDead() || (target.isInvul() && !target.isParalyzed())) // bypass if target is dead or invul (excluding invul from Petrification)
 				continue;
 			
@@ -183,9 +183,9 @@ public class Disablers implements ISkillHandler
 						{
 							Attackable targ = (Attackable) target;
 							targ.stopHating(activeChar);
-							if (targ.getMostHated() == null && targ.hasAI() && targ.getAI() instanceof L2AttackableAI)
+							if (targ.getMostHated() == null && targ.hasAI() && targ.getAI() instanceof AttackableAI)
 							{
-								((L2AttackableAI) targ.getAI()).setGlobalAggro(-25);
+								((AttackableAI) targ.getAI()).setGlobalAggro(-25);
 								targ.getAggroList().clear();
 								targ.getAI().setIntention(CtrlIntention.ACTIVE);
 								targ.setWalking();

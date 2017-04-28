@@ -4,12 +4,9 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.commons.mmocore.ReceivablePacket;
 
-import net.sf.l2j.loginserver.L2LoginClient;
+import net.sf.l2j.loginserver.network.LoginClient;
 
-/**
- * @author KenM
- */
-public abstract class L2LoginClientPacket extends ReceivablePacket<L2LoginClient>
+public abstract class L2LoginClientPacket extends ReceivablePacket<LoginClient>
 {
 	private static Logger _log = Logger.getLogger(L2LoginClientPacket.class.getName());
 	

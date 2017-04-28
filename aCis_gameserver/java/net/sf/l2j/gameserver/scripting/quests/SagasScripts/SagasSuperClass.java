@@ -8,13 +8,13 @@ import java.util.Map;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
@@ -145,7 +145,7 @@ public class SagasSuperClass extends Quest
 			addKillId(Guardian_Angel);
 	}
 	
-	private static void cast(Npc npc, Character target, int skillId, int level)
+	private static void cast(Npc npc, Creature target, int skillId, int level)
 	{
 		target.broadcastPacket(new MagicSkillUse(target, target, skillId, level, 6000, 1));
 		target.broadcastPacket(new MagicSkillUse(npc, npc, skillId, level, 6000, 1));
@@ -802,7 +802,7 @@ public class SagasSuperClass extends Quest
 	}
 	
 	@Override
-	public String onSkillSee(Npc npc, Player player, L2Skill skill, L2Object[] targets, boolean isPet)
+	public String onSkillSee(Npc npc, Player player, L2Skill skill, WorldObject[] targets, boolean isPet)
 	{
 		if (_SpawnList.containsKey(npc) && _SpawnList.get(npc) != player.getObjectId())
 		{
@@ -810,7 +810,7 @@ public class SagasSuperClass extends Quest
 			if (quest_player == null)
 				return null;
 			
-			for (L2Object obj : targets)
+			for (WorldObject obj : targets)
 			{
 				if (obj == quest_player || obj == npc)
 				{

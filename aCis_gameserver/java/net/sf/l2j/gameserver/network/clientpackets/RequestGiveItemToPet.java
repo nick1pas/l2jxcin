@@ -1,5 +1,7 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import net.sf.l2j.commons.math.MathUtil;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
@@ -8,7 +10,6 @@ import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.model.item.type.EtcItemType;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.EnchantResult;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class RequestGiveItemToPet extends L2GameClientPacket
 {
@@ -68,7 +69,7 @@ public final class RequestGiveItemToPet extends L2GameClientPacket
 			return;
 		}
 		
-		if (Util.calculateDistance(player, pet, true) > Npc.INTERACTION_DISTANCE)
+		if (MathUtil.calculateDistance(player, pet, true) > Npc.INTERACTION_DISTANCE)
 		{
 			player.sendPacket(SystemMessageId.TARGET_TOO_FAR);
 			return;

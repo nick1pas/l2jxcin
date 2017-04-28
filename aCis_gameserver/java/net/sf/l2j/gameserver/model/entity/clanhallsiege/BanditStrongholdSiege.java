@@ -35,7 +35,7 @@ import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Deco;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -203,7 +203,7 @@ public class BanditStrongholdSiege extends ClanHallSiege
 	public void teleportPlayers()
 	{
 		zone = clanhall.getZone();
-		for (Character cha : zone.getCharactersInside())
+		for (Creature cha : zone.getCharactersInside())
 		{
 			if (cha instanceof Player)
 			{

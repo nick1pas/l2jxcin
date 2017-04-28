@@ -1,8 +1,5 @@
 package net.sf.l2j.loginserver.network.serverpackets;
 
-/**
- * @author KenM
- */
 public final class AccountKicked extends L2LoginServerPacket
 {
 	public static enum AccountKickedReason

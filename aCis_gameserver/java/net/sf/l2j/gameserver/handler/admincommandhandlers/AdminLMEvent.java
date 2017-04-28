@@ -5,7 +5,7 @@ package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEventTeleporter;
@@ -29,7 +29,7 @@ public class AdminLMEvent implements IAdminCommandHandler
 	{
 		if (command.equals("admin_lm_add"))
 		{
-			L2Object target = activeChar.getTarget();
+			WorldObject target = activeChar.getTarget();
 			
 			if (!(target instanceof Player))
 			{
@@ -41,7 +41,7 @@ public class AdminLMEvent implements IAdminCommandHandler
 		}
 		else if (command.equals("admin_lm_remove"))
 		{
-			L2Object target = activeChar.getTarget();
+			WorldObject target = activeChar.getTarget();
 			
 			if (!(target instanceof Player))
 			{

@@ -10,8 +10,8 @@ import net.sf.l2j.gameserver.instancemanager.AuctionManager;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.model.L2Clan;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.TowerSpawn;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
@@ -44,7 +44,8 @@ public class AdminSiege implements IAdminCommandHandler
 		"admin_clanhalldel",
 		"admin_clanhallopendoors",
 		"admin_clanhallclosedoors",
-		"admin_clanhallteleportself"
+		"admin_clanhallteleportself",
+		"admin_reset_certificates"
 	};
 	
 	@Override
@@ -68,7 +69,7 @@ public class AdminSiege implements IAdminCommandHandler
 			return true;
 		}
 		
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		if (target instanceof Player)
 			player = (Player) target;
@@ -131,6 +132,10 @@ public class AdminSiege implements IAdminCommandHandler
 			{
 				castle.getSiege().startSiege();
 			}
+			else if (command.equalsIgnoreCase("admin_reset_certificates"))
+			{
+				castle.setLeftCertificates(300, true);
+			}
 			
 			final NpcHtmlMessage html = new NpcHtmlMessage(0);
 			html.setFile("data/html/admin/castle.htm");
@@ -140,6 +145,7 @@ public class AdminSiege implements IAdminCommandHandler
 			html.replace("%ticketsNumber%", castle.getTickets().size());
 			html.replace("%droppedTicketsNumber%", castle.getDroppedTickets().size());
 			html.replace("%npcsNumber%", castle.getRelatedNpcIds().size());
+			html.replace("%certificates%", castle.getLeftCertificates());
 			
 			final StringBuilder sb = new StringBuilder();
 			

@@ -9,9 +9,9 @@ import net.sf.l2j.commons.math.MathUtil;
 
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
@@ -153,13 +153,13 @@ public class AdminSkill implements IAdminCommandHandler
 	
 	private static void adminTestSkill(Player activeChar, int id)
 	{
-		Character player;
-		L2Object target = activeChar.getTarget();
+		Creature player;
+		WorldObject target = activeChar.getTarget();
 		
-		if (target == null || !(target instanceof Character))
+		if (target == null || !(target instanceof Creature))
 			player = activeChar;
 		else
-			player = (Character) target;
+			player = (Creature) target;
 		
 		player.broadcastPacket(new MagicSkillUse(activeChar, player, id, 1, 1, 1));
 	}
@@ -170,7 +170,7 @@ public class AdminSkill implements IAdminCommandHandler
 	 */
 	private static void adminGiveAllSkills(Player activeChar)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		
 		if (target instanceof Player)
@@ -188,7 +188,7 @@ public class AdminSkill implements IAdminCommandHandler
 	
 	private static void removeSkillsPage(Player activeChar, int page)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		if (target instanceof Player)
 			player = (Player) target;
@@ -230,7 +230,7 @@ public class AdminSkill implements IAdminCommandHandler
 	
 	private static void showMainPage(Player activeChar)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		if (target instanceof Player)
 			player = (Player) target;
@@ -250,7 +250,7 @@ public class AdminSkill implements IAdminCommandHandler
 	
 	private static void adminGetSkills(Player activeChar)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		
 		if (target instanceof Player)
@@ -299,7 +299,7 @@ public class AdminSkill implements IAdminCommandHandler
 	
 	private static void adminAddSkill(Player activeChar, String val)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		
 		if (target instanceof Player)
@@ -349,7 +349,7 @@ public class AdminSkill implements IAdminCommandHandler
 	
 	private static void adminRemoveSkill(Player activeChar, int idval)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		
 		if (target instanceof Player)
@@ -380,7 +380,7 @@ public class AdminSkill implements IAdminCommandHandler
 	
 	private static void adminAddClanSkill(Player activeChar, int id, int level)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		
 		if (target instanceof Player)

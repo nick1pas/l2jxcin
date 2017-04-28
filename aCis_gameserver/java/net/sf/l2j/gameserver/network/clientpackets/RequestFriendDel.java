@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.util.logging.Level;
 
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.datatables.CharNameTable;
+import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -29,7 +29,7 @@ public final class RequestFriendDel extends L2GameClientPacket
 		if (activeChar == null)
 			return;
 		
-		int id = CharNameTable.getInstance().getPlayerObjectId(_name);
+		int id = PlayerNameTable.getInstance().getPlayerObjectId(_name);
 		
 		if (id == -1 || !activeChar.getFriendList().contains(id))
 		{

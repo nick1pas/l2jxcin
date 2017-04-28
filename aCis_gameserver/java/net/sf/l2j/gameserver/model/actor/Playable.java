@@ -1,15 +1,15 @@
 package net.sf.l2j.gameserver.model.actor;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.model.L2Effect;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.WorldRegion;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlEvent;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.stat.PlayableStat;
 import net.sf.l2j.gameserver.model.actor.status.PlayableStatus;
-import net.sf.l2j.gameserver.model.actor.template.CharTemplate;
+import net.sf.l2j.gameserver.model.actor.template.CreatureTemplate;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.Revive;
@@ -26,7 +26,7 @@ import net.sf.l2j.gameserver.templates.skills.L2EffectType;
  * <li>Summon</li><BR>
  * <BR>
  */
-public abstract class Playable extends Character
+public abstract class Playable extends Creature
 {
 	/**
 	 * Constructor of Playable (use Character constructor).<BR>
@@ -36,9 +36,9 @@ public abstract class Playable extends Character
 	 * <li>Call the Character constructor to create an empty _skills slot and link copy basic Calculator set to this Playable</li><BR>
 	 * <BR>
 	 * @param objectId Identifier of the object to initialized
-	 * @param template The L2CharTemplate to apply to the Playable
+	 * @param template The L2CreatureTemplate to apply to the Playable
 	 */
-	public Playable(int objectId, CharTemplate template)
+	public Playable(int objectId, CreatureTemplate template)
 	{
 		super(objectId, template);
 	}
@@ -77,7 +77,7 @@ public abstract class Playable extends Character
 	}
 	
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		// killing is only possible one time
 		synchronized (this)
@@ -303,7 +303,7 @@ public abstract class Playable extends Character
 		return isInsideZone(ZoneId.PVP) && !isInsideZone(ZoneId.SIEGE);
 	}
 	
-	public abstract void doPickupItem(L2Object object);
+	public abstract void doPickupItem(WorldObject object);
 	
 	public abstract int getKarma();
 	

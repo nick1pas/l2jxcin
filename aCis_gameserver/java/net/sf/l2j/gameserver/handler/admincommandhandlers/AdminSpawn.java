@@ -16,9 +16,9 @@ import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.DayNightSpawnManager;
 import net.sf.l2j.gameserver.instancemanager.RaidBossSpawnManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Spawn;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Fence;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -79,7 +79,7 @@ public class AdminSpawn implements IAdminCommandHandler
 			catch (Exception e)
 			{
 				// If the parameter wasn't ok, then take the current target.
-				final L2Object target = activeChar.getTarget();
+				final WorldObject target = activeChar.getTarget();
 				if (target instanceof Npc)
 					npcId = ((Npc) target).getNpcId();
 			}
@@ -232,7 +232,7 @@ public class AdminSpawn implements IAdminCommandHandler
 			st.nextToken();
 			try
 			{
-				L2Object object = World.getInstance().getObject(Integer.parseInt(st.nextToken()));
+				WorldObject object = World.getInstance().getObject(Integer.parseInt(st.nextToken()));
 				if (object instanceof Fence)
 				{
 					FenceTable.getInstance().removeFence((Fence) object);
@@ -280,7 +280,7 @@ public class AdminSpawn implements IAdminCommandHandler
 	
 	private static void spawn(Player activeChar, String monsterId, int respawnTime, boolean permanent)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		if (target == null)
 			target = activeChar;
 		

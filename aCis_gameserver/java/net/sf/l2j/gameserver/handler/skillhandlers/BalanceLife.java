@@ -5,9 +5,9 @@ import java.util.List;
 
 import net.sf.l2j.gameserver.handler.ISkillHandler;
 import net.sf.l2j.gameserver.handler.SkillHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
@@ -23,24 +23,24 @@ public class BalanceLife implements ISkillHandler
 	};
 	
 	@Override
-	public void useSkill(Character activeChar, L2Skill skill, L2Object[] targets)
+	public void useSkill(Creature activeChar, L2Skill skill, WorldObject[] targets)
 	{
 		final ISkillHandler handler = SkillHandler.getInstance().getSkillHandler(L2SkillType.BUFF);
 		if (handler != null)
 			handler.useSkill(activeChar, skill, targets);
 		
 		final Player player = activeChar.getActingPlayer();
-		final List<Character> finalList = new ArrayList<>();
+		final List<Creature> finalList = new ArrayList<>();
 		
 		double fullHP = 0;
 		double currentHPs = 0;
 		
-		for (L2Object obj : targets)
+		for (WorldObject obj : targets)
 		{
-			if (!(obj instanceof Character))
+			if (!(obj instanceof Creature))
 				continue;
 			
-			final Character target = ((Character) obj);
+			final Creature target = ((Creature) obj);
 			if (target.isDead())
 				continue;
 			
@@ -64,7 +64,7 @@ public class BalanceLife implements ISkillHandler
 		{
 			double percentHP = currentHPs / fullHP;
 			
-			for (Character target : finalList)
+			for (Creature target : finalList)
 			{
 				target.setCurrentHp(target.getMaxHp() * percentHP);
 				

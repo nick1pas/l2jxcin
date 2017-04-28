@@ -1,12 +1,12 @@
 package net.sf.l2j.gameserver.handler.skillhandlers;
 
 import net.sf.l2j.gameserver.handler.ISkillHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
-import net.sf.l2j.gameserver.model.actor.Character;
-import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
@@ -22,7 +22,7 @@ public class Resurrect implements ISkillHandler
 	};
 	
 	@Override
-	public void useSkill(Character activeChar, L2Skill skill, L2Object[] targets)
+	public void useSkill(Creature activeChar, L2Skill skill, WorldObject[] targets)
 	{
 		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(activeChar.getObjectId())
 			|| !DMEvent.isInactive() && DMEvent.isPlayerParticipant(activeChar.getObjectId())
@@ -32,9 +32,9 @@ public class Resurrect implements ISkillHandler
 			return;
 		}
 		
-		for (L2Object cha : targets)
+		for (WorldObject cha : targets)
 		{
-			final Character target = (Character) cha;
+			final Creature target = (Creature) cha;
 			if (activeChar instanceof Player)
 			{
 				if (cha instanceof Player)

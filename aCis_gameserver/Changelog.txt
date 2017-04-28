@@ -137,3 +137,67 @@ Fix: Dropped this option because all HTML *-pk.htm not exists. And retail like P
 Fix: Dropped AltLeavePartyLeader. Retail like always True.
 Fix: Dropped config RemoveCastleCirclets because circle can't be used when castle was lost.
 Fix: Dropped all debug configs. Unused.
+Fix: Zaken
+Fix: Enchanter Warehouse
+
+--------------------------------------------
+                 aCis 368 
+--------------------------------------------
+Chamberlain Manor's Certificates
+   - Implement a missing castle chamberlain feature, the possibility to buy Manor's Certificates. HTMs and behavior is OFF-like.
+   - Added "//reset_certificates castleName" admincommand. Integrate it on the castle panel (had to reorganize it a little).
+
+Cleanup Config
+   - Drop DATABASE_MAX_IDLE_TIME time (set to 0 by default).
+   - Re-order login/server .properties
+   - Drop ACCEPT_ALTERNATE_ID / REQUEST_ID from login on Config.java (weren't existing on .properties, not used by login)
+   
+Login
+   - Drop external/internal hostnames system ; only one hostname is allowed.
+   - LoginServerThread cleanup :
+      - Drop _waitingClients (synchronized, check logic already handled by the other CHMap).
+      - Drop some variables (7 were calling Config), some unused methods. Some rename are made.
+      - Move some of the security check logic here and there to make it cleaner.
+   - ServerStatus content is reorganized in both LS and GS sides. Addition of age limit / pvp server tags.
+   - FloodProtectedListener connections are registered on a ConcurrentHashMap.
+   - Creation of ServerData class (was part of ServerList packet). Cleanup of ServerList for easier proxy handler implementation.
+   - Creation of GameServerInfo class (was part of GameServerTable).
+
+MMOCore
+   - Avoid to crash on packet read buffer underflow (client connection is dropped instead).
+   - Tweak MMOCore values to process packets x4 faster (5k packets = from 16s to 4s).
+   - Tweak CLIENT_PACKET_QUEUE_MAX_PACKETS_PER_SECOND && CLIENT_PACKET_QUEUE_MAX_AVERAGE_PACKETS_PER_SECOND default values (x2 now).
+   
+Instance rename && reorganization part II
+   - L2Object is renamed WorldObject.
+   - Character (previously L2Character) is renamed Creature due to class already defined on JDK (and making imports complicated).
+   - AI models are renamed to fit with new naming convention (PlayerAI, PlayableAI, CreatureAI, etc).
+   - The package gameserver.ai is now moved on gameserver.model.actor.ai (best location). ai.model is renamed ai.type (because gameserver.model.actor.ai.model was redundant).
+   - Templates, Stat && Status models are renamed to fit with new naming convention.
+
+Logging rework
+   - log.cfg is renamed logging.properties.
+   - Drop 'audit' layer && associated IllegalPlayerAction system (all punishements are deleted, DefaultPunish && DefaultPunishParam configs are dropped). Reason : that's the point you write integrity checks.
+   - Drop GMAudit, uses the default formatter/handler/filter (all GMs are written on the same file).
+   - Whole logging system is moved into commons. Create 'filter', 'formatter' && 'handler' packages on log. Rename package 'log' to 'logging'.
+   - All handlers got a limit and a count to avoid to flood server with logs. The log limit is set to 1mo instead of 500ko. The count is setted to 5 files.
+   - All logs are now moved in their own folders (those folders are created by default).
+   - Logs name pattern has been edited (typeName_count.txt), the extension is now .txt.
+   - All formatters are based on same writting style.
+   
+Misc
+   - Merge math methods from Util with MathUtil. Delete Util.
+   - banned_ip.cfg is renamed banned_ips.properties.
+   - FloodProtectors class is moved from gameserver.util to gameserver.network.
+   - Addition of SysUtil, holding system related methods.
+   - L2Bookmark > Bookmark + basic cleanup of BookmarkTable.
+   - Minor cleanup of GameServer and L2LoginServer (don't keep references when not needed, drop of "L2" > LoginServer).
+   - MinionList cleanup, replace the CopyOnWriteArrayList (poor performance).
+   - Minor cleanup of RaidBoss (drop a double isMovementDisabled() check).
+   - Fix a typo error on query prior to sieges rework, ty HaddWik for report. Minor Siege class cleanup.
+   - SevenSigns minor cleanup (drop 3 redundant static variables and one method).
+   - Slight cleanup of RecipeShopSellList packet (avoid .get on a for loop).
+   - villagemaster/30594.htm edit.
+   
+PS: if you got better log writting style, I would eventually integrate it.
+PS2: build.xml is edited, some .properties are edited.

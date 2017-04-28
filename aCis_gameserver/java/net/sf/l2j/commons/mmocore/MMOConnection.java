@@ -194,16 +194,7 @@ public class MMOConnection<T extends MMOClient<?>>
 		return _sendQueue;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public final void close(final SendablePacket<T> sp)
-	{
-		close(new SendablePacket[]
-		{
-			sp
-		});
-	}
-	
-	public final void close(final SendablePacket<T>[] closeList)
 	{
 		if (_pendingClose)
 			return;
@@ -214,8 +205,7 @@ public class MMOConnection<T extends MMOClient<?>>
 			{
 				_pendingClose = true;
 				_sendQueue.clear();
-				for (SendablePacket<T> sp : closeList)
-					_sendQueue.addLast(sp);
+				_sendQueue.addLast(sp);
 			}
 		}
 		
@@ -223,9 +213,7 @@ public class MMOConnection<T extends MMOClient<?>>
 		{
 			_selectionKey.interestOps(_selectionKey.interestOps() & ~SelectionKey.OP_WRITE);
 		}
-		catch (CancelledKeyException e)
-		{
-			// ignore
+		catch (CancelledKeyException e) {
 		}
 		
 		_selectorThread.closeConnection(this);

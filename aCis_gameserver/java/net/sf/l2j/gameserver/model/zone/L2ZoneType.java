@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
 import net.sf.l2j.gameserver.scripting.EventType;
@@ -23,7 +23,7 @@ public abstract class L2ZoneType
 	protected static final Logger _log = Logger.getLogger(L2ZoneType.class.getName());
 	
 	private final int _id;
-	protected final Map<Integer, Character> _characterList = new ConcurrentHashMap<>();
+	protected final Map<Integer, Creature> _characterList = new ConcurrentHashMap<>();
 	
 	private Map<EventType, List<Quest>> _questEvents;
 	private L2ZoneForm _zone;
@@ -33,13 +33,13 @@ public abstract class L2ZoneType
 		_id = id;	
 	}
  	
-	protected abstract void onEnter(Character character);
+	protected abstract void onEnter(Creature character);
 	
-	protected abstract void onExit(Character character);
+	protected abstract void onExit(Creature character);
 	
-	public abstract void onDieInside(Character character);
+	public abstract void onDieInside(Creature character);
 	
-	public abstract void onReviveInside(Character character);
+	public abstract void onReviveInside(Creature character);
 	
 	@Override
 	public String toString()
@@ -99,7 +99,7 @@ public abstract class L2ZoneType
 	 * @param object check object's X/Y positions.
 	 * @return true if the given object is inside the zone.
 	 */
-	public boolean isInsideZone(L2Object object)
+	public boolean isInsideZone(WorldObject object)
 	{
 		return isInsideZone(object.getX(), object.getY(), object.getZ());
 	}
@@ -109,12 +109,12 @@ public abstract class L2ZoneType
 		return getZone().getDistanceToZone(x, y);
 	}
 	
-	public double getDistanceToZone(L2Object object)
+	public double getDistanceToZone(WorldObject object)
 	{
 		return getZone().getDistanceToZone(object.getX(), object.getY());
 	}
 	
-	public void revalidateInZone(Character character)
+	public void revalidateInZone(Creature character)
 	{
 		// If the character can't be affected by this zone return
 		if (!isAffected(character))
@@ -148,7 +148,7 @@ public abstract class L2ZoneType
 	 * Removes a character from the zone.
 	 * @param character : The character to remove.
 	 */
-	public void removeCharacter(Character character)
+	public void removeCharacter(Creature character)
 	{
 		// Was the character inside this zone?
 		if (_characterList.containsKey(character.getObjectId()))
@@ -173,12 +173,12 @@ public abstract class L2ZoneType
 	 * @param character The character to test.
 	 * @return True if the character is in the zone.
 	 */
-	public boolean isCharacterInZone(Character character)
+	public boolean isCharacterInZone(Creature character)
 	{
 		return _characterList.containsKey(character.getObjectId());
 	}
 	
-	public Collection<Character> getCharactersInside()
+	public Collection<Creature> getCharactersInside()
 	{
 		return _characterList.values();
 	}
@@ -193,7 +193,7 @@ public abstract class L2ZoneType
 	{
 		List<A> result = new ArrayList<>();
 		
-		for (L2Object obj : _characterList.values())
+		for (WorldObject obj : _characterList.values())
 		{
 			if (type.isAssignableFrom(obj.getClass()))
 				result.add((A) obj);
@@ -231,7 +231,7 @@ public abstract class L2ZoneType
 	 */
 	public void broadcastPacket(L2GameServerPacket packet)
 	{
-		for (Character character : _characterList.values())
+		for (Creature character : _characterList.values())
 		{
 			if (character instanceof Player)
 				character.sendPacket(packet);
@@ -252,7 +252,7 @@ public abstract class L2ZoneType
 	 * @param character The character to test.
 	 * @return True if the given character is affected by this zone.
 	 */
-	protected boolean isAffected(Character character)
+	protected boolean isAffected(Creature character)
 	{
 		// Overriden in children classes.
 		return true;

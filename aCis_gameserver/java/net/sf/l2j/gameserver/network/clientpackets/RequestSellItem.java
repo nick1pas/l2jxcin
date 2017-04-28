@@ -2,7 +2,7 @@ package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.cache.HtmCache;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Fisherman;
 import net.sf.l2j.gameserver.model.actor.instance.MercenaryManagerNpc;
@@ -13,11 +13,7 @@ import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
-import net.sf.l2j.gameserver.util.Util;
 
-/**
- * format: cdd (ddd)
- */
 public final class RequestSellItem extends L2GameClientPacket
 {
 	private static final int BATCH_LENGTH = 12; // length of the one item
@@ -63,7 +59,7 @@ public final class RequestSellItem extends L2GameClientPacket
 			return;
 		
 		Npc merchant = null;
-		L2Object target = player.getTarget();
+		WorldObject target = player.getTarget();
 		boolean isGoodInstance = (target instanceof Merchant || target instanceof MercenaryManagerNpc);
 		
 		merchant = isGoodInstance ? (Npc) target : null;
@@ -86,11 +82,10 @@ public final class RequestSellItem extends L2GameClientPacket
 			
 			int price = item.getReferencePrice() / 2;
 			totalPrice += price * i.getValue();
+			
 			if ((Integer.MAX_VALUE / i.getValue()) < price || totalPrice > Integer.MAX_VALUE)
-			{
-				Util.handleIllegalPlayerAction(player, player.getName() + " of account " + player.getAccountName() + " tried to purchase over " + Integer.MAX_VALUE + " adena worth of goods.", Config.DEFAULT_PUNISH);
 				return;
-			}
+			
 			item = player.getInventory().destroyItem("Sell", i.getId(), i.getValue(), player, merchant);
 		}
 		

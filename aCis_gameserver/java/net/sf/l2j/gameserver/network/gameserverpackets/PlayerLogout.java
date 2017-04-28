@@ -1,8 +1,5 @@
 package net.sf.l2j.gameserver.network.gameserverpackets;
 
-/**
- * @author -Wooden-
- */
 public class PlayerLogout extends GameServerBasePacket
 {
 	public PlayerLogout(String player)

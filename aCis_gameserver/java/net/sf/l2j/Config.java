@@ -491,19 +491,17 @@ public final class Config
 	
 	public static String LOGIN_BIND_ADDRESS;
 	public static int PORT_LOGIN;
-	
-	public static boolean ACCEPT_NEW_GAMESERVER;
-	public static int REQUEST_ID;
-	public static boolean ACCEPT_ALTERNATE_ID;
-	
+
 	public static int LOGIN_TRY_BEFORE_BAN;
 	public static int LOGIN_BLOCK_AFTER_BAN;
-	
-	public static boolean LOG_LOGIN_CONTROLLER;
-	
+	public static boolean ACCEPT_NEW_GAMESERVER;
+
 	public static boolean SHOW_LICENCE;
 	
 	public static boolean AUTO_CREATE_ACCOUNTS;
+	
+	public static boolean LOG_LOGIN_CONTROLLER;
+	
 	public static boolean FORCE_GGAUTH;
 	public static boolean CRYPT_TOKEN;
 	
@@ -743,22 +741,24 @@ public final class Config
 	
 	public static String GAMESERVER_HOSTNAME;
 	public static int PORT_GAME;
-	public static String EXTERNAL_HOSTNAME;
-	public static String INTERNAL_HOSTNAME;
+	public static String HOSTNAME;
 	public static int GAME_SERVER_LOGIN_PORT;
 	public static String GAME_SERVER_LOGIN_HOST;
+	public static int REQUEST_ID;
+	public static boolean ACCEPT_ALTERNATE_ID;
 	
 	/** Access to database */
 	public static String DATABASE_URL;
 	public static String DATABASE_LOGIN;
 	public static String DATABASE_PASSWORD;
 	public static int DATABASE_MAX_CONNECTIONS;
-	public static int DATABASE_MAX_IDLE_TIME;
 	
 	/** serverList & Test */
 	public static boolean SERVER_LIST_BRACKET;
 	public static boolean SERVER_LIST_CLOCK;
-	public static boolean SERVER_LIST_TESTSERVER;
+	public static int SERVER_LIST_AGE;
+ 	public static boolean SERVER_LIST_TESTSERVER;
+	public static boolean SERVER_LIST_PVPSERVER;
 	public static boolean SERVER_GMONLY;
 	
 	/** clients related */
@@ -766,10 +766,6 @@ public final class Config
 	public static int MAXIMUM_ONLINE_USERS;
 	public static int MIN_PROTOCOL_REVISION;
 	public static int MAX_PROTOCOL_REVISION;
-	
-	/** Jail & Punishements **/
-	public static int DEFAULT_PUNISH;
-	public static int DEFAULT_PUNISH_PARAM;
 	
 	/** Auto-loot */
 	public static boolean AUTO_LOOT;
@@ -915,16 +911,16 @@ public final class Config
 	
 	/** MMO settings */
 	public static int MMO_SELECTOR_SLEEP_TIME = 20; // default 20
-	public static int MMO_MAX_SEND_PER_PASS = 12; // default 12
-	public static int MMO_MAX_READ_PER_PASS = 12; // default 12
+	public static int MMO_MAX_SEND_PER_PASS = 80; // default 80
+	public static int MMO_MAX_READ_PER_PASS = 80; // default 80
 	public static int MMO_HELPER_BUFFER_COUNT = 20; // default 20
 	
 	/** Client Packets Queue settings */
 	public static int CLIENT_PACKET_QUEUE_SIZE = 14; // default MMO_MAX_READ_PER_PASS + 2
 	public static int CLIENT_PACKET_QUEUE_MAX_BURST_SIZE = 13; // default MMO_MAX_READ_PER_PASS + 1
-	public static int CLIENT_PACKET_QUEUE_MAX_PACKETS_PER_SECOND = 80; // default 80
+	public static int CLIENT_PACKET_QUEUE_MAX_PACKETS_PER_SECOND = 160; // default 160
 	public static int CLIENT_PACKET_QUEUE_MEASURE_INTERVAL = 5; // default 5
-	public static int CLIENT_PACKET_QUEUE_MAX_AVERAGE_PACKETS_PER_SECOND = 40; // default 40
+	public static int CLIENT_PACKET_QUEUE_MAX_AVERAGE_PACKETS_PER_SECOND = 80; // default 80
 	public static int CLIENT_PACKET_QUEUE_MAX_FLOODS_PER_MIN = 2; // default 2
 	public static int CLIENT_PACKET_QUEUE_MAX_OVERFLOWS_PER_MIN = 1; // default 1
 	public static int CLIENT_PACKET_QUEUE_MAX_UNDERFLOWS_PER_MIN = 1; // default 1
@@ -2407,8 +2403,7 @@ public final class Config
 		GAMESERVER_HOSTNAME = server.getProperty("GameserverHostname");
 		PORT_GAME = server.getProperty("GameserverPort", 7777);
 		
-		EXTERNAL_HOSTNAME = server.getProperty("ExternalHostname", "*");
-		INTERNAL_HOSTNAME = server.getProperty("InternalHostname", "*");
+		HOSTNAME = server.getProperty("Hostname", "*");
 		
 		GAME_SERVER_LOGIN_PORT = server.getProperty("LoginPort", 9014);
 		GAME_SERVER_LOGIN_HOST = server.getProperty("LoginHost", "127.0.0.1");
@@ -2420,12 +2415,13 @@ public final class Config
 		DATABASE_LOGIN = server.getProperty("Login", "root");
 		DATABASE_PASSWORD = server.getProperty("Password", "");
 		DATABASE_MAX_CONNECTIONS = server.getProperty("MaximumDbConnections", 10);
-		DATABASE_MAX_IDLE_TIME = server.getProperty("MaximumDbIdleTime", 0);
-		
+	
 		SERVER_LIST_BRACKET = server.getProperty("ServerListBrackets", false);
 		SERVER_LIST_CLOCK = server.getProperty("ServerListClock", false);
 		SERVER_GMONLY = server.getProperty("ServerGMOnly", false);
-		SERVER_LIST_TESTSERVER = server.getProperty("TestServer", false);
+		SERVER_LIST_AGE = server.getProperty("ServerListAgeLimit", 0);
+ 		SERVER_LIST_TESTSERVER = server.getProperty("TestServer", false);
+		SERVER_LIST_PVPSERVER = server.getProperty("PvpServer", true);
 		
 		DELETE_DAYS = server.getProperty("DeleteCharAfterDays", 7);
 		MAXIMUM_ONLINE_USERS = server.getProperty("MaximumOnlineUsers", 100);
@@ -2433,10 +2429,7 @@ public final class Config
 		MAX_PROTOCOL_REVISION = server.getProperty("MaxProtocolRevision", 746);
 		if (MIN_PROTOCOL_REVISION > MAX_PROTOCOL_REVISION)
 			throw new Error("MinProtocolRevision is bigger than MaxProtocolRevision in server.properties.");
-		
-		DEFAULT_PUNISH = server.getProperty("DefaultPunish", 2);
-		DEFAULT_PUNISH_PARAM = server.getProperty("DefaultPunishParam", 0);
-		
+
 		AUTO_LOOT = server.getProperty("AutoLoot", false);
 		AUTO_LOOT_HERBS = server.getProperty("AutoLootHerbs", false);
 		AUTO_LOOT_RAID = server.getProperty("AutoLootRaid", false);
@@ -2570,37 +2563,30 @@ public final class Config
 	private static final void loadLogin()
 	{
 		final ExProperties server = initProperties(LOGIN_CONFIGURATION_FILE);
-		GAME_SERVER_LOGIN_HOST = server.getProperty("LoginHostname", "*");
-		GAME_SERVER_LOGIN_PORT = server.getProperty("LoginPort", 9013);
+		HOSTNAME = server.getProperty("Hostname", "localhost");
 		
 		LOGIN_BIND_ADDRESS = server.getProperty("LoginserverHostname", "*");
 		PORT_LOGIN = server.getProperty("LoginserverPort", 2106);
 		
-		DEBUG = server.getProperty("Debug", false);
-		DEVELOPER = server.getProperty("Developer", false);
-		PACKET_HANDLER_DEBUG = server.getProperty("PacketHandlerDebug", false);
-		ACCEPT_NEW_GAMESERVER = server.getProperty("AcceptNewGameServer", true);
-		REQUEST_ID = server.getProperty("RequestServerID", 0);
-		ACCEPT_ALTERNATE_ID = server.getProperty("AcceptAlternateID", true);
+		GAME_SERVER_LOGIN_HOST = server.getProperty("LoginHostname", "*");
+		GAME_SERVER_LOGIN_PORT = server.getProperty("LoginPort", 9014);
 		
 		LOGIN_TRY_BEFORE_BAN = server.getProperty("LoginTryBeforeBan", 3);
 		LOGIN_BLOCK_AFTER_BAN = server.getProperty("LoginBlockAfterBan", 600);
+		ACCEPT_NEW_GAMESERVER = server.getProperty("AcceptNewGameServer", false);
 		
-		LOG_LOGIN_CONTROLLER = server.getProperty("LogLoginController", false);
-		
-		INTERNAL_HOSTNAME = server.getProperty("InternalHostname", "localhost");
-		EXTERNAL_HOSTNAME = server.getProperty("ExternalHostname", "localhost");
-		
+		SHOW_LICENCE = server.getProperty("ShowLicence", true);
+
 		DATABASE_URL = server.getProperty("URL", "jdbc:mysql://localhost/acis");
 		DATABASE_LOGIN = server.getProperty("Login", "root");
 		DATABASE_PASSWORD = server.getProperty("Password", "");
 		DATABASE_MAX_CONNECTIONS = server.getProperty("MaximumDbConnections", 10);
-		DATABASE_MAX_IDLE_TIME = server.getProperty("MaximumDbIdleTime", 0);
-		
-		SHOW_LICENCE = server.getProperty("ShowLicence", true);
+
 		FORCE_GGAUTH = server.getProperty("ForceGGAuth", false);
 		
 		AUTO_CREATE_ACCOUNTS = server.getProperty("AutoCreateAccounts", true);
+
+		LOG_LOGIN_CONTROLLER = server.getProperty("LogLoginController", false);
 		
 		CRYPT_TOKEN = server.getProperty("CryptToken", true);
 		FLOOD_PROTECTION = server.getProperty("EnableFloodProtection", true);
@@ -2608,6 +2594,10 @@ public final class Config
 		NORMAL_CONNECTION_TIME = server.getProperty("NormalConnectionTime", 700);
 		FAST_CONNECTION_TIME = server.getProperty("FastConnectionTime", 350);
 		MAX_CONNECTION_PER_IP = server.getProperty("MaxConnectionPerIP", 50);
+				
+		DEBUG = server.getProperty("Debug", false);
+		DEVELOPER = server.getProperty("Developer", false);
+		PACKET_HANDLER_DEBUG = server.getProperty("PacketHandlerDebug", false);
 	}
 	
 	public static final void loadGameServer()

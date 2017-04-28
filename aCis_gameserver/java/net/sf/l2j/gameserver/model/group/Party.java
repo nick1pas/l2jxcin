@@ -7,6 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Future;
 
 import net.sf.l2j.commons.concurrent.ThreadPool;
+import net.sf.l2j.commons.math.MathUtil;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
@@ -15,10 +16,10 @@ import net.sf.l2j.gameserver.instancemanager.DimensionalRiftManager;
 import net.sf.l2j.gameserver.instancemanager.DuelManager;
 import net.sf.l2j.gameserver.instancemanager.SevenSignsFestival;
 import net.sf.l2j.gameserver.model.BlockList;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.RewardInfo;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.Servitor;
 import net.sf.l2j.gameserver.model.entity.DimensionalRift;
@@ -37,7 +38,6 @@ import net.sf.l2j.gameserver.network.serverpackets.PartySmallWindowAll;
 import net.sf.l2j.gameserver.network.serverpackets.PartySmallWindowDelete;
 import net.sf.l2j.gameserver.network.serverpackets.PartySmallWindowDeleteAll;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
-import net.sf.l2j.gameserver.util.Util;
 
 public class Party extends AbstractGroup
 {
@@ -158,7 +158,7 @@ public class Party extends AbstractGroup
 	}
 	
 	@Override
-	public boolean containsPlayer(L2Object player)
+	public boolean containsPlayer(WorldObject player)
 	{
 		return _members.contains(player);
 	}
@@ -223,7 +223,7 @@ public class Party extends AbstractGroup
 			if (member.getFusionSkill() != null)
 				member.abortCast();
 			
-			for (Character character : member.getKnownType(Character.class))
+			for (Creature character : member.getKnownType(Creature.class))
 				if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == member)
 					character.abortCast();
 			
@@ -273,12 +273,12 @@ public class Party extends AbstractGroup
 	 * @param target : the object of which the member must be within a certain range (must not be null).
 	 * @return a random member from this party or {@code null} if none of the members have inventory space for the specified item.
 	 */
-	private Player getRandomMember(int itemId, Character target)
+	private Player getRandomMember(int itemId, Creature target)
 	{
 		final List<Player> availableMembers = new ArrayList<>();
 		for (Player member : _members)
 		{
-			if (member.getInventory().validateCapacityByItemId(itemId) && Util.checkIfInRange(Config.ALT_PARTY_RANGE2, target, member, true))
+			if (member.getInventory().validateCapacityByItemId(itemId) && MathUtil.checkIfInRange(Config.ALT_PARTY_RANGE2, target, member, true))
 				availableMembers.add(member);
 		}
 		return (availableMembers.isEmpty()) ? null : Rnd.get(availableMembers);
@@ -290,7 +290,7 @@ public class Party extends AbstractGroup
 	 * @param target : the object of which the member must be within a certain range (must not be null).
 	 * @return the next looter from this party or {@code null} if none of the members have inventory space for the specified item.
 	 */
-	private Player getNextLooter(int itemId, Character target)
+	private Player getNextLooter(int itemId, Creature target)
 	{
 		for (int i = 0; i < getMembersCount(); i++)
 		{
@@ -298,7 +298,7 @@ public class Party extends AbstractGroup
 				_itemLastLoot = 0;
 			
 			final Player member = _members.get(_itemLastLoot);
-			if (member.getInventory().validateCapacityByItemId(itemId) && Util.checkIfInRange(Config.ALT_PARTY_RANGE2, target, member, true))
+			if (member.getInventory().validateCapacityByItemId(itemId) && MathUtil.checkIfInRange(Config.ALT_PARTY_RANGE2, target, member, true))
 				return member;
 		}
 		return null;
@@ -311,7 +311,7 @@ public class Party extends AbstractGroup
 	 * @param target : the object of which the member must be within a certain range (must not be null).
 	 * @return the next Player looter.
 	 */
-	private Player getActualLooter(Player player, int itemId, boolean spoil, Character target)
+	private Player getActualLooter(Player player, int itemId, boolean spoil, Creature target)
 	{
 		Player looter = player;
 		
@@ -464,7 +464,7 @@ public class Party extends AbstractGroup
 			if (player.getFusionSkill() != null)
 				player.abortCast();
 			
-			for (Character character : player.getKnownType(Character.class))
+			for (Creature character : player.getKnownType(Creature.class))
 				if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == player)
 					character.abortCast();
 				
@@ -622,12 +622,12 @@ public class Party extends AbstractGroup
 	 * @param adena : Amount of adenas.
 	 * @param target : Target used for distance checks.
 	 */
-	public void distributeAdena(Player player, int adena, Character target)
+	public void distributeAdena(Player player, int adena, Creature target)
 	{
 		List<Player> toReward = new ArrayList<>(_members.size());
 		for (Player member : _members)
 		{
-			if (!Util.checkIfInRange(Config.ALT_PARTY_RANGE2, target, member, true) || member.getAdena() == Integer.MAX_VALUE)
+			if (!MathUtil.checkIfInRange(Config.ALT_PARTY_RANGE2, target, member, true) || member.getAdena() == Integer.MAX_VALUE)
 				continue;
 			
 			toReward.add(member);
@@ -665,7 +665,7 @@ public class Party extends AbstractGroup
 	 * @param topLvl : The maximum level.
 	 * @param rewards : The list of players and summons.
 	 */
-	public void distributeXpAndSp(long xpReward, int spReward, List<Player> rewardedMembers, int topLvl, Map<Character, RewardInfo> rewards)
+	public void distributeXpAndSp(long xpReward, int spReward, List<Player> rewardedMembers, int topLvl, Map<Creature, RewardInfo> rewards)
 	{
 		final List<Player> validMembers = new ArrayList<>();
 		

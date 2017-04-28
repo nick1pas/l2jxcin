@@ -9,12 +9,10 @@ import net.sf.l2j.gameserver.handler.ChatHandler;
 import net.sf.l2j.gameserver.handler.IChatHandler;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.util.IllegalPlayerAction;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class Say2 extends L2GameClientPacket
 {
-	private static Logger _logChat = Logger.getLogger("chat");
+	private static final Logger CHAT_LOG = Logger.getLogger("chat");
 	
 	public static final int ALL = 0;
 	public static final int SHOUT = 1; // !
@@ -137,14 +135,10 @@ public final class Say2 extends L2GameClientPacket
 			return;
 		
 		if (Config.L2WALKER_PROTECTION && _type == TELL && checkBot(_text))
-		{
-			Util.handleIllegalPlayerAction(activeChar, "Client Emulator Detect: " + activeChar.getName() + " is using L2Walker.", Config.DEFAULT_PUNISH);
 			return;
-		}
 		
 		if (!activeChar.isGM() && _type == ANNOUNCEMENT)
 		{
-			Util.handleIllegalPlayerAction(activeChar, activeChar.getName() + " tried to announce without GM statut.", IllegalPlayerAction.PUNISH_BROADCAST);
 			_log.warning(activeChar.getName() + " tried to use announcements without GM statut.");
 			return;
 		}
@@ -176,7 +170,7 @@ public final class Say2 extends L2GameClientPacket
 					"[" + activeChar.getName() + "]"
 				});
 			
-			_logChat.log(record);
+			CHAT_LOG.log(record);
 		}
 		
 		_text = _text.replaceAll("\\\\n", "");

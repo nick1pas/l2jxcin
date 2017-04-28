@@ -6,15 +6,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 /**
- * Destroys {@link Character} corpse after specified time.
+ * Destroys {@link Creature} corpse after specified time.
  * @author Hasha
  */
 public final class DecayTaskManager implements Runnable
 {
-	private final Map<Character, Long> _characters = new ConcurrentHashMap<>();
+	private final Map<Creature, Long> _characters = new ConcurrentHashMap<>();
 	
 	public static final DecayTaskManager getInstance()
 	{
@@ -28,11 +28,11 @@ public final class DecayTaskManager implements Runnable
 	}
 	
 	/**
-	 * Adds {@link Character} to the DecayTask with additional interval.
-	 * @param character : {@link Character} to be added.
+	 * Adds {@link Creature} to the DecayTask with additional interval.
+	 * @param character : {@link Creature} to be added.
 	 * @param interval : Interval in seconds, after which the decay task is triggered.
 	 */
-	public final void add(Character character, int interval)
+	public final void add(Creature character, int interval)
 	{
 		// if character is monster
 		if (character instanceof Attackable)
@@ -51,7 +51,7 @@ public final class DecayTaskManager implements Runnable
 	 * Removes {@link Character} from the DecayTask.
 	 * @param actor : {@link Character} to be removed.
 	 */
-	public final void cancel(Character actor)
+	public final void cancel(Creature actor)
 	{
 		_characters.remove(actor);
 	}
@@ -90,13 +90,13 @@ public final class DecayTaskManager implements Runnable
 		final long time = System.currentTimeMillis();
 		
 		// Loop all characters.
-		for (Map.Entry<Character, Long> entry : _characters.entrySet())
+		for (Map.Entry<Creature, Long> entry : _characters.entrySet())
 		{
 			// Time hasn't passed yet, skip.
 			if (time < entry.getValue())
 				continue;
 			
-			final Character character = entry.getKey();
+			final Creature character = entry.getKey();
 			
 			// Decay character and remove task.
 			character.onDecay();

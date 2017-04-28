@@ -10,7 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.Summon;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -50,13 +50,13 @@ public class CharEffectList
 	private boolean _partyOnly = false;
 	
 	// Owner of this list
-	private final Character _owner;
+	private final Creature _owner;
 	
 	private L2Effect[] _effectCache;
 	private volatile boolean _rebuildCache = true;
 	private final Object _buildEffectLock = new Object();
 	
-	public CharEffectList(Character owner)
+	public CharEffectList(Creature owner)
 	{
 		_owner = owner;
 	}

@@ -5,11 +5,11 @@ import java.util.List;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Effect;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Chest;
 import net.sf.l2j.gameserver.skills.Env;
 import net.sf.l2j.gameserver.templates.skills.L2EffectFlag;
@@ -53,7 +53,7 @@ public class EffectConfuseMob extends L2Effect
 	@Override
 	public boolean onActionTime()
 	{
-		List<Character> targetList = new ArrayList<>();
+		List<Creature> targetList = new ArrayList<>();
 		
 		// Getting the possible targets
 		for (Attackable obj : getEffected().getKnownType(Attackable.class))
@@ -68,7 +68,7 @@ public class EffectConfuseMob extends L2Effect
 			return true;
 		
 		// Choosing randomly a new target
-		L2Object target = Rnd.get(targetList);
+		WorldObject target = Rnd.get(targetList);
 		
 		// Attacking the target
 		getEffected().setTarget(target);
@@ -76,7 +76,7 @@ public class EffectConfuseMob extends L2Effect
 		
 		// Add aggro to that target aswell. The aggro power is random.
 		int aggro = (5 + Rnd.get(5)) * getEffector().getLevel();
-		((Attackable) getEffected()).addDamageHate((Character) target, 0, aggro);
+		((Attackable) getEffected()).addDamageHate((Creature) target, 0, aggro);
 		
 		return true;
 	}

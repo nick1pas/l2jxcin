@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 public class TargetUnselected extends L2GameServerPacket
 {
@@ -9,7 +9,7 @@ public class TargetUnselected extends L2GameServerPacket
 	private final int _y;
 	private final int _z;
 	
-	public TargetUnselected(Character character)
+	public TargetUnselected(Creature character)
 	{
 		_targetObjId = character.getObjectId();
 		_x = character.getX();

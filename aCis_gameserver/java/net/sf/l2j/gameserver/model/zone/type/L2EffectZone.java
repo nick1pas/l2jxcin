@@ -10,7 +10,7 @@ import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.L2ZoneType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -88,7 +88,7 @@ public class L2EffectZone extends L2ZoneType
 	}
 	
 	@Override
-	protected boolean isAffected(Character character)
+	protected boolean isAffected(Creature character)
 	{
 		// Check lvl
 		if (character.getLevel() < _minLvl)
@@ -109,7 +109,7 @@ public class L2EffectZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onEnter(Character character)
+	protected void onEnter(Creature character)
 	{
 		if (_task == null)
 		{
@@ -128,7 +128,7 @@ public class L2EffectZone extends L2ZoneType
 	}
 	
 	@Override
-	protected void onExit(Character character)
+	protected void onExit(Creature character)
 	{
 		if (character instanceof Player && _isShowDangerIcon)
 		{
@@ -193,7 +193,7 @@ public class L2EffectZone extends L2ZoneType
 		{
 			if (isEnabled())
 			{
-				for (Character temp : getCharactersInside())
+				for (Creature temp : getCharactersInside())
 				{
 					if (temp != null && !temp.isDead())
 					{
@@ -214,12 +214,12 @@ public class L2EffectZone extends L2ZoneType
 	}
 	
 	@Override
-	public void onDieInside(Character character)
+	public void onDieInside(Creature character)
 	{
 	}
 	
 	@Override
-	public void onReviveInside(Character character)
+	public void onReviveInside(Creature character)
 	{
 	}
 }

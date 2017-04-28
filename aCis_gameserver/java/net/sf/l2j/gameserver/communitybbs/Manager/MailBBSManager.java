@@ -16,7 +16,7 @@ import net.sf.l2j.commons.lang.StringUtil;
 
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.cache.HtmCache;
-import net.sf.l2j.gameserver.datatables.CharNameTable;
+import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.model.BlockList;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -500,7 +500,7 @@ public class MailBBSManager extends BaseBBSManager
 			for (String recipientName : recipientNames)
 			{
 				// Recipient is an invalid player, or is the sender.
-				final int recipientId = CharNameTable.getInstance().getPlayerObjectId(recipientName);
+				final int recipientId = PlayerNameTable.getInstance().getPlayerObjectId(recipientName);
 				if (recipientId <= 0 || recipientId == activeChar.getObjectId())
 				{
 					activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
@@ -717,7 +717,7 @@ public class MailBBSManager extends BaseBBSManager
 	
 	private static String getCharName(int charId)
 	{
-		String name = CharNameTable.getInstance().getPlayerName(charId);
+		String name = PlayerNameTable.getInstance().getPlayerName(charId);
 		return name == null ? "Unknown" : name;
 	}
 	

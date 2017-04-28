@@ -1,16 +1,17 @@
 package net.sf.l2j.gameserver.skills.effects;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
+import net.sf.l2j.commons.math.MathUtil;
+
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.network.serverpackets.FlyToLocation;
 import net.sf.l2j.gameserver.network.serverpackets.FlyToLocation.FlyType;
 import net.sf.l2j.gameserver.network.serverpackets.ValidateLocation;
 import net.sf.l2j.gameserver.skills.Env;
 import net.sf.l2j.gameserver.templates.skills.L2EffectType;
-import net.sf.l2j.gameserver.util.Util;
 
 /**
  * This class handles warp effects, disappear and quickly turn up in a near location. If geodata enabled and an object is between initial and final point, flight is stopped just before colliding with object. Flight course and radius are set as skill properties (flyCourse and flyRadius):
@@ -24,7 +25,7 @@ import net.sf.l2j.gameserver.util.Util;
 public class EffectWarp extends L2Effect
 {
 	private int x, y, z;
-	private Character _actor;
+	private Creature _actor;
 	
 	public EffectWarp(Env env, EffectTemplate template)
 	{
@@ -47,7 +48,7 @@ public class EffectWarp extends L2Effect
 		
 		int _radius = getSkill().getFlyRadius();
 		
-		double angle = Util.convertHeadingToDegree(_actor.getHeading());
+		double angle = MathUtil.convertHeadingToDegree(_actor.getHeading());
 		double radian = Math.toRadians(angle);
 		double course = Math.toRadians(getSkill().getFlyCourse());
 		

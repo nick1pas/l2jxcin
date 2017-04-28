@@ -1,9 +1,9 @@
 package net.sf.l2j.gameserver.model.actor.instance;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
 
@@ -17,12 +17,12 @@ public final class HolyThing extends Folk
 	@Override
 	public void onAction(Player player)
 	{
-		// Set the target of the Player player
+		// Set the target of the player
 		if (player.getTarget() != this)
 			player.setTarget(this);
 		else
 		{
-			// Calculate the distance between the Player and the Npc
+			// Calculate the distance between the Player and the L2Npc
 			if (!canInteract(player))
 			{
 				// Notify the Player AI with INTERACT
@@ -52,12 +52,12 @@ public final class HolyThing extends Folk
 	}
 	
 	@Override
-	public void reduceCurrentHp(double damage, Character attacker, L2Skill skill)
+	public void reduceCurrentHp(double damage, Creature attacker, L2Skill skill)
 	{
 	}
 	
 	@Override
-	public void reduceCurrentHp(double damage, Character attacker, boolean awake, boolean isDOT, L2Skill skill)
+	public void reduceCurrentHp(double damage, Creature attacker, boolean awake, boolean isDOT, L2Skill skill)
 	{
 	}
 }

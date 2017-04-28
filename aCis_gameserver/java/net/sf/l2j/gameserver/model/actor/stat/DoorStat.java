@@ -3,10 +3,10 @@ package net.sf.l2j.gameserver.model.actor.stat;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns;
 import net.sf.l2j.gameserver.instancemanager.SevenSigns.SealType;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Door;
 
-public class DoorStat extends CharStat
+public class DoorStat extends CreatureStat
 {
 	private int _upgradeHpRatio;
 	
@@ -24,7 +24,7 @@ public class DoorStat extends CharStat
 	}
 	
 	@Override
-	public int getMDef(Character target, L2Skill skill)
+	public int getMDef(Creature target, L2Skill skill)
 	{
 		double defense = getActiveChar().getTemplate().getBaseMDef();
 		
@@ -43,7 +43,7 @@ public class DoorStat extends CharStat
 	}
 	
 	@Override
-	public int getPDef(Character target)
+	public int getPDef(Creature target)
 	{
 		double defense = getActiveChar().getTemplate().getBasePDef();
 		

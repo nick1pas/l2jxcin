@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
@@ -22,18 +22,18 @@ public class ZombieGatekeepers extends L2AttackableAIScript
 		addAggroRangeEnterId(22136);
 	}
 	
-	private final Map<Integer, ArrayList<Character>> _attackersList = new LinkedHashMap<>();
+	private final Map<Integer, ArrayList<Creature>> _attackersList = new LinkedHashMap<>();
 	
 	@Override
 	public String onAttack(Npc npc, Player attacker, int damage, boolean isPet, L2Skill skill)
 	{
 		int npcObjId = npc.getObjectId();
 		
-		Character target = isPet ? attacker.getPet() : attacker;
+		Creature target = isPet ? attacker.getPet() : attacker;
 		
 		if (_attackersList.get(npcObjId) == null)
 		{
-			ArrayList<Character> player = new ArrayList<>();
+			ArrayList<Creature> player = new ArrayList<>();
 			player.add(target);
 			_attackersList.put(npcObjId, player);
 		}
@@ -57,7 +57,7 @@ public class ZombieGatekeepers extends L2AttackableAIScript
 		
 		int npcObjId = npc.getObjectId();
 		
-		Character target = isPet ? player.getPet() : player;
+		Creature target = isPet ? player.getPet() : player;
 		
 		ItemInstance VisitorsMark = player.getInventory().getItemByItemId(8064);
 		ItemInstance FadedVisitorsMark = player.getInventory().getItemByItemId(8065);

@@ -3,10 +3,10 @@ package net.sf.l2j.gameserver.handler.itemhandlers;
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Playable;
-import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
@@ -33,7 +33,7 @@ public class ScrollOfResurrection implements IItemHandler
 		if (activeChar.isMovementDisabled())
 			return;
 		
-		final Character target = (Character) activeChar.getTarget();
+		final Creature target = (Creature) activeChar.getTarget();
 		
 		// Target must be a dead Pet or Player.
 		if ((!(target instanceof Pet) && !(target instanceof Player)) || !target.isDead())

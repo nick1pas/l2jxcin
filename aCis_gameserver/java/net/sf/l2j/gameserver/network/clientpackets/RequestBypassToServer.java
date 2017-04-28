@@ -2,6 +2,7 @@ package net.sf.l2j.gameserver.network.clientpackets;
 
 import java.util.StringTokenizer;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.communitybbs.CommunityBoard;
@@ -13,8 +14,8 @@ import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
 import net.sf.l2j.gameserver.handler.VoicedCommandHandler;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Buff;
 import net.sf.l2j.gameserver.instancemanager.BotsPreventionManager;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.OlympiadManagerNpc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -23,15 +24,16 @@ import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadManager;
+import net.sf.l2j.gameserver.network.FloodProtectors;
+import net.sf.l2j.gameserver.network.FloodProtectors.Action;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
-import net.sf.l2j.gameserver.util.FloodProtectors;
-import net.sf.l2j.gameserver.util.FloodProtectors.Action;
-import net.sf.l2j.gameserver.util.GMAudit;
 
 public final class RequestBypassToServer extends L2GameClientPacket
 {
+	private static final Logger GMAUDIT_LOG = Logger.getLogger("gmaudit");
+	
 	private String _command;
 	
 	@Override
@@ -81,7 +83,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 				}
 				
 				if (Config.GMAUDIT)
-					GMAudit.auditGMAction(activeChar.getName() + " [" + activeChar.getObjectId() + "]", _command, (activeChar.getTarget() != null ? activeChar.getTarget().getName() : "no-target"));
+					GMAUDIT_LOG.info(activeChar.getName() + " [" + activeChar.getObjectId() + "] used '" + _command + "' command on: " + ((activeChar.getTarget() != null) ? activeChar.getTarget().getName() : "none"));
 				
 				ach.useAdminCommand(_command, activeChar);
 			}
@@ -118,7 +120,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 				
 				try
 				{
-					final L2Object object = World.getInstance().getObject(Integer.parseInt(id));
+					final WorldObject object = World.getInstance().getObject(Integer.parseInt(id));
 					
 					if (object != null && object instanceof Npc && endOfId > 0 && ((Npc) object).canInteract(activeChar))
 						((Npc) object).onBypassFeedback(activeChar, _command.substring(endOfId + 1));
@@ -132,7 +134,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			// Navigate throught Manor windows
 			else if (_command.startsWith("manor_menu_select?"))
 			{
-				L2Object object = activeChar.getTarget();
+				WorldObject object = activeChar.getTarget();
 				if (object instanceof Npc)
 					((Npc) object).onBypassFeedback(activeChar, _command);
 			}

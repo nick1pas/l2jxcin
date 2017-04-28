@@ -3,7 +3,7 @@ package net.sf.l2j.gameserver.model.zone.type;
 import net.sf.l2j.commons.concurrent.ThreadPool;
 
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.Summon;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -54,7 +54,7 @@ public class L2OlympiadStadiumZone extends L2SpawnZone
 	}
 	
 	@Override
-	protected final void onEnter(Character character)
+	protected final void onEnter(Creature character)
 	{
 		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, true);
 		character.setInsideZone(ZoneId.NO_RESTART, true);
@@ -85,7 +85,7 @@ public class L2OlympiadStadiumZone extends L2SpawnZone
 	}
 	
 	@Override
-	protected final void onExit(Character character)
+	protected final void onExit(Creature character)
 	{
 		character.setInsideZone(ZoneId.NO_SUMMON_FRIEND, false);
 		character.setInsideZone(ZoneId.NO_RESTART, false);
@@ -116,7 +116,7 @@ public class L2OlympiadStadiumZone extends L2SpawnZone
 		else
 			sm = SystemMessage.getSystemMessage(SystemMessageId.LEFT_COMBAT_ZONE);
 		
-		for (Character character : _characterList.values())
+		for (Creature character : _characterList.values())
 		{
 			if (battleStarted)
 			{
@@ -137,12 +137,12 @@ public class L2OlympiadStadiumZone extends L2SpawnZone
 	}
 	
 	@Override
-	public void onDieInside(Character character)
+	public void onDieInside(Creature character)
 	{
 	}
 	
 	@Override
-	public void onReviveInside(Character character)
+	public void onReviveInside(Creature character)
 	{
 	}
 	

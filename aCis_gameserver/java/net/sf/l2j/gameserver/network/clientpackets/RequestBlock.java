@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
-import net.sf.l2j.gameserver.datatables.CharNameTable;
+import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.model.BlockList;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -37,7 +37,7 @@ public final class RequestBlock extends L2GameClientPacket
 			case BLOCK:
 			case UNBLOCK:
 				// Can't block/unblock inexisting or self.
-				final int targetId = CharNameTable.getInstance().getPlayerObjectId(_name);
+				final int targetId = PlayerNameTable.getInstance().getPlayerObjectId(_name);
 				if (targetId <= 0 || activeChar.getObjectId() == targetId)
 				{
 					activeChar.sendPacket(SystemMessageId.FAILED_TO_REGISTER_TO_IGNORE_LIST);
@@ -45,7 +45,7 @@ public final class RequestBlock extends L2GameClientPacket
 				}
 				
 				// Can't block a GM character.
-				if (CharNameTable.getInstance().getPlayerAccessLevel(targetId) > 0)
+				if (PlayerNameTable.getInstance().getPlayerAccessLevel(targetId) > 0)
 				{
 					activeChar.sendPacket(SystemMessageId.YOU_MAY_NOT_IMPOSE_A_BLOCK_ON_GM);
 					return;

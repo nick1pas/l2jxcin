@@ -1,11 +1,12 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import net.sf.l2j.commons.math.MathUtil;
+
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.ValidateLocation;
-import net.sf.l2j.gameserver.util.Util;
 
 /**
  * Fromat:(ch) dddddc
@@ -31,7 +32,7 @@ public final class RequestExMagicSkillUseGround extends L2GameClientPacket
 	@Override
 	protected void runImpl()
 	{
-		// Get the current Player of the player
+		// Get the current player
 		final Player activeChar = getClient().getActiveChar();
 		if (activeChar == null)
 			return;
@@ -51,7 +52,7 @@ public final class RequestExMagicSkillUseGround extends L2GameClientPacket
 			activeChar.setCurrentSkillWorldPosition(new Location(_x, _y, _z));
 			
 			// normally magicskilluse packet turns char client side but for these skills, it doesn't (even with correct target)
-			activeChar.setHeading(Util.calculateHeadingFrom(activeChar.getX(), activeChar.getY(), _x, _y));
+			activeChar.setHeading(MathUtil.calculateHeadingFrom(activeChar.getX(), activeChar.getY(), _x, _y));
 			activeChar.broadcastPacket(new ValidateLocation(activeChar));
 			
 			activeChar.useMagic(skill, _ctrlPressed, _shiftPressed);

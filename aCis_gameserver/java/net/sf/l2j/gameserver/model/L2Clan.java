@@ -1436,9 +1436,9 @@ public class L2Clan
 	}
 	
 	/**
-	 * Retrieve all skills of this Player from the database
-	 * @param rank
-	 * @param privs
+	 * Update ranks priviledges.
+	 * @param rank : The rank to edit.
+	 * @param privs : The priviledges to be set.
 	 */
 	public void setRankPrivs(int rank, int privs)
 	{

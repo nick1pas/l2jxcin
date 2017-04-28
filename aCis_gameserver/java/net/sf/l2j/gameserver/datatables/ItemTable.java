@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -29,7 +29,7 @@ import net.sf.l2j.gameserver.skills.DocumentItem;
 public class ItemTable
 {
 	private static final Logger _log = Logger.getLogger(ItemTable.class.getName());
-	private static final Logger _logItems = Logger.getLogger("item");
+	private static final Logger ITEM_LOG = Logger.getLogger("item");
 	
 	public static final Map<String, Integer> _slots = new HashMap<>();
 	
@@ -136,7 +136,7 @@ public class ItemTable
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @return ItemInstance corresponding to the new item
 	 */
-	public ItemInstance createItem(String process, int itemId, int count, Player actor, L2Object reference)
+	public ItemInstance createItem(String process, int itemId, int count, Player actor, WorldObject reference)
 	{
 		// Create and Init the ItemInstance corresponding to the Item Identifier
 		ItemInstance item = new ItemInstance(IdFactory.getInstance().getNextId(), itemId);
@@ -162,15 +162,15 @@ public class ItemTable
 		
 		if (Config.LOG_ITEMS)
 		{
-			LogRecord record = new LogRecord(Level.INFO, "CREATE:" + process);
+			final LogRecord record = new LogRecord(Level.INFO, "CREATE:" + process);
 			record.setLoggerName("item");
 			record.setParameters(new Object[]
 			{
-				item,
 				actor,
+				item,
 				reference
 			});
-			_logItems.log(record);
+			ITEM_LOG.log(record);
 		}
 		
 		return item;
@@ -197,7 +197,7 @@ public class ItemTable
 	 * @param actor : Player Player requesting the item destroy
 	 * @param reference : L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 */
-	public void destroyItem(String process, ItemInstance item, Player actor, L2Object reference)
+	public void destroyItem(String process, ItemInstance item, Player actor, WorldObject reference)
 	{
 		synchronized (item)
 		{
@@ -211,15 +211,15 @@ public class ItemTable
 			
 			if (Config.LOG_ITEMS)
 			{
-				LogRecord record = new LogRecord(Level.INFO, "DELETE:" + process);
+				final LogRecord record = new LogRecord(Level.INFO, "DELETE:" + process);
 				record.setLoggerName("item");
 				record.setParameters(new Object[]
 				{
-					item,
 					actor,
+					item,
 					reference
 				});
-				_logItems.log(record);
+				ITEM_LOG.log(record);
 			}
 			
 			// if it's a pet control item, delete the pet as well

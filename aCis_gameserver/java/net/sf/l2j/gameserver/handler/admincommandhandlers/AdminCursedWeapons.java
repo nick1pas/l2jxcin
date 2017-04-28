@@ -6,7 +6,7 @@ import net.sf.l2j.commons.lang.StringUtil;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.CursedWeapon;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -158,7 +158,7 @@ public class AdminCursedWeapons implements IAdminCommandHandler
 						activeChar.sendMessage("This cursed weapon is already active.");
 					else
 					{
-						L2Object target = activeChar.getTarget();
+						WorldObject target = activeChar.getTarget();
 						if (target instanceof Player)
 							((Player) target).addItem("AdminCursedWeaponAdd", id, 1, target, true);
 						else

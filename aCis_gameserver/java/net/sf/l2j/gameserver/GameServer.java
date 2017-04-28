@@ -16,6 +16,7 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.commons.mmocore.SelectorConfig;
 import net.sf.l2j.commons.mmocore.SelectorThread;
+import net.sf.l2j.commons.util.SysUtil;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
@@ -32,7 +33,6 @@ import net.sf.l2j.gameserver.datatables.AugmentationData;
 import net.sf.l2j.gameserver.datatables.BookmarkTable;
 import net.sf.l2j.gameserver.datatables.BufferTable;
 import net.sf.l2j.gameserver.datatables.BuyListTable;
-import net.sf.l2j.gameserver.datatables.CharNameTable;
 import net.sf.l2j.gameserver.datatables.CharTemplateTable;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.DoorTable;
@@ -49,6 +49,7 @@ import net.sf.l2j.gameserver.datatables.MultisellData;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.datatables.NpcWalkerRoutesTable;
 import net.sf.l2j.gameserver.datatables.OfflineTradersTable;
+import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.datatables.PvpColorTable;
 import net.sf.l2j.gameserver.datatables.RecipeTable;
 import net.sf.l2j.gameserver.datatables.ServerMemo;
@@ -131,26 +132,39 @@ public class GameServer
 	private static final Logger _log = Logger.getLogger(GameServer.class.getName());
 	
 	private final SelectorThread<L2GameClient> _selectorThread;
-	private final L2GamePacketHandler _gamePacketHandler;
-	private final DeadLockDetector _deadDetectThread;
-	public static GameServer gameServer;
-	private final LoginServerThread _loginThread;
+	private static GameServer _gameServer;
 	
-	public long getUsedMemoryMB()
+	public static void main(String[] args) throws Throwable
 	{
-		return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576; // 1024 * 1024 = 1048576;
-	}
-	
-	public SelectorThread<L2GameClient> getSelectorThread()
-	{
-		return _selectorThread;
+		_gameServer = new GameServer();
 	}
 	
 	public GameServer() throws Throwable
 	{
-		gameServer = this;
+		// Create log folder
+		new File("./log").mkdir();
+		new File("./log/chat").mkdir();
+		new File("./log/console").mkdir();
+		new File("./log/error").mkdir();
+		new File("./log/gmaudit").mkdir();
+		new File("./log/item").mkdir();
 		new File("./data/crests").mkdirs();
+ 		
+		// Create input stream for log file -- or store file data into memory
+		try (InputStream is = new FileInputStream(new File("config/logging.properties")))
+		{
+			LogManager.getLogManager().readConfiguration(is);
+		}
 		
+		StringUtil.printSection("aCis");
+		
+		// Initialize config
+		Config.loadGameServer();
+		
+		// Factories
+		XMLDocumentFactory.getInstance();
+		L2DatabaseFactory.getInstance();
+	
 		StringUtil.printSection("ThreadPool");
 		ThreadPool.init();
 		
@@ -194,7 +208,7 @@ public class GameServer
 		StringUtil.printSection("Characters");
 		AioManager.getInstance();
 		CharTemplateTable.getInstance();
-		CharNameTable.getInstance();
+		PlayerNameTable.getInstance();
 		HennaTable.getInstance();
 		HelperBuffTable.getInstance();
 		TeleportLocationTable.getInstance();
@@ -347,27 +361,20 @@ public class GameServer
 		if (Config.DEADLOCK_DETECTOR)
 		{
 			_log.info("Deadlock detector is enabled. Timer: " + Config.DEADLOCK_CHECK_INTERVAL + "s.");
-			_deadDetectThread = new DeadLockDetector();
-			_deadDetectThread.setDaemon(true);
-			_deadDetectThread.start();
+			final DeadLockDetector deadDetectThread = new DeadLockDetector();
+			deadDetectThread.setDaemon(true);
+			deadDetectThread.start();
 		}
 		else
-		{
-			_log.info("Deadlock detector is disabled.");
-			_deadDetectThread = null;
-		}
+			_log.info("Deadlock detector is disabled.");	
 		
 		System.gc();
 		
-		long usedMem = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576;
-		long totalMem = Runtime.getRuntime().maxMemory() / 1048576;
-		
-		_log.info("Gameserver have started, used memory: " + usedMem + " / " + totalMem + " Mo.");
+		_log.info("Gameserver have started, used memory: " + SysUtil.getUsedMemory() + " / " + SysUtil.getMaxMemory() + " Mo.");
 		_log.info("Maximum allowed players: " + Config.MAXIMUM_ONLINE_USERS);
 		
 		StringUtil.printSection("Login");
-		_loginThread = LoginServerThread.getInstance();
-		_loginThread.start();
+		LoginServerThread.getInstance().start();
 		
 		final SelectorConfig sc = new SelectorConfig();
 		sc.MAX_READ_PER_PASS = Config.MMO_MAX_READ_PER_PASS;
@@ -375,8 +382,8 @@ public class GameServer
 		sc.SLEEP_TIME = Config.MMO_SELECTOR_SLEEP_TIME;
 		sc.HELPER_BUFFER_COUNT = Config.MMO_HELPER_BUFFER_COUNT;
 		
-		_gamePacketHandler = new L2GamePacketHandler();
-		_selectorThread = new SelectorThread<>(sc, _gamePacketHandler, _gamePacketHandler, _gamePacketHandler, new IPv4Filter());
+		final L2GamePacketHandler handler = new L2GamePacketHandler();
+		_selectorThread = new SelectorThread<>(sc, handler, handler, handler, new IPv4Filter());
 		
 		InetAddress bindAddress = null;
 		if (!Config.GAMESERVER_HOSTNAME.equals("*"))
@@ -403,29 +410,13 @@ public class GameServer
 		_selectorThread.start();
 	}
 	
-	public static void main(String[] args) throws Throwable
+	public static GameServer getInstance()
 	{
-		final String LOG_FOLDER = "./log"; // Name of folder for log file
-		final String LOG_NAME = "config/log.cfg"; // Name of log file
+		return _gameServer;
+	}
 		
-		// Create log folder
-		File logFolder = new File(LOG_FOLDER);
-		logFolder.mkdir();
-		
-		// Create input stream for log file -- or store file data into memory
-		InputStream is = new FileInputStream(new File(LOG_NAME));
-		LogManager.getLogManager().readConfiguration(is);
-		is.close();
-		
-		StringUtil.printSection("aCis");
-		
-		// Initialize config
-		Config.loadGameServer();
-		
-		// Factories
-		XMLDocumentFactory.getInstance();
-		L2DatabaseFactory.getInstance();
-		
-		gameServer = new GameServer();
+	public SelectorThread<L2GameClient> getSelectorThread()
+	{
+		return _selectorThread;
 	}
 }

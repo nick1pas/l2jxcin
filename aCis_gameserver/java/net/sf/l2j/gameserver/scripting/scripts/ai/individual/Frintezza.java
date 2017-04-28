@@ -6,15 +6,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.GrandBoss;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -1403,7 +1403,7 @@ public class Frintezza extends L2AttackableAIScript
 		{
 			_Zone.broadcastPacket(new SocialAction(demon1, 1));
 			_Zone.broadcastPacket(new SocialAction(demon4, 1));
-			for (Character pc : _Zone.getCharactersInside())
+			for (Creature pc : _Zone.getCharactersInside())
 			{
 				if (pc instanceof Player)
 					if (pc.getX() < 174232)
@@ -1415,7 +1415,7 @@ public class Frintezza extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("camera_9c"))
 		{
-			for (Character pc : _Zone.getCharactersInside())
+			for (Creature pc : _Zone.getCharactersInside())
 			{
 				if (pc instanceof Player)
 					if (pc.getX() < 174232)
@@ -1559,7 +1559,7 @@ public class Frintezza extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("stop_pc"))
 		{
-			for (Character cha : _Zone.getCharactersInside())
+			for (Creature cha : _Zone.getCharactersInside())
 			{
 				cha.abortAttack();
 				cha.abortCast();
@@ -1580,7 +1580,7 @@ public class Frintezza extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("start_pc"))
 		{
-			for (Character cha : _Zone.getCharactersInside())
+			for (Creature cha : _Zone.getCharactersInside())
 			{
 				if (cha != frintezza)
 				{
@@ -1800,7 +1800,7 @@ public class Frintezza extends L2AttackableAIScript
 			}
 			else if (_OnSong == 4)
 			{
-				for (Character cha : _Zone.getCharactersInside())
+				for (Creature cha : _Zone.getCharactersInside())
 				{
 					if (cha instanceof Player && Rnd.get(100) < 80)
 					{
@@ -1811,7 +1811,7 @@ public class Frintezza extends L2AttackableAIScript
 			}
 			else if (_OnSong == 5)
 			{
-				for (Character cha : _Zone.getCharactersInside())
+				for (Creature cha : _Zone.getCharactersInside())
 				{
 					if (cha instanceof Player && Rnd.get(100) < 70)
 					{
@@ -1832,7 +1832,7 @@ public class Frintezza extends L2AttackableAIScript
 		}
 		else if (event.equalsIgnoreCase("stop_effect"))
 		{
-			for (Character cha : _Zone.getCharactersInside())
+			for (Creature cha : _Zone.getCharactersInside())
 			{
 				if (cha instanceof Player)
 				{
@@ -1954,7 +1954,7 @@ public class Frintezza extends L2AttackableAIScript
 			}
 			else
 			{
-				for (Character cha : _Zone.getCharactersInside())
+				for (Creature cha : _Zone.getCharactersInside())
 				{
 					if (cha instanceof Player)
 					{

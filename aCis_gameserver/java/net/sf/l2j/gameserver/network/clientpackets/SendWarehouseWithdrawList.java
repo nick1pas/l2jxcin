@@ -14,7 +14,6 @@ import net.sf.l2j.gameserver.network.serverpackets.EnchantResult;
 import net.sf.l2j.gameserver.network.serverpackets.InventoryUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class SendWarehouseWithdrawList extends L2GameClientPacket
 {
@@ -103,11 +102,9 @@ public final class SendWarehouseWithdrawList extends L2GameClientPacket
 		{
 			// Calculate needed slots
 			ItemInstance item = warehouse.getItemByObjectId(i.getId());
+			
 			if (item == null || item.getCount() < i.getValue())
-			{
-				Util.handleIllegalPlayerAction(player, player.getName() + " of account " + player.getAccountName() + " tried to withdraw non-existent item from warehouse.", Config.DEFAULT_PUNISH);
 				return;
-			}
 			
 			weight += i.getValue() * item.getItem().getWeight();
 			

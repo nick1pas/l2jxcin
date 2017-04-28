@@ -13,7 +13,7 @@ import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.Quest;
@@ -632,7 +632,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 	}
 	
 	@Override
-	public String onDeath(Character npc, Character pc, Player player)
+	public String onDeath(Creature npc, Creature pc, Player player)
 	{
 		QuestState st = checkPlayerState(player, (Npc) npc, STATE_STARTED);
 		if ((st.getPlayer() == null) || (st.getPlayer().getClan() == null))

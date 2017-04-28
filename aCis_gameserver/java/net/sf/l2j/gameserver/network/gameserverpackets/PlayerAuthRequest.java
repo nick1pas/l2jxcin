@@ -1,10 +1,7 @@
 package net.sf.l2j.gameserver.network.gameserverpackets;
 
-import net.sf.l2j.gameserver.LoginServerThread.SessionKey;
+import net.sf.l2j.gameserver.network.SessionKey;
 
-/**
- * @author -Wooden-
- */
 public class PlayerAuthRequest extends GameServerBasePacket
 {
 	public PlayerAuthRequest(String account, SessionKey key)

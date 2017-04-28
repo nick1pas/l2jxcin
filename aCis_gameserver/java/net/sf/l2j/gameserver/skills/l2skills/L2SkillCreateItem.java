@@ -2,9 +2,9 @@ package net.sf.l2j.gameserver.skills.l2skills;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -31,10 +31,10 @@ public class L2SkillCreateItem extends L2Skill
 	}
 	
 	/**
-	 * @see net.sf.l2j.gameserver.model.L2Skill#useSkill(net.sf.l2j.gameserver.model.actor.Character, net.sf.l2j.gameserver.model.L2Object[])
+	 * @see net.sf.l2j.gameserver.model.L2Skill#useSkill(net.sf.l2j.gameserver.model.actor.Creature, net.sf.l2j.gameserver.model.WorldObject[])
 	 */
 	@Override
-	public void useSkill(Character activeChar, L2Object[] targets)
+	public void useSkill(Creature activeChar, WorldObject[] targets)
 	{
 		Player player = activeChar.getActingPlayer();
 		if (activeChar.isAlikeDead())

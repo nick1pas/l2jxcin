@@ -3,10 +3,10 @@ package net.sf.l2j.gameserver.scripting.scripts.ai.individual;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.l2j.commons.math.MathUtil;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.instancemanager.GrandBossManager;
@@ -14,8 +14,9 @@ import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.SpawnLocation;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.GrandBoss;
 import net.sf.l2j.gameserver.model.actor.instance.Monster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -26,7 +27,6 @@ import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 import net.sf.l2j.gameserver.templates.StatsSet;
-import net.sf.l2j.gameserver.util.Util;
 
 /**
  * Following animations are handled in that time tempo :
@@ -60,7 +60,7 @@ public class Baium extends L2AttackableAIScript
 		new SpawnLocation(115792, 16608, 10080, 0)
 	};
 	
-	private Character _actualVictim;
+	private Creature _actualVictim;
 	private long _lastAttackTime = 0;
 	private final List<Npc> _minions = new ArrayList<>(5);
 	
@@ -151,7 +151,7 @@ public class Baium extends L2AttackableAIScript
 				if (player != null)
 				{
 					// If player is far of Baium, teleport him back.
-					if (!Util.checkIfInShortRadius(300, player, npc, true))
+					if (!MathUtil.checkIfInShortRadius(300, player, npc, true))
 					{
 						BAIUM_LAIR.allowPlayerEntry(player, 10);
 						player.teleToLocation(115929, 17349, 10077, 0);
@@ -233,7 +233,7 @@ public class Baium extends L2AttackableAIScript
 			for (Npc minion : _minions)
 			{
 				Attackable angel = ((Attackable) minion);
-				Character victim = angel.getMostHated();
+				Creature victim = angel.getMostHated();
 				
 				if (Rnd.get(100) < 10) // Chaos time
 					updateTarget = true;
@@ -254,7 +254,7 @@ public class Baium extends L2AttackableAIScript
 				
 				if (updateTarget)
 				{
-					Character newVictim = getRandomTarget(minion);
+					Creature newVictim = getRandomTarget(minion);
 					if (newVictim != null && victim != newVictim)
 					{
 						angel.addDamageHate(newVictim, 0, 10000);
@@ -373,12 +373,12 @@ public class Baium extends L2AttackableAIScript
 	 * @param npc to check.
 	 * @return the random target.
 	 */
-	private Character getRandomTarget(Npc npc)
+	private Creature getRandomTarget(Npc npc)
 	{
 		int npcId = npc.getNpcId();
-		List<Character> result = new ArrayList<>();
+		List<Creature> result = new ArrayList<>();
 		
-		for (Character obj : npc.getKnownType(Character.class))
+		for (Creature obj : npc.getKnownType(Creature.class))
 		{
 			if (obj instanceof Player)
 			{
@@ -431,7 +431,7 @@ public class Baium extends L2AttackableAIScript
 		final L2Skill skill = SkillTable.getInstance().getInfo(getRandomSkill(npc), 1);
 		
 		// Adapt the skill range, because Baium is fat.
-		if (Util.checkIfInRange((int) (skill.getCastRange() + npc.getCollisionRadius()), npc, _actualVictim, true))
+		if (MathUtil.checkIfInRange((int) (skill.getCastRange() + npc.getCollisionRadius()), npc, _actualVictim, true))
 		{
 			npc.getAI().setIntention(CtrlIntention.IDLE);
 			npc.setTarget(skill.getId() == 4135 ? npc : _actualVictim);

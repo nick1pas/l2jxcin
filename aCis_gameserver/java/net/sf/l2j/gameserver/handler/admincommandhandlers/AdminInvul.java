@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 
 /**
@@ -26,7 +26,7 @@ public class AdminInvul implements IAdminCommandHandler
 			handleInvul(activeChar);
 		if (command.equals("admin_setinvul"))
 		{
-			L2Object target = activeChar.getTarget();
+			WorldObject target = activeChar.getTarget();
 			if (target instanceof Player)
 				handleInvul((Player) target);
 		}

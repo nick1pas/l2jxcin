@@ -1,13 +1,14 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import net.sf.l2j.commons.math.MathUtil;
+
 import net.sf.l2j.gameserver.datatables.RecipeTable;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.instance.Player.StoreType;
+import net.sf.l2j.gameserver.network.FloodProtectors;
+import net.sf.l2j.gameserver.network.FloodProtectors.Action;
 import net.sf.l2j.gameserver.network.SystemMessageId;
-import net.sf.l2j.gameserver.util.FloodProtectors;
-import net.sf.l2j.gameserver.util.FloodProtectors.Action;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class RequestRecipeShopMakeItem extends L2GameClientPacket
 {
@@ -53,7 +54,7 @@ public final class RequestRecipeShopMakeItem extends L2GameClientPacket
 			return;
 		}
 		
-		if (Util.checkIfInRange(150, activeChar, manufacturer, true))
+		if (MathUtil.checkIfInRange(150, activeChar, manufacturer, true))
 			RecipeTable.getInstance().requestManufactureItem(manufacturer, _recipeId, activeChar);
 	}
 }

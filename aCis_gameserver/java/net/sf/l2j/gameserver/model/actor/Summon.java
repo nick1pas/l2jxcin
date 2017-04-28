@@ -3,17 +3,17 @@ package net.sf.l2j.gameserver.model.actor;
 import java.util.List;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.ai.model.L2CharacterAI;
-import net.sf.l2j.gameserver.ai.model.L2SummonAI;
 import net.sf.l2j.gameserver.datatables.ItemTable;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.handler.ItemHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.L2Skill.SkillTargetType;
 import net.sf.l2j.gameserver.model.ShotType;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
+import net.sf.l2j.gameserver.model.actor.ai.type.CreatureAI;
+import net.sf.l2j.gameserver.model.actor.ai.type.SummonAI;
 import net.sf.l2j.gameserver.model.actor.instance.Door;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -88,15 +88,15 @@ public abstract class Summon extends Playable
 	}
 	
 	@Override
-	public L2CharacterAI getAI()
+	public CreatureAI getAI()
 	{
-		L2CharacterAI ai = _ai;
+		CreatureAI ai = _ai;
 		if (ai == null)
 		{
 			synchronized (this)
 			{
 				if (_ai == null)
-					_ai = new L2SummonAI(this);
+					_ai = new SummonAI(this);
 				
 				return _ai;
 			}
@@ -277,7 +277,7 @@ public abstract class Summon extends Playable
 	}
 	
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		if (!super.doDie(killer))
 			return false;
@@ -377,7 +377,7 @@ public abstract class Summon extends Playable
 	}
 	
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		return _owner.isAutoAttackable(attacker);
 	}
@@ -443,10 +443,7 @@ public abstract class Summon extends Playable
 	@Override
 	public Party getParty()
 	{
-		if (_owner == null)
-			return null;
-		
-		return _owner.getParty();
+		return (_owner == null) ? null : _owner.getParty();
 	}
 	
 	/**
@@ -456,10 +453,7 @@ public abstract class Summon extends Playable
 	@Override
 	public boolean isInParty()
 	{
-		if (_owner == null)
-			return false;
-		
-		return _owner.getParty() != null;
+		return (_owner == null) ? false : _owner.getParty() != null;
 	}
 	
 	/**
@@ -502,7 +496,7 @@ public abstract class Summon extends Playable
 		// ************************************* Check Target *******************************************
 		
 		// Get the target for the skill
-		L2Object target = null;
+		WorldObject target = null;
 		
 		switch (skill.getTargetType())
 		{
@@ -626,7 +620,7 @@ public abstract class Summon extends Playable
 	}
 	
 	@Override
-	public void sendDamageMessage(Character target, int damage, boolean mcrit, boolean pcrit, boolean miss)
+	public void sendDamageMessage(Creature target, int damage, boolean mcrit, boolean pcrit, boolean miss)
 	{
 		if (miss || getOwner() == null)
 			return;
@@ -662,7 +656,7 @@ public abstract class Summon extends Playable
 	}
 	
 	@Override
-	public void reduceCurrentHp(double damage, Character attacker, L2Skill skill)
+	public void reduceCurrentHp(double damage, Creature attacker, L2Skill skill)
 	{
 		super.reduceCurrentHp(damage, attacker, skill);
 	}

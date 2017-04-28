@@ -6,7 +6,7 @@ import java.util.List;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.EffectPoint;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
@@ -63,8 +63,8 @@ public class EffectSignet extends L2Effect
 		}
 		getEffector().reduceCurrentMp(mpConsume);
 		
-		List<Character> targets = new ArrayList<>();
-		for (Character cha : _actor.getKnownTypeInRadius(Character.class, getSkill().getSkillRadius()))
+		List<Creature> targets = new ArrayList<>();
+		for (Creature cha : _actor.getKnownTypeInRadius(Creature.class, getSkill().getSkillRadius()))
 		{
 			if (_skill.isOffensive() && !L2Skill.checkForAreaOffensiveSkills(getEffector(), cha, _skill, _srcInArena))
 				continue;
@@ -75,7 +75,7 @@ public class EffectSignet extends L2Effect
 		}
 		
 		if (!targets.isEmpty())
-			getEffector().callSkill(_skill, targets.toArray(new Character[targets.size()]));
+			getEffector().callSkill(_skill, targets.toArray(new Creature[targets.size()]));
 		
 		return true;
 	}

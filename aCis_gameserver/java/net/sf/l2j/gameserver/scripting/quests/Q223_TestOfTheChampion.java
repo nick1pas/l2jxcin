@@ -2,11 +2,11 @@ package net.sf.l2j.gameserver.scripting.quests;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
@@ -281,7 +281,7 @@ public class Q223_TestOfTheChampion extends Quest
 			case HARPY: // Possibility to spawn an HARPY _MATRIARCH.
 				if (st.getInt("cond") == 6 && Rnd.nextBoolean() && !npc.isScriptValue(1))
 				{
-					final Character originalKiller = isPet ? attacker.getPet() : attacker;
+					final Creature originalKiller = isPet ? attacker.getPet() : attacker;
 					
 					// Spawn one or two matriarchs.
 					for (int i = 1; i < ((Rnd.get(10) < 7) ? 2 : 3); i++)
@@ -299,7 +299,7 @@ public class Q223_TestOfTheChampion extends Quest
 			case ROAD_SCAVENGER: // Possibility to spawn a Road Collector.
 				if (st.getInt("cond") == 10 && Rnd.nextBoolean() && !npc.isScriptValue(1))
 				{
-					final Character originalKiller = isPet ? attacker.getPet() : attacker;
+					final Creature originalKiller = isPet ? attacker.getPet() : attacker;
 					
 					// Spawn one or two collectors.
 					for (int i = 1; i < ((Rnd.get(10) < 7) ? 2 : 3); i++)

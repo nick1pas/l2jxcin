@@ -1,10 +1,10 @@
 package net.sf.l2j.gameserver.handler.skillhandlers;
 
 import net.sf.l2j.gameserver.handler.ISkillHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.QuestState;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
@@ -22,7 +22,7 @@ public class DrainSoul implements ISkillHandler
 	};
 	
 	@Override
-	public void useSkill(Character activeChar, L2Skill skill, L2Object[] targets)
+	public void useSkill(Creature activeChar, L2Skill skill, WorldObject[] targets)
 	{
 		// Check player.
 		if (activeChar == null || activeChar.isDead() || !(activeChar instanceof Player))
@@ -35,7 +35,7 @@ public class DrainSoul implements ISkillHandler
 			return;
 		
 		// Get target.
-		L2Object target = targets[0];
+		WorldObject target = targets[0];
 		if (target == null || !(target instanceof Attackable))
 			return;
 		

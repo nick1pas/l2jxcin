@@ -2,14 +2,14 @@ package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.gameserver.geoengine.geodata.IGeoObject;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
-import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.network.serverpackets.ExColosseumFenceInfo;
 
 /**
  * @author Hasha
  */
-public class Fence extends L2Object implements IGeoObject
+public class Fence extends WorldObject implements IGeoObject
 {
 	private static final int FENCE_HEIGHT = 24;
 	
@@ -90,7 +90,7 @@ public class Fence extends L2Object implements IGeoObject
 	}
 	
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		return false;
 	}
@@ -135,7 +135,7 @@ public class Fence extends L2Object implements IGeoObject
 	 * Dummy fence class in order to spawn/delete multi-layer fences correctly.
 	 * @author Hasha
 	 */
-	protected class L2DummyFence extends L2Object
+	protected class L2DummyFence extends WorldObject
 	{
 		private final Fence _fence;
 		
@@ -147,7 +147,7 @@ public class Fence extends L2Object implements IGeoObject
 		}
 		
 		@Override
-		public boolean isAutoAttackable(Character attacker)
+		public boolean isAutoAttackable(Creature attacker)
 		{
 			return false;
 		}

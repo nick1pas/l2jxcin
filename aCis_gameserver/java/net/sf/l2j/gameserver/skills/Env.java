@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.skills;
 
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Cubic;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -11,9 +11,9 @@ import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
  */
 public final class Env
 {
-	private Character _character;
+	private Creature _character;
 	private Cubic _cubic;
-	private Character _target;
+	private Creature _target;
 	private ItemInstance _item;
 	private L2Skill _skill;
 	
@@ -42,7 +42,7 @@ public final class Env
 	/**
 	 * @return the _character
 	 */
-	public Character getCharacter()
+	public Creature getCharacter()
 	{
 		return _character;
 	}
@@ -58,7 +58,7 @@ public final class Env
 	/**
 	 * @return the _target
 	 */
-	public Character getTarget()
+	public Creature getTarget()
 	{
 		return _target;
 	}
@@ -146,7 +146,7 @@ public final class Env
 	/**
 	 * @param character the _character to set
 	 */
-	public void setCharacter(Character character)
+	public void setCharacter(Creature character)
 	{
 		_character = character;
 	}
@@ -162,7 +162,7 @@ public final class Env
 	/**
 	 * @param target the _target to set
 	 */
-	public void setTarget(Character target)
+	public void setTarget(Creature target)
 	{
 		_target = target;
 	}

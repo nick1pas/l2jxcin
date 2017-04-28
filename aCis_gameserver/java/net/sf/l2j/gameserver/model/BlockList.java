@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.sf.l2j.L2DatabaseFactory;
-import net.sf.l2j.gameserver.datatables.CharNameTable;
+import net.sf.l2j.gameserver.datatables.PlayerNameTable;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -148,7 +148,7 @@ public class BlockList
 		if (listOwner == null)
 			return;
 		
-		String charName = CharNameTable.getInstance().getPlayerName(targetId);
+		String charName = PlayerNameTable.getInstance().getPlayerName(targetId);
 		
 		if (listOwner.getFriendList().contains(targetId))
 		{
@@ -186,7 +186,7 @@ public class BlockList
 			return;
 		
 		SystemMessage sm;
-		String charName = CharNameTable.getInstance().getPlayerName(targetId);
+		String charName = PlayerNameTable.getInstance().getPlayerName(targetId);
 		
 		if (!listOwner.getBlockList().getBlockList().contains(targetId))
 		{
@@ -223,7 +223,7 @@ public class BlockList
 		listOwner.sendPacket(SystemMessageId.BLOCK_LIST_HEADER);
 		
 		for (int playerId : listOwner.getBlockList().getBlockList())
-			listOwner.sendMessage((i++) + ". " + CharNameTable.getInstance().getPlayerName(playerId));
+			listOwner.sendMessage((i++) + ". " + PlayerNameTable.getInstance().getPlayerName(playerId));
 		
 		listOwner.sendPacket(SystemMessageId.FRIEND_LIST_FOOTER);
 	}

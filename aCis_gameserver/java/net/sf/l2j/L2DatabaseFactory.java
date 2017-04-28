@@ -44,10 +44,7 @@ public class L2DatabaseFactory
 			// testing OnCheckin used with IdleConnectionTestPeriod is faster than testing on checkout
 			
 			_source.setIdleConnectionTestPeriod(3600); // test idle connection every 60 sec
-			_source.setMaxIdleTime(Config.DATABASE_MAX_IDLE_TIME); // 0 = idle connections never expire
-			// *THANKS* to connection testing configured above
-			// but I prefer to disconnect all connections not used
-			// for more than 1 hour
+			_source.setMaxIdleTime(0); // idle connections never expire
 			
 			// enables statement caching, there is a "semi-bug" in c3p0 0.9.0 but in 0.9.0.2 and later it's fixed
 			_source.setMaxStatementsPerConnection(100);

@@ -16,8 +16,9 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.loginserver.GameServerTable.GameServerInfo;
 import net.sf.l2j.loginserver.crypt.NewCrypt;
+import net.sf.l2j.loginserver.model.GameServerInfo;
+import net.sf.l2j.loginserver.network.SessionKey;
 import net.sf.l2j.loginserver.network.gameserverpackets.BlowFishKey;
 import net.sf.l2j.loginserver.network.gameserverpackets.ChangeAccessLevel;
 import net.sf.l2j.loginserver.network.gameserverpackets.GameServerAuth;
@@ -32,10 +33,6 @@ import net.sf.l2j.loginserver.network.loginserverpackets.LoginServerFail;
 import net.sf.l2j.loginserver.network.loginserverpackets.PlayerAuthResponse;
 import net.sf.l2j.loginserver.network.serverpackets.ServerBasePacket;
 
-/**
- * @author -Wooden-
- * @author KenM
- */
 public class GameServerThread extends Thread
 {
 	protected static final Logger _log = Logger.getLogger(GameServerThread.class.getName());
@@ -161,8 +158,8 @@ public class GameServerThread extends Thread
 				_gsi.setDown();
 				_log.info("GameServer [" + getServerId() + "] " + GameServerTable.getInstance().getServerNames().get(getServerId()) + " is now set as disconnected.");
 			}
-			L2LoginServer.getInstance().getGameServerListener().removeGameServer(this);
-			L2LoginServer.getInstance().getGameServerListener().removeFloodProtection(_connectionIp);
+			LoginServer.getInstance().getGameServerListener().removeGameServer(this);
+			LoginServer.getInstance().getGameServerListener().removeFloodProtection(_connectionIp);
 		}
 	}
 	
@@ -330,9 +327,26 @@ public class GameServerThread extends Thread
 		setGameServerInfo(gsi);
 		gsi.setGameServerThread(this);
 		gsi.setPort(gameServerAuth.getPort());
-		setGameHosts(gameServerAuth.getExternalHost(), gameServerAuth.getInternalHost());
+		
+		if (!gameServerAuth.getHostName().equals("*"))
+		{
+			try
+			{
+				_gsi.setHostName(InetAddress.getByName(gameServerAuth.getHostName()).getHostAddress());
+			}
+			catch (UnknownHostException e)
+			{
+				_log.warning("Couldn't resolve hostname \"" + gameServerAuth.getHostName() + "\"");
+				_gsi.setHostName(_connectionIp);
+			}
+		}
+		else
+			_gsi.setHostName(_connectionIp);
+
 		gsi.setMaxPlayers(gameServerAuth.getMaxPlayers());
 		gsi.setAuthed(true);
+		
+		_log.info("Hooked [" + getServerId() + "] " + GameServerTable.getInstance().getServerNames().get(getServerId()) + " gameserver on: " + _gsi.getHostName());
 	}
 	
 	private void forceClose(int reason)
@@ -416,50 +430,6 @@ public class GameServerThread extends Thread
 	public void kickPlayer(String account)
 	{
 		sendPacket(new KickPlayer(account));
-	}
-	
-	/**
-	 * @param gameExternalHost
-	 * @param gameInternalHost
-	 */
-	public void setGameHosts(String gameExternalHost, String gameInternalHost)
-	{
-		String oldInternal = _gsi.getInternalHost();
-		String oldExternal = _gsi.getExternalHost();
-		
-		_gsi.setExternalHost(gameExternalHost);
-		_gsi.setInternalIp(gameInternalHost);
-		
-		if (!gameExternalHost.equals("*"))
-		{
-			try
-			{
-				_gsi.setExternalIp(InetAddress.getByName(gameExternalHost).getHostAddress());
-			}
-			catch (UnknownHostException e)
-			{
-				_log.warning("Couldn't resolve hostname \"" + gameExternalHost + "\"");
-			}
-		}
-		else
-			_gsi.setExternalIp(_connectionIp);
-		
-		if (!gameInternalHost.equals("*"))
-		{
-			try
-			{
-				_gsi.setInternalIp(InetAddress.getByName(gameInternalHost).getHostAddress());
-			}
-			catch (UnknownHostException e)
-			{
-				_log.warning("Couldn't resolve hostname \"" + gameInternalHost + "\"");
-			}
-		}
-		else
-			_gsi.setInternalIp(_connectionIp);
-		
-		_log.info("Hooked gameserver: [" + getServerId() + "] " + GameServerTable.getInstance().getServerNames().get(getServerId()));
-		_log.info("Internal/External IP(s): " + ((oldInternal == null) ? gameInternalHost : oldInternal) + "/" + ((oldExternal == null) ? gameExternalHost : oldExternal));
 	}
 	
 	/**

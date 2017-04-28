@@ -15,7 +15,6 @@ import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
 import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class RequestBuyItem extends L2GameClientPacket
 {
@@ -68,10 +67,7 @@ public final class RequestBuyItem extends L2GameClientPacket
 		
 		final NpcBuyList buyList = BuyListTable.getInstance().getBuyList(_listId);
 		if (buyList == null)
-		{
-			Util.handleIllegalPlayerAction(player, player.getName() + " of account " + player.getAccountName() + " sent a false BuyList list_id " + _listId, Config.DEFAULT_PUNISH);
 			return;
-		}
 		
 		double castleTaxRate = 0;
 		
@@ -94,14 +90,10 @@ public final class RequestBuyItem extends L2GameClientPacket
 			
 			final Product product = buyList.getProductByItemId(i.getId());
 			if (product == null)
-			{
-				Util.handleIllegalPlayerAction(player, player.getName() + " of account " + player.getAccountName() + " sent a false BuyList list_id " + _listId + " and item_id " + i.getId(), Config.DEFAULT_PUNISH);
 				return;
-			}
 			
 			if (!product.getItem().isStackable() && i.getValue() > 1)
 			{
-				Util.handleIllegalPlayerAction(player, player.getName() + " of account " + player.getAccountName() + " tried to purchase invalid quantity of items at the same time.", Config.DEFAULT_PUNISH);
 				sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_HAVE_EXCEEDED_QUANTITY_THAT_CAN_BE_INPUTTED));
 				return;
 			}
@@ -114,10 +106,7 @@ public final class RequestBuyItem extends L2GameClientPacket
 				return;
 			
 			if (price == 0 && !player.isGM())
-			{
-				Util.handleIllegalPlayerAction(player, player.getName() + " of account " + player.getAccountName() + " tried buy item for 0 adena.", Config.DEFAULT_PUNISH);
 				return;
-			}
 			
 			if (product.hasLimitedStock())
 			{
@@ -127,20 +116,14 @@ public final class RequestBuyItem extends L2GameClientPacket
 			}
 			
 			if ((Integer.MAX_VALUE / i.getValue()) < price)
-			{
-				Util.handleIllegalPlayerAction(player, player.getName() + " of account " + player.getAccountName() + " tried to purchase over " + Integer.MAX_VALUE + " adena worth of goods.", Config.DEFAULT_PUNISH);
 				return;
-			}
 			
 			// first calculate price per item with tax, then multiply by count
 			price = (int) (price * (1 + castleTaxRate));
 			subTotal += i.getValue() * price;
 			
 			if (subTotal > Integer.MAX_VALUE)
-			{
-				Util.handleIllegalPlayerAction(player, player.getName() + " of account " + player.getAccountName() + " tried to purchase over " + Integer.MAX_VALUE + " adena worth of goods.", Config.DEFAULT_PUNISH);
 				return;
-			}
 			
 			weight += i.getValue() * product.getItem().getWeight();
 			if (!product.getItem().isStackable())
@@ -173,10 +156,8 @@ public final class RequestBuyItem extends L2GameClientPacket
 		{
 			final Product product = buyList.getProductByItemId(i.getId());
 			if (product == null)
-			{
-				Util.handleIllegalPlayerAction(player, player.getName() + " of account " + player.getAccountName() + " sent a false BuyList list_id " + _listId + " and item_id " + i.getId(), Config.DEFAULT_PUNISH);
 				continue;
-			}
+			
 			
 			if (product.hasLimitedStock())
 			{

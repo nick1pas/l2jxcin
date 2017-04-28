@@ -7,8 +7,8 @@ import net.sf.l2j.commons.lang.StringUtil;
 import net.sf.l2j.commons.math.MathUtil;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
@@ -33,7 +33,7 @@ public class AdminKnownlist implements IAdminCommandHandler
 			StringTokenizer st = new StringTokenizer(command, " ");
 			st.nextToken();
 			
-			L2Object target = null;
+			WorldObject target = null;
 			
 			// Try to parse the parameter as an int, then try to retrieve an objectId ; if it's a string, search for any player name.
 			if (st.hasMoreTokens())
@@ -77,9 +77,9 @@ public class AdminKnownlist implements IAdminCommandHandler
 		return true;
 	}
 	
-	private static void showKnownlist(Player activeChar, L2Object target, int page)
+	private static void showKnownlist(Player activeChar, WorldObject target, int page)
 	{
-		List<L2Object> knownlist = target.getKnownType(L2Object.class);
+		List<WorldObject> knownlist = target.getKnownType(WorldObject.class);
 		
 		// Load static Htm.
 		final NpcHtmlMessage html = new NpcHtmlMessage(0);
@@ -103,7 +103,7 @@ public class AdminKnownlist implements IAdminCommandHandler
 		
 		// Generate data.
 		final StringBuilder sb = new StringBuilder(knownlist.size() * 150);
-		for (L2Object object : knownlist)
+		for (WorldObject object : knownlist)
 			StringUtil.append(sb, "<tr><td>", object.getName(), "</td><td>", object.getClass().getSimpleName(), "</td></tr>");
 		
 		html.replace("%knownlist%", sb.toString());

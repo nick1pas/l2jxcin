@@ -28,10 +28,10 @@ import net.sf.l2j.gameserver.geoengine.geodata.GeoStructure;
 import net.sf.l2j.gameserver.geoengine.geodata.IBlockDynamic;
 import net.sf.l2j.gameserver.geoengine.geodata.IGeoObject;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Door;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 
@@ -507,12 +507,12 @@ public class GeoEngine
 	// PATHFINDING
 	
 	/**
-	 * Check line of sight from {@link L2Object} to {@link L2Object}.
+	 * Check line of sight from {@link WorldObject} to {@link WorldObject}.
 	 * @param origin : The origin object.
 	 * @param target : The target object.
 	 * @return {@code boolean} : True if origin can see target
 	 */
-	public final boolean canSeeTarget(L2Object origin, L2Object target)
+	public final boolean canSeeTarget(WorldObject origin, WorldObject target)
 	{
 		// get origin and target world coordinates
 		final int ox = origin.getX();
@@ -545,24 +545,24 @@ public class GeoEngine
 		
 		// get origin and target height, real height = collision height * 2
 		double oheight = 0;
-		if (origin instanceof Character)
-			oheight = ((Character) origin).getCollisionHeight() * 2;
+		if (origin instanceof Creature)
+			oheight = ((Creature) origin).getCollisionHeight() * 2;
 		
 		double theight = 0;
-		if (target instanceof Character)
-			theight = ((Character) target).getCollisionHeight() * 2;
+		if (target instanceof Creature)
+			theight = ((Creature) target).getCollisionHeight() * 2;
 		
 		// perform geodata check
 		return door ? checkSeeOriginal(gox, goy, goz, oheight, gtx, gty, gtz, theight) : checkSee(gox, goy, goz, oheight, gtx, gty, gtz, theight);
 	}
 	
 	/**
-	 * Check line of sight from {@link L2Object} to {@link Location}.
+	 * Check line of sight from {@link WorldObject} to {@link Location}.
 	 * @param origin : The origin object.
 	 * @param position : The target position.
 	 * @return {@code boolean} : True if object can see position
 	 */
-	public final boolean canSeeTarget(L2Object origin, Location position)
+	public final boolean canSeeTarget(WorldObject origin, Location position)
 	{
 		// get origin and target world coordinates
 		final int ox = origin.getX();
@@ -594,8 +594,8 @@ public class GeoEngine
 		
 		// get origin and target height, real height = collision height * 2
 		double oheight = 0;
-		if (origin instanceof Character)
-			oheight = ((Character) origin).getTemplate().getCollisionHeight();
+		if (origin instanceof Creature)
+			oheight = ((Creature) origin).getTemplate().getCollisionHeight();
 		
 		// perform geodata check
 		return checkSee(gox, goy, goz, oheight, gtx, gty, gtz, 0);
@@ -606,11 +606,11 @@ public class GeoEngine
 	 * @param gox : origin X geodata coordinate
 	 * @param goy : origin Y geodata coordinate
 	 * @param goz : origin Z geodata coordinate
-	 * @param oheight : origin height (if instance of {@link Character})
+	 * @param oheight : origin height (if instance of {@link Creature})
 	 * @param gtx : target X geodata coordinate
 	 * @param gty : target Y geodata coordinate
 	 * @param gtz : target Z geodata coordinate
-	 * @param theight : target height (if instance of {@link Character})
+	 * @param theight : target height (if instance of {@link Creature})
 	 * @return {@code boolean} : True, when target can be seen.
 	 */
 	protected final boolean checkSee(int gox, int goy, int goz, double oheight, int gtx, int gty, int gtz, double theight)
@@ -772,11 +772,11 @@ public class GeoEngine
 	 * @param gox : origin X geodata coordinate
 	 * @param goy : origin Y geodata coordinate
 	 * @param goz : origin Z geodata coordinate
-	 * @param oheight : origin height (if instance of {@link Character})
+	 * @param oheight : origin height (if instance of {@link Creature})
 	 * @param gtx : target X geodata coordinate
 	 * @param gty : target Y geodata coordinate
 	 * @param gtz : target Z geodata coordinate
-	 * @param theight : target height (if instance of {@link Character} or {@link Door})
+	 * @param theight : target height (if instance of {@link Creature} or {@link Door})
 	 * @return {@code boolean} : True, when target can be seen.
 	 */
 	protected final boolean checkSeeOriginal(int gox, int goy, int goz, double oheight, int gtx, int gty, int gtz, double theight)

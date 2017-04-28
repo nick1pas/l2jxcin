@@ -16,7 +16,7 @@ import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.CursedWeaponsManager;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -95,9 +95,9 @@ public final class ItemsOnGroundTaskManager implements Runnable
 	/**
 	 * Adds {@link ItemInstance} to the ItemAutoDestroyTask.
 	 * @param item : {@link ItemInstance} to be added and checked.
-	 * @param actor : {@link Character} who dropped the item.
+	 * @param actor : {@link Creature} who dropped the item.
 	 */
-	public final void add(ItemInstance item, Character actor)
+	public final void add(ItemInstance item, Creature actor)
 	{
 		// Actor doesn't exist or item is protected, don't bother with the item (e.g. Cursed Weapons).
 		if (actor == null || item.isDestroyProtected())

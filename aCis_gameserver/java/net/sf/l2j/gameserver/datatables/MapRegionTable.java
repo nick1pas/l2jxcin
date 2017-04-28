@@ -8,7 +8,7 @@ import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.instancemanager.ZoneManager;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.base.ClassRace;
@@ -225,7 +225,7 @@ public class MapRegionTable
 	 * @param teleportType : The type of teleport to check.
 	 * @return a Location based on character and teleport types.
 	 */
-	public Location getLocationToTeleport(Character character, TeleportType teleportType)
+	public Location getLocationToTeleport(Creature character, TeleportType teleportType)
 	{
 		// The character isn't a player, bypass all checks and retrieve a random spawn location on closest town.
 		if (!(character instanceof Player))

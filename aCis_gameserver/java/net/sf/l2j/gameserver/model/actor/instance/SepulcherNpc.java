@@ -6,10 +6,10 @@ import java.util.concurrent.Future;
 import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.datatables.DoorTable;
 import net.sf.l2j.gameserver.instancemanager.FourSepulchersManager;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
@@ -122,8 +122,7 @@ public class SepulcherNpc extends Folk
 					doAction(player);
 				}
 			}
-			// Send a Server->Client ActionFailed to the Player in order
-			// to avoid that the client wait another packet
+			// Send a Server->Client ActionFailed to the Player in order to avoid that the client wait another packet
 			player.ActionF();
 		}
 	}

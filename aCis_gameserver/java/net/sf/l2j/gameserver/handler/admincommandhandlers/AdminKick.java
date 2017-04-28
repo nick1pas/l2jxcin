@@ -3,8 +3,8 @@ package net.sf.l2j.gameserver.handler.admincommandhandlers;
 import java.util.StringTokenizer;
 
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 
 public class AdminKick implements IAdminCommandHandler
@@ -57,7 +57,7 @@ public class AdminKick implements IAdminCommandHandler
 	
 	private static void disconnectCharacter(Player activeChar)
 	{
-		L2Object target = activeChar.getTarget();
+		WorldObject target = activeChar.getTarget();
 		Player player = null;
 		
 		if (target instanceof Player)

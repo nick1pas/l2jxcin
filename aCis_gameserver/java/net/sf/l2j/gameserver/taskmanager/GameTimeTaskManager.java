@@ -9,7 +9,7 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.DayNightSpawnManager;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
@@ -123,7 +123,7 @@ public final class GameTimeTaskManager implements Runnable
 	 * Removes {@link Player} from the GameTimeTask.
 	 * @param player : {@link Player} to be removed.
 	 */
-	public final void remove(Character player)
+	public final void remove(Creature player)
 	{
 		_players.remove(player);
 	}

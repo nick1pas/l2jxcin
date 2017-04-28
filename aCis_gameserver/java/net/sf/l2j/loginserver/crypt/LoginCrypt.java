@@ -4,9 +4,6 @@ import java.io.IOException;
 
 import net.sf.l2j.commons.random.Rnd;
 
-/**
- * @author KenM
- */
 public class LoginCrypt
 {
 	private static final byte[] STATIC_BLOWFISH_KEY =

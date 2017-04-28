@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 
 public class SpawnItem extends L2GameServerPacket
@@ -21,7 +21,7 @@ public class SpawnItem extends L2GameServerPacket
 		_count = item.getCount();
 	}
 	
-	public SpawnItem(L2Object object)
+	public SpawnItem(WorldObject object)
 	{
 		_objectId = object.getObjectId();
 		_itemId = object.getPolyId();

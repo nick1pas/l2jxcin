@@ -11,13 +11,11 @@ import net.sf.l2j.commons.mmocore.IMMOExecutor;
 import net.sf.l2j.commons.mmocore.MMOConnection;
 import net.sf.l2j.commons.mmocore.ReceivablePacket;
 
+import net.sf.l2j.loginserver.network.LoginClient;
 import net.sf.l2j.loginserver.network.serverpackets.Init;
 import net.sf.l2j.util.IPv4Filter;
 
-/**
- * @author KenM
- */
-public class SelectorHelper implements IMMOExecutor<L2LoginClient>, IClientFactory<L2LoginClient>, IAcceptFilter
+public class SelectorHelper implements IMMOExecutor<LoginClient>, IClientFactory<LoginClient>, IAcceptFilter
 {
 	private final ThreadPoolExecutor _generalPacketsThreadPool;
 	
@@ -30,15 +28,15 @@ public class SelectorHelper implements IMMOExecutor<L2LoginClient>, IClientFacto
 	}
 	
 	@Override
-	public void execute(ReceivablePacket<L2LoginClient> packet)
+	public void execute(ReceivablePacket<LoginClient> packet)
 	{
 		_generalPacketsThreadPool.execute(packet);
 	}
 	
 	@Override
-	public L2LoginClient create(MMOConnection<L2LoginClient> con)
+	public LoginClient create(MMOConnection<LoginClient> con)
 	{
-		L2LoginClient client = new L2LoginClient(con);
+		LoginClient client = new LoginClient(con);
 		client.sendPacket(new Init(client));
 		return client;
 	}

@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.L2Object;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 /**
  * @author KenM
@@ -19,7 +19,7 @@ public final class FlyToLocation extends L2GameServerPacket
 		DUMMY; // no effect
 	}
 	
-	public FlyToLocation(Character cha, int destX, int destY, int destZ, FlyType type)
+	public FlyToLocation(Creature cha, int destX, int destY, int destZ, FlyType type)
 	{
 		_chaObjId = cha.getObjectId();
 		_chaX = cha.getX();
@@ -31,7 +31,7 @@ public final class FlyToLocation extends L2GameServerPacket
 		_type = type;
 	}
 	
-	public FlyToLocation(Character cha, L2Object dest, FlyType type)
+	public FlyToLocation(Creature cha, WorldObject dest, FlyType type)
 	{
 		this(cha, dest.getX(), dest.getY(), dest.getZ(), type);
 	}

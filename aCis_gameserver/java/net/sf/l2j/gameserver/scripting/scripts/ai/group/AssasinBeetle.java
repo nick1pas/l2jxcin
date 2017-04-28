@@ -2,10 +2,10 @@ package net.sf.l2j.gameserver.scripting.scripts.ai.group;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
@@ -33,7 +33,7 @@ public class AssasinBeetle extends L2AttackableAIScript
 				for (int i = 0; i < 5; i++)
 				{
 					Attackable newNpc = (Attackable) addSpawn(NPC[1], npc.getX(), npc.getY(), npc.getZ(), npc.getHeading(), true, 0, false);
-					Character originalAttacker = isPet ? killer.getPet() : killer;
+					Creature originalAttacker = isPet ? killer.getPet() : killer;
 					newNpc.setRunning();
 					newNpc.addDamageHate(originalAttacker, 0, 999);
 					newNpc.getAI().setIntention(CtrlIntention.ATTACK, originalAttacker);

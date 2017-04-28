@@ -1,5 +1,7 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import net.sf.l2j.commons.math.MathUtil;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.model.BlockList;
 import net.sf.l2j.gameserver.model.World;
@@ -8,7 +10,6 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SendTradeRequest;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class TradeRequest extends L2GameClientPacket
 {
@@ -99,7 +100,7 @@ public final class TradeRequest extends L2GameClientPacket
 			return;
 		}
 		
-		if (Util.calculateDistance(player, target, true) > Npc.INTERACTION_DISTANCE)
+		if (MathUtil.calculateDistance(player, target, true) > Npc.INTERACTION_DISTANCE)
 		{
 			player.sendPacket(SystemMessageId.TARGET_TOO_FAR);
 			return;

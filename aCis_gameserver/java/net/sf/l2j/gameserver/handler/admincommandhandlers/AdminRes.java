@@ -4,9 +4,9 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.taskmanager.DecayTaskManager;
@@ -53,7 +53,7 @@ public class AdminRes implements IAdminCommandHandler
 	
 	private static void handleRes(Player activeChar, String resParam)
 	{
-		L2Object obj = activeChar.getTarget();
+		WorldObject obj = activeChar.getTarget();
 		
 		if (resParam != null)
 		{
@@ -86,7 +86,7 @@ public class AdminRes implements IAdminCommandHandler
 		if (obj == null)
 			obj = activeChar;
 		
-		doResurrect((Character) obj);
+		doResurrect((Creature) obj);
 		
 		if (Config.DEBUG)
 			_log.fine("GM: " + activeChar.getName() + "(" + activeChar.getObjectId() + ") resurrected character " + obj.getObjectId());
@@ -99,7 +99,7 @@ public class AdminRes implements IAdminCommandHandler
 	
 	private static void handleNonPlayerRes(Player activeChar, String radiusStr)
 	{
-		L2Object obj = activeChar.getTarget();
+		WorldObject obj = activeChar.getTarget();
 		
 		try
 		{
@@ -109,7 +109,7 @@ public class AdminRes implements IAdminCommandHandler
 			{
 				radius = Integer.parseInt(radiusStr);
 				
-				for (Character knownChar : activeChar.getKnownTypeInRadius(Character.class, radius))
+				for (Creature knownChar : activeChar.getKnownTypeInRadius(Creature.class, radius))
 					if (!(knownChar instanceof Player))
 						doResurrect(knownChar);
 					
@@ -128,10 +128,10 @@ public class AdminRes implements IAdminCommandHandler
 			return;
 		}
 		
-		doResurrect((Character) obj);
+		doResurrect((Creature) obj);
 	}
 	
-	private static void doResurrect(Character targetChar)
+	private static void doResurrect(Creature targetChar)
 	{
 		if (!targetChar.isDead())
 			return;

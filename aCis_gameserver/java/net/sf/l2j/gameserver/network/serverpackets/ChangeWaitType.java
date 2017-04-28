@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.network.serverpackets;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 
 public class ChangeWaitType extends L2GameServerPacket
 {
@@ -13,7 +13,7 @@ public class ChangeWaitType extends L2GameServerPacket
 	private final int _moveType;
 	private final int _x, _y, _z;
 	
-	public ChangeWaitType(Character character, int newMoveType)
+	public ChangeWaitType(Creature character, int newMoveType)
 	{
 		_charObjId = character.getObjectId();
 		_moveType = newMoveType;

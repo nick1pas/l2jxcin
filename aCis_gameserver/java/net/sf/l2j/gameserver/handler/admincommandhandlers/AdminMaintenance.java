@@ -1,5 +1,7 @@
 package net.sf.l2j.gameserver.handler.admincommandhandlers;
 
+import net.sf.l2j.commons.util.SysUtil;
+
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.LoginServerThread;
 import net.sf.l2j.gameserver.Shutdown;
@@ -95,10 +97,10 @@ public class AdminMaintenance implements IAdminCommandHandler
 		final NpcHtmlMessage html = new NpcHtmlMessage(0);
 		html.setFile("data/html/admin/maintenance.htm");
 		html.replace("%count%", World.getInstance().getPlayers().size());
-		html.replace("%used%", Math.round((int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576)));
+		html.replace("%used%", SysUtil.getUsedMemory());
 		html.replace("%server_name%", LoginServerThread.getInstance().getServerName());
 		html.replace("%status%", LoginServerThread.getInstance().getStatusString());
-		html.replace("%max_players%", LoginServerThread.getInstance().getMaxPlayer());
+		html.replace("%max_players%", LoginServerThread.getInstance().getMaxPlayers());
 		html.replace("%time%", GameTimeTaskManager.getInstance().getGameTimeFormated());
 		activeChar.sendPacket(html);
 	}

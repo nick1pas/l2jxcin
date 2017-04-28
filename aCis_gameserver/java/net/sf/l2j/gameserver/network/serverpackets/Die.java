@@ -3,7 +3,7 @@ package net.sf.l2j.gameserver.network.serverpackets;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.model.L2Clan;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
@@ -15,7 +15,7 @@ import net.sf.l2j.gameserver.model.zone.type.L2MultiZone;
 
 public class Die extends L2GameServerPacket
 {
-	private final Character _activeChar;
+	private final Creature _activeChar;
 	private final int _charObjId;
 	private final boolean _fake;
 	private boolean _canTeleport;
@@ -23,7 +23,7 @@ public class Die extends L2GameServerPacket
 	private boolean _allowFixedRes;
 	private L2Clan _clan;
 	
-	public Die(Character cha)
+	public Die(Creature cha)
 	{
 		_activeChar = cha;
 		_charObjId = cha.getObjectId();

@@ -4,7 +4,7 @@ import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.datatables.MapRegionTable;
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.instancemanager.CastleManorManager;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -21,7 +21,7 @@ public class SeedHandler implements IItemHandler
 		if (!Config.ALLOW_MANOR || !(playable instanceof Player))
 			return;
 		
-		final L2Object tgt = playable.getTarget();
+		final WorldObject tgt = playable.getTarget();
 		if (!(tgt instanceof Attackable) || !((Attackable) tgt).getTemplate().isSeedable())
 		{
 			playable.sendPacket(SystemMessageId.THE_TARGET_IS_UNAVAILABLE_FOR_SEEDING);

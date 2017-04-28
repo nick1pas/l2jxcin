@@ -7,7 +7,7 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.gameserver.datatables.SkillTable;
 import net.sf.l2j.gameserver.instancemanager.FourSepulchersManager;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.group.Party;
 import net.sf.l2j.gameserver.network.serverpackets.NpcSay;
@@ -111,7 +111,7 @@ public class SepulcherMonster extends Monster
 	}
 	
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		if (!super.doDie(killer))
 			return false;
@@ -251,7 +251,7 @@ public class SepulcherMonster extends Monster
 		super.deleteMe();
 	}
 	
-	private void giveCup(Character killer)
+	private void giveCup(Creature killer)
 	{
 		int cupId = 0;
 		
@@ -462,7 +462,7 @@ public class SepulcherMonster extends Monster
 	}
 	
 	@Override
-	public boolean isAutoAttackable(Character attacker)
+	public boolean isAutoAttackable(Creature attacker)
 	{
 		return true;
 	}

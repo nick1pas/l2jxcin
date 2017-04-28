@@ -4,7 +4,7 @@ import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.gameserver.model.L2Effect;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.skills.Env;
 import net.sf.l2j.gameserver.skills.Formulas;
@@ -39,7 +39,7 @@ public class EffectCancelDebuff extends L2Effect
 		return false;
 	}
 	
-	private static boolean cancel(Character caster, Character target, L2Skill skill, L2SkillType effectType)
+	private static boolean cancel(Creature caster, Creature target, L2Skill skill, L2SkillType effectType)
 	{
 		if (!(target instanceof Player) || target.isDead())
 			return false;

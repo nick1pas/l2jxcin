@@ -11,7 +11,7 @@ import net.sf.l2j.Config;
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.LoginServerThread;
 import net.sf.l2j.loginserver.GameServerTable;
-import net.sf.l2j.loginserver.GameServerTable.GameServerInfo;
+import net.sf.l2j.loginserver.model.GameServerInfo;
 
 public class GameServerRegister
 {

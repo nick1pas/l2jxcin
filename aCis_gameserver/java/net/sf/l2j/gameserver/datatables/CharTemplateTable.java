@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.sf.l2j.gameserver.model.L2SkillLearn;
-import net.sf.l2j.gameserver.model.actor.template.PcTemplate;
+import net.sf.l2j.gameserver.model.actor.template.PlayerTemplate;
 import net.sf.l2j.gameserver.model.base.ClassId;
 import net.sf.l2j.gameserver.templates.StatsSet;
 import net.sf.l2j.gameserver.xmlfactory.XMLDocumentFactory;
@@ -25,7 +25,7 @@ public class CharTemplateTable
 {
 	private static final Logger _log = Logger.getLogger(CharTemplateTable.class.getName());
 	
-	private final Map<Integer, PcTemplate> _templates = new HashMap<>();
+	private final Map<Integer, PlayerTemplate> _templates = new HashMap<>();
 	
 	public static CharTemplateTable getInstance()
 	{
@@ -102,7 +102,7 @@ public class CharTemplateTable
 							items = attrs.getNamedItem("val").getNodeValue().trim();
 						}
 					}
-					PcTemplate pcT = new PcTemplate(classId, set);
+					PlayerTemplate pcT = new PlayerTemplate(classId, set);
 					
 					// Add items listed in "items" if class possess a filled "items" string.
 					if (items != null)
@@ -122,19 +122,19 @@ public class CharTemplateTable
 		}
 	}
 	
-	public PcTemplate getTemplate(ClassId classId)
+	public PlayerTemplate getTemplate(ClassId classId)
 	{
 		return _templates.get(classId.getId());
 	}
 	
-	public PcTemplate getTemplate(int classId)
+	public PlayerTemplate getTemplate(int classId)
 	{
 		return _templates.get(classId);
 	}
 	
 	public final String getClassNameById(int classId)
 	{
-		PcTemplate pcTemplate = _templates.get(classId);
+		PlayerTemplate pcTemplate = _templates.get(classId);
 		if (pcTemplate == null)
 			throw new IllegalArgumentException("No template for classId: " + classId);
 		

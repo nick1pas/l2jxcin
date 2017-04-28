@@ -1,15 +1,16 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
+import net.sf.l2j.commons.math.MathUtil;
 import net.sf.l2j.commons.random.Rnd;
 import net.sf.l2j.commons.util.ArraysUtil;
 
-import net.sf.l2j.gameserver.ai.CtrlIntention;
-import net.sf.l2j.gameserver.ai.model.L2SummonAI;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
+import net.sf.l2j.gameserver.model.actor.ai.type.SummonAI;
 import net.sf.l2j.gameserver.model.actor.instance.Door;
 import net.sf.l2j.gameserver.model.actor.instance.Folk;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
@@ -18,7 +19,6 @@ import net.sf.l2j.gameserver.model.actor.instance.Servitor;
 import net.sf.l2j.gameserver.model.actor.instance.SiegeSummon;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcSay;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class RequestActionUse extends L2GameClientPacket
 {
@@ -99,7 +99,7 @@ public final class RequestActionUse extends L2GameClientPacket
 		}
 		
 		final Summon pet = activeChar.getPet();
-		final L2Object target = activeChar.getTarget();
+		final WorldObject target = activeChar.getTarget();
 		
 		switch (_actionId)
 		{
@@ -132,7 +132,7 @@ public final class RequestActionUse extends L2GameClientPacket
 					return;
 				
 				// You can't order anymore your pet to stop if distance is superior to 2000.
-				if (pet.getFollowStatus() && Util.calculateDistance(activeChar, pet, true) > 2000)
+				if (pet.getFollowStatus() && MathUtil.calculateDistance(activeChar, pet, true) > 2000)
 					return;
 				
 				if (pet.isOutOfControl())
@@ -141,12 +141,12 @@ public final class RequestActionUse extends L2GameClientPacket
 					return;
 				}
 				
-				((L2SummonAI) pet.getAI()).notifyFollowStatusChange();
+				((SummonAI) pet.getAI()).notifyFollowStatusChange();
 				break;
 			
 			case 16:
 			case 22: // Attack (pet attack)
-				if (!(target instanceof Character) || pet == null || pet == target || activeChar == target)
+				if (!(target instanceof Creature) || pet == null || pet == target || activeChar == target)
 					return;
 				
 				// Sin eater, Big Boom, Wyvern can't attack with attack button.
@@ -195,7 +195,7 @@ public final class RequestActionUse extends L2GameClientPacket
 				// siege golem AI doesn't support attacking other than doors at the moment
 				else if (pet.getNpcId() != SiegeSummon.SIEGE_GOLEM_ID)
 				{
-					if (Character.isInsidePeaceZone(pet, target))
+					if (Creature.isInsidePeaceZone(pet, target))
 					{
 						pet.setFollowStatus(false);
 						pet.getAI().setIntention(CtrlIntention.FOLLOW, target);
@@ -468,7 +468,7 @@ public final class RequestActionUse extends L2GameClientPacket
 	 * @param target The target is specified as a parameter but can be overwrited or ignored depending on skill type.
 	 * @return true if you can use the skill, false otherwise.
 	 */
-	private boolean useSkill(int skillId, L2Object target)
+	private boolean useSkill(int skillId, WorldObject target)
 	{
 		final Player activeChar = getClient().getActiveChar();
 		

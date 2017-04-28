@@ -3,7 +3,6 @@ package net.sf.l2j.gameserver.skills.effects;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.l2j.gameserver.ai.CtrlEvent;
 import net.sf.l2j.gameserver.datatables.NpcTable;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.model.L2Effect;
@@ -11,9 +10,10 @@ import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.Location;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.actor.Attackable;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.Summon;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlEvent;
 import net.sf.l2j.gameserver.model.actor.instance.EffectPoint;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
@@ -88,9 +88,9 @@ public class EffectSignetMDam extends L2Effect
 		final boolean sps = caster.isChargedShot(ShotType.SPIRITSHOT);
 		final boolean bsps = caster.isChargedShot(ShotType.BLESSED_SPIRITSHOT);
 		
-		List<Character> targets = new ArrayList<>();
+		List<Creature> targets = new ArrayList<>();
 		
-		for (Character cha : _actor.getKnownTypeInRadius(Character.class, getSkill().getSkillRadius()))
+		for (Creature cha : _actor.getKnownTypeInRadius(Creature.class, getSkill().getSkillRadius()))
 		{
 			if (cha == caster)
 				continue;
@@ -123,8 +123,8 @@ public class EffectSignetMDam extends L2Effect
 		
 		if (!targets.isEmpty())
 		{
-			caster.broadcastPacket(new MagicSkillLaunched(caster, getSkill().getId(), getSkill().getLevel(), targets.toArray(new Character[targets.size()])));
-			for (Character target : targets)
+			caster.broadcastPacket(new MagicSkillLaunched(caster, getSkill().getId(), getSkill().getLevel(), targets.toArray(new Creature[targets.size()])));
+			for (Creature target : targets)
 			{
 				boolean mcrit = Formulas.calcMCrit(caster.getMCriticalHit(target, getSkill()));
 				byte shld = Formulas.calcShldUse(caster, target, getSkill());

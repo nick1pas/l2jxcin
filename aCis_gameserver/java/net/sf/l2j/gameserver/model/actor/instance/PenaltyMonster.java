@@ -2,8 +2,8 @@ package net.sf.l2j.gameserver.model.actor.instance;
 
 import net.sf.l2j.commons.random.Rnd;
 
-import net.sf.l2j.gameserver.ai.CtrlEvent;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlEvent;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 
 public class PenaltyMonster extends Monster
@@ -16,7 +16,7 @@ public class PenaltyMonster extends Monster
 	}
 	
 	@Override
-	public Character getMostHated()
+	public Creature getMostHated()
 	{
 		if (_ptk != null)
 			return _ptk; // always attack only one person
@@ -35,7 +35,7 @@ public class PenaltyMonster extends Monster
 	}
 	
 	@Override
-	public boolean doDie(Character killer)
+	public boolean doDie(Creature killer)
 	{
 		if (!super.doDie(killer))
 			return false;

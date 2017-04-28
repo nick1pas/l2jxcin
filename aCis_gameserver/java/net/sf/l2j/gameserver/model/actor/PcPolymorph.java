@@ -7,7 +7,7 @@ import java.util.logging.Level;
 
 import net.sf.l2j.L2DatabaseFactory;
 import net.sf.l2j.gameserver.model.CharSelectInfoPackage;
-import net.sf.l2j.gameserver.model.L2Object;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.actor.template.NpcTemplate;
 import net.sf.l2j.gameserver.model.itemcontainer.Inventory;
@@ -45,7 +45,7 @@ public class PcPolymorph extends Npc
 	{
 		_polymorphInfo = polymorphInfo;
 		
-		for (L2Object object : getKnownType(L2Object.class))
+		for (WorldObject object : getKnownType(WorldObject.class))
 		{
 			if (object instanceof Player)
 			{

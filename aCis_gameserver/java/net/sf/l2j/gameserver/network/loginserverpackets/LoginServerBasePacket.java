@@ -1,8 +1,5 @@
 package net.sf.l2j.gameserver.network.loginserverpackets;
 
-/**
- * @author -Wooden-
- */
 public abstract class LoginServerBasePacket
 {
 	private final byte[] _decrypt;

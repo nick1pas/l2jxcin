@@ -2,7 +2,7 @@ package net.sf.l2j.gameserver.model.actor.stat;
 
 import net.sf.l2j.gameserver.model.actor.Vehicle;
 
-public class VehicleStat extends CharStat
+public class VehicleStat extends CreatureStat
 {
 	private int _moveSpeed = 0;
 	private int _rotationSpeed = 0;

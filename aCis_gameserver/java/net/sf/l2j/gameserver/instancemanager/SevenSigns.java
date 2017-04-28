@@ -159,11 +159,7 @@ public class SevenSigns
 	public static final int SEAL_STONE_BLUE_VALUE = 3;
 	public static final int SEAL_STONE_GREEN_VALUE = 5;
 	public static final int SEAL_STONE_RED_VALUE = 10;
-	
-	public static final int BLUE_CONTRIB_POINTS = 3;
-	public static final int GREEN_CONTRIB_POINTS = 5;
-	public static final int RED_CONTRIB_POINTS = 10;
-	
+
 	private final Calendar _nextPeriodChange = Calendar.getInstance();
 	private Calendar _lastSave = Calendar.getInstance();
 	
@@ -411,12 +407,7 @@ public class SevenSigns
 		}
 	}
 	
-	public static int calcContributionScore(int blueCount, int greenCount, int redCount)
-	{
-		return blueCount * BLUE_CONTRIB_POINTS + greenCount * GREEN_CONTRIB_POINTS + redCount * RED_CONTRIB_POINTS;
-	}
-	
-	public static int calcAncientAdenaReward(int blueCount, int greenCount, int redCount)
+	public static int calcScore(int blueCount, int greenCount, int redCount)
 	{
 		return blueCount * SEAL_STONE_BLUE_VALUE + greenCount * SEAL_STONE_GREEN_VALUE + redCount * SEAL_STONE_RED_VALUE;
 	}
@@ -865,8 +856,8 @@ public class SevenSigns
 	{
 		StatsSet set = _playersData.get(objectId);
 		
-		int contribScore = calcContributionScore(blueCount, greenCount, redCount);
-		int totalAncientAdena = set.getInteger("ancient_adena_amount") + calcAncientAdenaReward(blueCount, greenCount, redCount);
+		int contribScore = calcScore(blueCount, greenCount, redCount);
+			int totalAncientAdena = set.getInteger("ancient_adena_amount") + contribScore;
 		int totalContribScore = set.getInteger("contribution_score") + contribScore;
 		
 		if (totalContribScore > Config.ALT_MAXIMUM_PLAYER_CONTRIB)
@@ -1116,7 +1107,10 @@ public class SevenSigns
 				case RECRUITING: // Initialization
 					// Start the Festival of Darkness cycle.
 					SevenSignsFestival.getInstance().startFestivalManager();
-					
+ 					
+					// Reset castles certificates count.
+					CastleManager.getInstance().resetCertificates();
+
 					// Send message that Competition has begun.
 					Broadcast.toAllOnlinePlayers(SystemMessage.getSystemMessage(SystemMessageId.QUEST_EVENT_PERIOD_BEGUN));
 					break;

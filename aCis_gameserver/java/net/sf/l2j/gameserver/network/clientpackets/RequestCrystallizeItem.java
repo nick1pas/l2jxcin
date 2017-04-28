@@ -9,8 +9,6 @@ import net.sf.l2j.gameserver.model.itemcontainer.PcInventory;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.InventoryUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
-import net.sf.l2j.gameserver.util.IllegalPlayerAction;
-import net.sf.l2j.gameserver.util.Util;
 
 public final class RequestCrystallizeItem extends L2GameClientPacket
 {
@@ -32,10 +30,7 @@ public final class RequestCrystallizeItem extends L2GameClientPacket
 			return;
 		
 		if (_count <= 0)
-		{
-			Util.handleIllegalPlayerAction(activeChar, "[RequestCrystallizeItem] " + activeChar.getName() + "tried to crystallize an object but count was inferior to 0", IllegalPlayerAction.PUNISH_KICK);
 			return;
-		}
 		
 		if (activeChar.isInStoreMode() || activeChar.isCrystallizing())
 		{

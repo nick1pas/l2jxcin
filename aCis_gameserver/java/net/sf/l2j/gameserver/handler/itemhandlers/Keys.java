@@ -2,7 +2,7 @@ package net.sf.l2j.gameserver.handler.itemhandlers;
 
 import net.sf.l2j.gameserver.handler.IItemHandler;
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.instance.Chest;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -32,7 +32,7 @@ public class Keys implements IItemHandler
 		if (activeChar.isMovementDisabled())
 			return;
 		
-		final Character target = (Character) activeChar.getTarget();
+		final Creature target = (Creature) activeChar.getTarget();
 		
 		// Target must be a valid chest (not dead or already interacted).
 		if (!(target instanceof Chest) || target.isDead() || ((Chest) target).isInteracted())

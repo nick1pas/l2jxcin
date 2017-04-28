@@ -1,6 +1,6 @@
 package net.sf.l2j.gameserver.model.zone.type;
 
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.L2CastleZoneType;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
@@ -31,7 +31,7 @@ public class L2SwampZone extends L2CastleZoneType
 	}
 	
 	@Override
-	protected void onEnter(Character character)
+	protected void onEnter(Creature character)
 	{
 		// Castle traps are active only during siege, or if they're activated.
 		if (getCastle() != null && (!isEnabled() || !getCastle().getSiege().isInProgress()))
@@ -43,7 +43,7 @@ public class L2SwampZone extends L2CastleZoneType
 	}
 	
 	@Override
-	protected void onExit(Character character)
+	protected void onExit(Creature character)
 	{
 		// don't broadcast info if not needed
 		if (character.isInsideZone(ZoneId.SWAMP))

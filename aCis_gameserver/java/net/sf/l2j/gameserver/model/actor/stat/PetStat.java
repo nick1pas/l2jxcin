@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.model.actor.stat;
 
 import net.sf.l2j.gameserver.model.L2Skill;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Pet;
 import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
@@ -96,7 +96,7 @@ public class PetStat extends SummonStat
 	}
 	
 	@Override
-	public int getMAtk(Character target, L2Skill skill)
+	public int getMAtk(Creature target, L2Skill skill)
 	{
 		double attack = getActiveChar().getPetData().getMAtk();
 		
@@ -118,13 +118,13 @@ public class PetStat extends SummonStat
 	}
 	
 	@Override
-	public int getMDef(Character target, L2Skill skill)
+	public int getMDef(Creature target, L2Skill skill)
 	{
 		return (int) calcStat(Stats.MAGIC_DEFENCE, getActiveChar().getPetData().getMDef(), target, skill);
 	}
 	
 	@Override
-	public int getPAtk(Character target)
+	public int getPAtk(Creature target)
 	{
 		return (int) calcStat(Stats.POWER_ATTACK, getActiveChar().getPetData().getPAtk(), target, null);
 	}
@@ -141,7 +141,7 @@ public class PetStat extends SummonStat
 	}
 	
 	@Override
-	public int getPDef(Character target)
+	public int getPDef(Creature target)
 	{
 		return (int) calcStat(Stats.POWER_DEFENCE, getActiveChar().getPetData().getPDef(), target, null);
 	}

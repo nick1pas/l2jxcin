@@ -3,13 +3,12 @@ package net.sf.l2j.gameserver.network.clientpackets;
 import java.nio.BufferUnderflowException;
 
 import net.sf.l2j.Config;
-import net.sf.l2j.gameserver.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.Location;
+import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.EnchantResult;
 import net.sf.l2j.gameserver.network.serverpackets.StopMove;
-import net.sf.l2j.gameserver.util.Util;
 
 public class MoveBackwardToLocation extends L2GameClientPacket
 {
@@ -39,12 +38,12 @@ public class MoveBackwardToLocation extends L2GameClientPacket
 		}
 		catch (BufferUnderflowException e)
 		{
-			if (Config.L2WALKER_PROTECTION)
-			{
-				Player activeChar = getClient().getActiveChar();
-				activeChar.sendPacket(SystemMessageId.ENCHANT_SCROLL_CANCELLED);
-				Util.handleIllegalPlayerAction(activeChar, activeChar.getName() + " is trying to use L2Walker.", Config.DEFAULT_PUNISH);
-			}
+ 			if (Config.L2WALKER_PROTECTION)
+ 			{
+				final Player player = getClient().getActiveChar();
+				if (player != null)
+					player.logout(false);
+ 			}
 		}
 	}
 	

@@ -4,9 +4,9 @@ import java.util.logging.Logger;
 
 import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.handler.IAdminCommandHandler;
-import net.sf.l2j.gameserver.model.L2Object;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.actor.Character;
+import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 
@@ -56,7 +56,7 @@ public class AdminHeal implements IAdminCommandHandler
 	
 	private static void handleRes(Player activeChar, String player)
 	{
-		L2Object obj = activeChar.getTarget();
+		WorldObject obj = activeChar.getTarget();
 		if (player != null)
 		{
 			Player plyr = World.getInstance().getPlayer(player);
@@ -68,7 +68,7 @@ public class AdminHeal implements IAdminCommandHandler
 				try
 				{
 					int radius = Integer.parseInt(player);
-					for (Character character : activeChar.getKnownType(Character.class))
+					for (Creature character : activeChar.getKnownType(Creature.class))
 					{
 						character.setCurrentHpMp(character.getMaxHp(), character.getMaxMp());
 						if (character instanceof Player)
@@ -86,9 +86,9 @@ public class AdminHeal implements IAdminCommandHandler
 		if (obj == null)
 			obj = activeChar;
 		
-		if (obj instanceof Character)
+		if (obj instanceof Creature)
 		{
-			Character target = (Character) obj;
+			Creature target = (Creature) obj;
 			target.setCurrentHpMp(target.getMaxHp(), target.getMaxMp());
 			
 			if (target instanceof Player)

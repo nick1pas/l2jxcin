@@ -82,6 +82,15 @@ public final class Config
 	public static Map<Integer, Integer> LIST_AIO_ITEMS;
 	public static String AIO_SKILLS;
 	public static Map<Integer, Integer> LIST_AIO_SKILLS;
+	/** Vip System */
+	public static boolean ENABLE_VIP_ITEM;
+	public static int VIP_ITEM_ID;
+	public static int VIP_DAYS;
+	public static int VIP_XP_SP_RATES;
+	public static int VIP_ADENA_RATES;
+	public static int VIP_SPOIL_RATES;
+	public static int VIP_RATE_DROP_ITEMS_BY_RAID;
+	public static int VIP_DROP_RATES;
 	/** Clan Manager */
 	public static int CLAN_MANAGER_ITEM_ID;
 	public static int CLAN_MANAGER_LEVEL_UP_COUNT;
@@ -1060,6 +1069,14 @@ public final class Config
 			int skillLv = Integer.parseInt(valSplit[1]);
 			LIST_AIO_SKILLS.put(skillId, skillLv);
 		}
+		ENABLE_VIP_ITEM = custom.getProperty("VipItemEnabled", true);
+		VIP_ITEM_ID = custom.getProperty("VipItemId", 3481);
+		VIP_DAYS = custom.getProperty("VipDays", 5);						
+		VIP_XP_SP_RATES = custom.getProperty("VipExp/SpRates", 1000);
+		VIP_ADENA_RATES = custom.getProperty("VipAdenaDrop", 1000);
+		VIP_SPOIL_RATES = custom.getProperty("VipSpoilRates", 1000);
+		VIP_RATE_DROP_ITEMS_BY_RAID = custom.getProperty("VipRaidDrop", 1);
+		VIP_DROP_RATES = custom.getProperty("VipDrop", 1);				
 		CLAN_MANAGER_ITEM_ID = custom.getProperty("ClanManagerItemId", 57);
 		CLAN_MANAGER_LEVEL_UP_COUNT = custom.getProperty("ClanManagerLevelUpCount", 10000);
 		CLAN_MANAGER_REPUTATION_COUNT = custom.getProperty("ClanManagerReputationCount", 100000);

@@ -353,6 +353,10 @@
 	<aCar name="admin_move_to" accessLevel="1" />
 	<aCar name="admin_sendhome" accessLevel="1" />
 
+	<!-- VIP -->
+	<aCar name="admin_vipon" accessLevel="1" />
+	<aCar name="admin_vipoff" accessLevel="1" />
+
 	<!-- ZONE -->
 	<aCar name="admin_zone_check" accessLevel="1" />
 	<aCar name="admin_zone_visual" accessLevel="1" />

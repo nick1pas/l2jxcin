@@ -27,6 +27,7 @@ import net.sf.l2j.gameserver.model.L2Clan.SubPledge;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.ClassMaster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
+import net.sf.l2j.gameserver.model.actor.instance.Vip;
 import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
@@ -304,7 +305,11 @@ public class EnterWorld extends L2GameClientPacket
 			activeChar.sendPacket(new PlaySound("systemmsg_e.1233"));
 			activeChar.sendPacket(ExMailArrived.STATIC_PACKET);
 		}
-		
+ 		
+		// Vip Status onEnter
+		if (activeChar.getMemos().getLong("TimeOfVip", 0) > 0)
+			Vip.onEnterVipStatus(activeChar);
+	
 		// Clan notice, if active.
 		if (Config.ENABLE_COMMUNITY_BOARD && clan != null && clan.isNoticeEnabled())
 		{

@@ -595,6 +595,7 @@
 		<set name="material" val="STEEL" />
 		<set name="price" val="200" />
 		<set name="is_stackable" val="true" />
+		<set name="handler" val="VipStatusItem" />
 	</item>
 	<item id="3482" type="EtcItem" name="Gold Wyvern">
 		<set name="material" val="STEEL" />

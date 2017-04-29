@@ -29,6 +29,7 @@ import net.sf.l2j.gameserver.handler.itemhandlers.SoulShots;
 import net.sf.l2j.gameserver.handler.itemhandlers.SpecialXMas;
 import net.sf.l2j.gameserver.handler.itemhandlers.SpiritShot;
 import net.sf.l2j.gameserver.handler.itemhandlers.SummonItems;
+import net.sf.l2j.gameserver.handler.itemhandlers.VipStatusItem;
 import net.sf.l2j.gameserver.model.item.kind.EtcItem;
 
 public class ItemHandler
@@ -68,6 +69,7 @@ public class ItemHandler
 		registerItemHandler(new SoulCrystals());
 		registerItemHandler(new SpiritShot());
 		registerItemHandler(new SummonItems());
+		registerItemHandler(new VipStatusItem());
 	}
 	
 	public void registerItemHandler(IItemHandler handler)

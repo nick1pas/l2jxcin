@@ -1,0 +1,80 @@
+<html><title>Donate Manager</title>
+<body>
+<br>
+
+<table width=300 height=32 bgcolor=000000>
+<tr>
+<td fixwidth=5>
+</td>
+<td fixwidth=32 height=42>
+<center><button action="bypass -h npc_%objectId%_vip $vip" value="" width=32 height=32 back="L2UI_CH3.Minimap.mapbutton_zoomin1" fore="icon.skill0106">
+</td>
+<td fixwidth=250>
+<br>
+<center><font color=F2F5A9>Vip Settings:</font>
+		<center><combobox width=120 height=17 var="vip" list=Noblesse;ChangeSex;CleanPk;FullRec;
+</td>
+<td fixwidth=50>
+</td>
+</tr>
+</table>
+
+<table width=300 height=32 bgcolor=000000>
+<tr>
+<td fixwidth=5>
+</td>
+<td fixwidth=32 height=42>
+		<center><button value="" action="bypass -h npc_%objectId%_siege $siege" width=32 height=32 back="L2UI_CH3.Minimap.mapbutton_zoomin1" fore="icon.skill0216">
+</td>
+<td fixwidth=250>
+<br>
+<center><font color=F2F5A9>Siege Services:</font>
+		<center><combobox width=120 height=17 var="siege" list=Gludio;Dion;Giran;Oren;Aden;Innadril;Goddard;Rune;Schuttgart;
+</td>
+<td fixwidth=50>
+</td>
+</tr>
+</table>
+
+<br>
+<center>
+Dear VIP player!<br1>
+From here you can go to your party member<br1>
+or you can also go to your clan member.<br1>
+Try it! It is easy only with one click.<br1>
+Conditions:<br1>
+ <font color=FE642E>Olympiad</font>,<font color=FE642E> Duel</font>,<font color=FE642E> Events</font><br1>
+<font color=FE642E>Jail</font>,<font color=FE642E> Observer Mode</font>,<font color=FE642E> Siege</font><br1>
+<font color=FE642E>Flag</font> for yourself,<font color=FE642E> Karma</font> for yourself<font color=FE642E></font>.<br1>
+</center>
+
+<table width=300 height=32 bgcolor=000000>
+<tr>
+<td fixwidth=5>
+</td>
+<td fixwidth=32 height=42>
+<button action="bypass -h npc_%objectId%_tp $val" value="" value="" width=32 height=32 back="L2UI_CH3.Minimap.mapbutton_zoomin1" fore="icon.skill1429">
+</td>
+<td fixwidth=250>
+<center><font color=F2F5A9>Teleport to your party member:</font>
+<center><edit var="val" width=120></td>
+<td fixwidth=50>
+</td>
+</tr>
+</table>
+
+<table width=300 height=32 bgcolor=000000>
+<tr>
+<td fixwidth=5>
+</td>
+<td fixwidth=32 height=42>
+<button action="bypass -h npc_%objectId%_clantp $clan" value="" value="" width=32 height=32 back="L2UI_CH3.Minimap.mapbutton_zoomin1" fore="icon.skill1429">
+</td>
+<td fixwidth=250>
+<center><font color=F2F5A9>Teleport to your clan member:</font>
+<center><edit var="clan" width=120></td>
+<td fixwidth=50>
+</td>
+</tr>
+</table>
+</body></html>

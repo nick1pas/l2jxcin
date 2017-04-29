@@ -137,8 +137,8 @@ Fix: Dropped this option because all HTML *-pk.htm not exists. And retail like P
 Fix: Dropped AltLeavePartyLeader. Retail like always True.
 Fix: Dropped config RemoveCastleCirclets because circle can't be used when castle was lost.
 Fix: Dropped all debug configs. Unused.
-Fix: Zaken
-Fix: Enchanter Warehouse
+Fix: Zaken.
+Fix: Enchanter Warehouse.
 
 --------------------------------------------
                  aCis 368 
@@ -201,3 +201,5 @@ Misc
    
 PS: if you got better log writting style, I would eventually integrate it.
 PS2: build.xml is edited, some .properties are edited.
+
+Add:Remove Duplicate Items.

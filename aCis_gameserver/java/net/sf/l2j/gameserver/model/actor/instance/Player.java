@@ -247,12 +247,12 @@ import net.sf.l2j.gameserver.taskmanager.GameTimeTaskManager;
 import net.sf.l2j.gameserver.taskmanager.ItemsOnGroundTaskManager;
 import net.sf.l2j.gameserver.taskmanager.PvpFlagTaskManager;
 import net.sf.l2j.gameserver.taskmanager.ShadowItemTaskManager;
+import net.sf.l2j.gameserver.taskmanager.VipTimeTaskManager;
 import net.sf.l2j.gameserver.taskmanager.WaterTaskManager;
 import net.sf.l2j.gameserver.templates.skills.L2EffectFlag;
 import net.sf.l2j.gameserver.templates.skills.L2EffectType;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 import net.sf.l2j.gameserver.util.Broadcast;
-
 
 /**
  * This class represents a player in the world.<br>
@@ -612,6 +612,7 @@ public final class Player extends Playable
 	private int _clientHeading;
 	
 	private int _mailPosition;
+	private boolean _isVipStatus;
 	
 	private static final int FALLING_VALIDATION_DELAY = 10000;
 	private volatile long _fallingTimestamp;
@@ -4365,6 +4366,8 @@ public final class Player extends Playable
 		GameTimeTaskManager.getInstance().remove(this);
 		ShadowItemTaskManager.getInstance().remove(this);
 		AioManager.getInstance().removeAioTask(getObjectId());
+		if (isVipStatus())
+			VipTimeTaskManager.getInstance().remove(this);
 	}
 	
 	/**
@@ -8546,6 +8549,9 @@ public final class Player extends Playable
 		// Add to the GameTimeTask to keep inform about activity time.
 		GameTimeTaskManager.getInstance().add(this);
 		
+		if (isVipStatus())
+			VipTimeTaskManager.getInstance().add(this);
+			 
 		// Teleport player if the Seven Signs period isn't the good one, or if the player isn't in a cabal.
 		if (isIn7sDungeon() && !isGM())
 		{
@@ -10988,4 +10994,14 @@ public final class Player extends Playable
 	public void ActionF() {
         sendPacket(STATIC_PACKET);
     }
+
+	public boolean isVipStatus()
+	{
+		return _isVipStatus;
+	}
+	
+	public void setVipStatus(boolean vip)
+	{
+		_isVipStatus = vip;
+	}
 }

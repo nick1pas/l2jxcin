@@ -28,10 +28,10 @@ import net.sf.l2j.gameserver.network.serverpackets.Earthquake;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillCanceld;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
 import net.sf.l2j.gameserver.network.serverpackets.NpcSay;
-import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 import net.sf.l2j.gameserver.network.serverpackets.SpecialCamera;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
+import net.sf.l2j.gameserver.scripting.quests.audio.Music;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 import net.sf.l2j.gameserver.skills.AbnormalEffect;
 import net.sf.l2j.gameserver.templates.StatsSet;
@@ -1860,7 +1860,7 @@ public class Frintezza extends L2AttackableAIScript
 			if (npc.isDead())
 			{
 				_OnMorph = 1;
-				_Zone.broadcastPacket(new PlaySound(1, "BS01_D", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
+				_Zone.broadcastPacket(Music.BS01_D_10000.getPacket());
 				
 				startQuestTimer("attack_stop", 0, frintezza, null, false);
 				startQuestTimer("stop_pc", 0, npc, null, false);
@@ -2296,7 +2296,7 @@ public class Frintezza extends L2AttackableAIScript
 	{
 		if (npc.getNpcId() == SCARLET2)
 		{
-			_Zone.broadcastPacket(new PlaySound(1, "BS01_D", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
+			_Zone.broadcastPacket(Music.BS01_D_10000.getPacket());
 			
 			startQuestTimer("stop_pc", 0, null, null, false);
 			startQuestTimer("stop_npc", 0, npc, null, false);

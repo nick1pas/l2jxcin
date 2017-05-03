@@ -5,6 +5,7 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.entity.clanhallsiege.BanditStrongholdSiege;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 
 public class Q504_CompetitionForTheBanditStronghold extends Quest
 {
@@ -42,7 +43,7 @@ public class Q504_CompetitionForTheBanditStronghold extends Quest
 			case "35437-02.htm":
 				st.set("cond", "1");
 				st.setState(STATE_STARTED);
-				st.playSound(QuestState.SOUND_ACCEPT);
+				st.playSound(Sound.SOUND_ACCEPT);
 				break;
 			
 			case "35437-04.htm":
@@ -50,7 +51,7 @@ public class Q504_CompetitionForTheBanditStronghold extends Quest
 				{
 					st.takeItems(TarlkAmulet, -30);
 					st.giveItems(AlianceTrophey, 1);
-					st.playSound(QuestState.SOUND_FINISH);
+					st.playSound(Sound.SOUND_FINISH);
 					st.exitQuest(true);
 				}
 				else
@@ -105,7 +106,7 @@ public class Q504_CompetitionForTheBanditStronghold extends Quest
 		if (st.getQuestItemsCount(TarlkAmulet) < 30)
 		{
 			st.giveItems(TarlkAmulet, 1);
-			st.playSound(QuestState.SOUND_ITEMGET);
+			st.playSound(Sound.SOUND_ITEMGET);
 		}
 		if (st.getQuestItemsCount(TarlkAmulet) == 30)
 		{

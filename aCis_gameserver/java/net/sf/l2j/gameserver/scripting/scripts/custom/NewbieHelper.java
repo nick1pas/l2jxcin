@@ -11,6 +11,8 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.holder.IntIntHolder;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
+import net.sf.l2j.gameserver.scripting.quests.audio.Voice;
 
 public class NewbieHelper extends Quest
 {
@@ -231,12 +233,12 @@ public class NewbieHelper extends Quest
         {
             if (ex == 0)
             {
-                st.playTutorialVoice(player.isMageClass() ? "tutorial_voice_009b" : "tutorial_voice_009a");
+                st.playTutorialVoice(player.isMageClass() ? Voice.TUTORIAL_VOICE_009B.getSoundName() : Voice.TUTORIAL_VOICE_009A.getSoundName());
                 qs.set("Ex", "1");
             }
             else if (ex == 3)
             {
-                st.playTutorialVoice("tutorial_voice_010a");
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_010A.getSoundName());
                 qs.set("Ex", "4");
             }
             return null;
@@ -246,8 +248,8 @@ public class NewbieHelper extends Quest
             if (ex >= 4)
             {
                 st.showQuestionMark(7);
-                st.playSound("ItemSound.quest_tutorial");
-                st.playTutorialVoice("tutorial_voice_025");
+                st.playSound(Sound.SOUND_TUTORIAL);
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_025_1000.getSoundName());
             }
             return null;
         }
@@ -269,13 +271,13 @@ public class NewbieHelper extends Quest
                     if (classId == ev._classId1)
                     {
                         st.giveItems(ev._gift1, ev._count1);
-                        st.playTutorialVoice(ev._gift1 == SPIRITSHOT_NOVICE ? "tutorial_voice_027" : "tutorial_voice_026");
+                        st.playTutorialVoice(ev._gift1 == SPIRITSHOT_NOVICE ? Voice.TUTORIAL_VOICE_027_1000.getSoundName() : Voice.TUTORIAL_VOICE_026_1000.getSoundName());
                     }
                     else if (classId == ev._classId2)
                         if (ev._gift2 != 0)
                         {
                             st.giveItems(ev._gift2, ev._count2);
-                            st.playTutorialVoice("tutorial_voice_026");
+                            st.playTutorialVoice(Voice.TUTORIAL_VOICE_026_1000.getSoundName());
                         }
                     st.unset("step");
                     st.set("onlyone", "1");
@@ -428,7 +430,7 @@ public class NewbieHelper extends Quest
             if (Rnd.get(100) < 25)
             {
                 ((Monster) npc).dropItem(player, new IntIntHolder(BLUE_GEM, 1));
-                st.playSound("ItemSound.quest_tutorial");
+                st.playSound(Sound.SOUND_TUTORIAL);
             }
         return null;
     }

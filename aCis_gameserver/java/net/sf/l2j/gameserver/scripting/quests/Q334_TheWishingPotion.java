@@ -6,6 +6,7 @@ import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 
 public class Q334_TheWishingPotion extends Quest
 {
@@ -268,7 +269,7 @@ public class Q334_TheWishingPotion extends Quest
 		{
 			if (checkIngr(st))
 			{
-				st.playSound(QuestState.SOUND_FINISH);
+				st.playSound(Sound.SOUND_FINISH);
 				st.takeItems(ALCHEMY_TEXT_ID, -1);
 				st.takeItems(SECRET_BOOK_ID, -1);
 				st.takeItems(POTION_RECIPE_1_ID, -1);
@@ -572,12 +573,12 @@ public class Q334_TheWishingPotion extends Quest
 		int DROP_CHANCE = Rnd.get(100) + 1;
 		if ((npcId == SUCCUBUS_OF_SEDUCTION) && (DROP_CHANCE <= DROP_CHANCE_FORBIDDEN_LOVE_SCROLL_ID))
 		{
-			st.playSound(QuestState.SOUND_ITEMGET);
+			st.playSound(Sound.SOUND_ITEMGET);
 			st.giveItems(FORBIDDEN_LOVE_SCROLL_ID, 1);
 		}
 		else if ((npcId == GRIMA) && (DROP_CHANCE <= DROP_CHANCE_GOLD_BAR_ID))
 		{
-			st.playSound(QuestState.SOUND_ITEMGET);
+			st.playSound(Sound.SOUND_ITEMGET);
 			st.giveItems(GOLD_BAR_ID, Rnd.get(5) + 1);
 		}
 		else if ((npcId == SANCHES) && Rnd.chance(51))
@@ -610,7 +611,7 @@ public class Q334_TheWishingPotion extends Quest
 			{
 				st.giveItems(DEMONS_TUNIC_ID, 1);
 			}
-			st.playSound(QuestState.SOUND_ITEMGET);
+			st.playSound(Sound.SOUND_ITEMGET);
 		}
 		return null;
 	}

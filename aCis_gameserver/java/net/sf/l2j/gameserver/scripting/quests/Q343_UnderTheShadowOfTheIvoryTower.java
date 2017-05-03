@@ -8,6 +8,7 @@ import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.base.ClassType;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 
 public class Q343_UnderTheShadowOfTheIvoryTower extends Quest
 {
@@ -145,7 +146,7 @@ public class Q343_UnderTheShadowOfTheIvoryTower extends Quest
 		if (event.equalsIgnoreCase("30834-02.htm"))
 		{
 			st.set("cond", "1");
-			st.playSound(QuestState.SOUND_ACCEPT);
+			st.playSound(Sound.SOUND_ACCEPT);
 			st.setState(STATE_STARTED);
 		}
 		else if (event.equalsIgnoreCase("30834-05.htm"))
@@ -363,7 +364,7 @@ public class Q343_UnderTheShadowOfTheIvoryTower extends Quest
 		}
 		else if (event.equalsIgnoreCase("30834-06.htm") || event.equalsIgnoreCase("30834-02b.htm"))
 		{
-			st.playSound(QuestState.SOUND_FINISH);
+			st.playSound(Sound.SOUND_FINISH);
 			st.exitQuest(true);
 		}
 		

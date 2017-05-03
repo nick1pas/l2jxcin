@@ -8,6 +8,8 @@ import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
+import net.sf.l2j.gameserver.scripting.quests.audio.Voice;
 
 public class Tutorial extends Quest
 {
@@ -16,47 +18,47 @@ public class Tutorial extends Quest
     {
         {
             "0",
-            "tutorial_voice_001a",
+            Voice.TUTORIAL_VOICE_001A_2000.getSoundName(),
             "tutorial_human_fighter001.htm"
         },
         {
             "10",
-            "tutorial_voice_001b",
+            Voice.TUTORIAL_VOICE_001B_2000.getSoundName(),
             "tutorial_human_mage001.htm"
         },
         {
             "18",
-            "tutorial_voice_001c",
+            Voice.TUTORIAL_VOICE_001C_2000.getSoundName(),
             "tutorial_elven_fighter001.htm"
         },
         {
             "25",
-            "tutorial_voice_001d",
+            Voice.TUTORIAL_VOICE_001D_2000.getSoundName(),
             "tutorial_elven_mage001.htm"
         },
         {
             "31",
-            "tutorial_voice_001e",
+            Voice.TUTORIAL_VOICE_001E_2000.getSoundName(),
             "tutorial_delf_fighter001.htm"
         },
         {
             "38",
-            "tutorial_voice_001f",
+            Voice.TUTORIAL_VOICE_001F_2000.getSoundName(),
             "tutorial_delf_mage001.htm"
         },
         {
             "44",
-            "tutorial_voice_001g",
+            Voice.TUTORIAL_VOICE_001G_2000.getSoundName(),
             "tutorial_orc_fighter001.htm"
         },
         {
             "49",
-            "tutorial_voice_001h",
+            Voice.TUTORIAL_VOICE_001H_2000.getSoundName(),
             "tutorial_orc_mage001.htm"
         },
         {
             "53",
-            "tutorial_voice_001i",
+            Voice.TUTORIAL_VOICE_001I_2000.getSoundName(),
             "tutorial_dwarven_fighter001.htm"
         }
     };
@@ -311,19 +313,19 @@ public class Tutorial extends Quest
                         break;
                     case 1:
                         st.showQuestionMark(1);
-                        st.playTutorialVoice("tutorial_voice_006");
-                        st.playSound("ItemSound.quest_tutorial");
+                        st.playTutorialVoice(Voice.TUTORIAL_VOICE_006_3500.getSoundName());
+                        st.playSound(Sound.SOUND_TUTORIAL);
                         break;
                     case 2:
                         if (Ex == 2)
                             st.showQuestionMark(3);
                         else if (st.getQuestItemsCount(6353) > 0)
                             st.showQuestionMark(5);
-                        st.playSound("ItemSound.quest_tutorial");
+                        st.playSound(Sound.SOUND_TUTORIAL);
                         break;
                     case 3:
                         st.showQuestionMark(12);
-                        st.playSound("ItemSound.quest_tutorial");
+                        st.playSound(Sound.SOUND_TUTORIAL);
                         st.onTutorialClientEvent(0);
                         break;
                 }
@@ -349,12 +351,12 @@ public class Tutorial extends Quest
             }
             else if (Ex == -3)
             {
-                st.playTutorialVoice("tutorial_voice_002");
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_002_1000.getSoundName());
                 st.set("Ex", "0");
             }
             else if (Ex == -4)
             {
-                st.playTutorialVoice("tutorial_voice_008");
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_008_1000.getSoundName());
                 st.set("Ex", "-5");
             }
         }
@@ -372,12 +374,12 @@ public class Tutorial extends Quest
                         st.closeTutorialHtml();
                         st.playTutorialVoice("tutorial_voice_006");
                         st.showQuestionMark(1);
-                        st.playSound("ItemSound.quest_tutorial");
+                        st.playSound(Sound.SOUND_TUTORIAL);
                         startQuestTimer("QT", 30000, null, player, false);
                         st.set("Ex", "-4");
                         break;
                     case 2:
-                        st.playTutorialVoice("tutorial_voice_003");
+                        st.playTutorialVoice(Voice.TUTORIAL_VOICE_003_2000.getSoundName());
                         html = "tutorial_02.htm";
                         st.onTutorialClientEvent(1);
                         st.set("Ex", "-5");
@@ -434,16 +436,16 @@ public class Tutorial extends Quest
             int event_id = Integer.valueOf(event.substring(2));
             if (event_id == 1 && player.getLevel() < 6)
             {
-                st.playTutorialVoice("tutorial_voice_004");
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_004_5000.getSoundName());
                 html = "tutorial_03.htm";
-                st.playSound("ItemSound.quest_tutorial");
+                st.playSound(Sound.SOUND_TUTORIAL);
                 st.onTutorialClientEvent(2);
             }
             else if (event_id == 2 && player.getLevel() < 6)
             {
-                st.playTutorialVoice("tutorial_voice_005");
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_005_5000.getSoundName());
                 html = "tutorial_05.htm";
-                st.playSound("ItemSound.quest_tutorial");
+                st.playSound(Sound.SOUND_TUTORIAL);
                 st.onTutorialClientEvent(8);
             }
             else if (event_id == 8 && player.getLevel() < 6)
@@ -461,9 +463,9 @@ public class Tutorial extends Quest
                     }
                 if (x != 0)
                 {
-                    st.playSound("ItemSound.quest_tutorial");
+                    st.playSound(Sound.SOUND_TUTORIAL);
                     st.addRadar(x, y, z);
-                    st.playTutorialVoice("tutorial_voice_007");
+                    st.playTutorialVoice(Voice.TUTORIAL_VOICE_007_3500.getSoundName());
                     st.set("ucMemo", "1");
                     st.set("Ex", "-5");
                 }
@@ -471,7 +473,7 @@ public class Tutorial extends Quest
             else if (event_id == 30 && player.getLevel() < 10 && st.getInt("Die") == 0)
             {
                 st.playTutorialVoice("tutorial_voice_016");
-                st.playSound("ItemSound.quest_tutorial");
+                st.playSound(Sound.SOUND_TUTORIAL);
                 st.set("Die", "1");
                 st.showQuestionMark(8);
                 st.onTutorialClientEvent(0);
@@ -479,7 +481,7 @@ public class Tutorial extends Quest
             else if (event_id == 800000 && player.getLevel() < 6 && st.getInt("sit") == 0)
             {
                 st.playTutorialVoice("tutorial_voice_018");
-                st.playSound("ItemSound.quest_tutorial");
+                st.playSound(Sound.SOUND_TUTORIAL);
                 st.set("sit", "1");
                 st.onTutorialClientEvent(0);
                 html = "tutorial_21z.htm";
@@ -493,7 +495,7 @@ public class Tutorial extends Quest
                         {
                             st.playTutorialVoice("tutorial_voice_014");
                             st.showQuestionMark(9);
-                            st.playSound("ItemSound.quest_tutorial");
+                            st.playSound(Sound.SOUND_TUTORIAL);
                             st.set("lvl", "5");
                         }
                         break;
@@ -501,7 +503,7 @@ public class Tutorial extends Quest
                         if (st.getInt("lvl") < 6 && player.getClassId().level() == 0)
                         {
                             st.playTutorialVoice("tutorial_voice_020");
-                            st.playSound("ItemSound.quest_tutorial");
+                            st.playSound(Sound.SOUND_TUTORIAL);
                             st.showQuestionMark(24);
                             st.set("lvl", "6");
                         }
@@ -510,7 +512,7 @@ public class Tutorial extends Quest
                         if (st.getInt("lvl") < 7 && player.isMageClass() && classId != 49 && player.getClassId().level() == 0)
                         {
                             st.playTutorialVoice("tutorial_voice_019");
-                            st.playSound("ItemSound.quest_tutorial");
+                            st.playSound(Sound.SOUND_TUTORIAL);
                             st.set("lvl", "7");
                             st.showQuestionMark(11);
                         }
@@ -518,7 +520,7 @@ public class Tutorial extends Quest
                     case 15:
                         if (st.getInt("lvl") < 15)
                         {
-                            st.playSound("ItemSound.quest_tutorial");
+                            st.playSound(Sound.SOUND_TUTORIAL);
                             st.set("lvl", "15");
                             st.showQuestionMark(33);
                         }
@@ -536,7 +538,7 @@ public class Tutorial extends Quest
                                 case 44:
                                 case 49:
                                 case 52:
-                                    st.playSound("ItemSound.quest_tutorial");
+                                    st.playSound(Sound.SOUND_TUTORIAL);
                                     st.set("lvl", "19");
                                     st.showQuestionMark(35);
                             }
@@ -563,7 +565,7 @@ public class Tutorial extends Quest
                                 case 50:
                                 case 54:
                                 case 56:
-                                    st.playSound("ItemSound.quest_tutorial");
+                                    st.playSound(Sound.SOUND_TUTORIAL);
                                     st.set("lvl", "35");
                                     st.showQuestionMark(34);
                             }
@@ -573,7 +575,7 @@ public class Tutorial extends Quest
             else if (event_id == 45 && player.getLevel() < 10 && st.getInt("HP") == 0)
             {
                 st.playTutorialVoice("tutorial_voice_017");
-                st.playSound("ItemSound.quest_tutorial");
+                st.playSound(Sound.SOUND_TUTORIAL);
                 st.set("HP", "1");
                 st.showQuestionMark(10);
                 st.onTutorialClientEvent(800000);
@@ -581,14 +583,14 @@ public class Tutorial extends Quest
             else if (event_id == 57 && player.getLevel() < 6 && st.getInt("Adena") == 0)
             {
                 st.playTutorialVoice("tutorial_voice_012");
-                st.playSound("ItemSound.quest_tutorial");
+                st.playSound(Sound.SOUND_TUTORIAL);
                 st.set("Adena", "1");
                 st.showQuestionMark(23);
             }
             else if (event_id == 6353 && player.getLevel() < 6 && st.getInt("Gemstone") == 0)
             {
                 st.playTutorialVoice("tutorial_voice_013");
-                st.playSound("ItemSound.quest_tutorial");
+                st.playSound(Sound.SOUND_TUTORIAL);
                 st.set("Gemstone", "1");
                 st.showQuestionMark(5);
             }
@@ -596,7 +598,7 @@ public class Tutorial extends Quest
             {
                 st.showQuestionMark(5);
                 st.playTutorialVoice("tutorial_voice_013");
-                st.playSound("ItemSound.quest_tutorial");
+                st.playSound(Sound.SOUND_TUTORIAL);
             }
         }
         // Question mark clicked

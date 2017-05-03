@@ -20,8 +20,8 @@ import net.sf.l2j.gameserver.model.actor.ai.CtrlIntention;
 import net.sf.l2j.gameserver.model.actor.instance.GrandBoss;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.type.L2BossZone;
-import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 import net.sf.l2j.gameserver.scripting.EventType;
+import net.sf.l2j.gameserver.scripting.quests.audio.Music;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 import net.sf.l2j.gameserver.taskmanager.GameTimeTaskManager;
 import net.sf.l2j.gameserver.templates.StatsSet;
@@ -196,7 +196,7 @@ public class Zaken extends L2AttackableAIScript
 	public final void spawnBoss(GrandBoss npc)
 	{
 		GrandBossManager.getInstance().addBoss(npc);
-		npc.broadcastPacket(new PlaySound(1, "BS01_A", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
+		npc.broadcastPacket(Music.BS01_A_10000.getPacket());
 		_ai0 = 0;
 		_ai1 = npc.getX();
 		_ai2 = npc.getY();
@@ -846,7 +846,7 @@ public class Zaken extends L2AttackableAIScript
 	{
 		if (npc.getNpcId() == ZAKEN)
 		{
-			npc.broadcastPacket(new PlaySound(1, "BS02_D", 1, npc.getObjectId(), npc.getX(), npc.getY(), npc.getZ()));
+			npc.broadcastPacket(Music.BS02_D_10000.getPacket());
 			GrandBossManager.getInstance().setBossStatus(ZAKEN, DEAD);
 			// log.warn(" - Epic: Zaken killed: " + time.getTime());
 			// time is 36hour +/- 17hour

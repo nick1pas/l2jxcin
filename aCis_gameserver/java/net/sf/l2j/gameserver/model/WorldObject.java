@@ -224,7 +224,7 @@ public abstract class WorldObject
 	
 	/**
 	 * Sends the Server->Client info packet for the object. Is Overridden in:
-	 * <li>L2BoatInstance</li>
+	 * <li>Vehicle</li>
 	 * <li>Door</li>
 	 * <li>Player</li>
 	 * <li>StaticObject</li>

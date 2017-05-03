@@ -14,6 +14,7 @@ import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 
 public class Q335_SongOfTheHunter extends Quest
 {
@@ -358,7 +359,7 @@ public class Q335_SongOfTheHunter extends Quest
 			st.set("cond", "1");
 			st.setState(STATE_STARTED);
 			st.giveItems(TEST_INSTRUCTIONS_1, 1);
-			st.playSound(QuestState.SOUND_ACCEPT);
+			st.playSound(Sound.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("30744-32.htm"))
 		{
@@ -368,7 +369,7 @@ public class Q335_SongOfTheHunter extends Quest
 				st.giveItems(57, 20000);
 			}
 			
-			st.playSound(QuestState.SOUND_FINISH);
+			st.playSound(Sound.SOUND_FINISH);
 			st.exitQuest(true);
 		}
 		else if (event.equalsIgnoreCase("30744-19.htm"))
@@ -666,7 +667,7 @@ public class Q335_SongOfTheHunter extends Quest
 								st.takeItems(_item, -1);
 								st.giveItems(LEAF_PIN, 1);
 								st.giveItems(57, _reward);
-								st.playSound(QuestState.SOUND_MIDDLE);
+								st.playSound(Sound.SOUND_MIDDLE);
 							}
 							else
 							{
@@ -693,7 +694,7 @@ public class Q335_SongOfTheHunter extends Quest
 								st.takeItems(_item, -1);
 								st.giveItems(LEAF_PIN, 1);
 								st.giveItems(57, _reward);
-								st.playSound(QuestState.SOUND_MIDDLE);
+								st.playSound(Sound.SOUND_MIDDLE);
 							}
 							else
 							{
@@ -780,11 +781,11 @@ public class Q335_SongOfTheHunter extends Quest
 					
 					if (st.getQuestItemsCount(_item) == _amount)
 					{
-						st.playSound(QuestState.SOUND_MIDDLE);
+						st.playSound(Sound.SOUND_MIDDLE);
 					}
 					else
 					{
-						st.playSound(QuestState.SOUND_ITEMGET);
+						st.playSound(Sound.SOUND_ITEMGET);
 					}
 				}
 			}
@@ -824,11 +825,11 @@ public class Q335_SongOfTheHunter extends Quest
 						
 						if (st.getQuestItemsCount(_item) == _amount)
 						{
-							st.playSound(QuestState.SOUND_MIDDLE);
+							st.playSound(Sound.SOUND_MIDDLE);
 						}
 						else
 						{
-							st.playSound(QuestState.SOUND_ITEMGET);
+							st.playSound(Sound.SOUND_ITEMGET);
 						}
 					}
 				}
@@ -869,11 +870,11 @@ public class Q335_SongOfTheHunter extends Quest
 						
 						if (st.getQuestItemsCount(_itemGive) == _itemAmount)
 						{
-							st.playSound(QuestState.SOUND_MIDDLE);
+							st.playSound(Sound.SOUND_MIDDLE);
 						}
 						else
 						{
-							st.playSound(QuestState.SOUND_ITEMGET);
+							st.playSound(Sound.SOUND_ITEMGET);
 						}
 						
 						if (Rnd.nextBoolean() && ((_npc >= 27160) && (_npc <= 27164)))
@@ -904,11 +905,11 @@ public class Q335_SongOfTheHunter extends Quest
 						
 						if (st.getQuestItemsCount(_itemGive) == _itemAmount)
 						{
-							st.playSound(QuestState.SOUND_MIDDLE);
+							st.playSound(Sound.SOUND_MIDDLE);
 						}
 						else
 						{
-							st.playSound(QuestState.SOUND_ITEMGET);
+							st.playSound(Sound.SOUND_ITEMGET);
 						}
 						
 						if (Rnd.nextBoolean() && (_npc == 27162))
@@ -950,11 +951,11 @@ public class Q335_SongOfTheHunter extends Quest
 							
 							if (st.getQuestItemsCount(_item) == _amount)
 							{
-								st.playSound(QuestState.SOUND_MIDDLE);
+								st.playSound(Sound.SOUND_MIDDLE);
 							}
 							else
 							{
-								st.playSound(QuestState.SOUND_ITEMGET);
+								st.playSound(Sound.SOUND_ITEMGET);
 							}
 							
 							autoChat(npc, "What!");
@@ -991,7 +992,7 @@ public class Q335_SongOfTheHunter extends Quest
 							
 							if (i >= 3703)
 							{
-								st.playSound(QuestState.SOUND_JACKPOT);
+								st.playSound(Sound.SOUND_JACKPOT);
 							}
 							
 							break;

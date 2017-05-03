@@ -6,6 +6,7 @@ import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 
 /**
  * @author Demon
@@ -48,18 +49,18 @@ public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 		{
 			st.giveItems(FLOWER, 1);
 			st.set("cond", "1");
-			st.playSound(QuestState.SOUND_ACCEPT);
+			st.playSound(Sound.SOUND_ACCEPT);
 			st.setState(Quest.STATE_STARTED);
 		}
 		else if (event.equalsIgnoreCase("31389-11.htm"))
 		{
 			st.set("cond", "3");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			st.giveItems(SILVERCROSS, 1);
 		}
 		else if (event.equalsIgnoreCase("31389-16.htm"))
 		{
-			st.playSound("InterfaceSound.charstat_open_01");
+			st.playSound(Sound.INTERFACESOUND_CHARSTAT_OPEN);
 		}
 		else if (event.equalsIgnoreCase("31389-17.htm"))
 		{
@@ -77,13 +78,13 @@ public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 		}
 		else if (event.equalsIgnoreCase("31531-02.htm"))
 		{
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			st.set("cond", "2");
 			st.takeItems(FLOWER, -1);
 		}
 		else if (event.equalsIgnoreCase("31532-04.htm"))
 		{
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			st.giveItems(LETTER, 1);
 			st.set("cond", "6");
 		}
@@ -94,7 +95,7 @@ public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 		}
 		else if (event.equalsIgnoreCase("31532-16.htm"))
 		{
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			st.set("cond", "9");
 		}
 		else if (event.equalsIgnoreCase("31522-19.htm"))
@@ -103,7 +104,7 @@ public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 			st.rewardExpAndSp(242105, 22529);
 			st.exitQuest(false);
 			st.unset("cond");
-			st.playSound(QuestState.SOUND_FINISH);
+			st.playSound(Sound.SOUND_FINISH);
 		}
 		return htmltext;
 	}
@@ -151,7 +152,7 @@ public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 					case TOMBSTONE:
 						if (cond == 1)
 						{
-							st.playSound("AmdSound.d_wind_loot_02");
+							st.playSound(Sound.AMDSOUND_WIND_LOOT);
 							htmltext = "31531-01.htm";
 						}
 						else if (cond == 2)
@@ -199,7 +200,7 @@ public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 			{
 				st.giveItems(TOTEM, 1);
 				st.set("cond", "10");
-				st.playSound(QuestState.SOUND_ITEMGET);
+				st.playSound(Sound.SOUND_ITEMGET);
 			}
 		}
 		

@@ -9,6 +9,7 @@ import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 
 public class Q336_CoinsOfMagic extends Quest
 {
@@ -460,7 +461,7 @@ public class Q336_CoinsOfMagic extends Quest
 			if (st.getInt("cond") < 7)
 			{
 				st.set("cond", "7");
-				st.playSound(QuestState.SOUND_ACCEPT);
+				st.playSound(Sound.SOUND_ACCEPT);
 			}
 		}
 		else if (event.equalsIgnoreCase("30232-22.htm"))
@@ -482,14 +483,14 @@ public class Q336_CoinsOfMagic extends Quest
 				else if (event.equalsIgnoreCase("30232-05.htm"))
 				{
 					st.setState(STATE_STARTED);
-					st.playSound(QuestState.SOUND_ACCEPT);
+					st.playSound(Sound.SOUND_ACCEPT);
 					st.giveItems(COIN_DIAGRAM, 1);
 					st.set("cond", "1");
 				}
 				else if (event.equalsIgnoreCase("30232-04.htm") || event.equalsIgnoreCase("30232-18a.htm"))
 				{
 					st.exitQuest(true);
-					st.playSound(QuestState.SOUND_GIVEUP);
+					st.playSound(Sound.SOUND_GIVEUP);
 				}
 				else if (event.equalsIgnoreCase("raise"))
 				{
@@ -531,7 +532,7 @@ public class Q336_CoinsOfMagic extends Quest
 							}
 							
 							st.set("grade", Integer.toString(_grade - 1));
-							st.playSound(QuestState.SOUND_FANFARE);
+							st.playSound(Sound.SOUND_FANFARE);
 						}
 						else
 						{
@@ -646,7 +647,7 @@ public class Q336_CoinsOfMagic extends Quest
 								st.giveItems(MEMBERSHIP_3, 1);
 								st.set("grade", "3");
 								st.set("cond", "4");
-								st.playSound(QuestState.SOUND_FANFARE);
+								st.playSound(Sound.SOUND_FANFARE);
 								htmltext = "30232-07.htm";
 							}
 							else
@@ -707,7 +708,7 @@ public class Q336_CoinsOfMagic extends Quest
 			{
 				if (st.dropItems(KALDIS_COIN, 1, 1, 100000 * (npc.getNpcId() == HARIT_LIZARDMAN_MATRIARCH ? 2 : 1)))
 				{
-					st.playSound(QuestState.SOUND_MIDDLE);
+					st.playSound(Sound.SOUND_MIDDLE);
 					st.set("cond", "3");
 				}
 			}
@@ -718,7 +719,7 @@ public class Q336_CoinsOfMagic extends Quest
 			if (_drop[0] == npc.getNpcId())
 			{
 				st.dropItems(_drop[1], 1, 0, ((npc.getLevel() + (st.getInt("grade") * 3)) - 20));
-				st.playSound(QuestState.SOUND_ITEMGET);
+				st.playSound(Sound.SOUND_ITEMGET);
 				break;
 			}
 		}

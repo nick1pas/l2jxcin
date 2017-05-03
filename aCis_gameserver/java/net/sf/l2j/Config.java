@@ -193,7 +193,8 @@ public final class Config
 	public static int VOTE_REWARD_ID;
 	public static int VOTE_REWARD_ID_COUNT;
 	public static int TIME_TO_VOTE;
-	
+	/** Shift for Npcs */
+	public static boolean ENABLE_SHIFT_CLICK_TO_NPCS;
 	// --------------------------------------------------
 	// Clans settings
 	// --------------------------------------------------
@@ -1257,6 +1258,7 @@ public final class Config
 		VOTE_REWARD_ID = custom.getProperty("VoteRewardId", 57);
 		VOTE_REWARD_ID_COUNT = custom.getProperty("VoteRewardCount", 20);
 		TIME_TO_VOTE = custom.getProperty("TimeToVote", 60);
+		ENABLE_SHIFT_CLICK_TO_NPCS = custom.getProperty("EnableShiftClickToNpcs", false);
 	}
 	
 	/**

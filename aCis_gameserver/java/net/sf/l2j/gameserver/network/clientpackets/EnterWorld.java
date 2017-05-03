@@ -49,7 +49,6 @@ import net.sf.l2j.gameserver.network.serverpackets.HennaInfo;
 import net.sf.l2j.gameserver.network.serverpackets.ItemList;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 import net.sf.l2j.gameserver.network.serverpackets.OpenUrl;
-import net.sf.l2j.gameserver.network.serverpackets.PlaySound;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeShowMemberListAll;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeShowMemberListUpdate;
 import net.sf.l2j.gameserver.network.serverpackets.PledgeSkillList;
@@ -62,6 +61,7 @@ import net.sf.l2j.gameserver.network.serverpackets.UserInfo;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
 import net.sf.l2j.gameserver.scripting.ScriptManager;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 import net.sf.l2j.gameserver.taskmanager.GameTimeTaskManager;
 
 public class EnterWorld extends L2GameClientPacket
@@ -302,7 +302,7 @@ public class EnterWorld extends L2GameClientPacket
 		if (Config.ENABLE_COMMUNITY_BOARD && MailBBSManager.getInstance().checkUnreadMail(activeChar) > 0)
 		{
 			activeChar.sendPacket(SystemMessageId.NEW_MAIL);
-			activeChar.sendPacket(new PlaySound("systemmsg_e.1233"));
+			activeChar.sendPacket(Sound.SYSTEM_MSG_1233.getPacket());
 			activeChar.sendPacket(ExMailArrived.STATIC_PACKET);
 		}
  		

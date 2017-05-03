@@ -4,6 +4,7 @@ import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 
 public class Q655_AGrandPlanForTamingWildBeasts extends Quest
 {
@@ -35,7 +36,7 @@ public class Q655_AGrandPlanForTamingWildBeasts extends Quest
 			case "35627-02.htm":
 				st.set("cond", "1");
 				st.setState(STATE_STARTED);
-				st.playSound(QuestState.SOUND_ACCEPT);
+				st.playSound(Sound.SOUND_ACCEPT);
 				break;
 			
 			case "35627-04.htm":

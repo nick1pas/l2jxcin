@@ -5,6 +5,7 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.MagicSkillUse;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 
 public class Q120_PavelsResearch extends Quest
 {
@@ -45,29 +46,29 @@ public class Q120_PavelsResearch extends Quest
 		if (event.equalsIgnoreCase("32041-03.htm"))
 		{
 			st.set("cond", "3");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32041-04.htm"))
 		{
 			st.set("cond", "4");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32041-12.htm"))
 		{
 			st.set("cond", "8");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32041-16.htm"))
 		{
 			st.set("cond", "16");
 			st.giveItems(ENIGMA, 1);
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32041-22.htm"))
 		{
 			st.set("cond", "17");
 			st.takeItems(ENIGMA, 1);
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32041-32.htm"))
 		{
@@ -77,7 +78,7 @@ public class Q120_PavelsResearch extends Quest
 			st.giveItems(57, 783729 + Math.round(Math.min(0, 227500)));
 			st.getPlayer().addExpAndSp(3447315, 272615);
 			st.exitQuest(false);
-			st.playSound(QuestState.SOUND_FINISH);
+			st.playSound(Sound.SOUND_FINISH);
 		}
 		else if (event.equalsIgnoreCase("32042-06.htm"))
 		{
@@ -88,7 +89,7 @@ public class Q120_PavelsResearch extends Quest
 					st.set("cond", "11");
 					st.set("talk", "0");
 					st.set("talk1", "0");
-					st.playSound(QuestState.SOUND_MIDDLE);
+					st.playSound(Sound.SOUND_MIDDLE);
 				}
 				else
 				{
@@ -130,7 +131,7 @@ public class Q120_PavelsResearch extends Quest
 			st.set("talk", "0");
 			st.set("talk1", "0");
 			st.set("talk2", "0");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32043-06.htm"))
 		{
@@ -141,7 +142,7 @@ public class Q120_PavelsResearch extends Quest
 					st.set("cond", "18");
 					st.set("talk", "0");
 					st.set("talk1", "0");
-					st.playSound(QuestState.SOUND_MIDDLE);
+					st.playSound(Sound.SOUND_MIDDLE);
 				}
 				else
 				{
@@ -166,7 +167,7 @@ public class Q120_PavelsResearch extends Quest
 		else if (event.equalsIgnoreCase("32043-20.htm"))
 		{
 			st.set("talk", "1");
-			st.playSound("AmbSound.ed_drone_02");
+			st.playSound(Sound.AMBSOUND_DRONE);
 		}
 		else if (event.equalsIgnoreCase("32043-28.htm"))
 		{
@@ -187,7 +188,7 @@ public class Q120_PavelsResearch extends Quest
 					st.set("cond", "21");
 					st.set("talk", "0");
 					st.set("talk1", "0");
-					st.playSound(QuestState.SOUND_MIDDLE);
+					st.playSound(Sound.SOUND_MIDDLE);
 				}
 				else
 				{
@@ -221,12 +222,12 @@ public class Q120_PavelsResearch extends Quest
 			st.set("cond", "22");
 			st.set("talk", "0");
 			st.set("talk1", "0");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32045-02.htm"))
 		{
 			st.set("cond", "15");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			st.giveItems(REPORT, 1);
 			npc.broadcastPacket(new MagicSkillUse(npc, player, 5073, 5, 1500, 0));
 		}
@@ -238,7 +239,7 @@ public class Q120_PavelsResearch extends Quest
 		{
 			if (st.getPlayer().getLevel() >= 70)
 			{
-				st.playSound("ItemSound.quest_accept");
+				st.playSound(Sound.SOUND_ACCEPT);
 				st.set("cond", "1");
 				st.setState(STATE_STARTED);
 			}
@@ -251,66 +252,66 @@ public class Q120_PavelsResearch extends Quest
 		else if (event.equalsIgnoreCase("32046-08.htm"))
 		{
 			st.set("cond", "2");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32046-12.htm"))
 		{
 			st.set("cond", "6");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			st.giveItems(FLOWER, 1);
 		}
 		else if (event.equalsIgnoreCase("32046-22.htm"))
 		{
 			st.set("cond", "10");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32046-29.htm"))
 		{
 			st.set("cond", "13");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32046-35.htm"))
 		{
 			st.set("cond", "20");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32046-38.htm"))
 		{
 			st.set("cond", "23");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			st.giveItems(HEART, 1);
 		}
 		else if (event.equalsIgnoreCase("32047-06.htm"))
 		{
 			st.set("cond", "5");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32047-10.htm"))
 		{
 			st.set("cond", "7");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			st.takeItems(FLOWER, 1);
 		}
 		else if (event.equalsIgnoreCase("32047-15.htm"))
 		{
 			st.set("cond", "9");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32047-18.htm"))
 		{
 			st.set("cond", "14");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("32047-26.htm"))
 		{
 			st.set("cond", "24");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			st.takeItems(HEART, 1);
 		}
 		else if (event.equalsIgnoreCase("32047-32.htm"))
 		{
 			st.set("cond", "25");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			st.giveItems(NECKLACE, 1);
 		}
 		else if (event.equalsIgnoreCase("w1_1"))

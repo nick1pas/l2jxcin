@@ -19,6 +19,7 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
 import net.sf.l2j.gameserver.scripting.QuestTimer;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 
 public class Q501_ProofOfClanAlliance extends Quest
 {
@@ -189,7 +190,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 			{
 				st.set("cond", "1");
 				st.setState(STATE_STARTED);
-				st.playSound(QuestState.SOUND_ACCEPT);
+				st.playSound(Sound.SOUND_ACCEPT);
 			}
 			else if (event.equalsIgnoreCase("30759-03.htm"))
 			{
@@ -242,7 +243,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 				st.getPlayer().reduceCurrentHp(st.getPlayer().getCurrentHp() * 8, st.getPlayer(), true, true, null);
 			}
 			st.giveItems(SYMBOL_OF_LOYALTY, 1);
-			st.playSound(QuestState.SOUND_ACCEPT);
+			st.playSound(Sound.SOUND_ACCEPT);
 		}
 		else if (event.equalsIgnoreCase("30757-05.htm"))
 		{
@@ -308,7 +309,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 			}
 			else if (st.getQuestItemsCount(VOUCHER_OF_FAITH) > 0)
 			{
-				st.playSound(QuestState.SOUND_FANFARE);
+				st.playSound(Sound.SOUND_FANFARE);
 				st.takeItems(VOUCHER_OF_FAITH, -1);
 				st.giveItems(PROOF_OF_ALLIANCE, 1);
 				st.getPlayer().addExpAndSp(0, 120000);
@@ -382,7 +383,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 							}
 						}
 						st.set("cond", "4");
-						st.playSound(QuestState.SOUND_FINISH);
+						st.playSound(Sound.SOUND_FINISH);
 						return "30759-08.htm";
 					}
 					else if (st.getQuestItemsCount(VOUCHER_OF_FAITH) == 0)
@@ -483,7 +484,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 			}
 			else if (game_state == 2)
 			{
-				st.playSound(QuestState.SOUND_FINISH);
+				st.playSound(Sound.SOUND_FINISH);
 				st.giveItems(BLOOD_OF_EVA, 1);
 				QuestTimer timer = getQuestTimer("chest_timer", null, st.getPlayer());
 				if (timer != null)
@@ -538,7 +539,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 				{
 					st.giveItems(m[1], 1);
 					leader.set(String.valueOf(m[1]), "1");
-					st.playSound(QuestState.SOUND_MIDDLE);
+					st.playSound(Sound.SOUND_MIDDLE);
 					return null;
 				}
 			}
@@ -569,11 +570,11 @@ public class Q501_ProofOfClanAlliance extends Quest
 						stop_chest_game(st);
 						leader.set("chest_game", "2");
 						timer.cancel();
-						st.playSound(QuestState.SOUND_MIDDLE);
+						st.playSound(Sound.SOUND_MIDDLE);
 					}
 					else
 					{
-						st.playSound(QuestState.SOUND_ITEMGET);
+						st.playSound(Sound.SOUND_ITEMGET);
 					}
 				}
 				return null;

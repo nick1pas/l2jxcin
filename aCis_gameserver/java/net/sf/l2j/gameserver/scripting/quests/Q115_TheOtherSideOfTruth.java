@@ -5,6 +5,7 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.NpcSay;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 
 /**
  * @author Demon
@@ -48,50 +49,50 @@ public class Q115_TheOtherSideOfTruth extends Quest
 		{
 			case "32020-02.htm":
 				st.setState(Quest.STATE_STARTED);
-				st.playSound(QuestState.SOUND_ACCEPT);
+				st.playSound(Sound.SOUND_ACCEPT);
 				st.set("cond", "1");
 				break;
 			
 			case "32018-04.htm":
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "7");
 				st.takeItems(LETTER2, 1);
 				break;
 				
 			case "32020-05.htm":
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "3");
 				st.takeItems(LETTER, 1);
 				break;
 				
 			case "32020-08.htm":
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "4");
 				break;
 				
 			case "32020-07a.htm":
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "4");
 				break;
 				
 			case "32020-12.htm":
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "5");
 				break;
 				
 			case "32020-16.htm":
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "10");
 				st.takeItems(REPORT, 1);
 				break;
 				
 			case "32020-19.htm":
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "11");
 				break;
 				
 			case "32022-02.htm":
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "9");
 				Npc man = addSpawn(SUSPICIOUS, 104562, -107598, -3688, 0, false, 4000, false);
 				man.broadcastPacket(new NpcSay(man.getObjectId(), 0, man.getNpcId(), "We meet again."));
@@ -106,7 +107,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 				break;
 				
 			case "Sculpture-04a.htm":
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "8");
 				Npc man2 = addSpawn(SUSPICIOUS, 117890, -126478, -2584, 0, false, 4000, false);
 				man2.broadcastPacket(new NpcSay(man2.getObjectId(), 0, man2.getNpcId(), "This looks like the right place..."));
@@ -130,25 +131,25 @@ public class Q115_TheOtherSideOfTruth extends Quest
 				
 			case "32020-06.htm":
 				st.exitQuest(true);
-				st.playSound(QuestState.SOUND_FINISH);
+				st.playSound(Sound.SOUND_FINISH);
 				break;
 				
 			case "32020-08a.htm":
 				st.exitQuest(true);
-				st.playSound(QuestState.SOUND_FINISH);
+				st.playSound(Sound.SOUND_FINISH);
 				break;
 				
 			case "32020-18.htm":
 				if (st.getQuestItemsCount(TABLET) == 0)
 				{
-					st.playSound(QuestState.SOUND_MIDDLE);
+					st.playSound(Sound.SOUND_MIDDLE);
 					st.set("cond", "11");
 					htmltext = "32020-19.htm";
 				}
 				else
 				{
 					st.exitQuest(false);
-					st.playSound(QuestState.SOUND_FINISH);
+					st.playSound(Sound.SOUND_FINISH);
 					st.giveItems(57, 115673);
 					st.rewardExpAndSp(493595, 40442);
 				}
@@ -191,7 +192,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						else if (cond == 5)
 						{
 							htmltext = "32020-13.htm";
-							st.playSound(QuestState.SOUND_MIDDLE);
+							st.playSound(Sound.SOUND_MIDDLE);
 							st.giveItems(LETTER2, 1);
 							st.set("cond", "6");
 						}
@@ -207,7 +208,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						{
 							htmltext = "32020-18.htm";
 							st.exitQuest(false);
-							st.playSound(QuestState.SOUND_FINISH);
+							st.playSound(Sound.SOUND_FINISH);
 							st.giveItems(57, 60044);
 						}
 						break;
@@ -217,7 +218,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						{
 							htmltext = "32018-01.htm";
 							st.giveItems(LETTER, 1);
-							st.playSound(QuestState.SOUND_MIDDLE);
+							st.playSound(Sound.SOUND_MIDDLE);
 							st.set("cond", "2");
 						}
 						else if (cond == 2)
@@ -243,7 +244,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						else if (cond == 11)
 						{
 							st.giveItems(TABLET, 1);
-							st.playSound(QuestState.SOUND_MIDDLE);
+							st.playSound(Sound.SOUND_MIDDLE);
 							st.set("cond", "12");
 							htmltext = "Sculpture-07.htm";
 						}
@@ -266,7 +267,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						else if (cond == 11)
 						{
 							st.giveItems(TABLET, 1);
-							st.playSound(QuestState.SOUND_MIDDLE);
+							st.playSound(Sound.SOUND_MIDDLE);
 							st.set("cond", "12");
 							htmltext = "Sculpture-07.htm";
 						}
@@ -288,7 +289,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						else if (cond == 11)
 						{
 							st.giveItems(TABLET, 1);
-							st.playSound(QuestState.SOUND_MIDDLE);
+							st.playSound(Sound.SOUND_MIDDLE);
 							st.set("cond", "12");
 							htmltext = "Sculpture-07.htm";
 						}
@@ -310,7 +311,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						else if (cond == 11)
 						{
 							st.giveItems(TABLET, 1);
-							st.playSound(QuestState.SOUND_MIDDLE);
+							st.playSound(Sound.SOUND_MIDDLE);
 							st.set("cond", "12");
 							htmltext = "Sculpture-07.htm";
 						}

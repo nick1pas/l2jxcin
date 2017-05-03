@@ -202,4 +202,13 @@ Misc
 PS: if you got better log writting style, I would eventually integrate it.
 PS2: build.xml is edited, some .properties are edited.
 
-Add:Remove Duplicate Items.
+Add: Remove Duplicate Items.
+Add: Shift Npc Click.
+Impl: Sound/Music/Voice Rework
+- New system reduce even more object creation
+- Reduce chance for create audio with wrong type or name
+- Tutorial use same method as other audio files
+- Add proper support for delay before music/voice play in client
+- Remove useless methods
+- Add missing sound/music/voice files
+- Prepare needed voice files for tutorial quest rework

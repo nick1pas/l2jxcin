@@ -4,6 +4,7 @@ import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
+import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
 
 public class Q025_HidingBehindTheTruth extends Quest
 {
@@ -57,14 +58,14 @@ public class Q025_HidingBehindTheTruth extends Quest
 			if ((qs_24 == null) || !qs_24.isCompleted())
 			{
 				st.set("cond", "1");
-				st.playSound(QuestState.SOUND_ACCEPT);
+				st.playSound(Sound.SOUND_ACCEPT);
 				return "31349-02.htm";
 			}
-			st.playSound(QuestState.SOUND_ACCEPT);
+			st.playSound(Sound.SOUND_ACCEPT);
 			if (st.getQuestItemsCount(SUSPICIOUS_TOTEM_DOLL_1) == 0)
 			{
 				st.set("cond", "2");
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 				return "31349-03a.htm";
 			}
 			return "31349-03.htm";
@@ -78,7 +79,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 			if (st.getInt("cond") == 4)
 			{
 				st.set("cond", "5");
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 				st.takeItems(SUSPICIOUS_TOTEM_DOLL_1, -1);
 				st.takeItems(SUSPICIOUS_TOTEM_DOLL_2, -1);
 				if (st.getQuestItemsCount(GEMSTONE_KEY) == 0)
@@ -94,7 +95,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 		else if (event.equalsIgnoreCase("31522-04.htm"))
 		{
 			st.set("cond", "6");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			if (st.getQuestItemsCount(MAP_FOREST_OF_DEADMAN) == 0)
 			{
 				st.giveItems(MAP_FOREST_OF_DEADMAN, 1);
@@ -104,7 +105,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 		{
 			addSpawn(TRIOLS_PAWN, player.getX() + 50, player.getY() + 50, player.getZ(), player.getHeading(), false, 0, false);
 			st.set("cond", "7");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 		}
 		else if (event.equalsIgnoreCase("31534-11.htm"))
 		{
@@ -118,7 +119,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 		else if (event.equalsIgnoreCase("31531-02.htm"))
 		{
 			st.set("cond", "12");
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			if (COFFIN_SPAWN != null)
 			{
 				COFFIN_SPAWN.deleteMe();
@@ -135,7 +136,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 			if (st.getInt("cond") == 12)
 			{
 				st.set("cond", "11");
-				st.playSound(QuestState.SOUND_MIDDLE);
+				st.playSound(Sound.SOUND_MIDDLE);
 			}
 			return null;
 		}
@@ -186,7 +187,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 			st.giveItems(NECKLACE_OF_BLESSING, 1);
 			st.giveItems(EARRING_OF_BLESSING, 1);
 			st.rewardExpAndSp(572277, 53750);
-			st.playSound(QuestState.SOUND_FINISH);
+			st.playSound(Sound.SOUND_FINISH);
 			st.exitQuest(false);
 			st.unset("cond");
 			return "31522-16.htm";
@@ -237,7 +238,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 						return "31522-05.htm";
 					}
 					st.set("cond", "9");
-					st.playSound(QuestState.SOUND_MIDDLE);
+					st.playSound(Sound.SOUND_MIDDLE);
 					return "31522-06.htm";
 				}
 				else if (cond == 15)				
@@ -286,7 +287,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 						return "31532-08.htm";
 					}
 					st.set("cond", "14");
-					st.playSound(QuestState.SOUND_MIDDLE);
+					st.playSound(Sound.SOUND_MIDDLE);
 					startQuestTimer("Lidia_wait", 60000, null, null, false);
 					st.takeItems(LIDIAS_DRESS, 1);
 					return "31532-09.htm";
@@ -315,7 +316,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 				if (cond == 12)
 				{
 					st.set("cond", "13");
-					st.playSound(QuestState.SOUND_MIDDLE);
+					st.playSound(Sound.SOUND_MIDDLE);
 					st.giveItems(LIDIAS_DRESS, 1);
 					return "31536-01.htm";
 				}
@@ -338,7 +339,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 		if ((npc.getNpcId() == TRIOLS_PAWN) && (cond == 7))
 		{
 			st.giveItems(SUSPICIOUS_TOTEM_DOLL_3, 1);
-			st.playSound(QuestState.SOUND_MIDDLE);
+			st.playSound(Sound.SOUND_MIDDLE);
 			st.set("cond", "7");
 		}
 		

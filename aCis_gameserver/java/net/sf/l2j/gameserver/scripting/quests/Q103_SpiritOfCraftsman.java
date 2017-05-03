@@ -7,6 +7,7 @@ import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
 import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
+import net.sf.l2j.gameserver.scripting.quests.audio.Voice;
 
 public class Q103_SpiritOfCraftsman extends Quest
 {
@@ -114,12 +115,12 @@ public class Q103_SpiritOfCraftsman extends Quest
 								st.showQuestionMark(26);
 								if (player.isMageClass())
 								{
-									st.playTutorialVoice("tutorial_voice_027");
+									st.playTutorialVoice(Voice.TUTORIAL_VOICE_027_1000.getSoundName());
 									st.giveItems(SPIRITSHOT_FOR_BEGINNERS, 3000);
 								}
 								else
 								{
-									st.playTutorialVoice("tutorial_voice_026");
+									st.playTutorialVoice(Voice.TUTORIAL_VOICE_026_1000.getSoundName());
 									st.giveItems(SOULSHOT_FOR_BEGINNERS, 7000);
 								}
 							}

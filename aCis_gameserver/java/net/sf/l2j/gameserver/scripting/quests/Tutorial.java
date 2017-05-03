@@ -313,7 +313,7 @@ public class Tutorial extends Quest
                         break;
                     case 1:
                         st.showQuestionMark(1);
-                        st.playTutorialVoice(Voice.TUTORIAL_VOICE_006_3500.getSoundName());
+                        st.playTutorialVoice(Voice.TUTORIAL_VOICE_006_1000.getSoundName());
                         st.playSound(Sound.SOUND_TUTORIAL);
                         break;
                     case 2:
@@ -372,7 +372,7 @@ public class Tutorial extends Quest
                         break;
                     case 1:
                         st.closeTutorialHtml();
-                        st.playTutorialVoice("tutorial_voice_006");
+                        st.playTutorialVoice(Voice.TUTORIAL_VOICE_006_1000.getSoundName());
                         st.showQuestionMark(1);
                         st.playSound(Sound.SOUND_TUTORIAL);
                         startQuestTimer("QT", 30000, null, player, false);
@@ -472,7 +472,7 @@ public class Tutorial extends Quest
             }
             else if (event_id == 30 && player.getLevel() < 10 && st.getInt("Die") == 0)
             {
-                st.playTutorialVoice("tutorial_voice_016");
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_016_1000.getSoundName());
                 st.playSound(Sound.SOUND_TUTORIAL);
                 st.set("Die", "1");
                 st.showQuestionMark(8);
@@ -480,7 +480,7 @@ public class Tutorial extends Quest
             }
             else if (event_id == 800000 && player.getLevel() < 6 && st.getInt("sit") == 0)
             {
-                st.playTutorialVoice("tutorial_voice_018");
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_018_1000.getSoundName());
                 st.playSound(Sound.SOUND_TUTORIAL);
                 st.set("sit", "1");
                 st.onTutorialClientEvent(0);
@@ -493,7 +493,7 @@ public class Tutorial extends Quest
                     case 5:
                         if (st.getInt("lvl") < 5 && !player.isMageClass() || classId == 49)
                         {
-                            st.playTutorialVoice("tutorial_voice_014");
+                            st.playTutorialVoice(Voice.TUTORIAL_VOICE_014_1000.getSoundName());
                             st.showQuestionMark(9);
                             st.playSound(Sound.SOUND_TUTORIAL);
                             st.set("lvl", "5");
@@ -502,7 +502,7 @@ public class Tutorial extends Quest
                     case 6:
                         if (st.getInt("lvl") < 6 && player.getClassId().level() == 0)
                         {
-                            st.playTutorialVoice("tutorial_voice_020");
+                            st.playTutorialVoice(Voice.TUTORIAL_VOICE_020_1000.getSoundName());
                             st.playSound(Sound.SOUND_TUTORIAL);
                             st.showQuestionMark(24);
                             st.set("lvl", "6");
@@ -511,7 +511,7 @@ public class Tutorial extends Quest
                     case 7:
                         if (st.getInt("lvl") < 7 && player.isMageClass() && classId != 49 && player.getClassId().level() == 0)
                         {
-                            st.playTutorialVoice("tutorial_voice_019");
+                            st.playTutorialVoice(Voice.TUTORIAL_VOICE_019_1000.getSoundName());
                             st.playSound(Sound.SOUND_TUTORIAL);
                             st.set("lvl", "7");
                             st.showQuestionMark(11);
@@ -574,7 +574,7 @@ public class Tutorial extends Quest
             }
             else if (event_id == 45 && player.getLevel() < 10 && st.getInt("HP") == 0)
             {
-                st.playTutorialVoice("tutorial_voice_017");
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_017_1000.getSoundName());
                 st.playSound(Sound.SOUND_TUTORIAL);
                 st.set("HP", "1");
                 st.showQuestionMark(10);
@@ -582,14 +582,14 @@ public class Tutorial extends Quest
             }
             else if (event_id == 57 && player.getLevel() < 6 && st.getInt("Adena") == 0)
             {
-                st.playTutorialVoice("tutorial_voice_012");
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_012_1000.getSoundName());
                 st.playSound(Sound.SOUND_TUTORIAL);
                 st.set("Adena", "1");
                 st.showQuestionMark(23);
             }
             else if (event_id == 6353 && player.getLevel() < 6 && st.getInt("Gemstone") == 0)
             {
-                st.playTutorialVoice("tutorial_voice_013");
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_013_1000.getSoundName());
                 st.playSound(Sound.SOUND_TUTORIAL);
                 st.set("Gemstone", "1");
                 st.showQuestionMark(5);
@@ -597,7 +597,7 @@ public class Tutorial extends Quest
             else if (event_id == 1048576 && player.getLevel() < 6)
             {
                 st.showQuestionMark(5);
-                st.playTutorialVoice("tutorial_voice_013");
+                st.playTutorialVoice(Voice.TUTORIAL_VOICE_013_1000.getSoundName());
                 st.playSound(Sound.SOUND_TUTORIAL);
             }
         }
@@ -610,7 +610,7 @@ public class Tutorial extends Quest
             switch (Integer.valueOf(event.substring(2)))
             {
                 case 1:
-                    st.playTutorialVoice("tutorial_voice_007");
+                    st.playTutorialVoice(Voice.TUTORIAL_VOICE_007_3500.getSoundName());
                     st.set("Ex", "-5");
                     for (String[] element : CEEa)
                         if (classId == Integer.valueOf(element[0]))

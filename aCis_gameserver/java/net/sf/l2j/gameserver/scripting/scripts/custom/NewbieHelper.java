@@ -349,7 +349,7 @@ public class NewbieHelper extends Quest
                                 startQuestTimer("TimerEx_NewbieHelper", 30000, null, player, false);
                                 if (isMage)
                                 {
-                                    st.playTutorialVoice("tutorial_voice_027");
+                                    st.playTutorialVoice(Voice.TUTORIAL_VOICE_027_1000.getSoundName());
                                     st.giveItems(SPIRITSHOT_NOVICE, 100);
                                     htmltext = htmlfiles[2];
                                     if (htmltext.equalsIgnoreCase(""))
@@ -357,7 +357,7 @@ public class NewbieHelper extends Quest
                                 }
                                 else
                                 {
-                                    st.playTutorialVoice("tutorial_voice_026");
+                                    st.playTutorialVoice(Voice.TUTORIAL_VOICE_026_1000.getSoundName());
                                     st.giveItems(SOULSHOT_NOVICE, 200);
                                     htmltext = htmlfiles[1];
                                     if (htmltext.equalsIgnoreCase(""))
@@ -386,7 +386,7 @@ public class NewbieHelper extends Quest
             {
                 if (qs.getInt("reward") == 0 && st.getInt("onlyone") == 1)
                 {
-                    st.playTutorialVoice(isMage ? "tutorial_voice_027" : "tutorial_voice_026");
+                    st.playTutorialVoice(isMage ? Voice.TUTORIAL_VOICE_027_1000.getSoundName() : Voice.TUTORIAL_VOICE_026_1000.getSoundName());
                     st.giveItems(isMage ? SPIRITSHOT_NOVICE : SOULSHOT_NOVICE, isMage ? 100 : 200);
                     st.giveItems(TOKEN, 12);
                     st.giveItems(SCROLL, 2);
@@ -422,7 +422,7 @@ public class NewbieHelper extends Quest
         
         if (ex <= 1)
         {
-            qs.playTutorialVoice("tutorial_voice_011");
+            qs.playTutorialVoice(Voice.TUTORIAL_VOICE_011_1000.getSoundName());
             qs.showQuestionMark(3);
             qs.set("Ex", "2");
         }

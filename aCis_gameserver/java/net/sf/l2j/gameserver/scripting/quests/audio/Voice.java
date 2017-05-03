@@ -21,7 +21,6 @@ public enum Voice implements IAudio
 	TUTORIAL_VOICE_004_5000("tutorial_voice_004", 5000),
 	TUTORIAL_VOICE_005_5000("tutorial_voice_005", 5000),
 	TUTORIAL_VOICE_006_1000("tutorial_voice_006", 1000),
-	TUTORIAL_VOICE_006_3500("tutorial_voice_006", 3500),
 	TUTORIAL_VOICE_007_3500("tutorial_voice_007", 3500),
 	TUTORIAL_VOICE_008_1000("tutorial_voice_008", 1000),
 	TUTORIAL_VOICE_009A("tutorial_voice_009a"),

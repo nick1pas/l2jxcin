@@ -8,6 +8,7 @@ import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.scripting.Quest;
 import net.sf.l2j.gameserver.scripting.QuestState;
 import net.sf.l2j.gameserver.scripting.quests.audio.Sound;
+import net.sf.l2j.gameserver.scripting.quests.audio.Voice;
 
 public class Q273_InvadersOfTheHolyLand extends Quest
 {
@@ -96,7 +97,7 @@ public class Q273_InvadersOfTheHolyLand extends Quest
 					if (player.isNewbie() && st.getInt("Reward") == 0)
 					{
 						st.giveItems(SOULSHOT_FOR_BEGINNERS, 6000);
-						st.playTutorialVoice("tutorial_voice_026");
+						st.playTutorialVoice(Voice.TUTORIAL_VOICE_026_1000.getSoundName());
 						st.set("Reward", "1");
 					}
 				}

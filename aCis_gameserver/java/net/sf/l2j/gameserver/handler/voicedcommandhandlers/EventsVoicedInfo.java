@@ -9,10 +9,6 @@ import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
-/**
- * @author L0ngh0rn
- * @reworked Leonardo Holanda
- */
 public class EventsVoicedInfo implements IVoicedCommandHandler
 {
 	private static final String[] _voicedCommands =

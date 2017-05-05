@@ -7,11 +7,6 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
-/**
- *
- * @author Bluur
- *
- */
 public class Buff implements IVoicedCommandHandler
 {
     private final String[] _voicedCommands =
@@ -22,7 +17,7 @@ public class Buff implements IVoicedCommandHandler
     @Override
     public boolean useVoicedCommand(String command, Player activeChar, String target)
     {    
-        if (check(activeChar)) //retorna                
+        if (check(activeChar))              
             showHtml(activeChar);    
         
         return true;

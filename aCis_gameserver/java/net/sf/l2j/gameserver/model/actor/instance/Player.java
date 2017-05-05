@@ -5,6 +5,8 @@ import static net.sf.l2j.gameserver.network.serverpackets.ActionFailed.STATIC_PA
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,6 +120,7 @@ import net.sf.l2j.gameserver.model.entity.Duel.DuelState;
 import net.sf.l2j.gameserver.model.entity.Hero;
 import net.sf.l2j.gameserver.model.entity.Siege;
 import net.sf.l2j.gameserver.model.entity.Siege.SiegeSide;
+import net.sf.l2j.gameserver.model.entity.achievementengine.AchievementsManager;
 import net.sf.l2j.gameserver.model.entity.events.DMEvent;
 import net.sf.l2j.gameserver.model.entity.events.LMEvent;
 import net.sf.l2j.gameserver.model.entity.events.TvTEvent;
@@ -282,6 +285,7 @@ public final class Player extends Playable
 		{
 			return _id;
 		}
+		
 		public static StoreType findById(int id)
 		{
 			for (StoreType StoreType : values())
@@ -448,7 +452,7 @@ public final class Player extends Playable
 	private boolean _isCrafting;
 	private long _offlineShopStart = 0;
 	private boolean _isVoting;
-
+	
 	private final Map<Integer, RecipeList> _dwarvenRecipeBook = new HashMap<>();
 	private final Map<Integer, RecipeList> _commonRecipeBook = new HashMap<>();
 	
@@ -537,9 +541,9 @@ public final class Player extends Playable
 	private boolean _tradeRefusal; // Trade refusal
 	private boolean _exchangeRefusal; // Exchange refusal
 	private boolean _isPartyInRefuse; // Party Refusal Mode
-	private boolean _gainXpSpEnable ; // XP Refusal mode
+	private boolean _gainXpSpEnable; // XP Refusal mode
 	private boolean _isSSDisabled; // SS Refuse mode
-	 
+	
 	private Party _party;
 	private LootRule _lootRule;
 	
@@ -614,6 +618,7 @@ public final class Player extends Playable
 	
 	private int _mailPosition;
 	private boolean _isVipStatus;
+	private List<Integer> _completedAchievements = new ArrayList<>();
 	
 	private static final int FALLING_VALIDATION_DELAY = 10000;
 	private volatile long _fallingTimestamp;
@@ -895,12 +900,12 @@ public final class Player extends Playable
 	{
 		_isCrafting = state;
 	}
-
+	
 	public void logout()
 	{
 		logout(true);
 	}
-
+	
 	public void logout(boolean closeClient)
 	{
 		try
@@ -1599,7 +1604,7 @@ public final class Player extends Playable
 	{
 		if (!Config.EXPERTISE_PENALTY)
 			return;
-			 
+		
 		int armorPenalty = 0;
 		boolean weaponPenalty = false;
 		
@@ -1977,7 +1982,7 @@ public final class Player extends Playable
 		
 		// Add Death Penalty Buff Level
 		restoreDeathPenaltyBuffLevel();
-
+		
 		pvpColor();
 	}
 	
@@ -2442,7 +2447,7 @@ public final class Player extends Playable
 			_inventory.addAdena(process, count, this, reference);
 			
 			InventoryUpdate iu = new InventoryUpdate();
-						
+			
 			if (_inventory.getAdenaInstance() != null)
 				iu.addModifiedItem(_inventory.getAdenaInstance());
 			else
@@ -2596,13 +2601,18 @@ public final class Player extends Playable
 	 * Adds item to Inventory and send InventoryUpdate packet to the Player.
 	 * @param process String Identifier of process triggering this action
 	 * @param itemId int Item Identifier of the item to be added
-	 * @param count int Quantity of items to be added
+	 * @param countL int Quantity of items to be added
 	 * @param reference L2Object Object referencing current action like NPC selling item or previous item in transformation
 	 * @param sendMessage boolean Specifies whether to send message to Client about this action
 	 * @return The created ItemInstance.
 	 */
-	public ItemInstance addItem(String process, int itemId, int count, WorldObject reference, boolean sendMessage)
+	public ItemInstance addItem(String process, int itemId, long countL, WorldObject reference, boolean sendMessage)
 	{
+		int count = 0;
+		count = (int) countL;
+		if (count != countL)
+			count = 1;
+		
 		if (count > 0)
 		{
 			// Retrieve the template of the item.
@@ -3074,12 +3084,12 @@ public final class Player extends Playable
 			return getAccountNamePlayer();
 		return _client.getAccountName();
 	}
-
+	
 	public String getAccountNamePlayer()
 	{
 		return _accountName;
 	}
-
+	
 	public Map<Integer, String> getAccountChars()
 	{
 		return _chars;
@@ -3208,11 +3218,9 @@ public final class Player extends Playable
 	
 	@Override
 	public void onAction(Player player)
-	{		
+	{
 		// See description in Events
-		if (!TvTEvent.onAction(player, player.getObjectId())
-				|| !DMEvent.onAction(player, player.getObjectId())
-				|| !LMEvent.onAction(player, player.getObjectId()))
+		if (!TvTEvent.onAction(player, player.getObjectId()) || !DMEvent.onAction(player, player.getObjectId()) || !LMEvent.onAction(player, player.getObjectId()))
 			return;
 		
 		// Set the target of the player
@@ -4631,18 +4639,18 @@ public final class Player extends Playable
 		if (Config.OFFLINE_DISCONNECT_FINISHED && (type == StoreType.NONE) && ((getClient() == null) || getClient().isDetached()))
 			deleteMe();
 	}
-
+	
 	public long getOfflineStartTime()
 	{
 		return _offlineShopStart;
 	}
-
+	
 	public void setOfflineStartTime(long time)
 	{
 		_offlineShopStart = time;
 	}
 	
-	public final boolean isVoting()		
+	public final boolean isVoting()
 	{
 		return _isVoting;
 	}
@@ -6643,7 +6651,7 @@ public final class Player extends Playable
 			ActionF();
 			return false;
 		}
- 		
+		
 		if (AioManager.getInstance().hasAioPrivileges(getObjectId()))
 		{
 			if (!isInsideZone(ZoneId.TOWN) ? true : !skill.isAioSkill())
@@ -6652,7 +6660,7 @@ public final class Player extends Playable
 				return false;
 			}
 		}
-	
+		
 		// Players wearing Formal Wear cannot use skills.
 		final ItemInstance formal = getInventory().getPaperdollItem(Inventory.PAPERDOLL_CHEST);
 		if (formal != null && formal.getItem().getBodyPart() == Item.SLOT_ALLDRESS)
@@ -7922,7 +7930,7 @@ public final class Player extends Playable
 	{
 		return _isPartyInRefuse;
 	}
-		
+	
 	public void setIsPartyInRefuse(boolean value)
 	{
 		_isPartyInRefuse = value;
@@ -7937,7 +7945,7 @@ public final class Player extends Playable
 	{
 		_gainXpSpEnable = value;
 	}
-	        
+	
 	public boolean isSSDisabled()
 	{
 		return _isSSDisabled;
@@ -7947,7 +7955,7 @@ public final class Player extends Playable
 	{
 		_isSSDisabled = value;
 	}
-	      
+	
 	public BlockList getBlockList()
 	{
 		return _blockList;
@@ -8552,7 +8560,7 @@ public final class Player extends Playable
 		
 		if (isVipStatus())
 			VipTimeTaskManager.getInstance().add(this);
-			 
+		
 		// Teleport player if the Seven Signs period isn't the good one, or if the player isn't in a cabal.
 		if (isIn7sDungeon() && !isGM())
 		{
@@ -8583,14 +8591,14 @@ public final class Player extends Playable
 			if (isInRefusalMode())
 				sendMessage("Entering world in Message Refusal mode.");
 		}
- 		
+		
 		if (AioManager.getInstance().hasAioPrivileges(getObjectId()))
 		{
 			long duration = AioManager.getInstance().getAioDuration(getObjectId());
 			sendPacket(new ExShowScreenMessage("Your aio privileges ends at " + new SimpleDateFormat("MMM dd, yyyy HH:mm").format(new Date(duration)) + ".", 10000));
 			AioManager.getInstance().addAioTask(getObjectId(), duration);
 		}
-	
+		
 		revalidateZone(true);
 		notifyFriends(true);
 		
@@ -10359,7 +10367,7 @@ public final class Player extends Playable
 			return false;
 		}
 		
-		if (targetChar.isRooted() || targetChar.isInCombat()  || targetChar.isInDuel())
+		if (targetChar.isRooted() || targetChar.isInCombat() || targetChar.isInDuel())
 		{
 			summonerChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.S1_IS_ENGAGED_IN_COMBAT_AND_CANNOT_BE_SUMMONED).addCharName(targetChar));
 			return false;
@@ -10772,15 +10780,14 @@ public final class Player extends Playable
 	
 	public boolean onEvents()
 	{
-		if (TvTEvent.isPlayerParticipant(this.getObjectId()) ||
-				DMEvent.isPlayerParticipant(this.getObjectId()) ||
-				LMEvent.isPlayerParticipant(this.getObjectId()))
+		if (TvTEvent.isPlayerParticipant(this.getObjectId()) || DMEvent.isPlayerParticipant(this.getObjectId()) || LMEvent.isPlayerParticipant(this.getObjectId()))
 			return true;
 		return false;
 	}
 	
 	private boolean _hideInfo = false;
 	public Integer _originalColorName, _originalColorTitle;
+	
 	public boolean isHideInfo()
 	{
 		return _hideInfo;
@@ -10790,7 +10797,7 @@ public final class Player extends Playable
 	{
 		_hideInfo = hideInfo;
 	}
-		
+	
 	private void pvpColor()
 	{
 		if (!Config.ENABLE_PVP_COLOR)
@@ -10808,7 +10815,7 @@ public final class Player extends Playable
 				if (skill != null)
 					addSkill(skill, false);
 			}
-		}	
+		}
 	}
 	
 	public String getHWid()
@@ -10826,84 +10833,93 @@ public final class Player extends Playable
 		return _hwid;
 	}
 	
-    // Reworked by L2R-Project
-    public boolean canRestart() {
-        if (getActiveEnchantItem() != null) {
-            sendPacket(RestartResponse.valueOf(false));
-            return false;
-        }
-
-        if (isLocked()) {
-            sendPacket(RestartResponse.valueOf(false));
-            return false;
-        }
-
-        if (isInsideZone(ZoneId.NO_RESTART)) {
-            sendPacket(SystemMessageId.NO_RESTART_HERE);
-            sendPacket(RestartResponse.valueOf(false));
-            return false;
-        }
-
-        if (isInStoreMode()) {
-            sendPacket(RestartResponse.valueOf(false));
-            return false;
-        }
-
-        if ((isInCombat()) && !isGM()) {
-            if (Config.DEBUG) {
-                _log.log(Level.FINE, getName() + " tried to restart while fighting.");
-            }
-
-            sendPacket(SystemMessageId.CANT_RESTART_WHILE_FIGHTING);
-            sendPacket(RestartResponse.valueOf(false));
-            return false;
-        }
-
-        if (isInOlympiadMode() || OlympiadManager.getInstance().isRegistered(this) || getOlympiadGameId() != -1) {
-            sendMessage("You cant restart in olympiad mode.");
-            return false;
-        }
-        
-		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(getObjectId())) 
-		{ 
-			sendMessage("You can not restart when you registering in TvTEvent."); 
+	// Reworked by L2R-Project
+	public boolean canRestart()
+	{
+		if (getActiveEnchantItem() != null)
+		{
 			sendPacket(RestartResponse.valueOf(false));
 			return false;
 		}
 		
-		if (!DMEvent.isInactive() && DMEvent.isPlayerParticipant(getObjectId())) 
-		{ 
-			sendMessage("You can not restart when you registering in DMEvent."); 
+		if (isLocked())
+		{
 			sendPacket(RestartResponse.valueOf(false));
 			return false;
 		}
 		
-		if (!LMEvent.isInactive() && LMEvent.isPlayerParticipant(getObjectId())) 
-		{ 
-			sendMessage("You can not restart when you registering in LMEvent."); 
+		if (isInsideZone(ZoneId.NO_RESTART))
+		{
+			sendPacket(SystemMessageId.NO_RESTART_HERE);
 			sendPacket(RestartResponse.valueOf(false));
 			return false;
 		}
 		
-        // Prevent player from restarting if they are a festival participant and it is in progress,
-        // otherwise notify party members that the player is not longer a participant.
-        if (isFestivalParticipant()) 
-        {
-            if (SevenSignsFestival.getInstance().isFestivalInitialized()) 
-            {
-                sendPacket(RestartResponse.valueOf(false));
-                return false;
-            }
-
-            final Party playerParty = getParty();
-            if (playerParty != null) 
-            {
-                getParty().broadcastToPartyMembers(SystemMessage.sendString(getName() + " has been removed from the upcoming festival."));
-            }
-        }
-
-        return true;
-    }
+		if (isInStoreMode())
+		{
+			sendPacket(RestartResponse.valueOf(false));
+			return false;
+		}
+		
+		if ((isInCombat()) && !isGM())
+		{
+			if (Config.DEBUG)
+			{
+				_log.log(Level.FINE, getName() + " tried to restart while fighting.");
+			}
+			
+			sendPacket(SystemMessageId.CANT_RESTART_WHILE_FIGHTING);
+			sendPacket(RestartResponse.valueOf(false));
+			return false;
+		}
+		
+		if (isInOlympiadMode() || OlympiadManager.getInstance().isRegistered(this) || getOlympiadGameId() != -1)
+		{
+			sendMessage("You cant restart in olympiad mode.");
+			return false;
+		}
+		
+		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(getObjectId()))
+		{
+			sendMessage("You can not restart when you registering in TvTEvent.");
+			sendPacket(RestartResponse.valueOf(false));
+			return false;
+		}
+		
+		if (!DMEvent.isInactive() && DMEvent.isPlayerParticipant(getObjectId()))
+		{
+			sendMessage("You can not restart when you registering in DMEvent.");
+			sendPacket(RestartResponse.valueOf(false));
+			return false;
+		}
+		
+		if (!LMEvent.isInactive() && LMEvent.isPlayerParticipant(getObjectId()))
+		{
+			sendMessage("You can not restart when you registering in LMEvent.");
+			sendPacket(RestartResponse.valueOf(false));
+			return false;
+		}
+		
+		// Prevent player from restarting if they are a festival participant and it is in progress,
+		// otherwise notify party members that the player is not longer a participant.
+		if (isFestivalParticipant())
+		{
+			if (SevenSignsFestival.getInstance().isFestivalInitialized())
+			{
+				sendPacket(RestartResponse.valueOf(false));
+				return false;
+			}
+			
+			final Party playerParty = getParty();
+			if (playerParty != null)
+			{
+				getParty().broadcastToPartyMembers(SystemMessage.sendString(getName() + " has been removed from the upcoming festival."));
+			}
+		}
+		
+		return true;
+	}
+	
 	// Reworked by L2R-Project
 	public boolean canLogout()
 	{
@@ -10965,9 +10981,7 @@ public final class Player extends Playable
 	}
 	
 	/**
-	 * This method is used to include all active skills Resets values
-	 * Pre-training to use.
-	 *
+	 * This method is used to include all active skills Resets values Pre-training to use.
 	 * @param ssl
 	 */
 	public void reuseAllSkills(boolean ssl)
@@ -10990,12 +11004,13 @@ public final class Player extends Playable
 		
 		sendPacket(new SkillCoolTime(this));
 	}
-
+	
 	@Override
-	public void ActionF() {
-        sendPacket(STATIC_PACKET);
-    }
-
+	public void ActionF()
+	{
+		sendPacket(STATIC_PACKET);
+	}
+	
 	public boolean isVipStatus()
 	{
 		return _isVipStatus;
@@ -11004,5 +11019,91 @@ public final class Player extends Playable
 	public void setVipStatus(boolean vip)
 	{
 		_isVipStatus = vip;
+	}
+	
+	public boolean readyAchievementsList()
+	{
+		if (_completedAchievements.isEmpty())
+			return false;
+		return true;
+	}
+	
+	public void saveAchievemntData()
+	{
+	}
+	
+	public void getAchievemntData()
+	{
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		{
+			PreparedStatement statement = con.prepareStatement("SELECT * from achievements WHERE owner_id=" + getObjectId());
+			PreparedStatement insertStatement;
+			ResultSet rs = statement.executeQuery();
+			
+			String values = "owner_id";
+			String in = Integer.toString(getObjectId());
+			String questionMarks = in;
+			int ilosc = AchievementsManager.getInstance().getAchievementList().size();
+			
+			if (rs.next())
+			{
+				_completedAchievements.clear();
+				for (int i = 1; i <= ilosc; i++)
+				{
+					int a = rs.getInt("a" + i);
+					
+					if (!_completedAchievements.contains(i))
+						if (a == 1)
+							_completedAchievements.add(i);
+				}
+			}
+			else
+			{
+				for (int i = 1; i <= ilosc; i++)
+				{
+					values += ", a" + i;
+					questionMarks += ", 0";
+				}
+				
+				String s = "INSERT INTO achievements(" + values + ") VALUES (" + questionMarks + ")";
+				insertStatement = con.prepareStatement(s);
+				
+				insertStatement.execute();
+				insertStatement.close();
+			}
+			rs.close();
+			statement.close();
+		}
+		catch (Exception e)
+		{
+			_log.warning("[ACHIEVEMENTS ENGINE GETDATA]" + e);
+		}
+	}
+	
+	public void saveAchievementData(int achievementID)
+	{
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
+		{
+			Statement statement = con.createStatement();
+			statement.executeUpdate("UPDATE achievements SET a" + achievementID + "=1 WHERE owner_id=" + getObjectId());
+			statement.close();
+			
+			if (!_completedAchievements.contains(achievementID))
+				_completedAchievements.add(achievementID);
+		}
+		catch (SQLException e)
+		{
+			_log.warning("[ACHIEVEMENTS SAVE GETDATA]" + e);
+		}
+	}
+	
+	public List<Integer> getCompletedAchievements()
+	{
+		return _completedAchievements;
+	}
+	
+	public long getOnlineTime()
+	{
+		return _onlineTime;
 	}
 }

@@ -53,6 +53,7 @@ Add NPCS:
 - Item Enchanter.
 - Clan Manager.
 - Vote.
+- Achievements.
 Add: Block skills in Olympiad.
 Fix: LM Voiced.
 Add Quests:
@@ -111,7 +112,7 @@ Add: AI
 - AncientEgg.
 - Splendor.
 Add: Olympiad Points.
-Add: Open Url .
+Add: Open Url.
 Fix: Adena visual double icon.
 Fix: Reuse skills after match Skills over 15min timer in olympiad.
 Fix: Messages when players is registered in olympiad.
@@ -137,7 +138,7 @@ Fix: Dropped this option because all HTML *-pk.htm not exists. And retail like P
 Fix: Dropped AltLeavePartyLeader. Retail like always True.
 Fix: Dropped config RemoveCastleCirclets because circle can't be used when castle was lost.
 Fix: Dropped all debug configs. Unused.
-Fix: Zaken.
+Fix: AI Zaken.
 Fix: Enchanter Warehouse.
 
 --------------------------------------------
@@ -212,3 +213,4 @@ Impl: Sound/Music/Voice Rework
 - Remove useless methods
 - Add missing sound/music/voice files
 - Prepare needed voice files for tutorial quest rework
+Add: Cancel System

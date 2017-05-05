@@ -1,25 +1,7 @@
 package net.sf.l2j.protection;
 
-/*************************************************************************
- *  Compilation:  javac CRC16.java
- *  Execution:    java CRC16 s
- *  
- *  Reads in a string s as a command-line argument, and prints out
- *  its 16-bit Cyclic Redundancy Check (CRC16). Uses a lookup table.
- *
- *  Reference:  http://www.gelato.unsw.edu.au/lxr/source/lib/crc16.c
- *
- *  % java CRC16 123456789
- *  CRC16 = bb3d
- *
- * Uses irreducible polynomial:  1 + x^2 + x^15 + x^16
- *
- *
- *************************************************************************/
-
 public class CRC16
 {
-	
 	private static int[] table =
 	{
 		0x0000,

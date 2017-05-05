@@ -195,6 +195,10 @@ public final class Config
 	public static int TIME_TO_VOTE;
 	/** Shift for Npcs */
 	public static boolean ENABLE_SHIFT_CLICK_TO_NPCS;
+	/** Cancel System */ 	
+	public static boolean ALLOW_CUSTOM_CANCEL;
+	public static int CUSTOM_CANCEL_SECONDS;
+
 	// --------------------------------------------------
 	// Clans settings
 	// --------------------------------------------------
@@ -1259,6 +1263,8 @@ public final class Config
 		VOTE_REWARD_ID_COUNT = custom.getProperty("VoteRewardCount", 20);
 		TIME_TO_VOTE = custom.getProperty("TimeToVote", 60);
 		ENABLE_SHIFT_CLICK_TO_NPCS = custom.getProperty("EnableShiftClickToNpcs", false);
+		ALLOW_CUSTOM_CANCEL = custom.getProperty("AllowCustomCancelTask", false);
+		CUSTOM_CANCEL_SECONDS = custom.getProperty("CustomCancelSeconds", 5);
 	}
 	
 	/**

@@ -37,61 +37,48 @@ public class Bingo
 		{
 			int num = Rnd.get(1, 9);
 			if (!board.contains(num))
-			{
 				board.add(num);
-			}
 		}
 	}
 	
 	public String Select(String s)
 	{
-		try
-		{
+		try {
 			return Select(Integer.valueOf(s));
 		}
-		catch (Exception E)
-		{
-			return null;
+		catch (Exception E) {
+			return null; 
 		}
 	}
 	
 	public String Select(int choise)
 	{
 		if ((choise < 1) || (choise > 9))
-		{
 			return null;
-		}
+		
 		if (guesses.contains(choise))
-		{
 			return getDialog(msg_again);
-		}
+		
 		guesses.add(choise);
 		if (guesses.size() == 6)
-		{
 			return getFinal();
-		}
+		
 		return getDialog("");
 	}
 	
 	protected String getBoard()
 	{
 		if (guesses.size() == 0)
-		{
 			return "";
-		}
 		String result = template_board;
 		for (int i = 1; i <= 9; i++)
 		{
 			String cell = "%cell" + String.valueOf(i) + "%";
 			int num = board.get(i - 1);
 			if (guesses.contains(num))
-			{
 				result = result.replaceFirst(cell, "<font color=\"" + (guesses.size() == 6 ? "ff0000" : "ffff00") + "\">" + String.valueOf(num) + "</font>");
-			}
 			else
-			{
 				result = result.replaceFirst(cell, "?");
-			}
 		}
 		return result;
 	}
@@ -99,12 +86,10 @@ public class Bingo
 	public String getDialog(String _msg)
 	{
 		String result = template;
-		if (guesses.size() == 0)
-		{
+		if (guesses.size() == 0) {
 			result = result.replaceFirst("%msg%", msg_begin);
 		}
-		else
-		{
+		else {
 			result = result.replaceFirst("%msg%", _msg.equalsIgnoreCase("") ? msg_next : _msg);
 		}
 		result = result.replaceFirst("%choicenum%", nums[guesses.size()]);
@@ -112,9 +97,7 @@ public class Bingo
 		for (int i = 1; i <= 9; i++)
 		{
 			if (!guesses.contains(i))
-			{
 				choices.append(_template_choice.replaceAll("%n%", String.valueOf(i)));
-			}
 		}
 		result = result.replaceFirst("%choices%", choices.toString());
 		result = result.replaceFirst("%board%", getBoard());
@@ -125,18 +108,14 @@ public class Bingo
 	{
 		String result = template_final.replaceFirst("%board%", getBoard());
 		calcLines();
-		if (lines == 3)
-		{
+		if (lines == 3) {
 			result = result.replaceFirst("%msg%", msg_3lines);
 		}
-		else if (lines == 0)
-		{
+		else if (lines == 0) {
 			result = result.replaceFirst("%msg%", msg_0lines);
 		}
 		else
-		{
 			result = result.replaceFirst("%msg%", msg_lose);
-		}
 		return result;
 	}
 	

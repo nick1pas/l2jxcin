@@ -1,5 +1,8 @@
 package net.sf.l2j.gameserver.handler.skillhandlers;
 
+import java.util.Vector;
+
+import net.sf.l2j.commons.concurrent.ThreadPool;
 import net.sf.l2j.commons.random.Rnd;
 
 import net.sf.l2j.Config;
@@ -9,7 +12,9 @@ import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.ShotType;
 import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Creature;
+import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.skills.Formulas;
+import net.sf.l2j.gameserver.taskmanager.CustomCancelTaskManager;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 
 /**
@@ -43,6 +48,8 @@ public class Cancel implements ISkillHandler
 			if (target.isDead())
 				continue;
 			
+			Vector<L2Skill> cancelledBuffs = new Vector<>();
+			 
 			int lastCanceledSkillId = 0;
 			int count = skill.getMaxNegatedEffects();
 			
@@ -85,13 +92,23 @@ public class Cancel implements ISkillHandler
 				// Calculate the success chance following previous variables.
 				if (calcCancelSuccess(effect.getPeriod(), diffLevel, skillPower, skillVuln, minRate, maxRate))
 				{
+					if (Config.ALLOW_CUSTOM_CANCEL)
+					{
+						if (!cancelledBuffs.contains(effect.getSkill()) && !((Player)activeChar).isInOlympiadMode())                        
+							cancelledBuffs.add(effect.getSkill());
+					}
 					// Stores the last canceled skill for further use.
 					lastCanceledSkillId = effect.getSkill().getId();
 					
 					// Exit the effect.
 					effect.exit();
 				}
-				
+				if (Config.ALLOW_CUSTOM_CANCEL)
+				{
+					if (cancelledBuffs.size() > 0)
+						ThreadPool.schedule(new CustomCancelTaskManager((Player) target, cancelledBuffs), Config.CUSTOM_CANCEL_SECONDS * 1000);
+				}
+
 				// Remove 1 to the stack of buffs to remove.
 				count--;
 				

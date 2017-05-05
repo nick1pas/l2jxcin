@@ -28,11 +28,9 @@ public class CastleManagers implements IVoicedCommandHandler
 	public boolean useVoicedCommand(String command, Player activeChar, String target)
 	{
 		if (command.startsWith("castlemanager"))
-		{
 			sendHtml(activeChar);
-		}
 		
-		if (command.startsWith("siege_"))
+		else if (command.startsWith("siege_"))
 		{
 			if (activeChar.getClan() != null && !activeChar.isClanLeader())
 			{

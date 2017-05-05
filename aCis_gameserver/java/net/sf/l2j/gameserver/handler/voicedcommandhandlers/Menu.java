@@ -5,12 +5,6 @@ import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
-/**
- *
- * @author Bluur
- * @version 1.0
- */
-
 public class Menu implements IVoicedCommandHandler
 {
     private static final String[] _voicedCommands =

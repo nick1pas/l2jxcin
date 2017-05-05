@@ -124,9 +124,7 @@ public class CatsGuard
 	private CatsGuard()
 	{
 		if (Config.SERVER_KEY == 0)
-		{
 			return;
-		}
 		
 		_connections = new HashMap<>();
 		_bannedhwid = new ArrayList<>();

@@ -12,11 +12,6 @@ import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
 
-/* 
- * @Author: Unknow
- * @Adaptation: |-Jing~Jang-|
- */
-
 public class ChangePassword implements IVoicedCommandHandler
 {
 	private static final String[] _voicedCommands =

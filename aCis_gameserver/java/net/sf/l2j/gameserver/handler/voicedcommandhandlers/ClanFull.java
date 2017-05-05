@@ -8,9 +8,6 @@ import net.sf.l2j.gameserver.model.L2Skill;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
 
-/**
- * @author Bluur
- */
 public class ClanFull implements IVoicedCommandHandler
 {
     private static final String[] _voicedCommands =

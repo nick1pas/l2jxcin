@@ -6,9 +6,6 @@ import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowVariationCancelWindow;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowVariationMakeWindow;
 
-/**
- * @author Raphael Fersan
- */
 public class Augment implements IVoicedCommandHandler
 {
 	private static final String[] _voicedCommands =

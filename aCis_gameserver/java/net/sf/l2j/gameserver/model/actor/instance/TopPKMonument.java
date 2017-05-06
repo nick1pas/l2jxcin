@@ -20,9 +20,7 @@ public class TopPKMonument extends PcPolymorph
 	{
 		super.onSpawn();
 		if (Config.CKM_ENABLED)
-		{
 			CharacterKillingManager.getInstance().addPKMorphListener(this);
-		}
 	}
 	
 	@Override
@@ -30,8 +28,6 @@ public class TopPKMonument extends PcPolymorph
 	{
 		super.deleteMe();
 		if (Config.CKM_ENABLED)
-		{
 			CharacterKillingManager.getInstance().removePKMorphListener(this);
-		}
 	}
 }

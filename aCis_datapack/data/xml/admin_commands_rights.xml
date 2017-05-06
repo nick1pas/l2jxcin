@@ -242,6 +242,7 @@
 	<!-- OLYMPIADS -->
 	<aCar name="admin_endoly" accessLevel="1" />
 	<aCar name="admin_sethero" accessLevel="1" />
+	<aCar name="admin_removehero" accessLevel="1" />
 	<aCar name="admin_setnoble" accessLevel="1" />
 	
 	 <!-- OLYMPIADS POINTS -->

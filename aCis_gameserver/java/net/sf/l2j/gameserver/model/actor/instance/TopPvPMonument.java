@@ -20,9 +20,7 @@ public class TopPvPMonument extends PcPolymorph
 	{
 		super.onSpawn();
 		if (Config.CKM_ENABLED)
-		{
 			CharacterKillingManager.getInstance().addPvPMorphListener(this);
-		}
 	}
 	
 	@Override
@@ -30,8 +28,6 @@ public class TopPvPMonument extends PcPolymorph
 	{
 		super.deleteMe();
 		if (Config.CKM_ENABLED)
-		{
 			CharacterKillingManager.getInstance().removePvPMorphListener(this);
-		}
 	}
 }

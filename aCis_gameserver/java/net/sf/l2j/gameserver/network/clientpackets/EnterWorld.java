@@ -3,6 +3,8 @@ package net.sf.l2j.gameserver.network.clientpackets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
@@ -70,8 +72,10 @@ public class EnterWorld extends L2GameClientPacket
 	
 	@Override
 	protected void readImpl()
-	{
-	}
+	{}
+	
+	long _daysleft;
+	SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	
 	@Override
 	protected void runImpl()
@@ -107,11 +111,11 @@ public class EnterWorld extends L2GameClientPacket
 		if (activeChar.getCurrentHp() < 0.5)
 			activeChar.setIsDead(true);
 		
-		if (Config.TVT_EVENT_ENABLED) 
+		if (Config.TVT_EVENT_ENABLED)
 			TvTEvent.onLogin(activeChar);
-		if (Config.DM_EVENT_ENABLED) 
+		if (Config.DM_EVENT_ENABLED)
 			DMEvent.onLogin(activeChar);
-		if (Config.LM_EVENT_ENABLED) 
+		if (Config.LM_EVENT_ENABLED)
 			LMEvent.onLogin(activeChar);
 		
 		// Clan checks.
@@ -305,11 +309,13 @@ public class EnterWorld extends L2GameClientPacket
 			activeChar.sendPacket(Sound.SYSTEM_MSG_1233.getPacket());
 			activeChar.sendPacket(ExMailArrived.STATIC_PACKET);
 		}
- 		
+		
 		// Vip Status onEnter
 		if (activeChar.getMemos().getLong("TimeOfVip", 0) > 0)
 			Vip.onEnterVipStatus(activeChar);
-	
+		
+		onEnterHero(activeChar);
+		
 		// Clan notice, if active.
 		if (Config.ENABLE_COMMUNITY_BOARD && clan != null && clan.isNoticeEnabled())
 		{
@@ -349,6 +355,37 @@ public class EnterWorld extends L2GameClientPacket
 		ClassMaster.showQuestionMark(activeChar);
 		
 		ActionF();
+	}
+	
+	private static void onEnterHero(Player activeChar)
+	{
+		long now = Calendar.getInstance().getTimeInMillis();
+		long endDay = activeChar.getHeroEndTime();
+		if (now > endDay)
+		{
+			activeChar.setHero(false);
+			activeChar.setHeroEndTime(0);
+		}
+		else
+		{
+			activeChar.setHero(true);
+			activeChar.broadcastUserInfo();
+			sendReEnterMessage(endDay, activeChar);
+		}
+	}
+		
+	private static void sendReEnterMessage(long time, Player activeChar)
+	{
+		final long remainingTime = (time - System.currentTimeMillis()) / 1000;
+		final int hours = (int) (remainingTime / 3600);
+		final int minutes = (int) ((remainingTime % 3600) / 60);
+		final int seconds = (int) ((remainingTime % 3600) % 60);
+		
+		String msg = "Your Hero period ends after: %hours% hours, %mins% minutes and %secs% seconds!";
+		msg = msg.replaceAll("%hours%", Integer.toString(hours));
+		msg = msg.replaceAll("%mins%", Integer.toString(minutes));
+		msg = msg.replaceAll("%secs%", Integer.toString(seconds));
+		activeChar.sendMessage(msg);
 	}
 	
 	@Override

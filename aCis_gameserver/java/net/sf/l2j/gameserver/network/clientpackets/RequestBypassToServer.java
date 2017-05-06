@@ -111,7 +111,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 				}
 				
 				ach.useVoicedCommand(_command.substring(7), activeChar, null);
-			}   
+			}
 			else if (_command.startsWith("npc_"))
 			{
 				if (!activeChar.validateBypass(_command))
@@ -150,7 +150,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			}
 			else if (_command.startsWith("report"))
 			{
-				BotsPreventionManager.getInstance().AnalyseBypass(_command,activeChar);
+				BotsPreventionManager.getInstance().AnalyseBypass(_command, activeChar);
 			}
 			else if (_command.startsWith("Quest "))
 			{
@@ -219,7 +219,7 @@ public final class RequestBypassToServer extends L2GameClientPacket
 			else if (_command.startsWith("buffCommandFight"))
 			{
 				Buff.getFullBuff(activeChar, false);
-			}            
+			}
 			else if (_command.startsWith("buffCommandMage"))
 			{
 				Buff.getFullBuff(activeChar, true);

@@ -85,7 +85,7 @@ public class OlympiadManager
 		if (_nonClassBasedRegisters.contains(objId))
 		{
 			if (showMessage)
-				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_ARE_ALREADY_ON_THE_WAITING_LIST_FOR_ALL_CLASSES_WAITING_TO_PARTICIPATE_IN_THE_GAME)); 			
+				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_ARE_ALREADY_ON_THE_WAITING_LIST_FOR_ALL_CLASSES_WAITING_TO_PARTICIPATE_IN_THE_GAME));
 			return true;
 		}
 		
@@ -154,7 +154,7 @@ public class OlympiadManager
 			player.sendPacket(SystemMessageId.GAME_REQUEST_CANNOT_BE_MADE);
 			return false;
 		}
- 		
+		
 		if (AioManager.getInstance().hasAioPrivileges(player.getObjectId()))
 		{
 			player.sendMessage("You cannot participate in the Olympiad games under aio privileges.");
@@ -277,14 +277,12 @@ public class OlympiadManager
 			return false;
 		}
 		
-		if (TvTEvent.isPlayerParticipant(player.getObjectId())
-				|| DMEvent.isPlayerParticipant(player)
-				|| LMEvent.isPlayerParticipant(player))
+		if (TvTEvent.isPlayerParticipant(player.getObjectId()) || DMEvent.isPlayerParticipant(player) || LMEvent.isPlayerParticipant(player))
 		{
 			player.sendMessage("You can't join olympiad while participating on Event.");
 			return false;
 		}
-			
+		
 		if (player.getInventoryLimit() * 0.8 <= player.getInventory().getSize())
 		{
 			player.sendPacket(SystemMessageId.SINCE_80_PERCENT_OR_MORE_OF_YOUR_INVENTORY_SLOTS_ARE_FULL_YOU_CANNOT_PARTICIPATE_IN_THE_OLYMPIAD);

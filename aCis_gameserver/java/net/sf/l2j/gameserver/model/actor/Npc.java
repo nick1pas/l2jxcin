@@ -102,10 +102,11 @@ public class Npc extends Creature
 	private int _scriptValue = 0;
 	
 	private Castle _castle;
-
+	
 	private boolean _isBusy = false;
-
+	
 	private String _busyMessage = "";
+	
 	/**
 	 * Send a packet SocialAction to all Player in the _KnownPlayers of the L2Npc and create a new RandomAnimation Task.
 	 * @param id the animation id.
@@ -510,43 +511,43 @@ public class Npc extends Creature
 	/**
 	 * Return the busy status of this L2NpcInstance.<BR>
 	 * <BR>
-	 * @return 
+	 * @return
 	 */
 	public final boolean isBusy()
 	{
 		return _isBusy;
 	}
-
+	
 	/**
 	 * Set the busy status of this L2NpcInstance.<BR>
 	 * <BR>
-	 * @param isBusy 
+	 * @param isBusy
 	 */
 	public void setBusy(boolean isBusy)
 	{
 		_isBusy = isBusy;
 	}
-
+	
 	/**
 	 * Return the busy message of this L2NpcInstance.<BR>
 	 * <BR>
-	 * @return 
+	 * @return
 	 */
 	public final String getBusyMessage()
 	{
 		return _busyMessage;
 	}
-
+	
 	/**
 	 * Set the busy message of this L2NpcInstance.<BR>
 	 * <BR>
-	 * @param message 
+	 * @param message
 	 */
 	public void setBusyMessage(String message)
 	{
 		_busyMessage = message;
 	}
-
+	
 	/**
 	 * Open a quest or chat window on client with the text of the L2Npc in function of the command.
 	 * @param player The player to test
@@ -557,7 +558,7 @@ public class Npc extends Creature
 		if (isBusy() && getBusyMessage().length() > 0)
 		{
 			player.ActionF();
-
+			
 			NpcHtmlMessage html = new NpcHtmlMessage(getObjectId());
 			html.setFile("data/html/npcbusy.htm");
 			html.replace("%busymessage%", getBusyMessage());

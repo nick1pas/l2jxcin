@@ -117,7 +117,7 @@ public class Continuous implements ISkillHandler
 			{
 				if (skill.isToggle())
 					target.stopSkillEffects(skill.getId());
-				
+					
 				// if this is a debuff let the duel manager know about it so the debuff
 				// can be removed after the duel (player & target must be in the same duel)
 				if (target instanceof Player && ((Player) target).isInDuel() && (skill.getSkillType() == L2SkillType.DEBUFF || skill.getSkillType() == L2SkillType.BUFF) && player != null && player.getDuelId() == ((Player) target).getDuelId())

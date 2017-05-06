@@ -8,7 +8,6 @@ import net.sf.l2j.gameserver.templates.skills.L2EffectType;
 
 /**
  * @author mkizub
- * 
  */
 public class EffectFakeDeath extends L2Effect
 {
@@ -16,20 +15,20 @@ public class EffectFakeDeath extends L2Effect
 	{
 		super(env, template);
 	}
-
+	
 	@Override
 	public L2EffectType getEffectType()
 	{
 		return L2EffectType.FAKE_DEATH;
 	}
-
+	
 	@Override
 	public boolean onStart()
 	{
 		getEffected().startFakeDeath();
 		return true;
 	}
-
+	
 	@Override
 	public void onExit()
 	{

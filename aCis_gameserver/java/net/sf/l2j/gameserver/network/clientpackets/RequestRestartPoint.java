@@ -135,6 +135,7 @@ public final class RequestRestartPoint extends L2GameClientPacket
 			_player.teleToLocation(loc, 20);
 		}
 	}
+	
 	@Override
 	protected void runImpl()
 	{
@@ -148,13 +149,13 @@ public final class RequestRestartPoint extends L2GameClientPacket
 			return;
 		}
 		
-		if (TvTEvent.isStarted() && TvTEvent.isPlayerParticipant(player.getObjectId())) 
+		if (TvTEvent.isStarted() && TvTEvent.isPlayerParticipant(player.getObjectId()))
 			return;
 		
-		if (DMEvent.isStarted() && DMEvent.isPlayerParticipant(player)) 
+		if (DMEvent.isStarted() && DMEvent.isPlayerParticipant(player))
 			return;
 		
-		if (LMEvent.isStarted() && LMEvent.isPlayerParticipant(player)) 
+		if (LMEvent.isStarted() && LMEvent.isPlayerParticipant(player))
 			return;
 		
 		if (!player.isDead())

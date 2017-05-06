@@ -10,7 +10,7 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
 public class ArimanesOfDestruction extends L2AttackableAIScript
-{	
+{
 	private static final int NPC[] =
 	{
 		21387,

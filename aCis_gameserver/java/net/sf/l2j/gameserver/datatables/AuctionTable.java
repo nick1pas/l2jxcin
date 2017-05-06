@@ -11,7 +11,6 @@ import net.sf.l2j.gameserver.model.AuctionItem;
 
 /**
  * @author Anarchy
- *
  */
 public class AuctionTable
 {
@@ -64,7 +63,7 @@ public class AuctionTable
 			e.printStackTrace();
 		}
 		
-		log.info("AuctionTable: Loaded "+items.size()+" items.");
+		log.info("AuctionTable: Loaded " + items.size() + " items.");
 	}
 	
 	public void addItem(AuctionItem item)

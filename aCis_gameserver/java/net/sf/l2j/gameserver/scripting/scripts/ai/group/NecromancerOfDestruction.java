@@ -10,8 +10,8 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.scripting.EventType;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
-public class NecromancerOfDestruction extends L2AttackableAIScript 
-{	
+public class NecromancerOfDestruction extends L2AttackableAIScript
+{
 	private static final int NPC[] =
 	{
 		21384,

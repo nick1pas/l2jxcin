@@ -13,7 +13,6 @@ import net.sf.l2j.gameserver.model.entity.events.LMManager;
 
 /**
  * @author L0ngh0rn
- *
  */
 public class AdminLMEvent implements IAdminCommandHandler
 {
@@ -51,7 +50,7 @@ public class AdminLMEvent implements IAdminCommandHandler
 			
 			remove(activeChar, (Player) target);
 		}
-		else if ( command.equals( "admin_lm_advance" ) )
+		else if (command.equals("admin_lm_advance"))
 		{
 			LMManager.getInstance().skipDelay();
 		}
@@ -94,5 +93,5 @@ public class AdminLMEvent implements IAdminCommandHandler
 		}
 		
 		new LMEventTeleporter(playerInstance, Config.LM_EVENT_PARTICIPATION_NPC_COORDINATES, true, true);
-	}	
+	}
 }

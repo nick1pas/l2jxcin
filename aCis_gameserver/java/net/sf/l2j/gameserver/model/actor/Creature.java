@@ -155,17 +155,18 @@ public abstract class Creature extends WorldObject
 	protected byte _zoneValidateCounter = 4;
 	
 	private boolean _isRaid = false;
-
+	
 	// protect From Debuffs
 	private boolean _isBuffProtected = false;
+	
 	public void setIsBuffProtected(boolean value)
 	{
 		_isBuffProtected = value;
 	}
-	            
+	
 	public boolean isBuffProtected()
 	{
-		return _isBuffProtected;    
+		return _isBuffProtected;
 	}
 	
 	/**
@@ -173,8 +174,8 @@ public abstract class Creature extends WorldObject
 	 * <BR>
 	 * <B><U> Concept</U> :</B><BR>
 	 * <BR>
-	 * Each Creature owns generic and static properties (ex : all Keltir have the same number of HP...). All of those properties are stored in a different template for each type of Creature. Each template is loaded once in the server cache memory (reduce memory use). When a new instance of
-	 * Creature is spawned, server just create a link between the instance and the template This link is stored in <B>_template</B><BR>
+	 * Each Creature owns generic and static properties (ex : all Keltir have the same number of HP...). All of those properties are stored in a different template for each type of Creature. Each template is loaded once in the server cache memory (reduce memory use). When a new instance of Creature
+	 * is spawned, server just create a link between the instance and the template This link is stored in <B>_template</B><BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B>
 	 * <ul>
@@ -1500,7 +1501,7 @@ public abstract class Creature extends WorldObject
 		calculateRewards(killer);
 		if (Config.BOTS_PREVENTION)
 		{
-			BotsPreventionManager.getInstance().updatecounter(killer,this);
+			BotsPreventionManager.getInstance().updatecounter(killer, this);
 		}
 		
 		// Send the Server->Client packet StatusUpdate with current HP and MP to all other Player to inform
@@ -1688,10 +1689,11 @@ public abstract class Creature extends WorldObject
 		return _isSleeping || isAffected(L2EffectFlag.SLEEP);
 	}
 	
-    public final void setIsSleeping(boolean value) {
-        _isSleeping = value;
-    }
-    
+	public final void setIsSleeping(boolean value)
+	{
+		_isSleeping = value;
+	}
+	
 	public final boolean isStunned()
 	{
 		return isAffected(L2EffectFlag.STUNNED);
@@ -1927,8 +1929,8 @@ public abstract class Creature extends WorldObject
 	/**
 	 * Set the template of the Creature.<BR>
 	 * <BR>
-	 * Each Creature owns generic and static properties (ex : all Keltir have the same number of HP...). All of those properties are stored in a different template for each type of Creature. Each template is loaded once in the server cache memory (reduce memory use). When a new instance of
-	 * Creature is spawned, server just create a link between the instance and the template This link is stored in <B>_template</B>
+	 * Each Creature owns generic and static properties (ex : all Keltir have the same number of HP...). All of those properties are stored in a different template for each type of Creature. Each template is loaded once in the server cache memory (reduce memory use). When a new instance of Creature
+	 * is spawned, server just create a link between the instance and the template This link is stored in <B>_template</B>
 	 * @param template The template to set up.
 	 */
 	protected final void setTemplate(CreatureTemplate template)
@@ -2150,8 +2152,8 @@ public abstract class Creature extends WorldObject
 	 * <BR>
 	 * All active skills effects in progress on the Creature are identified in ConcurrentHashMap(Integer,L2Effect) <B>_effects</B>. The Integer key of _effects is the L2Skill Identifier that has created the L2Effect.<BR>
 	 * <BR>
-	 * Several same effect can't be used on a Creature at the same time. Indeed, effects are not stackable and the last cast will replace the previous in progress. More, some effects belong to the same Stack Group (ex WindWald and Haste Potion). If 2 effects of a same group are used at the same
-	 * time on a Creature, only the more efficient (identified by its priority order) will be preserve.<BR>
+	 * Several same effect can't be used on a Creature at the same time. Indeed, effects are not stackable and the last cast will replace the previous in progress. More, some effects belong to the same Stack Group (ex WindWald and Haste Potion). If 2 effects of a same group are used at the same time
+	 * on a Creature, only the more efficient (identified by its priority order) will be preserve.<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B>
 	 * <ul>
@@ -2175,8 +2177,8 @@ public abstract class Creature extends WorldObject
 	 * <BR>
 	 * All active skills effects in progress on the Creature are identified in ConcurrentHashMap(Integer,L2Effect) <B>_effects</B>. The Integer key of _effects is the L2Skill Identifier that has created the L2Effect.<BR>
 	 * <BR>
-	 * Several same effect can't be used on a Creature at the same time. Indeed, effects are not stackable and the last cast will replace the previous in progress. More, some effects belong to the same Stack Group (ex WindWald and Haste Potion). If 2 effects of a same group are used at the same
-	 * time on a Creature, only the more efficient (identified by its priority order) will be preserve.<BR>
+	 * Several same effect can't be used on a Creature at the same time. Indeed, effects are not stackable and the last cast will replace the previous in progress. More, some effects belong to the same Stack Group (ex WindWald and Haste Potion). If 2 effects of a same group are used at the same time
+	 * on a Creature, only the more efficient (identified by its priority order) will be preserve.<BR>
 	 * <BR>
 	 * <B><U> Actions</U> :</B>
 	 * <ul>
@@ -2798,7 +2800,6 @@ public abstract class Creature extends WorldObject
 		}
 	}
 	
-	
 	private void broadcastModifiedStats(List<Stats> stats)
 	{
 		if (stats == null || stats.isEmpty())
@@ -3048,8 +3049,8 @@ public abstract class Creature extends WorldObject
 	 * <BR>
 	 * At the beginning of the move action, all properties of the movement are stored in the MoveData object called <B>_move</B> of the Creature. The position of the start point and of the destination permit to estimated in function of the movement speed the time to achieve the destination.<BR>
 	 * <BR>
-	 * When the movement is started (ex : by MovetoLocation), this method will be called each 0.1 sec to estimate and update the Creature position on the server. Note, that the current server position can differe from the current client position even if each movement is straight foward. That's
-	 * why, client send regularly a Client->Server ValidatePosition packet to eventually correct the gap on the server. But, it's always the server position that is used in range calculation.<BR>
+	 * When the movement is started (ex : by MovetoLocation), this method will be called each 0.1 sec to estimate and update the Creature position on the server. Note, that the current server position can differe from the current client position even if each movement is straight foward. That's why,
+	 * client send regularly a Client->Server ValidatePosition packet to eventually correct the gap on the server. But, it's always the server position that is used in range calculation.<BR>
 	 * <BR>
 	 * At the end of the estimated movement time, the Creature position is automatically set to the destination position even if the movement is not finished.<BR>
 	 * <BR>
@@ -3794,10 +3795,11 @@ public abstract class Creature extends WorldObject
 			if (target instanceof Player)
 				((Player) target).sendPacket(SystemMessage.getSystemMessage(SystemMessageId.AVOIDED_S1_ATTACK).addCharName(this));
 			
-            if (this instanceof Player) {
-                SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.MISSED_TARGET);
-                ((Player) this).sendPacket(sm);
-            }
+			if (this instanceof Player)
+			{
+				SystemMessage sm = SystemMessage.getSystemMessage(SystemMessageId.MISSED_TARGET);
+				((Player) this).sendPacket(sm);
+			}
 		}
 		
 		// Send message about damage/crit or miss
@@ -5493,7 +5495,7 @@ public abstract class Creature extends WorldObject
 		if (object == getTarget())
 			setTarget(null);
 	}
- 		    
+	
 	public float getMovementSpeedMultiplier()
 	{
 		return getStat().getMovementSpeedMultiplier();
@@ -5513,8 +5515,9 @@ public abstract class Creature extends WorldObject
 	{
 		return getStat().getAttackSpeedMultiplier();
 	}
-
-	public void ActionF() {
-        sendPacket(STATIC_PACKET);
-    }
+	
+	public void ActionF()
+	{
+		sendPacket(STATIC_PACKET);
+	}
 }

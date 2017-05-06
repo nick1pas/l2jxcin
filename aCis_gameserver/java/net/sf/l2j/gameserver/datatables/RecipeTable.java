@@ -164,7 +164,6 @@ public class RecipeTable
 		if (!dwarfRecipes.contains(recipeList) && !commonRecipes.contains(recipeList))
 			return;
 		
-		
 		final RecipeItemMaker maker = new RecipeItemMaker(manufacturer, recipeList, player);
 		if (maker._isValid)
 			maker.run();

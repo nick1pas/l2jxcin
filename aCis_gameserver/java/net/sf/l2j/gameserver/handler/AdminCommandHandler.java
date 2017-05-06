@@ -80,7 +80,7 @@ public class AdminCommandHandler
 		registerAdminCommandHandler(new AdminCreateItem());
 		registerAdminCommandHandler(new AdminCursedWeapons());
 		registerAdminCommandHandler(new AdminDelete());
-		registerAdminCommandHandler(new AdminDMEvent());	
+		registerAdminCommandHandler(new AdminDMEvent());
 		registerAdminCommandHandler(new AdminDoorControl());
 		registerAdminCommandHandler(new AdminEditChar());
 		registerAdminCommandHandler(new AdminEditNpc());

@@ -276,7 +276,7 @@ public class GrandBossTeleporters extends Quest
 									return "32109-07.htm";
 							}
 							
-							// Take item from party leader.	
+							// Take item from party leader.
 							st.takeItems(8784, 1);
 							
 							final L2BossZone nest = ZoneManager.getInstance().getZoneById(110015, L2BossZone.class);

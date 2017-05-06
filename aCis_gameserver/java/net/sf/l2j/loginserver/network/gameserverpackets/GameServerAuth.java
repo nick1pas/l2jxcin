@@ -14,7 +14,7 @@ public class GameServerAuth extends ClientBasePacket
 	private final int _maxPlayers;
 	private final int _port;
 	private final String _hostName;
-
+	
 	public GameServerAuth(byte[] decrypt)
 	{
 		super(decrypt);
@@ -27,7 +27,7 @@ public class GameServerAuth extends ClientBasePacket
 		int size = readD();
 		_hexId = readB(size);
 	}
-
+	
 	public byte[] getHexID()
 	{
 		return _hexId;
@@ -47,7 +47,7 @@ public class GameServerAuth extends ClientBasePacket
 	{
 		return _acceptAlternativeId;
 	}
-
+	
 	public int getMaxPlayers()
 	{
 		return _maxPlayers;
@@ -57,7 +57,7 @@ public class GameServerAuth extends ClientBasePacket
 	{
 		return _hostName;
 	}
-
+	
 	public int getPort()
 	{
 		return _port;

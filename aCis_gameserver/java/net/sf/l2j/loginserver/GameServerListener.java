@@ -15,7 +15,7 @@ public class GameServerListener extends FloodProtectedListener
 	{
 		super(Config.GAME_SERVER_LOGIN_HOST, Config.GAME_SERVER_LOGIN_PORT);
 	}
-
+	
 	@Override
 	public void addClient(Socket s)
 	{

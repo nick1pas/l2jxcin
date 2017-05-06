@@ -27,9 +27,9 @@ import net.sf.l2j.gameserver.taskmanager.GameTimeTaskManager;
 import net.sf.l2j.gameserver.templates.StatsSet;
 
 public class Zaken extends L2AttackableAIScript
-{	
+{
 	private static final L2BossZone _zakenLair = ZoneManager.getInstance().getZoneById(110000, L2BossZone.class);
-	Calendar time = Calendar.getInstance();	
+	Calendar time = Calendar.getInstance();
 	private int _1001 = 0; // used for first cancel of QuestTimer "1001"
 	private int _ai0 = 0; // used for zaken coords updater
 	private int _ai1 = 0; // used for X coord tracking for non-random teleporting in zaken's self teleport skill

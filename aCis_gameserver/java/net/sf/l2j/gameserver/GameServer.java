@@ -149,7 +149,7 @@ public class GameServer
 		new File("./log/gmaudit").mkdir();
 		new File("./log/item").mkdir();
 		new File("./data/crests").mkdirs();
- 		
+		
 		// Create input stream for log file -- or store file data into memory
 		try (InputStream is = new FileInputStream(new File("config/logging.properties")))
 		{
@@ -164,7 +164,7 @@ public class GameServer
 		// Factories
 		XMLDocumentFactory.getInstance();
 		L2DatabaseFactory.getInstance();
-	
+		
 		StringUtil.printSection("ThreadPool");
 		ThreadPool.init();
 		
@@ -282,10 +282,10 @@ public class GameServer
 		
 		if (Config.CKM_ENABLED)
 			CharacterKillingManager.getInstance().init();
- 		
+		
 		if (Config.ENABLE_PVP_COLOR)
 			PvpColorTable.getInstance();
-	
+		
 		StringUtil.printSection("Four Sepulchers");
 		FourSepulchersManager.getInstance().init();
 		
@@ -366,7 +366,7 @@ public class GameServer
 			deadDetectThread.start();
 		}
 		else
-			_log.info("Deadlock detector is disabled.");	
+			_log.info("Deadlock detector is disabled.");
 		
 		System.gc();
 		
@@ -414,7 +414,7 @@ public class GameServer
 	{
 		return _gameServer;
 	}
-		
+	
 	public SelectorThread<L2GameClient> getSelectorThread()
 	{
 		return _selectorThread;

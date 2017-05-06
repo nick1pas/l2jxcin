@@ -18,7 +18,7 @@ public class Legs extends Condition
 	{
 		if (getValue() == null)
 			return false;
-
+		
 		int val = Integer.parseInt(getValue().toString());
 		
 		ItemInstance armor = player.getInventory().getPaperdollItem(Inventory.PAPERDOLL_LEGS);

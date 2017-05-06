@@ -37,7 +37,7 @@ public class AuthGameGuard extends L2LoginClientPacket
 	{
 		return _data4;
 	}
-
+	
 	@Override
 	protected boolean readImpl()
 	{

@@ -6,7 +6,6 @@ import net.sf.l2j.gameserver.model.item.type.CrystalType;
 
 /**
  * @author Thug
- *
  */
 public class L2EnchantScroll
 {
@@ -37,7 +36,7 @@ public class L2EnchantScroll
 		
 		if (level >= _chance.length)
 			return 0;
-			
+		
 		return _chance[level];
 	}
 	

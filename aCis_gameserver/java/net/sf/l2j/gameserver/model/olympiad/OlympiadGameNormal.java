@@ -176,18 +176,24 @@ abstract public class OlympiadGameNormal extends AbstractOlympiadGame
 			return false;
 		
 		_playerOne.player.setOlympiadStart(true);
-		if (Config.ALT_OLY_SKILL_PROTECT) {
-			for (L2Skill skill : _playerOne.player.getSkills().values()) {
-				if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId())) {
+		if (Config.ALT_OLY_SKILL_PROTECT)
+		{
+			for (L2Skill skill : _playerOne.player.getSkills().values())
+			{
+				if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId()))
+				{
 					_playerOne.player.enableSkill(skill);
 				}
 				_playerOne.player.updateEffectIcons();
 			}
 		}
 		_playerTwo.player.setOlympiadStart(true);
-		if (Config.ALT_OLY_SKILL_PROTECT) {
-			for (L2Skill skill : _playerTwo.player.getSkills().values()) {
-				if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId())) {
+		if (Config.ALT_OLY_SKILL_PROTECT)
+		{
+			for (L2Skill skill : _playerTwo.player.getSkills().values())
+			{
+				if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId()))
+				{
 					_playerTwo.player.enableSkill(skill);
 				}
 				_playerTwo.player.updateEffectIcons();
@@ -555,20 +561,20 @@ abstract public class OlympiadGameNormal extends AbstractOlympiadGame
 				_log.log(Level.SEVERE, "SQL exception while saving olympiad fight.", e);
 		}
 	}
-    
-    @Override
-    protected boolean checkDualbox()
-    {
-        String ip1 = _playerOne.player.getClient().getConnection().getInetAddress().getHostAddress();
-        String ip2 = _playerTwo.player.getClient().getConnection().getInetAddress().getHostAddress();
-        
-        if (ip1.equals(ip2))
-        {
-            _playerOne.player.sendMessage("[Duabox Protection]: Your opponent [" + _playerTwo.player.getName() + "] Has the same ip as your!");
-            _playerTwo.player.sendMessage("[Duabox Protection]: Your opponent [" + _playerOne.player.getName() + "] Has the same ip as your!");
-            return true;
-        }
-        
-        return false;
-    }
+	
+	@Override
+	protected boolean checkDualbox()
+	{
+		String ip1 = _playerOne.player.getClient().getConnection().getInetAddress().getHostAddress();
+		String ip2 = _playerTwo.player.getClient().getConnection().getInetAddress().getHostAddress();
+		
+		if (ip1.equals(ip2))
+		{
+			_playerOne.player.sendMessage("[Duabox Protection]: Your opponent [" + _playerTwo.player.getName() + "] Has the same ip as your!");
+			_playerTwo.player.sendMessage("[Duabox Protection]: Your opponent [" + _playerOne.player.getName() + "] Has the same ip as your!");
+			return true;
+		}
+		
+		return false;
+	}
 }

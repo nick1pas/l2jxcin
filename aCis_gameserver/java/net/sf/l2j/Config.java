@@ -195,10 +195,10 @@ public final class Config
 	public static int TIME_TO_VOTE;
 	/** Shift for Npcs */
 	public static boolean ENABLE_SHIFT_CLICK_TO_NPCS;
-	/** Cancel System */ 	
+	/** Cancel System */
 	public static boolean ALLOW_CUSTOM_CANCEL;
 	public static int CUSTOM_CANCEL_SECONDS;
-
+	
 	// --------------------------------------------------
 	// Clans settings
 	// --------------------------------------------------
@@ -315,9 +315,9 @@ public final class Config
 	public static boolean ALT_OLY_SKILL_PROTECT;
 	public static List<Integer> ALT_OLY_SKILL_LIST = new ArrayList<>();
 	public static boolean ALT_OLY_END_ANNOUNCE;
-    public static boolean ALT_OLY_BACK_REUSE_SKILLS;
-    public static int ALT_OLY_ENCHANT_LIMIT;
-    
+	public static boolean ALT_OLY_BACK_REUSE_SKILLS;
+	public static int ALT_OLY_ENCHANT_LIMIT;
+	
 	/** SevenSigns Festival */
 	public static boolean ALT_GAME_CASTLE_DAWN;
 	public static boolean ALT_GAME_CASTLE_DUSK;
@@ -505,11 +505,11 @@ public final class Config
 	
 	public static String LOGIN_BIND_ADDRESS;
 	public static int PORT_LOGIN;
-
+	
 	public static int LOGIN_TRY_BEFORE_BAN;
 	public static int LOGIN_BLOCK_AFTER_BAN;
 	public static boolean ACCEPT_NEW_GAMESERVER;
-
+	
 	public static boolean SHOW_LICENCE;
 	
 	public static boolean AUTO_CREATE_ACCOUNTS;
@@ -634,7 +634,7 @@ public final class Config
 	public static boolean DEEPBLUE_DROP_RULES;
 	public static boolean ALT_GAME_DELEVEL;
 	public static int DEATH_PENALTY_CHANCE;
-
+	
 	/** Inventory & WH */
 	public static int INVENTORY_MAXIMUM_NO_DWARF;
 	public static int INVENTORY_MAXIMUM_DWARF;
@@ -771,7 +771,7 @@ public final class Config
 	public static boolean SERVER_LIST_BRACKET;
 	public static boolean SERVER_LIST_CLOCK;
 	public static int SERVER_LIST_AGE;
- 	public static boolean SERVER_LIST_TESTSERVER;
+	public static boolean SERVER_LIST_TESTSERVER;
 	public static boolean SERVER_LIST_PVPSERVER;
 	public static boolean SERVER_GMONLY;
 	
@@ -904,7 +904,7 @@ public final class Config
 	public static int ZONE_TOWN;
 	public static boolean DISABLE_TUTORIAL;
 	
-	/**Protection Settings */
+	/** Protection Settings */
 	public static boolean ENABLED;
 	public static int SERVER_KEY;
 	public static String LOG_OPTION;
@@ -1076,12 +1076,12 @@ public final class Config
 		}
 		ENABLE_VIP_ITEM = custom.getProperty("VipItemEnabled", true);
 		VIP_ITEM_ID = custom.getProperty("VipItemId", 3481);
-		VIP_DAYS = custom.getProperty("VipDays", 5);						
+		VIP_DAYS = custom.getProperty("VipDays", 5);
 		VIP_XP_SP_RATES = custom.getProperty("VipExp/SpRates", 1000);
 		VIP_ADENA_RATES = custom.getProperty("VipAdenaDrop", 1000);
 		VIP_SPOIL_RATES = custom.getProperty("VipSpoilRates", 1000);
 		VIP_RATE_DROP_ITEMS_BY_RAID = custom.getProperty("VipRaidDrop", 1);
-		VIP_DROP_RATES = custom.getProperty("VipDrop", 1);				
+		VIP_DROP_RATES = custom.getProperty("VipDrop", 1);
 		CLAN_MANAGER_ITEM_ID = custom.getProperty("ClanManagerItemId", 57);
 		CLAN_MANAGER_LEVEL_UP_COUNT = custom.getProperty("ClanManagerLevelUpCount", 10000);
 		CLAN_MANAGER_REPUTATION_COUNT = custom.getProperty("ClanManagerReputationCount", 100000);
@@ -1388,12 +1388,13 @@ public final class Config
 			ALT_OLY_SKILL_LIST.add(Integer.parseInt(id));
 		}
 		ALT_OLY_END_ANNOUNCE = events.getProperty("AltOlyEndAnnounce", false);
-        ALT_OLY_BACK_REUSE_SKILLS = events.getProperty("AltOlyBackReuseSkills", false);
-        ALT_OLY_ENCHANT_LIMIT = events.getProperty("AltOlyEnchantLimit", -1);
-        if (ALT_OLY_ENCHANT_LIMIT > 65535) {
-            ALT_OLY_ENCHANT_LIMIT = 65535;
-        }
-        
+		ALT_OLY_BACK_REUSE_SKILLS = events.getProperty("AltOlyBackReuseSkills", false);
+		ALT_OLY_ENCHANT_LIMIT = events.getProperty("AltOlyEnchantLimit", -1);
+		if (ALT_OLY_ENCHANT_LIMIT > 65535)
+		{
+			ALT_OLY_ENCHANT_LIMIT = 65535;
+		}
+		
 		ALT_GAME_CASTLE_DAWN = events.getProperty("AltCastleForDawn", true);
 		ALT_GAME_CASTLE_DUSK = events.getProperty("AltCastleForDusk", true);
 		ALT_FESTIVAL_MIN_PLAYER = MathUtil.limit(events.getProperty("AltFestivalMinPlayer", 5), 2, 9);
@@ -2440,12 +2441,12 @@ public final class Config
 		DATABASE_LOGIN = server.getProperty("Login", "root");
 		DATABASE_PASSWORD = server.getProperty("Password", "");
 		DATABASE_MAX_CONNECTIONS = server.getProperty("MaximumDbConnections", 10);
-	
+		
 		SERVER_LIST_BRACKET = server.getProperty("ServerListBrackets", false);
 		SERVER_LIST_CLOCK = server.getProperty("ServerListClock", false);
 		SERVER_GMONLY = server.getProperty("ServerGMOnly", false);
 		SERVER_LIST_AGE = server.getProperty("ServerListAgeLimit", 0);
- 		SERVER_LIST_TESTSERVER = server.getProperty("TestServer", false);
+		SERVER_LIST_TESTSERVER = server.getProperty("TestServer", false);
 		SERVER_LIST_PVPSERVER = server.getProperty("PvpServer", true);
 		
 		DELETE_DAYS = server.getProperty("DeleteCharAfterDays", 7);
@@ -2454,7 +2455,7 @@ public final class Config
 		MAX_PROTOCOL_REVISION = server.getProperty("MaxProtocolRevision", 746);
 		if (MIN_PROTOCOL_REVISION > MAX_PROTOCOL_REVISION)
 			throw new Error("MinProtocolRevision is bigger than MaxProtocolRevision in server.properties.");
-
+		
 		AUTO_LOOT = server.getProperty("AutoLoot", false);
 		AUTO_LOOT_HERBS = server.getProperty("AutoLootHerbs", false);
 		AUTO_LOOT_RAID = server.getProperty("AutoLootRaid", false);
@@ -2601,16 +2602,16 @@ public final class Config
 		ACCEPT_NEW_GAMESERVER = server.getProperty("AcceptNewGameServer", false);
 		
 		SHOW_LICENCE = server.getProperty("ShowLicence", true);
-
+		
 		DATABASE_URL = server.getProperty("URL", "jdbc:mysql://localhost/acis");
 		DATABASE_LOGIN = server.getProperty("Login", "root");
 		DATABASE_PASSWORD = server.getProperty("Password", "");
 		DATABASE_MAX_CONNECTIONS = server.getProperty("MaximumDbConnections", 10);
-
+		
 		FORCE_GGAUTH = server.getProperty("ForceGGAuth", false);
 		
 		AUTO_CREATE_ACCOUNTS = server.getProperty("AutoCreateAccounts", true);
-
+		
 		LOG_LOGIN_CONTROLLER = server.getProperty("LogLoginController", false);
 		
 		CRYPT_TOKEN = server.getProperty("CryptToken", true);
@@ -2619,7 +2620,7 @@ public final class Config
 		NORMAL_CONNECTION_TIME = server.getProperty("NormalConnectionTime", 700);
 		FAST_CONNECTION_TIME = server.getProperty("FastConnectionTime", 350);
 		MAX_CONNECTION_PER_IP = server.getProperty("MaxConnectionPerIP", 50);
-				
+		
 		DEBUG = server.getProperty("Debug", false);
 		DEVELOPER = server.getProperty("Developer", false);
 		PACKET_HANDLER_DEBUG = server.getProperty("PacketHandlerDebug", false);

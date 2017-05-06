@@ -9,9 +9,9 @@ public class RC4
 	private boolean _block = false;
 	
 	/**
-	 * @param key   the encryption/decryption key
-	 * @param block 
-	 * @throws NullPointerException 
+	 * @param key the encryption/decryption key
+	 * @param block
+	 * @throws NullPointerException
 	 */
 	public RC4(String key, boolean block) throws NullPointerException
 	{
@@ -19,9 +19,9 @@ public class RC4
 	}
 	
 	/**
-	 * @param key   the encryption/decryption key
-	 * @param block 
-	 * @throws NullPointerException 
+	 * @param key the encryption/decryption key
+	 * @param block
+	 * @throws NullPointerException
 	 */
 	public RC4(byte[] key, boolean block) throws NullPointerException
 	{
@@ -59,26 +59,26 @@ public class RC4
 		}
 	}
 	
-	/** 
-	 * @param data  the data to be encrypted/decrypted
+	/**
+	 * @param data the data to be encrypted/decrypted
 	 * @return the result of the encryption/decryption
 	 */
 	public byte[] rc4(String data)
 	{
 		if ((data == null) || (data.length() == 0))
 			return null;
-
+		
 		return rc4(data.getBytes());
 	}
 	
-	/** 
-	 * @param buf  the data to be encrypted/decrypted
+	/**
+	 * @param buf the data to be encrypted/decrypted
 	 * @return the result of the encryption/decryption
 	 */
 	public byte[] rc4(byte[] buf)
 	{
-		//int lx = this.x;
-		//int ly = this.y;
+		// int lx = this.x;
+		// int ly = this.y;
 		int xorIndex;
 		byte tmp;
 		

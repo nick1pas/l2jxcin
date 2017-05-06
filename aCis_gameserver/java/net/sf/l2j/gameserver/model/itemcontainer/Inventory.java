@@ -960,7 +960,7 @@ public abstract class Inventory extends ItemContainer
 				// Check if that item already exists in OID map.
 				if (World.getInstance().getObject(inv.getInt("object_id")) != null)
 				{
-					_log.log(Level.WARNING, "Item: "+ item.getObjectId() +" Has Duplied on World And Cannot be Load");
+					_log.log(Level.WARNING, "Item: " + item.getObjectId() + " Has Duplied on World And Cannot be Load");
 					World.getInstance().removeObject(item);
 					continue;
 				}

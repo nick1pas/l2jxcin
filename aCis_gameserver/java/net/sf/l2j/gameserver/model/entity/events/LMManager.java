@@ -21,7 +21,7 @@ public class LMManager
 	private LMManager()
 	{
 		if (Config.LM_EVENT_ENABLED)
-		{		
+		{
 			this.scheduleEventStart();
 			_log.info("LMEventEngine[LMManager.LMManager()]: Started.");
 		}

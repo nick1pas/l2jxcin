@@ -123,7 +123,8 @@ public class AchievementsManager
 			b = Boolean.valueOf(d.getAttributes().getNamedItem(nodename).getNodeValue());
 		}
 		catch (Exception e)
-		{}
+		{
+		}
 		return b;
 	}
 	
@@ -135,7 +136,8 @@ public class AchievementsManager
 			i = Integer.valueOf(d.getAttributes().getNamedItem(nodename).getNodeValue());
 		}
 		catch (Exception e)
-		{}
+		{
+		}
 		return i;
 	}
 	
@@ -152,7 +154,8 @@ public class AchievementsManager
 			statement.close();
 		}
 		catch (SQLException e)
-		{}
+		{
+		}
 	}
 	
 	public List<Condition> conditionList(NamedNodeMap attributesList)
@@ -162,7 +165,7 @@ public class AchievementsManager
 		for (int j = 0; j < attributesList.getLength(); j++)
 		{
 			addToConditionList(attributesList.item(j).getNodeName(), attributesList.item(j).getNodeValue(), conditions);
-		}	
+		}
 		return conditions;
 	}
 	
@@ -274,6 +277,6 @@ public class AchievementsManager
 			conditions.add(new Legs(value));
 		
 		else if (nodeName.equals("minGlovestEnchant"))
-			conditions.add(new Gloves(value));	
+			conditions.add(new Gloves(value));
 	}
 }

@@ -234,8 +234,8 @@ public class Quest
 	 * @param npc : the instance of a Npc to compare distance
 	 * @param var : a tuple specifying a quest condition that must be satisfied for a party member to be considered.
 	 * @param value : a tuple specifying a quest condition that must be satisfied for a party member to be considered.
-	 * @return List<Player> : List of party members that matches the specified condition, empty list if none matches. If the var is null, empty list is returned (i.e. no condition is applied). The party member must be within Config.ALT_PARTY_RANGE distance from the npc. If npc is null,
-	 *         distance condition is ignored.
+	 * @return List<Player> : List of party members that matches the specified condition, empty list if none matches. If the var is null, empty list is returned (i.e. no condition is applied). The party member must be within Config.ALT_PARTY_RANGE distance from the npc. If npc is null, distance
+	 *         condition is ignored.
 	 */
 	public List<Player> getPartyMembers(Player player, Npc npc, String var, String value)
 	{
@@ -255,8 +255,7 @@ public class Quest
 	 * @param npc : the instance of a Npc to compare distance
 	 * @param var : a tuple specifying a quest condition that must be satisfied for a party member to be considered.
 	 * @param value : a tuple specifying a quest condition that must be satisfied for a party member to be considered.
-	 * @return Player : Player for a random party member that matches the specified condition, or null if no match. If the var is null, null is returned (i.e. no condition is applied). The party member must be within 1500 distance from the npc. If npc is null, distance condition is
-	 *         ignored.
+	 * @return Player : Player for a random party member that matches the specified condition, or null if no match. If the var is null, null is returned (i.e. no condition is applied). The party member must be within 1500 distance from the npc. If npc is null, distance condition is ignored.
 	 */
 	public Player getRandomPartyMember(Player player, Npc npc, String var, String value)
 	{
@@ -1415,8 +1414,9 @@ public class Quest
 		
 		return false;
 	}
-	public void setQuestTimerShared() 
-	{ 
-		_eventTimers.values(); 
+	
+	public void setQuestTimerShared()
+	{
+		_eventTimers.values();
 	}
 }

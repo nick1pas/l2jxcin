@@ -101,7 +101,7 @@ public class Q386_StolenDignity extends Quest
 	
 	public Q386_StolenDignity()
 	{
-		super(386,"Stolen Dignity");
+		super(386, "Stolen Dignity");
 		addStartNpc(Romp);
 		addTalkId(Romp);
 		

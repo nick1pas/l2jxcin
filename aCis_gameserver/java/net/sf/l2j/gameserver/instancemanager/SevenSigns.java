@@ -159,7 +159,7 @@ public class SevenSigns
 	public static final int SEAL_STONE_BLUE_VALUE = 3;
 	public static final int SEAL_STONE_GREEN_VALUE = 5;
 	public static final int SEAL_STONE_RED_VALUE = 10;
-
+	
 	private final Calendar _nextPeriodChange = Calendar.getInstance();
 	private Calendar _lastSave = Calendar.getInstance();
 	
@@ -857,7 +857,7 @@ public class SevenSigns
 		StatsSet set = _playersData.get(objectId);
 		
 		int contribScore = calcScore(blueCount, greenCount, redCount);
-			int totalAncientAdena = set.getInteger("ancient_adena_amount") + contribScore;
+		int totalAncientAdena = set.getInteger("ancient_adena_amount") + contribScore;
 		int totalContribScore = set.getInteger("contribution_score") + contribScore;
 		
 		if (totalContribScore > Config.ALT_MAXIMUM_PLAYER_CONTRIB)
@@ -1107,10 +1107,10 @@ public class SevenSigns
 				case RECRUITING: // Initialization
 					// Start the Festival of Darkness cycle.
 					SevenSignsFestival.getInstance().startFestivalManager();
- 					
+					
 					// Reset castles certificates count.
 					CastleManager.getInstance().resetCertificates();
-
+					
 					// Send message that Competition has begun.
 					Broadcast.toAllOnlinePlayers(SystemMessage.getSystemMessage(SystemMessageId.QUEST_EVENT_PERIOD_BEGUN));
 					break;

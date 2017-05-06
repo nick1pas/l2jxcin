@@ -467,7 +467,7 @@ public class ZoneManager
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Add an item on debug list. Used to visualize zones.
 	 * @param item : The item to add.
@@ -476,7 +476,7 @@ public class ZoneManager
 	{
 		_debugItems.put(item.getObjectId(), item);
 	}
-
+	
 	/**
 	 * Remove all debug items from the world.
 	 */
@@ -487,14 +487,14 @@ public class ZoneManager
 		
 		_debugItems.clear();
 	}
- 	
+	
 	public static final ZoneManager getInstance()
 	{
 		return SingletonHolder.INSTANCE;
 	}
-		
- 	private static class SingletonHolder
- 	{
+	
+	private static class SingletonHolder
+	{
 		protected static final ZoneManager INSTANCE = new ZoneManager();
- 	}
+	}
 }

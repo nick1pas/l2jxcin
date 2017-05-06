@@ -158,7 +158,6 @@ public abstract class AbstractNpcInfo extends L2GameServerPacket
 			else
 				writeC(0x00);
 			
-			
 			writeF(_collisionRadius);
 			writeF(_collisionHeight);
 			

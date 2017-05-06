@@ -16,7 +16,6 @@ import org.w3c.dom.Node;
 
 /**
  * @author Thug
- *
  */
 public class EnchantTable
 {
@@ -75,14 +74,14 @@ public class EnchantTable
 								case 5:
 									grade_test = CrystalType.S;
 									break;
-							}							
+							}
 							
 							_map.put(id, new L2EnchantScroll(grade_test, weapon, breaks, maintain, chance));
 						}
 					}
 				}
 			}
-				
+			
 			_log.info("EnchantTable: Loaded " + _map.size() + " enchants.");
 		}
 		catch (Exception e)

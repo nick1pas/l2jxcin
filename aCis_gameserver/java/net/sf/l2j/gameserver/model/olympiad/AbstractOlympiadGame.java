@@ -96,12 +96,12 @@ public abstract class AbstractOlympiadGame
 			return SystemMessage.getSystemMessage(SystemMessageId.THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_ENDS_THE_GAME);
 		
 		if (player.getClient() == null || player.getClient().isDetached())
-			return SystemMessage.getSystemMessage(SystemMessageId.THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_ENDS_THE_GAME);		
-
+			return SystemMessage.getSystemMessage(SystemMessageId.THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_ENDS_THE_GAME);
+		
 		// safety precautions
 		if (player.isInObserverMode() || TvTEvent.isPlayerParticipant(player.getObjectId()) || DMEvent.isPlayerParticipant(player.getObjectId()) || LMEvent.isPlayerParticipant(player.getObjectId()))
 			return SystemMessage.getSystemMessage(SystemMessageId.THE_GAME_HAS_BEEN_CANCELLED_BECAUSE_THE_OTHER_PARTY_DOES_NOT_MEET_THE_REQUIREMENTS_FOR_JOINING_THE_GAME);
-
+		
 		if (player.isDead())
 		{
 			player.sendPacket(SystemMessageId.CANNOT_PARTICIPATE_OLYMPIAD_WHILE_DEAD);
@@ -162,10 +162,13 @@ public abstract class AbstractOlympiadGame
 		{
 			if (player == null)
 				return;
- 			
-			if (Config.ALT_OLY_SKILL_PROTECT) {
-				for (L2Skill skill : player.getSkills().values()) {
-					if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId())) {
+			
+			if (Config.ALT_OLY_SKILL_PROTECT)
+			{
+				for (L2Skill skill : player.getSkills().values())
+				{
+					if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId()))
+					{
 						player.removeSkill(skill, false);
 					}
 					player.sendPacket(new ExShowScreenMessage("This skill can not be used", 4000));
@@ -273,7 +276,7 @@ public abstract class AbstractOlympiadGame
 				player.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.YOU_FEEL_S1_EFFECT).addSkillName(1085));
 			}
 		}
-			 		
+		
 		if (!player.isMageClass())
 		{
 			skill = SkillTable.getInstance().getInfo(1086, 1); // Haste 1
@@ -357,10 +360,13 @@ public abstract class AbstractOlympiadGame
 				player.setCurrentHp(player.getMaxHp());
 				player.setCurrentMp(player.getMaxMp());
 			}
- 			
-			if (Config.ALT_OLY_SKILL_PROTECT) {
-				for (L2Skill skill : player.getSkills().values()) {
-					if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId())) {
+			
+			if (Config.ALT_OLY_SKILL_PROTECT)
+			{
+				for (L2Skill skill : player.getSkills().values())
+				{
+					if (Config.ALT_OLY_SKILL_LIST.contains(skill.getId()))
+					{
 						player.enableSkill(skill);
 					}
 					player.updateEffectIcons();
@@ -375,11 +381,12 @@ public abstract class AbstractOlympiadGame
 					player.addSkill(skill, false);
 			}
 			player.sendSkillList();
-
-            // Update all timer skills in port back
-            if (Config.ALT_OLY_BACK_REUSE_SKILLS) {
-                player.reuseAllSkills(true);
-            }
+			
+			// Update all timer skills in port back
+			if (Config.ALT_OLY_BACK_REUSE_SKILLS)
+			{
+				player.reuseAllSkills(true);
+			}
 		}
 		catch (Exception e)
 		{

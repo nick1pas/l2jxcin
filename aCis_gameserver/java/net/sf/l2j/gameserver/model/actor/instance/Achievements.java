@@ -69,12 +69,12 @@ public class Achievements extends Folk
 	@Override
 	public void showChatWindow(Player player, int val)
 	{
-        String filename = "data/html/mods/Achievements/Main.htm";
-        NpcHtmlMessage html = new NpcHtmlMessage(this.getObjectId());
-        html.setFile(filename);
-        html.replace("%objectId%", String.valueOf(getObjectId()));
-        html.replace("%name%", player.getName());
-        player.sendPacket(html);
+		String filename = "data/html/mods/Achievements/Main.htm";
+		NpcHtmlMessage html = new NpcHtmlMessage(this.getObjectId());
+		html.setFile(filename);
+		html.replace("%objectId%", String.valueOf(getObjectId()));
+		html.replace("%name%", player.getName());
+		player.sendPacket(html);
 	}
 	
 	private void showMyAchievements(Player player)

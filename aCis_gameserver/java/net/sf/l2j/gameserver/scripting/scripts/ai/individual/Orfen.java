@@ -223,7 +223,7 @@ public class Orfen extends L2AttackableAIScript
 	@Override
 	public String onKill(Npc npc, Player killer, boolean isPet)
 	{
-		npc.broadcastPacket(Music.BS02_D_7000.getPacket());	
+		npc.broadcastPacket(Music.BS02_D_7000.getPacket());
 		GrandBossManager.getInstance().setBossStatus(ORFEN, DEAD);
 		
 		long respawnTime = (long) Config.SPAWN_INTERVAL_ORFEN + Rnd.get(-Config.RANDOM_SPAWN_TIME_ORFEN, Config.RANDOM_SPAWN_TIME_ORFEN);

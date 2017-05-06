@@ -83,7 +83,7 @@ public class PcPolymorph extends Npc
 	{
 		_visibleTitle = title == null ? "" : title;
 	}
-
+	
 	@Override
 	public void sendInfo(Player activeChar)
 	{
@@ -125,8 +125,7 @@ public class PcPolymorph extends Npc
 	
 	public static CharSelectInfoPackage loadCharInfo(int objectId)
 	{
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
-			PreparedStatement statement = con.prepareStatement("SELECT char_name, race, base_class, classid, sex, face, hairStyle, hairColor, clanid FROM characters WHERE obj_Id = ?"))
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection(); PreparedStatement statement = con.prepareStatement("SELECT char_name, race, base_class, classid, sex, face, hairStyle, hairColor, clanid FROM characters WHERE obj_Id = ?"))
 		{
 			statement.setInt(1, objectId);
 			

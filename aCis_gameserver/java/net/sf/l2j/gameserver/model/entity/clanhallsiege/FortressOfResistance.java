@@ -44,7 +44,7 @@ import net.sf.l2j.gameserver.util.Broadcast;
 public class FortressOfResistance
 {
 	private final static Logger _log = Logger.getLogger(FortressOfResistance.class.getName());
-
+	
 	private Map<Integer, DamageInfo> _clansDamageInfo;
 	
 	private static int START_DAY = 1;
@@ -106,7 +106,7 @@ public class FortressOfResistance
 		
 		if (MINUTES < 0 || MINUTES > 59)
 			MINUTES = 0;
-
+		
 		_clansDamageInfo = new HashMap<>();
 		
 		synchronized (this)

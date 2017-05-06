@@ -242,22 +242,22 @@ public class ClanHall
 	{
 		return _ownerId;
 	}
-
+	
 	public L2Clan getOwnerClan()
 	{
-		if(_ownerId == 0)
+		if (_ownerId == 0)
 		{
 			return null;
 		}
-
-		if(_ownerClan == null)
+		
+		if (_ownerClan == null)
 		{
 			_ownerClan = ClanTable.getInstance().getClan(getOwnerId());
 		}
-
+		
 		return _ownerClan;
 	}
-
+	
 	/**
 	 * @return clanHall lease
 	 */

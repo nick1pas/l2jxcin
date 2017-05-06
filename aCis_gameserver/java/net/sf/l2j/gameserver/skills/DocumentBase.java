@@ -217,27 +217,27 @@ abstract class DocumentBase
 		
 		if (attrs.getNamedItem("time") != null)
 		{
- 			time = Integer.decode(getValue(attrs.getNamedItem("time").getNodeValue(), template));
-			if(Config.ENABLE_MODIFY_SKILL_DURATION)
+			time = Integer.decode(getValue(attrs.getNamedItem("time").getNodeValue(), template));
+			if (Config.ENABLE_MODIFY_SKILL_DURATION)
 			{
-				if(Config.SKILL_DURATION_LIST.containsKey(((L2Skill) template).getId()))
+				if (Config.SKILL_DURATION_LIST.containsKey(((L2Skill) template).getId()))
 				{
-					if(((L2Skill) template).getLevel() < 100)
+					if (((L2Skill) template).getLevel() < 100)
 					{
 						time = Config.SKILL_DURATION_LIST.get(((L2Skill) template).getId());
 					}
-					else if(((L2Skill) template).getLevel() >= 100 && ((L2Skill) template).getLevel() < 140)
+					else if (((L2Skill) template).getLevel() >= 100 && ((L2Skill) template).getLevel() < 140)
 					{
 						time += Config.SKILL_DURATION_LIST.get(((L2Skill) template).getId());
 					}
-					else if(((L2Skill) template).getLevel() > 140)
+					else if (((L2Skill) template).getLevel() > 140)
 					{
 						time = Config.SKILL_DURATION_LIST.get(((L2Skill) template).getId());
 					}
 				}
-			}		
+			}
 			
-		}	
+		}
 		else if (((L2Skill) template).getBuffDuration() > 0)
 			time = ((L2Skill) template).getBuffDuration() / 1000 / count;
 		
@@ -566,16 +566,16 @@ abstract class DocumentBase
 				boolean val = Boolean.valueOf(a.getNodeValue());
 				cond = joinAnd(cond, new ConditionPlayerTvTEvent(val));
 			}
-            else if ("onDMEvent".equalsIgnoreCase(a.getNodeName()))
-            {
-            	boolean val = Boolean.valueOf(a.getNodeValue());
-                cond = joinAnd(cond, new ConditionPlayerDMEvent(val));
-            }
-            else if ("onLMEvent".equalsIgnoreCase(a.getNodeName()))
-            {
-            	boolean val = Boolean.valueOf(a.getNodeValue());
-                cond = joinAnd(cond, new ConditionPlayerLMEvent(val));
-            }
+			else if ("onDMEvent".equalsIgnoreCase(a.getNodeName()))
+			{
+				boolean val = Boolean.valueOf(a.getNodeValue());
+				cond = joinAnd(cond, new ConditionPlayerDMEvent(val));
+			}
+			else if ("onLMEvent".equalsIgnoreCase(a.getNodeName()))
+			{
+				boolean val = Boolean.valueOf(a.getNodeValue());
+				cond = joinAnd(cond, new ConditionPlayerLMEvent(val));
+			}
 			else if ("seed_fire".equalsIgnoreCase(a.getNodeName()))
 			{
 				ElementSeeds[0] = Integer.decode(getValue(a.getNodeValue(), null));

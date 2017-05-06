@@ -120,35 +120,35 @@ public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-			QuestState st2 = player.getQuestState("Q023_LidiasHeart");
-			if (st2 != null && st2.isCompleted())
-			{
-				if (player.getLevel() >= 65)
-					htmltext = "31389-01.htm";
+				QuestState st2 = player.getQuestState("Q023_LidiasHeart");
+				if (st2 != null && st2.isCompleted())
+				{
+					if (player.getLevel() >= 65)
+						htmltext = "31389-01.htm";
+					else
+						htmltext = "31389-00.htm";
+				}
 				else
-					htmltext = "31389-00.htm";
-			}
-			else
-				htmltext = "31328-00.htm";
-			break;
+					htmltext = "31328-00.htm";
+				break;
 			
 			case STATE_STARTED:
 				int cond = st.getInt("cond");
 				switch (npc.getNpcId())
 				{
 					case DORIAN:
-						if (cond == 1)	
-							htmltext = "31389-03.htm";						
-						else if (cond == 2)							
-							htmltext = "31389-04.htm";							
-						else if (cond == 3)							
-							htmltext = "31389-12.htm";							
-						else if (cond == 4)							
-							htmltext = "31389-13.htm";							
-						else if (cond == 5)							
+						if (cond == 1)
+							htmltext = "31389-03.htm";
+						else if (cond == 2)
+							htmltext = "31389-04.htm";
+						else if (cond == 3)
+							htmltext = "31389-12.htm";
+						else if (cond == 4)
+							htmltext = "31389-13.htm";
+						else if (cond == 5)
 							htmltext = "31389-18.htm";
 						break;
-						
+					
 					case TOMBSTONE:
 						if (cond == 1)
 						{
@@ -158,19 +158,19 @@ public class Q024_InhabitantsOfTheForestOfTheDead extends Quest
 						else if (cond == 2)
 							htmltext = "31531-03.htm";
 						break;
-						
+					
 					case MAIDOFLIDIA:
 						if (cond == 5)
 							htmltext = "31532-01.htm";
-						else if (cond == 6)						
-							htmltext = (st.getQuestItemsCount(LETTER) > 0) && (st.getQuestItemsCount(HAIRPIN) > 0) ? "31532-05.htm" : "31532-07.htm";				
+						else if (cond == 6)
+							htmltext = (st.getQuestItemsCount(LETTER) > 0) && (st.getQuestItemsCount(HAIRPIN) > 0) ? "31532-05.htm" : "31532-07.htm";
 						else if (cond == 9)
 							htmltext = "31532-16.htm";
 						break;
-						
+					
 					case WIZARD:
-						if (cond == 10)	
-							htmltext = "31522-01.htm";						
+						if (cond == 10)
+							htmltext = "31522-01.htm";
 						else if (cond == 11)
 							htmltext = "31522-08.htm";
 						break;

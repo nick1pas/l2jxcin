@@ -27,9 +27,7 @@ public class Escape implements IUserCommandHandler
 			return false;
 		}
 		// Thanks nbd
-		if (!TvTEvent.onEscapeUse(activeChar.getObjectId())
-				|| !DMEvent.onEscapeUse(activeChar.getObjectId())
-				|| !LMEvent.onEscapeUse(activeChar.getObjectId()))
+		if (!TvTEvent.onEscapeUse(activeChar.getObjectId()) || !DMEvent.onEscapeUse(activeChar.getObjectId()) || !LMEvent.onEscapeUse(activeChar.getObjectId()))
 		{
 			activeChar.ActionF();
 			return false;

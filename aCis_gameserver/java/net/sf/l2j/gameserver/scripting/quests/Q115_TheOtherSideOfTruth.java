@@ -27,7 +27,6 @@ public class Q115_TheOtherSideOfTruth extends Quest
 	private static final int LETTER2 = 8080;
 	private static final int TABLET = 8081;
 	private static final int REPORT = 8082;
-
 	
 	public Q115_TheOtherSideOfTruth()
 	{
@@ -44,7 +43,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 		QuestState st = player.getQuestState(getName());
 		if (st == null)
 			return htmltext;
-
+		
 		switch (event)
 		{
 			case "32020-02.htm":
@@ -58,39 +57,39 @@ public class Q115_TheOtherSideOfTruth extends Quest
 				st.set("cond", "7");
 				st.takeItems(LETTER2, 1);
 				break;
-				
+			
 			case "32020-05.htm":
 				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "3");
 				st.takeItems(LETTER, 1);
 				break;
-				
+			
 			case "32020-08.htm":
 				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "4");
 				break;
-				
+			
 			case "32020-07a.htm":
 				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "4");
 				break;
-				
+			
 			case "32020-12.htm":
 				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "5");
 				break;
-				
+			
 			case "32020-16.htm":
 				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "10");
 				st.takeItems(REPORT, 1);
 				break;
-				
+			
 			case "32020-19.htm":
 				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "11");
 				break;
-				
+			
 			case "32022-02.htm":
 				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "9");
@@ -99,13 +98,13 @@ public class Q115_TheOtherSideOfTruth extends Quest
 				startQuestTimer("2", 3700, man, player, false);
 				st.giveItems(REPORT, 1);
 				break;
-				
+			
 			case "Sculpture-04.htm":
 				st.set("talk", "1");
 				htmltext = "Sculpture-05.htm";
 				st.set(String.valueOf(npc.getNpcId()), "1");
 				break;
-				
+			
 			case "Sculpture-04a.htm":
 				st.playSound(Sound.SOUND_MIDDLE);
 				st.set("cond", "8");
@@ -115,30 +114,29 @@ public class Q115_TheOtherSideOfTruth extends Quest
 				htmltext = "Sculpture-04.htm";
 				st.giveItems(TABLET, 1);
 				break;
-				
+			
 			case "Sculpture-05.htm":
 				st.set(String.valueOf(npc.getNpcId()), "1");
 				break;
-				
+			
 			case "1":
 				npc.broadcastPacket(new NpcSay(npc.getObjectId(), 0, npc.getNpcId(), "I see someone. Is this fate?"));
 				break;
-				
+			
 			case "2":
 				npc.broadcastPacket(new NpcSay(npc.getObjectId(), 0, npc.getNpcId(), "Don't bother trying to find out more about me. Follow your own destiny."));
 				break;
-				
-				
+			
 			case "32020-06.htm":
 				st.exitQuest(true);
 				st.playSound(Sound.SOUND_FINISH);
 				break;
-				
+			
 			case "32020-08a.htm":
 				st.exitQuest(true);
 				st.playSound(Sound.SOUND_FINISH);
 				break;
-				
+			
 			case "32020-18.htm":
 				if (st.getQuestItemsCount(TABLET) == 0)
 				{
@@ -154,7 +152,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 					st.rewardExpAndSp(493595, 40442);
 				}
 				break;
-				
+			
 		}
 		return htmltext;
 	}
@@ -174,7 +172,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 					htmltext = "32020-01.htm";
 				else
 					htmltext = "32020-00.htm";
-			break;
+				break;
 			
 			case STATE_STARTED:
 				int cond = st.getInt("cond");
@@ -212,7 +210,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 							st.giveItems(57, 60044);
 						}
 						break;
-						
+					
 					case MISA:
 						if (cond == 1)
 						{
@@ -228,7 +226,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						else if (cond == 7)
 							htmltext = "32018-05.htm";
 						break;
-						
+					
 					case SCULPTURE1:
 						if (cond == 7)
 						{
@@ -251,7 +249,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						else if (cond == 12)
 							htmltext = "Sculpture-08.htm";
 						break;
-						
+					
 					case SCULPTURE2:
 						if (cond == 7)
 						{
@@ -274,7 +272,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						else if (cond == 12)
 							htmltext = "Sculpture-08.htm";
 						break;
-						
+					
 					case SCULPTURE3:
 						if (cond == 7)
 						{
@@ -282,7 +280,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 								htmltext = "Sculpture-02.htm";
 							else
 								htmltext = "Sculpture-01.htm";
-								st.set(String.valueOf(npc.getNpcId()), "1");
+							st.set(String.valueOf(npc.getNpcId()), "1");
 						}
 						else if (cond == 8)
 							htmltext = "Sculpture-04.htm";
@@ -296,7 +294,7 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						else if (cond == 12)
 							htmltext = "Sculpture-08.htm";
 						break;
-						
+					
 					case SCULPTURE4:
 						if (cond == 7)
 						{
@@ -318,18 +316,18 @@ public class Q115_TheOtherSideOfTruth extends Quest
 						else if (cond == 12)
 							htmltext = "Sculpture-08.htm";
 						break;
-						
+					
 					case KIERRE:
 						if (cond == 8)
-							htmltext = "32022-01.htm";						
-						else if (cond == 9)						
-							htmltext = "32022-03.htm";						
+							htmltext = "32022-01.htm";
+						else if (cond == 9)
+							htmltext = "32022-03.htm";
 						break;
 				}
 				break;
 			case STATE_COMPLETED:
-			htmltext = getAlreadyCompletedMsg();
-			break;
+				htmltext = getAlreadyCompletedMsg();
+				break;
 		}
 		return htmltext;
 	}

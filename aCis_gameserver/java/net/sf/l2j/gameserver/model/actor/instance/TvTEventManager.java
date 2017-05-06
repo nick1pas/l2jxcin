@@ -8,7 +8,7 @@ import net.sf.l2j.gameserver.network.serverpackets.NpcHtmlMessage;
 
 public class TvTEventManager extends Folk
 {
-	private static final String htmlPath="data/html/mods/TvTEvent/";
+	private static final String htmlPath = "data/html/mods/TvTEvent/";
 	
 	public TvTEventManager(int objectId, NpcTemplate template)
 	{
@@ -48,7 +48,7 @@ public class TvTEventManager extends Folk
 				npcHtmlMessage.replace("%team1playercount%", String.valueOf(teamsPlayerCounts[0]));
 				npcHtmlMessage.replace("%team2name%", Config.TVT_EVENT_TEAM_2_NAME);
 				npcHtmlMessage.replace("%team2playercount%", String.valueOf(teamsPlayerCounts[1]));
-				npcHtmlMessage.replace("%playercount%", String.valueOf(teamsPlayerCounts[0]+teamsPlayerCounts[1]));
+				npcHtmlMessage.replace("%playercount%", String.valueOf(teamsPlayerCounts[0] + teamsPlayerCounts[1]));
 				if (!isParticipant)
 					npcHtmlMessage.replace("%fee%", TvTEvent.getParticipationFee());
 				
@@ -66,7 +66,7 @@ public class TvTEventManager extends Folk
 				NpcHtmlMessage npcHtmlMessage = new NpcHtmlMessage(getObjectId());
 				
 				npcHtmlMessage.setHtml(htmContent);
-				//npcHtmlMessage.replace("%objectId%", String.valueOf(getObjectId()));
+				// npcHtmlMessage.replace("%objectId%", String.valueOf(getObjectId()));
 				npcHtmlMessage.replace("%team1name%", Config.TVT_EVENT_TEAM_1_NAME);
 				npcHtmlMessage.replace("%team1playercount%", String.valueOf(teamsPlayerCounts[0]));
 				npcHtmlMessage.replace("%team1points%", String.valueOf(teamsPointsCounts[0]));

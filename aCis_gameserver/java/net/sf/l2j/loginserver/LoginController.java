@@ -126,7 +126,7 @@ public class LoginController
 	{
 		return _blowfishKeys[(int) (Math.random() * BLOWFISH_KEYS)];
 	}
-
+	
 	public void removeAuthedLoginClient(String account)
 	{
 		if (account == null)
@@ -472,7 +472,7 @@ public class LoginController
 	{
 		return _instance;
 	}
-		
+	
 	public static boolean isValidLogin(String text)
 	{
 		return isValidPattern(text, "^[A-Za-z0-9]{1,16}$");

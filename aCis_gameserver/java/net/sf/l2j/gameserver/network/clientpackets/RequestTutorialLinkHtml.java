@@ -20,9 +20,9 @@ public class RequestTutorialLinkHtml extends L2GameClientPacket
 		final Player player = getClient().getActiveChar();
 		if (player == null)
 			return;
- 		
+		
 		ClassMaster.onTutorialLink(player, _bypass);
-	
+		
 		QuestState qs = player.getQuestState("Tutorial");
 		if (qs != null)
 			qs.getQuest().notifyEvent(_bypass, null, player);

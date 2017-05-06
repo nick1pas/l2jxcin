@@ -57,7 +57,7 @@ public class Nurka extends L2AttackableAIScript
 	
 	@Override
 	public String onAttack(Npc npc, Player attacker, int damage, boolean isPet, L2Skill skill)
-	{		
+	{
 		if (attacker != null && npc.getNpcId() == NURKA && CLAN_LEADERS.contains(attacker.getName()))
 		{
 			FortressOfResistance.getInstance().addSiegeDamage(attacker.getClan(), damage);

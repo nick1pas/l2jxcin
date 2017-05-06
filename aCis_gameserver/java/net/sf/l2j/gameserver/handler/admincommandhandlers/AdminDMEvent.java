@@ -10,7 +10,6 @@ import net.sf.l2j.gameserver.model.entity.events.DMManager;
 
 /**
  * @author L0ngh0rn
- *
  */
 public class AdminDMEvent implements IAdminCommandHandler
 {
@@ -48,7 +47,7 @@ public class AdminDMEvent implements IAdminCommandHandler
 			
 			remove(activeChar, (Player) target);
 		}
-		else if ( command.equals( "admin_dm_advance" ) )
+		else if (command.equals("admin_dm_advance"))
 		{
 			DMManager.getInstance().skipDelay();
 		}

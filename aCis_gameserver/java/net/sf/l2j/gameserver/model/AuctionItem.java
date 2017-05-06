@@ -2,7 +2,6 @@ package net.sf.l2j.gameserver.model;
 
 /**
  * @author Anarchy
- *
  */
 public class AuctionItem
 {

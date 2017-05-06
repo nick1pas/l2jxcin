@@ -71,7 +71,7 @@ public class Q655_AGrandPlanForTamingWildBeasts extends Quest
 				final int cond = st.getInt("cond");
 				switch (npc.getNpcId())
 				{
-					case Messenger:						
+					case Messenger:
 						if (cond == 0)
 							htmltext = "35627-01.htm";
 						else if (cond > 1)

@@ -127,12 +127,12 @@ public class BookmarkTable
 			}
 		}
 	}
- 	
+	
 	public static BookmarkTable getInstance()
 	{
 		return SingletonHolder.INSTANCE;
 	}
-
+	
 	private static class SingletonHolder
 	{
 		protected static final BookmarkTable INSTANCE = new BookmarkTable();

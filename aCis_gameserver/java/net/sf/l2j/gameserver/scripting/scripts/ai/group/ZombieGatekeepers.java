@@ -14,7 +14,7 @@ import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 
 public class ZombieGatekeepers extends L2AttackableAIScript
-{	
+{
 	public ZombieGatekeepers()
 	{
 		super("ai/group");

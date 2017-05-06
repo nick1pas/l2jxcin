@@ -12,12 +12,12 @@ public class PlayerAuthResponse extends LoginServerBasePacket
 		_account = readS();
 		_authed = readC() != 0;
 	}
-
+	
 	public String getAccount()
 	{
 		return _account;
 	}
-
+	
 	public boolean isAuthed()
 	{
 		return _authed;

@@ -16,7 +16,7 @@ public class Hero extends Condition
 	{
 		if (getValue() == null)
 			return false;
-
+		
 		return player.isHero();
 	}
 }

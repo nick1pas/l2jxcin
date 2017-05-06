@@ -28,7 +28,7 @@ public class ItemInfo
 	{
 		if (item == null)
 			return;
-
+		
 		_objectId = item.getObjectId();
 		_item = item.getItem();
 		_enchant = item.getEnchantLevel();

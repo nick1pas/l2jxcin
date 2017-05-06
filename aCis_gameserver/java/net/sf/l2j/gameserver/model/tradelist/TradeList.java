@@ -809,7 +809,7 @@ public class TradeList
 			}
 			if (oldItem.getItemId() != item.getItemId())
 				return false;
-
+			
 			if (!oldItem.isTradable())
 				continue;
 			

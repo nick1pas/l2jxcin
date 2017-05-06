@@ -441,29 +441,30 @@ public class Olympiad
 			}
 		}, getMillisToCompBegin());
 	}
+	
 	public static void olympiadEnd(Player player)
 	{
-	        long milliToEnd;
-	        if(_period == 0)
-	        {
-	            milliToEnd = getMillisToOlympiadEnd();
-	        }
-	        else
-	        {
-	            milliToEnd = getMillisToValidationEnd();
-	        }
-
-	        double numSecs = milliToEnd / 1000 % 60;
-	        double countDown = (milliToEnd / 1000 - numSecs) / 60;
-	        int numMins = (int) Math.floor(countDown % 60);
-	        countDown = (countDown - numMins) / 60;
-	        int numHours = (int) Math.floor(countDown % 24);
-	        int numDays = (int) Math.floor((countDown - numHours) / 24);
-
-	        CreatureSay cs = new CreatureSay(0, Say2.ANNOUNCEMENT, "", "Olympiad period ends in " + numDays + " days, " + numHours + " hours and " + numMins + " mins.");
-	        player.sendPacket(cs);
+		long milliToEnd;
+		if (_period == 0)
+		{
+			milliToEnd = getMillisToOlympiadEnd();
+		}
+		else
+		{
+			milliToEnd = getMillisToValidationEnd();
+		}
+		
+		double numSecs = milliToEnd / 1000 % 60;
+		double countDown = (milliToEnd / 1000 - numSecs) / 60;
+		int numMins = (int) Math.floor(countDown % 60);
+		countDown = (countDown - numMins) / 60;
+		int numHours = (int) Math.floor(countDown % 24);
+		int numDays = (int) Math.floor((countDown - numHours) / 24);
+		
+		CreatureSay cs = new CreatureSay(0, Say2.ANNOUNCEMENT, "", "Olympiad period ends in " + numDays + " days, " + numHours + " hours and " + numMins + " mins.");
+		player.sendPacket(cs);
 	}
-
+	
 	private static long getMillisToOlympiadEnd()
 	{
 		return (_olympiadEnd - Calendar.getInstance().getTimeInMillis());

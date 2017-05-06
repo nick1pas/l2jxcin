@@ -112,7 +112,7 @@ public class Q501_ProofOfClanAlliance extends Quest
 			st.exitQuest(true);
 			return;
 		}
-
+		
 		try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 		{
 			PreparedStatement offline = con.prepareStatement("DELETE FROM character_quests WHERE name = ? AND charId IN (SELECT obj_Id FROM characters WHERE clanId = ? AND online = 0)");

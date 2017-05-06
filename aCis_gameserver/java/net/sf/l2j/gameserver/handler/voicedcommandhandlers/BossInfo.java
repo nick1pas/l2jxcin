@@ -43,7 +43,7 @@ public class BossInfo implements IVoicedCommandHandler
 		tb.append("</center></body></html>");
 		msg.setHtml(tb.toString());
 		activeChar.sendPacket(msg);
-	    return true;
+		return true;
 	}
 	
 	@Override

@@ -110,7 +110,7 @@ public class Benom extends L2AttackableAIScript
 				if (_siege.getControlTowerCount() < 2)
 				{
 					npc.teleToLocation(THRONE_LOC, 0);
-					_siege.getCastle().getSiegeZone().broadcastPacket(new NpcSay(0, Say2.ALL, DUNGEON_KEEPER, "Oh no! The defenses have failed. It is too dangerous to remain inside the castle. Flee! Every man for himself!"));					
+					_siege.getCastle().getSiegeZone().broadcastPacket(new NpcSay(0, Say2.ALL, DUNGEON_KEEPER, "Oh no! The defenses have failed. It is too dangerous to remain inside the castle. Flee! Every man for himself!"));
 					cancelQuestTimer("tower_check", npc, null);
 					startQuestTimer("raid_check", 10000, npc, null, true);
 				}

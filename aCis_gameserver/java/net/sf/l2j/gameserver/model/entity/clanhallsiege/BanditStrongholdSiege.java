@@ -174,7 +174,7 @@ public class BanditStrongholdSiege extends ClanHallSiege
 			
 			if (mob != null)
 				mob.deleteMe();
-
+			
 			if (flag != null)
 				flag.deleteMe();
 		}
@@ -190,7 +190,7 @@ public class BanditStrongholdSiege extends ClanHallSiege
 				DoorTable.getInstance().getDoor(22170003).closeMe();
 				DoorTable.getInstance().getDoor(22170004).closeMe();
 				break;
-				
+			
 			case 2:
 				DoorTable.getInstance().getDoor(22170001).closeMe();
 				DoorTable.getInstance().getDoor(22170002).closeMe();
@@ -232,7 +232,7 @@ public class BanditStrongholdSiege extends ClanHallSiege
 		
 		if (questMobCount > 1)
 			return null;
-
+		
 		return res;
 	}
 	
@@ -288,19 +288,19 @@ public class BanditStrongholdSiege extends ClanHallSiege
 					case 1:
 						questMob.spawnMe(83752, -17354, -1828);
 						break;
-						
+					
 					case 2:
 						questMob.spawnMe(82018, -15126, -1829);
 						break;
-						
+					
 					case 3:
 						questMob.spawnMe(85320, -16191, -1823);
 						break;
-						
+					
 					case 4:
 						questMob.spawnMe(81522, -16503, -1829);
 						break;
-						
+					
 					case 5:
 						questMob.spawnMe(83786, -15369, -1828);
 						break;
@@ -346,19 +346,19 @@ public class BanditStrongholdSiege extends ClanHallSiege
 				case 1:
 					flag.spawnMe(83452, -17654, -1828);
 					break;
-					
+				
 				case 2:
 					flag.spawnMe(81718, -14826, -1829);
 					break;
-					
+				
 				case 3:
 					flag.spawnMe(85020, -15891, -1823);
 					break;
-					
+				
 				case 4:
 					flag.spawnMe(81222, -16803, -1829);
 					break;
-					
+				
 				case 5:
 					flag.spawnMe(83486, -15069, -1828);
 					break;
@@ -399,11 +399,11 @@ public class BanditStrongholdSiege extends ClanHallSiege
 	{
 		if (playerClan == clanhall.getOwnerClan())
 			return true;
-
+		
 		clanPlayersInfo regPlayers = _clansInfo.get(playerClan.getClanId());
 		if (regPlayers == null)
 			return false;
-
+		
 		return true;
 	}
 	

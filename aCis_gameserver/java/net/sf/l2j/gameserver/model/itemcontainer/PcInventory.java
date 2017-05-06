@@ -673,7 +673,7 @@ public class PcInventory extends Inventory
 	public boolean validateWeight(int weight)
 	{
 		return (_totalWeight + weight <= _owner.getMaxLoad());
-	}	
+	}
 	
 	public ItemInstance[] getWeaponsList()
 	{
@@ -690,8 +690,8 @@ public class PcInventory extends Inventory
 						enchantLevel = Config.modifyItemEnchantList.get(item.getItemId());
 					}
 				}
-
-				if(item.getEnchantLevel() < enchantLevel)
+				
+				if (item.getEnchantLevel() < enchantLevel)
 					list.add(item);
 			}
 		}
@@ -715,8 +715,8 @@ public class PcInventory extends Inventory
 						enchantLevel = Config.modifyItemEnchantList.get(item.getItemId());
 					}
 				}
-
-				if(item.getEnchantLevel() < enchantLevel)
+				
+				if (item.getEnchantLevel() < enchantLevel)
 				{
 					list.add(item);
 				}
@@ -726,7 +726,7 @@ public class PcInventory extends Inventory
 		ItemInstance[] result = list.toArray(new ItemInstance[list.size()]);
 		return result;
 	}
-
+	
 	@Override
 	public String toString()
 	{

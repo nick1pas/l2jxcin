@@ -189,7 +189,7 @@ public class WildBeastFarmSiege extends ClanHallSiege
 				DoorTable.getInstance().getDoor(21150001).closeMe();
 				DoorTable.getInstance().getDoor(21150002).closeMe();
 				break;
-				
+			
 			case 2:
 				DoorTable.getInstance().getDoor(21150001).closeMe();
 				DoorTable.getInstance().getDoor(21150002).closeMe();
@@ -285,19 +285,19 @@ public class WildBeastFarmSiege extends ClanHallSiege
 					case 1:
 						questMob.spawnMe(57069, -91797, -1360);
 						break;
-						
+					
 					case 2:
 						questMob.spawnMe(58838, -92232, -1354);
 						break;
-						
+					
 					case 3:
 						questMob.spawnMe(57327, -93373, -1365);
 						break;
-						
+					
 					case 4:
 						questMob.spawnMe(57327, -93373, -1365);
 						break;
-						
+					
 					case 5:
 						questMob.spawnMe(58728, -93487, -1360);
 						break;
@@ -394,7 +394,7 @@ public class WildBeastFarmSiege extends ClanHallSiege
 	{
 		if (playerClan == clanhall.getOwnerClan())
 			return true;
-
+		
 		clanPlayersInfo regPlayers = _clansInfo.get(playerClan.getClanId());
 		if (regPlayers == null)
 		{

@@ -69,14 +69,14 @@ public final class RequestMagicSkillUse extends L2GameClientPacket
 			ActionF();
 			return;
 		}
- 		
+		
 		if (activeChar.isInsideZone(ZoneId.MULTI) && L2MultiZone.isRestrictedSkill(skill.getId()))
 		{
 			activeChar.sendMessage(skill.getName() + " cannot be used inside multi zone.");
 			ActionF();
 			return;
 		}
-	
+		
 		if (activeChar.isAttackingNow())
 		{
 			if (skill.isToggle())

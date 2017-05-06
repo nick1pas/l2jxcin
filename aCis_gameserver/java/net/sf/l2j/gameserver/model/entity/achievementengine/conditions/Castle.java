@@ -19,15 +19,7 @@ public class Castle extends Condition
 		
 		if (player.getClan() != null)
 		{
-			if ((player.isCastleLord(1)) || 
-				(player.isCastleLord(2)) || 
-				(player.isCastleLord(3)) || 
-				(player.isCastleLord(4)) || 
-				(player.isCastleLord(5)) || 
-				(player.isCastleLord(6)) || 
-				(player.isCastleLord(7)) || 
-				(player.isCastleLord(8)) || 
-				(player.isCastleLord(9)))
+			if ((player.isCastleLord(1)) || (player.isCastleLord(2)) || (player.isCastleLord(3)) || (player.isCastleLord(4)) || (player.isCastleLord(5)) || (player.isCastleLord(6)) || (player.isCastleLord(7)) || (player.isCastleLord(8)) || (player.isCastleLord(9)))
 				return true;
 		}
 		return false;

@@ -308,13 +308,13 @@ public class Attackable extends Npc
 						exp *= Config.CHAMPION_REWARDS;
 						sp *= Config.CHAMPION_REWARDS;
 					}
- 					
+					
 					if (attacker.isVipStatus())
 					{
 						exp *= Config.VIP_XP_SP_RATES;
 						sp *= Config.VIP_XP_SP_RATES;
 					}
-
+					
 					exp *= 1 - penalty;
 					
 					if (isOverhit() && _overhitAttacker != null && _overhitAttacker.getActingPlayer() != null && attacker == _overhitAttacker.getActingPlayer())
@@ -399,13 +399,13 @@ public class Attackable extends Npc
 					exp *= Config.CHAMPION_REWARDS;
 					sp *= Config.CHAMPION_REWARDS;
 				}
- 				
+				
 				if (attacker.isVipStatus())
 				{
 					exp *= Config.VIP_XP_SP_RATES;
 					sp *= Config.VIP_XP_SP_RATES;
 				}
-
+				
 				exp *= partyMul;
 				sp *= partyMul;
 				

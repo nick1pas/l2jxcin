@@ -47,9 +47,7 @@ public class L2SkillTeleport extends L2Skill
 				return;
 			
 			// Thanks nbd
-			if (!TvTEvent.onEscapeUse(((Player) activeChar).getObjectId())
-					|| !DMEvent.onEscapeUse(((Player) activeChar).getObjectId())
-					|| !LMEvent.onEscapeUse(((Player) activeChar).getObjectId()))
+			if (!TvTEvent.onEscapeUse(((Player) activeChar).getObjectId()) || !DMEvent.onEscapeUse(((Player) activeChar).getObjectId()) || !LMEvent.onEscapeUse(((Player) activeChar).getObjectId()))
 			{
 				activeChar.sendPacket(ActionFailed.STATIC_PACKET);
 				return;
@@ -78,11 +76,9 @@ public class L2SkillTeleport extends L2Skill
 					if (targetChar.isInOlympiadMode())
 						continue;
 					
-					if (!TvTEvent.onEscapeUse(targetChar.getObjectId())
-						|| !DMEvent.onEscapeUse(targetChar.getObjectId())
-						|| !LMEvent.onEscapeUse(targetChar.getObjectId()))
-					continue;
-
+					if (!TvTEvent.onEscapeUse(targetChar.getObjectId()) || !DMEvent.onEscapeUse(targetChar.getObjectId()) || !LMEvent.onEscapeUse(targetChar.getObjectId()))
+						continue;
+					
 					if (ZoneManager.getInstance().getZone(targetChar, L2BossZone.class) != null)
 						continue;
 				}

@@ -70,7 +70,7 @@ public final class RequestPackageSend extends L2GameClientPacket
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
 		}
-
+		
 		// Freight price from config or normal price per item slot (30)
 		int fee = _items.size() * Config.ALT_GAME_FREIGHT_PRICE;
 		int currentAdena = player.getAdena();

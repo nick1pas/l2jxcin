@@ -83,7 +83,7 @@ public final class RequestRefine extends AbstractRefinePacket
 			activeChar.sendPacket(SystemMessageId.AUGMENTATION_FAILED_DUE_TO_INAPPROPRIATE_CONDITIONS);
 			return;
 		}
-        
+		
 		// unequip item
 		if (targetItem.isEquipped())
 		{

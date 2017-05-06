@@ -24,10 +24,8 @@ public class Resurrect implements ISkillHandler
 	@Override
 	public void useSkill(Creature activeChar, L2Skill skill, WorldObject[] targets)
 	{
-		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(activeChar.getObjectId())
-			|| !DMEvent.isInactive() && DMEvent.isPlayerParticipant(activeChar.getObjectId())
-			|| !LMEvent.isInactive() && LMEvent.isPlayerParticipant(activeChar.getObjectId())) 
-		{ 
+		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(activeChar.getObjectId()) || !DMEvent.isInactive() && DMEvent.isPlayerParticipant(activeChar.getObjectId()) || !LMEvent.isInactive() && LMEvent.isPlayerParticipant(activeChar.getObjectId()))
+		{
 			activeChar.sendMessage("You can not use this action when it is participating in this event.");
 			return;
 		}

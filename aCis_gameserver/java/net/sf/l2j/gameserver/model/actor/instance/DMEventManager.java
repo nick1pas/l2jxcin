@@ -21,7 +21,7 @@ public class DMEventManager extends Folk
 	{
 		super(objectId, template);
 	}
-
+	
 	@Override
 	public void onBypassFeedback(Player playerInstance, String command)
 	{

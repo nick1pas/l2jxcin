@@ -170,7 +170,7 @@ public class L2SiegeZone extends L2SpawnZone
 	{
 		if (_characterList.isEmpty())
 			return;
-			
+		
 		for (Player player : getKnownTypeInside(Player.class))
 		{
 			if (player.getClanId() == owningClanId)

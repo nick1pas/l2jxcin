@@ -7,7 +7,6 @@ import net.sf.l2j.gameserver.model.actor.instance.Player;
 
 /**
  * @author Anarchy
- *
  */
 public class CustomCancelTaskManager implements Runnable
 {
@@ -31,7 +30,7 @@ public class CustomCancelTaskManager implements Runnable
 			if (s == null)
 				continue;
 			
-			 s.getEffects(player, player);
+			s.getEffects(player, player);
 		}
 	}
 }

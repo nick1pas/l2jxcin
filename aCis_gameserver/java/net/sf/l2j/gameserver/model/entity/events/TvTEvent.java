@@ -802,10 +802,10 @@ public class TvTEvent
 			killerTeam.increasePoints();
 			
 			CreatureSay cs = new CreatureSay(killerPlayerInstance.getObjectId(), Say2.TELL, killerPlayerInstance.getName(), "I have killed " + killedPlayerInstance.getName() + "!");
-
+			
 			SystemMessage sysmsg = null;
 			for (int[] reward : Config.TVT_EVENT_REWARDS_KILL)
-			{	
+			{
 				if (ItemTable.getInstance().createDummyItem(reward[0]).isStackable())
 				{
 					killerPlayerInstance.addItem("TvT Kill", reward[0], reward[1], killedPlayerInstance, true);
@@ -835,7 +835,7 @@ public class TvTEvent
 					}
 				}
 			}
-
+			
 			for (Player playerInstance : _teams[killerTeamId].getParticipatedPlayers().values())
 			{
 				if (playerInstance != null)

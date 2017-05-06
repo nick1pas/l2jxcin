@@ -89,20 +89,19 @@ public class GlobalDropMonsters extends Quest
 	/**
 	 * Drop item.
 	 * @author Tayran.JavaDev
-	 * @param mob 
+	 * @param mob
 	 * @param lastAttacker The player who made ultimate damage.
 	 * @param item instance IntIntHolder.
 	 * @return the dropped item instance.
 	 */
-	 public static ItemInstance dropItem(Npc mob, Player lastAttacker, IntIntHolder item)
-	 {
-		 if (Config.AUTO_LOOT)
-			 lastAttacker.doAutoLoot((Attackable) mob, item);
-		 else
-			 return  ((Attackable) mob).dropItem(lastAttacker, item);
-		return null;		 
-	 }
-
+	public static ItemInstance dropItem(Npc mob, Player lastAttacker, IntIntHolder item)
+	{
+		if (Config.AUTO_LOOT)
+			lastAttacker.doAutoLoot((Attackable) mob, item);
+		else
+			return ((Attackable) mob).dropItem(lastAttacker, item);
+		return null;
+	}
 	
 	public GlobalDropMonsters()
 	{

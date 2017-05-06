@@ -13,19 +13,20 @@ public final class RequestRestart extends L2GameClientPacket
 	{
 	}
 	
-    @Override
-    protected void runImpl() 
-    {
-        final Player player = getClient().getActiveChar();
-        if (player == null) {
-            return;
-        }
-
-        if (!player.canRestart()) 
-        {
-            ActionF();
-            return;
-        }
+	@Override
+	protected void runImpl()
+	{
+		final Player player = getClient().getActiveChar();
+		if (player == null)
+		{
+			return;
+		}
+		
+		if (!player.canRestart())
+		{
+			ActionF();
+			return;
+		}
 		player.removeFromBossZone();
 		
 		final L2GameClient client = getClient();

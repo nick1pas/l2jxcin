@@ -443,7 +443,7 @@ public class Q336_CoinsOfMagic extends Quest
 			addKillId(mob[0]);
 		}
 		
-		addKillId(HARIT_LIZARDMAN_MATRIARCH,HARIT_LIZARDMAN_SHAMAN);
+		addKillId(HARIT_LIZARDMAN_MATRIARCH, HARIT_LIZARDMAN_SHAMAN);
 	}
 	
 	@Override

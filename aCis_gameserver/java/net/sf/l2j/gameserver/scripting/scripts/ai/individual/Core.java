@@ -33,7 +33,7 @@ public class Core extends L2AttackableAIScript
 		super("ai/individual");
 		
 		final StatsSet info = GrandBossManager.getInstance().getStatsSet(CORE);
-
+		
 		switch (GrandBossManager.getInstance().getBossStatus(CORE))
 		{
 			case DEAD:
@@ -52,7 +52,7 @@ public class Core extends L2AttackableAIScript
 					spawnBoss(core);
 				}
 				break;
-				
+			
 			case ALIVE:
 				final int loc_x = info.getInteger("loc_x");
 				final int loc_y = info.getInteger("loc_y");
@@ -64,7 +64,7 @@ public class Core extends L2AttackableAIScript
 				final GrandBoss core = (GrandBoss) addSpawn(CORE, loc_x, loc_y, loc_z, heading, false, 0, false);
 				core.setCurrentHpMp(hp, mp);
 				spawnBoss(core);
-				break;	
+				break;
 		}
 	}
 	
@@ -116,13 +116,13 @@ public class Core extends L2AttackableAIScript
 				GrandBossManager.getInstance().setBossStatus(CORE, ALIVE);
 				spawnBoss(core);
 				break;
-				
+			
 			case "spawn_minion":
 				final Attackable mob = (Attackable) addSpawn(npc.getNpcId(), npc.getX(), npc.getY(), npc.getZ(), npc.getHeading(), false, 0, false);
 				mob.setIsRaidMinion(true);
 				_minions.add(mob);
 				break;
-				
+			
 			case "despawn_minions":
 				for (int i = 0; i < _minions.size(); i++)
 				{
@@ -132,7 +132,7 @@ public class Core extends L2AttackableAIScript
 				}
 				_minions.clear();
 				break;
-				
+			
 		}
 		return super.onAdvEvent(event, npc, player);
 	}

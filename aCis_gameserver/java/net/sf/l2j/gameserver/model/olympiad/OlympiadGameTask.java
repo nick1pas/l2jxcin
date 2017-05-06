@@ -179,7 +179,7 @@ public final class OlympiadGameTask implements Runnable
 						_state = GameState.CLEANUP;
 						break;
 					}
-						   
+					
 					if (!startGame())
 					{
 						_state = GameState.GAME_STOPPED;

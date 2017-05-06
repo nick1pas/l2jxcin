@@ -1021,10 +1021,10 @@ public class Siege implements Siegable
 				{
 					_siegeTask = ThreadPool.schedule(new SiegeTask(_castle), regTimeRemaining);
 					return;
-				}			
+				}
 				endTimeRegistration(true);
 			}
-						
+			
 			final long timeRemaining = getSiegeDate().getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
 			
 			if (timeRemaining > 86400000)

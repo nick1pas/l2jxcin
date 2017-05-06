@@ -1263,17 +1263,16 @@ public final class ItemInstance extends WorldObject implements Runnable, Compara
 		
 		return Integer.compare(item.getObjectId(), getObjectId());
 	}
- 	
- 	/**
+	
+	/**
 	 * Returns the reference grade of the item.
-	 *
 	 * @return int
 	 */
 	public final CrystalType getItemGrade()
 	{
 		return _item.getCrystalType();
 	}
- 	
+	
 	/**
 	 * @return true if item can be enchanted.
 	 */
@@ -1297,7 +1296,7 @@ public final class ItemInstance extends WorldObject implements Runnable, Compara
 	
 	public boolean isAugmentable()
 	{
-		if(isAugmented() || isArmor() || getItem().getItemType() == WeaponType.NONE)
+		if (isAugmented() || isArmor() || getItem().getItemType() == WeaponType.NONE)
 			return false;
 		
 		return true;

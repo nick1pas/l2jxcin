@@ -50,7 +50,7 @@ public class AdminTvTEvent implements IAdminCommandHandler
 			
 			remove(activeChar, (Player) target);
 		}
-		else if ( command.equals( "admin_tvt_advance" ) )
+		else if (command.equals("admin_tvt_advance"))
 		{
 			TvTManager.getInstance().skipDelay();
 		}

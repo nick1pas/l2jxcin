@@ -25,62 +25,62 @@ import net.sf.l2j.commons.concurrent.ThreadPool;
 public abstract class ExclusiveTask
 {
 	private final boolean _returnIfAlreadyRunning;
-
+	
 	private Future<?> _future;
 	private boolean _isRunning;
 	private Thread _currentThread;
-
+	
 	protected abstract void onElapsed();
-
+	
 	protected ExclusiveTask(boolean returnIfAlreadyRunning)
 	{
 		_returnIfAlreadyRunning = returnIfAlreadyRunning;
 	}
-
+	
 	protected ExclusiveTask()
 	{
 		this(false);
 	}
-
+	
 	public synchronized boolean isScheduled()
 	{
 		return _future != null;
 	}
-
+	
 	public synchronized final void cancel()
 	{
-		if(_future != null)
+		if (_future != null)
 		{
 			_future.cancel(false);
 			_future = null;
 		}
 	}
-
+	
 	public synchronized final void schedule(long delay)
 	{
 		cancel();
-
+		
 		_future = ThreadPool.schedule(_runnable, delay);
 	}
-
+	
 	public synchronized final void execute()
 	{
 		ThreadPool.execute(_runnable);
 	}
-
+	
 	public synchronized final void scheduleAtFixedRate(long delay, long period)
 	{
 		cancel();
-
+		
 		_future = ThreadPool.scheduleAtFixedRate(_runnable, delay, period);
 	}
-
+	
 	private final Runnable _runnable = new Runnable()
 	{
 		@Override
 		public void run()
 		{
-			if(tryLock())
+			if (tryLock())
 			{
 				try
 				{
@@ -93,43 +93,43 @@ public abstract class ExclusiveTask
 			}
 		}
 	};
-
+	
 	synchronized boolean tryLock()
 	{
-		if(_returnIfAlreadyRunning)
+		if (_returnIfAlreadyRunning)
 		{
 			return !_isRunning;
 		}
-
+		
 		_currentThread = Thread.currentThread();
-
-		for(;;)
+		
+		for (;;)
 		{
 			try
 			{
 				notifyAll();
-
-				if(_currentThread != Thread.currentThread())
+				
+				if (_currentThread != Thread.currentThread())
 				{
 					return false;
 				}
-
-				if(!_isRunning)
+				
+				if (!_isRunning)
 				{
 					return true;
 				}
-
+				
 				wait();
 			}
-			catch(InterruptedException e)
+			catch (InterruptedException e)
 			{
 			}
 		}
 	}
-
+	
 	synchronized void unlock()
 	{
 		_isRunning = false;
 	}
-
+	
 }

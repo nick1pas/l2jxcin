@@ -95,8 +95,9 @@ public abstract class L2GameClientPacket extends ReceivablePacket<L2GameClient>
 	{
 		return true;
 	}
-
-    protected final void ActionF() {
-        sendPacket(STATIC_PACKET);
-    }
+	
+	protected final void ActionF()
+	{
+		sendPacket(STATIC_PACKET);
+	}
 }

@@ -209,7 +209,7 @@ public abstract class WorldObject
 	{
 		return null;
 	}
- 	
+	
 	public void setInstanceId(int val)
 	{
 		_instance = val;
@@ -408,7 +408,7 @@ public abstract class WorldObject
 		}
 		
 		_region = newRegion;
-				
+		
 		for (WorldObject object : getDifferentInstanceObjects())
 		{
 			object.removeKnownObject(this);
@@ -431,7 +431,7 @@ public abstract class WorldObject
 	public void removeKnownObject(WorldObject object)
 	{
 	}
- 	
+	
 	private final List<WorldObject> getDifferentInstanceObjects()
 	{
 		final WorldRegion region = _region;
@@ -475,10 +475,10 @@ public abstract class WorldObject
 			{
 				if (obj == this || !type.isAssignableFrom(obj.getClass()))
 					continue;
- 				
+				
 				if (obj.getInstanceId() != getInstanceId() && !(obj instanceof Door || obj instanceof Fence))
 					continue;
-	
+				
 				result.add((A) obj);
 			}
 		}
@@ -508,10 +508,10 @@ public abstract class WorldObject
 			{
 				if (obj == this || !type.isAssignableFrom(obj.getClass()) || !MathUtil.checkIfInRange(radius, this, obj, true))
 					continue;
- 				
+				
 				if (obj.getInstanceId() != getInstanceId() && !(obj instanceof Door || obj instanceof Fence))
 					continue;
-	
+				
 				result.add((A) obj);
 			}
 		}

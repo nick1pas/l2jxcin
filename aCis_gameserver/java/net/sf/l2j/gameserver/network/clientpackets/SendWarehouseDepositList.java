@@ -81,7 +81,7 @@ public final class SendWarehouseDepositList extends L2GameClientPacket
 			player.sendPacket(SystemMessageId.YOU_ARE_NOT_AUTHORIZED_TO_DO_THAT);
 			return;
 		}
-
+		
 		// Freight price from config or normal price per item slot (30)
 		final int fee = _items.length * 30;
 		int currentAdena = player.getAdena();

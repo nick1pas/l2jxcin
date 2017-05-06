@@ -358,17 +358,17 @@ public class Q120_PavelsResearch extends Quest
 		switch (st.getState())
 		{
 			case STATE_CREATED:
-			QuestState st2 = player.getQuestState("Q114_ResurrectionOfAnOldManager");
-			if (st2 != null && st2.isCompleted())
-			{
-				if (player.getLevel() >= 50)
-					htmltext = "32046-01.htm";
+				QuestState st2 = player.getQuestState("Q114_ResurrectionOfAnOldManager");
+				if (st2 != null && st2.isCompleted())
+				{
+					if (player.getLevel() >= 50)
+						htmltext = "32046-01.htm";
+					else
+						htmltext = "32046-00.htm";
+				}
 				else
 					htmltext = "32046-00.htm";
-			}
-			else
-				htmltext = "32046-00.htm";
-			break;
+				break;
 			
 			case STATE_STARTED:
 				int cond = st.getInt("cond");
@@ -391,43 +391,43 @@ public class Q120_PavelsResearch extends Quest
 							htmltext = "32046-26.htm";
 						else if (cond == 13)
 							htmltext = "32046-30.htm";
-						else if (cond == 19)						
-							htmltext = "32046-31.htm";					
-						else if (cond == 20)					
-							htmltext = "32046-36.htm";				
-						else if (cond == 22)						
-							htmltext = "32046-37.htm";						
-						else if (cond == 23)						
+						else if (cond == 19)
+							htmltext = "32046-31.htm";
+						else if (cond == 20)
+							htmltext = "32046-36.htm";
+						else if (cond == 22)
+							htmltext = "32046-37.htm";
+						else if (cond == 23)
 							htmltext = "32046-39.htm";
 						break;
-						
+					
 					case WENDY:
 						if ((cond == 2) || (cond == 3) || (cond == 4))
 							htmltext = "32047-01.htm";
-						else if (cond == 5)						
-							htmltext = "32047-07.htm";						
-						else if (cond == 6)						
+						else if (cond == 5)
+							htmltext = "32047-07.htm";
+						else if (cond == 6)
 							htmltext = "32047-08.htm";
-						else if (cond == 7)						
-							htmltext = "32047-11.htm";						
-						else if (cond == 8)						
-							htmltext = "32047-12.htm";						
-						else if (cond == 9)						
-							htmltext = "32047-15.htm";						
-						else if (cond == 13)						
-							htmltext = "32047-16.htm";						
-						else if (cond == 14)						
-							htmltext = "32047-19.htm";						
-						else if (cond == 15)						
-							htmltext = "32047-20.htm";						
-						else if (cond == 23)						
-							htmltext = "32047-21.htm";						
-						else if (cond == 24)						
-							htmltext = "32047-26.htm";						
-						else if (cond == 25)						
-							htmltext = "32047-33.htm";		
+						else if (cond == 7)
+							htmltext = "32047-11.htm";
+						else if (cond == 8)
+							htmltext = "32047-12.htm";
+						else if (cond == 9)
+							htmltext = "32047-15.htm";
+						else if (cond == 13)
+							htmltext = "32047-16.htm";
+						else if (cond == 14)
+							htmltext = "32047-19.htm";
+						else if (cond == 15)
+							htmltext = "32047-20.htm";
+						else if (cond == 23)
+							htmltext = "32047-21.htm";
+						else if (cond == 24)
+							htmltext = "32047-26.htm";
+						else if (cond == 25)
+							htmltext = "32047-33.htm";
 						break;
-						
+					
 					case YUMI:
 						if (cond == 2)
 							htmltext = "32041-01.htm";
@@ -453,7 +453,7 @@ public class Q120_PavelsResearch extends Quest
 						else if (cond == 25)
 							htmltext = "32041-26.htm";
 						break;
-						
+					
 					case WEATHER1:
 						if (cond == 10)
 							htmltext = "32042-01.htm";
@@ -467,7 +467,7 @@ public class Q120_PavelsResearch extends Quest
 						else if (cond == 12)
 							htmltext = "32042-15.htm";
 						break;
-						
+					
 					case WEATHER2:
 						if (cond == 17)
 							htmltext = "32043-01.htm";
@@ -481,7 +481,7 @@ public class Q120_PavelsResearch extends Quest
 						else if (cond == 19)
 							htmltext = "32043-30.htm";
 						break;
-						
+					
 					case WEATHER3:
 						if (cond == 20)
 							htmltext = "32044-01.htm";
@@ -490,7 +490,7 @@ public class Q120_PavelsResearch extends Quest
 						else if (cond == 22)
 							htmltext = "32044-18.htm";
 						break;
-						
+					
 					case BOOKSHELF:
 						if (cond == 14)
 							htmltext = "32045-01.htm";

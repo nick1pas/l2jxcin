@@ -12,7 +12,7 @@ import net.sf.l2j.gameserver.scripting.scripts.ai.L2AttackableAIScript;
 /**
  * @author Maxi
  */
-public class DeluLizardmanSpecialAgent extends L2AttackableAIScript	
+public class DeluLizardmanSpecialAgent extends L2AttackableAIScript
 {
 	
 	private static final int LIZARDMAN = 21105;

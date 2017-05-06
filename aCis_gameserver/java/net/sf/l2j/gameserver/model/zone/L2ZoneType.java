@@ -30,9 +30,9 @@ public abstract class L2ZoneType
 	
 	protected L2ZoneType(int id)
 	{
-		_id = id;	
+		_id = id;
 	}
- 	
+	
 	protected abstract void onEnter(Creature character);
 	
 	protected abstract void onExit(Creature character);
@@ -46,7 +46,7 @@ public abstract class L2ZoneType
 	{
 		return getClass().getSimpleName() + "[" + _id + "]";
 	}
-
+	
 	/**
 	 * @return Returns the id.
 	 */
@@ -62,7 +62,7 @@ public abstract class L2ZoneType
 	{
 		return _zone;
 	}
-
+	
 	/**
 	 * Set the zone for this L2ZoneType Instance
 	 * @param zone
@@ -160,7 +160,7 @@ public abstract class L2ZoneType
 				for (Quest quest : quests)
 					quest.notifyExitZone(character, this);
 			}
-						
+			
 			// Unregister player.
 			_characterList.remove(character.getObjectId());
 			
@@ -247,7 +247,7 @@ public abstract class L2ZoneType
 	{
 		_log.info(getClass().getSimpleName() + ": Unknown parameter - " + name + " in zone: " + getId());
 	}
- 	
+	
 	/**
 	 * @param character The character to test.
 	 * @return True if the given character is affected by this zone.
@@ -257,7 +257,7 @@ public abstract class L2ZoneType
 		// Overriden in children classes.
 		return true;
 	}
-
+	
 	public void visualizeZone(int z)
 	{
 		getZone().visualizeZone(_id, z);

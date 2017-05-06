@@ -30,13 +30,11 @@ public class SummonFriend implements ISkillHandler
 	{
 		if (!(activeChar instanceof Player))
 			return;
-
+		
 		final Player player = (Player) activeChar;
 		
-		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(player.getObjectId())
-			|| !DMEvent.isInactive() && DMEvent.isPlayerParticipant(player.getObjectId())
-			|| !LMEvent.isInactive() && LMEvent.isPlayerParticipant(player.getObjectId())) 
-		{ 
+		if (!TvTEvent.isInactive() && TvTEvent.isPlayerParticipant(player.getObjectId()) || !DMEvent.isInactive() && DMEvent.isPlayerParticipant(player.getObjectId()) || !LMEvent.isInactive() && LMEvent.isPlayerParticipant(player.getObjectId()))
+		{
 			player.sendMessage("You can not use this action when it is participating in this event.");
 			return;
 		}

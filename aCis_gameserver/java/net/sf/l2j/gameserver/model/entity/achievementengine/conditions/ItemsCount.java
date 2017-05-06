@@ -18,7 +18,7 @@ public class ItemsCount extends Condition
 	{
 		if (getValue() == null)
 			return false;
-
+		
 		String s = getValue().toString();
 		StringTokenizer st = new StringTokenizer(s, ",");
 		int id = 0;

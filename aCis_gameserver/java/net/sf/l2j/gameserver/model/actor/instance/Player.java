@@ -750,7 +750,7 @@ public final class Player extends Playable
 			statement.setInt(32, player.isNoble() ? 1 : 0);
 			statement.setLong(33, 0);
 			statement.setLong(34, System.currentTimeMillis());
-			statement.setInt(35, player.isHero() ? 1 :0);
+			statement.setInt(35, player.isHero() ? 1 : 0);
 			statement.setLong(36, 0);
 			statement.executeUpdate();
 			statement.close();
@@ -5490,10 +5490,10 @@ public final class Player extends Playable
 				player.setAllianceWithVarkaKetra(rset.getInt("varka_ketra_ally"));
 				
 				player.setDeathPenaltyBuffLevel(rset.getInt("death_penalty_level"));
-
-                player.setHero(rset.getInt("hero") == 1 ? true : false);
-                player.setHeroEndTime(rset.getLong("hero_end"));
-
+				
+				player.setHero(rset.getInt("hero") == 1 ? true : false);
+				player.setHeroEndTime(rset.getLong("hero_end"));
+				
 				// Set the x,y,z position of the Player and make it invisible
 				player.getPosition().set(rset.getInt("x"), rset.getInt("y"), rset.getInt("z"));
 				
@@ -7354,16 +7354,17 @@ public final class Player extends Playable
 		sendSkillList(); // Update faded icons && eventual added skills.
 		return true;
 	}
-	  
+	
 	public void setHeroEndTime(long val)
-	{	
+	{
 		_hero_endTime = val;
 	}
+	
 	public long getHeroEndTime()
 	{
 		return _hero_endTime;
 	}
-	 
+	
 	@Override
 	public boolean isSeated()
 	{
@@ -11123,62 +11124,62 @@ public final class Player extends Playable
 	{
 		return _onlineTime;
 	}
-	 
-	 public void setEndTime(String process, int val)
-	 {
-	 if (val > 0)
-	 {
-	 long end_day;
-	 Calendar calendar = Calendar.getInstance();
-	 if (val >= 30)
-	 {
-	 while(val >= 30)
-	 {
-	 if(calendar.get(Calendar.MONTH)== 11)
-	 calendar.roll(Calendar.YEAR, true);
-	 calendar.roll(Calendar.MONTH, true);
-	 val -= 30;
-	 }
-	 }
-	 if (val < 30 && val > 0)
-	 {
-	 while(val > 0)
-	 {
-	 if(calendar.get(Calendar.DATE)== 28 && calendar.get(Calendar.MONTH) == 1)
-	 calendar.roll(Calendar.MONTH, true); 
-	 if(calendar.get(Calendar.DATE)== 30)
-	 {
-	 if(calendar.get(Calendar.MONTH) == 11)
-	 calendar.roll(Calendar.YEAR, true);
-	 calendar.roll(Calendar.MONTH, true);
-	 
-	 }
-	 calendar.roll(Calendar.DATE, true);
-	 val--;
-	 }
-	 }
 	
-	 end_day = calendar.getTimeInMillis();
-	 if(process.equals("hero"))
-	 _hero_endTime = end_day;
-	 else
-	 {
-	 System.out.println("process "+ process + "no Known while try set end date");
-	 return;
-	 }
-	 Date dt = new Date(end_day);
-	 System.out.println(""+process +" end time for player " + getName() + " is " + dt);
-	 }
-	 else
-	 {
-	 if(process.equals("hero"))
-	 _hero_endTime = 0;
-	 else
-	 {
-	 System.out.println("process "+ process + "no Known while try set end date");
-	 return;
-	 }
-	 }
-	 }
+	public void setEndTime(String process, int val)
+	{
+		if (val > 0)
+		{
+			long end_day;
+			Calendar calendar = Calendar.getInstance();
+			if (val >= 30)
+			{
+				while (val >= 30)
+				{
+					if (calendar.get(Calendar.MONTH) == 11)
+						calendar.roll(Calendar.YEAR, true);
+					calendar.roll(Calendar.MONTH, true);
+					val -= 30;
+				}
+			}
+			if (val < 30 && val > 0)
+			{
+				while (val > 0)
+				{
+					if (calendar.get(Calendar.DATE) == 28 && calendar.get(Calendar.MONTH) == 1)
+						calendar.roll(Calendar.MONTH, true);
+					if (calendar.get(Calendar.DATE) == 30)
+					{
+						if (calendar.get(Calendar.MONTH) == 11)
+							calendar.roll(Calendar.YEAR, true);
+						calendar.roll(Calendar.MONTH, true);
+						
+					}
+					calendar.roll(Calendar.DATE, true);
+					val--;
+				}
+			}
+			
+			end_day = calendar.getTimeInMillis();
+			if (process.equals("hero"))
+				_hero_endTime = end_day;
+			else
+			{
+				System.out.println("process " + process + "no Known while try set end date");
+				return;
+			}
+			Date dt = new Date(end_day);
+			System.out.println("" + process + " end time for player " + getName() + " is " + dt);
+		}
+		else
+		{
+			if (process.equals("hero"))
+				_hero_endTime = 0;
+			else
+			{
+				System.out.println("process " + process + "no Known while try set end date");
+				return;
+			}
+		}
+	}
 	
 }

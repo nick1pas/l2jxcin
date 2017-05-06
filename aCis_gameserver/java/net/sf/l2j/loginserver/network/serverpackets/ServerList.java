@@ -28,7 +28,7 @@ public final class ServerList extends L2LoginServerPacket
 			_servers.add(new ServerData(status, hostName, gsi));
 		}
 	}
-
+	
 	@Override
 	public void write()
 	{

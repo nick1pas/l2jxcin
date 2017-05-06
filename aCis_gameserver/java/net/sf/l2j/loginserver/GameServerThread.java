@@ -342,7 +342,7 @@ public class GameServerThread extends Thread
 		}
 		else
 			_gsi.setHostName(_connectionIp);
-
+		
 		gsi.setMaxPlayers(gameServerAuth.getMaxPlayers());
 		gsi.setAuthed(true);
 		

@@ -14,7 +14,7 @@ public class MinCMcount extends Condition
 	@Override
 	public boolean meetConditionRequirements(Player player)
 	{
-		if (getValue() == null)		
+		if (getValue() == null)
 			return false;
 		
 		if (player.getClan() != null)

@@ -12,7 +12,7 @@ public class BlowFishKey extends ClientBasePacket
 {
 	byte[] _key;
 	protected static final Logger _log = Logger.getLogger(BlowFishKey.class.getName());
-
+	
 	public BlowFishKey(byte[] decrypt, RSAPrivateKey privateKey)
 	{
 		super(decrypt);

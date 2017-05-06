@@ -54,13 +54,13 @@ public final class RequestPetUseItem extends L2GameClientPacket
 		
 		if (!item.isEquipped() && !item.getItem().checkCondition(pet, pet, true))
 			return;
- 		
+		
 		if (activeChar.isInsideZone(ZoneId.MULTI) && L2MultiZone.isRestrictedItem(item.getItemId()))
 		{
 			activeChar.sendMessage(item.getName() + " cannot be used inside multi zone.");
 			return;
 		}
-	
+		
 		// Check if item is pet armor or pet weapon
 		if (item.isPetItem())
 		{

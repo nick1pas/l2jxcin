@@ -76,7 +76,7 @@ public class Castle
 	private L2CastleTeleportZone _teleZone;
 	
 	private int _leftCertificates;
-		
+	
 	public Castle(int id, String name)
 	{
 		_castleId = id;
@@ -238,13 +238,13 @@ public class Castle
 	{
 		getTeleZone().oustAllPlayers();
 	}
- 	
+	
 	public int getLeftCertificates()
 	{
 		return _leftCertificates;
 	}
 	
- 	/**
+	/**
 	 * Set (and optionally save on database) left certificates count.
 	 * @param leftCertificates : the count to save.
 	 * @param save : true means we store it on database. Basically setted to false on server startup.
@@ -811,7 +811,7 @@ public class Castle
 	{
 		_treasury = treasury;
 	}
- 	
+	
 	/**
 	 * Update clan reputation points over siege end, as following :
 	 * <ul>
@@ -827,7 +827,7 @@ public class Castle
 		{
 			// Defenders fail
 			if (_formerOwner != owner)
-			{	
+			{
 				_formerOwner.takeReputationScore(1000);
 				_formerOwner.broadcastToOnlineMembers(SystemMessage.getSystemMessage(SystemMessageId.CLAN_WAS_DEFEATED_IN_SIEGE_AND_LOST_S1_REPUTATION_POINTS).addNumber(1000));
 				

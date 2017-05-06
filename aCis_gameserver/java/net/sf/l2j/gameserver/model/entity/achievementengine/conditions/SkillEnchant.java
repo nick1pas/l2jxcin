@@ -25,7 +25,7 @@ public class SkillEnchant extends Condition
 				continue;
 			if (Integer.parseInt(lvl.substring(1)) >= Integer.parseInt(getValue().toString()))
 				return true;
-		}	
+		}
 		return false;
 	}
 }

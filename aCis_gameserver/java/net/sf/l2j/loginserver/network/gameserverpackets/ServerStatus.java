@@ -58,27 +58,27 @@ public class ServerStatus extends ClientBasePacket
 					case STATUS:
 						gsi.setStatus(value);
 						break;
-						
+					
 					case CLOCK:
 						gsi.setShowingClock(value == ON);
 						break;
-						
+					
 					case BRACKETS:
 						gsi.setShowingBrackets(value == ON);
 						break;
-											
+					
 					case AGE_LIMIT:
 						gsi.setAgeLimit(value);
 						break;
-						
+					
 					case TEST_SERVER:
 						gsi.setTestServer(value == ON);
 						break;
-											
+					
 					case PVP_SERVER:
 						gsi.setPvp(value == ON);
 						break;
-						
+					
 					case MAX_PLAYERS:
 						gsi.setMaxPlayers(value);
 						break;

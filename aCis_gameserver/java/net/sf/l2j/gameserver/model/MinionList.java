@@ -180,7 +180,7 @@ public class MinionList
 			}
 		}
 	}
-
+	
 	/**
 	 * Init a Minion and add it in the world as a visible object.
 	 * <ul>
@@ -236,7 +236,7 @@ public class MinionList
 			newY = master.getY() - newY + minRadius;
 		
 		minion.spawnMe(newX, newY, master.getZ());
-
+		
 		return minion;
 	}
 	

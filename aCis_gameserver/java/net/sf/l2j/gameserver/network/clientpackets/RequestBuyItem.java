@@ -158,7 +158,6 @@ public final class RequestBuyItem extends L2GameClientPacket
 			if (product == null)
 				continue;
 			
-			
 			if (product.hasLimitedStock())
 			{
 				if (product.decreaseCount(i.getValue()))

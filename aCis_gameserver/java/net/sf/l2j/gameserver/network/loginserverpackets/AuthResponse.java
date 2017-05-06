@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.network.loginserverpackets;
 
 public class AuthResponse extends LoginServerBasePacket
-{	
+{
 	private final int _serverId;
 	private final String _serverName;
 	
@@ -11,12 +11,12 @@ public class AuthResponse extends LoginServerBasePacket
 		_serverId = readC();
 		_serverName = readS();
 	}
-
+	
 	public int getServerId()
 	{
 		return _serverId;
 	}
-
+	
 	public String getServerName()
 	{
 		return _serverName;

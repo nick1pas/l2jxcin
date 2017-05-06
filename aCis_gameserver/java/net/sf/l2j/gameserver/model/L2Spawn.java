@@ -278,12 +278,12 @@ public final class L2Spawn implements Runnable
 	{
 		return _respawnMaxDelay;
 	}
-
+	
 	public Npc spawnOne()
 	{
 		return doSpawn();
 	}
-
+	
 	public Npc doSpawn()
 	{
 		return doSpawn(false);

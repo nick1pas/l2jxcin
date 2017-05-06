@@ -160,7 +160,7 @@ public class L2SkillSummon extends L2Skill
 					else
 						// given by other player
 						player.addCubic(_npcId, _cubicSkillLevel, getPower(), _activationtime, _activationchance, _summonTotalLifeTime, true);
-				
+					
 					player.broadcastUserInfo();
 				}
 				return;

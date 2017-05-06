@@ -226,7 +226,7 @@ public class Party extends AbstractGroup
 			for (Creature character : member.getKnownType(Creature.class))
 				if (character.getFusionSkill() != null && character.getFusionSkill().getTarget() == member)
 					character.abortCast();
-			
+				
 			member.sendPacket(SystemMessageId.PARTY_DISPERSED);
 		}
 		_members.clear();
@@ -364,23 +364,22 @@ public class Party extends AbstractGroup
 				member.sendPacket(msg);
 		}
 	}
-
-    /**
-     * Broadcasts packet to every party member.
-     *
-     * @param packet The packet to broadcast.
-     */
-    public void broadcastToPartyMembers(L2GameServerPacket packet) 
-    {
-        for (Player member : _members) 
-        {
-            if (member != null) 
-            {
-                member.sendPacket(packet);
-            }
-        }
-    }
-    
+	
+	/**
+	 * Broadcasts packet to every party member.
+	 * @param packet The packet to broadcast.
+	 */
+	public void broadcastToPartyMembers(L2GameServerPacket packet)
+	{
+		for (Player member : _members)
+		{
+			if (member != null)
+			{
+				member.sendPacket(packet);
+			}
+		}
+	}
+	
 	/**
 	 * Add a new member to the party.
 	 * @param player : the player to add to the party.

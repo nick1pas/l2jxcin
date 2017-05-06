@@ -72,7 +72,8 @@ public class EnterWorld extends L2GameClientPacket
 	
 	@Override
 	protected void readImpl()
-	{}
+	{
+	}
 	
 	long _daysleft;
 	SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -373,7 +374,7 @@ public class EnterWorld extends L2GameClientPacket
 			sendReEnterMessage(endDay, activeChar);
 		}
 	}
-		
+	
 	private static void sendReEnterMessage(long time, Player activeChar)
 	{
 		final long remainingTime = (time - System.currentTimeMillis()) / 1000;

@@ -15,8 +15,8 @@ public class EventsVoicedInfo implements IVoicedCommandHandler
 	{
 		"lmjoin",
 		"lmleave",
-		"dminfo", 
-		"dmjoin", 
+		"dminfo",
+		"dmjoin",
 		"dmleave",
 		"tvtinfo",
 		"tvtjoin",
@@ -41,11 +41,11 @@ public class EventsVoicedInfo implements IVoicedCommandHandler
 		{
 			if (DMEvent.isStarting() || DMEvent.isStarted())
 			{
-				String htmContent = (USE_STATIC_HTML && !HTML_DM.isEmpty()) ? HTML_DM : HtmCache.getInstance().getHtm("data/html/mods/DMEvent/Status.htm");			
+				String htmContent = (USE_STATIC_HTML && !HTML_DM.isEmpty()) ? HTML_DM : HtmCache.getInstance().getHtm("data/html/mods/DMEvent/Status.htm");
 				try
 				{
 					String[] firstPositions = DMEvent.getFirstPosition(Config.DM_REWARD_FIRST_PLAYERS);
-					NpcHtmlMessage npcHtmlMessage = new NpcHtmlMessage(5);					
+					NpcHtmlMessage npcHtmlMessage = new NpcHtmlMessage(5);
 					String htmltext = "";
 					Boolean c = true;
 					String c1 = "D9CC46";
@@ -61,15 +61,15 @@ public class EventsVoicedInfo implements IVoicedCommandHandler
 							htmltext += "<td width=\"125\" align=\"right\"><font color=\"" + color + "\">" + row[1] + "</font></td>";
 							htmltext += "</tr>";
 							c = !c;
-						}					
+						}
 					npcHtmlMessage.setHtml(htmContent);
 					npcHtmlMessage.replace("%toprank%", htmltext);
-					activeChar.sendPacket(npcHtmlMessage);	
+					activeChar.sendPacket(npcHtmlMessage);
 				}
 				catch (Exception e)
 				{
 					_log.warning("wrong Events voiced: " + e);
-				}			
+				}
 			}
 			else
 			{
@@ -88,10 +88,10 @@ public class EventsVoicedInfo implements IVoicedCommandHandler
 		{
 			if (TvTEvent.isStarting() || TvTEvent.isStarted())
 			{
-				String htmContent = (USE_STATIC_HTML && !HTML_TVT.isEmpty()) ? HTML_TVT : HtmCache.getInstance().getHtm("data/html/mods/TvTEvent/Status.htm");				
+				String htmContent = (USE_STATIC_HTML && !HTML_TVT.isEmpty()) ? HTML_TVT : HtmCache.getInstance().getHtm("data/html/mods/TvTEvent/Status.htm");
 				try
 				{
-					NpcHtmlMessage npcHtmlMessage = new NpcHtmlMessage(5);					
+					NpcHtmlMessage npcHtmlMessage = new NpcHtmlMessage(5);
 					npcHtmlMessage.setHtml(htmContent);
 					npcHtmlMessage.replace("%team1name%", Config.TVT_EVENT_TEAM_1_NAME);
 					npcHtmlMessage.replace("%team1playercount%", String.valueOf(TvTEvent.getTeamsPlayerCounts()[0]));
@@ -104,7 +104,7 @@ public class EventsVoicedInfo implements IVoicedCommandHandler
 				catch (Exception e)
 				{
 					_log.warning("wrong Events voiced: " + e);
-				}			
+				}
 			}
 			else
 			{

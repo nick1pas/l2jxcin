@@ -73,11 +73,12 @@ public final class World
 	{
 		_objects.putIfAbsent(object.getObjectId(), object);
 	}
-
-    public WorldObject findObject(int oID) {
-        return _objects.get(Integer.valueOf(oID));
-    }
-
+	
+	public WorldObject findObject(int oID)
+	{
+		return _objects.get(Integer.valueOf(oID));
+	}
+	
 	public void removeObject(WorldObject object)
 	{
 		_objects.remove(object.getObjectId());
@@ -225,17 +226,17 @@ public final class World
 		}
 		return result;
 	}
-    
-    /**
-     * Return a table containing all GMs.<BR>
-     * <BR>
-     * @return the all g ms
-     */
-    public static List<Player> getAllGMs()
-    {
-        return GmListTable.getInstance().getAllGms(true);
-    }
-  
+	
+	/**
+	 * Return a table containing all GMs.<BR>
+	 * <BR>
+	 * @return the all g ms
+	 */
+	public static List<Player> getAllGMs()
+	{
+		return GmListTable.getInstance().getAllGms(true);
+	}
+	
 	public static World getInstance()
 	{
 		return SingletonHolder._instance;

@@ -201,7 +201,7 @@ public class Q025_HidingBehindTheTruth extends Quest
 		String htmltext = getNoQuestMsg();
 		final QuestState st = player.getQuestState(getName());
 		if (st == null)
-			return htmltext;		
+			return htmltext;
 		
 		int IntId = st.getInt("id");
 		int cond = st.getInt("cond");
@@ -211,11 +211,11 @@ public class Q025_HidingBehindTheTruth extends Quest
 				if ((cond == 0) || (cond == 1))
 					return "31349-01.htm";
 				else if (cond == 2)
-					return st.getQuestItemsCount(SUSPICIOUS_TOTEM_DOLL_1) == 0 ? "31349-03a.htm" : "31349-03.htm";				
-				else if (cond == 3)				
-					return "31349-03.htm";			
-				else if (cond == 4)			
-					return "31349-11.htm";				
+					return st.getQuestItemsCount(SUSPICIOUS_TOTEM_DOLL_1) == 0 ? "31349-03a.htm" : "31349-03.htm";
+				else if (cond == 3)
+					return "31349-03.htm";
+				else if (cond == 4)
+					return "31349-11.htm";
 				break;
 			
 			case MYSTERIOUS_WIZARD:
@@ -225,12 +225,12 @@ public class Q025_HidingBehindTheTruth extends Quest
 					st.giveItems(SUSPICIOUS_TOTEM_DOLL_2, 1);
 					return "31522-01.htm";
 				}
-				else if (cond == 3)			
-					return "31522-02.htm";				
-				else if (cond == 5)				
-					return "31522-03.htm";				
-				else if (cond == 6)				
-					return "31522-05.htm";				
+				else if (cond == 3)
+					return "31522-02.htm";
+				else if (cond == 5)
+					return "31522-03.htm";
+				else if (cond == 6)
+					return "31522-05.htm";
 				else if (cond == 8)
 				{
 					if (IntId != 8)
@@ -241,12 +241,12 @@ public class Q025_HidingBehindTheTruth extends Quest
 					st.playSound(Sound.SOUND_MIDDLE);
 					return "31522-06.htm";
 				}
-				else if (cond == 15)				
-					return "31522-06a.htm";				
-				else if (cond == 16)				
-					return "31522-12.htm";				
-				else if (cond == 17)				
-					return "31522-15a.htm";				
+				else if (cond == 15)
+					return "31522-06a.htm";
+				else if (cond == 16)
+					return "31522-12.htm";
+				else if (cond == 17)
+					return "31522-15a.htm";
 				else if (cond == 18)
 				{
 					st.set("id", "18");
@@ -255,13 +255,13 @@ public class Q025_HidingBehindTheTruth extends Quest
 				break;
 			
 			case AGRIPEL:
-				if (cond == 4)			
-					return "31348-01.htm";			
-				else if (cond == 5)				
-					return "31348-03.htm";				
-				else if (cond == 16)			
-					return IntId == 16 ? "31348-15.htm" : "31348-09.htm";				
-				else if ((cond == 17) || (cond == 18))				
+				if (cond == 4)
+					return "31348-01.htm";
+				else if (cond == 5)
+					return "31348-03.htm";
+				else if (cond == 16)
+					return IntId == 16 ? "31348-15.htm" : "31348-09.htm";
+				else if ((cond == 17) || (cond == 18))
 					return "31348-15.htm";
 				
 				break;
@@ -304,12 +304,12 @@ public class Q025_HidingBehindTheTruth extends Quest
 				break;
 			
 			case TOMBSTONE:
-				if (cond == 11)			
+				if (cond == 11)
 					return "31531-01.htm";
-				else if (cond == 12)				
-					return "31531-02.htm";				
+				else if (cond == 12)
+					return "31531-02.htm";
 				else if (cond == 13)
-					return "31531-03.htm";	
+					return "31531-03.htm";
 				break;
 			
 			case COFFIN:

@@ -66,7 +66,7 @@ public final class PvpFlagTaskManager implements Runnable
 				_players.remove(player);
 				continue;
 			}
-				
+			
 			// Get time left and check.
 			final long timeLeft = entry.getValue();
 			

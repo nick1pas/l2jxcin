@@ -49,7 +49,7 @@ public class Cancel implements ISkillHandler
 				continue;
 			
 			Vector<L2Skill> cancelledBuffs = new Vector<>();
-			 
+			
 			int lastCanceledSkillId = 0;
 			int count = skill.getMaxNegatedEffects();
 			
@@ -94,7 +94,7 @@ public class Cancel implements ISkillHandler
 				{
 					if (Config.ALLOW_CUSTOM_CANCEL)
 					{
-						if (!cancelledBuffs.contains(effect.getSkill()) && !((Player)activeChar).isInOlympiadMode())                        
+						if (!cancelledBuffs.contains(effect.getSkill()) && !((Player) activeChar).isInOlympiadMode())
 							cancelledBuffs.add(effect.getSkill());
 					}
 					// Stores the last canceled skill for further use.
@@ -108,7 +108,7 @@ public class Cancel implements ISkillHandler
 					if (cancelledBuffs.size() > 0)
 						ThreadPool.schedule(new CustomCancelTaskManager((Player) target, cancelledBuffs), Config.CUSTOM_CANCEL_SECONDS * 1000);
 				}
-
+				
 				// Remove 1 to the stack of buffs to remove.
 				count--;
 				

@@ -578,7 +578,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 						
 						if (getActiveChar().getOfflineStartTime() == 0)
 							getActiveChar().setOfflineStartTime(System.currentTimeMillis());
-							
+						
 						return;
 					}
 					fast = !getActiveChar().isInCombat() && !getActiveChar().isLocked();
@@ -823,7 +823,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 		}
 		return false;
 	}
-		
+	
 	/**
 	 * @param player the player to be check.
 	 * @return {@code true} if the player is allowed to remain as off-line shop.
@@ -832,7 +832,7 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 	{
 		if (player.isInOlympiadMode() || player.isFestivalParticipant() || player.isInJail() || player.getVehicle() != null)
 			return false;
-	
+		
 		boolean canSetShop = false;
 		switch (player.getStoreType())
 		{
@@ -854,12 +854,12 @@ public final class L2GameClient extends MMOClient<MMOConnection<L2GameClient>> i
 				break;
 			}
 		}
-	
+		
 		if (Config.OFFLINE_MODE_IN_PEACE_ZONE && !player.isInsideZone(ZoneId.PEACE))
 			canSetShop = false;
-	
+		
 		return canSetShop;
-	 }
+	}
 	
 	public void setHWID(String hwid)
 	{

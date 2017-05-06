@@ -35,11 +35,7 @@ public class Die extends L2GameServerPacket
 			_allowFixedRes = player.getAccessLevel().allowFixedRes();
 			_clan = player.getClan();
 			
-	        _canTeleport = !((cha instanceof Player && (
-        		(TvTEvent.isStarted() && TvTEvent.isPlayerParticipant(_charObjId)) ||
-        		(DMEvent.isStarted() && DMEvent.isPlayerParticipant(_charObjId)) ||
-        		(LMEvent.isStarted() && LMEvent.isPlayerParticipant(_charObjId))
-        		)) || _activeChar.isInsideZone(ZoneId.MULTI) && L2MultiZone.isReviveEnabled());
+			_canTeleport = !((cha instanceof Player && ((TvTEvent.isStarted() && TvTEvent.isPlayerParticipant(_charObjId)) || (DMEvent.isStarted() && DMEvent.isPlayerParticipant(_charObjId)) || (LMEvent.isStarted() && LMEvent.isPlayerParticipant(_charObjId)))) || _activeChar.isInsideZone(ZoneId.MULTI) && L2MultiZone.isReviveEnabled());
 			
 		}
 		else if (cha instanceof Attackable)

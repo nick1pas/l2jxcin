@@ -129,9 +129,7 @@ public class CatsGuard
 		_connections = new HashMap<>();
 		_bannedhwid = new ArrayList<>();
 		
-		try (Connection con = L2DatabaseFactory.getInstance().getConnection();
-			PreparedStatement stm = con.prepareStatement("select * from banned_hwid");
-			ResultSet rs = stm.executeQuery())
+		try (Connection con = L2DatabaseFactory.getInstance().getConnection(); PreparedStatement stm = con.prepareStatement("select * from banned_hwid"); ResultSet rs = stm.executeQuery())
 		{
 			while (rs.next())
 			{
@@ -142,8 +140,7 @@ public class CatsGuard
 		{
 			if (e.getClass().getSimpleName().equals("MySQLSyntaxErrorException"))
 			{
-				try (Connection con = L2DatabaseFactory.getInstance().getConnection();
-					PreparedStatement stmt = con.prepareStatement("create table `banned_hwid` (`hwid` varchar(64) not null primary key)");)
+				try (Connection con = L2DatabaseFactory.getInstance().getConnection(); PreparedStatement stmt = con.prepareStatement("create table `banned_hwid` (`hwid` varchar(64) not null primary key)");)
 				{
 					stmt.execute();
 				}
@@ -211,8 +208,7 @@ public class CatsGuard
 			}
 			
 			_bannedhwid.add(hwid);
-			try (Connection con = L2DatabaseFactory.getInstance().getConnection();
-				PreparedStatement stm = con.prepareStatement("delete from banned_hwid where hwid=?"))
+			try (Connection con = L2DatabaseFactory.getInstance().getConnection(); PreparedStatement stm = con.prepareStatement("delete from banned_hwid where hwid=?"))
 			{
 				stm.setString(1, hwid);
 				stm.execute();

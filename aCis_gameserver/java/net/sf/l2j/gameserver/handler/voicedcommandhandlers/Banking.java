@@ -12,7 +12,7 @@ public class Banking implements IVoicedCommandHandler
 		"withdraw",
 		"deposit"
 	};
-
+	
 	@Override
 	public boolean useVoicedCommand(String command, Player activeChar, String params)
 	{
@@ -52,7 +52,7 @@ public class Banking implements IVoicedCommandHandler
 		}
 		return true;
 	}
-
+	
 	@Override
 	public String[] getVoicedCommandList()
 	{

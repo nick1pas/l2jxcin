@@ -37,11 +37,8 @@ public class SummonItems implements IItemHandler
 		if (!(playable instanceof Player))
 			return;
 		
-		if (!TvTEvent.onItemSummon(playable.getObjectId())
-				|| !DMEvent.onItemSummon(playable.getObjectId())
-				|| !LMEvent.onItemSummon(playable.getObjectId()))
+		if (!TvTEvent.onItemSummon(playable.getObjectId()) || !DMEvent.onItemSummon(playable.getObjectId()) || !LMEvent.onItemSummon(playable.getObjectId()))
 			return;
-		
 		
 		final Player activeChar = (Player) playable;
 		

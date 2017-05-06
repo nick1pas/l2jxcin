@@ -16,7 +16,7 @@ public class Level extends Condition
 	{
 		if (getValue() == null)
 			return false;
-
+		
 		int val = Integer.parseInt(getValue().toString());
 		
 		return player.getLevel() >= val;

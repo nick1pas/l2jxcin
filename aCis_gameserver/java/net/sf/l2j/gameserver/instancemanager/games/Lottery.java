@@ -336,7 +336,7 @@ public class Lottery
 			else
 				// There are no winners.
 				Broadcast.toAllOnlinePlayers(SystemMessage.getSystemMessage(SystemMessageId.AMOUNT_FOR_LOTTERY_S1_IS_S2_ADENA_NO_WINNER).addNumber(getId()).addNumber(getPrize()));
-		
+			
 			try (Connection con = L2DatabaseFactory.getInstance().getConnection())
 			{
 				PreparedStatement statement = con.prepareStatement(UPDATE_LOTTERY);

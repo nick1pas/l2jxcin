@@ -41,7 +41,7 @@ public enum Sound implements IAudio
 	ITEMSOUND_SHIP_ARRIVAL_DEPARTURE("itemsound.ship_arrival_departure"),
 	ITEMSOUND_SHIP_5MIN("itemsound.ship_5min"),
 	ITEMSOUND_SHIP_1MIN("itemsound.ship_1min"),
-	//System Mgs
+	// System Mgs
 	SYSTEM_MSG_017("systemmsg_e.17"),
 	SYSTEM_MSG_018("systemmsg_e.18"),
 	SYSTEM_MSG_345("systemmsg_e.345"),

@@ -213,7 +213,8 @@ public class MMOConnection<T extends MMOClient<?>>
 		{
 			_selectionKey.interestOps(_selectionKey.interestOps() & ~SelectionKey.OP_WRITE);
 		}
-		catch (CancelledKeyException e) {
+		catch (CancelledKeyException e)
+		{
 		}
 		
 		_selectorThread.closeConnection(this);

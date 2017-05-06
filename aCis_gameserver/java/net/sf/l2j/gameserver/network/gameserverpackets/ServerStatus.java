@@ -56,12 +56,12 @@ public class ServerStatus extends GameServerBasePacket
 	{
 		_attributes.add(new Attribute(id, value));
 	}
-	 	
+	
 	public void addAttribute(int id, boolean onOrOff)
 	{
 		_attributes.add(new Attribute(id, (onOrOff) ? ServerStatus.ON : ServerStatus.OFF));
 	}
-
+	
 	@Override
 	public byte[] getContent()
 	{

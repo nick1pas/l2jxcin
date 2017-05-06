@@ -24,11 +24,12 @@ public class FuncEnchant extends Func
 		int enchant = item.getEnchantLevel();
 		if (enchant <= 0)
 			return;
-
-        if (Config.ALT_OLY_ENCHANT_LIMIT >= 0 && env.getPlayer() != null && env.getPlayer().isOlympiadStart()) {
-            enchant = Math.min(Config.ALT_OLY_ENCHANT_LIMIT, enchant);
-        }
-
+		
+		if (Config.ALT_OLY_ENCHANT_LIMIT >= 0 && env.getPlayer() != null && env.getPlayer().isOlympiadStart())
+		{
+			enchant = Math.min(Config.ALT_OLY_ENCHANT_LIMIT, enchant);
+		}
+		
 		int overenchant = 0;
 		
 		if (enchant > 3)

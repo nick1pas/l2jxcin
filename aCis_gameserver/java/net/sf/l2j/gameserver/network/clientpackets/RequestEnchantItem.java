@@ -42,9 +42,9 @@ public final class RequestEnchantItem extends L2GameClientPacket
 	protected void runImpl()
 	{
 		// get player
-		final Player activeChar = getClient().getActiveChar();		
+		final Player activeChar = getClient().getActiveChar();
 		if (activeChar == null || _objectId == 0)
-			return;	
+			return;
 		
 		Collection<Creature> knowns = activeChar.getKnownTypeInRadius(Creature.class, 400);
 		for (WorldObject wh : knowns)
@@ -53,16 +53,16 @@ public final class RequestEnchantItem extends L2GameClientPacket
 			{
 				activeChar.sendMessage("You Cannot enchant near warehouse.");
 				return;
-			}	
+			}
 		}
-
+		
 		// player online and active
 		if (!activeChar.isOnline() || getClient().isDetached())
 		{
 			activeChar.setActiveEnchantItem(null);
 			return;
-		}	
-
+		}
+		
 		if (activeChar.isProcessingTransaction() || activeChar.isInStoreMode())
 		{
 			activeChar.sendPacket(SystemMessageId.CANNOT_ENCHANT_WHILE_STORE);
@@ -70,7 +70,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 			activeChar.sendPacket(EnchantResult.CANCELLED);
 			return;
 		}
-
+		
 		// player trading
 		if (activeChar.getActiveTradeList() != null)
 		{
@@ -80,7 +80,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 			activeChar.sendPacket(EnchantResult.CANCELLED);
 			return;
 		}
- 		
+		
 		// get item and enchant scroll
 		ItemInstance item = activeChar.getInventory().getItemByObjectId(_objectId);
 		ItemInstance scroll = activeChar.getActiveEnchantItem();
@@ -116,7 +116,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 			activeChar.sendPacket(EnchantResult.CANCELLED);
 			return;
 		}
-
+		
 		synchronized (item)
 		{
 			// success
@@ -249,7 +249,7 @@ public final class RequestEnchantItem extends L2GameClientPacket
 					
 					// add crystals, if item crystalizable
 					int crystalType = item.getItem().getCrystalItemId();
-					ItemInstance crystals = null;					
+					ItemInstance crystals = null;
 					if (crystalType != 0)
 					{
 						// get crystals count
@@ -271,8 +271,8 @@ public final class RequestEnchantItem extends L2GameClientPacket
 					activeChar.sendPacket(iu);
 					
 					// remove item
-					World.getInstance().removeObject(destroyItem);									
-						
+					World.getInstance().removeObject(destroyItem);
+					
 					if (item.getEnchantLevel() > 0)
 						activeChar.sendPacket(SystemMessage.getSystemMessage(SystemMessageId.ENCHANTMENT_FAILED_S1_S2_EVAPORATED).addNumber(item.getEnchantLevel()).addItemName(item.getItemId()));
 					else
@@ -290,15 +290,16 @@ public final class RequestEnchantItem extends L2GameClientPacket
 					activeChar.sendPacket(su);
 				}
 			}
- 			
+			
 			// send item list
- 			activeChar.sendPacket(new ItemList(activeChar, false));
+			activeChar.sendPacket(new ItemList(activeChar, false));
 			
 			// update appearance
- 			activeChar.broadcastUserInfo();
- 			activeChar.setActiveEnchantItem(null);
+			activeChar.broadcastUserInfo();
+			activeChar.setActiveEnchantItem(null);
 		}
 	}
+	
 	/**
 	 * @param item The instance of item to make checks on.
 	 * @return true if item can be enchanted.
@@ -312,6 +313,6 @@ public final class RequestEnchantItem extends L2GameClientPacket
 		if (item.getLocation() != ItemInstance.ItemLocation.INVENTORY && item.getLocation() != ItemInstance.ItemLocation.PAPERDOLL)
 			return false;
 		
-	return true;
+		return true;
 	}
 }

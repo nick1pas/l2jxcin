@@ -43,11 +43,13 @@ public class Bingo
 	
 	public String Select(String s)
 	{
-		try {
+		try
+		{
 			return Select(Integer.valueOf(s));
 		}
-		catch (Exception E) {
-			return null; 
+		catch (Exception E)
+		{
+			return null;
 		}
 	}
 	
@@ -86,10 +88,12 @@ public class Bingo
 	public String getDialog(String _msg)
 	{
 		String result = template;
-		if (guesses.size() == 0) {
+		if (guesses.size() == 0)
+		{
 			result = result.replaceFirst("%msg%", msg_begin);
 		}
-		else {
+		else
+		{
 			result = result.replaceFirst("%msg%", _msg.equalsIgnoreCase("") ? msg_next : _msg);
 		}
 		result = result.replaceFirst("%choicenum%", nums[guesses.size()]);
@@ -108,10 +112,12 @@ public class Bingo
 	{
 		String result = template_final.replaceFirst("%board%", getBoard());
 		calcLines();
-		if (lines == 3) {
+		if (lines == 3)
+		{
 			result = result.replaceFirst("%msg%", msg_3lines);
 		}
-		else if (lines == 0) {
+		else if (lines == 0)
+		{
 			result = result.replaceFirst("%msg%", msg_0lines);
 		}
 		else

@@ -45,7 +45,7 @@ public class BotsPreventionManager
 	protected static Map<Integer, Future<?>> _beginvalidation;
 	protected static Map<Integer, PlayerData> _validation;
 	protected static Map<Integer, byte[]> _images;
-	protected int WINDOW_DELAY = 3; //delay used to generate new window if previous have been closed.
+	protected int WINDOW_DELAY = 3; // delay used to generate new window if previous have been closed.
 	protected int VALIDATION_TIME = Config.VALIDATION_TIME * 1000;
 	
 	public static final BotsPreventionManager getInstance()
@@ -206,7 +206,7 @@ public class BotsPreventionManager
 		_beginvalidation.put(player.getObjectId(), newTask);
 	}
 	
-	protected void randomizeimages(PlayerData container,Player player)
+	protected void randomizeimages(PlayerData container, Player player)
 	{
 		int buttonscount = 4;
 		int imagescount = _images.size();
@@ -220,13 +220,13 @@ public class BotsPreventionManager
 			}
 			container.options.add(next);
 		}
-				
-		int mainIndex = _randomize.nextInt(buttonscount);
-		container.mainpattern = mainIndex;	
 		
-		Calendar token =  Calendar.getInstance();
-		String uniquetoken = Integer.toString(token.get(Calendar.DAY_OF_MONTH))+Integer.toString(token.get(Calendar.HOUR_OF_DAY))+Integer.toString(token.get(Calendar.MINUTE))+Integer.toString(token.get(Calendar.SECOND))+Integer.toString(token.get(Calendar.MILLISECOND)/100);
-		container.patternid = Integer.parseInt(uniquetoken);	
+		int mainIndex = _randomize.nextInt(buttonscount);
+		container.mainpattern = mainIndex;
+		
+		Calendar token = Calendar.getInstance();
+		String uniquetoken = Integer.toString(token.get(Calendar.DAY_OF_MONTH)) + Integer.toString(token.get(Calendar.HOUR_OF_DAY)) + Integer.toString(token.get(Calendar.MINUTE)) + Integer.toString(token.get(Calendar.SECOND)) + Integer.toString(token.get(Calendar.MILLISECOND) / 100);
+		container.patternid = Integer.parseInt(uniquetoken);
 	}
 	
 	protected void banpunishment(Player player)
@@ -237,10 +237,10 @@ public class BotsPreventionManager
 		
 		switch (Config.PUNISHMENT)
 		{
-		// 0 = move character to the closest village.
-		// 1 = kick characters from the server.
-		// 2 = put character to jail.
-		// 3 = ban character from the server.
+			// 0 = move character to the closest village.
+			// 1 = kick characters from the server.
+			// 2 = put character to jail.
+			// 3 = ban character from the server.
 			case 0:
 				player.stopMove(null);
 				player.teleToLocation(MapRegionTable.TeleportType.TOWN);
@@ -256,7 +256,7 @@ public class BotsPreventionManager
 				jailpunishment(player, Config.PUNISHMENT_TIME * 60);
 				break;
 			case 3:
-				//player.setAccessLevel(-100);
+				// player.setAccessLevel(-100);
 				changeaccesslevel(player, -100);
 				break;
 		}

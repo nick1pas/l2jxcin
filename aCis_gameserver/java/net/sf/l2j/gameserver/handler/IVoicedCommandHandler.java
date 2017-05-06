@@ -8,7 +8,7 @@ public interface IVoicedCommandHandler
 {
 	public static Logger _log = Logger.getLogger(IVoicedCommandHandler.class.getName());
 	
-    public boolean useVoicedCommand(String command, Player activeChar, String params);
-
-    public String[] getVoicedCommandList();
+	public boolean useVoicedCommand(String command, Player activeChar, String params);
+	
+	public String[] getVoicedCommandList();
 }

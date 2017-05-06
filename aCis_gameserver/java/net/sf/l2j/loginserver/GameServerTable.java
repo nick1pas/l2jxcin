@@ -189,7 +189,7 @@ public class GameServerTable
 	{
 		return SingletonHolder.INSTANCE;
 	}
-
+	
 	private static class SingletonHolder
 	{
 		protected static final GameServerTable INSTANCE = new GameServerTable();

@@ -531,7 +531,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 	{
 		return _isStriderSkill;
 	}
- 	
+	
 	public final boolean isAioSkill()
 	{
 		return Config.LIST_AIO_SKILLS.containsKey(getId());
@@ -1672,9 +1672,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 						if (!player.checkPvpSkill(obj, this))
 							continue;
 						
-						if (!TvTEvent.checkForTvTSkill(player, obj, this)
-								|| !DMEvent.checkForDMSkill(player, obj, this)
-								|| !LMEvent.checkForLMSkill(player, obj, this))
+						if (!TvTEvent.checkForTvTSkill(player, obj, this) || !DMEvent.checkForDMSkill(player, obj, this) || !LMEvent.checkForLMSkill(player, obj, this))
 							continue;
 						
 						final Summon summon = obj.getPet();
@@ -1776,9 +1774,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 							if (!player.checkPvpSkill(obj, this))
 								continue;
 							
-							if (!TvTEvent.checkForTvTSkill(player, obj, this)
-									|| !DMEvent.checkForDMSkill(player, obj, this)
-									|| !LMEvent.checkForLMSkill(player, obj, this))
+							if (!TvTEvent.checkForTvTSkill(player, obj, this) || !DMEvent.checkForDMSkill(player, obj, this) || !LMEvent.checkForLMSkill(player, obj, this))
 								continue;
 							
 							if (addSummon(activeChar, obj, radius, false))
@@ -2088,9 +2084,7 @@ public abstract class L2Skill implements IChanceSkillTrigger
 					return false;
 			}
 			
-			if (!TvTEvent.checkForTvTSkill(player, targetPlayer, skill)
-					|| !DMEvent.checkForDMSkill(player, targetPlayer, skill)
-					|| !LMEvent.checkForLMSkill(player, targetPlayer, skill))
+			if (!TvTEvent.checkForTvTSkill(player, targetPlayer, skill) || !DMEvent.checkForDMSkill(player, targetPlayer, skill) || !LMEvent.checkForLMSkill(player, targetPlayer, skill))
 				return false;
 			
 			if (!sourceInArena && !(targetPlayer.isInsideZone(ZoneId.PVP) && !targetPlayer.isInsideZone(ZoneId.SIEGE)))
@@ -2189,10 +2183,10 @@ public abstract class L2Skill implements IChanceSkillTrigger
 		// doors and siege flags cannot receive any effects
 		if (effected instanceof Door || effected instanceof SiegeFlag)
 			return Collections.emptyList();
- 		
+		
 		if ((effected instanceof Player || effected instanceof Pet) && effected.isInsideZone(ZoneId.MULTI) && L2MultiZone.isRestrictedSkill(getId()))
 			return Collections.emptyList();
-	
+		
 		if (effector != effected)
 		{
 			if (isOffensive() || isDebuff())

@@ -904,7 +904,7 @@ public class L2Clan
 	{
 		_siegeDeaths = value;
 	}
- 	
+	
 	public Npc getFlag()
 	{
 		return _flag;
@@ -2231,7 +2231,7 @@ public class L2Clan
 		for (Castle castle : CastleManager.getInstance().getCastles())
 			if (castle.getSiege().checkSides(this))
 				return true;
-		
+			
 		return false;
 	}
 }

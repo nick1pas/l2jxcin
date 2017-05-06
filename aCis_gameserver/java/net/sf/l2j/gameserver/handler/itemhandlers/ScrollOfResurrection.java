@@ -48,13 +48,11 @@ public class ScrollOfResurrection implements IItemHandler
 			activeChar.sendPacket(SystemMessageId.INCORRECT_TARGET);
 			return;
 		}
-		if (!TvTEvent.onScrollUse(activeChar.getObjectId())
-			|| !DMEvent.onScrollUse(activeChar.getObjectId())
-			|| !LMEvent.onScrollUse(activeChar.getObjectId()))
+		if (!TvTEvent.onScrollUse(activeChar.getObjectId()) || !DMEvent.onScrollUse(activeChar.getObjectId()) || !LMEvent.onScrollUse(activeChar.getObjectId()))
 		{
 			activeChar.ActionF();
 			return;
-		} 
+		}
 		// Pickup player, or pet owner in case target is a pet.
 		final Player targetPlayer = target.getActingPlayer();
 		

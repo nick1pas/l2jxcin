@@ -38,12 +38,12 @@ public class MoveBackwardToLocation extends L2GameClientPacket
 		}
 		catch (BufferUnderflowException e)
 		{
- 			if (Config.L2WALKER_PROTECTION)
- 			{
+			if (Config.L2WALKER_PROTECTION)
+			{
 				final Player player = getClient().getActiveChar();
 				if (player != null)
 					player.logout(false);
- 			}
+			}
 		}
 	}
 	
@@ -67,7 +67,8 @@ public class MoveBackwardToLocation extends L2GameClientPacket
 			activeChar.sendPacket(SystemMessageId.ENCHANT_SCROLL_CANCELLED);
 		}
 		
-		if (_targetX == _originX && _targetY == _originY && _targetZ == _originZ) {
+		if (_targetX == _originX && _targetY == _originY && _targetZ == _originZ)
+		{
 			activeChar.sendPacket(new StopMove(activeChar));
 			return;
 		}

@@ -58,7 +58,8 @@ public class Achievement
 	
 	public boolean meetAchievementRequirements(Player player)
 	{
-		for (Condition c : getConditions()) {
+		for (Condition c : getConditions())
+		{
 			if (!c.meetConditionRequirements(player))
 				return false;
 		}

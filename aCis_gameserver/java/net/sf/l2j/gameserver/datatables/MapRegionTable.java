@@ -275,15 +275,15 @@ public class MapRegionTable
 				}
 			}
 		}
-
-		if (BanditStrongholdSiege.getInstance().isPlayerRegister(player.getClan(),player.getName()))
+		
+		if (BanditStrongholdSiege.getInstance().isPlayerRegister(player.getClan(), player.getName()))
 		{
 			Npc flag = BanditStrongholdSiege.getInstance().getSiegeFlag(player.getClan());
 			if (flag != null)
 				return new Location(flag.getX(), flag.getY(), flag.getZ());
 		}
-
-		if (WildBeastFarmSiege.getInstance().isPlayerRegister(player.getClan(),player.getName()))
+		
+		if (WildBeastFarmSiege.getInstance().isPlayerRegister(player.getClan(), player.getName()))
 		{
 			Npc flag = WildBeastFarmSiege.getInstance().getSiegeFlag(player.getClan());
 			if (flag != null)

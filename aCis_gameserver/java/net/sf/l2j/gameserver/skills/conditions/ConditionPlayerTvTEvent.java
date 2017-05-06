@@ -13,7 +13,6 @@ public class ConditionPlayerTvTEvent extends Condition
 	
 	/**
 	 * Instantiates a new condition player tv t event.
-	 *
 	 * @param val the val
 	 */
 	public ConditionPlayerTvTEvent(boolean val)

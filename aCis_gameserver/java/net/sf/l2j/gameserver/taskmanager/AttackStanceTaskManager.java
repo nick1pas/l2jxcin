@@ -35,7 +35,7 @@ public final class AttackStanceTaskManager implements Runnable
 	
 	/**
 	 * Adds {@link Creature} to the AttackStanceTask.
-	 * @param character : {@link Creature	} to be added and checked.
+	 * @param character : {@link Creature } to be added and checked.
 	 */
 	public final void add(Creature character)
 	{

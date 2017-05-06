@@ -245,7 +245,7 @@ public final class CastleManager
 			
 		return null;
 	}
- 	
+	
 	/**
 	 * Reset all castles certificates. Reset the memory value, and run a unique query.
 	 */
@@ -265,7 +265,7 @@ public final class CastleManager
 			LOG.log(Level.WARNING, "resetCertificates: " + e.getMessage(), e);
 		}
 	}
-
+	
 	public static final CastleManager getInstance()
 	{
 		return SingletonHolder.INSTANCE;

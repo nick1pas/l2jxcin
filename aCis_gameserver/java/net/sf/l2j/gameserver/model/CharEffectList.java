@@ -748,7 +748,7 @@ public class CharEffectList
 			if (newEffect.setInUse(true))
 				// Add Funcs of this effect to the Calculator set of the Character
 				_owner.addStatFuncs(newEffect.getStatFuncs());
-		
+			
 			return;
 		}
 		

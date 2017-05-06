@@ -108,12 +108,12 @@ public final class PcAppearance
 	{
 		_titleColor = (red & 0xFF) + ((green & 0xFF) << 8) + ((blue & 0xFF) << 16);
 	}
-
+	
 	public final void setVisibleName(String visibleName)
 	{
 		_visibleName = visibleName;
 	}
-
+	
 	public final String getVisibleName()
 	{
 		if (_visibleName == null)
@@ -122,12 +122,12 @@ public final class PcAppearance
 		}
 		return _visibleName;
 	}
-
+	
 	public final void setVisibleTitle(String visibleTitle)
 	{
 		_visibleTitle = visibleTitle;
 	}
-
+	
 	public final String getVisibleTitle()
 	{
 		if (_visibleTitle == null)
@@ -136,12 +136,12 @@ public final class PcAppearance
 		}
 		return _visibleTitle;
 	}
-
+	
 	public void setOwner(Player owner)
 	{
 		_owner = owner;
 	}
-
+	
 	public Player getOwner()
 	{
 		return _owner;

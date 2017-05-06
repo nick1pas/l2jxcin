@@ -28,7 +28,7 @@ public final class RequestConfirmCancelItem extends L2GameClientPacket
 		
 		if (item.getOwnerId() != activeChar.getObjectId())
 			return;
-
+		
 		if (!item.isAugmented())
 		{
 			activeChar.sendPacket(SystemMessageId.AUGMENTATION_REMOVAL_CAN_ONLY_BE_DONE_ON_AN_AUGMENTED_ITEM);

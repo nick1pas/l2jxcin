@@ -38,6 +38,7 @@ import net.sf.l2j.gameserver.model.entity.achievementengine.conditions.Pvp;
 import net.sf.l2j.gameserver.model.entity.achievementengine.conditions.RaidKill;
 import net.sf.l2j.gameserver.model.entity.achievementengine.conditions.SkillEnchant;
 import net.sf.l2j.gameserver.model.entity.achievementengine.conditions.Sub;
+import net.sf.l2j.gameserver.model.entity.achievementengine.conditions.Vip;
 import net.sf.l2j.gameserver.model.entity.achievementengine.enchant.Chest;
 import net.sf.l2j.gameserver.model.entity.achievementengine.enchant.Feet;
 import net.sf.l2j.gameserver.model.entity.achievementengine.enchant.Gloves;
@@ -66,7 +67,7 @@ public class AchievementsManager
 		factory.setValidating(false);
 		factory.setIgnoringComments(true);
 		
-		File file = new File("config/achievements.xml");
+		File file = new File("data/xml/achievements.xml");
 		if (!file.exists())
 		{
 			_log.warning("[AchievementsEngine] Error: achievements xml file does not exist, check directory!");
@@ -244,7 +245,7 @@ public class AchievementsManager
 			conditions.add(new MageClass(value));
 		
 		else if (nodeName.equals("mustBeVip"))
-			conditions.add(new Noble(value));
+			conditions.add(new Vip(value));
 		
 		else if (nodeName.equals("raidToKill"))
 			conditions.add(new RaidKill(value));

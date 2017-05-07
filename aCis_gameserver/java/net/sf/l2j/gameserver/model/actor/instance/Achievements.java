@@ -69,12 +69,22 @@ public class Achievements extends Folk
 	@Override
 	public void showChatWindow(Player player, int val)
 	{
-		String filename = "data/html/mods/Achievements/Main.htm";
-		NpcHtmlMessage html = new NpcHtmlMessage(this.getObjectId());
-		html.setFile(filename);
-		html.replace("%objectId%", String.valueOf(getObjectId()));
-		html.replace("%name%", player.getName());
-		player.sendPacket(html);
+		StringBuilder tb = new StringBuilder();
+		tb.append("<html><title>Achievements Manager</title><body><center><br>");
+		tb.append("<img src=\"l2font-e.replay_logo-e\" width=250 height=80><br1><center><img src=\"L2UI.SquareGray\" width=300 height=1></center><table bgcolor=000000 width=319><tr><td><center><font color=\"LEVEL\">Hello <font color=\"LEVEL\">" + player.getName() + "</font></center></td></font></tr></table><center><img src=\"L2UI.SquareGray\" width=300 height=1></center>");
+		tb.append("<br><font color=\"LEVEL\">Are you looking for challenge?</font>");
+		tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1\"><br>");
+		tb.append("<button value=\"My Achievements\" action=\"bypass -h npc_%objectId%_showMyAchievements\" width=134 height=21 back=\"L2UI_CH3.br_bar2_hp1\" fore=\"L2UI_CH3.br_bar2_hp1\">");
+		tb.append("<button value=\"Statistics\" action=\"bypass -h npc_%objectId%_showMyStats\" width=134 height=21 back=\"L2UI_CH3.br_bar2_hp1\" fore=\"L2UI_CH3.br_bar2_hp1\">");
+		tb.append("<button value=\"Help\" action=\"bypass -h npc_%objectId%_showHelpWindow\" width=134 height=21 back=\"L2UI_CH3.br_bar2_hp1\" fore=\"L2UI_CH3.br_bar2_hp1\">");
+		tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1\"><br>");
+		tb.append("<center><br><img src=l2ui.bbs_lineage2 height=16 width=80></center>");
+		
+		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
+		msg.setHtml(tb.toString());
+		msg.replace("%objectId%", String.valueOf(this.getObjectId()));
+		
+		player.sendPacket(msg);
 	}
 	
 	private void showMyAchievements(Player player)
@@ -104,7 +114,7 @@ public class Achievements extends Folk
 			}
 			
 			tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1s\"><br>");
-			tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMainWindow\" width=134 height=21 back=\"L2UI_ch3.BigButton3_over\" fore=\"L2UI_ch3.BigButton3\"><center>");
+			tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMainWindow\" width=134 height=21 back=\"L2UI_CH3.br_bar2_hp1\" fore=\"L2UI_CH3.br_bar2_hp1\"><center>");
 		}
 		
 		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
@@ -127,7 +137,7 @@ public class Achievements extends Folk
 		
 		if (a.meetAchievementRequirements(player) && !player.getCompletedAchievements().contains(achievementID))
 		{
-			tb.append("<button value=\"Receive Reward!\" action=\"bypass -h npc_%objectId%_getReward " + a.getID() + "\" width=134 height=21 back=\"L2UI_ch3.BigButton3_over\" fore=\"L2UI_ch3.BigButton3\">");
+			tb.append("<button value=\"Receive Reward!\" action=\"bypass -h npc_%objectId%_getReward " + a.getID() + "\" width=134 height=21 back=\"L2UI_CH3.br_bar2_hp1\" fore=\"L2UI_CH3.br_bar2_hp1\">");
 		}
 		
 		tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1s\"><br>");
@@ -141,7 +151,7 @@ public class Achievements extends Folk
 		tb.append("<tr><td width=270 align=\"left\">Condition:</td><td width=100 align=\"right\">Value:</td><td width=200 align=\"center\">Status:</td></tr></table>");
 		tb.append(getConditionsStatus(achievementID, player));
 		tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1s\"><br>");
-		tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMyAchievements\" width=134 height=21 back=\"L2UI_ch3.BigButton3_over\" fore=\"L2UI_ch3.BigButton3\"><center>");
+		tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMyAchievements\" width=134 height=21 back=\"L2UI_CH3.br_bar2_hp1\" fore=\"L2UI_CH3.br_bar2_hp1\"><center>");
 		
 		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
 		msg.setHtml(tb.toString());
@@ -163,7 +173,7 @@ public class Achievements extends Folk
 		tb.append("You have completed: " + completedCount + "/<font color=\"LEVEL\">" + AchievementsManager.getInstance().getAchievementList().size() + "</font>");
 		
 		tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1s\"><br>");
-		tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMainWindow\" width=134 height=21 back=\"L2UI_ch3.BigButton3_over\" fore=\"L2UI_ch3.BigButton3\"><center>");
+		tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMainWindow\" width=134 height=21 back=\"L2UI_CH3.br_bar2_hp1\" fore=\"L2UI_CH3.br_bar2_hp1\"><center>");
 		
 		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
 		msg.setHtml(tb.toString());
@@ -182,7 +192,7 @@ public class Achievements extends Folk
 		tb.append("List Player " + player.getCompletedAchievements() + " ");
 		
 		tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1s\"><br>");
-		tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMainWindow\" width=134 height=21 back=\"L2UI_ch3.BigButton3_over\" fore=\"L2UI_ch3.BigButton3\"><center>");
+		tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMainWindow\" width=134 height=21 back=\"L2UI_CH3.br_bar2_hp1\" fore=\"L2UI_CH3.br_bar2_hp1\"><center>");
 		
 		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
 		msg.setHtml(tb.toString());
@@ -204,9 +214,9 @@ public class Achievements extends Folk
 		tb.append("<font color=\"LEVEL\">Get Reward</font> - you may receive reward, click info.<br>");
 		tb.append("<font color=\"5EA82E\">Completed</font> - achievement completed, reward received.<br></center>");
 		
-		tb.append("Achievements Engine by <font color=\"LEVEL\">L2JSanne</font>");
+		tb.append("Achievements Engine by <font color=\"LEVEL\">Interlude Project</font>");
 		tb.append("<br><img src=\"l2ui.squaregray\" width=\"270\" height=\"1s\"><br>");
-		tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMainWindow\" width=134 height=21 back=\"L2UI_ch3.BigButton3_over\" fore=\"L2UI_ch3.BigButton3\"><center>");
+		tb.append("<center><button value=\"Back\" action=\"bypass -h npc_%objectId%_showMainWindow\" width=134 height=21 back=\"L2UI_CH3.br_bar2_hp1\" fore=\"L2UI_CH3.br_bar2_hp1\"><center>");
 		
 		NpcHtmlMessage msg = new NpcHtmlMessage(this.getObjectId());
 		msg.setHtml(tb.toString());

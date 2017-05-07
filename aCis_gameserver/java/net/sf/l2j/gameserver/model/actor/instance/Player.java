@@ -11047,8 +11047,7 @@ public final class Player extends Playable
 	}
 	
 	public void saveAchievemntData()
-	{
-	}
+	{}
 	
 	public void getAchievemntData()
 	{

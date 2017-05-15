@@ -16,6 +16,7 @@ import net.sf.l2j.gameserver.datatables.AnnouncementTable;
 import net.sf.l2j.gameserver.datatables.GmListTable;
 import net.sf.l2j.gameserver.datatables.MapRegionTable.TeleportType;
 import net.sf.l2j.gameserver.datatables.SkillTable.FrequentSkill;
+import net.sf.l2j.gameserver.handler.admincommandhandlers.AdminVipStatus;
 import net.sf.l2j.gameserver.instancemanager.CastleManager;
 import net.sf.l2j.gameserver.instancemanager.ClanHallManager;
 import net.sf.l2j.gameserver.instancemanager.CoupleManager;
@@ -29,7 +30,6 @@ import net.sf.l2j.gameserver.model.L2Clan.SubPledge;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.instance.ClassMaster;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
-import net.sf.l2j.gameserver.model.actor.instance.Vip;
 import net.sf.l2j.gameserver.model.base.ClassRace;
 import net.sf.l2j.gameserver.model.entity.Castle;
 import net.sf.l2j.gameserver.model.entity.ClanHall;
@@ -88,7 +88,37 @@ public class EnterWorld extends L2GameClientPacket
 			getClient().closeNow();
 			return;
 		}
-		
+ 		
+		int color = activeChar.isColor();
+		switch (color)
+		{
+			case 1:
+				activeChar.setColor(1);
+				activeChar.getAppearance().setNameColor(0x009900);
+				activeChar.broadcastUserInfo();
+				break;
+			case 2:
+				activeChar.setColor(2);
+				activeChar.getAppearance().setNameColor(0xff7f00);
+				activeChar.broadcastUserInfo();
+				break;
+			case 3:
+				activeChar.setColor(3);
+				activeChar.getAppearance().setNameColor(0xff00ff);
+				activeChar.broadcastUserInfo();
+				break;
+			case 4:
+				activeChar.setColor(4);
+				activeChar.getAppearance().setNameColor(0x00ffff);
+				activeChar.broadcastUserInfo();
+				break;
+			case 5:
+				activeChar.setColor(5);
+				activeChar.getAppearance().setNameColor(0x0099ff);
+				activeChar.broadcastUserInfo();
+				break;
+		}
+
 		final int objectId = activeChar.getObjectId();
 		
 		if (activeChar.isGM())
@@ -311,9 +341,9 @@ public class EnterWorld extends L2GameClientPacket
 			activeChar.sendPacket(ExMailArrived.STATIC_PACKET);
 		}
 		
-		// Vip Status onEnter
+		// Vip Status 
 		if (activeChar.getMemos().getLong("TimeOfVip", 0) > 0)
-			Vip.onEnterVipStatus(activeChar);
+			onEnterVip(activeChar);
 		
 		onEnterHero(activeChar);
 		
@@ -357,7 +387,21 @@ public class EnterWorld extends L2GameClientPacket
 		
 		ActionF();
 	}
-	
+ 	
+	private static void onEnterVip(Player activeChar)
+	{
+		long now = Calendar.getInstance().getTimeInMillis();
+		long endDay = activeChar.getMemos().getLong("TimeOfVip");
+		
+		if (now > endDay)
+			AdminVipStatus.RemoveVipStatus(activeChar);
+		else
+		{
+			activeChar.setVipStatus(true);
+			activeChar.broadcastUserInfo();
+		}
+	}
+
 	private static void onEnterHero(Player activeChar)
 	{
 		long now = Calendar.getInstance().getTimeInMillis();

@@ -9,6 +9,9 @@ import net.sf.l2j.gameserver.model.item.instance.ItemInstance;
 import net.sf.l2j.gameserver.network.SystemMessageId;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 
+/**
+ * @author Baggos
+ */
 public class VipStatusItem implements IItemHandler
 {
 	@Override

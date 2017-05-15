@@ -11,6 +11,9 @@ import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.SocialAction;
 import net.sf.l2j.gameserver.taskmanager.VipTimeTaskManager;
 
+/**
+ * @author Baggos
+ */
 public class AdminVipStatus implements IAdminCommandHandler
 {
 	private static String[] _adminCommands = new String[]
@@ -75,7 +78,7 @@ public class AdminVipStatus implements IAdminCommandHandler
 					activeChar.sendMessage(target.getName() + "'s VIP Status has been removed.");
 				}
 				else
-					activeChar.sendMessage("Player " + target.getName() + " is not an VIP.");
+					activeChar.sendMessage("Player " +target.getName() + " is not an VIP.");
 			}
 		}
 		return true;

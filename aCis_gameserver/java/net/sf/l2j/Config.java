@@ -91,6 +91,9 @@ public final class Config
 	public static int VIP_SPOIL_RATES;
 	public static int VIP_RATE_DROP_ITEMS_BY_RAID;
 	public static int VIP_DROP_RATES;
+	public static double VIP_ENCHANT_CHANCE_ARMOR;
+	public static double VIP_ENCHANT_CHANCE_WEAPON_15PLUS;
+	public static double VIP_ENCHANT_CHANCE_WEAPON;
 	/** Clan Manager */
 	public static int CLAN_MANAGER_ITEM_ID;
 	public static int CLAN_MANAGER_LEVEL_UP_COUNT;
@@ -147,12 +150,6 @@ public final class Config
 	/** Grandboss Info */
 	public static String GRAND_BOSS;
 	public static List<Integer> GRAND_BOSS_LIST;
-	/** Clan Full */
-	public static boolean ENABLE_CLAN_SYSTEM;
-	public static byte CLAN_LEVEL;
-	public static int REPUTATION_QUANTITY;
-	public static int CLAN_ITEM_ID;
-	public static long CLAN_ITEM_COUNT;
 	/** Buff Command */
 	public static String LIST_BUFF_COMMAND;
 	public static int[] BUFF_COMMAND_FIGHT_IDBUFFS;
@@ -197,7 +194,30 @@ public final class Config
 	public static boolean ENABLE_SHIFT_CLICK_TO_NPCS;
 	/** Cancel System */
 	public static boolean ALLOW_CUSTOM_CANCEL;
-	public static int CUSTOM_CANCEL_SECONDS;
+	public static int CUSTOM_CANCEL_SECONDS;	
+	/** Multi Shop Manager */
+	public static int DONATE_ITEM;
+	public static int NOBL_ITEM_COUNT;
+	public static int MULTI_LEVEL;
+	public static int LEVEL_ITEM_COUNT;
+	public static int SEX_ITEM_COUNT;
+	public static int PK_ITEM_COUNT;
+	public static int PK_CLEAN;
+	public static int CLAN_ITEM_COUNT;
+	public static int CLAN_REP_ITEM_COUNT;
+	public static int CLAN_REPS;
+	public static int AUGM_ITEM_COUNT;
+	public static int CLAN_SKILL_ITEM_COUNT;
+	public static int REC_ITEM_COUNT;
+	public static int PASSWORD_ITEM_COUNT;
+	public static int COLOR_ITEM_COUNT;
+	public static int NAME_ITEM_COUNT;
+	public static int ENCHANT_ITEM_COUNT;
+	public static int ENCHANT_MAX_VALUE;
+	public static int CLASS_ITEM_COUNT;
+	public static int VIP7_ITEM_COUNT;
+	public static int VIP15_ITEM_COUNT;
+	public static int VIP30_ITEM_COUNT;
 	
 	// --------------------------------------------------
 	// Clans settings
@@ -650,6 +670,17 @@ public final class Config
 	public static int ALT_GAME_FREIGHT_PRICE;
 	public static int STARTING_ADENA;
 	public static int STARTING_AA;
+	
+	/** Enchant */
+	public static double ENCHANT_CHANCE_WEAPON_MAGIC;
+	public static double ENCHANT_CHANCE_WEAPON_MAGIC_15PLUS;
+	public static double ENCHANT_CHANCE_WEAPON_NONMAGIC;
+	public static double ENCHANT_CHANCE_WEAPON_NONMAGIC_15PLUS;
+	public static double ENCHANT_CHANCE_ARMOR;
+	public static int ENCHANT_MAX_WEAPON;
+	public static int ENCHANT_MAX_ARMOR;
+	public static int ENCHANT_SAFE_MAX;
+	public static int ENCHANT_SAFE_MAX_FULL;
 	
 	/** Augmentations */
 	public static int AUGMENTATION_NG_SKILL_CHANCE;
@@ -1166,11 +1197,6 @@ public final class Config
 		{
 			GRAND_BOSS_LIST.add(Integer.parseInt(id.trim()));
 		}
-		ENABLE_CLAN_SYSTEM = custom.getProperty("EnableClanSystem", true);
-		CLAN_LEVEL = (byte) custom.getProperty("ClanLevel", 8);
-		REPUTATION_QUANTITY = custom.getProperty("ClanReputation", 10000);
-		CLAN_ITEM_ID = custom.getProperty("ClanItemId", 57);
-		CLAN_ITEM_COUNT = custom.getProperty("ClanItemCount", 10000);
 		LIST_BUFF_COMMAND = custom.getProperty("buffCommandFightBuffsID", "123,456");
 		
 		String[] buffCommand = LIST_BUFF_COMMAND.split(",");
@@ -2280,6 +2306,16 @@ public final class Config
 		ALT_GAME_FREIGHT_PRICE = players.getProperty("AltGameFreightPrice", 1000);
 		STARTING_ADENA = players.getProperty("StartingAdena", 100);
 		STARTING_AA = players.getProperty("StartingAncientAdena", 0);
+		
+		ENCHANT_CHANCE_WEAPON_MAGIC = players.getProperty("EnchantChanceMagicWeapon", 0.4);
+		ENCHANT_CHANCE_WEAPON_MAGIC_15PLUS = players.getProperty("EnchantChanceMagicWeapon15Plus", 0.2);
+		ENCHANT_CHANCE_WEAPON_NONMAGIC = players.getProperty("EnchantChanceNonMagicWeapon", 0.7);
+		ENCHANT_CHANCE_WEAPON_NONMAGIC_15PLUS = players.getProperty("EnchantChanceNonMagicWeapon15Plus", 0.35);
+		ENCHANT_CHANCE_ARMOR = players.getProperty("EnchantChanceArmor", 0.66);
+		ENCHANT_MAX_WEAPON = players.getProperty("EnchantMaxWeapon", 0);
+		ENCHANT_MAX_ARMOR = players.getProperty("EnchantMaxArmor", 0);
+		ENCHANT_SAFE_MAX = players.getProperty("EnchantSafeMax", 3);
+		ENCHANT_SAFE_MAX_FULL = players.getProperty("EnchantSafeMaxFull", 4);
 		
 		AUGMENTATION_NG_SKILL_CHANCE = players.getProperty("AugmentationNGSkillChance", 15);
 		AUGMENTATION_NG_GLOW_CHANCE = players.getProperty("AugmentationNGGlowChance", 0);

@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS characters (
   `lastNZvote` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
   `hero` decimal(1,0) NOT NULL DEFAULT 0,
   `hero_end` decimal(20,0) NOT NULL DEFAULT 0,
+  `color` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (obj_Id),
   KEY `clanid` (`clanid`)
 );

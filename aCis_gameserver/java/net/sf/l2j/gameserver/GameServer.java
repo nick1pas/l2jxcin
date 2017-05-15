@@ -36,7 +36,6 @@ import net.sf.l2j.gameserver.datatables.BuyListTable;
 import net.sf.l2j.gameserver.datatables.CharTemplateTable;
 import net.sf.l2j.gameserver.datatables.ClanTable;
 import net.sf.l2j.gameserver.datatables.DoorTable;
-import net.sf.l2j.gameserver.datatables.EnchantTable;
 import net.sf.l2j.gameserver.datatables.FishTable;
 import net.sf.l2j.gameserver.datatables.GmListTable;
 import net.sf.l2j.gameserver.datatables.HelperBuffTable;
@@ -194,7 +193,6 @@ public class GameServer
 		SoulCrystalsTable.load();
 		AugmentationData.getInstance();
 		CursedWeaponsManager.getInstance();
-		EnchantTable.getInstance();
 		AuctionTable.getInstance();
 		
 		StringUtil.printSection("Admins");

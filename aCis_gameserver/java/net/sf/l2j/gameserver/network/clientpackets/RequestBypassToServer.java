@@ -17,6 +17,7 @@ import net.sf.l2j.gameserver.handler.IVoicedCommandHandler;
 import net.sf.l2j.gameserver.handler.VoicedCommandHandler;
 import net.sf.l2j.gameserver.handler.voicedcommandhandlers.Buff;
 import net.sf.l2j.gameserver.instancemanager.BotsPreventionManager;
+import net.sf.l2j.gameserver.instancemanager.MultiShopManager;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Npc;
@@ -182,6 +183,43 @@ public final class RequestBypassToServer extends L2GameClientPacket
 				int heroid = Hero.getInstance().getHeroByClass(heroclass);
 				if (heroid > 0)
 					Hero.getInstance().showHeroDiary(activeChar, heroclass, heroid, heropage);
+			}
+			
+			else if (_command.startsWith("classes"))
+			{
+				MultiShopManager.getInstance().Classes(_command, activeChar);
+			}
+			else if (_command.startsWith("password"))
+			{
+				MultiShopManager.getInstance().Password(_command, activeChar);
+			}
+			else if (_command.startsWith("classes"))
+			{
+				MultiShopManager.getInstance().Classes(_command, activeChar);
+			}
+			else if (_command.startsWith("name"))
+			{
+				MultiShopManager.getInstance().Name(_command, activeChar);
+			}
+			else if (_command.startsWith("tp"))
+			{
+				MultiShopManager.getInstance().Teleport(_command, activeChar);
+			}
+			else if (_command.startsWith("clan"))
+			{
+				MultiShopManager.getInstance().TeleportClan(_command, activeChar);
+			}
+			else if (_command.startsWith("services"))
+			{
+				MultiShopManager.getInstance().Page(_command, activeChar);
+			}
+			else if (_command.startsWith("next"))
+			{
+				MultiShopManager.getInstance().Page2(_command, activeChar);
+			}
+			else if (_command.startsWith("enchant"))
+			{
+				MultiShopManager.getInstance().Enchants(_command, activeChar);
 			}
 			else if (_command.startsWith("arenachange")) // change
 			{

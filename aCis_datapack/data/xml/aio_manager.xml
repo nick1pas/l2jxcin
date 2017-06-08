@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<list>
-	<!-- 30 days -->
-	<service id="1" duration="30" feeId="57" feeVal="100000000" />
-	<!-- 60 days -->
-	<service id="2" duration="60" feeId="57" feeVal="175000000" />
-	<!-- 90 days -->
-	<service id="3" duration="90" feeId="57" feeVal="250000000" />
-</list>
